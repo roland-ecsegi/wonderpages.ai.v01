@@ -1,0 +1,89 @@
+{
+  "kind": "architecture-baseline-verification",
+  "date": "2026-10-02",
+  "source_artifacts": [
+    {
+      "name": "Ghid_Complet_WonderPages_AI_v04.pdf",
+      "bytes": 6256048,
+      "sha256": "a400bd2efc5b96a564f207f325e550395fe98124c7bc7886bb3420c298afa22a"
+    },
+    {
+      "name": "Audit_Full_WonderPages_AI_v04.pdf",
+      "bytes": 6699514,
+      "sha256": "a577d004446a9c46015bab898858009b2fd83d508cd791f182b57e81049226ca"
+    },
+    {
+      "name": "wonderpages-ai.claude-gpt.v04.zip",
+      "bytes": 2990571,
+      "sha256": "4fbbcc8bcc33116b599218cbf167fa0084554ea5072a8d584de28626f380378a"
+    },
+    {
+      "name": "dinosaur-world-proiect.v04.zip",
+      "bytes": 3779123,
+      "sha256": "7056e113bf5c84fdfc0f7b8f528713de6c8fe31e82b40fbab056544fe10e45e3"
+    }
+  ],
+  "reference_manifest_checks": [
+    {
+      "file": "CITESTE-MA.md",
+      "bytes_match": true,
+      "sha256_match": true
+    },
+    {
+      "file": "project.json",
+      "bytes_match": true,
+      "sha256_match": true
+    },
+    {
+      "file": "REVIZIE-EDITORIALA.md",
+      "bytes_match": true,
+      "sha256_match": true
+    },
+    {
+      "file": "files/uploads/01-milo-reference.png",
+      "bytes_match": true,
+      "sha256_match": true
+    },
+    {
+      "file": "files/uploads/02-tia-reference.png",
+      "bytes_match": true,
+      "sha256_match": true
+    }
+  ],
+  "reference_artifacts": [
+    "brief",
+    "series",
+    "bible",
+    "cast",
+    "refs",
+    "script_0"
+  ],
+  "reference_volumes": 6,
+  "planned_content_pages": 72,
+  "prepared_manuscript_pages": 12,
+  "images": [
+    {
+      "name": "01-milo-reference.png",
+      "pixels": [
+        1199,
+        1312
+      ]
+    },
+    {
+      "name": "02-tia-reference.png",
+      "pixels": [
+        1222,
+        1287
+      ]
+    }
+  ],
+  "engineering_skills": [
+    ".claude/skills/adauga-etapa/SKILL.md",
+    ".claude/skills/blueprint-si-prompturi/SKILL.md",
+    ".claude/skills/ruleaza-teste/SKILL.md",
+    ".claude/skills/texte-pentru-editor/SKILL.md"
+  ],
+  "new_build_result": "PASS: 78 JavaScript files plus JSON/lockfile/fonts/runtime resources (scripts/build.mjs, extracted scratch copy)",
+  "full_suite_this_session": "NOT_RUN: dependency installation and provider/browser runtime not activated for architecture task",
+  "historical_suite": "91/91 PASS reported by supplied audit and v04 report, 2026-10-01; simulated AI providers"
+}
