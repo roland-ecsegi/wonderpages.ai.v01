@@ -1,16 +1,16 @@
 {
  "kind": "wonderpages.defect-reproduction/1",
- "generatedAt": "2026-10-02T10:52:41.518Z",
+ "generatedAt": "2026-10-02T11:30:22.581Z",
  "defects": [
   {
    "id": "D-C16",
    "arch": "C16/G05",
    "phase": "P2-T05",
-   "status": "REPRODUCED",
+   "status": "FIXED",
    "method": "dynamic",
    "evidence": [
-    "export format v1; artifact keys: content,meta,version,note,by",
-    "server/projectpkg.js:23"
+    "export format v2; artifact keys: content,meta,version,note,by,basedOn,stage,updatedAt",
+    "server/projectpkg.js:37"
    ]
   },
   {
@@ -43,7 +43,7 @@
    "method": "dynamic",
    "evidence": [
     "gazdă din rețea: 0 seturi cunoscute; loopback (migrare legacy): 2",
-    "server/storage/postgres.js:34"
+    "server/storage/postgres.js:35"
    ]
   },
   {
@@ -64,8 +64,8 @@
    "method": "static",
    "evidence": [
     "2 apeluri recursive callImage cu alt provider",
-    "server/engine.js:191",
-    "server/engine.js:205"
+    "server/engine.js:193",
+    "server/engine.js:207"
    ]
   },
   {

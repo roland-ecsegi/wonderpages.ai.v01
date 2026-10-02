@@ -1,6 +1,7 @@
 import { EventEmitter } from 'node:events';
 import crypto from 'node:crypto';
 import { versionDoc, versionRel } from './persistence/artifact-store.js';
+import { canonicalHash } from './domain/canonical.js';
 
 export const bus = new EventEmitter();
 bus.setMaxListeners(100);
@@ -113,7 +114,7 @@ export class Repo {
     const keep = o.keep ?? 5;
     const versions = prev ? [{ version: prev.version, content: clone(prev.content), meta: clone(prev.meta), basedOn: clone(prev.basedOn), by: prev.by, note: prev.note, at: prev.updatedAt }, ...(prev.versions || [])].slice(0, keep) : [];
     doc = {
-      key, content: clone(content), version: (prev?.version || 0) + 1, by: o.by || 'agent', note: o.note || '',
+      key, content: clone(content), version: Number.isInteger(o.versionOverride) && o.versionOverride > (prev?.version || 0) ? o.versionOverride : (prev?.version || 0) + 1, by: o.by || 'agent', note: o.note || '',
       meta: o.meta !== undefined ? o.meta : (prev?.meta || {}), basedOn: o.basedOn !== undefined ? o.basedOn : (prev?.basedOn || null),
       versions, updatedAt: now(), stage: o.stage || prev?.stage || ''
     };
@@ -132,7 +133,10 @@ export class Repo {
   }
   async patchArtifact(pid, key, patch) {
     const map = await this.artifacts(pid); if (!map[key]) return null;
-    await queued('p/' + pid,async()=>{const next=deepMerge(clone(map[key]),patch);await this.s.writeJSON(`projects/${pid}/artifacts/${key}.json`,next);map[key]=next;});
+    await queued('p/' + pid,async()=>{const next=deepMerge(clone(map[key]),patch);await this.s.writeJSON(`projects/${pid}/artifacts/${key}.json`,next);map[key]=next;
+      /* P2-T03/P2-T05: an in-place annotation of the current content (QA verdicts) is recorded on the version, never hidden: the original hash stays, annotatedHash describes the current content */
+      if (patch.content && typeof this.s.readJSON === 'function') { const vr = versionRel(pid, key, next.version), vd = await this.s.readJSON(vr, null); if (vd) await this.s.writeJSON(vr, { ...vd, annotatedHash: canonicalHash(next.content ?? null), annotations: [...(vd.annotations || []), { at: now(), keys: Object.keys(patch.content) }].slice(-50) }); }
+    });
     changed('project', pid);
     return map[key];
   }

@@ -14,16 +14,33 @@ import { expandStages, HANDLER_NAMES } from './engine.js';
 import { str, cleanInput, isSafeRel, IMAGE_MIME, safeCode, cleanComment } from './sanitize.js';
 import { contractFromBlueprint, validateContract } from './domain/product-contract.js';
 import { sniffImage } from './security/safe-zip.js';
+import { listVersions, backfillVersions, versionDoc } from './persistence/artifact-store.js';
+import { fileHash } from './contracts.js';
+import { APP_VERSION } from './config.js';
+import { SCHEMA_VERSION } from './persistence/migrations.js';
+import { canonicalHash } from './domain/canonical.js';
 
 const FORMAT = 'wonderpages-project';
 async function copyDir(a, b) { await fsp.mkdir(b, { recursive: true }); for (const e of await fsp.readdir(a, { withFileTypes: true }).catch(() => [])) { const x = path.join(a, e.name), y = path.join(b, e.name); if (e.isDirectory()) await copyDir(x, y); else await fsp.copyFile(x, y); } }
+/* P2-T05: package v2 = superset of v1 (same project.json fields, so a v04 importer still reads it) plus the immutable
+   version history, typed lineage edges, decisions as evidence, rights, raw migration sources and a checksummed manifest. */
 export async function exportProject(repo, storage, p) {
   const tmp = await fsp.mkdtemp(path.join(os.tmpdir(), 'wonderpages-export-'));
   const art = await repo.artifacts(p.id);
-  const doc = { format: FORMAT, version: 1, exportedAt: now(), project: { ...p, running: undefined, pausing: undefined, rendering: undefined }, blueprint: await repo.getBlueprint(p.id), artifacts: Object.fromEntries(Object.entries(art).map(([k, a]) => [k, { content: a.content, meta: a.meta, version: a.version, note: a.note, by: a.by }])), comments: await repo.listComments(p.id) };
+  const versions = {};
+  for (const [k, a] of Object.entries(art)) { await backfillVersions(storage, p.id, k, a).catch(() => 0); versions[k] = (await listVersions(storage, p.id, k)).map(v => ({ version: v.version, hash: v.hash, content: v.content, meta: v.meta, basedOn: v.basedOn, by: v.by, note: v.note, at: v.at, pins: v.pins, restoredFrom: v.restoredFrom || null, source: v.source || null, annotatedHash: v.annotatedHash || null, annotations: v.annotations || [] })); }
+  const dependencies = []; for (const f of (await storage.list(`projects/${p.id}/dependencies`).catch(() => [])).filter(x => x.name.endsWith('.json'))) { const d = await storage.readJSON(`projects/${p.id}/dependencies/${f.name}`, null); if (d) dependencies.push(d); }
+  const decisions = await repo.listDecisions?.(p.id).catch(() => []) || [];
+  const doc = { format: FORMAT, version: 2, exportedAt: now(), app: { version: APP_VERSION, schema: SCHEMA_VERSION },
+    project: { ...p, running: undefined, pausing: undefined, rendering: undefined },
+    blueprint: await repo.getBlueprint(p.id),
+    artifacts: Object.fromEntries(Object.entries(art).map(([k, a]) => [k, { content: a.content, meta: a.meta, version: a.version, note: a.note, by: a.by, basedOn: a.basedOn ?? null, stage: a.stage || '', updatedAt: a.updatedAt || null }])),
+    comments: await repo.listComments(p.id), versions, dependencies, decisions, rights: p.rightsDeclared || [], contract: p.contractRef || null };
   await fsp.writeFile(path.join(tmp, 'project.json'), JSON.stringify(doc, null, 1));
   const src = storage.abs ? storage.abs(`projects/${p.id}`) : null;
-  for (const sub of ['images', 'uploads']) if (src && fs.existsSync(path.join(src, sub))) await copyDir(path.join(src, sub), path.join(tmp, 'files', sub));
+  for (const sub of ['images', 'uploads', 'raw']) if (src && fs.existsSync(path.join(src, sub))) await copyDir(path.join(src, sub), path.join(tmp, 'files', sub));
+  const listed = []; (function walk(d, rel) { for (const e of fs.readdirSync(d, { withFileTypes: true })) { const a = path.join(d, e.name), r = rel ? `${rel}/${e.name}` : e.name; if (e.isDirectory()) walk(a, r); else { const b = fs.readFileSync(a); listed.push({ path: r, bytes: b.length, sha256: fileHash(b) }); } } })(tmp, '');
+  await fsp.writeFile(path.join(tmp, 'manifest.json'), JSON.stringify({ format: FORMAT, version: 2, exportedAt: doc.exportedAt, app: doc.app, contract: doc.contract, counts: { artifacts: Object.keys(art).length, versions: Object.values(versions).reduce((n, l) => n + l.length, 0), dependencies: dependencies.length, decisions: decisions.length }, files: listed }, null, 1));
   const name = `${(safeCode(p.code) || 'wp')}-${String(p.title || 'proiect').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9]+/g, '-').slice(0, 50)}-proiect`;
   const out = path.join(os.tmpdir(), `${name}.zip`); await zipDir(tmp, out, name);
   fsp.rm(tmp, { recursive: true, force: true }).catch(() => {});
@@ -47,6 +64,10 @@ export async function importProject(repo, storage, buf) {
   const root = manName.includes('/') ? manName.slice(0, manName.lastIndexOf('/') + 1) : '';
   let doc; try { doc = JSON.parse(files.get(manName).toString('utf8')); } catch { throw { status: 400, message: 'project.json nu e JSON valid.' }; }
   if (doc.format !== FORMAT || !doc.project || typeof doc.project !== 'object' || !doc.blueprint) throw { status: 400, message: 'Nu e un proiect WonderPages.' };
+  if (![1, 2].includes(doc.version ?? 1)) throw { status: 400, code: 'unsupported_schema', message: `Formatul pachetului (v${doc.version}) nu este suportat de această versiune a aplicației.` };   // P2-T05
+  const manName2 = root + 'manifest.json', manifest = files.get(manName2) ? (() => { try { return JSON.parse(files.get(manName2).toString('utf8')); } catch { throw { status: 400, code: 'package_corrupt', message: 'manifest.json nu e JSON valid.' }; } })() : null;
+  if (doc.version === 2 && !manifest) throw { status: 400, code: 'package_corrupt', message: 'Pachetul v2 nu are manifest.' };
+  if (manifest) for (const f of manifest.files || []) { const b = files.get(root + f.path); if (!b) throw { status: 400, code: 'package_missing_file', message: `Pachet incomplet: lipsește ${f.path}.` }; if (b.length !== f.bytes || fileHash(b) !== f.sha256) throw { status: 400, code: 'package_corrupt', message: `Pachet deteriorat: ${f.path} nu corespunde sumei de control.` }; }
   const bad = blueprintProblem(doc.blueprint); if (bad) throw { status: 400, message: 'Proiect respins: ' + bad + '.' };
   /* P1-T01: the protected ProductContract (6 volumes × story+coloring × 12 pages, age bands) is checked before anything is written */
   const contract = contractFromBlueprint(doc.blueprint), cv = validateContract(contract);
@@ -54,9 +75,16 @@ export async function importProject(repo, storage, buf) {
   const pid = uid('p'); const src = doc.project; const bp = doc.blueprint;
   /* files: only images/ and uploads/ with plain names, only image formats */
   const kept = new Set(), rejectedFiles = [];
+  /* P2-T05: assets referenced by the project must be in a v2 package (a v1 package only warns, as before) */
+  const referenced = new Set(); (function visit(v) { if (typeof v === 'string' && /^(images|uploads)\/[A-Za-z0-9._-]+$/.test(v)) referenced.add(v); else if (Array.isArray(v)) v.forEach(visit); else if (v && typeof v === 'object') Object.values(v).forEach(visit); })([doc.artifacts, doc.project?.refs]);
+  const missingAssets = [...referenced].filter(r => !files.get(root + 'files/' + r));
+  if (doc.version === 2 && missingAssets.length) throw { status: 400, code: 'package_missing_asset', message: `Pachet incomplet: lipsesc ${missingAssets.length} fișiere (${missingAssets.slice(0, 3).join(', ')}).` };
+  try {
   for (const [name, data] of files) {
     if (!data || !name.startsWith(root + 'files/')) continue;
-    const rel = path.posix.normalize(name.slice((root + 'files/').length));
+    const rawRel = path.posix.normalize(name.slice((root + 'files/').length));
+    if (/^raw\/[A-Za-z0-9._-]{1,160}$/.test(rawRel)) { await storage.writeFile(`projects/${pid}/${rawRel}`, data); continue; }   // P2-T05: raw migration source, never served
+    const rel = rawRel;
     if (!isSafeRel(rel) || rel.startsWith('exports/') || !IMAGE_MIME[path.extname(rel).toLowerCase()]) continue;
     if (sniffImage(data) !== IMAGE_MIME[path.extname(rel).toLowerCase()]) { rejectedFiles.push(rel); continue; }   // P1-T04: declared type must match the bytes
     await storage.writeFile(`projects/${pid}/${rel}`, data); kept.add(rel);
@@ -89,7 +117,7 @@ export async function importProject(repo, storage, buf) {
   await repo.createProject(p, bp);
   for (const [k, a] of Object.entries(doc.artifacts || {})) {
     if (!/^[a-z0-9_]{1,40}$/i.test(k) || !a || typeof a !== 'object') continue;
-    await repo.writeArtifact(pid, k, a.content ?? null, { meta: a.meta && typeof a.meta === 'object' ? a.meta : {}, note: 'importat', by: 'import' });
+    await repo.writeArtifact(pid, k, a.content ?? null, { meta: a.meta && typeof a.meta === 'object' ? a.meta : {}, note: 'importat', by: 'import', versionOverride: Number.isInteger(a.version) && a.version >= 1 && a.version < 1e6 ? a.version : undefined, ...(doc.version === 2 && a.basedOn && typeof a.basedOn === 'object' ? { basedOn: { key: str(a.basedOn.key, 40), version: Number.isInteger(a.basedOn.version) ? a.basedOn.version : null, pageHash: a.basedOn.pageHash ? str(a.basedOn.pageHash, 80) : undefined } } : {}) });   // P2-T05: original version numbers and lineage kept
   }
   if (Array.isArray(doc.comments) && doc.comments.length) {
     const list = await repo.listComments(pid);
@@ -97,6 +125,19 @@ export async function importProject(repo, storage, buf) {
     await repo.saveComments(pid);
   }
   if (rejectedFiles.length) await repo.patchProject(pid, { log: [...p.log, { t: now(), text: `${rejectedFiles.length} fișiere respinse la import: conținutul nu corespunde tipului declarat (${rejectedFiles.slice(0, 5).join(', ')}).`, kind: 'warn' }] });
-  await repo.logEvent(pid, 'import', { from: str(src.id, 60), title: p.title });
+  /* P2-T05: v2 history is imported as retained history (pin "migration"); original pins/decisions become evidence, never local authority */
+  if (doc.version === 2) {
+    for (const [k, list] of Object.entries(doc.versions || {})) {
+      if (!/^[a-z0-9_]{1,40}$/i.test(k) || !Array.isArray(list)) continue;
+      const cur = (await repo.artifacts(pid))[k]?.version;
+      for (const v of list.slice(-500)) if (Number.isInteger(v?.version) && v.version >= 1 && v.version < 1e6) { const vd = versionDoc(k, { version: v.version, content: v.content ?? null, meta: v.meta || {}, basedOn: v.basedOn ?? null, by: v.by, note: v.note, updatedAt: v.at }, { source: 'import-v2', pinned: true, pins: [{ reason: 'migration', ref: { originalPins: (v.pins || []).map(x => x?.reason).filter(Boolean) }, actor: 'import', at: now() }], importedFrom: { version: v.version, hash: v.hash ?? null }, restoredFrom: v.restoredFrom || undefined }); if (v.hash && vd.hash !== v.hash) throw { status: 400, code: 'package_corrupt', message: `Versiunea ${k}@${v.version} nu corespunde amprentei sale.` }; if (v.version === cur) { const c = await storage.readJSON(`projects/${pid}/versions/${k}/${cur}.json`, null); if (c && c.hash !== (v.annotatedHash || vd.hash)) throw { status: 400, code: 'package_corrupt', message: `Versiunea curentă ${k}@${cur} diferă de istoric.` }; continue; } await storage.writeJSON(`projects/${pid}/versions/${k}/${v.version}.json`, vd); }
+    }
+    for (const d of (doc.dependencies || []).slice(0, 5000)) if (d?.id && /^[A-Za-z0-9_@.-]{1,80}$/.test(d.id)) await storage.writeJSON(`projects/${pid}/dependencies/${d.id}.json`, { ...d, imported: true });
+    await repo.patchProject(pid, { importedEvidence: { ...p.importedEvidence, decisionRecords: (doc.decisions || []).slice(-500).map(d => ({ id: str(d?.id, 40), kind: str(d?.kind, 30), state: str(d?.state, 30), actor: str(d?.actor, 40), at: Number(d?.at) || null })) }, rightsDeclared: Array.isArray(doc.rights) ? doc.rights.slice(0, 500) : [] });
+  }
+  if (missingAssets.length) await repo.patchProject(pid, { log: [...(repo.getProject(pid).log || []), { t: now(), text: `Pachet v1: ${missingAssets.length} fișiere referite lipsesc din arhivă (${missingAssets.slice(0, 3).join(', ')}).`, kind: 'warn' }] });
+  await repo.logEvent(pid, 'import', { from: str(src.id, 60), title: p.title, version: doc.version ?? 1 });
   return p;
+  } catch (e) { await rollbackImport(repo, storage, pid); throw e; }   // P2-T05: an error never leaves a partial project
 }
+async function rollbackImport(repo, storage, pid) { try { if (repo.getProject(pid)) await repo.deleteProject(pid); else await storage.deleteProject?.(pid) ?? storage.remove(`projects/${pid}`); } catch (e) { console.warn('[import rollback]', e?.message || e); } }

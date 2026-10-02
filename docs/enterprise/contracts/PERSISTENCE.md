@@ -47,3 +47,10 @@ Snapshoturile PostgreSQL includ tabelele de registru; restaurarea unui snapshot 
 - Retenția: `GET /api/projects/:pid/retention?keep=N` (dry-run, `planHash`); `POST …/retention/apply {planHash, keep}` doar pe laptop, refuzat dacă planul s-a schimbat. Nu atinge versiunile curente, fixate sau referite; fișierele de imagine rămân (GC separat).
 - API: `GET …/artifacts/:key/history` (istoric complet + VariantSet), `GET …/variants/:key`, `POST …/variants/:key/pin`.
 - Backfill legacy: istoricul încorporat (≤5) și documentul curent devin versiuni marcate `backfill`; nu se inventează variante.
+
+## Pachet v2 și migrator (P2-T05)
+
+- **Export v2** (`GET /api/projects/:pid/export.zip`) = superset al v1 (aceleași câmpuri în `project.json`, deci importatorul v04 îl citește) + `versions` (istoric imuabil, pin-uri, adnotări), `dependencies`, `decisions` (evidență), `rights`, `contract`, `files/raw/**` (surse de migrare) și `manifest.json` cu bytes + sha256 pentru fiecare fișier. Exclude secrete și setări.
+- **Import v1/v2**: schemă nesuportată → `unsupported_schema`; v2: manifest obligatoriu, orice fișier lipsă/alterat → `package_missing_file` / `package_corrupt`, asset referit absent → `package_missing_asset`; numerele de versiune originale și lineage-ul (`basedOn`) se păstrează; istoricul v2 intră fixat `migration`; deciziile originale devin evidență; orice eroare retrage proiectul nou (fără proiect parțial). Un pachet v1 fără asset-uri referite doar avertizează (comportament v04).
+- **Adnotări**: verdictele QA scrise în conținutul curent (`patchArtifact`) se înregistrează pe versiune (`annotatedHash`, `annotations`); hash-ul original rămâne.
+- **Migrator** (`server/migration/migrator.js`): `POST /api/migrations/plan` (dry-run read-only, `planHash`), `POST /api/migrations/run?plan=…` (laptop), `GET /api/migrations`, `GET /api/projects/:pid/migration-report`. Transformările T1–T7, idempotență per hash de sursă, raport preserved/repaired/new/revalidate, rollback la orice eroare. Raportul DW: `docs/enterprise/migration/DW-DRY-RUN.md`.

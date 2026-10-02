@@ -60,7 +60,8 @@ test('P2-T03: restaurarea creează o versiune nouă cu lineage; trecutul nu se r
   assert.deepEqual(h.body.variants.versions.find(v => v.version === 8).restoredFrom, { version: 2, hash: v2hash });
   const pin = await api('POST', `projects/${pid}/variants/brief/pin`, { version: 5, note: 'favorit' }); assert.equal(pin.status, 200);
   const plan = await api('GET', `projects/${pid}/retention?keep=1`); assert.ok(!plan.body.remove.some(x => x.key === 'brief' && x.version === 5));
-  const vfile = path.join(process.env.WP_TMP, 'data', 'projects', pid, 'versions', 'brief', '3.json'); const d = JSON.parse(fs.readFileSync(vfile, 'utf8')); d.content.title = 'tampered'; fs.writeFileSync(vfile, JSON.stringify(d));
+  if (process.env.WP_TEST_DATABASE_URL) { const pg = (await import('pg')).default; const c = new pg.Client({ connectionString: process.env.WP_TEST_DATABASE_URL }); await c.connect(); await c.query(`UPDATE artifact_versions SET doc = jsonb_set(doc, '{content,title}', '"tampered"') WHERE project_id = $1 AND key = 'brief' AND version = 3`, [pid]); await c.end(); }
+  else { const vfile = path.join(process.env.WP_TMP, 'data', 'projects', pid, 'versions', 'brief', '3.json'); const d = JSON.parse(fs.readFileSync(vfile, 'utf8')); d.content.title = 'tampered'; fs.writeFileSync(vfile, JSON.stringify(d)); }
   const bad = await api('POST', `projects/${pid}/artifacts/brief/restore`, { version: 3 }); assert.equal(bad.status, 409); assert.equal(bad.body.code, 'version_corrupt');
   await api('POST', `projects/${pid}/archive`, { archived: true });
 });

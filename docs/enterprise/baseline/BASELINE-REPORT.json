@@ -1,31 +1,31 @@
 {
  "kind": "wonderpages.baseline-report/1",
- "generatedAt": "2026-10-02T10:52:31.306Z",
- "codeRevision": "828b282",
+ "generatedAt": "2026-10-02T11:37:25.847Z",
+ "codeRevision": "730aa69",
  "checks": [
   {
    "id": "INVENTORY",
    "status": "PASS",
-   "summary": "176 fișiere (fără node_modules/.git/data), 6 ascunse",
+   "summary": "194 fișiere (fără node_modules/.git/data), 6 ascunse",
    "detail": {
-    "total": 176,
+    "total": 194,
     "byExt": {
-     ".md": 40,
+     ".md": 44,
      ".example": 1,
      "(none)": 3,
      ".json": 11,
      ".bat": 4,
      ".vbs": 1,
      ".yml": 1,
-     ".log": 3,
-     ".js": 62,
+     ".log": 4,
+     ".js": 70,
      ".ttf": 4,
      ".txt": 1,
      ".png": 3,
      ".html": 2,
      ".webmanifest": 1,
      ".zip": 1,
-     ".mjs": 31,
+     ".mjs": 36,
      ".ps1": 1,
      ".cjs": 4,
      ".cmd": 2
@@ -65,16 +65,22 @@
   {
    "id": "SOURCE_DRIFT_V04",
    "status": "PASS",
-   "summary": "130/137 fișiere v04 identice, 7 modificate (enterprise), 33 adăugate, 0 lipsă",
+   "summary": "124/137 fișiere v04 identice, 13 modificate (enterprise), 51 adăugate, 0 lipsă",
    "detail": {
-    "unchanged": 130,
+    "unchanged": 124,
     "modified": [
      "server/canva.js",
+     "server/engine.js",
      "server/index.js",
      "server/projectpkg.js",
+     "server/repo.js",
+     "server/snapshot.js",
+     "server/storage/index.js",
+     "server/storage/local.js",
      "server/storage/postgres.js",
      "server/training.js",
      "tests/3-securitate.test.mjs",
+     "tests/run.mjs",
      "tests/shim/client/index.js"
     ],
     "missing": [],
@@ -89,20 +95,33 @@
      "docs/enterprise/baseline/EDITORIAL-BASELINE.md",
      "docs/enterprise/baseline/logs/2026-10-02-build.log",
      "docs/enterprise/baseline/logs/2026-10-02-pg-qa.log",
+     "docs/enterprise/baseline/logs/2026-10-02-rs0-postgres.log",
      "docs/enterprise/baseline/logs/2026-10-02-rs0.log",
+     "docs/enterprise/contracts/CANON-AND-DEPENDENCIES.md",
+     "docs/enterprise/contracts/DECISIONS.md",
+     "docs/enterprise/contracts/PERSISTENCE.md",
      "docs/enterprise/contracts/PRODUCT-CONTRACT.md",
      "docs/enterprise/contracts/PROVIDER-CAPABILITIES.md",
      "docs/enterprise/contracts/SECURITY-BASELINE.md",
      "docs/enterprise/records/P1.md",
+     "docs/enterprise/records/P2.md",
      "scripts/enterprise/baseline-report.mjs",
      "scripts/enterprise/editorial-baseline.mjs",
      "scripts/enterprise/pg-ephemeral.mjs",
      "scripts/enterprise/reproduce-defects.mjs",
+     "server/domain/canon.js",
      "server/domain/canonical.js",
+     "server/domain/decisions.js",
+     "server/domain/dependencies.js",
      "server/domain/product-contract.js",
      "server/domain/rights.js",
+     "server/enterprise-routes.js",
      "server/migration/dw-reference.js",
+     "server/migration/migrator.js",
      "server/migration/raw-compare.js",
+     "server/persistence/artifact-store.js",
+     "server/persistence/migrations.js",
+     "server/persistence/rebind.js",
      "server/providers/capabilities.js",
      "server/providers/registry.js",
      "server/security/posture.js",
@@ -111,30 +130,37 @@
      "tests/20-p1-contract.test.mjs",
      "tests/21-p1-providers.test.mjs",
      "tests/22-p1-security.test.mjs",
-     "tests/23-p1-rights.test.mjs"
+     "tests/23-p1-rights.test.mjs",
+     "tests/24-p2-uow.test.mjs",
+     "tests/25-p2-canon.test.mjs",
+     "tests/26-p2-variants.test.mjs",
+     "tests/27-p2-decisions.test.mjs",
+     "tests/28-p2-package.test.mjs"
     ]
    }
   },
   {
    "id": "BUILD",
    "status": "PASS",
-   "summary": "PASS: 96 fișiere JavaScript, JSON, lockfile, fonturi și fișiere runtime; WonderPages AI — claude-gpt.v04",
+   "summary": "PASS: 109 fișiere JavaScript, JSON, lockfile, fonturi și fișiere runtime; WonderPages AI — claude-gpt.v04",
    "log": "docs/enterprise/baseline/logs/2026-10-02-build.log"
   },
   {
    "id": "RS0_SUITE",
    "status": "PASS",
-   "summary": "117 trecute, 0 picate, 0 sărite; browser PDF: da",
+   "summary": "151 trecute, 0 picate, 0 sărite; browser PDF: da",
    "log": "docs/enterprise/baseline/logs/2026-10-02-rs0.log"
   },
   {
    "id": "PROTECT_IMPORT",
    "status": "PASS",
-   "summary": "5/5 teste",
+   "summary": "7/7 teste",
    "detail": [
     "export și import de proiect: conținutul rămâne, aprobările se refac (audit C1)",
     "P1-T01 API: importul cu structură invalidă este refuzat explicit, fără proiect parțial",
     "P1-T04 API: la import, o „imagine” care nu e imagine nu se păstrează; referința falsă la proiect nou e refuzată",
+    "P2-T04 API: DW importat intră Pregătit cu aprobări goale; deciziile originale sunt doar evidență",
+    "P2-T05 API: arhiva v1 originală rămâne importabilă (compatibilitate)",
     "C1: „code” mălițios dintr-un proiect importat este neutralizat",
     "C1: „code” cu ../ nu scoate folderul din destinație"
    ]
@@ -142,7 +168,7 @@
   {
    "id": "PROTECT_APPROVALS",
    "status": "PASS",
-   "summary": "10/10 teste",
+   "summary": "19/19 teste",
    "detail": [
     "poarta seriei: aprobarea pe elemente e obligatorie (audit H1)",
     "aprobarea se invalidează când elementul se schimbă",
@@ -151,6 +177,15 @@
     "export și import de proiect: conținutul rămâne, aprobările se refac (audit C1)",
     "v03 acceptare: corectura doar de colorat păstrează culoarea și aprobarea",
     "v03: editarea unui volum anterior redeschide revizuirea chiar în timpul unui gate ulterior",
+    "P2-T03: 8 încercări → toate versiunile imuabile rămân; varianta aprobată este fixată și selectabilă",
+    "P2-T03: retenția este dry-run; aprobatul, curentul și ce e referit nu se șterg; planul vechi este refuzat",
+    "P2-T03: aprobarea unui element fixează exact versiunea aprobată",
+    "P2-T04: aprobare + editare de aceeași lungime → decizia rămâne în istoric, dar devine expirată",
+    "P2-T04: limbă sau imagine lipsă → inventar incomplet → release blocat chiar cu porți aprobate",
+    "P2-T04: decizia de poartă este un record durabil, legat de versiunile aprobate",
+    "P2-T04 API: export de colecție fără poartă refuzat cu motive; propunerea de canon cere decizie; propunere expirată refuzată",
+    "P2-T04 API: DW importat intră Pregătit cu aprobări goale; deciziile originale sunt doar evidență",
+    "P2-T05 API: migrarea DW — dry-run, rulare legată de plan, raport fără pierderi, nimic generat, aprobări pending",
     "v19 1.8: continuitatea volumului 2 folosește registrul aprobat",
     "v03: nicio lipsă nu poate fi aprobată implicit",
     "v03: aprobare închisă cu conținut schimbat refuză livrarea"
@@ -170,21 +205,25 @@
   {
    "id": "PROTECT_BACKUP",
    "status": "PASS",
-   "summary": "5/5 teste",
+   "summary": "8/8 teste",
    "detail": [
     "v03: backupul și restaurarea păstrează împreună documentele și imaginile",
     "v03: o copie întreruptă nu devine backup valid și nu suprascrie copia existentă",
     "v04: dimensiunea backupului este măsurată pe disc, inclusiv fișierele și manifestul",
     "v04: lista API raportează dimensiunea reală a copiei create și păstrează formatul restaurabil",
+    "P2-T01: snapshot + restaurare păstrează registrul de comenzi; orfanii sunt detectați, nu șterși",
+    "P2-T03: restaurarea creează o versiune nouă cu lineage; trecutul nu se rescrie; corupția este detectată",
+    "P2-T03: re-legarea dependențelor după restaurare: scena identică → legat, scena diferită → rămâne expirat",
     "copiile de siguranță: rândurile proiectului ies, celelalte rămân"
    ]
   },
   {
    "id": "PROTECT_LEARNING",
    "status": "PASS",
-   "summary": "4/4 teste",
+   "summary": "5/5 teste",
    "detail": [
     "agenți și lecții",
+    "P2-T04 API: export de colecție fără poartă refuzat cu motive; propunerea de canon cere decizie; propunere expirată refuzată",
     "v19 3.3: retrospectiva volumului propune lecții, aplicate doar cu acordul tău",
     "v19 2.5: buget săptămânal și estimarea colecției",
     "v19 3.6: setul de aur rulează etapele de text și se compară cu referința"
@@ -216,6 +255,12 @@
    "status": "PASS",
    "summary": "PASS: PostgreSQL real — CRUD, istoric, backup DB+fișiere, restaurare, rollback tranzacțional; numărul proiectelor instalate păstrat.",
    "log": "docs/enterprise/baseline/logs/2026-10-02-pg-qa.log"
+  },
+  {
+   "id": "RS0_SUITE_POSTGRES",
+   "status": "PASS",
+   "summary": "151 trecute, 0 picate, 0 sărite (STORAGE=postgres)",
+   "log": "docs/enterprise/baseline/logs/2026-10-02-rs0-postgres.log"
   },
   {
    "id": "DW_REFERENCE",
@@ -472,7 +517,7 @@
   }
  ],
  "summary": {
-  "PASS": 14,
+  "PASS": 15,
   "FAIL": 0,
   "NOT_RUN": 3
  }

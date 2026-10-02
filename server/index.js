@@ -394,7 +394,7 @@ on('PUT', '/api/agents/:id', async ({ id }, req) => { localOnly(req); return upd
 const commandCtx = (req, b = {}) => ({ actor: LAN.isLocal(req) ? 'operator@laptop' : 'operator@lan', expectedRevision: Number.isInteger(b.expectedRevision) ? b.expectedRevision : undefined, commandId: commandIdOf(req) });
 const commandIdOf = req => { const c = String(req.headers['x-wp-command'] || ''); if (!c) return undefined; if (!/^[A-Za-z0-9_.-]{8,120}$/.test(c)) throw { status: 400, message: 'Identificator de comandă invalid.' }; return c; };
 on('GET', '/api/schema', async () => schemaStatus(storage));
-registerEnterpriseRoutes({ on, json, need, localOnly, repo, storage, commandIdOf });
+registerEnterpriseRoutes({ on, json, need, localOnly, repo, storage, commandIdOf, readBody });
 const securityMode = () => transportMode({ lanEnabled: LAN.lanEnabled(), tlsEnabled: tlsEnabled(), acceptPlainLan: !!SETTINGS.acceptPlainLan });   // P1-T04
 on('GET', '/api/security/posture', async (_, req) => { localOnly(req); return postureReport({ mode: securityMode(), bindHost: boundHost, storage: storage.describe().kind, legacyDbCredentials: !!storage.describe().legacyCredentials, tlsEnabled: tlsEnabled(), lanStatus: LAN.status() }); });
 on('PUT', '/api/settings/lan-transport', async (_, req) => { localOnly(req); const b = await json(req); SETTINGS.acceptPlainLan = b.acceptPlainLan === true; await storage.writeJSON('settings.json', SETTINGS); return { mode: securityMode(), acceptPlainLan: SETTINGS.acceptPlainLan }; });

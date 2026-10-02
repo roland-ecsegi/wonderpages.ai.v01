@@ -1,0 +1,146 @@
+{
+ "sourceSha256": "7056e113bf5c84fdfc0f7b8f528713de6c8fe31e82b40fbab056544fe10e45e3",
+ "sourceFormat": {
+  "format": "wonderpages-project",
+  "version": 1
+ },
+ "originalProjectId": "p5405a8a96j4w",
+ "integrity": {
+  "kind": "reference-manifest",
+  "allMatch": true,
+  "entries": [
+   {
+    "path": "CITESTE-MA.md",
+    "present": true,
+    "bytesMatch": true,
+    "sha256Match": true
+   },
+   {
+    "path": "project.json",
+    "present": true,
+    "bytesMatch": true,
+    "sha256Match": true
+   },
+   {
+    "path": "REVIZIE-EDITORIALA.md",
+    "present": true,
+    "bytesMatch": true,
+    "sha256Match": true
+   },
+   {
+    "path": "files/uploads/01-milo-reference.png",
+    "present": true,
+    "bytesMatch": true,
+    "sha256Match": true
+   },
+   {
+    "path": "files/uploads/02-tia-reference.png",
+    "present": true,
+    "bytesMatch": true,
+    "sha256Match": true
+   }
+  ]
+ },
+ "contract": {
+  "valid": true,
+  "errors": [],
+  "input": {
+   "valid": true,
+   "errors": []
+  },
+  "contractHash": "b04df8c0b29661776137a3b32ca1ef84b650fd18b99e8a202a046716e6af07e3",
+  "blueprintVersion": 15
+ },
+ "counts": {
+  "artifacts": 6,
+  "volumes": 6,
+  "pagePlans": 72,
+  "manuscriptPages": 12,
+  "refs": 2,
+  "approvals": 0
+ },
+ "refs": [
+  {
+   "file": "uploads/01-milo-reference.png",
+   "sha256": "da8cbac3255e8d0c6a97f336f4c0f6c12f879a50ba708d280481aea45b2f87c6",
+   "pixels": [
+    1199,
+    1312
+   ]
+  },
+  {
+   "file": "uploads/02-tia-reference.png",
+   "sha256": "14c574ddb45bc5b22dee56cfbcf192b3ae65a76e5804a622eb93fae7ddcd0d79",
+   "pixels": [
+    1222,
+    1287
+   ]
+  }
+ ],
+ "rawFingerprints": {
+  "input": "9761c9132465ad5893083cfcc03ac6efd119fd4330160bd6882ae06c5d0252c8",
+  "refs": "a30f2ba478b739490bf039e272d2a6f4dcc7388ffa210b0e0be0a170ac51e8c6",
+  "blueprint": "bcd4ebb1a923d4667333bb83d26248eccd6f620a44e479cefab31c8eb978d97a",
+  "prompts": "c6020d75af9b1c14abe777c8c2db421ebb63ba3112922a9d488bda14629bcb50",
+  "artifacts": {
+   "bible": "f43b9b4fc462804d4c6ea98e36477f2c729d9c876686d68b790bb1941b3a12dd",
+   "brief": "62936fd91d2fe5a3765398e7929527178fdaa1de3feb6ae1610385ab2381f69f",
+   "cast": "40b57767f2427e95c496d8b9707c312dc75ccef8583d9db8d2375823453fe03f",
+   "refs": "dfd64f848cfa720b0c960f733ede61dce5f59893241e5dd6e8f93e30daa076cc",
+   "script_0": "d1fe0ccf659f945056039175a617670e2b7b73e4a130f0d816989079aee896ed",
+   "series": "3c952d13fa2cbddfe6c0ba989fb1ab474365d97b23c501ba771c28e9db006b93"
+  }
+ },
+ "conflicts": [
+  {
+   "id": "turn-type@v1",
+   "kind": "dual_authority",
+   "requiresDecision": true
+  },
+  {
+   "id": "projection:series.volumes[0].summary",
+   "kind": "unverified_projection",
+   "requiresDecision": false
+  },
+  {
+   "id": "finding:DW01",
+   "kind": "semantic_conflict",
+   "requiresDecision": true
+  }
+ ],
+ "unknownFields": [],
+ "customPrompts": [
+  "adapt",
+  "critic",
+  "native_critic",
+  "page_fix",
+  "polish",
+  "revise_pages",
+  "script",
+  "series",
+  "visual_qa"
+ ],
+ "transforms": [
+  "T1-raw-retention",
+  "T2-id-mapping",
+  "T3-contract-snapshot",
+  "T4-version-pins",
+  "T5-typed-adapter",
+  "T6-conflict-report",
+  "T7-gates-pending"
+ ],
+ "notGenerated": {
+  "volumesWithoutManuscript": [
+   2,
+   3,
+   4,
+   5,
+   6
+  ],
+  "art": "absentă",
+  "note": "Migrarea nu generează conținut lipsă; producția ulterioară trece prin porți."
+ },
+ "planHash": "9a58c1c2e4eaf31fd55749da173b77791994ab2647017407719dd03db90154e0",
+ "migrationId": "mig-7056e113bf5c84fdfc0f7b8f",
+ "dryRun": true
+}

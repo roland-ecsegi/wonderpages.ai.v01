@@ -6,6 +6,10 @@ import { buildGraph, impactOf, textArtifactChanges, canonChanges } from './domai
 import { canonRevision, canonConflicts, projections, proposeCanonChange, AUTHORITY } from './domain/canon.js';
 import { uid, now } from './repo.js';
 import { decisionRecord, policyHash } from './domain/decisions.js';
+import { planMigration, runMigration, listMigrations } from './migration/migrator.js';
+import fs from 'node:fs';
+import path from 'node:path';
+import { ROOT } from './config.js';
 
 export function impactForWrite(bp, art, key, nextContent) {
   const prev = art[key]?.content;
@@ -17,7 +21,13 @@ export function impactForWrite(bp, art, key, nextContent) {
   return impactOf(buildGraph(bp, art), changes, bp);
 }
 
-export function registerEnterpriseRoutes({ on, json, need, localOnly, repo }) {
+export function registerEnterpriseRoutes({ on, json, need, localOnly, repo, storage, readBody }) {
+  const currentBlueprint = () => { try { return JSON.parse(fs.readFileSync(path.join(ROOT, 'blueprints', 'kids-sc.json'), 'utf8')); } catch { return null; } };
+  /* P2-T05: migration dry-run (read-only), run bound to the plan hash (idempotent per source), history */
+  on('POST', '/api/migrations/plan', async (_, req) => { localOnly(req); return planMigration(await readBody(req, 600 * 1024 * 1024), { currentBlueprint: currentBlueprint() }); });
+  on('POST', '/api/migrations/run', async (_, req, url) => { localOnly(req); return runMigration(repo, storage, await readBody(req, 600 * 1024 * 1024), { planHash: String(url.searchParams.get('plan') || ''), currentBlueprint: currentBlueprint() }); });
+  on('GET', '/api/migrations', async (_, req) => { localOnly(req); return { runs: await listMigrations(storage) }; });
+  on('GET', '/api/projects/:pid/migration-report', async ({ pid }) => { need(pid); const a = (await repo.artifacts(pid)).migration_report; if (!a) throw { status: 404, message: 'Proiectul nu provine dintr-o migrare.' }; return a.content; });
   /* P2-T02: canon authority, projections and conflicts (read-only) */
   on('GET', '/api/projects/:pid/canon', async ({ pid }) => {
     need(pid); const bp = await repo.getBlueprint(pid), art = await repo.artifacts(pid), p = repo.getProject(pid);
