@@ -1,6 +1,6 @@
 {
  "kind": "wonderpages.defect-reproduction/1",
- "generatedAt": "2026-10-02T16:52:25.187Z",
+ "generatedAt": "2026-10-02T16:56:42.781Z",
  "defects": [
   {
    "id": "D-C16",
@@ -17,11 +17,11 @@
    "id": "D-C19",
    "arch": "C19/G11",
    "phase": "P7-T01",
-   "status": "REPRODUCED",
+   "status": "FIXED",
    "method": "dynamic",
    "evidence": [
-    "active după import: 1; active după ștergerea packului: 1",
-    "server/training.js:46"
+    "active după import: 0; active după ștergerea packului: 0",
+    "server/training.js:84"
    ]
   },
   {

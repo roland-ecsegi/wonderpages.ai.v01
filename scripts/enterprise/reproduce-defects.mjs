@@ -35,7 +35,7 @@ try {
   /* C19: training import creates ACTIVE lessons immediately; deleting the pack does not revoke them */
   {
     const learning = await import('../../server/learning.js'); const training = await import('../../server/training.js'); const { zip } = await import('../../tests/lib.mjs');
-    await learning.initLearning(storage, async () => ({})); await training.initTraining(storage, learning);
+    await learning.initLearning(storage, async () => ({})); await (await import('../../server/knowledge/store.js')).initKnowledgeStore(storage); await training.initTraining(storage, learning);
     const pack = zip([{ name: 'training.json', data: JSON.stringify({ id: 'defect-pack', name: 'D', lessons: [{ agent: 'scriitor', text: 'Imported rule must not be active by default.' }] }) }]);
     await training.importPack(pack);
     const active = learning.listLessons().filter(l => l.source === 'training' && l.status === 'active');

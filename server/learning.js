@@ -75,9 +75,9 @@ export async function setLessonScope(id, scope, age = null) {
   await save('lessons.json', LESSONS); bus.emit('change', { scope: 'learning' }); return l;
 }
 /* rules you write yourself (or the initial ones from seeds/lessons.json): active immediately, editable, deletable */
-export async function addManualLesson({ agent, text, age = null, source = 'manual', scope, ref }) {
+export async function addManualLesson({ agent, text, age = null, source = 'manual', scope, ref, provenance = null }) {
   if (!agent || !String(text || '').trim()) throw { status: 400, message: 'Alege agentul și scrie regula.' };
-  const l = { id: uid('l'), agent, text: String(text).trim().slice(0, 500), age: age || null, scope: scope || (age ? 'age' : 'global'), ref: ref || null, confidence: 0.95, hits: 1, status: 'active', source, createdAt: now(), updatedAt: now() };
+  const l = { id: uid('l'), agent, text: String(text).trim().slice(0, 500), age: age || null, scope: scope || (age ? 'age' : 'global'), ref: ref || null, confidence: 0.95, hits: 1, status: 'active', source, ...(provenance ? { provenance } : {}), createdAt: now(), updatedAt: now() };
   LESSONS.push(l); await save('lessons.json', LESSONS); bus.emit('change', { scope: 'learning' }); return l;
 }
 export async function seedLessons(list) { for (const x of list) if (!LESSONS.some(l => l.text === x.text)) await addManualLesson({ ...x, source: x.ref ? 'registru' : 'initial' }); }
@@ -201,6 +201,7 @@ export async function setLearningSettings(patch) { for (const k of ['modelExperi
 /* ---------------- 4. approved examples (TF-IDF retrieval) ---------------- */
 export const listExamples = () => EXAMPLES;
 export const banditState = () => BANDIT;
+export async function removeExample(pid, volume) { EXAMPLES = EXAMPLES.filter(e => !(e.pid === pid && e.volume === volume)); await save('examples.json', EXAMPLES); bus.emit('change', { scope: 'learning' }); }   // P7-T01: revocation
 export async function addExample(ex) { EXAMPLES = EXAMPLES.filter(e => !(e.pid === ex.pid && e.volume === ex.volume)); EXAMPLES.push({ ...ex, at: now() }); EXAMPLES = EXAMPLES.slice(-300); await save('examples.json', EXAMPLES); }
 export function findExamples(query, { age, language, excludePid, k = 2 }) {
   const pool = EXAMPLES.filter(e => e.age === age && e.language === language && e.pid !== excludePid); if (!pool.length) return [];

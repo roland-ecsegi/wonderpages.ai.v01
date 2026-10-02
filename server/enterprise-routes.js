@@ -19,6 +19,9 @@ import { deliveryFingerprint } from './delivery.js';
 import { projectFolder, mirrorDelivery } from './output.js';
 import { buildCandidate, verifyCandidate, transition, recordProof, exportRelease } from './domain/release-candidate.js';
 import { checkedPackage } from './package-check.js';
+import * as Knowledge from './knowledge/store.js';
+import { ingestLessonsRegistry } from './knowledge/ll.js';
+import { applyCandidate, revokeDerived } from './training.js';
 import { projectRightsInventory, appRightsInventory, commercialReleaseCheck } from './domain/rights.js';
 import { unitHashes, verifyExecution, missingUnits } from './quality/repair.js';
 import { variantSet, backfillVersions } from './persistence/artifact-store.js';
@@ -367,4 +370,11 @@ export function registerEnterpriseRoutes({ on, json, need, localOnly, repo, stor
     await rcSave(pid, next, 'release_candidate.proof', rec);
     return { candidate: next, physicalAccepted: next.proof.print === 'accepted' };
   });
+  /* P7-T01: knowledge sources and candidates — imports are quarantined candidates; promotion is explicit; revocation is complete */
+  on('GET', '/api/knowledge/sources', async () => ({ sources: Knowledge.listSources().map(s => ({ ...s, counts: Knowledge.counts(s.id) })) }));
+  on('GET', '/api/knowledge/candidates', async (_, req) => { const q = new URL(req.url, 'http://x').searchParams; return { candidates: Knowledge.listCandidates({ status: q.get('status') || undefined, sourceId: q.get('source') || undefined }).slice(-500), counts: Knowledge.counts() }; });
+  on('POST', '/api/knowledge/candidates/:id/promote', async ({ id }, req) => { localOnly(req); const b = await json(req).catch(() => ({})); const c = await Knowledge.promoteCandidate(id, applyCandidate, { actor: 'operator@laptop' }); return { candidate: c, note: String(b.note || '').slice(0, 200) }; });
+  on('POST', '/api/knowledge/candidates/:id/reject', async ({ id }, req) => { localOnly(req); const b = await json(req).catch(() => ({})); return { candidate: await Knowledge.rejectCandidate(id, b.reason) }; });
+  on('POST', '/api/knowledge/sources/:id/revoke', async ({ id }, req) => { localOnly(req); const b = await json(req).catch(() => ({})); return Knowledge.revokeSource(id, revokeDerived, b.reason || 'revocată de operator'); });
+  on('POST', '/api/knowledge/ingest-lessons-registry', async (_, req) => { localOnly(req); const r = await ingestLessonsRegistry(await fs.promises.readFile(path.join(ROOT, 'docs', 'LESSONS-LEARNED.md'), 'utf8')); return { source: r.source, reused: r.reused, counts: Knowledge.counts(r.source.id), quarantined: r.candidates.filter(c => c.status === 'quarantined').map(c => ({ id: c.id, ref: c.ref, flags: c.flags })) }; });
 }
