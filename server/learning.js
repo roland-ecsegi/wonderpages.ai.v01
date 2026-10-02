@@ -80,6 +80,7 @@ export async function addManualLesson({ agent, text, age = null, source = 'manua
   const l = { id: uid('l'), agent, text: String(text).trim().slice(0, 500), age: age || null, scope: scope || (age ? 'age' : 'global'), ref: ref || null, confidence: 0.95, hits: 1, status: 'active', source, ...(provenance ? { provenance } : {}), createdAt: now(), updatedAt: now() };
   LESSONS.push(l); await save('lessons.json', LESSONS); bus.emit('change', { scope: 'learning' }); return l;
 }
+export async function persistLessons() { await save('lessons.json', LESSONS); bus.emit('change', { scope: 'learning' }); }
 export async function seedLessons(list) { for (const x of list) if (!LESSONS.some(l => l.text === x.text)) await addManualLesson({ ...x, source: x.ref ? 'registru' : 'initial' }); }
 export async function setLessonStatus(id, status) {
   const l = LESSONS.find(x => x.id === id); if (!l) throw { status: 404, message: 'Lecție inexistentă.' };
@@ -98,7 +99,7 @@ export async function learnFromEvent(event, { agents, age, pid = null, codes = '
   const existing = LESSONS.filter(l => l.status !== 'rejected').slice(-60).map(l => ({ id: l.id, agent: l.agent, code: l.code || undefined, text: l.text }));
   const out = await completeFn(LESSON_PROMPT(event, existing, agents.join(', '), codes), { json: true, agent: 'producator', task: 'Extrag lecții din decizia ta', meta: { stage: 'lectii', prompt: 'lessons', lessons: false } });
   for (const id of out?.confirm || []) { const l = LESSONS.find(x => x.id === id); if (l) { l.confidence = Math.min(0.97, l.confidence + 0.15); l.hits = (l.hits || 0) + 1; l.projects = [...new Set([...(l.projects || [l.pid].filter(Boolean)), pid].filter(Boolean))]; l.candidate = scopeOf(l) === 'project' && l.projects.length >= 2; l.updatedAt = now(); } }
-  for (const id of out?.contradict || []) { const l = LESSONS.find(x => x.id === id); if (l) { l.confidence = Math.max(0, l.confidence - 0.25); l.updatedAt = now(); if (l.confidence < 0.2 && l.status !== 'active') l.status = 'rejected'; } }
+  for (const id of out?.contradict || []) { const l = LESSONS.find(x => x.id === id); if (l) { l.confidence = Math.max(0, l.confidence - 0.25); l.updatedAt = now(); if (pid) l.negatives = [...(l.negatives || []).filter(n => n.pid !== pid), { pid, at: now() }].slice(-50); /* P7-T02: negative case kept as evidence */ if (l.confidence < 0.2 && l.status !== 'active') l.status = 'rejected'; } }
   for (const n of out?.new || []) {
     if (!n?.text || !agents.includes(n.agent)) continue;
     if (LESSONS.some(l => l.text.toLowerCase() === n.text.toLowerCase())) continue;
@@ -247,6 +248,7 @@ export async function addProposals(list, { pid, vol, age, confirm = [] } = {}) {
 }
 export async function decideProposal(id, accept, scope = 'project') {
   const x = PROPOSALS.find(p => p.id === id); if (!x || x.status !== 'pending') throw { status: 404, message: 'Propunere inexistentă.' };
+  if (accept && scope && scope !== 'project') throw { status: 409, code: 'single_case', message: 'O propunere vine dintr-un singur proiect: se acceptă la nivel de proiect; lărgirea cere dovezi din mai multe proiecte (raport de promovare).' };   // P7-T02
   x.status = accept ? 'accepted' : 'rejected'; x.decidedAt = now();
   if (accept) LESSONS.push({ id: uid('l'), agent: x.agent, text: x.text, code: x.code, age: scope === 'age' ? x.age : null, scope: ['project', 'age', 'global'].includes(scope) ? scope : 'project', pid: x.pid, projects: [x.pid].filter(Boolean), confidence: 0.7, hits: 1, status: 'active', source: 'retro', createdAt: now(), updatedAt: now() });
   await save('proposals.json', PROPOSALS); await save('lessons.json', LESSONS); bus.emit('change', { scope: 'learning' }); return x;

@@ -15,10 +15,10 @@
 import { uid, now, bus } from '../repo.js';
 import { canonicalHash } from '../domain/canonical.js';
 
-let storage = null, SOURCES = [], CANDIDATES = [];
+let storage = null, SOURCES = [], CANDIDATES = [], DECISIONS = [];
 export const KNOWLEDGE_SCHEMA = 'wonderpages.knowledge/1';
-export async function initKnowledgeStore(s) { storage = s; const d = (await s.readJSON('knowledge/store.json', null)) || {}; SOURCES = d.sources || []; CANDIDATES = d.candidates || []; }
-const save = async () => { await storage.writeJSON('knowledge/store.json', { schema: KNOWLEDGE_SCHEMA, sources: SOURCES, candidates: CANDIDATES }); bus.emit('change', { scope: 'learning' }); };
+export async function initKnowledgeStore(s) { storage = s; const d = (await s.readJSON('knowledge/store.json', null)) || {}; SOURCES = d.sources || []; CANDIDATES = d.candidates || []; DECISIONS = d.decisions || []; }
+const save = async () => { await storage.writeJSON('knowledge/store.json', { schema: KNOWLEDGE_SCHEMA, sources: SOURCES, candidates: CANDIDATES, decisions: DECISIONS }); bus.emit('change', { scope: 'learning' }); };
 export const listSources = () => SOURCES;
 export const listCandidates = (f = {}) => CANDIDATES.filter(c => (!f.sourceId || c.sourceId === f.sourceId) && (!f.status || c.status === f.status));
 export const getCandidate = id => CANDIDATES.find(c => c.id === id) || null;
@@ -88,3 +88,9 @@ export function counts(sourceId = null) {
   for (const c of list) by[c.status] = (by[c.status] || 0) + 1;
   return { total: list.length, ...by };
 }
+
+/* P7-T02: append-only knowledge decisions (promotions, rollbacks) */
+export async function recordDecision(rec) { DECISIONS.push(rec); await save(); return rec; }
+export const listDecisions = () => DECISIONS;
+export const getDecision = id => DECISIONS.find(d => d.id === id) || null;
+export const sourceStatus = id => SOURCES.find(s => s.id === id)?.status || null;

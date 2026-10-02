@@ -57,6 +57,7 @@ import { releaseCheck, expectedInventory, decisionStatus } from './domain/decisi
 import { rebindDependents } from './persistence/rebind.js';
 import { registerEnterpriseRoutes, impactForWrite, measuredLayout } from './enterprise-routes.js';
 import * as Knowledge from './knowledge/store.js';
+import * as Governance from './knowledge/governance.js';
 import { inspectPdf, checkInspection } from './inspection/pdf-inspect.js';
 import { imageResolution } from './quality/readiness.js';
 import { EventStream } from './observability/events.js';
@@ -514,7 +515,10 @@ on('GET', '/api/diagnostic', async () => {
   return { checks: out };
 });
 on('POST', '/api/lessons', async (_, req) => { localOnly(req); return addManualLesson(await json(req)); });
-on('POST', '/api/lessons/:id/scope', async ({ id }, req) => { localOnly(req); const b = await json(req); return setLessonScope(id, b.scope, b.age); });
+on('POST', '/api/lessons/:id/scope', async ({ id }, req) => { localOnly(req); const b = await json(req); return Governance.changeScope(repo, id, { scope: b.scope, age: b.age || null, pid: b.pid || null, reportHash: b.reportHash || null, note: b.note || '' }); });   // P7-T02: report → decision → versioned change
+on('GET', '/api/lessons/:id/promotion-report', async ({ id }, _, url) => Governance.scopeReport(repo, id, { scope: url.searchParams.get('scope'), age: url.searchParams.get('age') || null, pid: url.searchParams.get('pid') || null }));
+on('POST', '/api/knowledge/decisions/:id/rollback', async ({ id }, req) => { localOnly(req); return Governance.rollback(id); });
+on('GET', '/api/knowledge/decisions', async () => ({ decisions: Knowledge.listDecisions().slice(-200) }));
 on('POST', '/api/calibration/:age', async ({ age }, req) => { localOnly(req); await setCalibrated(age, (await json(req)).calibrated); return { ok: true }; });
 on('POST', '/api/lessons/:id', async ({ id }, req) => localOnly(req) || setLessonStatus(id, (await json(req)).status));
 on('GET', '/api/learning', async () => learningState(repo.listProjects()));

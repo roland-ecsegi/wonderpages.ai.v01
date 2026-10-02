@@ -80,8 +80,11 @@ export async function revokeDerived(d) {
   else if (d.kind === 'failure') await learning.setKnownFailures(d.key, []);
 }
 /** Explicit operator promotion of one candidate (P7-T02 adds validation and scope gates in front of it). */
-export async function applyCandidate(c) {
-  if (c.type === 'lesson' || c.type === 'world_rule') { const l = await learning.addManualLesson({ agent: c.agent, text: c.text, age: c.age, scope: c.scope || 'project', ref: c.ref, source: 'training', provenance: { sourceId: c.sourceId, candidateId: c.id } }); return { kind: 'lesson', id: l.id }; }
+export async function applyCandidate(c, { pid = null } = {}) {
+  if (c.type === 'lesson' || c.type === 'world_rule') {   // P7-T02: a promoted rule starts in ONE project; widening needs evidence (promotion report)
+    if (!pid) throw { status: 400, code: 'project_required', message: 'Alege proiectul în care se aplică regula; lărgirea la vârstă sau la tot rolul cere dovezi din mai multe proiecte.' };
+    const l = await learning.addManualLesson({ agent: c.agent, text: c.text, age: c.age, scope: 'project', ref: c.ref, source: 'training', provenance: { sourceId: c.sourceId, candidateId: c.id } });
+    l.pid = pid; l.projects = [pid]; await learning.persistLessons(); return { kind: 'lesson', id: l.id }; }
   if (c.type === 'example') { await learning.addExample({ ...c.payload, provenance: { sourceId: c.sourceId, candidateId: c.id } }); return { kind: 'example', pid: c.payload.pid, volume: c.payload.volume }; }
   if (c.type === 'failure') { await learning.setKnownFailures('kc:' + c.id, [c.payload]); return { kind: 'failure', key: 'kc:' + c.id }; }
   throw { status: 400, message: 'Tip de candidat necunoscut.' };
