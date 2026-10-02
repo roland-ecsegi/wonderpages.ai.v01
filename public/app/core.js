@@ -175,12 +175,16 @@ async function boot() {
   if (parseRoute().name !== 'render') daliInit();
 }
 
+/* P4-T01: route registry — every project tab and alias leads to a real function (e.g. preview → the Book tab, where layout and languages are checked) */
+const PROJECT_TABS = Object.freeze({ progress: 'Progres', review: 'Revizuire', book: 'Carte', export: 'Livrare', activity: 'Activitate' });
+const TAB_ALIASES = Object.freeze({ preview: 'book', carte: 'book', macheta: 'book', livrare: 'export', activitate: 'activity', revizuire: 'review', progres: 'progress' });
+const resolveTab = t => (PROJECT_TABS[t] ? t : TAB_ALIASES[t] || 'progress');
 function parseRoute() {
   const parts = (location.hash || '#/').split('?')[0].replace(/^#\/?/, '').split('/').filter(Boolean);
   if (!parts.length) return { name: 'dashboard' };
   if (parts[0] === 'projects') return { name: 'projects' };
   if (parts[0] === 'new') return { name: 'new', slug: parts[1] || null };
-  if (parts[0] === 'p' && parts[1]) return { name: 'project', pid: parts[1], tab: parts[2] || 'progress' };
+  if (parts[0] === 'p' && parts[1]) return { name: 'project', pid: parts[1], tab: resolveTab(parts[2] || 'progress') };
   if (parts[0] === 'studio') return { name: 'studio', slug: parts[1] || null };
   if (parts[0].startsWith('settings')) return { name: 'settings' };
   if (parts[0] === 'agents') return { name: 'agents' };

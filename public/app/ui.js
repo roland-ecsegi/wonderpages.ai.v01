@@ -179,7 +179,7 @@ async function startFromPack(id) {
   if (pk.project.seed_story) { const txt = await (await file(pk.project.seed_story)).text(); S.wiz.values.seed_story = txt; }
   S.wiz.files = [];
   for (const c of pk.characters || []) { const b = await (await file(c.file)).blob(); const url = await new Promise(res => { const rd = new FileReader(); rd.onload = () => res(rd.result); rd.readAsDataURL(b); }); S.wiz.files.push({ name: c.file.split('/').pop(), mime: b.type || 'image/png', url }); }
-  S.wiz.step = 2; location.hash = '#/new/' + t.slug; toast('Formularul a fost completat din pachet; verifică-l și continuă.');
+  S.wiz.source = 'pack'; S.wiz.step = 2; location.hash = '#/new/' + t.slug; toast('Formularul a fost completat din pachet; verifică-l și continuă.');
 }
 /* only one project works at a time: starting another asks you to pause the current one */
 async function startOrSwitch(pid) {

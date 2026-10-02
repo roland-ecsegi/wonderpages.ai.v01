@@ -32,6 +32,7 @@ test('P2-T05 API: migrarea DW — dry-run, rulare legată de plan, raport fără
   assert.ok(r.conflicts.some(c => c.id === 'turn-type@v1') && r.findings.some(f => f.id === 'DW01'));
   const d = await project(MIGRATED);
   assert.equal(d.project.status, 'ready'); assert.deepEqual(d.project.approvals, {}); assert.equal(d.project.running, false);
+  assert.equal(d.project.source?.kind, 'migration', 'P4-T01: DW se vede ca sursă existentă (proiect migrat), nu ca formular nou');
   assert.ok(!d.artifacts.script_1 && !Object.keys(d.artifacts).some(k => k.startsWith('ill_')), 'nimic generat');
   assert.equal(d.artifacts.series.version, SRC.artifacts.series.version, 'numerele de versiune originale păstrate');
   for (const ref of d.project.refs) { const b = Buffer.from(await (await api('GET', `/files/${MIGRATED}/${ref.file}`, undefined, { raw: true })).arrayBuffer()); assert.equal(sha(b), plan.body.refs.find(x => x.file === ref.file).sha256, 'referința originală byte-identică'); }

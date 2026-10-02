@@ -1,6 +1,6 @@
 {
  "kind": "wonderpages.defect-reproduction/1",
- "generatedAt": "2026-10-02T12:16:33.120Z",
+ "generatedAt": "2026-10-02T13:15:07.671Z",
  "defects": [
   {
    "id": "D-C16",
@@ -50,10 +50,11 @@
    "id": "D-ROUTE-PREVIEW",
    "arch": "OUTPUT-02/23",
    "phase": "P4-T01",
-   "status": "REPRODUCED",
+   "status": "FIXED",
    "method": "static",
    "evidence": [
-    "public/app/ui.js:331"
+    "public/app/ui.js:331",
+    "public/app/core.js:180"
    ]
   },
   {

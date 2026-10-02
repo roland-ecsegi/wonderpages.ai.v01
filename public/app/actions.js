@@ -63,10 +63,15 @@ async function createProject() {
   $('[data-act="start"]')?.setAttribute('disabled', '');
   try {
     const refs = (S.wiz.files || []).map(x => ({ name: x.name, mime: x.mime, data: x.url.split(',')[1] }));
-    const r = await api('POST', '/projects', { typeSlug: t.slug, input: { ...S.wiz.values }, options: { ...S.wiz.options }, refs });
+    const r = await api('POST', '/projects', { typeSlug: t.slug, input: { ...S.wiz.values }, options: { ...S.wiz.options }, refs, previewHash: S.wiz.preview?.formHash ?? undefined, source: S.wiz.source || undefined });   // P4-T01: bound to what you confirmed
     S.wiz = { slug: null, values: {}, step: 2, errors: {}, options: { images: imagesOk() }, files: [] };
     await loadState(); location.hash = `#/p/${r.id}/progress`; toast('Proiect creat. Apasă „Pornește lucrul” când vrei să înceapă.');
-  } catch (e) { toast('Proiectul nu a putut fi creat: ' + e.message); $('[data-act="start"]')?.removeAttribute('disabled'); }
+  } catch (e) { if (e.code === 'stale_form') { S.wiz.preview = null; loadPreview(); } toast('Proiectul nu a putut fi creat: ' + e.message); $('[data-act="start"]')?.removeAttribute('disabled'); }
+}
+/* P4-T01: the contract preview is computed by the server from exactly the values that will be sent */
+function loadPreview() {
+  const t = typeBySlug(S.wiz.slug); if (!t) return; const sent = JSON.stringify(S.wiz.values);
+  api('POST', '/intake/preview', { typeSlug: t.slug, input: { ...S.wiz.values }, source: S.wiz.source || undefined }).then(p => { if (JSON.stringify(S.wiz.values) === sent) { S.wiz.preview = p; render(); } }).catch(e => { S.wiz.preview = { valid: false, errors: [{ message: e.message }], languages: [], source: { label: '—' } }; render(); });
 }
 
 function decisionModal(d) {
@@ -272,9 +277,12 @@ const ACT = {
   'wiz-next': () => {
     const t = typeBySlug(S.wiz.slug); const errors = {};
     (t.input_schema.fields || []).forEach(f => { const v = S.wiz.values[f.key]; if (f.type === 'languages' && !(v || []).length) errors[f.key] = 'Alege cel puțin o limbă.'; if (!['images', 'languages'].includes(f.type) && f.required && !String(v ?? '').trim()) errors[f.key] = 'Câmp obligatoriu.'; });
-    S.wiz.errors = errors; if (!Object.keys(errors).length) { S.wiz.step = 3; window.scrollTo(0, 0); } render();
+    S.wiz.errors = errors; if (!Object.keys(errors).length) { S.wiz.step = 3; S.wiz.preview = null; loadPreview(); window.scrollTo(0, 0); } render();
   },
-  'wiz-back': () => { S.wiz.step = 2; render(); },
+  'wiz-back': () => { S.wiz.step = 2; S.wiz.preview = null; render(); },
+  'intake-infer': () => { const text = $('#intake-text')?.value || ''; S.wiz.intake = { text }; api('POST', '/intake/infer', { typeSlug: S.wiz.slug, text }).then(r => { S.wiz.intake = { text, result: r }; render(); }).catch(e => { S.wiz.intake = { text, error: e.message }; render(); }); },
+  'intake-apply': () => { const r = S.wiz.intake?.result; if (!r) return; for (const [k, v] of Object.entries(r.values)) S.wiz.values[k] = Array.isArray(v) ? [...v] : v; S.wiz.intake = { text: S.wiz.intake.text }; toast('Formularul a fost completat; verifică fiecare câmp.'); render(); },
+  'intake-cancel': () => { S.wiz.intake = { text: S.wiz.intake?.text || '' }; render(); },
   'start': () => createProject(),
   'run': el => startOrSwitch(el.dataset.pid),
   'pause': el => api('POST', `/projects/${el.dataset.pid}/pause`).then(() => toast('Se pune pe pauză după pasul în curs. Nimic nu se pierde.')).catch(e => toast(e.message)),

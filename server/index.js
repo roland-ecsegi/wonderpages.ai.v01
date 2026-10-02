@@ -57,6 +57,7 @@ import { releaseCheck, expectedInventory, decisionStatus } from './domain/decisi
 import { rebindDependents } from './persistence/rebind.js';
 import { registerEnterpriseRoutes, impactForWrite } from './enterprise-routes.js';
 import { EventStream } from './observability/events.js';
+import * as Intake from './domain/intake.js';
 import { toolSchemaHash, hostConfig } from './providers/capabilities.js';
 import { checkIncludedQuota } from './subscription-usage.js';
 
@@ -186,17 +187,14 @@ on('POST','/api/projects/:pid/blueprint-upgrade',async({pid},req)=>{
 });
 on('POST', '/api/projects', async (_, req) => {
   const b = await readBody(req, 60 * 1024 * 1024); const body = JSON.parse(b.toString('utf8') || '{}'); const { typeSlug, refs = [] } = body;
-  const input = cleanInput(body.input); const o = body.options && typeof body.options === 'object' ? body.options : {};
+  const o = body.options && typeof body.options === 'object' ? body.options : {};
   const options = Object.fromEntries(Object.entries(o).filter(([k, v]) => /^[a-z_]{1,30}$/.test(k) && typeof v === 'boolean'));   // on/off flags of the product type
   if (['canva', 'chatgpt'].includes(o.image_engine)) options.image_engine = o.image_engine;
   const t = repo.getType(typeSlug); if (!t) throw { status: 400, message: 'Tip de produs necunoscut.' };
-  for (const f of t.input_schema?.fields || []) if (f.type === 'languages') {        // first selected = source language, second = natural adaptation
-    const sel = (Array.isArray(input[f.key]) ? input[f.key] : []).filter(v => (f.options || []).some(o => o.value === v));
-    const ordered = (f.options || []).map(o => o.value).filter(v => sel.includes(v));
-    if (!ordered.length) throw { status: 400, message: `Alege cel puțin o limbă la „${f.label}”.` };
-    input[f.key] = ordered; input.language = ordered[0]; input.second_language = ordered[1] || '';
-  }
+  const tooLong = Intake.checkLimits(t, body.input); if (tooLong.length) throw { status: 422, code: 'input_too_long', errors: tooLong, message: tooLong.map(e => e.message).join(' ') };   // P4-T01: never cut silently
+  const input = Intake.normalizeInput(t, cleanInput(body.input));   // first selected = source language, second = natural adaptation
   for (const f of t.input_schema?.fields || []) if (!['images', 'languages'].includes(f.type) && f.required && !String(input[f.key] ?? '').trim()) throw { status: 400, message: `Câmpul „${f.label}” este obligatoriu.` };
+  if (body.previewHash != null && body.previewHash !== Intake.formHash(t, input)) throw { status: 409, code: 'stale_form', message: 'Formularul sau tipul de produs s-a schimbat după confirmare. Verifică din nou rezumatul înainte de creare.' };   // P4-T01
   const contract = contractFromBlueprint(t), cv = validateContract(contract), iv = cv.valid ? validateProjectInput(contract, input) : cv;   // P1-T01
   if (!iv.valid) throw { status: 422, code: 'contract_invalid', errors: iv.errors, message: iv.errors.map(e => e.message).join(' ') };
   const variant = (t.input_schema.fields.find(f => f.key === t.variant_key)?.options || []).find(o => o.value === input[t.variant_key]);
@@ -205,7 +203,7 @@ on('POST', '/api/projects', async (_, req) => {
     id: pid, title: (String(input.title || '').trim() || String(input.short_description || '').trim().split(/\s+/).slice(0, 7).join(' ')).slice(0, 160),
     typeSlug: t.slug, typeName: t.name, typeIcon: t.icon || '', typeVersion: t.version, variantLabel: variant?.label || '',
     contractRef: { schema: contract.schema, contractHash: contract.contractHash, blueprintVersion: contract.blueprintVersion, blueprintHash: contract.blueprintHash },
-    input, options: { image_engine: IMAGE_DEFAULT.engine, image_fallback: !!IMAGE_DEFAULT.fallback, ...options }, status: 'ready', stageIndex: 0, stages: {}, currentStage: null, run: 1,
+    input, source: { kind: Intake.sourceOf(input, ['pack'].includes(body.source) ? body.source : null), at: now() }, options: { image_engine: IMAGE_DEFAULT.engine, image_fallback: !!IMAGE_DEFAULT.fallback, ...options }, status: 'ready', stageIndex: 0, stages: {}, currentStage: null, run: 1,
     stagePlan: expandStages(t).map(s => ({ key: s.key, label: s.label, phase: s.phase || '', gate: s.handler === 'review_gate', vol: s.vol ?? null })), volumeFlow: !!t.volume_flow,
     gate: null, decisions: [], notes: [], rejections: [], log: [{ t: now(), text: 'Proiect creat. Pornește-l când vrei, din pagina proiectului sau din Proiecte.', kind: 'info' }], createdAt: now(), updatedAt: now(), error: null
   };

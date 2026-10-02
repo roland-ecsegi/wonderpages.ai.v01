@@ -60,8 +60,8 @@ try {
   }
   /* routes: preview link vs book tab */
   {
-    const has = /#\/p\/'\+esc\(S\.cur\)\+'\/preview/.test(src('public/app/ui.js'));
-    rec('D-ROUTE-PREVIEW', 'OUTPUT-02/23', 'P4-T01', has ? 'REPRODUCED' : 'FIXED', [lineOf('public/app/ui.js', /\/preview">Verifică macheta/) || 'link absent'], 'static');
+    const has = /#\/p\/'\+esc\(S\.cur\)\+'\/preview/.test(src('public/app/ui.js')), alias = /preview: 'book'/.test(src('public/app/core.js'));   // P4-T01: the route registry resolves the alias
+    rec('D-ROUTE-PREVIEW', 'OUTPUT-02/23', 'P4-T01', has && !alias ? 'REPRODUCED' : 'FIXED', [lineOf('public/app/ui.js', /\/preview">Verifică macheta/) || 'link absent', alias ? lineOf('public/app/core.js', /preview: 'book'/) : 'fără alias'], 'static');
   }
   /* C11: recursive provider fallback can reset the local wait clock (INFERRED in the architecture) */
   {

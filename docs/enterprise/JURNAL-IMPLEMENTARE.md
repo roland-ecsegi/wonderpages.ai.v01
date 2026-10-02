@@ -54,8 +54,8 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | P3-T03 | DONE | c2051be | TEST-P3-T03 7/7; RS0 169/169 local + 169/169 PG | Joburi durabile, lease+fencing în commit, reconciliere, ambiguous |
 | P3-T04 | DONE | f2dd02b | TEST-P3-T04 5/5; RS0 174/174 | Buget comun, 1 hop, lookup job acceptat, ownership; C11/C12 FIXED |
 | P3-T05 | DONE | 2a42777 | TEST-P3-T05 6/6; RS0 180/180 | Verificare la execuție, refs_unsupported, login revocat, pachete text/imagine cu aceleași validări |
-| P3-T06 | DONE | (acest commit) | TEST-P3-T06 4/4; RS0 184/184 local + 184/184 PG | Flux SSE cu cursor, progres din unități durabile, estimare doar măsurată, inspector; PHASE 3 închisă |
-| P4-T01 | PENDING | | | |
+| P3-T06 | DONE | 6700b69 | TEST-P3-T06 4/4; RS0 184/184 local + 184/184 PG | Flux SSE cu cursor, progres din unități durabile, estimare doar măsurată, inspector; PHASE 3 închisă |
+| P4-T01 | DONE | (acest commit) | TEST-P4-T01 7/7; RS0 191/191 | Intake local idee/manuscris, rezumat contract legat de creare (stale_form), limite explicite, registru rute; D-ROUTE-PREVIEW FIXED |
 | P4-T02 | PENDING | | | |
 | P4-T03 | PENDING | | | |
 | P4-T04 | PENDING | | | |
@@ -110,6 +110,7 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | 2026-10-02 | RS0 + TEST-P3-T05 | 180/180 PASS | — |
 | 2026-10-02 | RS0 + TEST-P3-T06 (local și PostgreSQL) | 184/184 + 184/184 PASS | prima rulare: urma proiectului șters în fluxul de evenimente (RS0 ștergere) și listarea pachetelor pe PG — corectate în cod |
 | 2026-10-02 | Închidere P3: baseline-report --with-tests --with-pg | 15 PASS · 0 FAIL · 3 NOT_RUN | o cursă în testul SSE nou (PG) — aserțiune corectată |
+| 2026-10-02 | RS0 + TEST-P4-T01 | 191/191 PASS | prima rulare: limitele de cuvânt ASCII nu recunoșteau „română” — corectat (Unicode) |
 
 ## Probleme deschise
 
@@ -123,6 +124,6 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 
 ## Checkpoint
 
-- Ultimul task închis: P3-T06
-- Următorul task: **P4-T01**
+- Ultimul task închis: P4-T01
+- Următorul task: **P4-T02**
 - Cum se reia: `npm ci && npm run build && BROWSER_PATH=/opt/pw-browsers/chromium npm test`; citește tabelul de mai sus și `docs/enterprise/records/`.

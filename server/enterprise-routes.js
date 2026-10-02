@@ -12,6 +12,8 @@ import path from 'node:path';
 import { ROOT } from './config.js';
 import { RUNNING, expandStages, prepareTextPacket, ingestTextPacket, prepareImagePacket, ingestImagePacket } from './engine.js';
 import { progressReport, inspectArtifact } from './observability/progress.js';
+import { inferFromText, contractPreview } from './domain/intake.js';
+import { contractFromBlueprint, validateProjectInput, editionsFor } from './domain/product-contract.js';
 import * as Ledger from './ledger.js';
 import { getCapabilities } from './providers/registry.js';
 import { createPacket, getPacket, listPackets, recordAttempt, assertUsable, packetZip } from './providers/operator-exchange.js';
@@ -110,4 +112,9 @@ export function registerEnterpriseRoutes({ on, json, need, localOnly, repo, stor
     const manifest = hash && /^[0-9a-f]{16,64}$/.test(hash) ? await storage.readJSON(`projects/${pid}/context/${hash}.json`, null) : null;
     return inspectArtifact({ key, art, pid, jobs: J ? await J.list(pid) : [], ledgerRows: Ledger.rows(r => r.pid === pid), decisions: await repo.listDecisions(pid), projectDecisions: p.decisions || [], manifest });
   });
+
+  /* P4-T01: guided intake — local inference proposal and the contract preview shown before create/start (nothing is created) */
+  const typeOr400 = slug => { const t = repo.getType(String(slug || '')); if (!t) throw { status: 400, message: 'Tip de produs necunoscut.' }; return t; };
+  on('POST', '/api/intake/infer', async (_, req) => { const b = await json(req); return inferFromText(typeOr400(b.typeSlug), b.text); });
+  on('POST', '/api/intake/preview', async (_, req) => { const b = await json(req), t = typeOr400(b.typeSlug); return contractPreview(t, b.input && typeof b.input === 'object' ? b.input : {}, { contract: contractFromBlueprint(t), validate: validateProjectInput, editions: editionsFor, source: b.source === 'pack' ? 'pack' : null }); });
 }

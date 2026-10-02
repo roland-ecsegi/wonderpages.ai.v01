@@ -96,7 +96,7 @@ export async function runMigration(repo, storage, buf, { planHash, currentBluepr
     report.lost = report.preserved.filter(x => x.status !== 'identical').length;
     if (report.lost) throw { code: 'migration_loss', message: `Migrarea ar modifica ${report.lost} artefacte: oprire.`, report };
     await repo.writeArtifact(pid, 'migration_report', report, { by: 'migration', note: 'Raport de migrare ' + plan.migrationId });
-    await repo.patchProject(pid, { canonFindings: findings, migration: { id: plan.migrationId, sourceSha256: plan.sourceSha256, at: report.at } });
+    await repo.patchProject(pid, { canonFindings: findings, migration: { id: plan.migrationId, sourceSha256: plan.sourceSha256, at: report.at }, source: { kind: 'migration', original: plan.originalProjectId || null, at: report.at } });
     const run = { id: plan.migrationId, status: 'committed', projectId: pid, planHash: plan.planHash, sourceSha256: plan.sourceSha256, transforms: plan.transforms, counts: plan.counts, at: now() };
     await storage.writeJSON(runRel, run);
     return { ...run, report };

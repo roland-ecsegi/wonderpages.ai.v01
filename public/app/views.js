@@ -161,10 +161,20 @@ function viewNew() {
   const t = typeBySlug(r.slug);
   if (!t) return `<div class="wiz">${head}<div class="faint">Se încarcă tipul de produs…</div></div>`;
   if (S.wiz.step === 3) return `<div class="wiz">${head}${wizSummary(t)}</div>`;
-  const fields = (t.input_schema?.fields || []).map(f => fieldHTML(f, S.wiz.values[f.key], S.wiz.errors[f.key])).join('');
-  return `<div class="wiz">${head}<div class="panel panel-pad"><div class="row" style="margin-bottom:18px"><span style="font-size:22px" aria-hidden="true">${esc(t.icon || '')}</span><div><b>${esc(t.full_name || t.name)}</b><div class="faint small">${esc(t.description || '')}</div></div></div>${fields}</div>
+  const all = t.input_schema?.fields || [];
+  const req = all.filter(f => f.required).map(f => fieldHTML(f, S.wiz.values[f.key], S.wiz.errors[f.key])).join('');
+  const optF = all.filter(f => !f.required), optOpen = optF.some(f => { const v = S.wiz.values[f.key]; return (Array.isArray(v) ? v.length : String(v ?? '').trim() && v !== f.default) || S.wiz.errors[f.key]; }) || (S.wiz.files || []).length;
+  const fields = `${req}<details class="more" ${optOpen ? 'open' : ''}><summary>Mai multe opțiuni: titlu, observații, personajele tale, manuscrisul tău</summary>${optF.map(f => fieldHTML(f, S.wiz.values[f.key], S.wiz.errors[f.key])).join('')}</details>`;
+  return `<div class="wiz">${head}${intakeHTML()}<div class="panel panel-pad"><div class="row" style="margin-bottom:18px"><span style="font-size:22px" aria-hidden="true">${esc(t.icon || '')}</span><div><b>${esc(t.full_name || t.name)}</b><div class="faint small">${esc(t.description || '')}</div></div></div>${fields}</div>
     <div class="wiz-foot"><a class="btn ghost" href="#/new">Alege alt tip</a><button class="btn primary" data-act="wiz-next">Continuă</button></div></div>`;
 }
+/* P4-T01: short intake — a local proposal (no AI, nothing created) that you confirm into the form or cancel */
+function intakeHTML() {
+  const I = S.wiz.intake || {};
+  const prop = I.result ? `<div class="notice" id="intake-proposal" style="margin-top:10px"><b>Propunere (${I.result.kind === 'manuscript' ? 'manuscris' : 'idee'})</b><dl class="small" style="margin:6px 0">${Object.entries(I.result.values).map(([k, v]) => `<dt>${esc(fieldLabel(k))}</dt><dd>${esc(Array.isArray(v) ? v.join(', ') : String(v).slice(0, 160))}${String(v).length > 160 ? '…' : ''} <span class="faint">(${esc(I.result.sources[k])})</span></dd>`).join('')}</dl>${I.result.warnings.map(w => `<div class="small" style="color:var(--warn)">${esc(w.message)}</div>`).join('')}${I.result.missing.length ? `<div class="small muted">De ales în formular: ${I.result.missing.map(m => esc(m.label)).join(', ')}</div>` : ''}<div class="row" style="margin-top:8px"><button class="btn sm primary" data-act="intake-apply">Aplică în formular</button><button class="btn sm ghost" data-act="intake-cancel">Renunță</button></div></div>` : '';
+  return `<div class="panel panel-pad" style="margin-bottom:12px"><label class="field" for="intake-text" style="margin:0"><span class="lbl">Pe scurt: ideea ta sau manuscrisul tău <span class="opt">(opțional)</span></span><textarea id="intake-text" class="textarea" placeholder="Ex.: o serie pentru 3-4 ani despre un pui de dinozaur curios, în română și engleză, acuarelă">${esc(I.text || '')}</textarea></label><div class="row" style="margin-top:8px"><button class="btn sm" data-act="intake-infer">Propune completarea formularului</button><span class="small muted">Nimic nu pornește și nimic nu se creează fără confirmarea ta.</span></div>${I.error ? `<div class="err-text">${esc(I.error)}</div>` : ''}${prop}</div>`;
+}
+const fieldLabel = k => (typeBySlug(S.wiz.slug)?.input_schema?.fields || []).find(f => f.key === k)?.label || k;
 function fieldHTML(f, val, err) {
   if (f.show_if_languages && (S.wiz.values.languages || []).length < f.show_if_languages) return '';
   const key = String(f.key || '').replace(/[^A-Za-z0-9_-]/g, ''); const id = 'f-' + key;   // audit C2: the id is a safe token
@@ -223,7 +233,11 @@ function wizSummary(t) {
   const hasFlag = (t.stages || []).some(s => s.optional_flag === 'images');
   const est = estimate(t, { ...S.wiz.options, languagesCount: (S.wiz.values.languages || []).length || 1 });
   const gates = (t.stages || []).filter(s => s.handler === 'review_gate').length;
-  return `<div class="panel panel-pad summary"><h3 style="font-size:16px;margin-bottom:14px">${esc(t.full_name || t.name)}, versiunea ${esc(t.version)}</h3><dl>${rows}</dl></div>
+  const P = S.wiz.preview;
+  const contractCard = !P ? `<div class="panel panel-pad faint">Se verifică contractul…</div>` : `<div class="panel panel-pad" id="contract-preview" data-valid="${P.valid}" style="margin-bottom:12px"><h3 style="font-size:16px;margin-bottom:10px">Ce se va produce</h3>
+    <dl><dt>Tema</dt><dd>${esc(P.theme || '—')}</dd><dt>Vârsta</dt><dd>${esc(P.age?.label || '—')}</dd><dt>Limbi</dt><dd>${P.languages.map(l => `${esc(l.label)} <span class="faint">(${esc(l.role)})</span>`).join(', ') || '—'}</dd><dt>Stil</dt><dd>${esc(P.style?.label || '—')}</dd><dt>Format</dt><dd>${esc(P.format?.label || '—')}</dd><dt>Sursa</dt><dd>${esc(P.source.label)}${P.source.manuscriptChars ? ` <span class="faint">(${esc(P.source.manuscriptChars)} caractere)</span>` : ''}</dd><dt>Structura</dt><dd>${P.structure ? `${esc(P.structure.volumes)} volume × ${esc(P.structure.pagesPerBook)} pagini${P.structure.books ? `, ${esc(P.structure.books)} cărți (${esc(P.structure.story)} de povești, ${esc(P.structure.coloring)} de colorat)` : ''}` : '—'}</dd></dl>
+    ${P.errors.map(e => `<div class="err-text">${esc(e.message)}</div>`).join('')}</div>`;
+  return `${contractCard}<div class="panel panel-pad summary"><h3 style="font-size:16px;margin-bottom:14px">${esc(t.full_name || t.name)}, versiunea ${esc(t.version)}</h3><dl>${rows}</dl></div>
     ${hasFlag ? `<div class="panel panel-pad" style="margin-top:12px"><label class="check"><input type="checkbox" data-opt="images" ${S.wiz.options.images !== false ? 'checked' : ''}><span><b>Generează ilustrațiile</b><br><span class="small muted">Motorul de imagini ales desenează fișele de personaj, apoi fiecare pagină color folosindu-le ca referință, apoi pagina de colorat pornind chiar de la imaginea color. Debifat, primești textul complet și prompturile, iar imaginile le poți genera ulterior, pagină cu pagină.</span></span></label>${S.wiz.options.images !== false && ((S.wiz.options.image_engine || S.images?.engine) === 'chatgpt' ? !S.images?.chatgpt?.ready : !canvaOk()) ? `<div class="notice warn" style="margin-top:10px">Motorul de imagini ales nu este conectat. <a href="#/settings">Conectează-l în Setări</a> înainte de etapa de imagini.</div>` : ''}
       <div class="field" style="margin-top:12px"><span class="lbl">Motor de imagini pentru acest proiect</span><div class="choices">${[['canva', 'Canva', 'din abonamentul Canva Pro'], ['chatgpt', 'ChatGPT (GPT Image)', 'din abonamentul ChatGPT, prin Codex']].map(([v, l, h]) => `<label class="choice"><input type="radio" name="img-engine" data-opt-engine="${v}" ${(S.wiz.options.image_engine || S.images?.engine || 'canva') === v ? 'checked' : ''} ${v === 'chatgpt' && !S.images?.chatgpt?.ready ? 'disabled' : ''}><b>${l}</b><span>${h}${v === 'chatgpt' && !S.images?.chatgpt?.ready ? ' (neconectat)' : ''}</span></label>`).join('')}</div></div>
       <label class="check" style="margin-top:12px"><input type="checkbox" data-opt="visual_qa" ${S.wiz.options.visual_qa !== false ? 'checked' : ''}><span><b>Verificare vizuală a personajelor</b><br><span class="small muted">Directorul artistic compară fiecare pagină cu fișele personajelor și redesenează automat ce nu seamănă. Cere în plus aproximativ 20 de apeluri Claude.</span></span></label></div>` : ''}
@@ -232,12 +246,12 @@ function wizSummary(t) {
     ${S.usage ? `<p class="small" style="margin-top:12px">Claude în ultimele 7 zile: <b>${S.usage.text7d}</b> apeluri${S.usage.budget7d ? ` din bugetul săptămânal de ${S.usage.budget7d}. ${S.usage.text7d + est.calls <= S.usage.budget7d ? 'Colecția încape în săptămâna aceasta.' : `Colecția nu încape toată în săptămâna aceasta: se oprește în siguranță la buget și continuă singură când se eliberează (${Math.max(0, S.usage.budget7d - S.usage.text7d)} apeluri rămase acum).`}` : '. Dacă atingi limita săptămânală a planului Pro, proiectul intră pe pauză și se reia singur; nu se cumpără nimic în plus.'} Pe 5 ore, colecția se întinde pe aproximativ ${Math.max(1, Math.ceil(est.calls / (S.usage.budget5h || 90)))} ferestre.</p>` : ''}
     <p class="small muted" style="margin-top:12px">Generarea rulează pe serverul local: poți închide fereastra, lucrul continuă cât timp serverul e pornit. Textul folosește ${S.services?.claude?.provider === 'claude-code' ? 'abonamentul tău Claude, prin Claude Code' : 'cheia ta Claude API'}; imaginile folosesc contul tău Canva, cu limitele planului tău.</p></div>
     ${claudeOk() ? '' : `<div class="notice err" style="margin-top:12px">Claude nu este configurat. Vezi <a href="#/settings">Setări</a>.</div>`}
-    <div class="wiz-foot"><button class="btn ghost" data-act="wiz-back">Înapoi la detalii</button><button class="btn primary" data-act="start" ${claudeOk() ? '' : 'disabled'}>Creează proiectul</button></div>`;
+    <div class="wiz-foot"><button class="btn ghost" data-act="wiz-back">Înapoi la detalii</button><button class="btn primary" data-act="start" ${claudeOk() && P?.valid ? '' : 'disabled'}>Creează proiectul</button></div>`;
 }
 
 /* ---------- project view ---------- */
 function projectTabs(p) {
-  const T = [['progress', 'Progres'], ['review', 'Revizuire'], ['book', 'Carte'], ['export', 'Livrare'], ['activity', 'Activitate']];
+  const T = Object.entries(PROJECT_TABS);   // P4-T01: one registry for tabs and aliases
   return `<nav class="tabs" aria-label="Secțiuni proiect">${T.map(([k, l]) => `<a href="#/p/${esc(p.id)}/${k}" ${S.route.tab === k ? 'aria-current="page"' : ''}>${l}${k === 'review' && p.status === 'awaiting_review' ? '<span class="pip" aria-label="așteaptă"></span>' : ''}</a>`).join('')}</nav>`;
 }
 function viewProject() {
@@ -260,7 +274,7 @@ function viewProject() {
   if (p.error && p.status === 'awaiting_review' && !local) banner += `<div class="banner err"><span>${esc(p.error)}</span></div>`;
   const inp = p.input || {};
   const head = `<a class="back" href="#/projects">Toate proiectele</a><div class="phead"><div style="min-width:0"><h1>${esc(p.title)}</h1>
-    <div class="pmeta">${badge(p.status)}<span class="chip">${esc(p.typeName)} v${esc(p.typeVersion)}</span><span class="chip">${esc(p.variantLabel || '')}</span>${[inp.language, inp.second_language].filter(Boolean).map(l => `<span class="chip">${esc(langLabel(l))}</span>`).join('')}</div></div><div class="row">${actions}</div></div>${banner}`;
+    <div class="pmeta">${badge(p.status)}<span class="chip">${esc(p.typeName)} v${esc(p.typeVersion)}</span><span class="chip">${esc(p.variantLabel || '')}</span>${p.source?.kind ? `<span class="chip" title="Sursa proiectului">${esc({ idea: 'din idee', manuscript: 'din manuscris', pack: 'din pachet', import: 'importat', migration: 'migrat' }[p.source.kind] || p.source.kind)}</span>` : ''}${[inp.language, inp.second_language].filter(Boolean).map(l => `<span class="chip">${esc(langLabel(l))}</span>`).join('')}</div></div><div class="row">${actions}</div></div>${banner}`;
   let body = '';
   if (!S.bp) body = `<div class="faint">Se încarcă…</div>`;
   else switch (S.route.tab) {

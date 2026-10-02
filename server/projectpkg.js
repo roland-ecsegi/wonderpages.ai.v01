@@ -110,7 +110,7 @@ export async function importProject(repo, storage, buf) {
     stagePlan: plan.map(s => ({ key: s.key, label: str(s.label, 120), phase: str(s.phase, 40), gate: s.handler === 'review_gate', vol: s.vol ?? null })), volumeFlow: !!bp.volume_flow,
     gate: null, decisions: [], approvals: {}, notes: (Array.isArray(src.notes) ? src.notes : []).filter(x => typeof x === 'string').slice(0, 50).map(x => x.slice(0, 2000)),
     rejections: [], refs, error: null, resumeAt: null, pausing: false, rendering: null, delivered: {},
-    importedAt: now(), createdAt: now(), updatedAt: now(),
+    importedAt: now(), createdAt: now(), updatedAt: now(), source: { kind: 'import', original: src.source?.kind ? str(src.source.kind, 20) : null, at: now() },   // P4-T01: shown as an existing source
     importedEvidence: { decisions: (Array.isArray(src.decisions) ? src.decisions : []).slice(-200).map(d => ({ gate: str(d?.gate, 60), vol: Number.isInteger(d?.vol) ? d.vol : null, decision: str(d?.decision, 40), at: Number(d?.at) || null })), approvals: Object.keys(src.approvals || {}).length, authority: 'none', note: 'Evidență istorică din arhivă; aprobările locale se refac.' },   // P2-T04
     log: [{ t: now(), text: `Proiect importat${Object.keys(stages).length ? ` cu ${Object.keys(stages).length} etape deja lucrate` : ''}. Toate aprobările se refac de către tine: fiecare poartă se redeschide când ajunge lucrul la ea.`, kind: 'info' }]
   };
