@@ -33,6 +33,7 @@ Linux (container cloud), Node v22.22.0, npm 10.9.4, PostgreSQL 16 (binare locale
 | DEV-002 | Ghidul și auditul PDF nu sunt disponibile. | Doar referințele de pagină din arhitectură. | Constatările G/A se folosesc doar așa cum sunt citate în arhitectură. |
 | DEV-003 | LAN fără HTTPS devine `lan-restricted` implicit: dispozitivele din rețea urmăresc și comentează, nu aprobă. | OUTPUT-26 / AC-P1-T04 („HTTPS pentru aprobări pe LAN … ori LAN restricted”). | Operatorul poate reveni la v04 de pe laptop: `PUT /api/settings/lan-transport {acceptPlainLan:true}`. |
 | DEV-004 | Tipul de produs kids-sc v15 → v16 (biblii de volum obligatorii, element „Planul colecției” la poarta seriei). | P4-T02 cere exact 6 biblii și aprobarea planului înainte de bulk. | Proiectele existente își păstrează blueprint-ul fixat (inclusiv DW v15); rollback prin revert. |
+| DEV-005 | kids-sc v16 → v17: etapă nouă „Planul paginilor” (6 apeluri text suplimentare în faza A) înaintea porții seriei. | P4-T03: 72 PageBlueprints verificabile înaintea producției în volum. | Proiectele existente își păstrează blueprint-ul; costul suplimentar este vizibil în estimare. |
 
 ## Starea taskurilor
 
@@ -57,8 +58,8 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | P3-T05 | DONE | 2a42777 | TEST-P3-T05 6/6; RS0 180/180 | Verificare la execuție, refs_unsupported, login revocat, pachete text/imagine cu aceleași validări |
 | P3-T06 | DONE | 6700b69 | TEST-P3-T06 4/4; RS0 184/184 local + 184/184 PG | Flux SSE cu cursor, progres din unități durabile, estimare doar măsurată, inspector; PHASE 3 închisă |
 | P4-T01 | DONE | 3cd9cf2 | TEST-P4-T01 7/7; RS0 191/191 | Intake local idee/manuscris, rezumat contract legat de creare (stale_form), limite explicite, registru rute; D-ROUTE-PREVIEW FIXED |
-| P4-T02 | DONE | (acest commit) | TEST-P4-T02 7/7; RS0 198/198 | kids-sc v16: 6 biblii de volum, matrice colecție + cronologie, constatări explicate, plan aprobat înainte de bulk |
-| P4-T03 | PENDING | | | |
+| P4-T02 | DONE | eca756c | TEST-P4-T02 7/7; RS0 198/198 | kids-sc v16: 6 biblii de volum, matrice colecție + cronologie, constatări explicate, plan aprobat înainte de bulk |
+| P4-T03 | DONE | (acest commit) | TEST-P4-T03 6/6; RS0 204/204 | kids-sc v17: 72 PageBlueprints înaintea porții seriei, payoff/deschideri/deținători, atlas cu aprobare explicită și drepturi de reutilizare |
 | P4-T04 | PENDING | | | |
 | P4-T05 | PENDING | | | |
 | P5-T01 | PENDING | | | |
@@ -113,6 +114,7 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | 2026-10-02 | Închidere P3: baseline-report --with-tests --with-pg | 15 PASS · 0 FAIL · 3 NOT_RUN | o cursă în testul SSE nou (PG) — aserțiune corectată |
 | 2026-10-02 | RS0 + TEST-P4-T01 | 191/191 PASS | prima rulare: limitele de cuvânt ASCII nu recunoșteau „română” — corectat (Unicode) |
 | 2026-10-02 | RS0 + TEST-P4-T02 | 198/198 PASS | prima rulare: 8 eșecuri — nume global duplicat în UI și hash de plan dependent de scenarii; corectate în cod; fixture P2-T04 actualizat la planul v16 |
+| 2026-10-02 | RS0 + TEST-P4-T03 | 204/204 PASS | prima rulare: fixture P2-T04 și numărul de prompturi personalizate DW depindeau de contractul vechi — ajustate |
 
 ## Probleme deschise
 
@@ -126,6 +128,6 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 
 ## Checkpoint
 
-- Ultimul task închis: P4-T02
-- Următorul task: **P4-T03**
+- Ultimul task închis: P4-T03
+- Următorul task: **P4-T04**
 - Cum se reia: `npm ci && npm run build && BROWSER_PATH=/opt/pw-browsers/chromium npm test`; citește tabelul de mai sus și `docs/enterprise/records/`.

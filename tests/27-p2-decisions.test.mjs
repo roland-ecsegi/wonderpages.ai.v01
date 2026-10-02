@@ -20,6 +20,7 @@ async function gateProject(pid) {
   /* v16 (P4-T02): the collection plan is an approval item, so the fixture carries a minimal valid plan */
   const plan = { series: { through_line: 'Milo', volumes: Array.from({ length: 6 }, (_, i) => ({ number: i + 1, title: 'V' + (i + 1), ending_type: 'e' + i, story_bible: { premise: 'Milo ' + i, protagonist: 'milo', goal: 'g', obstacle: 'o', climax_choice: 'c', resolution: 'r' } })) }, cast: { main_character: 'milo', characters: [{ id: 'milo', role: 'main', volumes: Array.from({ length: 6 }, (_, i) => ({ volume: i + 1, presence: i ? 'appears' : 'introduced' })) }] }, bible: { characters: [{ id: 'milo', name: 'Milo', role: 'main' }], world_rules: { magic: 'none' } } };
   for (const k of ['brief', 'series', 'bible', 'cast']) await repo.writeArtifact(pid, k, plan[k] ? { ...plan[k], text: 'abcd', k } : { text: 'abcd', k });
+  for (let v = 0; v < 6; v++) await repo.writeArtifact(pid, 'plan_' + v, { pages: Array.from({ length: 12 }, (_, i) => ({ n: i + 1, role: 'r', beat: 'b', emotion: 'e', new_information: 's', image_added_value: 'i', turn: { type: 'quiet' } })) });   // v17 (P4-T03)
   await repo.patchProject(pid, { gate: { key: 'review_collection', vol: null, round: 1 } });
   return { s, repo, dir, engine };
 }

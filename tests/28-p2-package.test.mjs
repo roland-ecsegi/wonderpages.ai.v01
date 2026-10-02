@@ -27,7 +27,8 @@ test('P2-T05 API: migrarea DW — dry-run, rulare legată de plan, raport fără
   assert.equal(run.status, 200, JSON.stringify(run.body)); MIGRATED = run.body.projectId;
   const r = run.body.report;
   assert.equal(r.lost, 0); assert.ok(r.preserved.every(x => x.status === 'identical') && r.preserved.length === 6);
-  assert.equal(r.prompts.blueprintIdentical, true); assert.equal(r.prompts.customPrompts.length, 9);
+  assert.equal(r.prompts.blueprintIdentical, true);
+  for (const k of ['series', 'script', 'critic', 'polish', 'visual_qa', 'adapt', 'native_critic', 'page_fix', 'revise_pages']) assert.ok(r.prompts.customPrompts.includes(k), 'promptul personalizat DW ' + k);   // the 9 DW custom prompts; newer prompts of the current type (v16+) are listed too
   assert.deepEqual(r.notGenerated.volumesWithoutManuscript, [2, 3, 4, 5, 6]); assert.deepEqual(r.repaired, []);
   assert.ok(r.conflicts.some(c => c.id === 'turn-type@v1') && r.findings.some(f => f.id === 'DW01'));
   const d = await project(MIGRATED);

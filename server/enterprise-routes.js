@@ -14,6 +14,8 @@ import { RUNNING, expandStages, prepareTextPacket, ingestTextPacket, prepareImag
 import { progressReport, inspectArtifact } from './observability/progress.js';
 import { inferFromText, contractPreview } from './domain/intake.js';
 import { matrixForArtifacts } from './domain/collection.js';
+import { derivePageBlueprints, validatePageBlueprints } from './domain/page-blueprints.js';
+import { atlasFor } from './domain/atlas.js';
 import { contractFromBlueprint, validateProjectInput, editionsFor } from './domain/product-contract.js';
 import * as Ledger from './ledger.js';
 import { getCapabilities } from './providers/registry.js';
@@ -121,4 +123,8 @@ export function registerEnterpriseRoutes({ on, json, need, localOnly, repo, stor
 
   /* P4-T02: the collection matrix (read-only, any project — also migrated ones such as Dinosaur World) */
   on('GET', '/api/projects/:pid/collection', async ({ pid }) => { need(pid); return matrixForArtifacts(await repo.getBlueprint(pid), await repo.artifacts(pid)); });
+
+  /* P4-T03: the 72 PageBlueprints and the visual canon (read-only, any project) */
+  on('GET', '/api/projects/:pid/pageplans', async ({ pid }) => { need(pid); const bp = await repo.getBlueprint(pid), art = await repo.artifacts(pid); const { pages, sources } = derivePageBlueprints(bp, art); return { pages, sources, ...validatePageBlueprints(pages, { structure: bp.structure, bible: art.bible?.content }) }; });
+  on('GET', '/api/projects/:pid/atlas', async ({ pid }) => { const p = need(pid), art = await repo.artifacts(pid); return atlasFor({ project: p, art, approvals: p.approvals?.['review_collection@c'] || {}, declaredRights: p.rightsDeclared || [] }); });
 }

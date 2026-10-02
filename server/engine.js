@@ -16,6 +16,8 @@ import { sniffImage, pngSize } from './security/safe-zip.js';
 import { assertExecutable } from './providers/registry.js';
 import { canonicalHash } from './domain/canonical.js';
 import { matrixForArtifacts } from './domain/collection.js';
+import { derivePageBlueprints, validatePageBlueprints } from './domain/page-blueprints.js';
+import { atlasFor, landmarkContext } from './domain/atlas.js';
 /* P3-T03: the innermost durable unit (stage or item) of the current async flow: its lease fences every result write */
 export const FENCE = new AsyncLocalStorage();
 export let jobs = null;
@@ -294,6 +296,7 @@ export function buildCtx(E, extra = {}) {
     ctx.cast_volume = (cast.characters || []).map(c => ({ id: c.id, name: names[c.id] || c.id, role: c.role, arc: c.arc, ...((c.volumes || []).find(v => Number(v.volume) === Number(ctx.n)) || { presence: 'absent' }) }))
       .filter(c => c.presence && c.presence !== 'absent');
   }
+  ctx.plan_volume = ctx.n && E.art['plan_' + (Number(ctx.n) - 1)] ? E.art['plan_' + (Number(ctx.n) - 1)].content.pages : '';   // P4-T03: scripts follow the approved PageBlueprints
   ctx.bible_volume = volumeBible(E, ctx.script || null, ctx.cast_volume);
   ctx.editorial_findings = editorialFindings(bp, E.art, Number.isInteger(extra.i) ? extra.i : E.curStage?.vol ?? null);
   ctx.codes = (bp.rubric || []).map(r => (typeof r === 'object' ? `${r.code} ${String(r.text).split(':')[0]}` : null)).filter(Boolean).join('; ');
@@ -319,7 +322,9 @@ function applyBind(E, spec, ctx) {
   for (const L of spec.lookup || []) {
     const pool = getPath(ctx, L.from) || []; const ids = getPath(ctx, L.by) || [];
     ctx[L.as] = (Array.isArray(ids) ? ids : [ids]).map(id => pool.find(x => x?.[L.key] === id)).filter(Boolean)
-      .map(x => L.fields ? Object.fromEntries(L.fields.map(f => [f.split('.').pop(), getPath(x, f)])) : x);
+      .map(x => { if (!L.fields) return x; const o = Object.fromEntries(L.fields.map(f => [f.split('.').pop(), getPath(x, f)]));
+        if (/characters$/.test(L.from) && L.fields.includes('canonical_description')) { const lc = landmarkContext(x); if (lc.deduplicated) { o.canonical_description = lc.description; o.landmarks = lc.landmarks.map(({ id, side, body_region, anchor, shape, colour, relative_size, occlusion_rule }) => ({ id, side, body_region, anchor, shape, colour, relative_size, occlusion_rule })); } }   // P4-T03 (DW03): landmarks once, structured; raw unchanged
+        return o; });
   }
   return ctx;
 }
@@ -1156,6 +1161,8 @@ export function gateItems(bp, art, project, gate) {
       }
     }
     if (s.kind === 'collection') { const m = matrixForArtifacts(bp, art); out.push({ id: 'collection', kind: 'collection', label: 'Planul colecției: bibliile volumelor și cronologia distribuției', missing: !art.series || !art.cast || !art.bible, blocked: !m.ready, hash: m.hash, matrix: m }); }   // P4-T02: plan approved before bulk; blockers cannot be approved
+    if (s.kind === 'pageplans') { const { pages, sources } = derivePageBlueprints(bp, art), r = validatePageBlueprints(pages, { structure: bp.structure, bible: art.bible?.content }); out.push({ id: 'pageplans', kind: 'pageplans', label: `Planul paginilor: ${r.count} din ${r.expected} PageBlueprints`, missing: !pages.length, blocked: !r.ready, hash: fingerprint([pages, r.findings.map(f => [f.code, f.page])]), check: { ...r, sources } }); }   // P4-T03
+    if (s.kind === 'atlas') { const a = atlasFor({ project, art, approvals: project.approvals?.[gateInstance(gate)] || {}, declaredRights: project.rightsDeclared || [] }); out.push({ id: 'atlas', kind: 'atlas', label: 'Canonul vizual: atlasul personajelor', missing: !art.bible, blocked: false, hash: fingerprint([a.requirements.map(r => [r.character, r.view]), a.entries.map(e => [e.id, e.file, e.kind])]), atlas: a }); }   // P4-T03: proposals stay proposed
     if (s.kind === 'layout') for (let i=0;i<P;i++) {
       const k=s.source+'_'+v, pg=art[k]?.content?.pages?.[i], tr=art['tr_'+v]?.content?.pages?.[i];
       out.push({id:'layout:'+k+':'+(i+1),kind:'layout',key:k,v,p:i+1,label:'Macheta paginii '+(i+1),missing:!pg,hash:pg?fingerprint([pg.layout,pg.text,tr?.text,art['ill_'+v+'_'+(i+1)]?.content?.color, project.input.page_format]):null});
