@@ -1,0 +1,103 @@
+{
+ "kind": "wonderpages.defect-reproduction/1",
+ "generatedAt": "2026-10-02T10:35:19.331Z",
+ "defects": [
+  {
+   "id": "D-C16",
+   "arch": "C16/G05",
+   "phase": "P2-T05",
+   "status": "REPRODUCED",
+   "method": "dynamic",
+   "evidence": [
+    "export format v1; artifact keys: content,meta,version,note,by",
+    "server/projectpkg.js:22"
+   ]
+  },
+  {
+   "id": "D-C19",
+   "arch": "C19/G11",
+   "phase": "P7-T01",
+   "status": "REPRODUCED",
+   "method": "dynamic",
+   "evidence": [
+    "active după import: 1; active după ștergerea packului: 1",
+    "server/training.js:68"
+   ]
+  },
+  {
+   "id": "D-AGENT-FALLBACK",
+   "arch": "OUTPUT-07",
+   "phase": "P3-T01",
+   "status": "REPRODUCED",
+   "method": "dynamic",
+   "evidence": [
+    "getAgent('agent-inexistent') → producator",
+    "server/agents.js:36"
+   ]
+  },
+  {
+   "id": "D-C26",
+   "arch": "C26/OUTPUT-26",
+   "phase": "P1-T04",
+   "status": "REPRODUCED",
+   "method": "dynamic",
+   "evidence": [
+    "candidați: 2 seturi de credențiale cunoscute",
+    "server/storage/postgres.js:32"
+   ]
+  },
+  {
+   "id": "D-ROUTE-PREVIEW",
+   "arch": "OUTPUT-02/23",
+   "phase": "P4-T01",
+   "status": "REPRODUCED",
+   "method": "static",
+   "evidence": [
+    "public/app/ui.js:331"
+   ]
+  },
+  {
+   "id": "D-C11",
+   "arch": "C11",
+   "phase": "P3-T04",
+   "status": "INFERRED",
+   "method": "static",
+   "evidence": [
+    "2 apeluri recursive callImage cu alt provider",
+    "server/engine.js:191",
+    "server/engine.js:205"
+   ]
+  },
+  {
+   "id": "D-C12",
+   "arch": "C12",
+   "phase": "P3-T04",
+   "status": "INFERRED",
+   "method": "static",
+   "evidence": [
+    "server/codeximage.js:56"
+   ]
+  },
+  {
+   "id": "D-C29",
+   "arch": "C29",
+   "phase": "P3-T01/P3-T05/P7-T05",
+   "status": "REPRODUCED",
+   "method": "static",
+   "evidence": [
+    "server/improve.js:60",
+    "agents/inginer.md:8"
+   ]
+  },
+  {
+   "id": "D-C21",
+   "arch": "C21/G14",
+   "phase": "P7-T06",
+   "status": "REPRODUCED",
+   "method": "static",
+   "evidence": [
+    "server/assistant.js:61"
+   ]
+  }
+ ]
+}

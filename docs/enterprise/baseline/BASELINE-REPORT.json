@@ -1,0 +1,449 @@
+{
+ "kind": "wonderpages.baseline-report/1",
+ "generatedAt": "2026-10-02T10:34:21.513Z",
+ "codeRevision": "ec9e804",
+ "checks": [
+  {
+   "id": "INVENTORY",
+   "status": "PASS",
+   "summary": "154 fișiere (fără node_modules/.git/data), 6 ascunse",
+   "detail": {
+    "total": 154,
+    "byExt": {
+     ".md": 35,
+     ".example": 1,
+     "(none)": 3,
+     ".json": 8,
+     ".bat": 4,
+     ".vbs": 1,
+     ".yml": 1,
+     ".js": 56,
+     ".ttf": 4,
+     ".txt": 1,
+     ".png": 3,
+     ".html": 2,
+     ".webmanifest": 1,
+     ".zip": 1,
+     ".mjs": 26,
+     ".ps1": 1,
+     ".cjs": 4,
+     ".cmd": 2
+    },
+    "hidden": [
+     ".claude/skills/adauga-etapa/SKILL.md",
+     ".claude/skills/blueprint-si-prompturi/SKILL.md",
+     ".claude/skills/ruleaza-teste/SKILL.md",
+     ".claude/skills/texte-pentru-editor/SKILL.md",
+     ".env.example",
+     ".gitignore"
+    ],
+    "entryPoints": {
+     "scripts": {
+      "start": "node server/start.js",
+      "test": "node tests/run.mjs",
+      "release:zip": "node scripts/pachet-versiune.mjs",
+      "canva:probe": "node scripts/probe-canva.js",
+      "build": "node scripts/build.mjs",
+      "lint": "node scripts/build.mjs"
+     },
+     "server": "server/start.js → server/index.js",
+     "ui": "public/index.html → public/app/{core,views,ui,actions,pdf}.js",
+     "installer": [
+      "instaleaza.bat",
+      "porneste.bat",
+      "opreste.bat",
+      "activeaza-retea.bat",
+      "deschide.vbs",
+      "docker-compose.yml"
+     ]
+    },
+    "version": "19.4.0",
+    "edition": "WonderPages AI — claude-gpt.v04"
+   }
+  },
+  {
+   "id": "SOURCE_DRIFT_V04",
+   "status": "PASS",
+   "summary": "134/137 fișiere v04 identice, 3 modificate (enterprise), 11 adăugate, 0 lipsă",
+   "detail": {
+    "unchanged": 134,
+    "modified": [
+     "server/index.js",
+     "server/projectpkg.js",
+     "tests/3-securitate.test.mjs"
+    ],
+    "missing": [],
+    "added": [
+     "docs/enterprise/JURNAL-IMPLEMENTARE.md",
+     "docs/enterprise/adr/ADR04-paginare.md",
+     "docs/enterprise/contracts/PRODUCT-CONTRACT.md",
+     "docs/enterprise/records/P1.md",
+     "scripts/enterprise/baseline-report.mjs",
+     "scripts/enterprise/pg-ephemeral.mjs",
+     "server/domain/canonical.js",
+     "server/domain/product-contract.js",
+     "server/migration/dw-reference.js",
+     "server/security/safe-zip.js",
+     "tests/20-p1-contract.test.mjs"
+    ]
+   }
+  },
+  {
+   "id": "BUILD",
+   "status": "PASS",
+   "summary": "PASS: 85 fișiere JavaScript, JSON, lockfile, fonturi și fișiere runtime; WonderPages AI — claude-gpt.v04",
+   "log": "docs/enterprise/baseline/logs/2026-10-02-build.log"
+  },
+  {
+   "id": "RS0_SUITE",
+   "status": "PASS",
+   "summary": "98 trecute, 0 picate, 0 sărite; browser PDF: da",
+   "log": "docs/enterprise/baseline/logs/2026-10-02-rs0.log"
+  },
+  {
+   "id": "PROTECT_IMPORT",
+   "status": "PASS",
+   "summary": "4/4 teste",
+   "detail": [
+    "export și import de proiect: conținutul rămâne, aprobările se refac (audit C1)",
+    "P1-T01 API: importul cu structură invalidă este refuzat explicit, fără proiect parțial",
+    "C1: „code” mălițios dintr-un proiect importat este neutralizat",
+    "C1: „code” cu ../ nu scoate folderul din destinație"
+   ]
+  },
+  {
+   "id": "PROTECT_APPROVALS",
+   "status": "PASS",
+   "summary": "10/10 teste",
+   "detail": [
+    "poarta seriei: aprobarea pe elemente e obligatorie (audit H1)",
+    "aprobarea se invalidează când elementul se schimbă",
+    "livrarea e refuzată înainte de aprobarea finală (audit H1)",
+    "după aprobarea finală: pachet, PDF-uri (dacă există browser)",
+    "export și import de proiect: conținutul rămâne, aprobările se refac (audit C1)",
+    "v03 acceptare: corectura doar de colorat păstrează culoarea și aprobarea",
+    "v03: editarea unui volum anterior redeschide revizuirea chiar în timpul unui gate ulterior",
+    "v19 1.8: continuitatea volumului 2 folosește registrul aprobat",
+    "v03: nicio lipsă nu poate fi aprobată implicit",
+    "v03: aprobare închisă cu conținut schimbat refuză livrarea"
+   ]
+  },
+  {
+   "id": "PROTECT_PDF",
+   "status": "PASS",
+   "summary": "4/4 teste",
+   "detail": [
+    "după aprobarea finală: pachet, PDF-uri (dacă există browser)",
+    "v03: serverul verifică paginarea, dimensiunile și fontul în PDF-ul final",
+    "/exports acceptă doar PDF-uri reale",
+    "v19 2.7–2.10: coperta din șablonul de brand Canva (autofill, export PDF, promovare, comentarii)"
+   ]
+  },
+  {
+   "id": "PROTECT_BACKUP",
+   "status": "PASS",
+   "summary": "5/5 teste",
+   "detail": [
+    "v03: backupul și restaurarea păstrează împreună documentele și imaginile",
+    "v03: o copie întreruptă nu devine backup valid și nu suprascrie copia existentă",
+    "v04: dimensiunea backupului este măsurată pe disc, inclusiv fișierele și manifestul",
+    "v04: lista API raportează dimensiunea reală a copiei create și păstrează formatul restaurabil",
+    "copiile de siguranță: rândurile proiectului ies, celelalte rămân"
+   ]
+  },
+  {
+   "id": "PROTECT_LEARNING",
+   "status": "PASS",
+   "summary": "4/4 teste",
+   "detail": [
+    "agenți și lecții",
+    "v19 3.3: retrospectiva volumului propune lecții, aplicate doar cu acordul tău",
+    "v19 2.5: buget săptămânal și estimarea colecției",
+    "v19 3.6: setul de aur rulează etapele de text și se compară cu referința"
+   ]
+  },
+  {
+   "id": "PROTECT_ATELIER",
+   "status": "PASS",
+   "summary": "2/2 teste",
+   "detail": [
+    "atelier: schimbarea trece verificările și testul de pornire în copie (audit #5)",
+    "atelier: scripturile de pornire nu pot fi modificate (audit H3)"
+   ]
+  },
+  {
+   "id": "PROTECT_LAN",
+   "status": "PASS",
+   "summary": "3/3 teste",
+   "detail": [
+    "anti-CSRF: comenzile fără antetul x-wp sunt respinse",
+    "anti-DNS-rebinding: Host străin respins, localhost acceptat",
+    "C3: rutele sensibile cer laptopul (au localOnly)"
+   ]
+  },
+  {
+   "id": "PG_QA",
+   "status": "PASS",
+   "summary": "PASS: PostgreSQL real — CRUD, istoric, backup DB+fișiere, restaurare, rollback tranzacțional; numărul proiectelor instalate păstrat.",
+   "log": "docs/enterprise/baseline/logs/2026-10-02-pg-qa.log"
+  },
+  {
+   "id": "DW_REFERENCE",
+   "status": "PASS",
+   "summary": "sha256 7056e113bf5c…, manifest 5/5, 6 artefacte, 6 volume, 72 planuri, 12 pagini V1, 2 PNG; producție nepornită",
+   "detail": {
+    "archiveSha256": "7056e113bf5c84fdfc0f7b8f528713de6c8fe31e82b40fbab056544fe10e45e3",
+    "edition": "Dinosaur World — proiect v04",
+    "root": "dinosaur-world-v04/",
+    "manifest": {
+     "entries": [
+      {
+       "path": "CITESTE-MA.md",
+       "present": true,
+       "bytesMatch": true,
+       "sha256Match": true
+      },
+      {
+       "path": "project.json",
+       "present": true,
+       "bytesMatch": true,
+       "sha256Match": true
+      },
+      {
+       "path": "REVIZIE-EDITORIALA.md",
+       "present": true,
+       "bytesMatch": true,
+       "sha256Match": true
+      },
+      {
+       "path": "files/uploads/01-milo-reference.png",
+       "present": true,
+       "bytesMatch": true,
+       "sha256Match": true
+      },
+      {
+       "path": "files/uploads/02-tia-reference.png",
+       "present": true,
+       "bytesMatch": true,
+       "sha256Match": true
+      }
+     ],
+     "allMatch": true
+    },
+    "counts": {
+     "artifacts": [
+      "bible",
+      "brief",
+      "cast",
+      "refs",
+      "script_0",
+      "series"
+     ],
+     "volumes": 6,
+     "pagePlans": 72,
+     "preparedManuscriptPages": 12,
+     "images": 2,
+     "wordCounts": {
+      "manifest": {
+       "English": 335,
+       "Romanian": 344
+      },
+      "whitespaceTokens": {
+       "English": 333,
+       "Romanian": 342
+      }
+     }
+    },
+    "images": [
+     {
+      "file": "uploads/01-milo-reference.png",
+      "sha256": "da8cbac3255e8d0c6a97f336f4c0f6c12f879a50ba708d280481aea45b2f87c6",
+      "bytes": 1631424,
+      "pixels": [
+       1199,
+       1312
+      ]
+     },
+     {
+      "file": "uploads/02-tia-reference.png",
+      "sha256": "14c574ddb45bc5b22dee56cfbcf192b3ae65a76e5804a622eb93fae7ddcd0d79",
+      "bytes": 1756162,
+      "pixels": [
+       1222,
+       1287
+      ]
+     }
+    ],
+    "project": {
+     "status": "ready",
+     "approvalsEmpty": true,
+     "decisionsEmpty": true,
+     "deliveriesEmpty": true,
+     "ages": [
+      "3-4"
+     ],
+     "languages": [
+      "English",
+      "Romanian"
+     ],
+     "format": "portrait45",
+     "style": "soft3d"
+    },
+    "contract": {
+     "valid": true,
+     "input": {
+      "valid": true,
+      "errors": []
+     },
+     "contractHash": "b04df8c0b29661776137a3b32ca1ef84b650fd18b99e8a202a046716e6af07e3",
+     "blueprintVersion": 15
+    },
+    "customPrompts": [
+     "adapt",
+     "critic",
+     "native_critic",
+     "page_fix",
+     "polish",
+     "revise_pages",
+     "script",
+     "series",
+     "visual_qa"
+    ],
+    "findings": [
+     {
+      "id": "DW01",
+      "status": "VERIFIED",
+      "title": "Premisă reziduală „protejarea pietrei de ploaie” vs paginile 8–9 (adăpostul prietenilor)",
+      "evidence": [
+       "series.volumes[0].summary",
+       "series.volumes[0].story_bible.premise",
+       "script_0.story_bible.premise"
+      ],
+      "count": 3
+     },
+     {
+      "id": "DW02",
+      "status": "VERIFIED",
+      "title": "turn.type din page_plan V1 este „quiet” peste tot; scriptul diferă",
+      "evidence": [
+       "p1: plan=quiet script=question",
+       "p2: plan=quiet script=anticipation",
+       "p4: plan=quiet script=question",
+       "p5: plan=quiet script=reveal",
+       "p6: plan=quiet script=anticipation",
+       "p7: plan=quiet script=reveal",
+       "p8: plan=quiet script=question",
+       "p9: plan=quiet script=reveal"
+      ],
+      "count": 8
+     },
+     {
+      "id": "DW03",
+      "status": "VERIFIED",
+      "title": "landmarks structurate, repetate în canonical_description; relative_size poate fi JSON string",
+      "evidence": [
+       "milo.spot-left-upper",
+       "milo.spot-left-rear",
+       "milo.spot-left-lower"
+      ],
+      "count": 3,
+      "repeatedInDescription": [
+       "milo",
+       "tia",
+       "pip"
+      ]
+     },
+     {
+      "id": "DW04",
+      "status": "VERIFIED",
+      "title": "Milo species-indeterminate; Tia folosește botul pentru frunză; pana lui Pip este obiect",
+      "evidence": [
+       "milo.species_certainty=indeterminate_stylized",
+       "p9 mouth=true",
+       "object=found-feather",
+       "tia.species_certainty=certain"
+      ]
+     },
+     {
+      "id": "DW05",
+      "status": "VERIFIED",
+      "title": "Lipsesc manuscrise V2–6, atlas nou, artă, lineart și exporturi",
+      "evidence": [
+       "script lipsă: V2,V3,V4,V5,V6",
+       "artefacte finale: 0"
+      ],
+      "visualBaseline": "NOT_AVAILABLE"
+     },
+     {
+      "id": "DW06",
+      "status": "INFERRED",
+      "title": "Unele planuri pot avea diferențiere insuficientă în finaluri/beat-uri",
+      "evidence": [
+       "V1: somn liniștit acasă",
+       "V2: un cântec cântat împreună",
+       "V3: Pip zboară și le face cu aripa",
+       "V4: un picnic împărțit",
+       "V5: o pictură făcută cu flori",
+       "V6: o sărbătoare la apus, cu toți prietenii"
+      ],
+      "note": "Se evaluează prin matricea de colecție (P4-T02/P5-T04); nu se declară defect din planuri."
+     },
+     {
+      "id": "DW07",
+      "status": "VERIFIED",
+      "title": "Import ready, aprobări goale; custom prompts și ref-uri originale",
+      "evidence": [
+       "status=ready",
+       "approvals=0",
+       "refs=2"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "RUNTIME",
+   "status": "PASS",
+   "summary": "Node v22.22.0, npm 10.9.4, linux 6.18.44-fc-v51 x64",
+   "detail": {
+    "node": "v22.22.0",
+    "npm": "10.9.4",
+    "platform": "linux 6.18.44-fc-v51 x64",
+    "postgresBin": "/usr/lib/postgresql/16/bin",
+    "browser": "/opt/pw-browsers/chromium",
+    "claude": "/opt/node22/bin/claude",
+    "codex": null,
+    "docker": "/usr/bin/docker"
+   }
+  },
+  {
+   "id": "PROVIDERS_REAL",
+   "status": "NOT_RUN",
+   "summary": "Fără apeluri reale în baseline (claude: instalat, codex: absent); discovery în P1-T03"
+  },
+  {
+   "id": "WINDOWS_INSTALLER",
+   "status": "NOT_RUN",
+   "summary": "hostul de referință Windows nu este acest mediu"
+  },
+  {
+   "id": "DOCKER_POSTGRES",
+   "status": "NOT_RUN",
+   "summary": "Docker prezent, dar nu se pornește în baseline"
+  }
+ ],
+ "historical": [
+  {
+   "source": "Audit_Full_WonderPages_AI_v04.pdf pp. 250–251 / docs/v04/RAPORT-V04.md",
+   "date": "2026-10-01",
+   "result": "91/91 PASS",
+   "providers": "simulați",
+   "note": "raport istoric; nu este rezultatul acestei rulări"
+  }
+ ],
+ "summary": {
+  "PASS": 14,
+  "FAIL": 0,
+  "NOT_RUN": 3
+ }
+}
