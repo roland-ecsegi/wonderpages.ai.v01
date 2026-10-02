@@ -132,9 +132,10 @@ async function loadProject() {
     const i = S.projects.findIndex(p => p.id === pid); if (i >= 0) S.projects[i] = { ...S.projects[i], ...d.project }; else S.projects.push(d.project);
     /* P3-T06: progress from durable units; units and manual packets only where they are shown */
     const act = S.route.tab === 'activity', migrated = d.project?.source?.kind === 'migration';
-    const [pr, jb, pk, pl, rc, cq] = await Promise.all([api('GET', `/projects/${pid}/progress`).catch(() => null), act ? api('GET', `/projects/${pid}/jobs`).catch(() => null) : null, act ? api('GET', `/projects/${pid}/packets`).catch(() => null) : null, api('GET', `/projects/${pid}/pilot`).catch(() => null), act && migrated ? api('GET', `/projects/${pid}/reconcile`).catch(() => null) : null, act ? api('GET', `/projects/${pid}/collection-qa`).catch(() => null) : null]);
+    const book = S.route.tab === 'book';
+    const [pr, jb, pk, pl, rc, cq, lo] = await Promise.all([api('GET', `/projects/${pid}/progress`).catch(() => null), act ? api('GET', `/projects/${pid}/jobs`).catch(() => null) : null, act ? api('GET', `/projects/${pid}/packets`).catch(() => null) : null, api('GET', `/projects/${pid}/pilot`).catch(() => null), act && migrated ? api('GET', `/projects/${pid}/reconcile`).catch(() => null) : null, act ? api('GET', `/projects/${pid}/collection-qa`).catch(() => null) : null, book ? api('GET', `/projects/${pid}/layout?preset=digital`).catch(() => null) : null]);
     if (S.cur !== pid) return;
-    (S.progress ||= {})[pid] = pr; if (jb) (S.jobs ||= {})[pid] = jb.jobs; if (pk) (S.packets ||= {})[pid] = pk.packets; (S.pilot ||= {})[pid] = pl; if (rc) (S.reconcile ||= {})[pid] = rc; if (cq) (S.collectionQA ||= {})[pid] = cq;
+    (S.progress ||= {})[pid] = pr; if (jb) (S.jobs ||= {})[pid] = jb.jobs; if (pk) (S.packets ||= {})[pid] = pk.packets; (S.pilot ||= {})[pid] = pl; if (rc) (S.reconcile ||= {})[pid] = rc; if (cq) (S.collectionQA ||= {})[pid] = cq; if (lo) (S.layout ||= {})[pid] = lo;
   } catch (e) { if (e.status === 404) S.projects = S.projects.filter(p => p.id !== pid); }
 }
 const refetch = { t: null, proj: false, all: false, busy: false };
@@ -159,9 +160,15 @@ async function runRefetch() {
 setInterval(() => { if ((S.live || []).some(c => c.pid === S.cur)) paintLive(); }, 1000);
 let extraT = null;
 function loadExtra(name) { clearTimeout(extraT); extraT = setTimeout(async () => { try { if (name === 'agents') S.agentsData = await api('GET', '/agents'); else { const [l, g, gd] = await Promise.all([api('GET', '/learning'), api('GET', '/ledger').catch(() => null), api('GET', '/golden').catch(() => null)]); S.learningData = l; S.ledgerData = g; S.goldenData = gd; } render(); } catch {} }, 200); }
+/* P6-T01: the book font's own measurements, shared by the preview, the export and the server planner */
+async function loadLayoutMetrics() {
+  if (!window.WPLayout || WPLayout.ready()) return;
+  try { const r = await fetch('/fonts/andika-metrics.json', { credentials: 'same-origin' }); if (r.ok) WPLayout.setMetrics(await r.json()); } catch {}
+}
 async function boot() {
   render();
   try { await loadState(); } catch { S.offline = true; }
+  loadLayoutMetrics();
   S.booted = true;
   const es = new EventSource('/api/events');
   /* P3-T06: each change has a durable id; a replayed or repeated id is applied once; `reset` means the gap cannot be replayed exactly */

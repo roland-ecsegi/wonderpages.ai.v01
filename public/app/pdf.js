@@ -21,9 +21,22 @@ const slugify = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g
 function loadImg(url) {
   return new Promise((res, rej) => { const img = new Image(); img.onload = () => res(img); img.onerror = () => rej(new Error('img')); img.src = url; });
 }
-function drawCover(g, img, px, ph) {
+function drawCover(g, img, px, ph, crop) {
+  if (crop && crop.w > 0 && crop.h > 0) { g.drawImage(img, crop.x * img.width, crop.y * img.height, crop.w * img.width, crop.h * img.height, 0, 0, px, ph); return; }   // P6-T01: measured crop (protected regions inside the safe area)
   const r = Math.max(px / img.width, ph / img.height); const w = img.width * r, h = img.height * r;
   g.drawImage(img, (px - w) / 2, (ph - h) / 2, w, h);
+}
+/* P6-T01: the export re-measures every text block with the shared code and must find the plan's exact lines */
+function verifyLayoutPlan(lay) {
+  if (!window.WPLayout || !WPLayout.ready()) throw new Error('Măsurătorile fontului cărții nu s-au încărcat; exportul se oprește (nu se măsoară cu alt font).');
+  if (lay.metricsHash !== WPLayout.metricsHash()) throw new Error('Măsurătorile fontului din browser diferă de cele ale serverului; reîncarcă aplicația.');
+  if (lay.blocking) throw new Error('Macheta are probleme blocante: ' + lay.findings.filter(f => f.blocking).slice(0, 2).map(f => f.message).join(' '));
+  const geom = WPLayout.geometry(lay.geometry);
+  for (const pg of lay.pages) for (const [id, tb] of Object.entries(pg.textBlocks || {})) {
+    const again = WPLayout.fitText(tb.lines.join(' '), { geom, zone: pg.zone, family: pg.family, sizePt: pg.sizePt, weight: 400 });
+    if (again.lines.join('\n') !== tb.lines.join('\n') || !again.fits) throw new Error(`Pagina ${pg.n} (${tb.language}): măsurarea exportului diferă de previzualizare; exportul se oprește.`);
+  }
+  return lay;
 }
 function wrapLines(g, text, maxW) {
   const out = [];
@@ -44,7 +57,7 @@ function rrect(g, x, y, w, h, r) {
 function drawBlock(g, segs, { px, ph = px, safe, zone, maxW, alpha = 0.9, bg = true }) {
   const base = Math.max(...segs.map(s => s.size));
   const pad = base * 0.55;
-  const laid = segs.filter(s => s.text).map(s => { g.font = `${s.weight || 400} ${s.size}px Andika, "Trebuchet MS", sans-serif`; return { ...s, lines: wrapLines(g, s.text, maxW - pad * 2), lh: s.size * (s.lh || 1.32) }; });
+  const laid = segs.filter(s => s.text).map(s => { g.font = `${s.weight || 400} ${s.size}px Andika, "Trebuchet MS", sans-serif`; return { ...s, lines: s.lines || wrapLines(g, s.text, maxW - pad * 2), lh: s.size * (s.lh || 1.32) }; });
   const gap = base * 0.25;
   const h = laid.reduce((a, s) => a + s.lines.length * s.lh, 0) + gap * Math.max(0, laid.length - 1) + pad * 2;
   const x = zone === 'left' ? safe : zone === 'right' ? px - safe - maxW : (px - maxW) / 2;
@@ -100,7 +113,7 @@ async function drawPage({ v, pg, book, src, src2 = null, age, px, ph, dpi, bleed
   else if (rel) {
     const image = await loadImg(fileUrl(rel));
     if (S.printValidation) { const actualDpi = Math.min(image.naturalWidth / (px / S.printValidation.dpi), image.naturalHeight / (ph / S.printValidation.dpi)); if (actualDpi < S.printValidation.minDpi) throw new Error('Rezoluția ilustrației este ' + Math.round(actualDpi) + ' DPI; profilul cere ' + S.printValidation.minDpi + '.'); }
-    drawCover(g, image, px, ph);
+    drawCover(g, image, px, ph, typeof pg === 'number' && pg > 0 ? S.layoutExport?.pages?.[pg - 1]?.crop : null);
   } else {
     if (S.finalExport && curProject()?.options?.images !== false) throw new Error('Lipsește ilustrația pentru pagina ' + pg + '.');
     g.fillStyle = '#F1F2F4'; g.fillRect(0, 0, px, ph);
@@ -125,7 +138,12 @@ async function drawPage({ v, pg, book, src, src2 = null, age, px, ph, dpi, bleed
   } else {
     const page = (src.c.pages || [])[pg - 1];
     const t2 = src2?.c?.pages?.[pg - 1]?.text;
-    if (page?.text && book.page_text !== false && !book.illustrationOnly) drawBlock(g, [{ text: page.text, size: fpx(pt), lh: 1.38 }], { px, ph, safe, zone: page.layout?.text_zone || page.text_zone || 'bottom', maxW: maxW * (['left','right'].includes(page.layout?.text_zone || page.text_zone) ? 0.48 : ({action:.88,dialogue:.72,surprise:.72,panorama:1,intimate:.78}[page.layout?.family] || 1)) });
+    const lp = S.layoutExport?.pages?.[pg - 1], tb = lp?.textBlocks?.[src.key?.startsWith('tr_') ? 'second' : 'first'];
+    if (page?.text && book.page_text !== false && !book.illustrationOnly) {
+      if (tb) drawBlock(g, [{ text: page.text, lines: tb.lines, size: fpx(lp.sizePt), lh: WPLayout.LINE }], { px, ph, safe, zone: lp.zone, maxW: tb.boxWidthPt / 72 * dpi });   // P6-T01: the plan's lines, font never below the profile
+      else if (S.finalExport) throw new Error('Pagina ' + pg + ' nu are măsurarea machetei; exportul final se oprește.');
+      else drawBlock(g, [{ text: page.text, size: fpx(pt), lh: 1.38 }], { px, ph, safe, zone: page.layout?.text_zone || page.text_zone || 'bottom', maxW: maxW * (['left','right'].includes(page.layout?.text_zone || page.text_zone) ? 0.48 : ({action:.88,dialogue:.72,surprise:.72,panorama:1,intimate:.78}[page.layout?.family] || 1)) });
+    }
   }
   return c;
 }
@@ -156,6 +174,7 @@ async function exportBook(v, bookKey, opt = {}) {
   const list = plan?.pages || entries;
   S.exporting = { label: `${opt.prefix || ''}${book.label}, volumul ${v + 1}`, i: 0, n: list.length }; if (opt.inPackage) paintExport(); else render();
   try {
+    S.layoutExport = verifyLayoutPlan(await api('GET', `/projects/${p.id}/layout/${v + 1}?preset=${encodeURIComponent(preset.key)}`));
     S.finalExport = !!opt.inPackage; S.printValidation = preset.key !== 'digital' ? { dpi: preset.dpi, minDpi: plan?.minDpi || 300 } : null;
     const pdf = new window.jspdf.jsPDF({ unit: 'in', format: [W, H], orientation: 'portrait', compress: true });
     await preparePdfFonts(pdf);
@@ -175,12 +194,12 @@ async function exportBook(v, bookKey, opt = {}) {
     const blob = pdf.output('blob');
     const filename = `${slugify(coll)}-vol${v + 1}-${slugify(book.key)}${langTag}-${preset.key}.pdf`;
     S.exporting.label = 'Salvez în folderul proiectului'; S.exporting.i = 0; paintExport();
-    const r = await api('POST', `/projects/${p.id}/exports?name=${encodeURIComponent(filename)}&kind=${opt.inPackage ? 'final' : 'preview'}&volume=${v}&book=${encodeURIComponent(bookKey)}&lang=${opt.lang || S.book.lang || 'first'}&preset=${preset.key}&fingerprint=${exportFingerprint}`, blob, true);
+    const r = await api('POST', `/projects/${p.id}/exports?name=${encodeURIComponent(filename)}&kind=${opt.inPackage ? 'final' : 'preview'}&volume=${v}&book=${encodeURIComponent(bookKey)}&lang=${opt.lang || S.book.lang || 'first'}&preset=${preset.key}&fingerprint=${exportFingerprint}&layout=${S.layoutExport.measurementHash}`, blob, true);
     if (!opt.silent) { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = filename; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 2000); toast('PDF salvat și în ' + r.path); }
   } catch (e) {
     if (opt.inPackage) throw e;
     toast('Exportul nu a reușit: ' + (e?.message || e?.code || e));
-  } finally { S.finalExport = false; S.printValidation = null; S.vectorText = null; if (!opt.inPackage) { S.exporting = null; render(); } }
+  } finally { S.finalExport = false; S.printValidation = null; S.vectorText = null; S.layoutExport = null; if (!opt.inPackage) { S.exporting = null; render(); } }
 }
 function bookRuns(p, bi, books) {
   const two = bi.bilingual && Object.keys(S.art).some(k => k.startsWith('tr_'));

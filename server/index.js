@@ -55,7 +55,7 @@ import { getVersion, listVersions, variantSet, pinVersion, backfillVersions, ret
 import { canonicalHash } from './domain/canonical.js';
 import { releaseCheck, expectedInventory, decisionStatus } from './domain/decisions.js';
 import { rebindDependents } from './persistence/rebind.js';
-import { registerEnterpriseRoutes, impactForWrite } from './enterprise-routes.js';
+import { registerEnterpriseRoutes, impactForWrite, measuredLayout } from './enterprise-routes.js';
 import { EventStream } from './observability/events.js';
 import * as Intake from './domain/intake.js';
 import { volumeSafety, inputSafety } from './quality/safety.js';
@@ -340,10 +340,15 @@ on('POST', '/api/projects/:pid/exports', async ({ pid }, req, url) => {
   const book = url.searchParams.get('book'), lang = url.searchParams.get('lang') || 'first';
   if (final && !requiredBooks(p, bp).some(b => (b.book === book || (url.searchParams.get('preset') === 'kdp' && b.book + '-cover' === book)) && b.lang === lang)) throw { status: 400, message: 'Carte sau limbă necunoscută.' };
   if(final)validateFinalPdf(buf,bp,p,{book,preset:url.searchParams.get('preset')});
+  /* P6-T01: the export carries the measurement hash it rendered; it must equal the current plan (same as the preview) */
+  const layoutHash = url.searchParams.get('layout'), interior = !/-cover$/.test(book || '');
+  let layoutPlan = null; if ((final || layoutHash) && interior && Number.isInteger(vol)) layoutPlan = await measuredLayout(repo, pid, p, bp, art, vol, url.searchParams.get('preset') || 'digital');
+  if (layoutPlan && layoutHash && layoutHash !== layoutPlan.measurementHash) throw { status: 409, code: 'stale_layout', message: 'Măsurarea machetei din export diferă de cea curentă (previzualizare); regenerează PDF-ul.' };
+  if (final && layoutPlan?.blocking) throw { status: 409, code: 'layout_blocked', message: 'Macheta are probleme blocante: ' + layoutPlan.findings.filter(f => f.blocking).slice(0, 3).map(f => f.message).join(' ') };
   const dir = path.join(projectFolder(p), ...(final ? ['PDF'] : ['Preview', 'PDF']));
   await fs.mkdir(dir, { recursive: true }); await fs.writeFile(path.join(dir, name), buf);
   if (final) {
-    const key = 'delivery_' + vol, old = art[key]?.content?.exports || [], receipt = { name, book, lang, preset: url.searchParams.get('preset'), kind: 'final', fingerprint: deliveryFingerprint(p, bp, art, vol), bytes: buf.length, sha256: fileHash(buf), at: now() };
+    const key = 'delivery_' + vol, old = art[key]?.content?.exports || [], receipt = { name, book, lang, preset: url.searchParams.get('preset'), kind: 'final', fingerprint: deliveryFingerprint(p, bp, art, vol), layout: layoutPlan ? (layoutHash ? { measurementHash: layoutHash, verified: true } : { measurementHash: layoutPlan.measurementHash, verified: false }) : null, bytes: buf.length, sha256: fileHash(buf), at: now() };
     await repo.writeArtifact(pid, key, { exports: [...old.filter(e => !(e.book === book && e.lang === lang)), receipt] }, { by: 'export', note: 'PDF al versiunii aprobate' });
     for (const [k, a] of Object.entries(await repo.artifacts(pid))) if (new RegExp(`^(final|tr|ill)_${vol}(_\\d+)?$`).test(k)) await pinVersion(storage, pid, k, a.version, { reason: 'released', ref: { receipt: receipt.sha256, book, lang }, actor: 'export' });   // P2-T03
   }
@@ -661,6 +666,7 @@ async function handler(req, res) {
     if (url.pathname === '/manifest.webmanifest') return serveFile(res, path.join(ROOT, 'public', 'manifest.webmanifest'));
     if (/^\/icons\/[a-z0-9-]+\.png$/.test(url.pathname)) return serveFile(res, path.join(ROOT, 'public', url.pathname), true);
     if (/^\/fonts\/[A-Za-z0-9-]+\.(woff2|woff|ttf)$/.test(url.pathname)) return serveFile(res, path.join(ROOT, 'public', url.pathname), true);
+    if (url.pathname === '/fonts/andika-metrics.json') return serveFile(res, path.join(ROOT, 'public', 'fonts', 'andika-metrics.json'));   // P6-T01: shared font measurements
     if (/^\/app\/[a-z0-9-]+\.(js|css)$/.test(url.pathname)) return serveFile(res, path.join(ROOT, 'public', url.pathname));
     if (url.pathname === '/vendor/jspdf.umd.min.js') return serveFile(res, path.join(ROOT, 'node_modules/jspdf/dist/jspdf.umd.min.js'), true);
     for (const r of routes) {

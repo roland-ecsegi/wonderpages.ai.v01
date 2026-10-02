@@ -12,5 +12,5 @@ for(const dir of ['server','public/app','scripts','tests','blueprints','seeds','
 const pkg=JSON.parse(await fs.readFile(path.join(root,'package.json'),'utf8')),lock=JSON.parse(await fs.readFile(path.join(root,'package-lock.json'),'utf8'));
 if(pkg.version!==lock.version||pkg.version!==lock.packages[''].version)throw Error('Versiunile manifestelor diferă.');
 for(const [name,version] of Object.entries(pkg.dependencies))if(lock.packages[''].dependencies[name]!==version)throw Error('Dependency lock mismatch: '+name);
-for(const file of ['public/fonts/Andika-Regular.ttf','public/fonts/Andika-Bold.ttf','public/index.html','.env.example','instaleaza.bat'])await fs.access(path.join(root,file));
+for(const file of ['public/fonts/Andika-Regular.ttf','public/fonts/Andika-Bold.ttf','public/fonts/andika-metrics.json','public/app/layout-measure.js','public/index.html','.env.example','instaleaza.bat'])await fs.access(path.join(root,file));
 console.log('PASS: '+checked+' fișiere JavaScript, JSON, lockfile, fonturi și fișiere runtime; '+pkg.edition);

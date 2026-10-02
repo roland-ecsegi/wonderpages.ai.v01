@@ -525,7 +525,8 @@ function sheetHTML(p, v, pg, book, forceSource) {
   }
   let art;
   const img = bookDef.mode === 'lineart' ? ill?.lineart : ill?.color;
-  if (img) art = `<img src="${fileUrl(img)}" alt="${esc(pageLabel(v, pg))}" loading="lazy">`;
+  const lp = typeof pg === 'number' && pg > 0 ? S.layout?.[p.id]?.plans?.[v]?.pages?.[pg - 1] : null;   // P6-T01: the measured plan (same lines and crop as the export)
+  if (img) art = `<img src="${fileUrl(img)}" alt="${esc(pageLabel(v, pg))}" loading="lazy"${lp?.crop ? ` style="object-position:${esc(lp.crop.objectPosition)}"` : ''}>`;
   else art = `<div class="ph">${bookDef.mode === 'lineart' && ill?.color ? 'Pagina de colorat nu a fost generată' : ill?.prompt ? 'Prompt pregătit, imagine negenerată' : 'Ilustrație în așteptare'}</div>`;
   let band = '';
   if (pg === 0) {
@@ -535,11 +536,14 @@ function sheetHTML(p, v, pg, book, forceSource) {
   } else {
     const page = (src?.c?.pages || [])[pg - 1];
     if (page?.text && bookDef.page_text !== false) {
-      const zone=page.layout?.text_zone || page.text_zone || 'bottom';
-      const family=page.layout?.family || 'panorama';
+      const tb = lp?.textBlocks?.[src?.key?.startsWith('tr_') ? 'second' : 'first'];
+      const zone=lp?.zone || page.layout?.text_zone || page.text_zone || 'bottom';
+      const family=lp?.family || page.layout?.family || 'panorama';
       const width={action:.88,dialogue:.72,surprise:.72,panorama:1,intimate:.78}[family] || 1;
       const horizontal=['left','right'].includes(zone) ? (zone==='left'?'right:51%;':'left:51%;') : `left:${5.5+44.5*(1-width)}%;right:${5.5+44.5*(1-width)}%;`;
-      band = `<div class="band ${zone === 'top' ? 'top' : 'bottom'}" style="--pt:${pt};${horizontal}">${esc(page.text)}</div>`;
+      const measured = tb && tb.lines.join(' ') === String(page.text).normalize('NFC').split(/\s+/).filter(Boolean).join(' ');
+      const blocked = (lp?.findings || []).some(f => f.blocking);
+      band = `<div class="band ${zone === 'top' ? 'top' : 'bottom'}${blocked ? ' overflow' : ''}" style="--pt:${num(tb?.sizePt, pt)};${horizontal}${measured ? 'white-space:nowrap;' : ''}"${blocked ? ` title="${esc(lp.findings.filter(f => f.blocking).map(f => f.message).join(' '))}"` : ''}>${measured ? tb.lines.map(esc).join('<br>') : esc(page.text)}</div>`;
     }
   }
   return `<figure class="sheet" style="margin:0;${shape}">${corners}<div class="art">${art}</div>${band}</figure>`;

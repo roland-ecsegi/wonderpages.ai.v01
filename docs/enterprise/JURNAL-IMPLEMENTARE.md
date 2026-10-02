@@ -71,8 +71,8 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | P5-T03 | DONE | eaf22b2 | TEST-P5-T03 7/7; RS0 240/240 | Verdict vizual verificat (repere cu ocluzie, deținător, dezvăluire, aglomerare); pereche color/colorat legată de fișiere curente |
 | P5-T04 | DONE | b51fa4b | TEST-P5-T04 8/8; RS0 248/248 | QA între artefacte și colecție cu referințe exacte; probleme mari blochează livrarea; colecția = cel mai slab volum |
 | P5-T05 | DONE | 3ee1f6e | TEST-P5-T05 8/8; RS0 256/256 | Set de aur gold-v1 (44 cazuri, 3 vârste/2 limbi/temă rezervată), rapoarte cu confuzie/false-pass/kappa, contaminare, comparații oarbe; praguri propuse până la acceptare |
-| P5-T06 | DONE | (acest commit) | TEST-P5-T06 6/6; RS0 262/262 local + 262/262 PG | PagePatch limitat (2 încercări creative), dependenți explicit, fără regenerări necerute, rezolvare doar cu recheck complet; PHASE 5 închisă |
-| P6-T01 | PENDING | | | |
+| P5-T06 | DONE | d4b2f12 | TEST-P5-T06 6/6; RS0 262/262 local + 262/262 PG | PagePatch limitat (2 încercări creative), dependenți explicit, fără regenerări necerute, rezolvare doar cu recheck complet; PHASE 5 închisă |
+| P6-T01 | DONE | (acest commit) | TEST-P6-T01 11/11; RS0 273/273 local + 273/273 PG | Plan de machetă măsurat cu metrica Andika (cod comun server/previzualizare/export), font ≥ profil, schimbare doar cu dovadă, încadrare care protejează reperele, hash identic preview/export |
 | P6-T02 | PENDING | | | |
 | P6-T03 | PENDING | | | |
 | P6-T04 | PENDING | | | |
@@ -129,6 +129,7 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | 2026-10-02 | RS0 + TEST-P5-T05 | 256/256 PASS | — |
 | 2026-10-02 | RS0 + TEST-P5-T06 | 262/262 PASS | — |
 | 2026-10-02 | Închidere P5: baseline-report --with-tests --with-pg | 15 PASS · 0 FAIL · 3 NOT_RUN; 262/262 local + 262/262 PostgreSQL | — |
+| 2026-10-02 | RS0 + TEST-P6-T01 | 273/273 PASS local + 273/273 PostgreSQL | — |
 
 ## Probleme deschise
 
@@ -143,6 +144,6 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 
 ## Checkpoint
 
-- Ultimul task închis: P5-T06
-- Următorul task: **P6-T01**
+- Ultimul task închis: P6-T01
+- Următorul task: **P6-T02**
 - Cum se reia: `npm ci && npm run build && BROWSER_PATH=/opt/pw-browsers/chromium npm test`; citește tabelul de mai sus și `docs/enterprise/records/`.

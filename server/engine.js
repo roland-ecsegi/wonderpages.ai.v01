@@ -13,6 +13,7 @@ import { AsyncLocalStorage } from 'node:async_hooks';
 import { Scheduler, INSTANCE, unitInputsHash } from './jobs/scheduler.js';
 import { ExecutionBudget } from './jobs/budget.js';
 import { sniffImage, pngSize } from './security/safe-zip.js';
+import { planLayout, pageIssues } from './domain/layout.js';
 import { assertExecutable } from './providers/registry.js';
 import { canonicalHash } from './domain/canonical.js';
 import { matrixForArtifacts } from './domain/collection.js';
@@ -1219,10 +1220,11 @@ export function gateItems(bp, art, project, gate) {
     if (s.kind === 'story' && v != null) { const sc = storyContract({ bp, art, input: project.input || {}, v }); out.push({ id: 'story:' + v, kind: 'story', v, label: `Contractul poveștii, volumul ${v + 1}: cauzalitate, vârstă, voce, știință${art['tr_' + v] ? ', ediția nativă' : ''}`, missing: !sc, blocked: !!sc && !sc.ready, hash: sc ? fingerprint([sc.causality, sc.findings.map(f => [f.code, f.page ?? null])]) : null, story: sc }); }   // P4-T04
     if (s.kind === 'pageplans') { const { pages, sources } = derivePageBlueprints(bp, art), r = validatePageBlueprints(pages, { structure: bp.structure, bible: art.bible?.content }); out.push({ id: 'pageplans', kind: 'pageplans', label: `Planul paginilor: ${r.count} din ${r.expected} PageBlueprints`, missing: !pages.length, blocked: !r.ready, hash: fingerprint([pages, r.findings.map(f => [f.code, f.page])]), check: { ...r, sources } }); }   // P4-T03
     if (s.kind === 'atlas') { const a = atlasFor({ project, art, approvals: project.approvals?.[gateInstance(gate)] || {}, declaredRights: project.rightsDeclared || [] }); out.push({ id: 'atlas', kind: 'atlas', label: 'Canonul vizual: atlasul personajelor', missing: !art.bible, blocked: false, hash: fingerprint([a.requirements.map(r => [r.character, r.view]), a.entries.map(e => [e.id, e.file, e.kind])]), atlas: a }); }   // P4-T03: proposals stay proposed
-    if (s.kind === 'layout') for (let i=0;i<P;i++) {
-      const k=s.source+'_'+v, pg=art[k]?.content?.pages?.[i], tr=art['tr_'+v]?.content?.pages?.[i];
-      out.push({id:'layout:'+k+':'+(i+1),kind:'layout',key:k,v,p:i+1,label:'Macheta paginii '+(i+1),missing:!pg,hash:pg?fingerprint([pg.layout,pg.text,tr?.text,art['ill_'+v+'_'+(i+1)]?.content?.color, project.input.page_format]):null});
-    }
+    if (s.kind === 'layout') { let lp = null; try { lp = planLayout({ bp, project, art, v }); } catch (e) { console.warn('[layout]', e.message); }   // P6-T01: measured plan; overflow/glyph/crop blockers cannot be approved
+      for (let i=0;i<P;i++) {
+      const k=s.source+'_'+v, pg=art[k]?.content?.pages?.[i], tr=art['tr_'+v]?.content?.pages?.[i], lpg=lp?.pages.find(x=>x.n===i+1), issues=lp?pageIssues(lp,i+1):[];
+      out.push({id:'layout:'+k+':'+(i+1),kind:'layout',key:k,v,p:i+1,label:'Macheta paginii '+(i+1),missing:!pg,blocked:issues.length>0,issues,plan:lpg?{family:lpg.family,zone:lpg.zone,sizePt:lpg.sizePt,source:lpg.source,reason:lpg.reason,adjusted:lpg.adjusted||null,findings:lpg.findings.map(f=>({code:f.code,severity:f.severity,message:f.message}))}:null,hash:pg?fingerprint([pg.layout,pg.text,tr?.text,art['ill_'+v+'_'+(i+1)]?.content?.color, project.input.page_format, lpg&&[lpg.family,lpg.zone,issues]]):null});
+    } }
     if (s.kind === 'bookcheck') {
       const k=s.source+'_'+v, c=art[k]?.content;
       out.push({id:'bookcheck:'+v,kind:'bookcheck',key:k,v,label:v===0?'Validarea pilotului: lectură, ritm, continuitate și pereche colorat':'Validarea editorială a volumului',missing:!c,blocked:editorialFindings(bp,art,v).strict && !editorialFindings(bp,art,v).complete,hash:c?fingerprint([c,art['tr_'+v]?.content,Array.from({length:P+1},(_,p)=>art['ill_'+v+'_'+p]?.content)]):null});

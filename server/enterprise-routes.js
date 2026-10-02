@@ -24,12 +24,21 @@ import { pageVisual } from './quality/visual.js';
 import { collectionQA } from './quality/collection-qa.js';
 import { runEvaluation, calibrationStatus, compareReports } from './quality/evaluation.js';
 import { missingUnits } from './quality/repair.js';
+import { planLayout } from './domain/layout.js';
 import { pngSize } from './security/safe-zip.js';
 import { reconcileReport, applyReconcile } from './migration/dw-reconcile.js';
 import { contractFromBlueprint, validateProjectInput, editionsFor } from './domain/product-contract.js';
 import * as Ledger from './ledger.js';
 import { getCapabilities } from './providers/registry.js';
 import { createPacket, getPacket, listPackets, recordAttempt, assertUsable, packetZip } from './providers/operator-exchange.js';
+
+/** P6-T01: the layout plan of a volume with the real pixel sizes of its illustrations (crop measured on the files). */
+export async function measuredLayout(repo, pid, project, bp, art, v, preset = 'digital') {
+  if (preset !== 'digital' && !(bp.export?.presets || []).some(x => x.key === preset)) throw { status: 400, message: 'Profil de export necunoscut.' };
+  const images = {};
+  for (let p = 1; p <= (bp.structure?.pages || 12); p++) { const c = art[`ill_${v}_${p}`]?.content; if (!c?.color) continue; try { const sz = pngSize(await repo.readFile(pid, c.color)); if (sz) images[`ill_${v}_${p}`] = sz; } catch {} }
+  return planLayout({ bp, project, art, v, preset, images });
+}
 
 export function impactForWrite(bp, art, key, nextContent) {
   const prev = art[key]?.content;
@@ -205,4 +214,20 @@ export function registerEnterpriseRoutes({ on, json, need, localOnly, repo, stor
   /* P5-T06: repair reports (plan, verification, resolutions, items for the operator) and missing/failed units of a volume */
   on('GET', '/api/projects/:pid/repairs', async ({ pid }) => { const p = need(pid); return { attempts: p.repairAttempts || {}, reports: p.repairs || [] }; });
   on('GET', '/api/projects/:pid/missing/:v', async ({ pid, v }) => { const p = need(pid), bp = await repo.getBlueprint(pid), n = Number(v); if (!Number.isInteger(n) || n < 1 || n > bp.structure.volumes) throw { status: 400, message: 'Volum invalid.' }; return { volume: n, units: missingUnits(await repo.artifacts(pid), n - 1, { pages: bp.structure.pages, images: p.options?.images !== false }) }; });
+  /* P6-T01: measured layout plans (shared measuring code with the preview and the export) and layout revisions */
+  const presetOf = req => { const k = new URL(req.url, 'http://x').searchParams.get('preset') || 'digital'; if (!/^[a-z0-9_-]{1,20}$/.test(k)) throw { status: 400, message: 'Profil de export invalid.' }; return k; };
+  const layoutOf = async (pid, n, preset) => { const p = need(pid), bp = await repo.getBlueprint(pid); if (!Number.isInteger(n) || n < 1 || n > bp.structure.volumes) throw { status: 400, message: 'Volum invalid.' }; return measuredLayout(repo, pid, p, bp, await repo.artifacts(pid), n - 1, preset); };
+  on('GET', '/api/projects/:pid/layout', async ({ pid }, req) => { const p = need(pid), bp = await repo.getBlueprint(pid), art = await repo.artifacts(pid), preset = presetOf(req), plans = {};
+    for (let v = 0; v < bp.structure.volumes; v++) if (art[`final_${v}`] || art[`script_${v}`]) plans[v] = await layoutOf(pid, v + 1, preset);
+    return { preset, plans, revisions: p.layoutRevisions || {} }; });
+  on('GET', '/api/projects/:pid/layout/:v', async ({ pid, v }, req) => layoutOf(pid, Number(v), presetOf(req)));
+  on('POST', '/api/projects/:pid/layout/:v/revision', async ({ pid, v }, req) => {
+    localOnly(req); const p = need(pid), b = await json(req), n = Number(v), plan = await layoutOf(pid, n, String(b.preset || 'digital'));
+    if (b.measurementHash !== plan.measurementHash) throw { status: 409, code: 'stale_layout', message: 'Măsurarea s-a schimbat (text, imagine, font sau profil) de la previzualizare; reîncarcă macheta.', current: plan.measurementHash };
+    if (plan.blocking) throw { status: 409, code: 'layout_blocked', message: 'Macheta are probleme blocante (depășire, glife lipsă, încadrare): rezolvă-le înainte de a o fixa.', findings: plan.findings.filter(f => f.blocking) };
+    const prev = p.layoutRevisions?.[n] || [], rev = { rev: prev.length + 1, preset: plan.preset, measurementHash: plan.measurementHash, metricsHash: plan.metricsHash, at: now(), actor: 'operator@laptop', note: String(b.note || '').slice(0, 300), pages: plan.pages.map(x => ({ n: x.n, family: x.family, zone: x.zone, sizePt: x.sizePt, source: x.source, crop: x.crop ? { x: x.crop.x, y: x.crop.y, w: x.crop.w, h: x.crop.h } : null })) };
+    const rec = decisionRecord({ kind: 'layout_revision', actor: 'operator@laptop', state: 'approved', note: rev.note, scope: { volume: n, preset: plan.preset }, subject: { measurementHash: plan.measurementHash, rev: rev.rev } });
+    await repo.commitProjectDecision(pid, { layoutRevisions: { ...(p.layoutRevisions || {}), [n]: [...prev, rev].slice(-20) } }, [rec], { actor: 'operator@laptop', kind: 'layout.revision' });
+    return { ok: true, revision: rev, decision: rec.id };
+  });
 }
