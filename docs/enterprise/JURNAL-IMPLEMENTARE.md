@@ -31,6 +31,7 @@ Linux (container cloud), Node v22.22.0, npm 10.9.4, PostgreSQL 16 (binare locale
 |---|---|---|---|
 | DEV-001 | Fixture-urile de import din `tests/3-securitate.test.mjs` (C1) primesc o structură validă 6×2×12; aserțiunile de securitate rămân identice. | P1-T01 face importul `kids-sc` cu structură invalidă refuzat (AC-P1-T01). Fixture-ul vechi avea `books: []` / `volumes: 1`, irelevant pentru scopul testului. Un test nou acoperă refuzul. | Revert commit P1-T01. |
 | DEV-002 | Ghidul și auditul PDF nu sunt disponibile. | Doar referințele de pagină din arhitectură. | Constatările G/A se folosesc doar așa cum sunt citate în arhitectură. |
+| DEV-003 | LAN fără HTTPS devine `lan-restricted` implicit: dispozitivele din rețea urmăresc și comentează, nu aprobă. | OUTPUT-26 / AC-P1-T04 („HTTPS pentru aprobări pe LAN … ori LAN restricted”). | Operatorul poate reveni la v04 de pe laptop: `PUT /api/settings/lan-transport {acceptPlainLan:true}`. |
 
 ## Starea taskurilor
 
@@ -40,8 +41,8 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 |---|---|---|---|---|
 | P1-T01 | DONE | ec9e804 | TEST-P1-T01 7/7; RS0 98/98 | ProductContract + ADR04; DEV-001 |
 | P1-T02 | DONE | fcd21b0 | baseline 14 PASS/0 FAIL/3 NOT_RUN; RS0 98/98; PG_QA PASS | raport `docs/enterprise/baseline/`; 7 defecte reproduse |
-| P1-T03 | DONE | (acest commit) | TEST-P1-T03 6/6; RS0 104/104 | Discovery read-only; host real UNKNOWN (operator) |
-| P1-T04 | PENDING | | | |
+| P1-T03 | DONE | 93e7867 | TEST-P1-T03 6/6; RS0 104/104 | Discovery read-only; host real UNKNOWN (operator) |
+| P1-T04 | DONE | (acest commit) | TEST-P1-T04 8/8; RS0 112/112 | ZIP dur, decode check, Origin, LAN restricted, redactare |
 | P1-T05 | PENDING | | | |
 | P2-T01 | PENDING | | | |
 | P2-T02 | PENDING | | | |
@@ -94,6 +95,7 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | 2026-10-02 | baseline-report --with-tests --with-pg | 14 PASS · 0 FAIL · 3 NOT_RUN | `docs/enterprise/baseline/BASELINE-REPORT.md`; PG 16 efemer |
 | 2026-10-02 | RS0 + TEST-P1-T01 după P1-T01 | 98/98 PASS, build 81 JS | prima rulare a picat 1 test nou (aserțiune dependentă de ordine: versiunea tipului 16 după testul de upgrade) — corectat în test, nu în cod |
 | 2026-10-02 | RS0 + TEST-P1-T03 | 104/104 PASS | prima rulare completă a picat testul nou (Canva deja conectat în suită) — corectat în test |
+| 2026-10-02 | RS0 + TEST-P1-T04 | 112/112 PASS | — |
 
 ## Probleme deschise
 
@@ -105,6 +107,6 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 
 ## Checkpoint
 
-- Ultimul task închis: P1-T03
-- Următorul task: **P1-T04**
+- Ultimul task închis: P1-T04
+- Următorul task: **P1-T05**
 - Cum se reia: `npm ci && npm run build && BROWSER_PATH=/opt/pw-browsers/chromium npm test`; citește tabelul de mai sus și `docs/enterprise/records/`.

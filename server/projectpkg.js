@@ -13,6 +13,7 @@ import { uid, now } from './repo.js';
 import { expandStages, HANDLER_NAMES } from './engine.js';
 import { str, cleanInput, isSafeRel, IMAGE_MIME, safeCode, cleanComment } from './sanitize.js';
 import { contractFromBlueprint, validateContract } from './domain/product-contract.js';
+import { sniffImage } from './security/safe-zip.js';
 
 const FORMAT = 'wonderpages-project';
 async function copyDir(a, b) { await fsp.mkdir(b, { recursive: true }); for (const e of await fsp.readdir(a, { withFileTypes: true }).catch(() => [])) { const x = path.join(a, e.name), y = path.join(b, e.name); if (e.isDirectory()) await copyDir(x, y); else await fsp.copyFile(x, y); } }
@@ -52,11 +53,12 @@ export async function importProject(repo, storage, buf) {
   if (!cv.valid) throw { status: 422, code: 'contract_invalid', errors: cv.errors, message: 'Proiect respins: nu respectă contractul produsului — ' + cv.errors.map(e => e.message).join(' ') };
   const pid = uid('p'); const src = doc.project; const bp = doc.blueprint;
   /* files: only images/ and uploads/ with plain names, only image formats */
-  const kept = new Set();
+  const kept = new Set(), rejectedFiles = [];
   for (const [name, data] of files) {
     if (!data || !name.startsWith(root + 'files/')) continue;
     const rel = path.posix.normalize(name.slice((root + 'files/').length));
     if (!isSafeRel(rel) || rel.startsWith('exports/') || !IMAGE_MIME[path.extname(rel).toLowerCase()]) continue;
+    if (sniffImage(data) !== IMAGE_MIME[path.extname(rel).toLowerCase()]) { rejectedFiles.push(rel); continue; }   // P1-T04: declared type must match the bytes
     await storage.writeFile(`projects/${pid}/${rel}`, data); kept.add(rel);
   }
   /* progress: finished work stages are kept as "imported" (skipped at start); approval gates are never kept */
@@ -93,6 +95,7 @@ export async function importProject(repo, storage, buf) {
     for (const c of doc.comments.slice(0, 500)) if (c && typeof c === 'object') list.push({ id: uid('c'), createdAt: now(), status: ['open', 'resolved', 'addressed'].includes(c.status) ? c.status : 'open', ...cleanComment(c) });
     await repo.saveComments(pid);
   }
+  if (rejectedFiles.length) await repo.patchProject(pid, { log: [...p.log, { t: now(), text: `${rejectedFiles.length} fișiere respinse la import: conținutul nu corespunde tipului declarat (${rejectedFiles.slice(0, 5).join(', ')}).`, kind: 'warn' }] });
   await repo.logEvent(pid, 'import', { from: str(src.id, 60), title: p.title });
   return p;
 }

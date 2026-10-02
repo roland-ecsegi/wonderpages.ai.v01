@@ -8,6 +8,7 @@
 import zlib from 'node:zlib';
 import path from 'node:path';
 import { bus, now } from './repo.js';
+import { readZip } from './security/safe-zip.js';
 
 let storage, learning;
 let PACKS = [];
@@ -19,33 +20,8 @@ export const getPack = id => PACKS.find(p => p.id === id) || null;
    audit M2: every entry and the whole archive have a ceiling after decompression (no "zip bomb"),
    and every offset is checked before it is read. */
 const MAX_ENTRY = 80 * 1024 * 1024, MAX_TOTAL = 900 * 1024 * 1024, MAX_FILES = 5000;
-export function unzip(buf) {
-  const bad = () => { throw { status: 400, message: 'Fișierul nu e o arhivă .zip validă.' }; };
-  const tooBig = () => { throw { status: 413, message: 'Arhiva se despachetează în fișiere prea mari (limită de siguranță).' }; };
-  if (!Buffer.isBuffer(buf) || buf.length < 22) bad();
-  let e = buf.length - 22; const stop = Math.max(0, buf.length - 22 - 65535); while (e >= stop && buf.readUInt32LE(e) !== 0x06054b50) e--;
-  if (e < stop) bad();
-  const n = buf.readUInt16LE(e + 10); let off = buf.readUInt32LE(e + 16); const out = new Map(); let total = 0;
-  if (n > MAX_FILES) tooBig();
-  for (let i = 0; i < n; i++) {
-    if (off + 46 > buf.length || buf.readUInt32LE(off) !== 0x02014b50) break;
-    const method = buf.readUInt16LE(off + 10), csize = buf.readUInt32LE(off + 20), usize = buf.readUInt32LE(off + 24), nlen = buf.readUInt16LE(off + 28), xlen = buf.readUInt16LE(off + 30), clen = buf.readUInt16LE(off + 32), lho = buf.readUInt32LE(off + 42);
-    if (off + 46 + nlen > buf.length) bad();
-    const name = buf.toString('utf8', off + 46, off + 46 + nlen); off += 46 + nlen + xlen + clen;
-    if (name.endsWith('/')) continue;
-    if (lho + 30 > buf.length) bad();
-    const ln = buf.readUInt16LE(lho + 26), lx = buf.readUInt16LE(lho + 28); const start = lho + 30 + ln + lx;
-    if (start + csize > buf.length) bad();
-    if (usize > MAX_ENTRY || total + usize > MAX_TOTAL) tooBig();
-    const data = buf.subarray(start, start + csize);
-    let body = null;
-    if (method === 8) { try { body = zlib.inflateRawSync(data, { maxOutputLength: MAX_ENTRY }); } catch (err) { if (err?.code === 'ERR_BUFFER_TOO_LARGE' || /buffer/i.test(err?.message || '')) tooBig(); bad(); } }
-    else if (method === 0) body = Buffer.from(data);
-    if (body) { total += body.length; if (total > MAX_TOTAL) tooBig(); }
-    out.set(name, body);
-  }
-  return out;
-}
+/* P1-T04: delegates to the hardened reader (traversal, duplicates, symlinks, CRC, sizes, methods) */
+export function unzip(buf) { return readZip(buf, { maxFiles: MAX_FILES, maxEntry: MAX_ENTRY, maxTotal: MAX_TOTAL }); }
 const safeRel = p => { const n = path.posix.normalize(String(p || '').replace(/\\/g, '/')).replace(/^\/+/, ''); if (!n || n.startsWith('..')) throw { status: 400, message: 'Cale invalidă în pachet: ' + p }; return n; };
 
 export async function importPack(zipBuf) {

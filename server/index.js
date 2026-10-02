@@ -1,4 +1,8 @@
+import { installConsoleRedaction } from './security/redact.js';
+import { transportMode, remoteMutationBlocked, originAllowed, postureReport } from './security/posture.js';
+import { sniffImage } from './security/safe-zip.js';
 import { validateFinalPdf } from './pdfcheck.js';
+installConsoleRedaction();   // P1-T04: secrets never reach wonderpages.log
 import { checkedPackage } from './package-check.js';
 import { reconcileStorage } from './reconcile.js';
 import http from 'node:http';
@@ -186,6 +190,7 @@ on('POST', '/api/projects', async (_, req) => {
   };
   const bp = clone(t); delete bp.updatedAt;
   const ok = (Array.isArray(refs) ? refs : []).filter(r => r && /^image\/(png|jpeg|webp)$/.test(r.mime) && typeof r.data === 'string' && r.data.length < 14e6).slice(0, 6);
+  for (const r of ok) if (sniffImage(Buffer.from(r.data, 'base64')) !== r.mime) throw { status: 400, code: 'mime_mismatch', message: `Referința „${String(r.name || '').slice(0, 60)}” nu este o imagine ${r.mime} validă.` };   // P1-T04 decode check
   await repo.createProject(p, bp);
   if (ok.length) {
     const files = [];
@@ -360,6 +365,9 @@ on('PUT', '/api/settings/drive-folder', async (_, req) => { localOnly(req); cons
 on('GET', '/api/agents', async () => ({ agents: listAgents(), lessons: listLessons() }));
 on('PUT', '/api/agents/:id', async ({ id }, req) => { localOnly(req); return updateAgent(id, await json(req)); });
 /* network access: configured only from the laptop itself */
+const securityMode = () => transportMode({ lanEnabled: LAN.lanEnabled(), tlsEnabled: tlsEnabled(), acceptPlainLan: !!SETTINGS.acceptPlainLan });   // P1-T04
+on('GET', '/api/security/posture', async (_, req) => { localOnly(req); return postureReport({ mode: securityMode(), bindHost: boundHost, storage: storage.describe().kind, legacyDbCredentials: !!storage.describe().legacyCredentials, tlsEnabled: tlsEnabled(), lanStatus: LAN.status() }); });
+on('PUT', '/api/settings/lan-transport', async (_, req) => { localOnly(req); const b = await json(req); SETTINGS.acceptPlainLan = b.acceptPlainLan === true; await storage.writeJSON('settings.json', SETTINGS); return { mode: securityMode(), acceptPlainLan: SETTINGS.acceptPlainLan }; });
 on('PUT', '/api/settings/lan', async (_, req) => { localOnly(req); const r = await LAN.configure(await json(req)); await relisten(); bus.emit('change', { scope: 'projects' }); return r; });
 on('POST', '/api/settings/lan/logout-all', async (_, req) => { localOnly(req); await LAN.logoutAll(); dropUnauthorized(); return { ok: true }; });
 on('GET', '/api/lan/qr', async (_, req) => { localOnly(req); await LAN.refreshPrimary().catch(() => {}); const u = LAN.lanUrls(config.port)[0]; return { url: u || null, svg: u ? await LAN.qrSvg(u) : null }; });
@@ -581,6 +589,8 @@ async function handler(req, res) {
   if (!LAN.hostAllowed(req)) { res.writeHead(403); res.end('Forbidden'); return; }
   if (req.method !== 'GET' && (req.url.startsWith('/api/') || req.url.startsWith('/auth/')) && req.headers['x-wp'] !== '1') { res.writeHead(403); res.end('Forbidden'); return; }
   const url = new URL(req.url, `http://localhost:${config.port}`);
+  if (!originAllowed(req)) { res.writeHead(403); res.end('Forbidden'); return; }   // P1-T04: cross-origin state change
+  if (remoteMutationBlocked({ mode: securityMode(), local: LAN.isLocal(req), method: req.method, pathname: url.pathname })) { send(res, 403, { code: 'lan_restricted', message: 'Rețeaua locală fără HTTPS permite urmărirea și comentariile, nu aprobări sau modificări. Activează HTTPS (WP_TLS_CERT/WP_TLS_KEY) sau acceptă explicit, de pe laptop, LAN fără HTTPS în Setări.' }); return; }
   if (!LAN.authorized(req) && !PUBLIC_WITHOUT_LOGIN(url.pathname)) {   // other devices: access code first
     if (url.pathname.startsWith('/api/') || url.pathname.startsWith('/files/')) { send(res, 401, { message: 'Autentifică-te cu codul de acces.' }); return; }
     res.writeHead(200, { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store' }); res.end(LAN.LOGIN_PAGE); return;

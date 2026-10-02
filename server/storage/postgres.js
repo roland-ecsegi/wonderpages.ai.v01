@@ -29,6 +29,8 @@ export class PostgresStorage {
      on an authentication error the known sets are tried, and .env is corrected to the one that works */
   candidates() {
     const u = new URL(this.url); const host = `${u.hostname}:${u.port || 5432}`; const list = [this.url];
+    /* P1-T04: the known legacy credential sets are a migration path for a LOCAL database only, never for a network host */
+    if (!['127.0.0.1', 'localhost', '[::1]', '::1'].includes(u.hostname.toLowerCase())) return list;
     for (const [user, pass, db] of [['wonderpages', 'wonderpages-local', 'wonderpages'], ['tiparnita', 'tiparnita-local', 'tiparnita']]) list.push(`postgres://${user}:${pass}@${host}/${db}`);
     return [...new Set(list)];
   }
@@ -52,7 +54,7 @@ export class PostgresStorage {
         if (['28P01', '28000', '3D000'].includes(e.code)) {          // wrong password / unknown user / unknown database: try the known credentials
           for (const url of this.candidates().slice(1)) {
             const p = new pg.Pool({ connectionString: url, max: 5 });
-            try { await p.query('SELECT 1'); await this.pool.end().catch(() => {}); this.pool = p; this.url = url; this.fixEnv(url); last = null; break; }
+            try { await p.query('SELECT 1'); await this.pool.end().catch(() => {}); this.pool = p; this.url = url; this.legacyCredentials = /:(wonderpages|tiparnita)-local@/.test(url); if (this.legacyCredentials) console.warn('[baza de date] conectat cu credențiale legacy cunoscute (doar local); migrează la o parolă generată.'); this.fixEnv(url); last = null; break; }
             catch { await p.end().catch(() => {}); }
           }
           if (!last) break;
@@ -62,6 +64,7 @@ export class PostgresStorage {
       }
     }
     if (last) throw new Error('Baza de date PostgreSQL nu răspunde. Pornește Docker Desktop și rulează din nou porneste.bat. (' + last.message + ')');
+    if (this.legacyCredentials === undefined) this.legacyCredentials = /:(wonderpages|tiparnita)-local@/.test(this.url);
     for (const stmt of SCHEMA.split(';').map(s => s.trim()).filter(Boolean)) await this.pool.query(stmt);
   }
   q(text, params) { return this.pool.query(text, params); }
@@ -120,5 +123,5 @@ export class PostgresStorage {
   remove(rel) { return this.files.remove(rel); }
   async flush() { await this.files.flush(); }
   async close() { await this.flush(); await this.pool.end(); }
-  describe() { return { kind: 'postgres', label: 'PostgreSQL în Docker', location: `containerul ${process.env.DB_CONTAINER || 'wonderpages-db'}, fișiere în ${this.files.root}` }; }
+  describe() { return { kind: 'postgres', legacyCredentials: !!this.legacyCredentials, label: 'PostgreSQL în Docker', location: `containerul ${process.env.DB_CONTAINER || 'wonderpages-db'}, fișiere în ${this.files.root}` }; }
 }
