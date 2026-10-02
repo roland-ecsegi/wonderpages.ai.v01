@@ -1,30 +1,31 @@
 {
  "kind": "wonderpages.baseline-report/1",
- "generatedAt": "2026-10-02T10:34:21.513Z",
- "codeRevision": "ec9e804",
+ "generatedAt": "2026-10-02T10:52:31.306Z",
+ "codeRevision": "828b282",
  "checks": [
   {
    "id": "INVENTORY",
    "status": "PASS",
-   "summary": "154 fișiere (fără node_modules/.git/data), 6 ascunse",
+   "summary": "176 fișiere (fără node_modules/.git/data), 6 ascunse",
    "detail": {
-    "total": 154,
+    "total": 176,
     "byExt": {
-     ".md": 35,
+     ".md": 40,
      ".example": 1,
      "(none)": 3,
-     ".json": 8,
+     ".json": 11,
      ".bat": 4,
      ".vbs": 1,
      ".yml": 1,
-     ".js": 56,
+     ".log": 3,
+     ".js": 62,
      ".ttf": 4,
      ".txt": 1,
      ".png": 3,
      ".html": 2,
      ".webmanifest": 1,
      ".zip": 1,
-     ".mjs": 26,
+     ".mjs": 31,
      ".ps1": 1,
      ".cjs": 4,
      ".cmd": 2
@@ -64,49 +65,76 @@
   {
    "id": "SOURCE_DRIFT_V04",
    "status": "PASS",
-   "summary": "134/137 fișiere v04 identice, 3 modificate (enterprise), 11 adăugate, 0 lipsă",
+   "summary": "130/137 fișiere v04 identice, 7 modificate (enterprise), 33 adăugate, 0 lipsă",
    "detail": {
-    "unchanged": 134,
+    "unchanged": 130,
     "modified": [
+     "server/canva.js",
      "server/index.js",
      "server/projectpkg.js",
-     "tests/3-securitate.test.mjs"
+     "server/storage/postgres.js",
+     "server/training.js",
+     "tests/3-securitate.test.mjs",
+     "tests/shim/client/index.js"
     ],
     "missing": [],
     "added": [
      "docs/enterprise/JURNAL-IMPLEMENTARE.md",
+     "docs/enterprise/PROTECTED-BEHAVIOR.md",
      "docs/enterprise/adr/ADR04-paginare.md",
+     "docs/enterprise/baseline/BASELINE-REPORT.json",
+     "docs/enterprise/baseline/BASELINE-REPORT.md",
+     "docs/enterprise/baseline/DEFECTS.json",
+     "docs/enterprise/baseline/EDITORIAL-BASELINE.json",
+     "docs/enterprise/baseline/EDITORIAL-BASELINE.md",
+     "docs/enterprise/baseline/logs/2026-10-02-build.log",
+     "docs/enterprise/baseline/logs/2026-10-02-pg-qa.log",
+     "docs/enterprise/baseline/logs/2026-10-02-rs0.log",
      "docs/enterprise/contracts/PRODUCT-CONTRACT.md",
+     "docs/enterprise/contracts/PROVIDER-CAPABILITIES.md",
+     "docs/enterprise/contracts/SECURITY-BASELINE.md",
      "docs/enterprise/records/P1.md",
      "scripts/enterprise/baseline-report.mjs",
+     "scripts/enterprise/editorial-baseline.mjs",
      "scripts/enterprise/pg-ephemeral.mjs",
+     "scripts/enterprise/reproduce-defects.mjs",
      "server/domain/canonical.js",
      "server/domain/product-contract.js",
+     "server/domain/rights.js",
      "server/migration/dw-reference.js",
+     "server/migration/raw-compare.js",
+     "server/providers/capabilities.js",
+     "server/providers/registry.js",
+     "server/security/posture.js",
+     "server/security/redact.js",
      "server/security/safe-zip.js",
-     "tests/20-p1-contract.test.mjs"
+     "tests/20-p1-contract.test.mjs",
+     "tests/21-p1-providers.test.mjs",
+     "tests/22-p1-security.test.mjs",
+     "tests/23-p1-rights.test.mjs"
     ]
    }
   },
   {
    "id": "BUILD",
    "status": "PASS",
-   "summary": "PASS: 85 fișiere JavaScript, JSON, lockfile, fonturi și fișiere runtime; WonderPages AI — claude-gpt.v04",
+   "summary": "PASS: 96 fișiere JavaScript, JSON, lockfile, fonturi și fișiere runtime; WonderPages AI — claude-gpt.v04",
    "log": "docs/enterprise/baseline/logs/2026-10-02-build.log"
   },
   {
    "id": "RS0_SUITE",
    "status": "PASS",
-   "summary": "98 trecute, 0 picate, 0 sărite; browser PDF: da",
+   "summary": "117 trecute, 0 picate, 0 sărite; browser PDF: da",
    "log": "docs/enterprise/baseline/logs/2026-10-02-rs0.log"
   },
   {
    "id": "PROTECT_IMPORT",
    "status": "PASS",
-   "summary": "4/4 teste",
+   "summary": "5/5 teste",
    "detail": [
     "export și import de proiect: conținutul rămâne, aprobările se refac (audit C1)",
     "P1-T01 API: importul cu structură invalidă este refuzat explicit, fără proiect parțial",
+    "P1-T04 API: la import, o „imagine” care nu e imagine nu se păstrează; referința falsă la proiect nou e refuzată",
     "C1: „code” mălițios dintr-un proiect importat este neutralizat",
     "C1: „code” cu ../ nu scoate folderul din destinație"
    ]
@@ -174,8 +202,10 @@
   {
    "id": "PROTECT_LAN",
    "status": "PASS",
-   "summary": "3/3 teste",
+   "summary": "5/5 teste",
    "detail": [
+    "P1-T04: cerere cu Origin străin este respinsă; politica de transport LAN",
+    "P1-T04: sesiunea LAN expirată nu mai autorizează",
     "anti-CSRF: comenzile fără antetul x-wp sunt respinse",
     "anti-DNS-rebinding: Host străin respins, localhost acceptat",
     "C3: rutele sensibile cer laptopul (au localOnly)"

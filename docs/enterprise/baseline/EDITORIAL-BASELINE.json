@@ -1,0 +1,443 @@
+{
+ "kind": "wonderpages.editorial-baseline/1",
+ "generatedAt": "2026-10-02T10:50:33.157Z",
+ "dinosaurWorld": {
+  "archiveSha256": "7056e113bf5c84fdfc0f7b8f528713de6c8fe31e82b40fbab056544fe10e45e3",
+  "findings": [
+   {
+    "id": "DW01",
+    "status": "VERIFIED",
+    "title": "Premisă reziduală „protejarea pietrei de ploaie” vs paginile 8–9 (adăpostul prietenilor)",
+    "evidence": [
+     "series.volumes[0].summary",
+     "series.volumes[0].story_bible.premise",
+     "script_0.story_bible.premise"
+    ],
+    "count": 3
+   },
+   {
+    "id": "DW02",
+    "status": "VERIFIED",
+    "title": "turn.type din page_plan V1 este „quiet” peste tot; scriptul diferă",
+    "evidence": [
+     "p1: plan=quiet script=question",
+     "p2: plan=quiet script=anticipation",
+     "p4: plan=quiet script=question",
+     "p5: plan=quiet script=reveal",
+     "p6: plan=quiet script=anticipation",
+     "p7: plan=quiet script=reveal",
+     "p8: plan=quiet script=question",
+     "p9: plan=quiet script=reveal"
+    ],
+    "count": 8
+   },
+   {
+    "id": "DW03",
+    "status": "VERIFIED",
+    "title": "landmarks structurate, repetate în canonical_description; relative_size poate fi JSON string",
+    "evidence": [
+     "milo.spot-left-upper",
+     "milo.spot-left-rear",
+     "milo.spot-left-lower"
+    ],
+    "count": 3,
+    "repeatedInDescription": [
+     "milo",
+     "tia",
+     "pip"
+    ]
+   },
+   {
+    "id": "DW04",
+    "status": "VERIFIED",
+    "title": "Milo species-indeterminate; Tia folosește botul pentru frunză; pana lui Pip este obiect",
+    "evidence": [
+     "milo.species_certainty=indeterminate_stylized",
+     "p9 mouth=true",
+     "object=found-feather",
+     "tia.species_certainty=certain"
+    ]
+   },
+   {
+    "id": "DW05",
+    "status": "VERIFIED",
+    "title": "Lipsesc manuscrise V2–6, atlas nou, artă, lineart și exporturi",
+    "evidence": [
+     "script lipsă: V2,V3,V4,V5,V6",
+     "artefacte finale: 0"
+    ],
+    "visualBaseline": "NOT_AVAILABLE"
+   },
+   {
+    "id": "DW06",
+    "status": "INFERRED",
+    "title": "Unele planuri pot avea diferențiere insuficientă în finaluri/beat-uri",
+    "evidence": [
+     "V1: somn liniștit acasă",
+     "V2: un cântec cântat împreună",
+     "V3: Pip zboară și le face cu aripa",
+     "V4: un picnic împărțit",
+     "V5: o pictură făcută cu flori",
+     "V6: o sărbătoare la apus, cu toți prietenii"
+    ],
+    "note": "Se evaluează prin matricea de colecție (P4-T02/P5-T04); nu se declară defect din planuri."
+   },
+   {
+    "id": "DW07",
+    "status": "VERIFIED",
+    "title": "Import ready, aprobări goale; custom prompts și ref-uri originale",
+    "evidence": [
+     "status=ready",
+     "approvals=0",
+     "refs=2"
+    ]
+   }
+  ],
+  "counts": {
+   "artifacts": [
+    "bible",
+    "brief",
+    "cast",
+    "refs",
+    "script_0",
+    "series"
+   ],
+   "volumes": 6,
+   "pagePlans": 72,
+   "preparedManuscriptPages": 12,
+   "images": 2,
+   "wordCounts": {
+    "manifest": {
+     "English": 335,
+     "Romanian": 344
+    },
+    "whitespaceTokens": {
+     "English": 333,
+     "Romanian": 342
+    }
+   }
+  },
+  "customPrompts": [
+   "adapt",
+   "critic",
+   "native_critic",
+   "page_fix",
+   "polish",
+   "revise_pages",
+   "script",
+   "series",
+   "visual_qa"
+  ],
+  "references": [
+   {
+    "file": "uploads/01-milo-reference.png",
+    "sha256": "da8cbac3255e8d0c6a97f336f4c0f6c12f879a50ba708d280481aea45b2f87c6",
+    "bytes": 1631424,
+    "pixels": [
+     1199,
+     1312
+    ],
+    "rights": "unknown",
+    "pinned": true
+   },
+   {
+    "file": "uploads/02-tia-reference.png",
+    "sha256": "14c574ddb45bc5b22dee56cfbcf192b3ae65a76e5804a622eb93fae7ddcd0d79",
+    "bytes": 1756162,
+    "pixels": [
+     1222,
+     1287
+    ],
+    "rights": "unknown",
+    "pinned": true
+   }
+  ],
+  "beforeBaseline": "EXPLICIT_INCOMPLETE: planuri + draft V1, fără artă/lineart/PDF/aprobări"
+ },
+ "lessonSources": {
+  "seeds": {
+   "file": "seeds/lessons.json",
+   "sha256": "6c0acc37e56a53085454da04c3a1a438793c58084db39f0f90a1b9e62260cf2f",
+   "count": 24,
+   "byAgent": {
+    "scriitor": 11,
+    "traducator": 3,
+    "corector": 1,
+    "arhitect-serie": 2,
+    "pastrator-continuitate": 2,
+    "director-artistic": 5
+   },
+   "status": "source (seed v04: activ în instalarea curentă prin seedLessons; guvernanța P7)"
+  },
+  "register": {
+   "file": "docs/LESSONS-LEARNED.md",
+   "sha256": "4b8a128519e5f98529210355bc40745ffda2d4498834c6ed7207bf6c882c0f10",
+   "count": 35,
+   "entries": [
+    {
+     "id": "LL-001",
+     "title": "Product assumption",
+     "scope": "AGE_PROFILE",
+     "status": "RESOLVED"
+    },
+    {
+     "id": "LL-002",
+     "title": "Creative/process gap",
+     "scope": "PAGE",
+     "status": "RESOLVED"
+    },
+    {
+     "id": "LL-003",
+     "title": "Creative continuity defect",
+     "scope": "COLLECTION",
+     "status": "RESOLVED"
+    },
+    {
+     "id": "LL-004",
+     "title": "Creative design gap",
+     "scope": "VOLUME",
+     "status": "RESOLVED"
+    },
+    {
+     "id": "LL-005",
+     "title": "Narrative defect",
+     "scope": "AGE_PROFILE",
+     "status": "RESOLVED"
+    },
+    {
+     "id": "LL-006",
+     "title": "Creative richness gap",
+     "scope": "COLLECTION",
+     "status": "RESOLVED"
+    },
+    {
+     "id": "LL-007",
+     "title": "Educational integrity risk",
+     "scope": "AGE_PROFILE",
+     "status": "RESOLVED"
+    },
+    {
+     "id": "LL-008",
+     "title": "Localization defect",
+     "scope": "PAGE",
+     "status": "RESOLVED"
+    },
+    {
+     "id": "LL-009",
+     "title": "Narrative differentiation defect",
+     "scope": "PAGE",
+     "status": "RESOLVED"
+    },
+    {
+     "id": "LL-010",
+     "title": "Continuity/clarity defect",
+     "scope": "COLLECTION",
+     "status": "RESOLVED"
+    },
+    {
+     "id": "LL-011",
+     "title": "Product pattern risk",
+     "scope": "CHARACTER",
+     "status": "RESOLVED"
+    },
+    {
+     "id": "LL-012",
+     "title": "Visual identity misstep",
+     "scope": "PAGE",
+     "status": "RESOLVED"
+    },
+    {
+     "id": "LL-013",
+     "title": "Narrative geography defect",
+     "scope": "PAGE",
+     "status": "RESOLVED"
+    },
+    {
+     "id": "LL-014",
+     "title": "Tone defect",
+     "scope": "PAGE",
+     "status": "RESOLVED"
+    },
+    {
+     "id": "LL-015",
+     "title": "World-model ambiguity",
+     "scope": "GLOBAL",
+     "status": "RESOLVED"
+    },
+    {
+     "id": "LL-016",
+     "title": "Prompt/layout ambiguity",
+     "scope": "GLOBAL",
+     "status": "PLANNED_GUARDRAIL"
+    },
+    {
+     "id": "LL-017",
+     "title": "Product architecture gap",
+     "scope": "COLLECTION",
+     "status": "PLANNED_FOR_M"
+    },
+    {
+     "id": "LL-018",
+     "title": "Collection continuity gap",
+     "scope": "VOLUME",
+     "status": "PLANNED_FOR_M"
+    },
+    {
+     "id": "LL-019",
+     "title": "Product structure gap",
+     "scope": "GLOBAL",
+     "status": "ACTIVE"
+    },
+    {
+     "id": "LL-020",
+     "title": "Workflow/cost risk",
+     "scope": "GLOBAL",
+     "status": "RESOLVED"
+    },
+    {
+     "id": "LL-021",
+     "title": "Engineering security defect",
+     "scope": "GLOBAL",
+     "status": "RESOLVED"
+    },
+    {
+     "id": "LL-022",
+     "title": "Checkpoint integrity gap",
+     "scope": "GLOBAL",
+     "status": "RESOLVED"
+    },
+    {
+     "id": "LL-023",
+     "title": "Observability gap",
+     "scope": "GLOBAL",
+     "status": "RESOLVED"
+    },
+    {
+     "id": "LL-024",
+     "title": "Documentation drift",
+     "scope": "INFRASTRUCTURE",
+     "status": "RESOLVED"
+    },
+    {
+     "id": "LL-025",
+     "title": "Infrastructure/auth failure",
+     "scope": "INFRASTRUCTURE",
+     "status": "HISTORICAL_RESOLVED"
+    },
+    {
+     "id": "LL-026",
+     "title": "Infrastructure/sandbox failure",
+     "scope": "INFRASTRUCTURE",
+     "status": "DOCUMENTED"
+    },
+    {
+     "id": "LL-027",
+     "title": "CLI environment issue",
+     "scope": "WORKFLOW",
+     "status": "RESOLVED"
+    },
+    {
+     "id": "LL-028",
+     "title": "Checkpoint/evidence defect",
+     "scope": "GLOBAL",
+     "status": "CORRECTION_IN_PROGRESS"
+    },
+    {
+     "id": "LL-029",
+     "title": "Visual QA miss",
+     "scope": "GLOBAL",
+     "status": "CORRECTION_IN_PROGRESS"
+    },
+    {
+     "id": "LL-030",
+     "title": "Validator design defect",
+     "scope": "COLLECTION",
+     "status": "CORRECTION_IN_PROGRESS"
+    },
+    {
+     "id": "LL-031",
+     "title": "Character consistency rule gap",
+     "scope": "GLOBAL",
+     "status": "PLANNED_FOR_M"
+    },
+    {
+     "id": "LL-032",
+     "title": "Governance risk",
+     "scope": "AGE_PROFILE",
+     "status": "PLANNED"
+    },
+    {
+     "id": "LL-033",
+     "title": "Calibration strategy gap",
+     "scope": "WORKFLOW",
+     "status": "ACTIVE_RULE"
+    },
+    {
+     "id": "LL-034",
+     "title": "Usage/recovery risk",
+     "scope": null,
+     "status": null
+    },
+    {
+     "id": "LL-035",
+     "title": "Corrective visual regression",
+     "scope": null,
+     "status": null
+    }
+   ],
+   "status": "istoric — candidat doar după reconciliere (P7-T01)"
+  },
+  "conflicts": [
+   {
+    "lesson": "LL-013",
+    "with": "DW v04 p8–p9",
+    "status": "CONFLICT_DETECTED",
+    "detail": "LL-013 (rezolvat istoric) tratează pagina 9 ca protejarea pietrei/curent; DW v04 corectează motivul în adăpostul prietenilor. Lecția nu se importă fără reconciliere."
+   }
+  ]
+ },
+ "rights": {
+  "app": {
+   "unknown": 4,
+   "cleared": 164
+  },
+  "gaps": [
+   {
+    "id": "font:Andika-Bold.ttf",
+    "status": "unknown",
+    "reasons": [
+     "Textul licenței lipsește din pachetul distribuit."
+    ],
+    "notes": "Textul OFL nu este inclus în public/fonts; OFL cere ca licența să însoțească fontul redistribuit (încorporarea în PDF este permisă)."
+   },
+   {
+    "id": "font:Andika-Regular.ttf",
+    "status": "unknown",
+    "reasons": [
+     "Textul licenței lipsește din pachetul distribuit."
+    ],
+    "notes": "Textul OFL nu este inclus în public/fonts; OFL cere ca licența să însoțească fontul redistribuit (încorporarea în PDF este permisă)."
+   },
+   {
+    "id": "dep:dompurify@2.5.9",
+    "status": "unknown",
+    "reasons": [
+     "Permisiunea „commercial” este necunoscută.",
+     "Permisiunea „reproduction” este necunoscută.",
+     "Permisiunea „derivative” este necunoscută."
+    ],
+    "notes": "Licență ne-standard sau lipsă ((MPL-2.0 OR Apache-2.0)): verificare manuală."
+   },
+   {
+    "id": "dep:rgbcolor@1.0.1",
+    "status": "unknown",
+    "reasons": [
+     "Permisiunea „commercial” este necunoscută.",
+     "Permisiunea „reproduction” este necunoscută.",
+     "Permisiunea „derivative” este necunoscută."
+    ],
+    "notes": "Licență ne-standard sau lipsă (MIT OR SEE LICENSE IN FEEL-FREE.md): verificare manuală."
+   }
+  ]
+ }
+}

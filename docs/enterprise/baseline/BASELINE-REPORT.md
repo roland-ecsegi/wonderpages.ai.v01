@@ -1,20 +1,20 @@
-# Baseline report (2026-10-02, cod ec9e804)
+# Baseline report (2026-10-02, cod 828b282)
 
 Generat de `scripts/enterprise/baseline-report.mjs`. NOT_RUN nu este PASS; istoricul este separat.
 
 | Check | Status | Rezumat | Log |
 |---|---|---|---|
-| INVENTORY | PASS | 154 fișiere (fără node_modules/.git/data), 6 ascunse |  |
-| SOURCE_DRIFT_V04 | PASS | 134/137 fișiere v04 identice, 3 modificate (enterprise), 11 adăugate, 0 lipsă |  |
-| BUILD | PASS | PASS: 85 fișiere JavaScript, JSON, lockfile, fonturi și fișiere runtime; WonderPages AI — claude-gpt.v04 | `docs/enterprise/baseline/logs/2026-10-02-build.log` |
-| RS0_SUITE | PASS | 98 trecute, 0 picate, 0 sărite; browser PDF: da | `docs/enterprise/baseline/logs/2026-10-02-rs0.log` |
-| PROTECT_IMPORT | PASS | 4/4 teste |  |
+| INVENTORY | PASS | 176 fișiere (fără node_modules/.git/data), 6 ascunse |  |
+| SOURCE_DRIFT_V04 | PASS | 130/137 fișiere v04 identice, 7 modificate (enterprise), 33 adăugate, 0 lipsă |  |
+| BUILD | PASS | PASS: 96 fișiere JavaScript, JSON, lockfile, fonturi și fișiere runtime; WonderPages AI — claude-gpt.v04 | `docs/enterprise/baseline/logs/2026-10-02-build.log` |
+| RS0_SUITE | PASS | 117 trecute, 0 picate, 0 sărite; browser PDF: da | `docs/enterprise/baseline/logs/2026-10-02-rs0.log` |
+| PROTECT_IMPORT | PASS | 5/5 teste |  |
 | PROTECT_APPROVALS | PASS | 10/10 teste |  |
 | PROTECT_PDF | PASS | 4/4 teste |  |
 | PROTECT_BACKUP | PASS | 5/5 teste |  |
 | PROTECT_LEARNING | PASS | 4/4 teste |  |
 | PROTECT_ATELIER | PASS | 2/2 teste |  |
-| PROTECT_LAN | PASS | 3/3 teste |  |
+| PROTECT_LAN | PASS | 5/5 teste |  |
 | PG_QA | PASS | PASS: PostgreSQL real — CRUD, istoric, backup DB+fișiere, restaurare, rollback tranzacțional; numărul proiectelor instalate păstrat. | `docs/enterprise/baseline/logs/2026-10-02-pg-qa.log` |
 | DW_REFERENCE | PASS | sha256 7056e113bf5c…, manifest 5/5, 6 artefacte, 6 volume, 72 planuri, 12 pagini V1, 2 PNG; producție nepornită |  |
 | RUNTIME | PASS | Node v22.22.0, npm 10.9.4, linux 6.18.44-fc-v51 x64 |  |

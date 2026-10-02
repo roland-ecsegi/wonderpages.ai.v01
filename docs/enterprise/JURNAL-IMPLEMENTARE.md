@@ -42,8 +42,8 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | P1-T01 | DONE | ec9e804 | TEST-P1-T01 7/7; RS0 98/98 | ProductContract + ADR04; DEV-001 |
 | P1-T02 | DONE | fcd21b0 | baseline 14 PASS/0 FAIL/3 NOT_RUN; RS0 98/98; PG_QA PASS | raport `docs/enterprise/baseline/`; 7 defecte reproduse |
 | P1-T03 | DONE | 93e7867 | TEST-P1-T03 6/6; RS0 104/104 | Discovery read-only; host real UNKNOWN (operator) |
-| P1-T04 | DONE | (acest commit) | TEST-P1-T04 8/8; RS0 112/112 | ZIP dur, decode check, Origin, LAN restricted, redactare |
-| P1-T05 | PENDING | | | |
+| P1-T04 | DONE | 828b282 | TEST-P1-T04 8/8; RS0 112/112 | ZIP dur, decode check, Origin, LAN restricted, redactare |
+| P1-T05 | DONE | (acest commit) | TEST-P1-T05 5/5; RS0 117/117; baseline 14/0/3 | RightsRecord; Andika OFL lipsă; LL-013 conflict |
 | P2-T01 | PENDING | | | |
 | P2-T02 | PENDING | | | |
 | P2-T03 | PENDING | | | |
@@ -96,10 +96,13 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | 2026-10-02 | RS0 + TEST-P1-T01 după P1-T01 | 98/98 PASS, build 81 JS | prima rulare a picat 1 test nou (aserțiune dependentă de ordine: versiunea tipului 16 după testul de upgrade) — corectat în test, nu în cod |
 | 2026-10-02 | RS0 + TEST-P1-T03 | 104/104 PASS | prima rulare completă a picat testul nou (Canva deja conectat în suită) — corectat în test |
 | 2026-10-02 | RS0 + TEST-P1-T04 | 112/112 PASS | — |
+| 2026-10-02 | Închidere P1: baseline-report --with-tests --with-pg | 14 PASS · 0 FAIL · 3 NOT_RUN; RS0 117/117 |  |
 
 ## Probleme deschise
 
 - Defecte curente reproduse (P1-T02): vezi `baseline/DEFECTS.json`; fiecare are faza de remediere.
+- Textul licenței OFL pentru Andika lipsește din distribuție (P1-T05) → de adăugat din sursa oficială înaintea unui release (P8-T03).
+- dompurify / rgbcolor: licențe ne-standard, verificare manuală la release (P8-T03).
 
 ## Aprobări umane așteptate
 
@@ -107,6 +110,6 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 
 ## Checkpoint
 
-- Ultimul task închis: P1-T04
-- Următorul task: **P1-T05**
+- Ultimul task închis: P1-T05
+- Următorul task: **P2-T01**
 - Cum se reia: `npm ci && npm run build && BROWSER_PATH=/opt/pw-browsers/chromium npm test`; citește tabelul de mai sus și `docs/enterprise/records/`.

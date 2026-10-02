@@ -53,9 +53,10 @@ try {
   /* C26: PostgreSQL storage retries known default credentials */
   {
     const { PostgresStorage } = await import('../../server/storage/postgres.js');
-    const s = new PostgresStorage({ databaseUrl: 'postgres://op:secret@127.0.0.1:5999/db', dataDir: path.join(tmp, 'pg') });
-    const c = s.candidates(); await s.pool.end().catch(() => {});
-    rec('D-C26', 'C26/OUTPUT-26', 'P1-T04', c.some(u => /wonderpages-local|tiparnita-local/.test(u)) ? 'REPRODUCED' : 'FIXED', [`candidați: ${c.length - 1} seturi de credențiale cunoscute`, lineOf('server/storage/postgres.js', /wonderpages-local/)], 'dynamic');
+    const s = new PostgresStorage({ databaseUrl: 'postgres://op:secret@127.0.0.1:5999/db', dataDir: path.join(tmp, 'pg') }), n = new PostgresStorage({ databaseUrl: 'postgres://op:secret@db.example.com:5999/db', dataDir: path.join(tmp, 'pg2') });
+    const c = s.candidates(), cn = n.candidates(); await s.pool.end().catch(() => {}); await n.pool.end().catch(() => {});
+    const known = l => l.filter(u => /wonderpages-local|tiparnita-local/.test(u)).length;
+    rec('D-C26', 'C26/OUTPUT-26', 'P1-T04', known(cn) ? 'REPRODUCED' : known(c) ? 'MITIGATED' : 'FIXED', [`gazdă din rețea: ${known(cn)} seturi cunoscute; loopback (migrare legacy): ${known(c)}`, lineOf('server/storage/postgres.js', /wonderpages-local/)], 'dynamic');
   }
   /* routes: preview link vs book tab */
   {

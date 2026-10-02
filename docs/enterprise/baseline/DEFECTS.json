@@ -1,6 +1,6 @@
 {
  "kind": "wonderpages.defect-reproduction/1",
- "generatedAt": "2026-10-02T10:35:19.331Z",
+ "generatedAt": "2026-10-02T10:52:41.518Z",
  "defects": [
   {
    "id": "D-C16",
@@ -10,7 +10,7 @@
    "method": "dynamic",
    "evidence": [
     "export format v1; artifact keys: content,meta,version,note,by",
-    "server/projectpkg.js:22"
+    "server/projectpkg.js:23"
    ]
   },
   {
@@ -21,7 +21,7 @@
    "method": "dynamic",
    "evidence": [
     "active după import: 1; active după ștergerea packului: 1",
-    "server/training.js:68"
+    "server/training.js:44"
    ]
   },
   {
@@ -39,11 +39,11 @@
    "id": "D-C26",
    "arch": "C26/OUTPUT-26",
    "phase": "P1-T04",
-   "status": "REPRODUCED",
+   "status": "MITIGATED",
    "method": "dynamic",
    "evidence": [
-    "candidați: 2 seturi de credențiale cunoscute",
-    "server/storage/postgres.js:32"
+    "gazdă din rețea: 0 seturi cunoscute; loopback (migrare legacy): 2",
+    "server/storage/postgres.js:34"
    ]
   },
   {

@@ -45,6 +45,7 @@ import { deliveryFingerprint, currentReceipts, requiredBooks } from './delivery.
 import { editorialFindings } from './editorial.js';
 import { physicalPages, printDimensions } from './printprofile.js';
 import { contractFromBlueprint, validateContract, validateProjectInput, projectContractReport } from './domain/product-contract.js';
+import { appRightsInventory, projectRightsInventory, rightsStatus, rightsRecord, commercialReleaseCheck } from './domain/rights.js';
 import * as Capabilities from './providers/registry.js';
 import { toolSchemaHash, hostConfig } from './providers/capabilities.js';
 import { checkIncludedQuota } from './subscription-usage.js';
@@ -147,6 +148,11 @@ on('GET', '/api/projects/:pid', async ({ pid }) => {
   const items = p.gate ? gateItems(bp, art, p, p.gate) : null;
   return { project: { ...p, running: !!RUNNING[pid] }, blueprint: bp, artifacts: art, comments: await repo.listComments(pid), editorial: editorialFindings(bp, art), preflight: runPreflight(bp, art, { structure: bp.structure, input: p.input, options: p.options, age_profile: bp.age_profiles?.[p.input?.[bp.variant_key]] || {} }), delivery: { fingerprints: Array.from({length:bp.structure.volumes},(_,v)=>deliveryFingerprint(p,bp,art,v)), volumes: Array.from({ length: bp.structure.volumes }, (_, v) => volumeApproved(p, bp, v, art)), collection: volumeApproved(p, bp, null, art) }, review: items ? { items, summary: gateSummary(items) } : null };
 });
+/* P1-T05: rights ledger — unknown/expired/restricted blocks commercial release, never internal editing */
+const projectRights = async (pid) => { const p = need(pid), art = await repo.artifacts(pid); const subjects = projectRightsInventory(p, art, p.rightsDeclared || []); const fonts = appRightsInventory(ROOT).records.filter(r => r.subject.kind === 'font' && /Andika/.test(r.id)); const all = [...subjects, ...fonts]; return { subjects: all.map(r => ({ ...r, ...rightsStatus(r) })), commercial: commercialReleaseCheck(all, all.map(r => r.subject.ref || r.id)), editing: { allowed: true } }; };
+on('GET', '/api/rights/app', async () => { const inv = appRightsInventory(ROOT); return { summary: inv.summary, records: inv.records.map(r => ({ ...r, ...rightsStatus(r) })) }; });
+on('GET', '/api/projects/:pid/rights', async ({ pid }) => projectRights(pid));
+on('PUT', '/api/projects/:pid/rights', async ({ pid }, req) => { localOnly(req); const p = need(pid), b = await json(req); if (!/^(ref|manuscript|output|character|input):[A-Za-z0-9._/-]{1,160}$/.test(String(b.id || ''))) throw { status: 400, message: 'Identificator de drepturi invalid.' }; const rec = rightsRecord({ ...b, reviewer: 'operator', reviewedAt: new Date().toISOString() }); await repo.patchProject(pid, { rightsDeclared: [...(p.rightsDeclared || []).filter(r => r.id !== rec.id), rec] }); return { record: rec, ...rightsStatus(rec) }; });
 on('GET', '/api/projects/:pid/contract', async ({ pid }) => { const p = need(pid); return projectContractReport(await repo.getBlueprint(pid), p); });   // P1-T01
 on('POST','/api/projects/:pid/blueprint-upgrade',async({pid},req)=>{
   localOnly(req);if(RUNNING[pid])throw {status:409,message:'Oprește proiectul înainte de schimbarea contractului.'};
@@ -317,6 +323,7 @@ on('POST', '/api/projects/:pid/package', async ({ pid }, _, url) => { const vol 
   const art0 = await repo.artifacts(pid);
   if (!volumeApproved(p0, bp0, vol, art0)) throw { status: 409, message: `Volumul ${vol + 1} nu are încă aprobarea finală dată de tine; pachetul nu se face.` };
   const r = await buildPackage(repo, p0, { vol, approved: v => volumeApproved(p0, bp0, v, art0) });
+  r.commercialRights = (await projectRights(pid)).commercial;   // P1-T05: the package is internal delivery; commercial eligibility is reported, not implied
   try { r.mirror = await mirrorDelivery([r.folder, r.zip]); } catch (e) { r.mirrorError = 'Copia în al doilea folder nu a reușit: ' + e.message; } if (r.final) await repo.patchProject(pid, vol == null ? { packagedAt: now(), packagePath: r.folder } : { delivered: { [vol]: { at: now(), zip: r.zip } } }); return r; });
 on('GET', '/api/projects/:pid/package.zip', async ({ pid }, _, url, res) => {
   const vq=url.searchParams.get('volume'),p=need(pid),v=vq==null?null:Number(vq);
