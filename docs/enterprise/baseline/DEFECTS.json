@@ -1,6 +1,6 @@
 {
  "kind": "wonderpages.defect-reproduction/1",
- "generatedAt": "2026-10-02T16:56:42.781Z",
+ "generatedAt": "2026-10-02T17:45:17.617Z",
  "defects": [
   {
    "id": "D-C16",
@@ -21,7 +21,7 @@
    "method": "dynamic",
    "evidence": [
     "active după import: 0; active după ștergerea packului: 0",
-    "server/training.js:84"
+    "server/training.js:86"
    ]
   },
   {
@@ -83,10 +83,10 @@
    "id": "D-C29",
    "arch": "C29",
    "phase": "P3-T01/P3-T05/P7-T05",
-   "status": "REPRODUCED",
+   "status": "FIXED",
    "method": "static",
    "evidence": [
-    "server/improve.js:60",
+    null,
     "agents/inginer.md:8"
    ]
   },

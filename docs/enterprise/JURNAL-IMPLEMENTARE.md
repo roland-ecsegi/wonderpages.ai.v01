@@ -82,8 +82,8 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | P7-T01 | DONE | 70e7416 | TEST-P7-T01 6/6; RS0 312/312 local + 312/312 PG | Importurile devin surse + candidați scanați (injecție, citat fals, lume magică, contradicție, coliziune canon); promovare explicită; revocare completă din sursă; D-C19 FIXED |
 | P7-T02 | DONE | a1d7fa9 | TEST-P7-T02 6/6; RS0 318/318 local + 318/318 PG | Lărgirea lecțiilor doar cu raport de dovezi (≥2 proiecte la vârstă, ≥3 proiecte/2 teme pentru rol, fără negative, nespecifică proiectului), decizie legată de hash, versiuni fixate, rollback determinist |
 | P7-T03 | DONE | 4192df2 | TEST-P7-T03 6/6; RS0 324/324 local + 324/324 PG | Rezultate legate de decizii/reparații, validare grupată pe proiecte, variante comparate doar în aceeași cohortă, efect potrivit al lecțiilor cu marcare dăunătoare; DW fără delta inventată |
-| P7-T04 | DONE | (acest commit) | TEST-P7-T04 5/5; RS0 329/329 local + 329/329 PG | Înregistrări de experiență pe rol/skill/cohortă/model cu dovezi; Senior/Principal doar din criteriile OUTPUT-07 și după calibrare; reevaluare la schimbarea modelului; istoric versionat; experiența privată rolului |
-| P7-T05 | PENDING | | | |
+| P7-T04 | DONE | 28007d2 | TEST-P7-T04 5/5; RS0 329/329 local + 329/329 PG | Înregistrări de experiență pe rol/skill/cohortă/model cu dovezi; Senior/Principal doar din criteriile OUTPUT-07 și după calibrare; reevaluare la schimbarea modelului; istoric versionat; experiența privată rolului |
+| P7-T05 | DONE | (acest commit) | TEST-P7-T05 6/6; RS0 335/335 local + 335/335 PG; D-C29 FIXED | Atelier mai sigur: Inginerul legat de cartă, rutare RCA, hash-uri de bază, izolare node_modules, suita absentă = eșec, aplicare jurnalizată cu recuperare, reguli prin promovare |
 | P7-T06 | PENDING | | | |
 | P8-T01 | PENDING | | | |
 | P8-T02 | PENDING | | | |
@@ -141,6 +141,7 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | 2026-10-02 | RS0 + TEST-P7-T02 | 318/318 PASS local + 318/318 PostgreSQL | — |
 | 2026-10-02 | RS0 + TEST-P7-T03 | 324/324 PASS local + 324/324 PostgreSQL | — |
 | 2026-10-02 | RS0 + TEST-P7-T04 | 329/329 PASS local + 329/329 PostgreSQL | — |
+| 2026-10-02 | RS0 + TEST-P7-T05 | 335/335 PASS local + 335/335 PostgreSQL; D-C29 FIXED | — |
 
 ## Probleme deschise
 
@@ -155,6 +156,6 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 
 ## Checkpoint
 
-- Ultimul task închis: P7-T04
-- Următorul task: **P7-T05**
+- Ultimul task închis: P7-T05
+- Următorul task: **P7-T06**
 - Cum se reia: `npm ci && npm run build && BROWSER_PATH=/opt/pw-browsers/chromium npm test`; citește tabelul de mai sus și `docs/enterprise/records/`.

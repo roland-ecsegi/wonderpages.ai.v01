@@ -85,6 +85,7 @@ await Dali.initAssistant(repo, storage, (prompt, o) => agentComplete(prompt, o),
   projects: repo.listProjects().slice(0, 20).map(p => ({ id: p.id, title: p.title, status: p.status, gate: p.gate ? { key: p.gate.key, vol: p.gate.vol } : null, currentVolume: p.currentVolume, age: p.variantLabel })),
   services: { claude: llmInfo().configured, claudeAuth: llmInfo().auth?.ok, canva: canva.status().connected, drive: gdrive.status().connected, lan: LAN.status().enabled }, usage: usage()
 }));
+await Improve.recoverInterruptedApplies(Dali.listImprovements()).then(r => { if (r.length) console.warn('[atelier] aplicări întrerupte, revenite:', r.join(', ')); }).catch(e => console.warn('[atelier]', e.message));   // P7-T05
 const SETTINGS = (await storage.readJSON('settings.json', {})) || {};
 if (SETTINGS.outputDir) setOutputDir(SETTINGS.outputDir);
 if (SETTINGS.outputMirror) setOutputMirror(SETTINGS.outputMirror);
