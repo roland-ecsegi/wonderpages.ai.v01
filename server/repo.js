@@ -50,11 +50,17 @@ export class Repo {
   listProjects() { return [...this.projects.values()].sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0)); }
   getProject(pid) { return this.projects.get(pid) || null; }
   async createProject(p, blueprint) {
-
-    await this.s.writeJSON(`projects/${p.id}/blueprint.json`, blueprint);
-    await this.s.writeJSON(`projects/${p.id}/project.json`, p);
+    /* P2-T01: blueprint snapshot and project document are committed together (no half-created project) */
+    p.revision = p.revision || 0;
+    await queued('p/' + p.id, () => this.commit({ projectId: p.id, bumpRevision: false, ops: [{ rel: `projects/${p.id}/blueprint.json`, obj: blueprint }, { rel: `projects/${p.id}/project.json`, obj: p }] }));
     this.projects.set(p.id,p);this.bps.set(p.id,blueprint);changed('projects'); return p;
   }
+  /** P2-T01: one atomic, durable commit (storage.commitBatch); falls back to sequential writes for adapters without it. */
+  async commit(b) {
+    if (typeof this.s.commitBatch === 'function') { const r = await this.s.commitBatch(b); for (const pid of r.recoveredProjects || []) this.forget(pid); return r; }
+    for (const o of b.ops) await this.s.writeJSON(o.rel, o.obj); return { deduplicated: false, revision: null, result: b.result ?? null };
+  }
+  forget(pid) { this.art.delete(pid); this.comments.delete(pid); this.bps.delete(pid); }
   async patchProject(pid, patch) {
     const p = this.projects.get(pid); if (!p) throw new Error('Proiect inexistent: ' + pid);
     await queued('p/' + pid, async () => {const next=deepMerge(clone(p),{...patch,updatedAt:now()});await this.s.writeJSON(`projects/${pid}/project.json`,next);deepMerge(p,next);});
@@ -81,9 +87,12 @@ export class Repo {
   }
   async writeArtifact(pid, key, content, o = {}) {
     const map = await this.artifacts(pid);
-    let prev,doc;
-    await queued(`a/${pid}/${key}`,async()=>{
+    let prev,doc,dedup=false;
+    await queued('p/' + pid,async()=>{
     prev = map[key] || null;
+    if (o.commandId && await this.s.readJSON(`_commands/${pid}/${o.commandId}.json`, null)) { dedup = true; doc = prev; return; }   // P2-T01: retry of a committed command
+    /* P2-T01: optimistic concurrency — a stale editor gets 409 with what changed, never last-write-wins */
+    if (o.expectedVersion != null && (prev?.version || 0) !== o.expectedVersion) throw { status: 409, code: 'version_conflict', key, currentVersion: prev?.version || 0, expectedVersion: o.expectedVersion, changedBy: prev?.by || null, changedAt: prev?.updatedAt || null, message: `Documentul a fost modificat între timp (versiunea ${prev?.version || 0}, nu ${o.expectedVersion}). Reîncarcă pentru a vedea diferența.` };
     const keep = o.keep ?? 5;
     const versions = prev ? [{ version: prev.version, content: clone(prev.content), meta: clone(prev.meta), basedOn: clone(prev.basedOn), by: prev.by, note: prev.note, at: prev.updatedAt }, ...(prev.versions || [])].slice(0, keep) : [];
     doc = {
@@ -91,15 +100,20 @@ export class Repo {
       meta: o.meta !== undefined ? o.meta : (prev?.meta || {}), basedOn: o.basedOn !== undefined ? o.basedOn : (prev?.basedOn || null),
       versions, updatedAt: now(), stage: o.stage || prev?.stage || ''
     };
-    await this.s.writeJSON(`projects/${pid}/artifacts/${key}.json`,doc);map[key]=doc;
+    const proj = this.projects.get(pid), projDoc = proj ? { ...clone(proj), updatedAt: now() } : null;
+    const ops = [{ rel: `projects/${pid}/artifacts/${key}.json`, obj: doc }, ...(projDoc ? [{ rel: `projects/${pid}/project.json`, obj: projDoc }] : [])];
+    const r = await this.commit({ projectId: proj ? pid : null, commandId: o.commandId, actor: o.by || 'agent', kind: 'artifact.write', expectedRevision: o.expectedRevision, bumpRevision: !!proj, ops, result: { key, version: doc.version }, events: o.commandId ? [{ kind: 'artifact.write', key, version: doc.version, by: doc.by, note: doc.note }] : [] });
+    if (r.deduplicated) { dedup = true; doc = map[key]; return; }
+    map[key]=doc; if (proj) { proj.revision = r.revision; proj.updatedAt = projDoc.updatedAt; }
     });
+    if (dedup) return doc;
     changed('project', pid);
     if (this.onArtifactWrite) await this.onArtifactWrite(pid, key, prev, doc);
     return doc;
   }
   async patchArtifact(pid, key, patch) {
     const map = await this.artifacts(pid); if (!map[key]) return null;
-    await queued(`a/${pid}/${key}`,async()=>{const next=deepMerge(clone(map[key]),patch);await this.s.writeJSON(`projects/${pid}/artifacts/${key}.json`,next);map[key]=next;});
+    await queued('p/' + pid,async()=>{const next=deepMerge(clone(map[key]),patch);await this.s.writeJSON(`projects/${pid}/artifacts/${key}.json`,next);map[key]=next;});
     changed('project', pid);
     return map[key];
   }

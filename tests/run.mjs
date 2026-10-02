@@ -19,7 +19,8 @@ const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'wonderpages-test-'));
 const state = path.join(tmp, 'fake-state.json'); fs.writeFileSync(state, '{}');
 const port = await freePort();
 const env = {
-  ...process.env, PORT: String(port), STORAGE: 'local', DATABASE_URL: '', DATA_DIR: path.join(tmp, 'data'), OUTPUT_DIR: path.join(tmp, 'out'),
+  ...process.env, PORT: String(port), STORAGE: process.env.WP_TEST_DATABASE_URL ? 'postgres' : 'local', DATABASE_URL: process.env.WP_TEST_DATABASE_URL || '',   // RS-DATA: WP_TEST_DATABASE_URL runs the same suite on a disposable PostgreSQL
+  DATA_DIR: path.join(tmp, 'data'), OUTPUT_DIR: path.join(tmp, 'out'),
   WP_FAKE_STATE: state, CODEX_HOME: path.join(tmp, 'codex'), CANVA_SPACING_SEC: '0', CANVA_POLL_MS: '30', CANVA_CONCURRENCY: '1',
   PATH: path.join(HERE, 'mocks', 'bin') + path.delimiter + process.env.PATH, ANTHROPIC_API_KEY: 'sk-test-must-be-stripped', OPENAI_API_KEY: 'sk-test-must-be-stripped',
   GOOGLE_CLIENT_ID: 'test-client', GOOGLE_CLIENT_SECRET: 'test-secret', WP_BG: '', OPEN_BROWSER: '0'

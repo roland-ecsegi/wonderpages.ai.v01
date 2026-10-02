@@ -71,6 +71,11 @@ if (process.argv.includes('--with-pg')) {
     const init = run(process.execPath, ['-e', `import('./server/storage/postgres.js').then(async m=>{const s=new m.PostgresStorage({databaseUrl:${JSON.stringify(pg.url)},dataDir:${JSON.stringify(path.join(inst, 'data'))}});await s.init();await s.close();})`]);
     const q = run(process.execPath, ['scripts/qa-postgres.mjs', inst]);
     add({ id: 'PG_QA', status: init.status === 0 && q.status === 0 ? 'PASS' : 'FAIL', summary: (q.stdout || q.stderr).trim().split('\n').pop().slice(0, 200), log: writeLog('pg-qa', init.stdout + init.stderr + q.stdout + q.stderr) });
+    if (process.argv.includes('--with-tests')) {   // RS-DATA: the whole suite again, on the disposable PostgreSQL
+      const t = run(process.execPath, ['tests/run.mjs'], { WP_TEST_DATABASE_URL: pg.url, ...(browser ? { BROWSER_PATH: browser } : {}) });
+      const out = t.stdout + t.stderr, pass = Number(out.match(/ℹ pass (\d+)/)?.[1] || 0), fail = Number(out.match(/ℹ fail (\d+)/)?.[1] || 0), skipped = Number(out.match(/ℹ skipped (\d+)/)?.[1] || 0);
+      add({ id: 'RS0_SUITE_POSTGRES', status: t.status === 0 && !fail ? 'PASS' : 'FAIL', summary: `${pass} trecute, ${fail} picate, ${skipped} sărite (STORAGE=postgres)`, log: writeLog('rs0-postgres', out) });
+    }
     fs.rmSync(inst, { recursive: true, force: true }); stopEphemeral(pg.dir);
   }
 } else add({ id: 'PG_QA', status: 'NOT_RUN', summary: findPgBin() ? 'rulează cu --with-pg' : 'binare PostgreSQL absente' });

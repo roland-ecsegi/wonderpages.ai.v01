@@ -1,6 +1,7 @@
 /** Matched database + file snapshots. Restore is explicit and requires an idle application. */
 import fs from 'node:fs/promises';import path from 'node:path';import crypto from 'node:crypto';
-const TABLES=['product_types','projects','project_blueprints','artifacts','comments','review_events','documents'];
+import {CORE_TABLES,LEDGER_TABLES} from './persistence/migrations.js';
+const TABLES=[...CORE_TABLES,...LEDGER_TABLES];   // P2-T01: ledger tables travel with the snapshot
 const hash=b=>crypto.createHash('sha256').update(b).digest('hex');
 const within=(root,file)=>file.startsWith(path.resolve(root)+path.sep);
 async function files(root,base=root,out=[]){for(const e of await fs.readdir(root,{withFileTypes:true})){const p=path.join(root,e.name);if(e.isSymbolicLink())throw Error('Snapshotul nu acceptă legături simbolice.');if(e.isDirectory())await files(p,base,out);else out.push({path:path.relative(base,p).split(path.sep).join('/'),sha256:hash(await fs.readFile(p)),bytes:(await fs.stat(p)).size});}return out;}
@@ -47,6 +48,8 @@ export async function listSnapshots(root){
     catch(e){return {...item,bytes:null,fileCount:null,error:e.message};}
   }));
 }
+/* the schema rows of the running installation are kept when an older snapshot has none */
+const tx0=async storage=>(await storage.q('SELECT * FROM schema_migrations')).rows;
 export async function restoreSnapshot(storage,folder){
   const manifest=await verifySnapshot(folder);if(manifest.kind!==storage.kind)throw Error('Tipul stocării nu se potrivește backupului.');
   const target=path.resolve(storage.kind==='postgres'?storage.files.root:storage.root);
@@ -56,14 +59,15 @@ export async function restoreSnapshot(storage,folder){
   try{
     if(storage.kind==='postgres'){
       const database=JSON.parse(await fs.readFile(path.join(folder,'database.json'),'utf8'));
-      if(TABLES.some(t=>!Array.isArray(database[t])))throw Error('Baza din backup este incompletă.');
+      if(CORE_TABLES.some(t=>!Array.isArray(database[t])))throw Error('Baza din backup este incompletă.');
+      for(const t of LEDGER_TABLES)if(!Array.isArray(database[t]))database[t]=t==='schema_migrations'?(await tx0(storage)):[];   // older snapshot: newer ledger tables start empty
       tx=await storage.pool.connect();await tx.query('BEGIN');
       for(const t of [...TABLES].reverse())await tx.query('DELETE FROM '+t);
       for(const t of TABLES)for(const row of database[t]){
         const cols=Object.keys(row);if(cols.some(k=>!/^\w+$/.test(k)))throw Error('Coloană invalidă în backup.');
         await tx.query('INSERT INTO '+t+' ('+cols.join(',')+') VALUES ('+cols.map((_,i)=>'$'+(i+1)).join(',')+')',cols.map(k=>row[k]&&typeof row[k]==='object'&&!(row[k] instanceof Date)?JSON.stringify(row[k]):row[k]));
       }
-      await tx.query("SELECT setval(pg_get_serial_sequence('review_events','id'),COALESCE((SELECT MAX(id) FROM review_events),1),(SELECT COUNT(*)>0 FROM review_events))");
+      for(const t of ['review_events','outbox'])await tx.query(`SELECT setval(pg_get_serial_sequence('${t}','id'),COALESCE((SELECT MAX(id) FROM ${t}),1),(SELECT COUNT(*)>0 FROM ${t}))`);
     }
     await fs.rename(target,previous);try{await fs.rename(stage,target);swapped=true;}catch(e){await fs.rename(previous,target);throw e;}
     if(tx)await tx.query('COMMIT');

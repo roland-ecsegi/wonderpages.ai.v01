@@ -47,6 +47,7 @@ import { physicalPages, printDimensions } from './printprofile.js';
 import { contractFromBlueprint, validateContract, validateProjectInput, projectContractReport } from './domain/product-contract.js';
 import { appRightsInventory, projectRightsInventory, rightsStatus, rightsRecord, commercialReleaseCheck } from './domain/rights.js';
 import * as Capabilities from './providers/registry.js';
+import { schemaStatus } from './persistence/migrations.js';
 import { toolSchemaHash, hostConfig } from './providers/capabilities.js';
 import { checkIncludedQuota } from './subscription-usage.js';
 
@@ -258,15 +259,15 @@ on('POST', '/api/projects/:pid/archive', async ({ pid }, req) => {
   return { ok: true };
 });
 on('POST', '/api/projects/:pid/artifacts/:key', async ({ pid, key }, req) => {
-  need(pid); const { content, note } = await json(req);
+  need(pid); const { content, note, expectedVersion, expectedRevision } = await json(req); const commandId = commandIdOf(req);
   if (RUNNING[pid]) throw { status: 409, message: 'Așteaptă terminarea operației înainte de editare.' };
   const bp = await repo.getBlueprint(pid);
   if (/^(script|final|tr)_\d+$/.test(key) && !pageSequence(content?.pages, bp.structure.pages)) throw { status: 400, message: 'Paginile trebuie numerotate unic, în ordine, de la 1 la ' + bp.structure.pages + '.' };
   const prev = (await repo.artifacts(pid))[key];
-  await repo.writeArtifact(pid, key, content, { by: 'user', note: note || 'Editare manuală', meta: prev?.meta || {} });
-  await repo.logEvent(pid, 'manual_edit', { key, note, before: prev?.content ?? null, after: content });
+  const doc = await repo.writeArtifact(pid, key, content, { by: 'user', note: note || 'Editare manuală', meta: prev?.meta || {}, commandId, expectedVersion: Number.isInteger(expectedVersion) ? expectedVersion : undefined, expectedRevision: Number.isInteger(expectedRevision) ? expectedRevision : undefined });
+  if (doc !== prev) await repo.logEvent(pid, 'manual_edit', { key, note, before: prev?.content ?? null, after: content });
   // Manual corrections are local. Their event is available to the later volume retrospective.
-  return { ok: true };
+  return { ok: true, version: doc.version, revision: repo.getProject(pid).revision };
 });
 on('GET', '/api/projects/:pid/artifacts/:key/history', async ({pid,key}) => { need(pid); const a=(await repo.artifacts(pid))[key]; if(!a) throw {status:404,message:'Document inexistent.'}; return {current:a,versions:a.versions||[]}; });
 on('POST', '/api/projects/:pid/artifacts/:key/restore', async ({pid,key},req) => {
@@ -372,6 +373,9 @@ on('PUT', '/api/settings/drive-folder', async (_, req) => { localOnly(req); cons
 on('GET', '/api/agents', async () => ({ agents: listAgents(), lessons: listLessons() }));
 on('PUT', '/api/agents/:id', async ({ id }, req) => { localOnly(req); return updateAgent(id, await json(req)); });
 /* network access: configured only from the laptop itself */
+/* P2-T01: an operator command may carry an idempotency key; a repeated key returns the first result */
+const commandIdOf = req => { const c = String(req.headers['x-wp-command'] || ''); if (!c) return undefined; if (!/^[A-Za-z0-9_.-]{8,120}$/.test(c)) throw { status: 400, message: 'Identificator de comandă invalid.' }; return c; };
+on('GET', '/api/schema', async () => schemaStatus(storage));
 const securityMode = () => transportMode({ lanEnabled: LAN.lanEnabled(), tlsEnabled: tlsEnabled(), acceptPlainLan: !!SETTINGS.acceptPlainLan });   // P1-T04
 on('GET', '/api/security/posture', async (_, req) => { localOnly(req); return postureReport({ mode: securityMode(), bindHost: boundHost, storage: storage.describe().kind, legacyDbCredentials: !!storage.describe().legacyCredentials, tlsEnabled: tlsEnabled(), lanStatus: LAN.status() }); });
 on('PUT', '/api/settings/lan-transport', async (_, req) => { localOnly(req); const b = await json(req); SETTINGS.acceptPlainLan = b.acceptPlainLan === true; await storage.writeJSON('settings.json', SETTINGS); return { mode: securityMode(), acceptPlainLan: SETTINGS.acceptPlainLan }; });
@@ -629,7 +633,7 @@ async function handler(req, res) {
   } catch (e) {
     /* audit L2: messages the app wrote for you are shown; unexpected internal errors only in the log */
     const known = e && typeof e === 'object' && !(e instanceof Error) && (e.status || e.code);
-    if (!res.headersSent) send(res, e?.status || (e?.code === 'busy' ? 409 : e?.code === 'bad_request' ? 400 : 500), known ? { message: e.message || 'Eroare.', code: e.code, ...(e.active ? { active: e.active } : {}), ...(Array.isArray(e.errors) ? { errors: e.errors } : {}) } : { message: 'A apărut o eroare internă. Detaliile sunt în jurnal (wonderpages.log).' });
+    if (!res.headersSent) send(res, e?.status || (e?.code === 'busy' ? 409 : e?.code === 'bad_request' ? 400 : 500), known ? { message: e.message || 'Eroare.', code: e.code, ...(e.active ? { active: e.active } : {}), ...(Array.isArray(e.errors) ? { errors: e.errors } : {}), ...(/_conflict$/.test(e.code || '') ? { conflict: Object.fromEntries(['key', 'currentVersion', 'expectedVersion', 'currentRevision', 'expectedRevision', 'changedBy', 'changedAt'].filter(k => e[k] !== undefined).map(k => [k, e[k]])) } : {}) } : { message: 'A apărut o eroare internă. Detaliile sunt în jurnal (wonderpages.log).' });
     if (!known || (!e.status && e.code !== 'busy' && e.code !== 'bad_request')) console.error(e);
   }
 }
