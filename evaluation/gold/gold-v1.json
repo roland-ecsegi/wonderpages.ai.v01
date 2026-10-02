@@ -1,0 +1,1781 @@
+{
+ "manifest": {
+  "schema": "wonderpages.gold-set/1",
+  "id": "gold-v1",
+  "version": 1,
+  "createdAt": "2026-10-02",
+  "purpose": "Calibrarea evaluatorilor deterministici și a politicii de calitate; NU reprezintă cărți reale și nu măsoară reacția copiilor sau piața.",
+  "rights": {
+   "synthetic": {
+    "source": "fixture-uri sintetice scrise în acest repository",
+    "commercial": "no",
+    "reproduction": "yes",
+    "derivative": "yes",
+    "use": "evaluare internă"
+   },
+   "dinosaur_world": {
+    "source": "reference/dinosaur-world-v04/dinosaur-world-proiect.v04.zip",
+    "sha256": "7056e113bf5c84fdfc0f7b8f528713de6c8fe31e82b40fbab056544fe10e45e3",
+    "use": "evaluare internă; textul nu este copiat în set (referință prin hash)"
+   }
+  },
+  "splits": {
+   "calibration": "teme: dinosaurs, sea, forest",
+   "holdout": "temă distinctă: space (nu apare în calibrare)"
+  },
+  "cohorts": {
+   "ages": [
+    "3-4",
+    "5-6",
+    "7-8"
+   ],
+   "languages": [
+    "English",
+    "Romanian"
+   ],
+   "themes": [
+    "dinosaurs",
+    "sea",
+    "forest",
+    "space"
+   ]
+  },
+  "baselineSubset": {
+   "dinosaur_world": {
+    "text": "script_0 (V1 draft, EN/RO) — evaluare fără scoruri vizuale preexistente",
+    "refs": "2 PNG originale (hash), fără verdict vizual",
+    "visualScores": "NOT_AVAILABLE"
+   }
+  },
+  "adjudication": "Etichetele sunt propuse de implementator și așteaptă confirmarea operatorului (WAITING_HUMAN).",
+  "limitations": [
+   "Cazurile și regulile evaluatorilor au același autor: acuratețea pe acest set este optimistă (risc de supraadaptare); operatorul trebuie să adauge cazuri proprii și să adjudece etichetele.",
+   "Set mic, sintetic, scris de implementator: măsoară consistența evaluatorilor, nu calitatea literară reală.",
+   "Evaluatorii sunt lexicali (RO/EN); o reformulare poate scăpa.",
+   "Nu există evaluări cu familii sau date de piață; ratingurile operatorului sunt distincte de feedbackul pieței."
+  ],
+  "caseCount": 44
+ },
+ "cases": [
+  {
+   "id": "safety-dinosaurs-3-4-English-01",
+   "kind": "safety",
+   "theme": "dinosaurs",
+   "age": "3-4",
+   "language": "English",
+   "label": "positive",
+   "split": "calibration",
+   "defect": null,
+   "input": {
+    "text": "Milo finds a shiny pebble and shows it to Tia."
+   },
+   "expected": {
+    "verdict": "PASS"
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "safety-dinosaurs-3-4-English-02",
+   "kind": "safety",
+   "theme": "dinosaurs",
+   "age": "3-4",
+   "language": "English",
+   "label": "negative",
+   "split": "calibration",
+   "defect": "dangerous_imitation",
+   "input": {
+    "text": "Milo plays with matches near the dry ferns."
+   },
+   "expected": {
+    "verdict": "BLOCK"
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "safety-dinosaurs-5-6-Romanian-03",
+   "kind": "safety",
+   "theme": "dinosaurs",
+   "age": "5-6",
+   "language": "Romanian",
+   "label": "positive",
+   "split": "calibration",
+   "defect": null,
+   "input": {
+    "text": "Milo nu se joacă niciodată cu focul; întreabă un adult."
+   },
+   "expected": {
+    "verdict": "PASS"
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "safety-dinosaurs-5-6-Romanian-04",
+   "kind": "safety",
+   "theme": "dinosaurs",
+   "age": "5-6",
+   "language": "Romanian",
+   "label": "negative",
+   "split": "calibration",
+   "defect": "stereotype",
+   "input": {
+    "text": "Băieții nu plâng, spuse dinozaurul cel mare."
+   },
+   "expected": {
+    "verdict": "BLOCK"
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "safety-sea-3-4-English-05",
+   "kind": "safety",
+   "theme": "sea",
+   "age": "3-4",
+   "language": "English",
+   "label": "positive",
+   "split": "calibration",
+   "defect": null,
+   "input": {
+    "text": "Lula the little fish swims with her mum in the warm bay."
+   },
+   "expected": {
+    "verdict": "PASS"
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "safety-sea-3-4-English-06",
+   "kind": "safety",
+   "theme": "sea",
+   "age": "3-4",
+   "language": "English",
+   "label": "negative",
+   "split": "calibration",
+   "defect": "dangerous_imitation",
+   "input": {
+    "text": "Lula swims alone into the deep dark sea."
+   },
+   "expected": {
+    "verdict": "REVIEW"
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "safety-sea-7-8-Romanian-07",
+   "kind": "safety",
+   "theme": "sea",
+   "age": "7-8",
+   "language": "Romanian",
+   "label": "positive",
+   "split": "calibration",
+   "defect": null,
+   "input": {
+    "text": "Și fetele și băieții pot explora recifele, spuse caracatița."
+   },
+   "expected": {
+    "verdict": "PASS"
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "safety-sea-7-8-Romanian-08",
+   "kind": "safety",
+   "theme": "sea",
+   "age": "7-8",
+   "language": "Romanian",
+   "label": "negative",
+   "split": "calibration",
+   "defect": "stereotype",
+   "input": {
+    "text": "Fetele nu pot înota departe, râse rechinul."
+   },
+   "expected": {
+    "verdict": "BLOCK"
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "safety-forest-5-6-English-09",
+   "kind": "safety",
+   "theme": "forest",
+   "age": "5-6",
+   "language": "English",
+   "label": "positive",
+   "split": "calibration",
+   "defect": null,
+   "input": {
+    "text": "The fox asks a grown-up before eating the berries from the forest."
+   },
+   "expected": {
+    "verdict": "PASS"
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "safety-forest-5-6-English-10",
+   "kind": "safety",
+   "theme": "forest",
+   "age": "5-6",
+   "language": "English",
+   "label": "negative",
+   "split": "calibration",
+   "defect": "dangerous_imitation",
+   "input": {
+    "text": "The fox eats the strange berries from the forest."
+   },
+   "expected": {
+    "verdict": "BLOCK"
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "safety-forest-7-8-English-11",
+   "kind": "safety",
+   "theme": "forest",
+   "age": "7-8",
+   "language": "English",
+   "label": "negative",
+   "split": "calibration",
+   "defect": "violence",
+   "input": {
+    "text": "The hunter raised his gun at the deer."
+   },
+   "expected": {
+    "verdict": "BLOCK"
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "safety-forest-3-4-Romanian-12",
+   "kind": "safety",
+   "theme": "forest",
+   "age": "3-4",
+   "language": "Romanian",
+   "label": "positive",
+   "split": "calibration",
+   "defect": null,
+   "input": {
+    "text": "Ursulețul a urat noapte bună tuturor prietenilor."
+   },
+   "expected": {
+    "verdict": "PASS"
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "safety-forest-3-4-English-13",
+   "kind": "safety",
+   "theme": "forest",
+   "age": "3-4",
+   "language": "English",
+   "label": "negative",
+   "split": "calibration",
+   "defect": "developmental_fit",
+   "input": {
+    "text": "The bear was terrified by the monster attack in the dark."
+   },
+   "expected": {
+    "verdict": "REVIEW"
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "safety-dinosaurs-7-8-English-14",
+   "kind": "safety",
+   "theme": "dinosaurs",
+   "age": "7-8",
+   "language": "English",
+   "label": "positive",
+   "split": "calibration",
+   "defect": null,
+   "input": {
+    "text": "Pip, the little pterosaur, had begun to glide over the river."
+   },
+   "expected": {
+    "verdict": "PASS"
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "safety-space-3-4-English-15",
+   "kind": "safety",
+   "theme": "space",
+   "age": "3-4",
+   "language": "English",
+   "label": "positive",
+   "split": "holdout",
+   "defect": null,
+   "input": {
+    "text": "Nova the little robot waves at the moon with her dad."
+   },
+   "expected": {
+    "verdict": "PASS"
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "safety-space-5-6-Romanian-16",
+   "kind": "safety",
+   "theme": "space",
+   "age": "5-6",
+   "language": "Romanian",
+   "label": "negative",
+   "split": "holdout",
+   "defect": "dangerous_imitation",
+   "input": {
+    "text": "Robotul Nova se urcă pe pervaz ca să vadă stelele."
+   },
+   "expected": {
+    "verdict": "BLOCK"
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "safety-space-7-8-English-17",
+   "kind": "safety",
+   "theme": "space",
+   "age": "7-8",
+   "language": "English",
+   "label": "negative",
+   "split": "holdout",
+   "defect": "violence",
+   "input": {
+    "text": "The space pirates shot their guns at the ship."
+   },
+   "expected": {
+    "verdict": "BLOCK"
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "safety-space-7-8-Romanian-18",
+   "kind": "safety",
+   "theme": "space",
+   "age": "7-8",
+   "language": "Romanian",
+   "label": "positive",
+   "split": "holdout",
+   "defect": null,
+   "input": {
+    "text": "Nova și prietenii ei numără stelele cu bunica."
+   },
+   "expected": {
+    "verdict": "PASS"
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "age-dinosaurs-3-4-English-01",
+   "kind": "age",
+   "theme": "dinosaurs",
+   "age": "3-4",
+   "language": "English",
+   "label": "positive",
+   "split": "calibration",
+   "defect": null,
+   "input": {
+    "band": "3-4",
+    "page": "Milo sees a leaf. It is shiny. Swish! Milo smiles."
+   },
+   "expected": {
+    "AGE_COMPLEXITY": false
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "age-dinosaurs-3-4-English-02",
+   "kind": "age",
+   "theme": "dinosaurs",
+   "age": "3-4",
+   "language": "English",
+   "label": "negative",
+   "split": "calibration",
+   "defect": "age_complexity",
+   "input": {
+    "band": "3-4",
+    "page": "When Milo noticed the shimmering leaf trembling beside the winding path, he wondered which of his many neighbours had dropped it so carelessly on such a windy afternoon near the old riverbank."
+   },
+   "expected": {
+    "AGE_COMPLEXITY": true
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "age-sea-3-4-English-03",
+   "kind": "age",
+   "theme": "sea",
+   "age": "3-4",
+   "language": "English",
+   "label": "positive",
+   "split": "calibration",
+   "defect": null,
+   "input": {
+    "band": "3-4",
+    "page": "Milo sees a leaf. It is shiny. Swish! Milo smiles."
+   },
+   "expected": {
+    "AGE_COMPLEXITY": false
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "age-sea-3-4-English-04",
+   "kind": "age",
+   "theme": "sea",
+   "age": "3-4",
+   "language": "English",
+   "label": "negative",
+   "split": "calibration",
+   "defect": "age_complexity",
+   "input": {
+    "band": "3-4",
+    "page": "When Milo noticed the shimmering leaf trembling beside the winding path, he wondered which of his many neighbours had dropped it so carelessly on such a windy afternoon near the old riverbank."
+   },
+   "expected": {
+    "AGE_COMPLEXITY": true
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "age-forest-3-4-English-05",
+   "kind": "age",
+   "theme": "forest",
+   "age": "3-4",
+   "language": "English",
+   "label": "positive",
+   "split": "calibration",
+   "defect": null,
+   "input": {
+    "band": "3-4",
+    "page": "Milo sees a leaf. It is shiny. Swish! Milo smiles."
+   },
+   "expected": {
+    "AGE_COMPLEXITY": false
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "age-forest-3-4-English-06",
+   "kind": "age",
+   "theme": "forest",
+   "age": "3-4",
+   "language": "English",
+   "label": "negative",
+   "split": "calibration",
+   "defect": "age_complexity",
+   "input": {
+    "band": "3-4",
+    "page": "When Milo noticed the shimmering leaf trembling beside the winding path, he wondered which of his many neighbours had dropped it so carelessly on such a windy afternoon near the old riverbank."
+   },
+   "expected": {
+    "AGE_COMPLEXITY": true
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "age-space-3-4-English-07",
+   "kind": "age",
+   "theme": "space",
+   "age": "3-4",
+   "language": "English",
+   "label": "negative",
+   "split": "holdout",
+   "defect": "age_complexity",
+   "input": {
+    "band": "3-4",
+    "page": "Because the enormous spaceship was travelling extraordinarily quickly through the glittering galaxy, Nova carefully calculated every complicated manoeuvre before the gigantic asteroid approached."
+   },
+   "expected": {
+    "AGE_COMPLEXITY": true
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "localization-dinosaurs-5-6-Romanian-01",
+   "kind": "localization",
+   "theme": "dinosaurs",
+   "age": "5-6",
+   "language": "Romanian",
+   "label": "positive",
+   "split": "calibration",
+   "defect": null,
+   "input": {
+    "source": "Milo finds a leaf.",
+    "native": "Milo găsește o frunză.",
+    "names": [
+     "Milo",
+     "Lula"
+    ]
+   },
+   "expected": {
+    "codes": []
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "localization-dinosaurs-5-6-Romanian-02",
+   "kind": "localization",
+   "theme": "dinosaurs",
+   "age": "5-6",
+   "language": "Romanian",
+   "label": "negative",
+   "split": "calibration",
+   "defect": "translation",
+   "input": {
+    "source": "It makes sense, says Milo.",
+    "native": "Asta face sens, spune Milo.",
+    "names": [
+     "Milo",
+     "Lula"
+    ]
+   },
+   "expected": {
+    "codes": [
+     "TR_CALQUE"
+    ]
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "localization-sea-5-6-Romanian-03",
+   "kind": "localization",
+   "theme": "sea",
+   "age": "5-6",
+   "language": "Romanian",
+   "label": "negative",
+   "split": "calibration",
+   "defect": "translation",
+   "input": {
+    "source": "Lula and the crab had a good time.",
+    "native": "Lula și crabul au avut un timp bun.",
+    "names": [
+     "Milo",
+     "Lula"
+    ]
+   },
+   "expected": {
+    "codes": [
+     "TR_CALQUE"
+    ]
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "localization-forest-5-6-Romanian-04",
+   "kind": "localization",
+   "theme": "forest",
+   "age": "5-6",
+   "language": "Romanian",
+   "label": "negative",
+   "split": "calibration",
+   "defect": "translation",
+   "input": {
+    "source": "The fox finds the berries.",
+    "native": "Vulpea găsește the fructe.",
+    "names": [
+     "Milo",
+     "Lula"
+    ]
+   },
+   "expected": {
+    "codes": [
+     "TR_UNTRANSLATED"
+    ]
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "localization-forest-5-6-Romanian-05",
+   "kind": "localization",
+   "theme": "forest",
+   "age": "5-6",
+   "language": "Romanian",
+   "label": "positive",
+   "split": "calibration",
+   "defect": null,
+   "input": {
+    "source": "The fox is happy.",
+    "native": "Vulpea este fericită.",
+    "names": [
+     "Milo",
+     "Lula"
+    ]
+   },
+   "expected": {
+    "codes": []
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "localization-space-5-6-Romanian-06",
+   "kind": "localization",
+   "theme": "space",
+   "age": "5-6",
+   "language": "Romanian",
+   "label": "negative",
+   "split": "holdout",
+   "defect": "translation",
+   "input": {
+    "source": "Nova had a good time.",
+    "native": "Nova a avut un timp bun.",
+    "names": [
+     "Nova"
+    ]
+   },
+   "expected": {
+    "codes": [
+     "TR_CALQUE"
+    ]
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "science-dinosaurs-7-8-English-01",
+   "kind": "science",
+   "theme": "dinosaurs",
+   "age": "7-8",
+   "language": "English",
+   "label": "negative",
+   "split": "calibration",
+   "defect": "science",
+   "input": {
+    "text": "Pip, the flying dinosaur, landed on a branch."
+   },
+   "expected": {
+    "rule": "pterosaur-dinosaur"
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "science-dinosaurs-7-8-English-02",
+   "kind": "science",
+   "theme": "dinosaurs",
+   "age": "7-8",
+   "language": "English",
+   "label": "negative",
+   "split": "calibration",
+   "defect": "science",
+   "input": {
+    "text": "Cavemen waved at the dinosaurs."
+   },
+   "expected": {
+    "rule": "humans-dinosaurs"
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "science-forest-7-8-English-03",
+   "kind": "science",
+   "theme": "forest",
+   "age": "7-8",
+   "language": "English",
+   "label": "negative",
+   "split": "calibration",
+   "defect": "science",
+   "input": {
+    "text": "Bats are blind, said the owl."
+   },
+   "expected": {
+    "rule": "bats-blind"
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "science-sea-7-8-English-04",
+   "kind": "science",
+   "theme": "sea",
+   "age": "7-8",
+   "language": "English",
+   "label": "positive",
+   "split": "calibration",
+   "defect": null,
+   "input": {
+    "text": "The moon shone over the sea, lit by the sun."
+   },
+   "expected": {
+    "rule": null
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "science-space-7-8-English-05",
+   "kind": "science",
+   "theme": "space",
+   "age": "7-8",
+   "language": "English",
+   "label": "negative",
+   "split": "holdout",
+   "defect": "science",
+   "input": {
+    "text": "The sun goes around the earth every day, said the robot."
+   },
+   "expected": {
+    "rule": "sun-orbits"
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "quality-dinosaurs-3-4-English-01",
+   "kind": "quality",
+   "theme": "dinosaurs",
+   "age": "3-4",
+   "language": "English",
+   "label": "positive",
+   "split": "calibration",
+   "defect": null,
+   "input": {
+    "reply": {
+     "criteria": [
+      {
+       "code": "T01",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T02",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T03",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T04",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T05",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T06",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T07",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T08",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T09",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T10",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T11",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T12",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T13",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T14",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T15",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T16",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T17",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T18",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      }
+     ],
+     "issues": []
+    }
+   },
+   "expected": {
+    "acceptable": true
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "quality-sea-5-6-English-02",
+   "kind": "quality",
+   "theme": "sea",
+   "age": "5-6",
+   "language": "English",
+   "label": "positive",
+   "split": "calibration",
+   "defect": null,
+   "input": {
+    "reply": {
+     "criteria": [
+      {
+       "code": "T01",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T02",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T03",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T04",
+       "score": 8,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T05",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T06",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T07",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T08",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T09",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T10",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T11",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T12",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T13",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T14",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T15",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T16",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T17",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T18",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      }
+     ],
+     "issues": []
+    }
+   },
+   "expected": {
+    "acceptable": true
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "quality-forest-7-8-English-03",
+   "kind": "quality",
+   "theme": "forest",
+   "age": "7-8",
+   "language": "English",
+   "label": "positive",
+   "split": "calibration",
+   "defect": null,
+   "input": {
+    "reply": {
+     "criteria": [
+      {
+       "code": "T01",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T02",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T03",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T04",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T05",
+       "score": 8,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T06",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T07",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T08",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T09",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T10",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T11",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T12",
+       "score": 8,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T13",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T14",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T15",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T16",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T17",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T18",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      }
+     ],
+     "issues": []
+    }
+   },
+   "expected": {
+    "acceptable": true
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "quality-dinosaurs-5-6-English-04",
+   "kind": "quality",
+   "theme": "dinosaurs",
+   "age": "5-6",
+   "language": "English",
+   "label": "negative",
+   "split": "calibration",
+   "defect": "quality",
+   "input": {
+    "reply": {
+     "criteria": [
+      {
+       "code": "T01",
+       "score": 7.5,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T02",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T03",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T04",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T05",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T06",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T07",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T08",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T09",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T10",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T11",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T12",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T13",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T14",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T15",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T16",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T17",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T18",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      }
+     ],
+     "issues": []
+    }
+   },
+   "expected": {
+    "acceptable": false
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "quality-sea-3-4-English-05",
+   "kind": "quality",
+   "theme": "sea",
+   "age": "3-4",
+   "language": "English",
+   "label": "negative",
+   "split": "calibration",
+   "defect": "quality",
+   "input": {
+    "reply": {
+     "criteria": [
+      {
+       "code": "T01",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T02",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T03",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T04",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T05",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T06",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T07",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T08",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T09",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T10",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T11",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T12",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T13",
+       "score": 6.5,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T14",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T15",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T16",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T17",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T18",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      }
+     ],
+     "issues": []
+    }
+   },
+   "expected": {
+    "acceptable": false
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "quality-forest-5-6-English-06",
+   "kind": "quality",
+   "theme": "forest",
+   "age": "5-6",
+   "language": "English",
+   "label": "negative",
+   "split": "calibration",
+   "defect": "quality",
+   "input": {
+    "reply": {
+     "criteria": [
+      {
+       "code": "T01",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T02",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T03",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T04",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T05",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T06",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T07",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T08",
+       "score": 7,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T09",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T10",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T11",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T12",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T13",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T14",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T15",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T16",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T17",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T18",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      }
+     ],
+     "issues": []
+    }
+   },
+   "expected": {
+    "acceptable": false
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "quality-dinosaurs-7-8-English-07",
+   "kind": "quality",
+   "theme": "dinosaurs",
+   "age": "7-8",
+   "language": "English",
+   "label": "negative",
+   "split": "calibration",
+   "defect": "quality",
+   "input": {
+    "reply": {
+     "criteria": [
+      {
+       "code": "T01",
+       "score": 7,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T02",
+       "score": 7,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T03",
+       "score": 7,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T04",
+       "score": 7,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T05",
+       "score": 7,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T06",
+       "score": 7,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T07",
+       "score": 7,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T08",
+       "score": 7,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T09",
+       "score": 7,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T10",
+       "score": 7,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T11",
+       "score": 7,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T12",
+       "score": 7,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T13",
+       "score": 7,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T14",
+       "score": 7,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T15",
+       "score": 7,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T16",
+       "score": 7,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T17",
+       "score": 7,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T18",
+       "score": 7,
+       "evidence": "Milo and Tia find a gentle surprise"
+      }
+     ],
+     "issues": []
+    }
+   },
+   "expected": {
+    "acceptable": false
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  },
+  {
+   "id": "quality-space-5-6-English-08",
+   "kind": "quality",
+   "theme": "space",
+   "age": "5-6",
+   "language": "English",
+   "label": "negative",
+   "split": "holdout",
+   "defect": "quality",
+   "input": {
+    "reply": {
+     "criteria": [
+      {
+       "code": "T01",
+       "score": 7.4,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T02",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T03",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T04",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T05",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T06",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T07",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T08",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T09",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T10",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T11",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T12",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T13",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T14",
+       "score": 6.8,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T15",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T16",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T17",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      },
+      {
+       "code": "T18",
+       "score": 9,
+       "evidence": "Milo and Tia find a gentle surprise"
+      }
+     ],
+     "issues": []
+    }
+   },
+   "expected": {
+    "acceptable": false
+   },
+   "adjudication": {
+    "by": "implementer (synthetic fixture)",
+    "status": "pending_operator_review",
+    "note": "Etichetă propusă; operatorul confirmă sau corectează (aprobare umană)."
+   }
+  }
+ ]
+}

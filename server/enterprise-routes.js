@@ -22,6 +22,7 @@ import { volumeSafety, SAFETY_POLICY } from './quality/safety.js';
 import { assessBook, policyFor } from './quality/assessment.js';
 import { pageVisual } from './quality/visual.js';
 import { collectionQA } from './quality/collection-qa.js';
+import { runEvaluation, calibrationStatus, compareReports } from './quality/evaluation.js';
 import { pngSize } from './security/safe-zip.js';
 import { reconcileReport, applyReconcile } from './migration/dw-reconcile.js';
 import { contractFromBlueprint, validateProjectInput, editionsFor } from './domain/product-contract.js';
@@ -189,4 +190,14 @@ export function registerEnterpriseRoutes({ on, json, need, localOnly, repo, stor
 
   /* P5-T04: cross-artifact and collection QA with exact references and affected scopes */
   on('GET', '/api/projects/:pid/collection-qa', async ({ pid }) => { const p = need(pid); return collectionQA({ bp: await repo.getBlueprint(pid), art: await repo.artifacts(pid), project: p }); });
+
+  /* P5-T05: gold set (versioned, rights + split manifest), evaluation runs, comparison and the operator's acceptance */
+  const gold = () => JSON.parse(fs.readFileSync(path.join(ROOT, 'evaluation', 'gold', 'gold-v1.json'), 'utf8'));
+  const reports = async () => { const out = []; for (const f of (await storage.list('evaluation/reports').catch(() => [])).filter(x => x.name.endsWith('.json'))) { const r = await storage.readJSON(`evaluation/reports/${f.name}`, null); if (r) out.push(r); } return out.sort((a, b) => a.at - b.at); };
+  on('GET', '/api/evaluation/gold', async () => { const g = gold(); return { manifest: g.manifest, counts: g.cases.reduce((m, c) => { m[c.split] = (m[c.split] || 0) + 1; m[c.kind] = (m[c.kind] || 0) + 1; return m; }, {}) }; });
+  on('POST', '/api/evaluation/run', async (_, req) => { localOnly(req); const b = await json(req); const r = runEvaluation(gold(), { split: ['calibration', 'holdout', 'all'].includes(b.split) ? b.split : 'calibration', policy: Number(b.policy) === 1 ? 1 : 2 }); await storage.writeJSON(`evaluation/reports/${r.id}.json`, r); return r; });
+  on('GET', '/api/evaluation/reports', async () => ({ reports: (await reports()).map(r => ({ id: r.id, split: r.split, versions: r.versions, dataset: r.dataset, at: r.at, overall: r.overall })) }));
+  on('POST', '/api/evaluation/compare', async (_, req) => { const b = await json(req), all = await reports(), a = all.find(r => r.id === b.a), c = all.find(r => r.id === b.b); if (!a || !c) throw { status: 404, message: 'Raport inexistent.' }; return compareReports(a, c); });
+  on('POST', '/api/evaluation/accept', async (_, req) => { localOnly(req); const b = await json(req), all = await reports(); if (!all.some(r => r.id === b.calibration && r.split === 'calibration') || !all.some(r => r.id === b.holdout && r.split === 'holdout')) throw { status: 400, message: 'Alege un raport de calibrare și unul pe setul rezervat.' }; if (String(b.note || '').trim().length < 10) throw { status: 400, message: 'Scrie ce ai verificat la acceptare.' }; const acc = { calibration: b.calibration, holdout: b.holdout, note: String(b.note).slice(0, 1000), actor: 'operator@laptop', at: now() }; await storage.writeJSON('evaluation/acceptance.json', acc); return acc; });
+  on('GET', '/api/evaluation/status', async () => { const all = await reports(), acc = await storage.readJSON('evaluation/acceptance.json', null); const pick = id => all.find(r => r.id === id); return calibrationStatus(acc ? [pick(acc.calibration), pick(acc.holdout)].filter(Boolean) : [all.filter(r => r.split === 'calibration').at(-1), all.filter(r => r.split === 'holdout').at(-1)].filter(Boolean), acc); });
 }

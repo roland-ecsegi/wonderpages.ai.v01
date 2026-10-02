@@ -69,8 +69,8 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | P5-T01 | DONE | ced6e9a | TEST-P5-T01 6/6; RS0 225/225 | Siguranță PASS/REVIEW/BLOCK/UNKNOWN separată de scor: intrare, producție, porți, livrare, învățare; BLOCK fără suprascriere |
 | P5-T02 | DONE | 5a0c931 | TEST-P5-T02 8/8; RS0 233/233 | QualityPolicy v1/v2 (v2 doar pe versiunea țintă), dovezi validate, snapshot model, evaluare de carte, regresii native respinse |
 | P5-T03 | DONE | eaf22b2 | TEST-P5-T03 7/7; RS0 240/240 | Verdict vizual verificat (repere cu ocluzie, deținător, dezvăluire, aglomerare); pereche color/colorat legată de fișiere curente |
-| P5-T04 | DONE | (acest commit) | TEST-P5-T04 8/8; RS0 248/248 | QA între artefacte și colecție cu referințe exacte; probleme mari blochează livrarea; colecția = cel mai slab volum |
-| P5-T05 | PENDING | | | |
+| P5-T04 | DONE | b51fa4b | TEST-P5-T04 8/8; RS0 248/248 | QA între artefacte și colecție cu referințe exacte; probleme mari blochează livrarea; colecția = cel mai slab volum |
+| P5-T05 | DONE | (acest commit) | TEST-P5-T05 8/8; RS0 256/256 | Set de aur gold-v1 (44 cazuri, 3 vârste/2 limbi/temă rezervată), rapoarte cu confuzie/false-pass/kappa, contaminare, comparații oarbe; praguri propuse până la acceptare |
 | P5-T06 | PENDING | | | |
 | P6-T01 | PENDING | | | |
 | P6-T02 | PENDING | | | |
@@ -126,6 +126,7 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | 2026-10-02 | RS0 + TEST-P5-T02 | 233/233 PASS | evaluarea învechită după editare bloca aprobarea finală fără cale de reevaluare — adăugată reevaluarea |
 | 2026-10-02 | RS0 + TEST-P5-T03 | 240/240 PASS | — |
 | 2026-10-02 | RS0 + TEST-P5-T04 | 248/248 PASS | regula locului final bloca un final ambiguu din mock — severitate rafinată |
+| 2026-10-02 | RS0 + TEST-P5-T05 | 256/256 PASS | — |
 
 ## Probleme deschise
 
@@ -136,9 +137,10 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 ## Aprobări umane așteptate
 
 - Reconcilierea DW01/DW02 a proiectului Dinosaur World migrat: raportul este gata (GET /api/projects/:pid/reconcile); alegerea textului premisei și a contractului de întoarcere pe pagină este decizia operatorului. (WAITING_HUMAN; nu blochează fazele 5–7.)
+- Setul de aur gold-v1: adjudecarea etichetelor (status pending_operator_review) și acceptarea raportului de calibrare (POST /api/evaluation/accept). Până atunci pragurile v2 rămân „propuse” și afirmațiile de maturitate (P7) sunt blocate. (WAITING_HUMAN)
 
 ## Checkpoint
 
-- Ultimul task închis: P5-T04
-- Următorul task: **P5-T05**
+- Ultimul task închis: P5-T05
+- Următorul task: **P5-T06**
 - Cum se reia: `npm ci && npm run build && BROWSER_PATH=/opt/pw-browsers/chromium npm test`; citește tabelul de mai sus și `docs/enterprise/records/`.
