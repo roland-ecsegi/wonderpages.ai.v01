@@ -8,7 +8,10 @@ test('Dali: răspunde, notează o îmbunătățire, completează formularul', as
   setFake({});
   let r = await api('POST', 'assistant', { message: 'Salut!' }); assert.equal(r.status, 200); assert.ok(r.body.reply);
   const sid = r.body.sid;
-  r = await api('POST', 'assistant', { message: 'notează o îmbunătățire pentru export', sid }); assert.ok(r.body.actions.some(a => a.type === 'improvement_added'));
+  r = await api('POST', 'assistant', { message: 'notează o îmbunătățire pentru export', sid });   // P7-T06 (D-C21): a proposal, applied only when you confirm it
+  const pr = r.body.actions.find(a => a.type === 'proposal' && a.kind === 'add_improvement'); assert.ok(pr && pr.status === 'proposed');
+  const n0 = (await api('GET', 'improvements')).body.items.length; const c = await api('POST', `assistant/${sid}/proposals/${pr.id}`, { confirm: true }); assert.equal(c.status, 200); assert.equal(c.body.applied, true);
+  assert.equal((await api('GET', 'improvements')).body.items.length, n0 + 1);
   r = await api('POST', 'assistant', { message: 'completează formularul', sid }); assert.ok(r.body.actions.some(a => a.type === 'fill_project'));
   r = await api('POST', 'assistant', { message: 'linkextern', sid }); assert.ok(!r.body.actions.some(a => a.type === 'navigate' && !a.to.startsWith('#/')), 'Dali deschide doar pagini din aplicație');
 });

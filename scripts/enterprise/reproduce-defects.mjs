@@ -80,8 +80,8 @@ try {
   }
   /* C21: Dali add_improvement follows the model result */
   {
-    const auto = /add_improvement/.test(src('server/assistant.js'));
-    rec('D-C21', 'C21/G14', 'P7-T06', auto ? 'REPRODUCED' : 'FIXED', [lineOf('server/assistant.js', /add_improvement/)], 'static');
+    const auto = /await addImprovement\(a, 'asistent'\)/.test(src('server/assistant.js'));   // the defect: the model's action is EXECUTED (P7-T06: proposals confirmed by the operator)
+    rec('D-C21', 'C21/G14', 'P7-T06', auto ? 'REPRODUCED' : 'FIXED', [lineOf('server/assistant.js', /export async function decideProposal/) || lineOf('server/assistant.js', /add_improvement/)], 'static');
   }
 } finally { fs.rmSync(tmp, { recursive: true, force: true }); }
 

@@ -1,16 +1,16 @@
 {
  "kind": "wonderpages.baseline-report/1",
- "generatedAt": "2026-10-02T16:51:55.717Z",
- "codeRevision": "b5b4492",
+ "generatedAt": "2026-10-02T18:12:20.515Z",
+ "codeRevision": "f116d0e",
  "checks": [
   {
    "id": "INVENTORY",
    "status": "PASS",
-   "summary": "278 fișiere (fără node_modules/.git/data), 6 ascunse",
+   "summary": "297 fișiere (fără node_modules/.git/data), 6 ascunse",
    "detail": {
-    "total": 278,
+    "total": 297,
     "byExt": {
-     ".md": 67,
+     ".md": 74,
      ".example": 1,
      "(none)": 3,
      ".json": 17,
@@ -18,14 +18,14 @@
      ".vbs": 1,
      ".yml": 1,
      ".log": 4,
-     ".js": 100,
+     ".js": 106,
      ".ttf": 4,
      ".txt": 1,
      ".png": 3,
      ".html": 2,
      ".webmanifest": 1,
      ".zip": 1,
-     ".mjs": 61,
+     ".mjs": 67,
      ".ps1": 1,
      ".cjs": 4,
      ".cmd": 2
@@ -65,9 +65,9 @@
   {
    "id": "SOURCE_DRIFT_V04",
    "status": "PASS",
-   "summary": "105/137 fișiere v04 identice, 32 modificate (enterprise), 135 adăugate, 0 lipsă",
+   "summary": "101/137 fișiere v04 identice, 36 modificate (enterprise), 154 adăugate, 0 lipsă",
    "detail": {
-    "unchanged": 105,
+    "unchanged": 101,
     "modified": [
      "blueprints/kids-sc.json",
      "public/app/actions.js",
@@ -78,12 +78,15 @@
      "public/index.html",
      "scripts/build.mjs",
      "server/agents.js",
+     "server/assistant.js",
      "server/canva.js",
      "server/codeximage.js",
      "server/contracts.js",
      "server/engine.js",
      "server/governor.js",
+     "server/improve.js",
      "server/index.js",
+     "server/learning.js",
      "server/pdfcheck.js",
      "server/printprofile.js",
      "server/projectpkg.js",
@@ -94,6 +97,7 @@
      "server/storage/postgres.js",
      "server/training.js",
      "tests/1-productie.test.mjs",
+     "tests/2-unelte.test.mjs",
      "tests/3-securitate.test.mjs",
      "tests/4-optimizare.test.mjs",
      "tests/mocks/bin/claude.cjs",
@@ -124,10 +128,14 @@
      "docs/enterprise/contracts/COLLECTION.md",
      "docs/enterprise/contracts/COLORING.md",
      "docs/enterprise/contracts/DECISIONS.md",
+     "docs/enterprise/contracts/EFFECTIVENESS.md",
      "docs/enterprise/contracts/GOLD-SET.md",
      "docs/enterprise/contracts/INTAKE.md",
      "docs/enterprise/contracts/JOBS.md",
+     "docs/enterprise/contracts/KNOWLEDGE-PROMOTION.md",
+     "docs/enterprise/contracts/KNOWLEDGE-QUARANTINE.md",
      "docs/enterprise/contracts/LAYOUT.md",
+     "docs/enterprise/contracts/MATURITY.md",
      "docs/enterprise/contracts/OBSERVABILITY.md",
      "docs/enterprise/contracts/PAGE-BLUEPRINTS.md",
      "docs/enterprise/contracts/PERSISTENCE.md",
@@ -136,7 +144,9 @@
      "docs/enterprise/contracts/PROVIDER-CAPABILITIES.md",
      "docs/enterprise/contracts/QUALITY-ASSESSMENT.md",
      "docs/enterprise/contracts/READINESS.md",
+     "docs/enterprise/contracts/RELEASE-CANDIDATE.md",
      "docs/enterprise/contracts/REPAIR.md",
+     "docs/enterprise/contracts/SAFER-CI.md",
      "docs/enterprise/contracts/SAFETY.md",
      "docs/enterprise/contracts/SECURITY-BASELINE.md",
      "docs/enterprise/contracts/STORY-CONTRACTS.md",
@@ -150,6 +160,7 @@
      "docs/enterprise/records/P4.md",
      "docs/enterprise/records/P5.md",
      "docs/enterprise/records/P6.md",
+     "docs/enterprise/records/P7.md",
      "evaluation/gold/gold-v1.json",
      "public/app/layout-measure.js",
      "public/fonts/andika-metrics.json",
@@ -181,6 +192,12 @@
      "server/inspection/raster.js",
      "server/jobs/budget.js",
      "server/jobs/scheduler.js",
+     "server/knowledge/effectiveness.js",
+     "server/knowledge/experience.js",
+     "server/knowledge/governance.js",
+     "server/knowledge/ll.js",
+     "server/knowledge/promotion.js",
+     "server/knowledge/store.js",
      "server/migration/dw-reconcile.js",
      "server/migration/dw-reference.js",
      "server/migration/migrator.js",
@@ -237,6 +254,12 @@
      "tests/63-p6-print-profiles.test.mjs",
      "tests/64-p6-readiness.test.mjs",
      "tests/65-p6-release.test.mjs",
+     "tests/70-p7-quarantine.test.mjs",
+     "tests/71-p7-promotion.test.mjs",
+     "tests/72-p7-effectiveness.test.mjs",
+     "tests/73-p7-maturity.test.mjs",
+     "tests/74-p7-improve.test.mjs",
+     "tests/75-p7-dali.test.mjs",
      "tests/cdp.mjs",
      "tests/mocks/legacy-blueprint-v15.json"
     ]
@@ -245,19 +268,19 @@
   {
    "id": "BUILD",
    "status": "PASS",
-   "summary": "PASS: 164 fișiere JavaScript, JSON, lockfile, fonturi și fișiere runtime; WonderPages AI — claude-gpt.v04",
+   "summary": "PASS: 176 fișiere JavaScript, JSON, lockfile, fonturi și fișiere runtime; WonderPages AI — claude-gpt.v04",
    "log": "docs/enterprise/baseline/logs/2026-10-02-build.log"
   },
   {
    "id": "RS0_SUITE",
    "status": "PASS",
-   "summary": "306 trecute, 0 picate, 0 sărite; browser PDF: da",
+   "summary": "340 trecute, 0 picate, 0 sărite; browser PDF: da",
    "log": "docs/enterprise/baseline/logs/2026-10-02-rs0.log"
   },
   {
    "id": "PROTECT_IMPORT",
    "status": "PASS",
-   "summary": "9/9 teste",
+   "summary": "11/11 teste",
    "detail": [
     "export și import de proiect: conținutul rămâne, aprobările se refac (audit C1)",
     "P1-T01 API: importul cu structură invalidă este refuzat explicit, fără proiect parțial",
@@ -267,13 +290,15 @@
     "C1: „code” mălițios dintr-un proiect importat este neutralizat",
     "C1: „code” cu ../ nu scoate folderul din destinație",
     "P3-T05 API: pachet text — ZIP complet; rezultat invalid respins; valid importat cu proveniență; refolosire și hash învechit refuzate",
-    "P4-T05: politica pilot — demo respins sau pilot nedecis blochează V2–6; porțile importate nu contează"
+    "P4-T05: politica pilot — demo respins sau pilot nedecis blochează V2–6; porțile importate nu contează",
+    "P7-T01: candidații eșuați sunt numărați exact; reimportul revocă sursa anterioară",
+    "P7-T01 API: importul nu activează; candidații și carantina sunt vizibili; promovarea e explicită; ștergerea revocă"
    ]
   },
   {
    "id": "PROTECT_APPROVALS",
    "status": "PASS",
-   "summary": "37/37 teste",
+   "summary": "39/39 teste",
    "detail": [
     "poarta seriei: aprobarea pe elemente e obligatorie (audit H1)",
     "aprobarea se invalidează când elementul se schimbă",
@@ -310,6 +335,8 @@
     "P6-T06: candidatul complet se verifică reproductibil; aprobarea cere previzualizarea reală; export → verificat",
     "P6-T06: drepturi lipsă → RIGHTS_MISSING; aprobare sau referință învechită → STALE_*",
     "P6-T06 API: candidatul unui volum neaprobat nu trece; aprobarea și exportul sunt refuzate; proba digitală nu există",
+    "P7-T03: aprobarea după reparație nu este un succes al variantei originale",
+    "P7-T06 Dinosaur World: Dali vede sursa migrată și raportul de reconciliere; aprobările nu sunt inventate",
     "v03: nicio lipsă nu poate fi aprobată implicit",
     "v03: aprobare închisă cu conținut schimbat refuză livrarea"
    ]
@@ -330,7 +357,7 @@
   {
    "id": "PROTECT_BACKUP",
    "status": "PASS",
-   "summary": "9/9 teste",
+   "summary": "10/10 teste",
    "detail": [
     "v03: backupul și restaurarea păstrează împreună documentele și imaginile",
     "v03: o copie întreruptă nu devine backup valid și nu suprascrie copia existentă",
@@ -340,13 +367,14 @@
     "P2-T03: restaurarea creează o versiune nouă cu lineage; trecutul nu se rescrie; corupția este detectată",
     "P2-T03: re-legarea dependențelor după restaurare: scena identică → legat, scena diferită → rămâne expirat",
     "copiile de siguranță: rândurile proiectului ies, celelalte rămân",
-    "P6-T02 API: greșeala exactă p7 locală; impact anulat; revizie învechită; culoare p4; doar linia p4; semantic p7; restaurare după > 5 candidați; previzualizare completă"
+    "P6-T02 API: greșeala exactă p7 locală; impact anulat; revizie învechită; culoare p4; doar linia p4; semantic p7; restaurare după > 5 candidați; previzualizare completă",
+    "P7-T05: aplicarea întreruptă se anulează complet la repornire (jurnal + backup)"
    ]
   },
   {
    "id": "PROTECT_LEARNING",
    "status": "PASS",
-   "summary": "13/13 teste",
+   "summary": "17/17 teste",
    "detail": [
     "agenți și lecții",
     "P2-T04 API: export de colecție fără poartă refuzat cu motive; propunerea de canon cere decizie; propunere expirată refuzată",
@@ -360,18 +388,23 @@
     "P5-T04: o colecție coerentă nu are probleme mari; scopurile sunt pe volume",
     "P5-T04 API: raportul de colecție este disponibil pe proiect",
     "P5-T05: raport pe calibrare — confuzie, false-pass pe setul negativ, kappa, erori; același input repetat dă același rezultat",
-    "P5-T05 API: rulare, rapoarte, comparație și starea calibrării (fără acceptare: propus)"
+    "P5-T05 API: rulare, rapoarte, comparație și starea calibrării (fără acceptare: propus)",
+    "P7-T01: lecția, exemplul și tiparul promovate sunt revocate complet la ștergerea pachetului (index de revocare)",
+    "P7-T02: sursa revocată — lecția nu mai poate fi promovată; rollback determinist al unei promovări",
+    "P7-T03: transfer negativ — efectul potrivit (vârstă, versiune, etapă) marchează lecția dăunătoare; rollback-ul promovării",
+    "P7-T04: pragul atins → Senior (calibrat); neatins → nedovedit cu motivele; necalibrat → rămâne nedovedit"
    ]
   },
   {
    "id": "PROTECT_ATELIER",
    "status": "PASS",
-   "summary": "4/4 teste",
+   "summary": "5/5 teste",
    "detail": [
     "atelier: schimbarea trece verificările și testul de pornire în copie (audit #5)",
     "atelier: scripturile de pornire nu pot fi modificate (audit H3)",
     "P6-T02: atelierul paginii — 12 pagini + copertă, limbi, distribuție/obiecte, contract, verificări; AI doar prin poarta deschisă",
-    "P6-T02: UI fără link generic fals de previzualizare (legături exacte către pagina din atelier)"
+    "P6-T02: UI fără link generic fals de previzualizare (legături exacte către pagina din atelier)",
+    "P7-T06: ruta invalidă este refuzată; rutele reale (inclusiv atelierul paginii) sunt acceptate"
    ]
   },
   {
@@ -395,7 +428,7 @@
   {
    "id": "RS0_SUITE_POSTGRES",
    "status": "PASS",
-   "summary": "306 trecute, 0 picate, 0 sărite (STORAGE=postgres)",
+   "summary": "340 trecute, 0 picate, 0 sărite (STORAGE=postgres)",
    "log": "docs/enterprise/baseline/logs/2026-10-02-rs0-postgres.log"
   },
   {

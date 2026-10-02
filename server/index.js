@@ -243,6 +243,7 @@ on('POST', '/api/projects/:pid/stop', async ({ pid }) => { need(pid); stopEngine
 on('POST', '/api/assistant', async (_, req) => Dali.chat(await json(req)));
 on('GET', '/api/assistant/:sid', async ({ sid }) => Dali.history(sid) || { sid: null, msgs: [] });
 on('DELETE', '/api/assistant/:sid', async ({ sid }) => { Dali.forget(sid); return { ok: true }; });
+on('POST', '/api/assistant/:sid/proposals/:id', async ({ sid, id }, req) => { localOnly(req); const b = await json(req); return Dali.decideProposal(sid, id, { confirm: b.confirm === true, revisionOf: pid => { const p = repo.getProject(pid); return p ? (p.revision ?? 0) : null; } }); });   // P7-T06: explicit confirm/cancel of a Dali proposal
 on('GET', '/api/improvements', async () => ({ items: Dali.listImprovements() }));
 on('POST', '/api/improvements', async (_, req) => Dali.addImprovement(await json(req), 'manual'));
 on('PUT', '/api/improvements/:id', async ({ id }, req) => Dali.updateImprovement(id, await json(req)));

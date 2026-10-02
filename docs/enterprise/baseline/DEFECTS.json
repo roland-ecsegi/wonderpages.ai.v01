@@ -1,6 +1,6 @@
 {
  "kind": "wonderpages.defect-reproduction/1",
- "generatedAt": "2026-10-02T17:45:17.617Z",
+ "generatedAt": "2026-10-02T18:12:20.775Z",
  "defects": [
   {
    "id": "D-C16",
@@ -94,10 +94,10 @@
    "id": "D-C21",
    "arch": "C21/G14",
    "phase": "P7-T06",
-   "status": "REPRODUCED",
+   "status": "FIXED",
    "method": "static",
    "evidence": [
-    "server/assistant.js:61"
+    "server/assistant.js:101"
    ]
   }
  ]

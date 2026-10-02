@@ -406,4 +406,11 @@ export function registerEnterpriseRoutes({ on, json, need, localOnly, repo, stor
     return Experience.recordAssessment(Experience.assess({ agent: id, skill, records: Experience.allRecords(), binding: prof?.modelBinding, ageBands: ctx.ageBands, calibrated }));
   });
   on('GET', '/api/agents/:id/experience/:skill', async ({ id, skill }) => ({ records: Experience.experienceFor(id, skill, xpCtx()).slice(-200) }));
+  /* P7-T06: role memory inspector — what one role knows, with scope, version, provenance, evidence and experience */
+  on('GET', '/api/agents/:id/memory', async ({ id }) => {
+    const roles = AgentsMod.registry().contracts?.roles || {}; if (!roles[id]) throw { status: 404, message: 'Agent necunoscut.' };
+    const lessons = LearningMod.listLessons().filter(l => l.agent === id).map(l => ({ id: l.id, text: l.text, status: l.status, scope: l.scope || 'global', age: l.age || null, pid: l.pid || null, version: l.version || 1, versions: (l.versions || []).length, source: l.source, provenance: l.provenance || null, promotion: l.promotion || null, evidence: { confirmations: (l.projects || []).length, negatives: (l.negatives || []).length }, effect: l.effectReport || null, needsReview: !!l.needsReview }));
+    const by = {}; for (const l of lessons) (by[l.status] ||= []).push(l);
+    return { agent: id, skills: roles[id].ownedSkills || [], lessons: by, candidates: Knowledge.listCandidates().filter(c => c.agent === id && ['candidate', 'quarantined'].includes(c.status)).slice(-50), decisions: Knowledge.listDecisions().filter(d => lessons.some(l => l.id === d.scope?.lesson)).slice(-50), experience: Object.fromEntries((roles[id].ownedSkills || []).map(sk => [sk, Experience.allRecords().filter(r => r.agent === id && r.skill === sk).length])) };
+  });
 }

@@ -1,22 +1,22 @@
-# Baseline report (2026-10-02, cod b5b4492)
+# Baseline report (2026-10-02, cod f116d0e)
 
 Generat de `scripts/enterprise/baseline-report.mjs`. NOT_RUN nu este PASS; istoricul este separat.
 
 | Check | Status | Rezumat | Log |
 |---|---|---|---|
-| INVENTORY | PASS | 278 fișiere (fără node_modules/.git/data), 6 ascunse |  |
-| SOURCE_DRIFT_V04 | PASS | 105/137 fișiere v04 identice, 32 modificate (enterprise), 135 adăugate, 0 lipsă |  |
-| BUILD | PASS | PASS: 164 fișiere JavaScript, JSON, lockfile, fonturi și fișiere runtime; WonderPages AI — claude-gpt.v04 | `docs/enterprise/baseline/logs/2026-10-02-build.log` |
-| RS0_SUITE | PASS | 306 trecute, 0 picate, 0 sărite; browser PDF: da | `docs/enterprise/baseline/logs/2026-10-02-rs0.log` |
-| PROTECT_IMPORT | PASS | 9/9 teste |  |
-| PROTECT_APPROVALS | PASS | 37/37 teste |  |
+| INVENTORY | PASS | 297 fișiere (fără node_modules/.git/data), 6 ascunse |  |
+| SOURCE_DRIFT_V04 | PASS | 101/137 fișiere v04 identice, 36 modificate (enterprise), 154 adăugate, 0 lipsă |  |
+| BUILD | PASS | PASS: 176 fișiere JavaScript, JSON, lockfile, fonturi și fișiere runtime; WonderPages AI — claude-gpt.v04 | `docs/enterprise/baseline/logs/2026-10-02-build.log` |
+| RS0_SUITE | PASS | 340 trecute, 0 picate, 0 sărite; browser PDF: da | `docs/enterprise/baseline/logs/2026-10-02-rs0.log` |
+| PROTECT_IMPORT | PASS | 11/11 teste |  |
+| PROTECT_APPROVALS | PASS | 39/39 teste |  |
 | PROTECT_PDF | PASS | 6/6 teste |  |
-| PROTECT_BACKUP | PASS | 9/9 teste |  |
-| PROTECT_LEARNING | PASS | 13/13 teste |  |
-| PROTECT_ATELIER | PASS | 4/4 teste |  |
+| PROTECT_BACKUP | PASS | 10/10 teste |  |
+| PROTECT_LEARNING | PASS | 17/17 teste |  |
+| PROTECT_ATELIER | PASS | 5/5 teste |  |
 | PROTECT_LAN | PASS | 5/5 teste |  |
 | PG_QA | PASS | PASS: PostgreSQL real — CRUD, istoric, backup DB+fișiere, restaurare, rollback tranzacțional; numărul proiectelor instalate păstrat. | `docs/enterprise/baseline/logs/2026-10-02-pg-qa.log` |
-| RS0_SUITE_POSTGRES | PASS | 306 trecute, 0 picate, 0 sărite (STORAGE=postgres) | `docs/enterprise/baseline/logs/2026-10-02-rs0-postgres.log` |
+| RS0_SUITE_POSTGRES | PASS | 340 trecute, 0 picate, 0 sărite (STORAGE=postgres) | `docs/enterprise/baseline/logs/2026-10-02-rs0-postgres.log` |
 | DW_REFERENCE | PASS | sha256 7056e113bf5c…, manifest 5/5, 6 artefacte, 6 volume, 72 planuri, 12 pagini V1, 2 PNG; producție nepornită |  |
 | RUNTIME | PASS | Node v22.22.0, npm 10.9.4, linux 6.18.44-fc-v51 x64 |  |
 | PROVIDERS_REAL | NOT_RUN | Fără apeluri reale în baseline (claude: instalat, codex: absent); discovery în P1-T03 |  |

@@ -850,7 +850,7 @@ const agentName = id => (S.agentsData?.agents || []).find(a => a.id === id)?.nam
 const MAT = { unproven: 'nedovedit', requires_reevaluation: 'de reevaluat după schimbarea modelului', senior: 'Senior', principal: 'Principal' };
 function maturityHTML(id) {
   const m = (S.maturity || {})[id];
-  if (!m) return `<div class="row small" style="margin-top:10px"><button class="btn sm ghost" data-act="maturity" data-id="${esc(id)}">Maturitate pe abilități</button></div>`;
+  if (!m) return `<div class="row small" style="margin-top:10px"><button class="btn sm ghost" data-act="maturity" data-id="${esc(id)}">Maturitate pe abilități</button><button class="btn sm ghost" data-act="memory" data-id="${esc(id)}">Inspector memorie</button></div>`;
   return `<div class="small" style="margin-top:10px" data-maturity="${esc(id)}"><b>Maturitate pe abilități</b> <span class="tiny faint">(${esc(m.binding?.model || '')}${m.calibrated ? '' : '; praguri necalibrate'})</span><ul>${m.skills.map(x => `<li data-skill="${esc(x.skill)}" data-status="${esc(x.current.status)}"><b>${esc(x.skill)}</b>: ${esc(MAT[x.current.status] || x.current.status)}${x.current.samples ? ` · ${x.current.samples} cazuri` : ''}${x.current.reasons?.length ? `<div class="tiny faint">${esc(x.current.reasons.slice(0, 2).join(' '))}</div>` : ''}</li>`).join('')}</ul></div>`;
 }
 function viewAgents() {
