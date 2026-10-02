@@ -64,6 +64,8 @@ test('livrarea e refuzată înainte de aprobarea finală (audit H1)', async () =
 });
 
 test('după aprobarea finală: pachet, PDF-uri (dacă există browser)', async (t) => {
+  /* P5-T02: the edit above made the text assessment stale — the current version is re-evaluated (no rewrite) before approval */
+  if ((await project(PID)).review?.items?.some(i => i.kind === 'book' && i.blocked)) { assert.equal((await api('POST', `projects/${PID}/assessment/1/refresh`)).status, 200); await waitFor(async () => !(await project(PID)).project.running && !(await project(PID)).review.items.find(i => i.kind === 'book').blocked, { label: 'reevaluare' }); }
   await approveAll(PID); await waitStatus(PID, ['paused', 'awaiting_review', 'completed']);
   let r = await api('POST', `projects/${PID}/package?volume=0`); assert.equal(r.status, 200); assert.ok(r.body.files > 10);
   const md = fs.readFileSync(path.join(r.body.folder, 'Extra', 'Detalii publicare.md'), 'utf8'); assert.match(md, /KDP/);

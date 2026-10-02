@@ -36,6 +36,7 @@ Linux (container cloud), Node v22.22.0, npm 10.9.4, PostgreSQL 16 (binare locale
 | DEV-005 | kids-sc v16 → v17: etapă nouă „Planul paginilor” (6 apeluri text suplimentare în faza A) înaintea porții seriei. | P4-T03: 72 PageBlueprints verificabile înaintea producției în volum. | Proiectele existente își păstrează blueprint-ul; costul suplimentar este vizibil în estimare. |
 | DEV-006 | kids-sc v17 → v18: scenariile declară lanțul cauzal cu citate; elementul „Contractul poveștii” la porțile de volum blochează o cauzalitate nedovedită sau o ediție nativă nealiniată. | AC-P4-T04. | Proiectele existente își păstrează blueprint-ul; pentru ele dovezile sunt deduse și marcate. |
 | DEV-007 | kids-sc v18 → v19: verdict de siguranță obligatoriu în QA vizual și element de siguranță la porțile de volum. | AC-P5-T01. | Proiectele vechi: imaginile fără verdict sunt UNKNOWN la livrare (verificare de adult sau QA nou). |
+| DEV-008 | kids-sc v19 → v20: politica de calitate v2 (propusă), evaluarea textului final, recheck nativ, elementul „Evaluarea cărții”. | AC-P5-T02 (pragurile OUTPUT-13 doar pe versiunea țintă). | Tipurile/proiectele vechi rămân pe v1; +1 apel de evaluare per volum. |
 
 ## Starea taskurilor
 
@@ -64,8 +65,8 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | P4-T03 | DONE | b1f765b | TEST-P4-T03 6/6; RS0 204/204 | kids-sc v17: 72 PageBlueprints înaintea porții seriei, payoff/deschideri/deținători, atlas cu aprobare explicită și drepturi de reutilizare |
 | P4-T04 | DONE | 4d31657 | TEST-P4-T04 9/9; RS0 213/213 | kids-sc v18: lanț cauzal cu citate, vârstă orientativă, voce, știință/T18, ediție nativă aliniată, fără tăieri tăcute |
 | P4-T05 | DONE | 705055c | TEST-P4-T05 6/6; RS0 219/219 local + 219/219 PG | Pilot demo→carte completă blochează V2–6 (inclusiv în avans); reconciliere DW01/DW02 selectivă; PHASE 4 închisă |
-| P5-T01 | DONE | (acest commit) | TEST-P5-T01 6/6; RS0 225/225 | Siguranță PASS/REVIEW/BLOCK/UNKNOWN separată de scor: intrare, producție, porți, livrare, învățare; BLOCK fără suprascriere |
-| P5-T02 | PENDING | | | |
+| P5-T01 | DONE | ced6e9a | TEST-P5-T01 6/6; RS0 225/225 | Siguranță PASS/REVIEW/BLOCK/UNKNOWN separată de scor: intrare, producție, porți, livrare, învățare; BLOCK fără suprascriere |
+| P5-T02 | DONE | (acest commit) | TEST-P5-T02 8/8; RS0 233/233 | QualityPolicy v1/v2 (v2 doar pe versiunea țintă), dovezi validate, snapshot model, evaluare de carte, regresii native respinse |
 | P5-T03 | PENDING | | | |
 | P5-T04 | PENDING | | | |
 | P5-T05 | PENDING | | | |
@@ -121,6 +122,7 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | 2026-10-02 | RS0 + TEST-P4-T05 | 219/219 PASS | politica pilot a schimbat comportamentul v19 2.12 pentru V2 — test actualizat (pregătire în avans de la V3) |
 | 2026-10-02 | Închidere P4: baseline-report --with-tests --with-pg | 15 PASS · 0 FAIL · 3 NOT_RUN; 219/219 local + 219/219 PostgreSQL | — |
 | 2026-10-02 | RS0 + TEST-P5-T01 | 225/225 PASS | încadrare de siguranță prea îngustă („with her dad”) — lărgită |
+| 2026-10-02 | RS0 + TEST-P5-T02 | 233/233 PASS | evaluarea învechită după editare bloca aprobarea finală fără cale de reevaluare — adăugată reevaluarea |
 
 ## Probleme deschise
 
@@ -134,6 +136,6 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 
 ## Checkpoint
 
-- Ultimul task închis: P5-T01
-- Următorul task: **P5-T02**
+- Ultimul task închis: P5-T02
+- Următorul task: **P5-T03**
 - Cum se reia: `npm ci && npm run build && BROWSER_PATH=/opt/pw-browsers/chromium npm test`; citește tabelul de mai sus și `docs/enterprise/records/`.

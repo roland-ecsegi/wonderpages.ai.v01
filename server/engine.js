@@ -20,6 +20,7 @@ import { derivePageBlueprints, validatePageBlueprints } from './domain/page-blue
 import { atlasFor, landmarkContext } from './domain/atlas.js';
 import { generationAllowed, pilotState } from './domain/pilot.js';
 import { volumeSafety, textSafety } from './quality/safety.js';
+import { assessText, assessBook, policyFor, nativeChecks, regressions } from './quality/assessment.js';
 import { storyContract, causality as storyCausality, voice as storyVoice, science as storyScience, ageFit, criticNotes } from './domain/story-contracts.js';
 /* P3-T03: the innermost durable unit (stage or item) of the current async flow: its lease fences every result write */
 export const FENCE = new AsyncLocalStorage();
@@ -660,32 +661,50 @@ const HANDLERS = {
       }
       if (stage.align) soft = alignWarnings(E, getPath(ctxOf(current), 'source'), current);   // 2.4
       const threshold = thresholdFor(age, stageBase, stage.threshold ?? 8);
-      let best = null, prevScore = null, critique = null, first = null;
+      let best = null, prevScore = null, critique = null, first = null, firstAs = null, firstContent = null; const qpolicy = policyFor(E.bp);
       const maxRounds = Math.min(2, stage.max_rounds ?? 1);
       for (let round = 0; round <= maxRounds; round++) {
         const ctx = ctxOf(current); ctx.warnings = [adjacentWarnings(current), ...soft].filter(Boolean).join(' ');
         critique = await callLLM(E, tpl(E.bp.prompts[stage.critic_prompt], ctx), { label: lbl + (round ? ' (re-evaluare)' : ''), agent: E.bp.prompt_agents?.[stage.critic_prompt] || 'editor-critic', promptKey: stage.critic_prompt, schemaCtx: ctx });
-        const ev = evaluateCritique(critique, E.bp, stage, threshold); if (!ev.valid) throw { code: 'validation', message: ev.errors.join(' ') }; critique = { ...critique, score: ev.score, failed_critical: ev.failedCritical };
-        if (first == null) first = ev.score;
+        const ev = evaluateCritique(critique, E.bp, stage, threshold); if (!ev.valid) throw { code: 'validation', message: ev.errors.join(' ') };
+        /* P5-T02: QualityAssessment under the type's policy; fabricated evidence (v2) is re-asked once, then fails closed */
+        const snap = () => ({ agent: E.lastContext?.agentId || null, model: E.lastContext?.model?.model || null, source: E.lastContext?.model?.source || null, context: E.lastContext?.manifestHash || null, prompt: stage.critic_prompt });
+        const assessNow = cr => { const a = assessText({ reply: cr, content: current, bp: E.bp, stage, policy: qpolicy, level: stage.align ? 'native' : 'script', subject: { artifact: key }, model: snap(), threshold }); if (stage.align) a.checks = nativeChecks(getPath(ctxOf(current), 'source'), current, { names: (E.art.bible?.content?.characters || []).map(x => x.name).filter(Boolean), language: E.project.input?.second_language || 'Romanian' }); return a; };
+        let as = assessNow(critique);
+        if (!as.valid) {
+          critique = await callLLM(E, tpl(E.bp.prompts[stage.critic_prompt], ctx) + `\nYOUR PREVIOUS EVIDENCE COULD NOT BE FOUND IN THE TEXT (${as.evidence.fabricated.join(', ')}). Quote ONLY words that literally appear in the script.`, { label: lbl + ' (dovezi verificate)', agent: E.bp.prompt_agents?.[stage.critic_prompt] || 'editor-critic', promptKey: stage.critic_prompt, schemaCtx: ctx });
+          const ev2 = evaluateCritique(critique, E.bp, stage, threshold); if (!ev2.valid) throw { code: 'validation', message: ev2.errors.join(' ') };
+          as = assessNow(critique); if (!as.valid) throw { code: 'validation', message: 'Evaluarea citează text care nu există: ' + as.evidence.fabricated.join(', ') };
+          Object.assign(ev, ev2);
+        }
+        ev.pass = as.pass;   // the policy decides (v1 = existing rule; v2 = stricter, target versions only)
+        critique = { ...critique, score: ev.score, failed_critical: ev.failedCritical };
+        if (first == null) { first = ev.score; firstAs = as; firstContent = current; }
         Ledger.record({ kind: 'quality', pid: E.pid, vol: i, stage: stageBase, round, age, score: ev.score, criteria: ev.criteria, critical: ev.failedCritical, lessons: E.art[key]?.meta?.prov?.lessons || [], variant: E.art[key]?.meta?.variant || null, bp: E.bp.version, charter: getAgent(writer)?.charterVersion || null });
-        if (!best || ev.score > best.score) best = { content: current, critique, score: ev.score };
+        if (!best || ev.score > best.score) best = { content: current, critique, score: ev.score, assessment: as };
         if (ev.pass || round === maxRounds) break;
         if (round > 0 && stage.stop_if_no_gain && prevScore != null && ev.score <= prevScore) break;   // 2.3: no gain, no more rounds
         prevScore = ev.score;
         current = await reviseWith(E, stage, current, critique, ctx, lbl + ' (revizuiesc)', writer);
         revised = true; rounds++;
-        if (stage.recheck === false) { best = { content: current, critique, score: ev.score }; break; }
+        if (stage.recheck === false && qpolicy.version < 2) { best = { content: current, critique, score: ev.score }; break; }   // legacy types only: v2 always rechecks a repair
       }
       if (best && best.content !== current) { current = best.content; critique = best.critique; }   // keep the best-scored version
+      let regress = [];
+      if (revised && firstAs && best?.assessment && best.content !== firstContent) {   // P5-T02: a repair that regresses on the complete check set is not kept
+        regress = regressions(firstAs, best.assessment);
+        if (regress.length) { current = firstContent; critique = { ...critique, regression: regress }; best = { content: firstContent, critique, score: first, assessment: { ...firstAs, regressionRejected: regress } }; revised = false; await logE(E, `Reparația (${lbl}) a introdus regresii (${regress.map(r => r.code || r.kind).join(', ')}); se păstrează versiunea dinainte.`, 'warn'); }
+      }
       const target = buildCtx(E).age_profile?.max_chars;
       let prob = predictApproval(featuresOf(current, { score: critique?.score }, target));
-      if (prob != null && prob < 0.35 && rounds < Math.min(2, maxRounds)) {                    // the local model expects you to reject it: one more careful pass first
+      if (prob != null && prob < 0.35 && rounds < Math.min(2, maxRounds) && qpolicy.version < 2) {   // P5-T02: v2 never keeps an unverified repair                    // the local model expects you to reject it: one more careful pass first
         const ctx = ctxOf(current);
         const hint = { ...critique, issues: [...(critique?.issues || []), { page: null, problem: 'The publisher usually rejects volumes like this one (learned from past reviews).', fix: 'Re-read the lessons above and revise the weakest pages accordingly.' }] };
         current = await llmValidated(E, tpl(E.bp.prompts[stage.revise_prompt], { ...ctx, critique: hint }), stage, ctx, lbl + ' (îmbunătățire după preferințele tale)', writer, stage.revise_prompt);
         revised = true; rounds++; prob = predictApproval(featuresOf(current, { score: critique?.score }, target));
       }
-      const meta = { ...(E.art[key]?.meta || {}), critique, score_before: first, score: Number(critique?.score) || 0, approval_prob: prob, rounds, lint: lint ? { hard: lint.hard.length, soft: lint.soft.length } : undefined, threshold };
+      const finalAs = best?.content === current && best?.assessment ? best.assessment : firstContent === current ? firstAs : null;
+      const meta = { ...(E.art[key]?.meta || {}), critique, score_before: first, score: Number(critique?.score) || 0, approval_prob: prob, rounds, lint: lint ? { hard: lint.hard.length, soft: lint.soft.length } : undefined, threshold, assessment: finalAs ? { ...finalAs, subject: { ...finalAs.subject, hash: canonicalHash(current) } } : null };   // P5-T02: assessment bound to the saved version
       if (revised) await saveArt(E, key, current, { stage: stage.key, note: `Revizuit de editorul critic (scor ${first} → ${meta.score})`, meta });
       else { await repo.patchArtifact(E.pid, key, { meta }); }
     });
@@ -1067,6 +1086,17 @@ export function runPipeline(pid) {
 }
 
 /* corrections at a gate, and single-page redraws, run through the same engine */
+/* P5-T02: re-evaluate the CURRENT text of a volume (critic only, no rewrite) after an edit made the assessment stale */
+export function reassessVolume(pid, v) {
+  return withEngine(pid, async E => {
+    E.prevStatus = E.project.status; E.curStage = { key: '_reassess', base: 'critic_final', vol: v };
+    const key = E.art[`final_${v}`] ? `final_${v}` : `script_${v}`;
+    const st = E.stages.find(s => s.handler === 'critique_revise' && s.vol === v && tpl(s.target, { i: v }) === key) || E.stages.find(s => s.handler === 'critique_revise' && s.vol === v && !s.align);
+    if (!st) throw { status: 400, message: 'Tipul de produs nu are o etapă de evaluare pentru acest volum.' };
+    await HANDLERS.critique_revise(E, { ...st, key: '_reassess', label: 'Reevaluare', target: key.replace(/_\d+$/, '_{{i}}'), max_rounds: 0, lint: false });
+    await repo.patchProject(pid, { status: E.prevStatus || 'awaiting_review' });
+  }, { kind: 'reassess', vol: v });
+}
 export function runTask(pid, task) {
   return withEngine(pid, async E => {
     E.prevStatus = E.project.status === 'correcting' ? (task.returnStatus || 'awaiting_review') : E.project.status;
@@ -1177,6 +1207,7 @@ export function gateItems(bp, art, project, gate) {
       }
     }
     if (s.kind === 'collection') { const m = matrixForArtifacts(bp, art); out.push({ id: 'collection', kind: 'collection', label: 'Planul colecției: bibliile volumelor și cronologia distribuției', missing: !art.series || !art.cast || !art.bible, blocked: !m.ready, hash: m.hash, matrix: m }); }   // P4-T02: plan approved before bulk; blockers cannot be approved
+    if (s.kind === 'book' && v != null) { const b = assessBook({ bp, art, project, v }); out.push({ id: 'book:' + v, kind: 'book', v, label: `Evaluarea cărții, volumul ${v + 1}`, missing: !art['final_' + v] && !art['script_' + v], blocked: !b.pass, hash: fingerprint([b.pass, b.reasons, b.checks?.text?.at]), book: b }); }   // P5-T02
     if (s.kind === 'safety' && v != null) { const sf = volumeSafety({ bp, art, project, v, images: (s.images ?? true) }); out.push({ id: 'safety:' + v, kind: 'safety', v, label: `Siguranța copiilor, volumul ${v + 1}: ${sf.verdict}`, missing: false, blocked: sf.verdict !== 'PASS', hash: fingerprint(sf.subjects.map(x => [x.id, x.verdict, x.hash])), safety: { ...sf, subjects: sf.subjects.filter(x => x.verdict !== 'PASS' || x.review) } }); }   // P5-T01: never compensated by scores
     if (s.kind === 'story' && v != null) { const sc = storyContract({ bp, art, input: project.input || {}, v }); out.push({ id: 'story:' + v, kind: 'story', v, label: `Contractul poveștii, volumul ${v + 1}: cauzalitate, vârstă, voce, știință${art['tr_' + v] ? ', ediția nativă' : ''}`, missing: !sc, blocked: !!sc && !sc.ready, hash: sc ? fingerprint([sc.causality, sc.findings.map(f => [f.code, f.page ?? null])]) : null, story: sc }); }   // P4-T04
     if (s.kind === 'pageplans') { const { pages, sources } = derivePageBlueprints(bp, art), r = validatePageBlueprints(pages, { structure: bp.structure, bible: art.bible?.content }); out.push({ id: 'pageplans', kind: 'pageplans', label: `Planul paginilor: ${r.count} din ${r.expected} PageBlueprints`, missing: !pages.length, blocked: !r.ready, hash: fingerprint([pages, r.findings.map(f => [f.code, f.page])]), check: { ...r, sources } }); }   // P4-T03

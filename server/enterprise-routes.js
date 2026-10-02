@@ -10,7 +10,7 @@ import { planMigration, runMigration, listMigrations } from './migration/migrato
 import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT } from './config.js';
-import { RUNNING, expandStages, prepareTextPacket, ingestTextPacket, prepareImagePacket, ingestImagePacket } from './engine.js';
+import { RUNNING, expandStages, reassessVolume, prepareTextPacket, ingestTextPacket, prepareImagePacket, ingestImagePacket } from './engine.js';
 import { progressReport, inspectArtifact } from './observability/progress.js';
 import { inferFromText, contractPreview } from './domain/intake.js';
 import { matrixForArtifacts } from './domain/collection.js';
@@ -19,6 +19,7 @@ import { atlasFor } from './domain/atlas.js';
 import { storyContract } from './domain/story-contracts.js';
 import { pilotState } from './domain/pilot.js';
 import { volumeSafety, SAFETY_POLICY } from './quality/safety.js';
+import { assessBook, policyFor } from './quality/assessment.js';
 import { reconcileReport, applyReconcile } from './migration/dw-reconcile.js';
 import { contractFromBlueprint, validateProjectInput, editionsFor } from './domain/product-contract.js';
 import * as Ledger from './ledger.js';
@@ -165,4 +166,13 @@ export function registerEnterpriseRoutes({ on, json, need, localOnly, repo, stor
     await repo.commitProjectDecision(pid, { safetyReviews: { ...(p.safetyReviews || {}), [sub.id]: review } }, [rec], { actor: 'operator@laptop', kind: 'safety.review' });
     return { ok: true, review, decision: rec.id };
   });
+
+  /* P5-T02: the current assessments of a volume (script, final, native edition) and the book assessment */
+  on('GET', '/api/projects/:pid/assessment/:v', async ({ pid, v }) => {
+    const p = need(pid), bp = await repo.getBlueprint(pid), n = Number(v); if (!Number.isInteger(n) || n < 1 || n > bp.structure.volumes) throw { status: 400, message: 'Volum invalid.' };
+    const art = await repo.artifacts(pid), i = n - 1, pick = k => art[k] ? { artifact: k, version: art[k].version, assessment: art[k].meta?.assessment || null, legacyScore: art[k].meta?.score ?? null } : null;
+    return { policy: policyFor(bp), script: pick(`script_${i}`), final: pick(`final_${i}`), native: pick(`tr_${i}`), book: assessBook({ bp, art, project: p, v: i }) };
+  });
+
+  on('POST', '/api/projects/:pid/assessment/:v/refresh', async ({ pid, v }, req) => { localOnly(req); const p = need(pid), bp = await repo.getBlueprint(pid), n = Number(v); if (!Number.isInteger(n) || n < 1 || n > bp.structure.volumes) throw { status: 400, message: 'Volum invalid.' }; if (RUNNING[pid]) throw { status: 409, message: 'Proiectul lucrează deja.' }; reassessVolume(pid, n - 1).catch(e => console.warn('[reassess]', e?.message || e)); return { ok: true, started: true }; });   // P5-T02
 }

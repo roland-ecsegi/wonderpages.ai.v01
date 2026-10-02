@@ -5,7 +5,7 @@
  "description": "Colecție de 6 volume livrate pe rând. Fiecare volum: carte de povești (în fiecare limbă aleasă) și carte de colorat, cu aceleași scene și personaje. Contract editorial claude-gpt.v03.",
  "brief_en": "A collection of 6 volumes. Every volume is a full-colour storybook plus a matching black-and-white colouring book, each with 12 narrative scenes; physical page counts depend on the export profile. The colouring book redraws the storybook's scenes and characters identically as line art, so the child uses the storybook as a colour reference.",
  "icon": "📚",
- "version": 19,
+ "version": 20,
  "status": "published",
  "ui_language": "Romanian",
  "variant_key": "target_age",
@@ -665,6 +665,28 @@
    ]
   },
   {
+   "key": "critic_final",
+   "label": "Evaluarea textului final",
+   "phase": "V",
+   "handler": "critique_revise",
+   "for_each": "series.volumes",
+   "estimate_count": "structure.volumes",
+   "item_label": "Vol. {{n}}",
+   "concurrency": 2,
+   "target": "final_{{i}}",
+   "critic_prompt": "critic",
+   "revise_prompt": "revise",
+   "threshold": 8,
+   "max_rounds": 0,
+   "validate": {
+    "path": "pages",
+    "length": "structure.pages"
+   },
+   "activity": "Evaluez textul final al volumului {{n}} (fără rescriere)",
+   "per_volume": true,
+   "critical_threshold": 7
+  },
+  {
    "key": "continuity_final",
    "label": "Continuitate finală",
    "phase": "V",
@@ -724,7 +746,7 @@
     "length": "structure.pages"
    },
    "activity": "Editorul nativ citește volumul {{n}}",
-   "recheck": false,
+   "recheck": true,
    "align": true,
    "targeted": false
   },
@@ -941,6 +963,9 @@
     },
     {
      "kind": "safety"
+    },
+    {
+     "kind": "book"
     }
    ]
   }
@@ -3242,5 +3267,11 @@
   "version": 1,
   "automatic_corrections": 2,
   "pilot_volume": 1
+ },
+ "quality_policy": {
+  "id": "wonderpages.quality-policy",
+  "version": 2,
+  "status": "proposed",
+  "note": "OUTPUT-13; calibrare pe setul de aur în P5-T05"
  }
 }
