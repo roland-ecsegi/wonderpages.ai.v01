@@ -68,8 +68,8 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | P4-T05 | DONE | 705055c | TEST-P4-T05 6/6; RS0 219/219 local + 219/219 PG | Pilot demo→carte completă blochează V2–6 (inclusiv în avans); reconciliere DW01/DW02 selectivă; PHASE 4 închisă |
 | P5-T01 | DONE | ced6e9a | TEST-P5-T01 6/6; RS0 225/225 | Siguranță PASS/REVIEW/BLOCK/UNKNOWN separată de scor: intrare, producție, porți, livrare, învățare; BLOCK fără suprascriere |
 | P5-T02 | DONE | 5a0c931 | TEST-P5-T02 8/8; RS0 233/233 | QualityPolicy v1/v2 (v2 doar pe versiunea țintă), dovezi validate, snapshot model, evaluare de carte, regresii native respinse |
-| P5-T03 | DONE | (acest commit) | TEST-P5-T03 7/7; RS0 240/240 | Verdict vizual verificat (repere cu ocluzie, deținător, dezvăluire, aglomerare); pereche color/colorat legată de fișiere curente |
-| P5-T04 | PENDING | | | |
+| P5-T03 | DONE | eaf22b2 | TEST-P5-T03 7/7; RS0 240/240 | Verdict vizual verificat (repere cu ocluzie, deținător, dezvăluire, aglomerare); pereche color/colorat legată de fișiere curente |
+| P5-T04 | DONE | (acest commit) | TEST-P5-T04 8/8; RS0 248/248 | QA între artefacte și colecție cu referințe exacte; probleme mari blochează livrarea; colecția = cel mai slab volum |
 | P5-T05 | PENDING | | | |
 | P5-T06 | PENDING | | | |
 | P6-T01 | PENDING | | | |
@@ -125,6 +125,7 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | 2026-10-02 | RS0 + TEST-P5-T01 | 225/225 PASS | încadrare de siguranță prea îngustă („with her dad”) — lărgită |
 | 2026-10-02 | RS0 + TEST-P5-T02 | 233/233 PASS | evaluarea învechită după editare bloca aprobarea finală fără cale de reevaluare — adăugată reevaluarea |
 | 2026-10-02 | RS0 + TEST-P5-T03 | 240/240 PASS | — |
+| 2026-10-02 | RS0 + TEST-P5-T04 | 248/248 PASS | regula locului final bloca un final ambiguu din mock — severitate rafinată |
 
 ## Probleme deschise
 
@@ -138,6 +139,6 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 
 ## Checkpoint
 
-- Ultimul task închis: P5-T03
-- Următorul task: **P5-T04**
+- Ultimul task închis: P5-T04
+- Următorul task: **P5-T05**
 - Cum se reia: `npm ci && npm run build && BROWSER_PATH=/opt/pw-browsers/chromium npm test`; citește tabelul de mai sus și `docs/enterprise/records/`.

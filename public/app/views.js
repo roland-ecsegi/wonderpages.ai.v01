@@ -646,8 +646,15 @@ function unitsActivity(p) {
   const keys = Object.keys(S.art || {}).sort();
   return `<div class="section"><h2>Unități de lucru</h2>${jobs.length ? `<div class="panel"><ul class="log" id="units-log">${jobs.slice(0, 80).map(row).join('')}</ul></div>` : `<div class="empty">Nicio unitate în rularea curentă.</div>`}</div>
     <div class="section"><h2>Inspector</h2><div class="panel panel-pad row"><select class="select" id="inspect-key" aria-label="Document de inspectat">${keys.map(k => `<option value="${esc(k)}" ${S.inspect?.key === k ? 'selected' : ''}>${esc(k)}</option>`).join('')}</select><button class="btn sm" data-act="inspect">Inspectează</button></div>${insp}</div>
-    ${reconcileHTML(p)}
+    ${collectionQAHTML(p)}${reconcileHTML(p)}
     <div class="section"><h2>Schimb manual</h2>${packets.length ? `<div class="panel"><ul class="log">${packets.map(k => `<li><time>${clock(k.issuedAt)}</time><div><b>${esc(k.outKey)}</b> <span class="chip">${esc(k.status === 'ingested' ? 'importat' : 'emis')}</span> <a class="small" href="/api/projects/${esc(p.id)}/packets/${esc(k.id)}/download">descarcă pachetul</a>${(k.attempts || []).filter(a => !a.ok).slice(-1).map(a => `<div class="small" style="color:var(--warn)">ultima respingere: ${esc(a.message)}</div>`).join('')}</div></li>`).join('')}</ul></div>` : `<div class="empty">Niciun pachet emis. Un pachet conține promptul, contextul agentului, schema și referințele, pentru rularea în aplicația oficială a unui furnizor; rezultatul trece prin aceleași validări și aprobarea rămâne a ta.</div>`}</div>`;
+}
+/* P5-T04: cross-artifact and collection QA — exact references and scopes; high issues block the release of what they touch */
+function collectionQAHTML(p) {
+  const q = S.collectionQA?.[p.id]; if (!q) return '';
+  const SEVL = { high: ['mare (blochează livrarea)', 'var(--err)'], medium: ['medie', 'var(--warn)'], low: ['mică', 'var(--ink-3)'] };
+  const row = i => `<li><span class="chip" style="color:${SEVL[i.severity]?.[1]}">${esc(SEVL[i.severity]?.[0] || i.severity)}</span> ${esc(i.message)}${(i.references || []).length ? `<div class="small faint">${i.references.slice(0, 3).map(r => `${esc(r.path)}: „${esc(String(r.quote || '').slice(0, 80))}”`).join(' · ')}</div>` : ''}</li>`;
+  return `<div class="section" id="collection-qa" data-high="${esc(q.high)}" data-pass="${q.collectionPass}"><h2>Calitatea colecției</h2><p class="small muted">Colecția este atât de bună cât cel mai slab volum al ei: ${q.volumes.map(v => `V${v.volume} ${v.bookPass ? '✓' : v.written ? '✗' : '—'}`).join(' · ')}</p>${q.issues.length ? `<div class="panel"><ul class="log">${q.issues.slice(0, 40).map(row).join('')}</ul></div>` : '<div class="empty">Nicio problemă între artefacte.</div>'}</div>`;
 }
 /* P4-T05: selective reconciliation of a migrated project (dry-run report; each change is your decision) */
 function reconcileHTML(p) {

@@ -21,6 +21,7 @@ import { pilotState } from './domain/pilot.js';
 import { volumeSafety, SAFETY_POLICY } from './quality/safety.js';
 import { assessBook, policyFor } from './quality/assessment.js';
 import { pageVisual } from './quality/visual.js';
+import { collectionQA } from './quality/collection-qa.js';
 import { pngSize } from './security/safe-zip.js';
 import { reconcileReport, applyReconcile } from './migration/dw-reconcile.js';
 import { contractFromBlueprint, validateProjectInput, editionsFor } from './domain/product-contract.js';
@@ -185,4 +186,7 @@ export function registerEnterpriseRoutes({ on, json, need, localOnly, repo, stor
     for (let pg = 0; pg <= bp.structure.pages; pg++) { const c = art[`ill_${n - 1}_${pg}`]?.content; pages.push({ page: pg, ...pageVisual({ c, size: await size(c?.color), lineSize: await size(c?.lineart), format: bp.formats?.[p.input?.[bp.format_key]] || {}, requireLine: p.options?.images !== false }) }); }
     return { volume: n, ok: pages.every(x => x.ok), pages };
   });
+
+  /* P5-T04: cross-artifact and collection QA with exact references and affected scopes */
+  on('GET', '/api/projects/:pid/collection-qa', async ({ pid }) => { const p = need(pid); return collectionQA({ bp: await repo.getBlueprint(pid), art: await repo.artifacts(pid), project: p }); });
 }
