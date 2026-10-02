@@ -1,0 +1,30 @@
+/**
+ * P1-T03 — persisted capability state (storage document `capabilities.json`). Discovery is read-only;
+ * real probes are recorded only from operator-initiated, laptop-only checks on the operator's own account.
+ */
+import { discover, effective, buildSnapshot, CHANNELS } from './capabilities.js';
+
+let storage = null, probes = {}, state = { discovery: null, probes: {}, history: [] };
+export async function initCapabilities(s, p) { storage = s; probes = p || {}; state = (await s.readJSON('capabilities.json', null)) || state; state.probes ||= {}; state.history ||= []; }
+const persist = () => storage?.writeJSON('capabilities.json', state);
+
+export async function runDiscovery(now = Date.now()) {
+  const previous = Object.fromEntries(Object.entries(state.discovery?.channels || {}).map(([k, v]) => [k, { ...v, realProbe: state.probes[k] || null }]));
+  const r = await discover(probes, previous, now);
+  state.discovery = r; state.history = [...state.history, { at: r.at, summary: r.summary }].slice(-50);
+  await persist(); return getCapabilities(now);
+}
+/** Records the outcome of a real, minimal, operator-run probe (no automatic spend). */
+export async function recordRealProbe(channel, ok, detail = {}) {
+  if (!CHANNELS[channel]) return;
+  state.probes[channel] = { ok: !!ok, at: Date.now(), model: detail.model || null, note: String(detail.note || '').slice(0, 200) };
+  if (state.discovery?.channels?.[channel]) { const prev = state.discovery.channels[channel]; state.discovery.channels[channel] = { ...prev, realProbe: state.probes[channel], states: { ...prev.states, verified: !!ok } }; }
+  await persist();
+}
+export function getCapabilities(now = Date.now()) {
+  const ch = state.discovery?.channels || {};
+  const channels = Object.fromEntries(Object.keys(CHANNELS).map(k => [k, ch[k] ? effective(ch[k], now) : buildSnapshot(k, k === 'operator-exchange' ? {} : { installed: null }, now)]));
+  return { discoveredAt: state.discovery?.at || null, probeErrors: state.discovery?.probeErrors || {}, channels, probes: state.probes, history: state.history.slice(-10), rule: 'unknown nu este verde; numai o probă reală recentă și cota verificată fac un canal „supported”.' };
+}
+/** Admission helper for later phases: may production use this channel automatically? */
+export function channelUsable(channel, now = Date.now()) { const s = getCapabilities(now).channels[channel]; return { usable: s?.status === 'supported', status: s?.status || 'unknown', reasons: s?.reasons || [] }; }

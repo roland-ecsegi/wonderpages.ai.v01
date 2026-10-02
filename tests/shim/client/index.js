@@ -9,6 +9,12 @@ export class Client {
   constructor(info) { this.info = info; }
   async connect(t) { this.t = t; const m = S.read().canva || 'ok'; if (m === 'down') throw new Error('ECONNREFUSED fake canva down'); await t._ensureAuth(); S.log('canva', { op: 'connect' }); }
   async close() {}
+  async listTools() {
+    const st = S.read(); if ((st.canva || 'ok') === 'unauthorized') throw new UnauthorizedError('token expired');
+    const names = ['generate-image', 'get-generate-image-job', 'create-upload-url', 'list-brand-kits', 'search-brand-templates', 'get-brand-template-dataset', 'autofill-design', 'resize-design', 'export-design', 'comment-on-design', 'list-comments'];
+    const drop = st.canvaToolsDrop || [];
+    return { tools: names.filter(n => !drop.includes(n)).map(name => ({ name, inputSchema: { type: 'object', properties: st.canvaToolSchemaVariant && name === 'generate-image' ? { prompt: { type: 'string' }, extra: { type: 'string' } } : { prompt: { type: 'string' } } } })) };
+  }
   async callTool({ name, arguments: a }) {
     const st = S.read(); const mode = st.canva || 'ok';
     S.log('canva', { op: 'callTool', name, mode, prompt: (a?.prompt || '').slice(0, 160), refs: (a?.imageReferences || []).length });

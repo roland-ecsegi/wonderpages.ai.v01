@@ -41,6 +41,9 @@ import { deliveryFingerprint, currentReceipts, requiredBooks } from './delivery.
 import { editorialFindings } from './editorial.js';
 import { physicalPages, printDimensions } from './printprofile.js';
 import { contractFromBlueprint, validateContract, validateProjectInput, projectContractReport } from './domain/product-contract.js';
+import * as Capabilities from './providers/registry.js';
+import { toolSchemaHash, hostConfig } from './providers/capabilities.js';
+import { checkIncludedQuota } from './subscription-usage.js';
 
 globalThis.__wpBootStage?.('Pornesc baza de date (Docker)…');
 const storage = await createStorage(config.storage);
@@ -78,6 +81,14 @@ for (const f of await fs.readdir(path.join(ROOT, 'blueprints'))) {
 for (const p of repo.listProjects()) if (['running', 'correcting'].includes(p.status)) await repo.patchProject(p.id, { status: p.gate ? 'awaiting_review' : 'paused', error: 'Serverul a fost repornit. Reia de unde a rămas.' });
 globalThis.__wpBootStage?.('Verific Claude…');
 await initLLM();
+/* P1-T03: read-only capability discovery (no generation, no API keys); unknown is never green */
+const codexQuotaObs = async () => { try { const q = await checkIncludedQuota(); return { status: 'ok', provenance: 'provider', checkedAt: q.checkedAt, primary: q.primary?.usedPercent ?? null, secondary: q.secondary?.usedPercent ?? null }; } catch (e) { return e?.code === 'rate_limited' ? { status: 'limited', provenance: 'provider', resetAt: e.resetAt } : { status: 'unknown', provenance: 'none', reason: e?.message }; } };
+await Capabilities.initCapabilities(storage, {
+  claudeText: async () => { const i = llmInfo(); return { installed: !!i.configured, version: i.version, auth: i.auth?.ok ?? null, authDetail: i.auth?.message || null }; },
+  codexText: async () => { const t = codexTextStatus(); const q = t.installed && t.auth === true ? await codexQuotaObs() : undefined; return { installed: t.installed, version: t.version, auth: t.auth, quota: q }; },
+  codexImage: async () => { const t = GPTImage.codexStatus(); const q = t.installed && t.auth === true ? await codexQuotaObs() : undefined; return { installed: t.installed, version: t.version, auth: t.auth, quota: q, generationVerified: t.generationVerified || null }; },
+  canva: async () => { const st = canva.status(); const tools = st.connected ? await canva.listTools().catch(() => null) : null; return { installed: true, auth: st.connected ? true : st.needsAuth ? false : null, tools: tools ? tools.map(t => t.name) : null, toolSchemaHash: tools ? toolSchemaHash(tools) : null }; }
+});
 const storageHealth=await reconcileStorage(repo); if(storageHealth.missing.length||storageHealth.orphans.length)console.warn('[storage reconciliation]',JSON.stringify(storageHealth));
 /* resource hygiene: leftovers from an earlier run (temporary images, delivery browser profiles) are removed at start */
 for (const f of await fs.readdir(os.tmpdir()).catch(() => [])) if (/^(wonderpages|tiparnita)-(img|render)-/.test(f)) { const p = path.join(os.tmpdir(), f); try { const st = await fs.stat(p); if (Date.now() - st.mtimeMs > 30 * 60e3) await fs.rm(p, { recursive: true, force: true }); } catch {} }
@@ -313,7 +324,9 @@ on('GET', '/api/projects/:pid/package.zip', async ({ pid }, _, url, res) => {
 });
 on('POST', '/api/projects/:pid/open-folder', async ({ pid }, req) => { localOnly(req); const dir = projectFolder(need(pid)); await fs.mkdir(dir, { recursive: true }); openFolder(dir); return { ok: true, path: dir }; });
 on('POST', '/api/claude/login', async (_, req) => { localOnly(req); openLoginWindow(); return { ok: true }; });
-on('POST', '/api/claude/check', async (_, req) => { localOnly(req); const r = await verifyClaude(); bus.emit('change', { scope: 'projects' }); return r; });
+on('POST', '/api/claude/check', async (_, req) => { localOnly(req); const r = await verifyClaude(); await Capabilities.recordRealProbe('claude-code-text', r.auth?.ok === true, { model: config.claudeCode.lightModel, note: 'verificare inițiată de operator' }); bus.emit('change', { scope: 'projects' }); return r; });
+on('GET', '/api/capabilities', async () => ({ ...Capabilities.getCapabilities(), host: hostConfig({ storage: storage.describe().kind, dataDir: config.storage.dataDir }) }));   // P1-T03
+on('POST', '/api/capabilities/discover', async (_, req) => { localOnly(req); return Capabilities.runDiscovery(); });
 /* Google Drive for desktop shows up as a drive (e.g. G:) with a "My Drive" folder: no Google Cloud setup needed */
 const DRIVE_NAMES = ['My Drive', 'Drive-ul meu', 'Drive-ul Meu', 'Mi unidad', 'Meine Ablage', 'Mon Drive', 'Il mio Drive', 'Meu Drive', 'Mijn Drive'];
 async function googleDriveFolders() {
@@ -357,10 +370,11 @@ on('POST', '/api/chatgpt/text-test', async (_, req) => {
   localOnly(req);
   const reply = await runCodexText('Return the requested JSON object with ok set to OK.', { model: 'gpt-6-sol', reasoning: 'medium', schema: { type: 'object', properties: { ok: { type: 'string' } }, required: ['ok'], additionalProperties: false } });
   let result; try { result = JSON.parse(reply); } catch { result = null; }
+  await Capabilities.recordRealProbe('codex-text', result?.ok === 'OK', { model: 'gpt-6-sol', note: 'test text inițiat de operator' });
   return { ok: result?.ok === 'OK', reply: reply.slice(0, 100) };
 });
 on('POST', '/api/chatgpt/login', async (_, req) => { localOnly(req); GPTImage.openCodexLogin(); return { ok: true }; });
-on('POST', '/api/chatgpt/test', async (_, req) => { localOnly(req); const r = await GPTImage.generate({ prompt: 'A small friendly turquoise robot waving, simple flat illustration, white background.', aspectRatio: 'SQUARE_1_1', timeoutMs: 5 * 60e3 }); const rel = `tests/chatgpt-test-${Date.now()}.png`; await storage.writeFile(rel, r.buffer); return { ok: true, bytes: r.buffer.length }; });
+on('POST', '/api/chatgpt/test', async (_, req) => { localOnly(req); const r = await GPTImage.generate({ prompt: 'A small friendly turquoise robot waving, simple flat illustration, white background.', aspectRatio: 'SQUARE_1_1', timeoutMs: 5 * 60e3 }); const rel = `tests/chatgpt-test-${Date.now()}.png`; await storage.writeFile(rel, r.buffer); await Capabilities.recordRealProbe('codex-image', true, { note: 'test imagine inițiat de operator' }); return { ok: true, bytes: r.buffer.length }; });
 on('PUT', '/api/projects/:pid/options', async ({ pid }, req) => { const p = need(pid); const b = await json(req); const o = {}; if (['canva', 'chatgpt'].includes(b.image_engine)) o.image_engine = b.image_engine; if (b.image_fallback != null) o.image_fallback = !!b.image_fallback; await repo.patchProject(pid, { options: { ...p.options, ...o } }); return { ok: true }; });
 on('GET', '/api/projects/:pid/export.zip', async ({ pid }, _, __, res) => { const f = await exportProject(repo, storage, need(pid)); const buf = await fs.readFile(f); res.writeHead(200, { 'content-type': 'application/zip', 'content-disposition': `attachment; filename="${path.basename(f)}"` }); res.end(buf); fs.rm(f).catch(() => {}); return null; });
 on('POST', '/api/projects/import', async (_, req) => { localOnly(req); const p = await importProject(repo, storage, await readBody(req, 600 * 1024 * 1024)); return { id: p.id, title: p.title }; });

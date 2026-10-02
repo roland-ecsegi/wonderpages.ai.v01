@@ -129,6 +129,12 @@ export class Canva {
     await this.transport.finishAuth(code);
     return this.connect();
   }
+  /* P1-T03: read-only tool discovery (names + input schemas); no generation */
+  async listTools() {
+    if (!this.client) { const r = await this.connect().catch(() => null); if (!r?.connected) return null; }
+    if (typeof this.client.listTools !== 'function') return null;
+    const r = await this.client.listTools(); return Array.isArray(r?.tools) ? r.tools.map(t => ({ name: t.name, inputSchema: t.inputSchema || null })) : null;
+  }
   async logout() { try { await this.client?.close(); } catch {} this.client = null; this.connected = false; await this.provider.logout(); }
 
   /* the Canva connection is closed after 10 idle minutes and reopened on the next image */
