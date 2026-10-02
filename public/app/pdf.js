@@ -112,8 +112,9 @@ async function drawPage({ v, pg, book, src, src2 = null, age, px, ph, dpi, bleed
   if (book.textOnly) { /* facing text page: illustration is on the paired physical page */ }
   else if (rel) {
     const image = await loadImg(fileUrl(rel));
-    if (S.printValidation) { const actualDpi = Math.min(image.naturalWidth / (px / S.printValidation.dpi), image.naturalHeight / (ph / S.printValidation.dpi)); if (actualDpi < S.printValidation.minDpi) throw new Error('Rezoluția ilustrației este ' + Math.round(actualDpi) + ' DPI; profilul cere ' + S.printValidation.minDpi + '.'); }
-    drawCover(g, image, px, ph, typeof pg === 'number' && pg > 0 ? S.layoutExport?.pages?.[pg - 1]?.crop : null);
+    const crop = typeof pg === 'number' && pg > 0 ? S.layoutExport?.pages?.[pg - 1]?.crop : null;
+    if (S.printValidation) { const actualDpi = Math.min(image.naturalWidth * (crop?.w || Math.min(1, (px / ph) / (image.naturalWidth / image.naturalHeight))) / (px / S.printValidation.dpi), image.naturalHeight * (crop?.h || Math.min(1, (ph / px) / (image.naturalHeight / image.naturalWidth))) / (ph / S.printValidation.dpi)); if (actualDpi < S.printValidation.minDpi) throw new Error('Rezoluția efectivă a ilustrației (după încadrare) este ' + Math.round(actualDpi) + ' DPI; profilul cere ' + S.printValidation.minDpi + '.'); }   // P6-T05: pixels actually used
+    drawCover(g, image, px, ph, crop);
   } else {
     if (S.finalExport && curProject()?.options?.images !== false) throw new Error('Lipsește ilustrația pentru pagina ' + pg + '.');
     g.fillStyle = '#F1F2F4'; g.fillRect(0, 0, px, ph);

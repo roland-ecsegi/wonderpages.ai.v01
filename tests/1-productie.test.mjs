@@ -77,6 +77,8 @@ test('după aprobarea finală: pachet, PDF-uri (dacă există browser)', async (
   assert.equal(job.ok, true, job.message);
   const pdfs = fs.readdirSync(path.join(TMP, 'out')).flatMap(d => { try { return fs.readdirSync(path.join(TMP, 'out', d, 'PDF')); } catch { return []; } }).filter(f => f.endsWith('.pdf'));
   assert.equal(pdfs.length, 3, 'colorat + EN + RO');
+  const receipts = (await project(PID)).artifacts.delivery_0.content.exports.filter(e => e.kind === 'final');   // P6-T05: every final PDF passed the independent inspection
+  assert.ok(receipts.length === 3 && receipts.every(e => e.inspection?.ok === true && e.inspection.fonts.every(f => f.embedded)), JSON.stringify(receipts.map(e => e.inspection)));
 });
 
 test('export și import de proiect: conținutul rămâne, aprobările se refac (audit C1)', async () => {

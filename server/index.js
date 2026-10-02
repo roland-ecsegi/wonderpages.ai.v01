@@ -56,6 +56,8 @@ import { canonicalHash } from './domain/canonical.js';
 import { releaseCheck, expectedInventory, decisionStatus } from './domain/decisions.js';
 import { rebindDependents } from './persistence/rebind.js';
 import { registerEnterpriseRoutes, impactForWrite, measuredLayout } from './enterprise-routes.js';
+import { inspectPdf, checkInspection } from './inspection/pdf-inspect.js';
+import { imageResolution } from './quality/readiness.js';
 import { EventStream } from './observability/events.js';
 import * as Intake from './domain/intake.js';
 import { volumeSafety, inputSafety } from './quality/safety.js';
@@ -343,16 +345,26 @@ on('POST', '/api/projects/:pid/exports', async ({ pid }, req, url) => {
   if (final) assertSafeRelease(p, bp, art, vol);   // P5-T01
   const book = url.searchParams.get('book'), lang = url.searchParams.get('lang') || 'first';
   if (final && !requiredBooks(p, bp).some(b => (b.book === book || (url.searchParams.get('preset') === 'kdp' && b.book + '-cover' === book)) && b.lang === lang)) throw { status: 400, message: 'Carte sau limbă necunoscută.' };
-  if(final)validateFinalPdf(buf,bp,p,{book,preset:url.searchParams.get('preset')});
+  const dims = final ? validateFinalPdf(buf,bp,p,{book,preset:url.searchParams.get('preset')}) : null;
   /* P6-T01: the export carries the measurement hash it rendered; it must equal the current plan (same as the preview) */
   const layoutHash = url.searchParams.get('layout'), interior = !/-cover$/.test(book || '');
   let layoutPlan = null; if ((final || layoutHash) && interior && Number.isInteger(vol)) layoutPlan = await measuredLayout(repo, pid, p, bp, art, vol, url.searchParams.get('preset') || 'digital');
   if (layoutPlan && layoutHash && layoutHash !== layoutPlan.measurementHash) throw { status: 409, code: 'stale_layout', message: 'Măsurarea machetei din export diferă de cea curentă (previzualizare); regenerează PDF-ul.' };
   if (final && layoutPlan?.blocking) throw { status: 409, code: 'layout_blocked', message: 'Macheta are probleme blocante: ' + layoutPlan.findings.filter(f => f.blocking).slice(0, 3).map(f => f.message).join(' ') };
+  /* P6-T05: independent inspection of the final file (fonts used are embedded, no .notdef, text in the safe area, placed image DPI) */
+  let inspection = null;
+  if (final) { const presetKey = url.searchParams.get('preset'), print = ['print', 'kdp'].includes(presetKey), ins = inspectPdf(buf), bk0 = (bp.structure.books || []).find(b => b.key === book), lang0 = url.searchParams.get('lang') || 'first', expectText = bk0 && bk0.mode !== 'lineart' && bk0.page_text !== false && layoutPlan ? layoutPlan.pages.flatMap(x => x.textBlocks?.[lang0]?.lines || []) : [], chk = checkInspection(ins, { pages: dims.pages, widthIn: dims.width, heightIn: dims.height, minDpi: print ? 300 : 0, safeIn: 0.25, expectText });
+    if (!chk.ok) throw { status: 400, code: 'pdf_inspection', message: 'Inspecția independentă a PDF-ului a eșuat: ' + chk.problems.slice(0, 3).map(x => x.message).join(' '), problems: chk.problems.slice(0, 20) };
+    inspection = { version: ins.version, ok: true, pages: ins.pageCount, fonts: ins.fontsUsed.map(f => ({ baseFont: f.baseFont, embedded: f.embedded })), minPlacedDpi: Math.min(Infinity, ...ins.pages.flatMap(x => x.images.map(i => i.dpi))) };
+    if (print && !/-cover$/.test(book || '')) {   // the canvas is rasterised at 300 DPI: the SOURCE art must really have it (crop included, upscaling estimated)
+      const bk = (bp.structure.books || []).find(b => b.key === book), lp = await measuredLayout(repo, pid, p, bp, art, vol, presetKey), g = lp.geometry.pt, low = [];
+      for (let pg = 0; pg <= bp.structure.pages; pg++) { const c = art[`ill_${vol}_${pg}`]?.content, file = bk?.mode === 'lineart' ? c?.lineart : c?.color; if (!file) continue; const r = await imageResolution(file, { readFile: f => repo.readFile(pid, f), crop: pg > 0 ? lp.pages.find(x => x.n === pg)?.crop : null, pageWIn: g.w / 72, pageHIn: g.h / 72, minDpi: 300 }); if (r.status === 'fail') low.push(`pagina ${pg}: ${r.width}×${r.height} px → ${r.effectiveDpi} DPI efectiv${r.nativeEstimate?.suspectedUpscale ? ` (mărită ~${r.nativeEstimate.factor}×, ~${r.nativeDpi} DPI nativ)` : ''}`); }
+      if (low.length) throw { status: 409, code: 'low_resolution', message: 'Arta sursă nu are 300 DPI efectivi la tipar: ' + low.slice(0, 4).join('; ') + '.', pages: low };
+    } }
   const dir = path.join(projectFolder(p), ...(final ? ['PDF'] : ['Preview', 'PDF']));
   await fs.mkdir(dir, { recursive: true }); await fs.writeFile(path.join(dir, name), buf);
   if (final) {
-    const key = 'delivery_' + vol, old = art[key]?.content?.exports || [], receipt = { name, book, lang, preset: url.searchParams.get('preset'), kind: 'final', fingerprint: deliveryFingerprint(p, bp, art, vol), layout: layoutPlan ? (layoutHash ? { measurementHash: layoutHash, verified: true } : { measurementHash: layoutPlan.measurementHash, verified: false }) : null, bytes: buf.length, sha256: fileHash(buf), at: now() };
+    const key = 'delivery_' + vol, old = art[key]?.content?.exports || [], receipt = { name, book, lang, preset: url.searchParams.get('preset'), kind: 'final', fingerprint: deliveryFingerprint(p, bp, art, vol), layout: layoutPlan ? (layoutHash ? { measurementHash: layoutHash, verified: true } : { measurementHash: layoutPlan.measurementHash, verified: false }) : null, inspection, bytes: buf.length, sha256: fileHash(buf), at: now() };
     await repo.writeArtifact(pid, key, { exports: [...old.filter(e => !(e.book === book && e.lang === lang)), receipt] }, { by: 'export', note: 'PDF al versiunii aprobate' });
     for (const [k, a] of Object.entries(await repo.artifacts(pid))) if (new RegExp(`^(final|tr|ill)_${vol}(_\\d+)?$`).test(k)) await pinVersion(storage, pid, k, a.version, { reason: 'released', ref: { receipt: receipt.sha256, book, lang }, actor: 'export' });   // P2-T03
   }

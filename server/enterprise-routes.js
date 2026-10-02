@@ -14,6 +14,9 @@ import { RUNNING, expandStages, reassessVolume, prepareTextPacket, ingestTextPac
 import { pageWorkbench, commandImpact, itemIdFor, srcKeyOf } from './domain/workbench.js';
 import { coloringQA, COLORING_QA_VERSION } from './quality/coloring.js';
 import { destinationCheck, coverWrap, PROFILE_VERSIONS, PROFILE_RULES } from './printprofile.js';
+import { readinessReport } from './quality/readiness.js';
+import { deliveryFingerprint } from './delivery.js';
+import { projectFolder } from './output.js';
 import { unitHashes, verifyExecution, missingUnits } from './quality/repair.js';
 import { variantSet, backfillVersions } from './persistence/artifact-store.js';
 import { progressReport, inspectArtifact } from './observability/progress.js';
@@ -307,5 +310,12 @@ export function registerEnterpriseRoutes({ on, json, need, localOnly, repo, stor
     await repo.commitProjectDecision(pid, { printProfiles: { ...(p.printProfiles || {}), kdp: { ...(p.printProfiles?.kdp || {}), [book.key]: ap } } }, [rec], { actor: 'operator@laptop', kind: 'print_profile.approve' });
     if (contractFromBlueprint(await repo.getBlueprint(pid)).contractHash !== before) throw { status: 500, message: 'Contractul canonic s-a schimbat (nu trebuia).' };
     return { ok: true, approval: ap, decision: rec.id, check: destinationCheck({ count: bp.structure.pages, book, profile: 'kdp', ink: ap.ink, paper: ap.paper, approval: ap }).status };
+  });
+  /* P6-T05: destination readiness from measurements (profile, layout, inventory, effective/native DPI, colouring, final PDFs) */
+  on('GET', '/api/projects/:pid/readiness/:v', async ({ pid, v }, req) => {
+    const p = need(pid), bp = await repo.getBlueprint(pid), n = Number(v); if (!Number.isInteger(n) || n < 1 || n > bp.structure.volumes) throw { status: 400, message: 'Volum invalid.' };
+    const preset = presetOf(req); if (preset !== 'digital' && !(bp.export?.presets || []).some(x => x.key === preset)) throw { status: 400, message: 'Profil de export necunoscut.' };
+    const art = await repo.artifacts(pid), plan = await measuredLayout(repo, pid, p, bp, art, n - 1, preset).catch(() => null);
+    return readinessReport({ bp, project: p, art, v: n - 1, preset, plan, readFile: f => repo.readFile(pid, f), readPdf: name => fs.promises.readFile(path.join(projectFolder(p), 'PDF', path.basename(name))), fingerprint: deliveryFingerprint(p, bp, art, n - 1), langs: p.input?.second_language ? ['first', 'second'] : ['first'] });
   });
 }

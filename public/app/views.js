@@ -644,11 +644,19 @@ function tabExport(p) {
       <div class="row">${S.services?.gdrive?.connected && p.packagedAt ? `<button class="btn" data-act="gdrive-upload">Trimite în Google Drive</button>` : ''}${p.driveLink ? `<a class="btn ghost" href="${extUrl(p.driveLink)}" rel="noopener noreferrer" target="_blank" rel="noopener">Vezi în Drive</a>` : ''}${S.lan?.remote ? '' : '<button class="btn" data-act="open-folder">Deschide folderul</button>'}<button class="btn primary" data-act="package" ${S.exporting ? 'disabled' : ''}>Generează pachetul final</button></div></div></div>
     <div class="section" style="margin-top:0"><h2>Destinație</h2><div class="presets" role="radiogroup">${presets.map(x => `<label class="choice"><input type="radio" name="preset" value="${esc(x.key)}" data-act-change="preset" ${S.preset === x.key ? 'checked' : ''}><b>${esc(x.label)}</b><span>${esc(x.detail || '')}</span></label>`).join('')}</div></div>
     ${printProfileHTML(p)}
+    ${readinessHTML(p)}
     <div class="section"><h2>Volume</h2>${p.rendering && !p.rendering.finished ? `<div class="notice m" style="margin-bottom:10px">Livrare pe laptop: ${esc(p.rendering.label)}${p.rendering.n ? `, pagina ${p.rendering.i} din ${p.rendering.n}` : ''}</div>` : p.rendering?.finished && Date.now() - (p.rendering.at || 0) < 10 * 60e3 ? `<div class="notice ${p.rendering.ok ? '' : 'err'}" style="margin-bottom:10px;${p.rendering.ok ? 'background:var(--ok-soft)' : ''}">${esc(p.rendering.message || '')}</div>` : ''}<div class="panel">${rows}</div><div id="xprog" class="small muted" style="margin-top:10px" aria-live="polite"></div></div>
     ${canvaCoverHTML(p)}
     <div class="section"><h2>Verificare finală</h2><div class="panel panel-pad"><ul class="checks" style="margin:0">${pf.map(x => `<li><span class="st ${cls(x.status)}"></span><div><b>${esc(x.label)}</b><div class="small muted">${esc(x.detail)}</div></div></li>`).join('')}</ul></div></div>`;
 }
 
+/* P6-T05: readiness measured for the chosen destination (never a label without measurements) */
+const RD = { PASS: ['b-ok', 'gata (măsurat)'], NOT_READY: ['b-err', 'nu este gata'], UNMEASURED: ['b-y', 'nemăsurat complet'] };
+function readinessHTML(p) {
+  const V = S.bp.structure.volumes, R = (S.readiness ||= {})[p.id] || {};
+  return `<div class="section" id="readiness"><h2>Pregătirea pentru destinație</h2><div class="panel panel-pad"><p class="small muted">Se măsoară pe fișierele reale: profil, machetă, artă (DPI efectiv după încadrare, mărire estimată), pagini de colorat la tipar și PDF-urile finale. „Gata” apare numai cu toate măsurile.</p>
+    ${Array.from({ length: V }, (_, v) => { const r = R[v + '@' + S.preset]; const [c, l] = r ? RD[r.status] : ['', '']; return `<div class="xrow" data-v="${v}"${r ? ` data-status="${esc(r.status)}"` : ''}><div class="n">${v + 1}</div><div style="min-width:0">${r ? `<h4><span class="badge ${c}">${esc(l)}</span> <span class="tiny faint">${esc(r.preset)}</span></h4>${r.checks.filter(x => x.status !== 'pass').map(x => `<div class="small"><b>${esc(x.id)}</b>: ${esc(x.detail)}</div>`).join('')}${r.note ? `<div class="tiny faint">${esc(r.note)}</div>` : ''}` : '<span class="small faint">nemăsurat</span>'}</div><button class="btn sm ghost" data-act="readiness" data-v="${v}">Măsoară</button></div>`; }).join('')}</div></div>`;
+}
 /* P6-T04: what the chosen destination does to the 12 canonical pages, before any export */
 const PP_STATUS = { compatible_unverified: ['b-y', 'compatibil, nemăsurat'], requires_approval: ['b-y', 'cere aprobarea ta'], approved_unverified: ['b-ok', 'aprobat, nemăsurat'], incompatible: ['b-err', 'incompatibil'] };
 function printProfileHTML(p) {

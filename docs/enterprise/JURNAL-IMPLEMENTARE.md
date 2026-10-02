@@ -76,8 +76,8 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | P6-T01 | DONE | 945de9e | TEST-P6-T01 11/11; RS0 273/273 local + 273/273 PG | Plan de machetă măsurat cu metrica Andika (cod comun server/previzualizare/export), font ≥ profil, schimbare doar cu dovadă, încadrare care protejează reperele, hash identic preview/export |
 | P6-T02 | DONE | c197048 | TEST-P6-T02 7/7; RS0 280/280 local + 280/280 PG | Atelierul paginii: context complet, 6 comenzi distincte cu impact înainte de aplicare, hash de stare (stale_preview), AI doar prin poarta deschisă, restaurare cu variante aprobate fixate, link exact în loc de preview generic |
 | P6-T03 | DONE | a217469 | TEST-P6-T03 5/5; RS0 285/285 local + 285/285 PG | Pagina de colorat măsurată la tipar după plasare (contur mm, spații mm², gri), legată de fișier și culoare; pagina bună și candidatul eșuat păstrate; fără acceptare automată |
-| P6-T04 | DONE | (acest commit) | TEST-P6-T04 6/6; RS0 291/291 local + 291/291 PG | Profiluri versionate cu reguli datate (cerneală/hârtie/margine/copertă), mapare fizic→canonic cu deschideri și scurgeri, aprobare explicită per carte pentru legacy 28/26; strict12 niciodată KDP |
-| P6-T05 | PENDING | | | |
+| P6-T04 | DONE | 55b8d82 | TEST-P6-T04 6/6; RS0 291/291 local + 291/291 PG | Profiluri versionate cu reguli datate (cerneală/hârtie/margine/copertă), mapare fizic→canonic cu deschideri și scurgeri, aprobare explicită per carte pentru legacy 28/26; strict12 niciodată KDP |
+| P6-T05 | DONE | (acest commit) | TEST-P6-T05 8/8; RS0 299/299 local + 299/299 PG | Inspecție PDF independentă (pagini, fonturi, ToUnicode, DPI plasat, zonă sigură), DPI efectiv/nativ după încadrare, raport de pregătire PASS doar cu măsuri pe profilul real; porți la export final |
 | P6-T06 | PENDING | | | |
 | P7-T01 | PENDING | | | |
 | P7-T02 | PENDING | | | |
@@ -134,6 +134,7 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | 2026-10-02 | RS0 + TEST-P6-T02 | 280/280 PASS local + 280/280 PostgreSQL | — |
 | 2026-10-02 | RS0 + TEST-P6-T03 | 285/285 PASS local + 285/285 PostgreSQL | — |
 | 2026-10-02 | RS0 + TEST-P6-T04 | 291/291 PASS local + 291/291 PostgreSQL | — |
+| 2026-10-02 | RS0 + TEST-P6-T05 | 299/299 PASS local + 299/299 PostgreSQL | — |
 
 ## Probleme deschise
 
@@ -148,6 +149,6 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 
 ## Checkpoint
 
-- Ultimul task închis: P6-T04
-- Următorul task: **P6-T05**
+- Ultimul task închis: P6-T05
+- Următorul task: **P6-T06**
 - Cum se reia: `npm ci && npm run build && BROWSER_PATH=/opt/pw-browsers/chromium npm test`; citește tabelul de mai sus și `docs/enterprise/records/`.

@@ -23,6 +23,8 @@ export function measureColoring(buf, { trimW, trimH, widthIn = null, heightIn = 
   const x0 = Math.round(c.x * w), y0 = Math.round(c.y * h), x1 = Math.min(w, Math.round((c.x + c.w) * w)), y1 = Math.min(h, Math.round((c.y + c.h) * h)), W = x1 - x0, H = y1 - y0;
   const pageW = widthIn || trimW, pageH = heightIn || trimH, ppi = Math.min(W / pageW, H / pageH), mmPerPx = 25.4 / ppi;
   const black = new Uint8Array(W * H); for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) black[y * W + x] = L[(y + y0) * w + x + x0] < threshold ? 1 : 0;
+  let allBlack = 0; for (let i = 0; i < w * h; i++) if (L[i] < threshold) allBlack++; let inBlack = 0; for (let i = 0; i < W * H; i++) inBlack += black[i];
+  const clippedShare = allBlack ? +((allBlack - inBlack) / allBlack).toFixed(3) : 0;   // P6-T05: contour mass cut away by the placement
   /* stroke thickness: black runs across lines, horizontally and vertically (a run is a cut through a contour) */
   const runs = []; const step = Math.max(1, Math.floor(Math.min(W, H) / 200));
   for (let y = 0; y < H; y += step) { let r = 0; for (let x = 0; x <= W; x++) { if (x < W && black[y * W + x]) r++; else { if (r) runs.push(r); r = 0; } } }
@@ -40,11 +42,12 @@ export function measureColoring(buf, { trimW, trimH, widthIn = null, heightIn = 
   const mm2 = a => a * mmPerPx * mmPerPx, noise = 1 / (mmPerPx * mmPerPx);   // components under 1 mm² are line noise, not spaces
   const regions = areas.filter(a => a >= noise).map(mm2), minRegion = Number(profile.min_region) || 300, minStroke = (Number(profile.line_weight) || 6) / 10;
   const small = regions.filter(a => a < minRegion), usable = regions.filter(a => a >= minRegion);
-  const metrics = { ppi: Math.round(ppi * 10) / 10, window: { x: x0, y: y0, w: W, h: H }, strokeMedianMm: +(pct(contour, 0.5) * mmPerPx).toFixed(2), strokeThinMm: +(pct(contour, 0.1) * mmPerPx).toFixed(2), regions: regions.length, usableRegions: usable.length, smallRegions: small.length, smallShare: regions.length ? +(small.length / regions.length).toFixed(3) : 0, smallestMm2: regions.length ? +Math.min(...regions).toFixed(1) : null, minRegionMm2: minRegion, minStrokeMm: minStroke };
+  const metrics = { ppi: Math.round(ppi * 10) / 10, window: { x: x0, y: y0, w: W, h: H }, strokeMedianMm: +(pct(contour, 0.5) * mmPerPx).toFixed(2), strokeThinMm: +(pct(contour, 0.1) * mmPerPx).toFixed(2), regions: regions.length, usableRegions: usable.length, smallRegions: small.length, smallShare: regions.length ? +(small.length / regions.length).toFixed(3) : 0, smallestMm2: regions.length ? +Math.min(...regions).toFixed(1) : null, minRegionMm2: minRegion, minStrokeMm: minStroke, clippedShare };
   const issues = [];
   if (!contour.length) issues.push('nu are contururi măsurabile');
   else if (metrics.strokeMedianMm < minStroke * 0.8) issues.push(`contururi prea subțiri la tipar (${metrics.strokeMedianMm} mm; vârsta cere ≥ ${minStroke} mm)`);
   if (usable.length < 3) issues.push(`prea puține spații de colorat la dimensiunea de tipar (${usable.length} ≥ ${minRegion} mm²)`);
+  if (clippedShare > 0.05) issues.push(`încadrarea taie ${Math.round(clippedShare * 100)}% din contururi (linii tăiate la marginea paginii)`);
   if (metrics.smallShare > 0.4) issues.push(`prea multe zone prea mici pentru vârstă (${small.length} din ${regions.length} sub ${minRegion} mm²)`);
   return { version: COLORING_QA_VERSION, ok: !issues.length, issues, metrics, print: { trimW, trimH, widthIn: pageW, heightIn: pageH, crop: c } };
 }
