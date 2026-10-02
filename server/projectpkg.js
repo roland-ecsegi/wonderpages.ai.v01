@@ -12,6 +12,7 @@ import { unzip } from './training.js';
 import { uid, now } from './repo.js';
 import { expandStages, HANDLER_NAMES } from './engine.js';
 import { str, cleanInput, isSafeRel, IMAGE_MIME, safeCode, cleanComment } from './sanitize.js';
+import { contractFromBlueprint, validateContract } from './domain/product-contract.js';
 
 const FORMAT = 'wonderpages-project';
 async function copyDir(a, b) { await fsp.mkdir(b, { recursive: true }); for (const e of await fsp.readdir(a, { withFileTypes: true }).catch(() => [])) { const x = path.join(a, e.name), y = path.join(b, e.name); if (e.isDirectory()) await copyDir(x, y); else await fsp.copyFile(x, y); } }
@@ -46,6 +47,9 @@ export async function importProject(repo, storage, buf) {
   let doc; try { doc = JSON.parse(files.get(manName).toString('utf8')); } catch { throw { status: 400, message: 'project.json nu e JSON valid.' }; }
   if (doc.format !== FORMAT || !doc.project || typeof doc.project !== 'object' || !doc.blueprint) throw { status: 400, message: 'Nu e un proiect WonderPages.' };
   const bad = blueprintProblem(doc.blueprint); if (bad) throw { status: 400, message: 'Proiect respins: ' + bad + '.' };
+  /* P1-T01: the protected ProductContract (6 volumes × story+coloring × 12 pages, age bands) is checked before anything is written */
+  const contract = contractFromBlueprint(doc.blueprint), cv = validateContract(contract);
+  if (!cv.valid) throw { status: 422, code: 'contract_invalid', errors: cv.errors, message: 'Proiect respins: nu respectă contractul produsului — ' + cv.errors.map(e => e.message).join(' ') };
   const pid = uid('p'); const src = doc.project; const bp = doc.blueprint;
   /* files: only images/ and uploads/ with plain names, only image formats */
   const kept = new Set();

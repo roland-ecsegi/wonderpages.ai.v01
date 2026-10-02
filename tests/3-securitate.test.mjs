@@ -9,7 +9,7 @@ import { api, setFake, project, rawRequest, zip, INPUT, TMP } from './lib.mjs';
 test('C1: „code” mălițios dintr-un proiect importat este neutralizat', async () => {
   setFake({});
   const marker = path.join(TMP, 'PWNED_C1'); try { fs.unlinkSync(marker); } catch {}
-  const doc = { format: 'wonderpages-project', version: 1, project: { id: 'evil', title: 'Evil', code: 'x"; touch ' + marker + '; echo "', status: 'completed', input: INPUT, approvals: { 'review_collection@c': { x: { state: 'approved' } } } }, blueprint: { slug: 'kids-sc', structure: { volumes: 6, pages: 12, books: [] }, stages: [{ key: 'brief', handler: 'llm_json' }], input_schema: { fields: [] } }, artifacts: {}, comments: [] };
+  const doc = { format: 'wonderpages-project', version: 1, project: { id: 'evil', title: 'Evil', code: 'x"; touch ' + marker + '; echo "', status: 'completed', input: INPUT, approvals: { 'review_collection@c': { x: { state: 'approved' } } } }, blueprint: { slug: 'kids-sc', variant_key: 'target_age', structure: { volumes: 6, pages: 12, cover: true, books: [{ key: 'story', mode: 'color', per_language: true, back_cover: true }, { key: 'coloring', mode: 'lineart', back_cover: true }] }, stages: [{ key: 'brief', handler: 'llm_json' }], input_schema: { fields: [{ key: 'target_age', options: [{ value: '3-4' }, { value: '5-6' }, { value: '7-8' }] }, { key: 'languages', type: 'languages', options: [{ value: 'English' }, { value: 'Romanian' }] }] } }, artifacts: {}, comments: [] };
   const r = await api('POST', 'projects/import', zip([{ name: 'p/project.json', data: JSON.stringify(doc) }]), { headers: { 'content-type': 'application/octet-stream' } });
   assert.equal(r.status, 200); const d = await project(r.body.id);
   assert.doesNotMatch(String(d.project.code || ''), /touch|"|;/, 'codul e regenerat');
@@ -21,7 +21,7 @@ test('C1: „code” mălițios dintr-un proiect importat este neutralizat', asy
 });
 
 test('C1: „code” cu ../ nu scoate folderul din destinație', async () => {
-  const doc = { format: 'wonderpages-project', version: 1, project: { id: 'x', title: 'T', code: '../../../etc', status: 'ready', input: INPUT }, blueprint: { slug: 'kids-sc', structure: { volumes: 1, pages: 12, books: [] }, stages: [{ key: 'brief', handler: 'llm_json' }], input_schema: { fields: [] } }, artifacts: {} };
+  const doc = { format: 'wonderpages-project', version: 1, project: { id: 'x', title: 'T', code: '../../../etc', status: 'ready', input: INPUT }, blueprint: { slug: 'kids-sc', variant_key: 'target_age', structure: { volumes: 6, pages: 12, cover: true, books: [{ key: 'story', mode: 'color', per_language: true, back_cover: true }, { key: 'coloring', mode: 'lineart', back_cover: true }] }, stages: [{ key: 'brief', handler: 'llm_json' }], input_schema: { fields: [{ key: 'target_age', options: [{ value: '3-4' }, { value: '5-6' }, { value: '7-8' }] }, { key: 'languages', type: 'languages', options: [{ value: 'English' }, { value: 'Romanian' }] }] } }, artifacts: {} };
   const r = await api('POST', 'projects/import', zip([{ name: 'p/project.json', data: JSON.stringify(doc) }]), { headers: { 'content-type': 'application/octet-stream' } });
   const d = await project(r.body.id); assert.doesNotMatch(String(d.project.code || ''), /\.\./);
 });

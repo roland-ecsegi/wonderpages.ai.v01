@@ -40,6 +40,7 @@ import { fingerprint, fileHash, pageSequence } from './contracts.js';
 import { deliveryFingerprint, currentReceipts, requiredBooks } from './delivery.js';
 import { editorialFindings } from './editorial.js';
 import { physicalPages, printDimensions } from './printprofile.js';
+import { contractFromBlueprint, validateContract, validateProjectInput, projectContractReport } from './domain/product-contract.js';
 
 globalThis.__wpBootStage?.('Pornesc baza de date (Docker)…');
 const storage = await createStorage(config.storage);
@@ -131,6 +132,7 @@ on('GET', '/api/projects/:pid', async ({ pid }) => {
   const items = p.gate ? gateItems(bp, art, p, p.gate) : null;
   return { project: { ...p, running: !!RUNNING[pid] }, blueprint: bp, artifacts: art, comments: await repo.listComments(pid), editorial: editorialFindings(bp, art), preflight: runPreflight(bp, art, { structure: bp.structure, input: p.input, options: p.options, age_profile: bp.age_profiles?.[p.input?.[bp.variant_key]] || {} }), delivery: { fingerprints: Array.from({length:bp.structure.volumes},(_,v)=>deliveryFingerprint(p,bp,art,v)), volumes: Array.from({ length: bp.structure.volumes }, (_, v) => volumeApproved(p, bp, v, art)), collection: volumeApproved(p, bp, null, art) }, review: items ? { items, summary: gateSummary(items) } : null };
 });
+on('GET', '/api/projects/:pid/contract', async ({ pid }) => { const p = need(pid); return projectContractReport(await repo.getBlueprint(pid), p); });   // P1-T01
 on('POST','/api/projects/:pid/blueprint-upgrade',async({pid},req)=>{
   localOnly(req);if(RUNNING[pid])throw {status:409,message:'Oprește proiectul înainte de schimbarea contractului.'};
   const p=need(pid),body=await json(req),old=clone(await repo.getBlueprint(pid)),art=await repo.artifacts(pid),record=art.blueprint_history?.content;
@@ -159,11 +161,14 @@ on('POST', '/api/projects', async (_, req) => {
     input[f.key] = ordered; input.language = ordered[0]; input.second_language = ordered[1] || '';
   }
   for (const f of t.input_schema?.fields || []) if (!['images', 'languages'].includes(f.type) && f.required && !String(input[f.key] ?? '').trim()) throw { status: 400, message: `Câmpul „${f.label}” este obligatoriu.` };
+  const contract = contractFromBlueprint(t), cv = validateContract(contract), iv = cv.valid ? validateProjectInput(contract, input) : cv;   // P1-T01
+  if (!iv.valid) throw { status: 422, code: 'contract_invalid', errors: iv.errors, message: iv.errors.map(e => e.message).join(' ') };
   const variant = (t.input_schema.fields.find(f => f.key === t.variant_key)?.options || []).find(o => o.value === input[t.variant_key]);
   const pid = uid('p');
   const p = {
     id: pid, title: (String(input.title || '').trim() || String(input.short_description || '').trim().split(/\s+/).slice(0, 7).join(' ')).slice(0, 160),
     typeSlug: t.slug, typeName: t.name, typeIcon: t.icon || '', typeVersion: t.version, variantLabel: variant?.label || '',
+    contractRef: { schema: contract.schema, contractHash: contract.contractHash, blueprintVersion: contract.blueprintVersion, blueprintHash: contract.blueprintHash },
     input, options: { image_engine: IMAGE_DEFAULT.engine, image_fallback: !!IMAGE_DEFAULT.fallback, ...options }, status: 'ready', stageIndex: 0, stages: {}, currentStage: null, run: 1,
     stagePlan: expandStages(t).map(s => ({ key: s.key, label: s.label, phase: s.phase || '', gate: s.handler === 'review_gate', vol: s.vol ?? null })), volumeFlow: !!t.volume_flow,
     gate: null, decisions: [], notes: [], rejections: [], log: [{ t: now(), text: 'Proiect creat. Pornește-l când vrei, din pagina proiectului sau din Proiecte.', kind: 'info' }], createdAt: now(), updatedAt: now(), error: null
@@ -269,7 +274,7 @@ on('GET', '/api/projects/:pid/print-plan', async ({ pid }, _, url) => {
   const profile = url.searchParams.get('profile') === 'kdp' ? 'kdp' : 'digital', format = bp.formats?.[p.input?.[bp.format_key]];
   const pages = physicalPages(bp.structure.pages, book.mode, profile, book.back_cover);
   if (profile === 'kdp' && pages.length < 24) throw { status: 409, message: 'Interiorul nu îndeplinește numărul minim de pagini pentru acest profil.' };
-  return { profile, pages, ...printDimensions(format, profile), separateCover: profile === 'kdp', sourceScenes: bp.structure.pages, colourSpace: 'RGB', publicationValidated: false };
+  return { profile, pages, ...printDimensions(format, profile), separateCover: profile === 'kdp', sourceScenes: bp.structure.pages, colourSpace: 'RGB', publicationValidated: false, semantics: profile === 'kdp' ? 'legacy-scene-expansion' : 'strict12', canonicalContentPages: bp.structure.pages };
 });
 on('POST', '/api/projects/:pid/exports', async ({ pid }, req, url) => {
   need(pid); const name = (url.searchParams.get('name') || 'export.pdf').replace(/[^a-zA-Z0-9._-]/g, '-').replace(/^\.+/, '');
@@ -506,6 +511,7 @@ on('PUT', '/api/types/:slug', async ({ slug }, req) => {
   localOnly(req); const bp = await json(req);
   if (!bp?.slug || !/^[a-z0-9-]{2,40}$/.test(bp.slug)) throw { status: 400, message: 'Slug invalid.' };
   if (bp.slug !== slug && repo.getType(bp.slug)) throw { status: 409, message: 'Există deja un tip cu acest slug.' };
+  const cv = validateContract(contractFromBlueprint(bp)); if (!cv.valid) throw { status: 422, code: 'contract_invalid', errors: cv.errors, message: 'Tipul de produs nu respectă contractul protejat: ' + cv.errors.map(e => e.message).join(' ') };   // P1-T01
   await repo.putType({ ...bp, updatedAt: now() });
   return { ok: true };
 });
@@ -592,7 +598,7 @@ async function handler(req, res) {
   } catch (e) {
     /* audit L2: messages the app wrote for you are shown; unexpected internal errors only in the log */
     const known = e && typeof e === 'object' && !(e instanceof Error) && (e.status || e.code);
-    if (!res.headersSent) send(res, e?.status || (e?.code === 'busy' ? 409 : e?.code === 'bad_request' ? 400 : 500), known ? { message: e.message || 'Eroare.', code: e.code, ...(e.active ? { active: e.active } : {}) } : { message: 'A apărut o eroare internă. Detaliile sunt în jurnal (wonderpages.log).' });
+    if (!res.headersSent) send(res, e?.status || (e?.code === 'busy' ? 409 : e?.code === 'bad_request' ? 400 : 500), known ? { message: e.message || 'Eroare.', code: e.code, ...(e.active ? { active: e.active } : {}), ...(Array.isArray(e.errors) ? { errors: e.errors } : {}) } : { message: 'A apărut o eroare internă. Detaliile sunt în jurnal (wonderpages.log).' });
     if (!known || (!e.status && e.code !== 'busy' && e.code !== 'bad_request')) console.error(e);
   }
 }
