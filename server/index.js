@@ -40,7 +40,8 @@ import * as Dali from './assistant.js';
 import * as Improve from './improve.js';
 import { cleanComment, cleanInput, IMAGE_MIME, PID_RE } from './sanitize.js';
 import { volumeApproved, runRetro, runPreflight } from './engine.js';
-import { fingerprint, fileHash, pageSequence } from './contracts.js';
+import { fingerprint, fileHash, pageSequence, sceneFingerprint } from './contracts.js';
+import { pageData } from './engine.js';
 import { deliveryFingerprint, currentReceipts, requiredBooks } from './delivery.js';
 import { editorialFindings } from './editorial.js';
 import { physicalPages, printDimensions } from './printprofile.js';
@@ -48,6 +49,9 @@ import { contractFromBlueprint, validateContract, validateProjectInput, projectC
 import { appRightsInventory, projectRightsInventory, rightsStatus, rightsRecord, commercialReleaseCheck } from './domain/rights.js';
 import * as Capabilities from './providers/registry.js';
 import { schemaStatus } from './persistence/migrations.js';
+import { getVersion, listVersions, variantSet, pinVersion, backfillVersions, retentionPlan, applyRetention } from './persistence/artifact-store.js';
+import { canonicalHash } from './domain/canonical.js';
+import { rebindDependents } from './persistence/rebind.js';
 import { registerEnterpriseRoutes, impactForWrite } from './enterprise-routes.js';
 import { toolSchemaHash, hostConfig } from './providers/capabilities.js';
 import { checkIncludedQuota } from './subscription-usage.js';
@@ -270,13 +274,21 @@ on('POST', '/api/projects/:pid/artifacts/:key', async ({ pid, key }, req) => {
   // Manual corrections are local. Their event is available to the later volume retrospective.
   return { ok: true, version: doc.version, revision: repo.getProject(pid).revision, impact: doc !== prev ? impact : null };
 });
-on('GET', '/api/projects/:pid/artifacts/:key/history', async ({pid,key}) => { need(pid); const a=(await repo.artifacts(pid))[key]; if(!a) throw {status:404,message:'Document inexistent.'}; return {current:a,versions:a.versions||[]}; });
+on('GET', '/api/projects/:pid/artifacts/:key/history', async ({pid,key}) => { need(pid); const a=(await repo.artifacts(pid))[key]; if(!a) throw {status:404,message:'Document inexistent.'}; await backfillVersions(storage,pid,key,a); const set=await variantSet(storage,pid,key,a); const all=(await listVersions(storage,pid,key)).filter(v=>v.version!==a.version).sort((x,y)=>y.version-x.version); return {current:a,versions:all.map(v=>({version:v.version,content:v.content,meta:v.meta,basedOn:v.basedOn,by:v.by,note:v.note,at:v.at,pinned:v.pinned,pins:v.pins,restoredFrom:v.restoredFrom||null})),variants:set}; });   // P2-T03: full immutable history
+on('GET', '/api/projects/:pid/variants/:key', async ({pid,key}) => { need(pid); const a=(await repo.artifacts(pid))[key]; if(!a) throw {status:404,message:'Document inexistent.'}; await backfillVersions(storage,pid,key,a); return variantSet(storage,pid,key,a); });
+on('POST', '/api/projects/:pid/variants/:key/pin', async ({pid,key},req) => { localOnly(req); need(pid); const b=await json(req); const d=await pinVersion(storage,pid,key,Number(b.version),{reason:'operator',ref:{note:String(b.note||'').slice(0,200)},actor:'operator'}); if(!d) throw {status:404,message:'Versiune inexistentă.'}; return {version:d.version,pins:d.pins}; });
+on('GET', '/api/projects/:pid/retention', async ({pid},_,url) => { need(pid); return retentionPlan(storage,pid,await repo.artifacts(pid),{keepUnpinned:Math.max(1,Math.min(50,Number(url.searchParams.get('keep'))||5))}); });
+on('POST', '/api/projects/:pid/retention/apply', async ({pid},req) => { localOnly(req); need(pid); if(RUNNING[pid]) throw {status:409,message:'Așteaptă operația activă.'}; const b=await json(req); return applyRetention(storage,pid,await repo.artifacts(pid),String(b.planHash||''),{keepUnpinned:Math.max(1,Math.min(50,Number(b.keep)||5))}); });
 on('POST', '/api/projects/:pid/artifacts/:key/restore', async ({pid,key},req) => {
   need(pid); if(RUNNING[pid]) throw {status:409,message:'Așteaptă operația activă.'};
-  const {version}=await json(req), a=(await repo.artifacts(pid))[key], old=a?.versions?.find(v=>v.version===Number(version));
+  /* P2-T03: restore reads the immutable version store (legacy embedded history as fallback) and writes a NEW version with lineage */
+  const {version}=await json(req), a=(await repo.artifacts(pid))[key];
+  const stored=await getVersion(storage,pid,key,Number(version)), old=stored||a?.versions?.find(v=>v.version===Number(version));
   if(!old) throw {status:404,message:'Versiunea nu mai există în istoric.'};
+  if(stored&&canonicalHash(stored.content??null)!==stored.hash) throw {status:409,code:'version_corrupt',message:'Versiunea salvată nu mai corespunde amprentei sale; nu o restaurez.'};
   const content=clone(old.content); if(/^ill_/.test(key)) for(const file of [content.color,content.lineart].filter(Boolean)) await repo.readFile(pid,file);
-  await repo.writeArtifact(pid,key,content,{by:'user',note:'Restaurat din versiunea '+version,meta:old.meta,basedOn:old.basedOn,keep:10}); return {ok:true};
+  const doc=await repo.writeArtifact(pid,key,content,{by:'user',note:'Restaurat din versiunea '+version,meta:old.meta,basedOn:old.basedOn,keep:10,restoredFrom:{version:Number(version),hash:stored?.hash||canonicalHash(old.content??null)}});
+  const rebound=await rebindDependents(repo,pid,key,doc); return {ok:true,version:doc.version,restoredFrom:Number(version),rebound};
 });
 on('POST', '/api/projects/:pid/artifacts/:key/media', async ({pid,key},req) => {
   need(pid); if(RUNNING[pid]) throw {status:409,message:'Așteaptă operația activă.'};
@@ -317,6 +329,7 @@ on('POST', '/api/projects/:pid/exports', async ({ pid }, req, url) => {
   if (final) {
     const key = 'delivery_' + vol, old = art[key]?.content?.exports || [], receipt = { name, book, lang, preset: url.searchParams.get('preset'), kind: 'final', fingerprint: deliveryFingerprint(p, bp, art, vol), bytes: buf.length, sha256: fileHash(buf), at: now() };
     await repo.writeArtifact(pid, key, { exports: [...old.filter(e => !(e.book === book && e.lang === lang)), receipt] }, { by: 'export', note: 'PDF al versiunii aprobate' });
+    for (const [k, a] of Object.entries(await repo.artifacts(pid))) if (new RegExp(`^(final|tr|ill)_${vol}(_\\d+)?$`).test(k)) await pinVersion(storage, pid, k, a.version, { reason: 'released', ref: { receipt: receipt.sha256, book, lang }, actor: 'export' });   // P2-T03
   }
   return { ok: true, kind: final ? 'final' : 'preview', path: path.join(dir, name) };
 });

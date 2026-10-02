@@ -16,6 +16,7 @@ import { schemaFor, validateSchema } from './schemas.js';
 import * as GPTImage from './codeximage.js';
 import path from 'node:path';
 import { analyzeLineart, judgeLineart, normalizeLineart } from './pngcheck.js';
+import { pinVersion } from './persistence/artifact-store.js';
 import { fingerprint, pageSequence, sceneFingerprint, rubricEvaluation, visualVerdicts, exactCorrection, parseExactCorrection } from './contracts.js';
 import { EDITORIAL_POLICY, editorialFindings } from './editorial.js';
 
@@ -1134,6 +1135,8 @@ export async function setItemDecisions(pid, decisions) {
     if (d.state !== 'approved' && d.state !== 'pending') { await repo.logEvent(pid, 'item_' + d.state, { gate: inst, item: it.id, note: d.note, code }); Ledger.record({ kind: 'item', pid, gate: p.gate.key, vol: p.gate.vol ?? null, item: it.id, itemKind: it.kind, decision: d.state, code, age: p.input?.[bp.variant_key] }); }
   }
   await repo.patchProject(pid, { approvals: { [inst]: cur } });
+  /* P2-T03: the exact version the operator approved is pinned (never evicted by retention) */
+  for (const d of decisions) { const it = items.find(i => i.id === d.id); if (it?.key && art[it.key] && ['approved', 'approved_note'].includes(d.state)) await pinVersion(repo.s, pid, it.key, art[it.key].version, { reason: 'approved', ref: { gate: inst, item: it.id, hash: it.hash }, actor: 'operator' }).catch(e => console.warn('[pin]', e?.message || e)); }
   const derive = decisions.map(d => items.find(i => i.id === d.id && d.state === 'approved' && i.kind === 'image' && i.mode === 'color')).filter(i => i && art[i.key]?.content?.linePending && items.some(line => line.id === i.id.replace(':color', ':line')));
   if (derive.length) withEngine(pid, async E => {
     E.prevStatus = 'awaiting_review'; const ill = stageByKey(E, matchMap(E.bp.gates?.[p.gate.key]?.redo || {}, 'ill_0_0') || 'illustrations');

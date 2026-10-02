@@ -36,3 +36,14 @@ Snapshoturile PostgreSQL includ tabelele de registru; restaurarea unui snapshot 
 ## Validare
 
 `tests/24-p2-uow.test.mjs` (local + PostgreSQL 16 real efemer) și **întreaga suită rulată și pe PostgreSQL** (`WP_TEST_DATABASE_URL`, check `RS0_SUITE_POSTGRES` în baseline-report).
+
+## Versiuni imuabile, VariantSet, retenție (P2-T03)
+
+`server/persistence/artifact-store.js`, `server/persistence/rebind.js`.
+
+- Fiecare `writeArtifact` scrie în același commit: pointerul curent, versiunea imuabilă (`versions/<key>/<v>.json`, conținut + hash canonic) și, când există `basedOn`, muchia de lineage tipizată (`dependencies/<key>@<v>.json`).
+- Pin-uri: `approved` (la aprobarea unui element — exact versiunea aprobată), `released` (la receipt-ul PDF final), `operator`, iar `evidence`/`migration` sunt rezervate pentru P5/P2-T05. O versiune fixată nu este eliminată niciodată de retenție.
+- Restaurarea citește stocul imuabil (fallback: istoricul încorporat legacy), verifică hash-ul (versiune coruptă → 409 `version_corrupt`) și scrie o **versiune nouă** cu `restoredFrom {version, hash}`; dependenții cu aceeași amprentă de scenă sunt re-legați, ceilalți rămân expirați.
+- Retenția: `GET /api/projects/:pid/retention?keep=N` (dry-run, `planHash`); `POST …/retention/apply {planHash, keep}` doar pe laptop, refuzat dacă planul s-a schimbat. Nu atinge versiunile curente, fixate sau referite; fișierele de imagine rămân (GC separat).
+- API: `GET …/artifacts/:key/history` (istoric complet + VariantSet), `GET …/variants/:key`, `POST …/variants/:key/pin`.
+- Backfill legacy: istoricul încorporat (≤5) și documentul curent devin versiuni marcate `backfill`; nu se inventează variante.
