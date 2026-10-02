@@ -6,7 +6,7 @@
 import { complete } from './llm.js';
 import { bus, now, clone } from './repo.js';
 import { config } from './config.js';
-import { getAgent, startInstance } from './agents.js';
+import { getAgent, requireAgent, startInstance } from './agents.js';
 import { lessonsFor, predictApproval, featuresOf, chooseVariant, findExamples, addSamples, rewardVariant, learnFromEvent, addExample } from './learning.js';
 import { recordCall, govConfig, beforeImage, canvaPaused, canvaCfg } from './governor.js';
 import { knownFailures, noteLessonUse, thresholdFor, noteVisualFailure, addProposals, listLessons, learningSettings } from './learning.js';
@@ -149,8 +149,8 @@ export function agentSystem(agentId, age, pid = null, opts = {}) {
 export function agentPrompt(agentId, prompt, age, pid = null) { const sys = agentSystem(agentId, age, pid); return sys ? `${sys}\n\n${prompt}` : prompt; }
 /* meta: { stage, vol, prompt, bp } for the ledger (plan 2.6); schema: JSON Schema of the reply (plan 1.3) */
 export async function agentComplete(prompt, { agent = 'producator', task = '', json = true, images, pid = null, age, signal, onText, skipBudget, schema = null, localSchema = false, meta = {}, model } = {}) {
-  const end = startInstance(agent, pid, task); let ok = false; let info = null; const t0 = Date.now();
-  const a = getAgent(agent); const useModel = a?.model === 'gpt-6-sol' ? 'gpt-6-sol' : (model || a?.model || config.claudeCode.model);
+  const a = requireAgent(agent);   // P3-T01: unknown agent ID is a contract error, never Producător by default
+  const end = startInstance(agent, pid, task); let ok = false; let info = null; const t0 = Date.now(); const useModel = a?.model === 'gpt-6-sol' ? 'gpt-6-sol' : (model || a?.model || config.claudeCode.model);
   const system = agentSystem(agent, age, pid, { stage: meta.stage, prompt: meta.prompt });
   if (meta.lessons !== false) noteLessonUse(agent, age, pid, { stage: meta.stage, prompt: meta.prompt });
   try { const r = await complete(prompt, { json, images, signal, onText, skipBudget, model: useModel, system, schema, onMeta: m => { info = m; } }); ok = true; recordCall(useModel === 'gpt-6-sol' ? 'text_gpt' : 'text'); return r; }

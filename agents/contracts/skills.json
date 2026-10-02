@@ -1,0 +1,440 @@
+{
+ "schema": "wonderpages.skills/1",
+ "version": "1.0.0",
+ "skills": [
+  {
+   "id": "adauga-etapa",
+   "version": "1.0.0",
+   "owners": [
+    "inginer"
+   ],
+   "description": "Skill de inginerie importat din .claude/skills/adauga-etapa/SKILL.md",
+   "inputSchema": {
+    "type": "object"
+   },
+   "outputSchema": {
+    "type": "object"
+   },
+   "procedure": "vezi fișierul sursă",
+   "negativeCases": [],
+   "prerequisites": [],
+   "tests": [],
+   "maturity": "unproven",
+   "source": ".claude/skills/adauga-etapa/SKILL.md"
+  },
+  {
+   "id": "blueprint-si-prompturi",
+   "version": "1.0.0",
+   "owners": [
+    "inginer"
+   ],
+   "description": "Skill de inginerie importat din .claude/skills/blueprint-si-prompturi/SKILL.md",
+   "inputSchema": {
+    "type": "object"
+   },
+   "outputSchema": {
+    "type": "object"
+   },
+   "procedure": "vezi fișierul sursă",
+   "negativeCases": [],
+   "prerequisites": [],
+   "tests": [],
+   "maturity": "unproven",
+   "source": ".claude/skills/blueprint-si-prompturi/SKILL.md"
+  },
+  {
+   "id": "ruleaza-teste",
+   "version": "1.0.0",
+   "owners": [
+    "inginer"
+   ],
+   "description": "Skill de inginerie importat din .claude/skills/ruleaza-teste/SKILL.md",
+   "inputSchema": {
+    "type": "object"
+   },
+   "outputSchema": {
+    "type": "object"
+   },
+   "procedure": "vezi fișierul sursă",
+   "negativeCases": [],
+   "prerequisites": [],
+   "tests": [],
+   "maturity": "unproven",
+   "source": ".claude/skills/ruleaza-teste/SKILL.md"
+  },
+  {
+   "id": "texte-pentru-editor",
+   "version": "1.0.0",
+   "owners": [
+    "inginer"
+   ],
+   "description": "Skill de inginerie importat din .claude/skills/texte-pentru-editor/SKILL.md",
+   "inputSchema": {
+    "type": "object"
+   },
+   "outputSchema": {
+    "type": "object"
+   },
+   "procedure": "vezi fișierul sursă",
+   "negativeCases": [],
+   "prerequisites": [],
+   "tests": [],
+   "maturity": "unproven",
+   "source": ".claude/skills/texte-pentru-editor/SKILL.md"
+  },
+  {
+   "id": "contract-migration",
+   "version": "1.0.0",
+   "owners": [
+    "inginer"
+   ],
+   "description": "Migrarea versionată a contractelor/schemelor",
+   "inputSchema": {
+    "type": "object"
+   },
+   "outputSchema": {
+    "type": "object"
+   },
+   "procedure": "dry-run → backup → aplicare → verificare",
+   "negativeCases": [
+    "migrare fără backup"
+   ],
+   "prerequisites": [],
+   "tests": [],
+   "maturity": "unproven",
+   "source": "contract inițial P3-T01"
+  },
+  {
+   "id": "guided-intake",
+   "version": "1.0.0",
+   "owners": [
+    "asistent"
+   ],
+   "description": "Intake ghidat cu contract vizibil",
+   "inputSchema": {
+    "type": "object"
+   },
+   "outputSchema": {
+    "type": "object"
+   },
+   "procedure": "întrebări relevante, inferență afișată",
+   "negativeCases": [
+    "pornire fără confirmare"
+   ],
+   "prerequisites": [],
+   "tests": [],
+   "maturity": "unproven",
+   "source": "contract inițial P3-T01"
+  },
+  {
+   "id": "production-triage",
+   "version": "1.0.0",
+   "owners": [
+    "producator"
+   ],
+   "description": "Triajul blocajelor pe dovezi",
+   "inputSchema": {
+    "type": "object"
+   },
+   "outputSchema": {
+    "type": "object"
+   },
+   "procedure": "blocker → owner → acțiune",
+   "negativeCases": [
+    "scor ca motiv de release"
+   ],
+   "prerequisites": [],
+   "tests": [],
+   "maturity": "unproven",
+   "source": "contract inițial P3-T01"
+  },
+  {
+   "id": "concept-differentiation",
+   "version": "1.0.0",
+   "owners": [
+    "director-creativ"
+   ],
+   "description": "Concept diferențiat, ton pe vârstă",
+   "inputSchema": {
+    "type": "object"
+   },
+   "outputSchema": {
+    "type": "object"
+   },
+   "procedure": "alternative comparabile",
+   "negativeCases": [
+    "clișee nejustificate"
+   ],
+   "prerequisites": [],
+   "tests": [],
+   "maturity": "unproven",
+   "source": "contract inițial P3-T01"
+  },
+  {
+   "id": "collection-arc",
+   "version": "1.0.0",
+   "owners": [
+    "arhitect-serie"
+   ],
+   "description": "Arcuri pe șase volume",
+   "inputSchema": {
+    "type": "object"
+   },
+   "outputSchema": {
+    "type": "object"
+   },
+   "procedure": "goal/obstacle/choice/consequence per volum",
+   "negativeCases": [
+    "finaluri cosmetizate identic"
+   ],
+   "prerequisites": [],
+   "tests": [],
+   "maturity": "unproven",
+   "source": "contract inițial P3-T01"
+  },
+  {
+   "id": "reveal-sequencing",
+   "version": "1.0.0",
+   "owners": [
+    "arhitect-serie",
+    "pastrator-continuitate"
+   ],
+   "description": "Ordinea dezvăluirilor și payoff",
+   "inputSchema": {
+    "type": "object"
+   },
+   "outputSchema": {
+    "type": "object"
+   },
+   "procedure": "hook→payoff pe pagini distincte",
+   "negativeCases": [
+    "reveal înainte de setup"
+   ],
+   "prerequisites": [],
+   "tests": [],
+   "maturity": "unproven",
+   "source": "contract inițial P3-T01"
+  },
+  {
+   "id": "continuity-ledger",
+   "version": "1.0.0",
+   "owners": [
+    "pastrator-continuitate"
+   ],
+   "description": "Registru de stare/relații/obiecte",
+   "inputSchema": {
+    "type": "object"
+   },
+   "outputSchema": {
+    "type": "object"
+   },
+   "procedure": "stateBefore/After pe 72 pagini",
+   "negativeCases": [
+    "reîntâlnire ca primă întâlnire"
+   ],
+   "prerequisites": [],
+   "tests": [],
+   "maturity": "unproven",
+   "source": "contract inițial P3-T01"
+  },
+  {
+   "id": "narrative-causality",
+   "version": "1.0.0",
+   "owners": [
+    "scriitor"
+   ],
+   "description": "Cauză → alegere → consecință",
+   "inputSchema": {
+    "type": "object"
+   },
+   "outputSchema": {
+    "type": "object"
+   },
+   "procedure": "beat-urile leagă alegerea protagonistului de rezolvare",
+   "negativeCases": [
+    "rezolvare întâmplătoare"
+   ],
+   "prerequisites": [],
+   "tests": [],
+   "maturity": "unproven",
+   "source": "contract inițial P3-T01"
+  },
+  {
+   "id": "age-dialogue",
+   "version": "1.0.0",
+   "owners": [
+    "scriitor"
+   ],
+   "description": "Dialog potrivit vârstei",
+   "inputSchema": {
+    "type": "object"
+   },
+   "outputSchema": {
+    "type": "object"
+   },
+   "procedure": "vocabular și ritm pe bandă",
+   "negativeCases": [
+    "caricatură sau stereotip"
+   ],
+   "prerequisites": [],
+   "tests": [],
+   "maturity": "unproven",
+   "source": "contract inițial P3-T01"
+  },
+  {
+   "id": "rubric-critique",
+   "version": "1.0.0",
+   "owners": [
+    "editor-critic"
+   ],
+   "description": "Critică pe 18 criterii cu dovezi",
+   "inputSchema": {
+    "type": "object"
+   },
+   "outputSchema": {
+    "type": "object"
+   },
+   "procedure": "citat + pagină per criteriu",
+   "negativeCases": [
+    "citat inventat"
+   ],
+   "prerequisites": [],
+   "tests": [],
+   "maturity": "unproven",
+   "source": "contract inițial P3-T01"
+  },
+  {
+   "id": "safety-semantic",
+   "version": "1.0.0",
+   "owners": [
+    "editor-critic"
+   ],
+   "description": "Siguranță semantică pentru copii",
+   "inputSchema": {
+    "type": "object"
+   },
+   "outputSchema": {
+    "type": "object"
+   },
+   "procedure": "PASS/BLOCK/REVIEW/UNKNOWN",
+   "negativeCases": [
+    "scor mare care compensează un blocker"
+   ],
+   "prerequisites": [],
+   "tests": [],
+   "maturity": "unproven",
+   "source": "contract inițial P3-T01"
+  },
+  {
+   "id": "native-read-aloud",
+   "version": "1.0.0",
+   "owners": [
+    "corector",
+    "traducator"
+   ],
+   "description": "Lectură orală nativă",
+   "inputSchema": {
+    "type": "object"
+   },
+   "outputSchema": {
+    "type": "object"
+   },
+   "procedure": "verificare frază cu frază",
+   "negativeCases": [
+    "calc lingvistic"
+   ],
+   "prerequisites": [],
+   "tests": [],
+   "maturity": "unproven",
+   "source": "contract inițial P3-T01"
+  },
+  {
+   "id": "literary-localization",
+   "version": "1.0.0",
+   "owners": [
+    "traducator"
+   ],
+   "description": "Adaptare literară pe aceleași pageIds",
+   "inputSchema": {
+    "type": "object"
+   },
+   "outputSchema": {
+    "type": "object"
+   },
+   "procedure": "evenimente și voce conservate",
+   "negativeCases": [
+    "sintaxă literală"
+   ],
+   "prerequisites": [],
+   "tests": [],
+   "maturity": "unproven",
+   "source": "contract inițial P3-T01"
+  },
+  {
+   "id": "animal-object-interaction",
+   "version": "1.0.0",
+   "owners": [
+    "director-artistic"
+   ],
+   "description": "Anatomie în posesie/interacțiune",
+   "inputSchema": {
+    "type": "object"
+   },
+   "outputSchema": {
+    "type": "object"
+   },
+   "procedure": "verificarea extremităților care țin obiectul",
+   "negativeCases": [
+    "„mână umană” la patrupede"
+   ],
+   "prerequisites": [],
+   "tests": [],
+   "maturity": "unproven",
+   "source": "contract inițial P3-T01"
+  },
+  {
+   "id": "coloring-simplification",
+   "version": "1.0.0",
+   "owners": [
+    "director-artistic"
+   ],
+   "description": "Simplificare pentru colorat",
+   "inputSchema": {
+    "type": "object"
+   },
+   "outputSchema": {
+    "type": "object"
+   },
+   "procedure": "reducere fundal, păstrarea landmark-urilor",
+   "negativeCases": [
+    "simplă desaturare"
+   ],
+   "prerequisites": [],
+   "tests": [],
+   "maturity": "unproven",
+   "source": "contract inițial P3-T01"
+  },
+  {
+   "id": "composition-planning",
+   "version": "1.0.0",
+   "owners": [
+    "director-artistic"
+   ],
+   "description": "Plan de compoziție măsurabil",
+   "inputSchema": {
+    "type": "object"
+   },
+   "outputSchema": {
+    "type": "object"
+   },
+   "procedure": "familie, zonă text, crop, focal",
+   "negativeCases": [
+    "rotire mecanică de preseturi"
+   ],
+   "prerequisites": [],
+   "tests": [],
+   "maturity": "unproven",
+   "source": "contract inițial P3-T01"
+  }
+ ]
+}

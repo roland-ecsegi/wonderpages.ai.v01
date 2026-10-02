@@ -48,8 +48,8 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | P2-T02 | DONE | d6b6200 | TEST-P2-T02 8/8; RS0 132/132 | Canon SSOT, graf tipizat, impact fără regenerare; DW01/DW02 |
 | P2-T03 | DONE | 8b0fdd4 | TEST-P2-T03 6/6; RS0 138/138 | Versiuni imuabile, pin aprobat/lansat, restaurare cu lineage, retenție dry-run |
 | P2-T04 | DONE | 730aa69 | TEST-P2-T04 7/7; RS0 145/145 | DecisionRecord atomic, scop, CAS, inventar așteptat, decizie de canon |
-| P2-T05 | DONE | (acest commit) | TEST-P2-T05 6/6; RS0 151/151 local + 151/151 PG | Pachet v2, migrator DW idempotent, rollback; D-C16 FIXED |
-| P3-T01 | PENDING | | | |
+| P2-T05 | DONE | 3ba5bd1 | TEST-P2-T05 6/6; RS0 151/151 local + 151/151 PG | Pachet v2, migrator DW idempotent, rollback; D-C16 FIXED |
+| P3-T01 | DONE | (acest commit) | TEST-P3-T01 6/6; RS0 157/157 | 11 RoleContracts, skills cu hash, ModelBinding separat, fără fallback |
 | P3-T02 | PENDING | | | |
 | P3-T03 | PENDING | | | |
 | P3-T04 | PENDING | | | |
@@ -103,6 +103,7 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | 2026-10-02 | RS0 + TEST-P2-T03 | 138/138 PASS | — |
 | 2026-10-02 | RS0 + TEST-P2-T04 | 145/145 PASS | — |
 | 2026-10-02 | Închidere P2: baseline-report --with-tests --with-pg | 15 PASS · 0 FAIL · 3 NOT_RUN; RS0 151/151 local + 151/151 PostgreSQL | prima rulare PG a picat un test nou (alterare dependentă de stocarea locală) — corectat în test |
+| 2026-10-02 | RS0 + TEST-P3-T01 | 157/157 PASS | — |
 
 ## Probleme deschise
 
@@ -116,6 +117,6 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 
 ## Checkpoint
 
-- Ultimul task închis: P2-T05
-- Următorul task: **P3-T01**
+- Ultimul task închis: P3-T01
+- Următorul task: **P3-T02**
 - Cum se reia: `npm ci && npm run build && BROWSER_PATH=/opt/pw-browsers/chromium npm test`; citește tabelul de mai sus și `docs/enterprise/records/`.

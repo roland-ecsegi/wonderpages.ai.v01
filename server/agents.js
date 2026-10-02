@@ -8,6 +8,11 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { ROOT } from './config.js';
 import { bus } from './repo.js';
+import { loadContracts, syncProfiles, assertBindingAllowed, PERMANENT_IDS } from './agents-runtime/registry.js';
+
+let CONTRACTS = null, PROFILES = {};
+export const registry = () => ({ contracts: CONTRACTS, profiles: PROFILES });
+async function saveProfiles(events = []) { if (!storage) return; const doc = (await storage.readJSON('agent-profiles.json', null)) || { events: [] }; await storage.writeJSON('agent-profiles.json', { schema: 'wonderpages.agent-profiles/1', profiles: PROFILES, events: [...(doc.events || []), ...events.map(e => ({ ...e, at: Date.now() }))].slice(-500) }); }
 
 /* sha1 (first 16 hex) of the one-line personas shipped up to 18.3: if agents.json still holds one of them, the user never edited it */
 const LEGACY_DEFAULTS = new Set(['59fce0ed900453c2', 'ea94040a5a235cdc', 'c296b15d5122fa21', '60c4aa155a67bdd1', 'ddc06a57be50dc37', 'c69443092d38df83', '7a45efed69c64a7e', 'bb7094cffb171c7c', 'cc3c215a05878cdd', '5bd294ed2f3dec20', '642c524afc2f7ac9']);
@@ -30,18 +35,29 @@ export async function initAgents(s) {
     AGENTS[a.id] = { ...a, ...mine, id: a.id, defaultPersona: a.persona, charterVersion: `${a.id}@${a.charter || 1}${mine.persona ? '*' : ''}` };
   }
   STATS = (await storage.readJSON('agent-stats.json', {})) || {};
+  /* P3-T01: RoleContracts/skills validated; profiles migrated with stable IDs, charter and binding history */
+  CONTRACTS = loadContracts(); if (CONTRACTS.errors.length) console.warn('[agent registry]', JSON.stringify(CONTRACTS.errors));
+  const savedProfiles = (await storage.readJSON('agent-profiles.json', null))?.profiles || {};
+  const r = syncProfiles(AGENTS, CONTRACTS, savedProfiles); PROFILES = r.profiles; if (r.events.length || !Object.keys(savedProfiles).length) await saveProfiles(r.events);
 }
-const ORDER = ['asistent', 'producator', 'director-creativ', 'arhitect-serie', 'pastrator-continuitate', 'scriitor', 'editor-critic', 'corector', 'director-artistic'];
+const ORDER = PERMANENT_IDS;
 export const listAgents = () => Object.values(AGENTS).sort((x, y) => (ORDER.indexOf(x.id) + 99) % 99 - (ORDER.indexOf(y.id) + 99) % 99).map(a => ({ ...a, stats: STATS[a.id] || { calls: 0, ms: 0, errors: 0 }, active: [...ACTIVE.values()].filter(x => x.agent === a.id) }));
-export const getAgent = id => AGENTS[id] || AGENTS.producator || null;
+/* P3-T01: no silent fallback — an unknown agent id is a contract error at the call site */
+export const getAgent = id => AGENTS[id] || null;
+export function requireAgent(id) { const a = AGENTS[id]; if (!a) throw { status: 500, code: 'unknown_agent', message: `Agent necunoscut în contract: „${id}”. Verifică etapa sau tipul de produs.` }; return a; }
 export async function updateAgent(id, patch) {
   if (!AGENTS[id]) throw { status: 404, message: 'Agent inexistent.' };
+  if (patch.persona != null && (typeof patch.persona !== 'string' || patch.persona.length > 20000)) throw { status: 400, code: 'schema', message: 'Carta (persona) trebuie să fie text de cel mult 20000 de caractere.' };
+  if (patch.model != null && typeof patch.model !== 'string') throw { status: 400, code: 'schema', message: 'Modelul trebuie să fie un text.' };
+  if (patch.model && ['sonnet', 'haiku', 'gpt-6-sol'].includes(patch.model) && CONTRACTS?.roles?.[id]) assertBindingAllowed(CONTRACTS.roles[id], patch.model);   // P3-T01: charter ↔ binding consistency
   if (typeof patch.persona === 'string') { AGENTS[id].persona = patch.persona.trim() || AGENTS[id].defaultPersona; AGENTS[id].charterVersion = `${id}@${AGENTS[id].charter || 1}${AGENTS[id].persona !== AGENTS[id].defaultPersona ? '*' : ''}`; }
   if (patch.model != null) {
     if (['sonnet', 'haiku', 'gpt-6-sol'].includes(patch.model)) AGENTS[id].model = patch.model;
   }
   const saved = Object.fromEntries(Object.values(AGENTS).map(a => [a.id, { ...(a.persona !== a.defaultPersona ? { persona: a.persona } : {}), model: a.model }]));   // only what you changed is stored
-  await storage.writeJSON('agents.json', saved); bus.emit('change', { scope: 'agents' });
+  await storage.writeJSON('agents.json', saved);
+  if (CONTRACTS) { const r = syncProfiles(AGENTS, CONTRACTS, PROFILES); PROFILES = r.profiles; await saveProfiles(r.events); }   // identity unchanged; history appended
+  bus.emit('change', { scope: 'agents' });
   return AGENTS[id];
 }
 /* a temporary agent: one real Claude/Canva process working for a permanent agent */

@@ -22,6 +22,7 @@ import { ENV_DUPLICATES } from './config.js';
 import { spawn } from 'node:child_process';
 import { startProject, pauseProject, switchTo, assertCanWork, activeProject, IMAGE_DEFAULT, gateItems, gateSummary, setItemDecisions, applyItemChanges, completeGate, expandStages, initEngine, runTask, stopEngine, decide, RUNNING, HANDLER_NAMES, agentComplete, learnFromEdit, trackProjectBackground, quietProjectBackground } from './engine.js';
 import { initAgents, listAgents, updateAgent, flushAgents } from './agents.js';
+import * as AgentsMod from './agents.js';
 import { initLearning, listLessons, setLessonStatus, learningState, addManualLesson, seedLessons, setLessonScope, loadCalibration, setCalibrated } from './learning.js';
 import { initGovernor, flushGovernor, usage, setBudget, setWeeklyBudget, canvaUsage, setCanvaSettings } from './governor.js';
 import * as Training from './training.js';
@@ -387,6 +388,7 @@ on('PUT', '/api/settings/output', async (_, req) => { localOnly(req);
 });
 on('PUT', '/api/settings/drive-folder', async (_, req) => { localOnly(req); const r = await gdrive.chooseFolder((await json(req)).folder || ''); bus.emit('change', { scope: 'projects' }); return r; });
 on('GET', '/api/agents', async () => ({ agents: listAgents(), lessons: listLessons() }));
+on('GET', '/api/agents/registry', async () => { const r = AgentsMod.registry(); return { contracts: r.contracts?.roles || {}, skills: r.contracts?.skills || {}, validation: r.contracts?.errors || [], profiles: r.profiles }; });   // P3-T01
 on('PUT', '/api/agents/:id', async ({ id }, req) => { localOnly(req); return updateAgent(id, await json(req)); });
 /* network access: configured only from the laptop itself */
 /* P2-T01: an operator command may carry an idempotency key; a repeated key returns the first result */

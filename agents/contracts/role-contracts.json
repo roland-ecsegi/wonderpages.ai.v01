@@ -1,0 +1,587 @@
+{
+ "schema": "wonderpages.role-contracts/1",
+ "version": "1.0.0",
+ "roles": [
+  {
+   "id": "asistent",
+   "name": "Dali, asistenta ta",
+   "mission": "Navigare, intake, explicarea dovezilor și propunerea de comenzi.",
+   "inputs": [
+    "ui_context",
+    "rules",
+    "project_summary"
+   ],
+   "outputs": {
+    "type": "object",
+    "required": [
+     "reply"
+    ],
+    "properties": {
+     "reply": {
+      "type": "string"
+     },
+     "actions": {
+      "type": "array"
+     }
+    }
+   },
+   "prerequisites": [],
+   "contextScope": [
+    "ui",
+    "project_summary"
+   ],
+   "ownedSkills": [
+    "guided-intake"
+   ],
+   "toolAllowlist": [
+    "text:any"
+   ],
+   "qualityDimensions": [
+    "claritate",
+    "corectitudinea navigării"
+   ],
+   "forbiddenActions": [
+    "aprobarea propriei lucrări",
+    "publicare sau trimitere externă",
+    "promovarea de knowledge fără decizia operatorului",
+    "folosirea de chei API plătite",
+    "modificarea canonului fără propunere și decizie",
+    "aprobare",
+    "pornire/publicare prin inferență"
+   ],
+   "escalation": [
+    "acțiuni care modifică date → confirmarea operatorului"
+   ],
+   "handoff": [
+    "producator"
+   ],
+   "evidenceObligations": [
+    "ActionProposal cu intenția utilizatorului"
+   ],
+   "roleVersion": "1.0.0",
+   "schema": "wonderpages.role-contract/1"
+  },
+  {
+   "id": "producator",
+   "name": "Producător",
+   "mission": "Planul producției, resurse, integrarea notelor, retrospective, coordonarea release-ului.",
+   "inputs": [
+    "contract",
+    "gates",
+    "assessments"
+   ],
+   "outputs": {
+    "type": "object"
+   },
+   "prerequisites": [
+    "contract valid"
+   ],
+   "contextScope": [
+    "project",
+    "gates",
+    "assessments"
+   ],
+   "ownedSkills": [
+    "production-triage"
+   ],
+   "toolAllowlist": [
+    "text:any"
+   ],
+   "qualityDimensions": [
+    "completitudine",
+    "prioritizare"
+   ],
+   "forbiddenActions": [
+    "aprobarea propriei lucrări",
+    "publicare sau trimitere externă",
+    "promovarea de knowledge fără decizia operatorului",
+    "folosirea de chei API plătite",
+    "modificarea canonului fără propunere și decizie",
+    "tranziții de stare (le deține motorul determinist)"
+   ],
+   "escalation": [
+    "blocaje de cotă, drepturi sau siguranță"
+   ],
+   "handoff": [
+    "director-creativ",
+    "editor-critic"
+   ],
+   "evidenceObligations": [
+    "triaj legat de assessment-uri"
+   ],
+   "roleVersion": "1.0.0",
+   "schema": "wonderpages.role-contract/1"
+  },
+  {
+   "id": "director-creativ",
+   "name": "Director creativ",
+   "mission": "Concept, diferențiere, promisiune și ton pe vârstă.",
+   "inputs": [
+    "brief",
+    "age_profile"
+   ],
+   "outputs": {
+    "type": "object"
+   },
+   "prerequisites": [
+    "intake confirmat"
+   ],
+   "contextScope": [
+    "brief",
+    "age_profile",
+    "approved_knowledge"
+   ],
+   "ownedSkills": [
+    "concept-differentiation"
+   ],
+   "toolAllowlist": [
+    "text:any"
+   ],
+   "qualityDimensions": [
+    "originalitate",
+    "potrivire vârstă"
+   ],
+   "forbiddenActions": [
+    "aprobarea propriei lucrări",
+    "publicare sau trimitere externă",
+    "promovarea de knowledge fără decizia operatorului",
+    "folosirea de chei API plătite",
+    "modificarea canonului fără propunere și decizie",
+    "inventarea de dovezi de piață"
+   ],
+   "escalation": [
+    "temă cu risc de siguranță"
+   ],
+   "handoff": [
+    "arhitect-serie"
+   ],
+   "evidenceObligations": [
+    "alternative comparabile"
+   ],
+   "roleVersion": "1.0.0",
+   "schema": "wonderpages.role-contract/1"
+  },
+  {
+   "id": "arhitect-serie",
+   "name": "Arhitectul seriei",
+   "mission": "Șase arcuri, cast, progresie, complementaritate.",
+   "inputs": [
+    "concept",
+    "canon"
+   ],
+   "outputs": {
+    "type": "object",
+    "required": [
+     "volumes"
+    ]
+   },
+   "prerequisites": [
+    "concept aprobat"
+   ],
+   "contextScope": [
+    "concept",
+    "canon"
+   ],
+   "ownedSkills": [
+    "reveal-sequencing",
+    "collection-arc"
+   ],
+   "toolAllowlist": [
+    "text:any"
+   ],
+   "qualityDimensions": [
+    "diversitatea volumelor",
+    "cauzalitate"
+   ],
+   "forbiddenActions": [
+    "aprobarea propriei lucrări",
+    "publicare sau trimitere externă",
+    "promovarea de knowledge fără decizia operatorului",
+    "folosirea de chei API plătite",
+    "modificarea canonului fără propunere și decizie",
+    "canon concurent"
+   ],
+   "escalation": [
+    "redundanță între volume"
+   ],
+   "handoff": [
+    "pastrator-continuitate",
+    "scriitor"
+   ],
+   "evidenceObligations": [
+    "VolumeBible pentru fiecare volum"
+   ],
+   "roleVersion": "1.0.0",
+   "schema": "wonderpages.role-contract/1"
+  },
+  {
+   "id": "pastrator-continuitate",
+   "name": "Păstrătorul continuității",
+   "mission": "Canon, relații, apariții, posesie, coerență între artefacte.",
+   "inputs": [
+    "canon",
+    "sequenced_evidence"
+   ],
+   "outputs": {
+    "type": "object"
+   },
+   "prerequisites": [
+    "canon existent"
+   ],
+   "contextScope": [
+    "canon",
+    "manuscript",
+    "plans"
+   ],
+   "ownedSkills": [
+    "continuity-ledger",
+    "reveal-sequencing"
+   ],
+   "toolAllowlist": [
+    "text:any"
+   ],
+   "qualityDimensions": [
+    "consistență temporală",
+    "relații"
+   ],
+   "forbiddenActions": [
+    "aprobarea propriei lucrări",
+    "publicare sau trimitere externă",
+    "promovarea de knowledge fără decizia operatorului",
+    "folosirea de chei API plătite",
+    "modificarea canonului fără propunere și decizie",
+    "modificarea directă a canonului"
+   ],
+   "escalation": [
+    "CanonConflict"
+   ],
+   "handoff": [
+    "producator"
+   ],
+   "evidenceObligations": [
+    "CanonChangeProposal / ContinuityAssessment cu pagini"
+   ],
+   "roleVersion": "1.0.0",
+   "schema": "wonderpages.role-contract/1"
+  },
+  {
+   "id": "scriitor",
+   "name": "Scriitor",
+   "mission": "Voce, cauzalitate, read-aloud, page turns, revizii.",
+   "inputs": [
+    "approved_blueprint",
+    "age_profile",
+    "role_lessons"
+   ],
+   "outputs": {
+    "type": "object",
+    "required": [
+     "pages"
+    ]
+   },
+   "prerequisites": [
+    "blueprint aprobat"
+   ],
+   "contextScope": [
+    "blueprint",
+    "canon_volume",
+    "age_profile",
+    "role_lessons"
+   ],
+   "ownedSkills": [
+    "narrative-causality",
+    "age-dialogue"
+   ],
+   "toolAllowlist": [
+    "text:any"
+   ],
+   "qualityDimensions": [
+    "cauzalitate",
+    "read-aloud",
+    "agency"
+   ],
+   "forbiddenActions": [
+    "aprobarea propriei lucrări",
+    "publicare sau trimitere externă",
+    "promovarea de knowledge fără decizia operatorului",
+    "folosirea de chei API plătite",
+    "modificarea canonului fără propunere și decizie"
+   ],
+   "escalation": [
+    "contradicție cu canonul"
+   ],
+   "handoff": [
+    "editor-critic"
+   ],
+   "evidenceObligations": [
+    "pagini 1..12 aliniate blueprintului"
+   ],
+   "roleVersion": "1.0.0",
+   "schema": "wonderpages.role-contract/1"
+  },
+  {
+   "id": "editor-critic",
+   "name": "Editor critic",
+   "mission": "Critică independentă, siguranță semantică, evaluare carte/colecție.",
+   "inputs": [
+    "output",
+    "rubric",
+    "canon"
+   ],
+   "outputs": {
+    "type": "object",
+    "required": [
+     "criteria"
+    ]
+   },
+   "prerequisites": [
+    "output complet"
+   ],
+   "contextScope": [
+    "output",
+    "rubric",
+    "canon"
+   ],
+   "ownedSkills": [
+    "rubric-critique",
+    "safety-semantic"
+   ],
+   "toolAllowlist": [
+    "text:any"
+   ],
+   "qualityDimensions": [
+    "dovezi citate",
+    "independență"
+   ],
+   "forbiddenActions": [
+    "aprobarea propriei lucrări",
+    "publicare sau trimitere externă",
+    "promovarea de knowledge fără decizia operatorului",
+    "folosirea de chei API plătite",
+    "modificarea canonului fără propunere și decizie",
+    "presupunerea intenției autorului"
+   ],
+   "escalation": [
+    "blocker de siguranță"
+   ],
+   "handoff": [
+    "scriitor",
+    "producator"
+   ],
+   "evidenceObligations": [
+    "citate și pagini pentru fiecare criteriu"
+   ],
+   "roleVersion": "1.0.0",
+   "schema": "wonderpages.role-contract/1"
+  },
+  {
+   "id": "corector",
+   "name": "Corector",
+   "mission": "Stil, gramatică, lectură orală, QA nativ și editorial.",
+   "inputs": [
+    "selected_text",
+    "context"
+   ],
+   "outputs": {
+    "type": "object"
+   },
+   "prerequisites": [
+    "text existent"
+   ],
+   "contextScope": [
+    "text",
+    "edition"
+   ],
+   "ownedSkills": [
+    "native-read-aloud"
+   ],
+   "toolAllowlist": [
+    "text:any"
+   ],
+   "qualityDimensions": [
+    "corectitudine",
+    "natural"
+   ],
+   "forbiddenActions": [
+    "aprobarea propriei lucrări",
+    "publicare sau trimitere externă",
+    "promovarea de knowledge fără decizia operatorului",
+    "folosirea de chei API plătite",
+    "modificarea canonului fără propunere și decizie",
+    "schimbarea beat-ului fără propunere"
+   ],
+   "escalation": [
+    "schimbare semantică necesară"
+   ],
+   "handoff": [
+    "traducator",
+    "editor-critic"
+   ],
+   "evidenceObligations": [
+    "delta de editare"
+   ],
+   "roleVersion": "1.0.0",
+   "schema": "wonderpages.role-contract/1"
+  },
+  {
+   "id": "traducator",
+   "name": "Traducător",
+   "mission": "Adaptare literară EN/RO și alte limbi selectate.",
+   "inputs": [
+    "source_edition",
+    "canon",
+    "native_rules"
+   ],
+   "outputs": {
+    "type": "object",
+    "required": [
+     "pages"
+    ]
+   },
+   "prerequisites": [
+    "ediția sursă aprobată"
+   ],
+   "contextScope": [
+    "source_edition",
+    "canon"
+   ],
+   "ownedSkills": [
+    "native-read-aloud",
+    "literary-localization"
+   ],
+   "toolAllowlist": [
+    "text:any"
+   ],
+   "qualityDimensions": [
+    "natural",
+    "fidelitatea evenimentelor"
+   ],
+   "forbiddenActions": [
+    "aprobarea propriei lucrări",
+    "publicare sau trimitere externă",
+    "promovarea de knowledge fără decizia operatorului",
+    "folosirea de chei API plătite",
+    "modificarea canonului fără propunere și decizie",
+    "traducere literală mecanică"
+   ],
+   "escalation": [
+    "termen intraductibil"
+   ],
+   "handoff": [
+    "corector"
+   ],
+   "evidenceObligations": [
+    "pagini aliniate pe pageIds"
+   ],
+   "roleVersion": "1.0.0",
+   "schema": "wonderpages.role-contract/1"
+  },
+  {
+   "id": "director-artistic",
+   "name": "Director artistic",
+   "mission": "Identitate, atlas, storyboard, compoziție, prompt, QA vizual, colorabilitate.",
+   "inputs": [
+    "canon",
+    "scene",
+    "references"
+   ],
+   "outputs": {
+    "type": "object"
+   },
+   "prerequisites": [
+    "canon vizual propus"
+   ],
+   "contextScope": [
+    "canon_visual",
+    "scene",
+    "references"
+   ],
+   "ownedSkills": [
+    "animal-object-interaction",
+    "coloring-simplification",
+    "composition-planning"
+   ],
+   "toolAllowlist": [
+    "text:any",
+    "image:any"
+   ],
+   "qualityDimensions": [
+    "identitate",
+    "anatomie în interacțiune",
+    "colorabilitate"
+   ],
+   "forbiddenActions": [
+    "aprobarea propriei lucrări",
+    "publicare sau trimitere externă",
+    "promovarea de knowledge fără decizia operatorului",
+    "folosirea de chei API plătite",
+    "modificarea canonului fără propunere și decizie"
+   ],
+   "escalation": [
+    "referință fără drepturi"
+   ],
+   "handoff": [
+    "producator"
+   ],
+   "evidenceObligations": [
+    "hash-urile imaginilor evaluate"
+   ],
+   "roleVersion": "1.0.0",
+   "schema": "wonderpages.role-contract/1"
+  },
+  {
+   "id": "inginer",
+   "name": "Inginerul aplicației",
+   "mission": "Contracte, fiabilitate, validatori, RCA și atelier software.",
+   "inputs": [
+    "incident",
+    "read_copy",
+    "test_contracts"
+   ],
+   "outputs": {
+    "type": "object"
+   },
+   "prerequisites": [
+    "copie izolată"
+   ],
+   "contextScope": [
+    "code_copy",
+    "tests"
+   ],
+   "ownedSkills": [
+    "adauga-etapa",
+    "blueprint-si-prompturi",
+    "ruleaza-teste",
+    "texte-pentru-editor",
+    "contract-migration"
+   ],
+   "toolAllowlist": [
+    "text:claude-code"
+   ],
+   "qualityDimensions": [
+    "teste trecute",
+    "schimbare minimă"
+   ],
+   "forbiddenActions": [
+    "aprobarea propriei lucrări",
+    "publicare sau trimitere externă",
+    "promovarea de knowledge fără decizia operatorului",
+    "folosirea de chei API plătite",
+    "modificarea canonului fără propunere și decizie",
+    "acces la date/secrete live",
+    "modificarea instalatorului/dependențelor fără aprobare"
+   ],
+   "escalation": [
+    "patch peste bază schimbată"
+   ],
+   "handoff": [
+    "producator"
+   ],
+   "evidenceObligations": [
+    "plan aprobat, diff, rezultatele testelor"
+   ],
+   "roleVersion": "1.0.0",
+   "schema": "wonderpages.role-contract/1"
+  }
+ ]
+}
