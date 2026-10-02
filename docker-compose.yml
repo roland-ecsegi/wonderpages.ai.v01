@@ -1,0 +1,24 @@
+# Baza de date a aplicației WonderPages.AI. Pornește cu: docker compose up -d
+# În Docker Desktop apare ca proiectul „wonderpages”, containerul „wonderpages-db” și volumul „wonderpages_pg”.
+name: wonderpages
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: wonderpages-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${PG_USER:-wonderpages}
+      POSTGRES_PASSWORD: ${PG_PASSWORD:-wonderpages-local}
+      POSTGRES_DB: ${PG_DB:-wonderpages}
+    ports:
+      - "127.0.0.1:5433:5432"   # doar de pe acest calculator
+    volumes:
+      - pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+volumes:
+  pg:
+    name: wonderpages_pg

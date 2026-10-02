@@ -1,0 +1,154 @@
+[
+ {
+  "agent": "scriitor",
+  "age": "3-4",
+  "text": "La 3–4 ani: puțină acțiune blândă (mișcare, o urmărire, o mică surpriză, un obstacol ușor), niciodată pericol sau tensiune mare."
+ },
+ {
+  "agent": "scriitor",
+  "age": null,
+  "text": "Un singur eveniment clar pe pagină; personajul principal conduce acțiunea."
+ },
+ {
+  "agent": "scriitor",
+  "age": null,
+  "text": "Obiectul important nu apare înainte de pagina în care e descoperit."
+ },
+ {
+  "agent": "scriitor",
+  "age": null,
+  "text": "Când prietenii își spun noapte bună, fiecare merge acasă, în cuibul sau patul lui."
+ },
+ {
+  "agent": "scriitor",
+  "age": null,
+  "text": "Fără formulări redundante sau adjective de umplutură (de exemplu „băltoacă mică”)."
+ },
+ {
+  "agent": "traducator",
+  "age": null,
+  "text": "Româna e o adaptare naturală, nu traducere mot-a-mot: ordine firească a cuvintelor, expresii românești, onomatopee românești."
+ },
+ {
+  "agent": "corector",
+  "age": null,
+  "text": "Numește personajul în loc de pronume când în scenă sunt doi."
+ },
+ {
+  "agent": "traducator",
+  "age": null,
+  "text": "Fără diminutive inventate sau forțate (de exemplu „sclipiriță”); folosește cuvinte pe care un părinte român le-ar spune firesc."
+ },
+ {
+  "agent": "scriitor",
+  "age": null,
+  "text": "Numărul de cuvinte e un semnal, nu arhitectura poveștii: nu forța proză nenaturală ca să atingi un număr.",
+  "ref": "LL-002",
+  "scope": "global"
+ },
+ {
+  "agent": "scriitor",
+  "age": null,
+  "text": "Un obiect important nu apare deloc înainte de pagina în care e descoperit (nici în imagine).",
+  "ref": "LL-003",
+  "scope": "global"
+ },
+ {
+  "agent": "arhitect-serie",
+  "age": null,
+  "text": "O prietenie nouă are pași vizibili: întâlnire, împărțire, invitație, ceva făcut împreună; un prieten care revine e recunoscut, nu întâlnit din nou.",
+  "ref": "LL-005",
+  "scope": "global"
+ },
+ {
+  "agent": "pastrator-continuitate",
+  "age": null,
+  "text": "Nu numi o specie reală dacă designul personajului nu o susține clar; atunci specia rămâne nedefinită.",
+  "ref": "LL-007",
+  "scope": "global"
+ },
+ {
+  "agent": "scriitor",
+  "age": null,
+  "text": "Două pagini alăturate nu fac aceeași treabă narativă (de ex. ploaia începe pe o pagină, adăpostul pe următoarea).",
+  "ref": "LL-009",
+  "scope": "global"
+ },
+ {
+  "agent": "scriitor",
+  "age": null,
+  "text": "Pe ultima pagină e clar unde ajunge fiecare personaj.",
+  "ref": "LL-010",
+  "scope": "global"
+ },
+ {
+  "agent": "arhitect-serie",
+  "age": null,
+  "text": "Finalurile variază între volume; somnul de seară nu e finalul implicit.",
+  "ref": "LL-011",
+  "scope": "global"
+ },
+ {
+  "agent": "pastrator-continuitate",
+  "age": null,
+  "text": "Culorile personajului sunt identitate fixă; vârsta poate schimba doar intensitatea redării, nu culorile.",
+  "ref": "LL-012",
+  "scope": "global"
+ },
+ {
+  "agent": "scriitor",
+  "age": null,
+  "text": "O problemă clară și o soluție clară pe pagină; cauza și efectul trebuie să aibă sens fizic.",
+  "ref": "LL-013",
+  "scope": "global"
+ },
+ {
+  "agent": "scriitor",
+  "age": null,
+  "text": "Fără limbaj procedural sau de „manual de siguranță”; siguranța se vede în acțiune.",
+  "ref": "LL-014",
+  "scope": "global"
+ },
+ {
+  "agent": "director-artistic",
+  "age": null,
+  "text": "Strălucirea și lumina sunt naturale (soare pe o suprafață udă), nu magie emisă, dacă lumea nu are magie.",
+  "ref": "LL-015",
+  "scope": "global"
+ },
+ {
+  "agent": "director-artistic",
+  "age": null,
+  "text": "Fără text, litere sau legende în ilustrații; textul cărții se adaugă la paginare.",
+  "ref": "LL-016",
+  "scope": "global"
+ },
+ {
+  "agent": "director-artistic",
+  "age": null,
+  "text": "La scenele în care personajele țin obiecte, verifică anatomia: numărul și prinderea membrelor, forma labelor, fără mâini umane la patrupede.",
+  "ref": "LL-029",
+  "scope": "global"
+ },
+ {
+  "agent": "director-artistic",
+  "age": null,
+  "text": "Verifică pe fiecare pagină trăsăturile numărabile: exact 3 pete, exact 3 coarne, gulerul, paleta, coada, proporțiile.",
+  "ref": "LL-031",
+  "scope": "global"
+ },
+ {
+  "agent": "director-artistic",
+  "age": null,
+  "text": "După orice corecție de imagine, reverifică tot contractul paginii (anatomie, acțiune, poveste, lizibilitate), nu doar defectul corectat.",
+  "ref": "LL-035",
+  "scope": "global"
+ },
+ {
+  "agent": "traducator",
+  "age": null,
+  "text": "Româna se scrie ca o carte românească: poate avea altă structură a frazei decât engleza, cu același sens.",
+  "ref": "LL-008",
+  "scope": "global"
+ }
+]

@@ -1,0 +1,2 @@
+// Pagina de autentificare pentru dispozitivele din rețea (scos din pagină ca să funcționeze cu politica CSP).
+document.getElementById('f').onsubmit=async e=>{e.preventDefault();const r=await fetch('/auth/login',{method:'POST',headers:{'content-type':'application/json','x-wp':'1'},body:JSON.stringify({code:document.getElementById('c').value})});if(r.ok)location.href='/';else{const j=await r.json().catch(()=>({}));document.getElementById('e').textContent=j.message||'Eroare';}};
