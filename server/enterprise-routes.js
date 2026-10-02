@@ -21,6 +21,8 @@ import { buildCandidate, verifyCandidate, transition, recordProof, exportRelease
 import { checkedPackage } from './package-check.js';
 import * as Knowledge from './knowledge/store.js';
 import { ingestLessonsRegistry } from './knowledge/ll.js';
+import * as Experience from './knowledge/experience.js';
+import * as AgentsMod from './agents.js';
 import * as LearningMod from './learning.js';
 import { baselineAfter, EFFECT_VERSION } from './knowledge/effectiveness.js';
 import { volumeMetrics } from './domain/story-contracts.js';
@@ -225,7 +227,8 @@ export function registerEnterpriseRoutes({ on, json, need, localOnly, repo, stor
   on('GET', '/api/evaluation/reports', async () => ({ reports: (await reports()).map(r => ({ id: r.id, split: r.split, versions: r.versions, dataset: r.dataset, at: r.at, overall: r.overall })) }));
   on('POST', '/api/evaluation/compare', async (_, req) => { const b = await json(req), all = await reports(), a = all.find(r => r.id === b.a), c = all.find(r => r.id === b.b); if (!a || !c) throw { status: 404, message: 'Raport inexistent.' }; return compareReports(a, c); });
   on('POST', '/api/evaluation/accept', async (_, req) => { localOnly(req); const b = await json(req), all = await reports(); if (!all.some(r => r.id === b.calibration && r.split === 'calibration') || !all.some(r => r.id === b.holdout && r.split === 'holdout')) throw { status: 400, message: 'Alege un raport de calibrare și unul pe setul rezervat.' }; if (String(b.note || '').trim().length < 10) throw { status: 400, message: 'Scrie ce ai verificat la acceptare.' }; const acc = { calibration: b.calibration, holdout: b.holdout, note: String(b.note).slice(0, 1000), actor: 'operator@laptop', at: now() }; await storage.writeJSON('evaluation/acceptance.json', acc); return acc; });
-  on('GET', '/api/evaluation/status', async () => { const all = await reports(), acc = await storage.readJSON('evaluation/acceptance.json', null); const pick = id => all.find(r => r.id === id); return calibrationStatus(acc ? [pick(acc.calibration), pick(acc.holdout)].filter(Boolean) : [all.filter(r => r.split === 'calibration').at(-1), all.filter(r => r.split === 'holdout').at(-1)].filter(Boolean), acc); });
+  const evalStatus = async () => { const all = await reports(), acc = await storage.readJSON('evaluation/acceptance.json', null); const pick = id => all.find(r => r.id === id); return calibrationStatus(acc ? [pick(acc.calibration), pick(acc.holdout)].filter(Boolean) : [all.filter(r => r.split === 'calibration').at(-1), all.filter(r => r.split === 'holdout').at(-1)].filter(Boolean), acc); };
+  on('GET', '/api/evaluation/status', evalStatus);
 
   /* P5-T06: repair reports (plan, verification, resolutions, items for the operator) and missing/failed units of a volume */
   on('GET', '/api/projects/:pid/repairs', async ({ pid }) => { const p = need(pid); return { attempts: p.repairAttempts || {}, reports: p.repairs || [] }; });
@@ -389,4 +392,18 @@ export function registerEnterpriseRoutes({ on, json, need, localOnly, repo, stor
     let dw = null; try { const doc = JSON.parse([...readZip(await fs.promises.readFile(path.join(ROOT, 'reference/dinosaur-world-v04/dinosaur-world-proiect.v04.zip')))].find(([k]) => k.endsWith('/project.json'))[1].toString()), pages = doc.artifacts?.script_0?.content?.pages || []; if (pages.length) dw = baselineAfter({ baseline: volumeMetrics(pages) }); } catch {}
     return { version: EFFECT_VERSION, model: model ? { samples: model.samples, validation: model.validation || null } : null, variants: LearningMod.variantReports(), lessons, harmful: lessons.filter(l => l.status === 'harmful'), outcomes: { total: outcomes.length, byResult: by }, confidenceNote: 'Încrederea istorică a lecțiilor este un proxy de politică, nu o probabilitate validată.', dinosaurWorld: dw };
   });
+  /* P7-T04: experience records per role/skill/cohort/binding and evidence-based maturity (granted only after calibration) */
+  const xpCtx = () => { const r = AgentsMod.registry(), type = repo.getType ? repo.getType('kids-sc') : null, c = type ? contractFromBlueprint(type) : null; return { roles: r.contracts?.roles || {}, ageBands: c?.ageBands || ['3-4', '5-6', '7-8'], languages: c?.languages || [] }; };
+  on('POST', '/api/agents/experience', async (_, req) => { localOnly(req); const b = await json(req); if (!Array.isArray(b.records) || !b.records.length) throw { status: 400, message: 'Lipsesc înregistrările.' }; const r = await Experience.addRecords(b.records.slice(0, 2000), xpCtx()); return { added: r.added.length, rejected: r.rejected }; });
+  on('GET', '/api/agents/:id/maturity', async ({ id }) => {
+    const ctx = xpCtx(), role = ctx.roles[id]; if (!role) throw { status: 404, message: 'Agent necunoscut.' };
+    const prof = AgentsMod.registry().profiles?.[id], calibrated = (await evalStatus()).thresholdsStatus === 'validated';
+    return { agent: id, binding: prof?.modelBinding || null, calibrated, skills: (role.ownedSkills || []).map(skill => ({ skill, current: Experience.assess({ agent: id, skill, records: Experience.allRecords(), binding: prof?.modelBinding, ageBands: ctx.ageBands, calibrated }), history: Experience.assessments(id, skill) })) };
+  });
+  on('POST', '/api/agents/:id/maturity/:skill/assess', async ({ id, skill }, req) => {
+    localOnly(req); const ctx = xpCtx(); if (!(ctx.roles[id]?.ownedSkills || []).includes(skill)) throw { status: 403, code: 'role_privacy', message: `Rolul ${id} nu deține skill-ul ${skill}.` };
+    const prof = AgentsMod.registry().profiles?.[id], calibrated = (await evalStatus()).thresholdsStatus === 'validated';
+    return Experience.recordAssessment(Experience.assess({ agent: id, skill, records: Experience.allRecords(), binding: prof?.modelBinding, ageBands: ctx.ageBands, calibrated }));
+  });
+  on('GET', '/api/agents/:id/experience/:skill', async ({ id, skill }) => ({ records: Experience.experienceFor(id, skill, xpCtx()).slice(-200) }));
 }

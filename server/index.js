@@ -77,7 +77,7 @@ await initAgents(storage); await initGovernor(storage);
 await Ledger.initLedger(storage);
 const Events = await new EventStream(storage).init();   // P3-T06: durable change stream (cursor replay across reconnects and restarts)
 await initLearning(storage, (prompt, o) => agentComplete(prompt, o)); await loadCalibration(); await Learning.loadKnownFailures(); await Learning.loadThresholds();
-await Knowledge.initKnowledgeStore(storage); await Training.initTraining(storage, Learning);
+await Knowledge.initKnowledgeStore(storage); await (await import('./knowledge/experience.js')).initExperience(storage); await Training.initTraining(storage, Learning);
 Improve.initImprove({ learn: Learning, activeProject: () => activeProject() });
 const gdrive = new GDrive(storage, config.port); await gdrive.init();
 await LAN.initLan(storage);
@@ -140,7 +140,7 @@ async function exclusiveStorage(fn) {
 scheduleBackups(storage,exclusiveStorage);
 canva.init().catch(e => console.warn('[canva]', e?.message || e));
 
-async function reloadPersistent(){repo.projects.clear();repo.art.clear();repo.bps.clear();repo.comments.clear();repo.types.clear();await repo.load();await initAgents(storage);await initGovernor(storage);await Ledger.initLedger(storage);await initLearning(storage,(prompt,o)=>agentComplete(prompt,o));await Knowledge.initKnowledgeStore(storage);await loadCalibration();await Learning.loadKnownFailures();await Learning.loadThresholds();Object.assign(SETTINGS,await storage.readJSON('settings.json',{}));if(SETTINGS.outputDir)setOutputDir(SETTINGS.outputDir);IMAGE_DEFAULT.engine=SETTINGS.imageEngine||'canva';}
+async function reloadPersistent(){repo.projects.clear();repo.art.clear();repo.bps.clear();repo.comments.clear();repo.types.clear();await repo.load();await initAgents(storage);await initGovernor(storage);await Ledger.initLedger(storage);await initLearning(storage,(prompt,o)=>agentComplete(prompt,o));await Knowledge.initKnowledgeStore(storage);await (await import('./knowledge/experience.js')).initExperience(storage);await loadCalibration();await Learning.loadKnownFailures();await Learning.loadThresholds();Object.assign(SETTINGS,await storage.readJSON('settings.json',{}));if(SETTINGS.outputDir)setOutputDir(SETTINGS.outputDir);IMAGE_DEFAULT.engine=SETTINGS.imageEngine||'canva';}
 /* ---------- tiny router ---------- */
 const routes = [];
 const on = (method, pattern, fn) => routes.push({ method, re: new RegExp('^' + pattern.replace(/:(\w+)/g, '(?<$1>[^/]+)') + '$'), fn });
