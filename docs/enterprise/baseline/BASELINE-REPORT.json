@@ -1,31 +1,31 @@
 {
  "kind": "wonderpages.baseline-report/1",
- "generatedAt": "2026-10-02T14:08:09.243Z",
- "codeRevision": "4d31657",
+ "generatedAt": "2026-10-02T15:03:47.028Z",
+ "codeRevision": "3ee1f6e",
  "checks": [
   {
    "id": "INVENTORY",
    "status": "PASS",
-   "summary": "235 fișiere (fără node_modules/.git/data), 6 ascunse",
+   "summary": "255 fișiere (fără node_modules/.git/data), 6 ascunse",
    "detail": {
-    "total": 235,
+    "total": 255,
     "byExt": {
-     ".md": 54,
+     ".md": 61,
      ".example": 1,
      "(none)": 3,
-     ".json": 15,
+     ".json": 16,
      ".bat": 4,
      ".vbs": 1,
      ".yml": 1,
      ".log": 4,
-     ".js": 85,
+     ".js": 91,
      ".ttf": 4,
      ".txt": 1,
      ".png": 3,
      ".html": 2,
      ".webmanifest": 1,
      ".zip": 1,
-     ".mjs": 48,
+     ".mjs": 54,
      ".ps1": 1,
      ".cjs": 4,
      ".cmd": 2
@@ -65,9 +65,9 @@
   {
    "id": "SOURCE_DRIFT_V04",
    "status": "PASS",
-   "summary": "111/137 fișiere v04 identice, 26 modificate (enterprise), 92 adăugate, 0 lipsă",
+   "summary": "109/137 fișiere v04 identice, 28 modificate (enterprise), 112 adăugate, 0 lipsă",
    "detail": {
-    "unchanged": 111,
+    "unchanged": 109,
     "modified": [
      "blueprints/kids-sc.json",
      "public/app/actions.js",
@@ -79,6 +79,7 @@
      "server/agents.js",
      "server/canva.js",
      "server/codeximage.js",
+     "server/contracts.js",
      "server/engine.js",
      "server/governor.js",
      "server/index.js",
@@ -89,6 +90,7 @@
      "server/storage/local.js",
      "server/storage/postgres.js",
      "server/training.js",
+     "tests/1-productie.test.mjs",
      "tests/3-securitate.test.mjs",
      "tests/4-optimizare.test.mjs",
      "tests/mocks/bin/claude.cjs",
@@ -114,23 +116,31 @@
      "docs/enterprise/baseline/logs/2026-10-02-rs0.log",
      "docs/enterprise/contracts/AGENT-REGISTRY.md",
      "docs/enterprise/contracts/CANON-AND-DEPENDENCIES.md",
+     "docs/enterprise/contracts/COLLECTION-QA.md",
      "docs/enterprise/contracts/COLLECTION.md",
      "docs/enterprise/contracts/DECISIONS.md",
+     "docs/enterprise/contracts/GOLD-SET.md",
      "docs/enterprise/contracts/INTAKE.md",
      "docs/enterprise/contracts/JOBS.md",
      "docs/enterprise/contracts/OBSERVABILITY.md",
      "docs/enterprise/contracts/PAGE-BLUEPRINTS.md",
      "docs/enterprise/contracts/PERSISTENCE.md",
+     "docs/enterprise/contracts/PILOT-AND-RECONCILE.md",
      "docs/enterprise/contracts/PRODUCT-CONTRACT.md",
      "docs/enterprise/contracts/PROVIDER-CAPABILITIES.md",
+     "docs/enterprise/contracts/QUALITY-ASSESSMENT.md",
+     "docs/enterprise/contracts/SAFETY.md",
      "docs/enterprise/contracts/SECURITY-BASELINE.md",
      "docs/enterprise/contracts/STORY-CONTRACTS.md",
+     "docs/enterprise/contracts/VISUAL-QUALITY.md",
      "docs/enterprise/migration/DW-DRY-RUN.json",
      "docs/enterprise/migration/DW-DRY-RUN.md",
      "docs/enterprise/records/P1.md",
      "docs/enterprise/records/P2.md",
      "docs/enterprise/records/P3.md",
      "docs/enterprise/records/P4.md",
+     "docs/enterprise/records/P5.md",
+     "evaluation/gold/gold-v1.json",
      "scripts/enterprise/baseline-report.mjs",
      "scripts/enterprise/editorial-baseline.mjs",
      "scripts/enterprise/pg-ephemeral.mjs",
@@ -165,6 +175,12 @@
      "server/providers/capabilities.js",
      "server/providers/operator-exchange.js",
      "server/providers/registry.js",
+     "server/quality/assessment.js",
+     "server/quality/collection-qa.js",
+     "server/quality/evaluation.js",
+     "server/quality/repair.js",
+     "server/quality/safety.js",
+     "server/quality/visual.js",
      "server/security/posture.js",
      "server/security/redact.js",
      "server/security/safe-zip.js",
@@ -188,6 +204,12 @@
      "tests/42-p4-pageplans.test.mjs",
      "tests/43-p4-story.test.mjs",
      "tests/44-p4-pilot.test.mjs",
+     "tests/50-p5-safety.test.mjs",
+     "tests/51-p5-assessment.test.mjs",
+     "tests/52-p5-visual.test.mjs",
+     "tests/53-p5-collection-qa.test.mjs",
+     "tests/54-p5-gold.test.mjs",
+     "tests/55-p5-repair.test.mjs",
      "tests/cdp.mjs",
      "tests/mocks/legacy-blueprint-v15.json"
     ]
@@ -196,13 +218,13 @@
   {
    "id": "BUILD",
    "status": "PASS",
-   "summary": "PASS: 136 fișiere JavaScript, JSON, lockfile, fonturi și fișiere runtime; WonderPages AI — claude-gpt.v04",
+   "summary": "PASS: 148 fișiere JavaScript, JSON, lockfile, fonturi și fișiere runtime; WonderPages AI — claude-gpt.v04",
    "log": "docs/enterprise/baseline/logs/2026-10-02-build.log"
   },
   {
    "id": "RS0_SUITE",
    "status": "PASS",
-   "summary": "219 trecute, 0 picate, 0 sărite; browser PDF: da",
+   "summary": "262 trecute, 0 picate, 0 sărite; browser PDF: da",
    "log": "docs/enterprise/baseline/logs/2026-10-02-rs0.log"
   },
   {
@@ -224,7 +246,7 @@
   {
    "id": "PROTECT_APPROVALS",
    "status": "PASS",
-   "summary": "25/25 teste",
+   "summary": "30/30 teste",
    "detail": [
     "poarta seriei: aprobarea pe elemente e obligatorie (audit H1)",
     "aprobarea se invalidează când elementul se schimbă",
@@ -249,6 +271,11 @@
     "P4-T03 API: etapa „Planul paginilor” produce 72 PageBlueprints înaintea porții seriei; planul și atlasul sunt elemente de aprobare",
     "P4-T05 API: demo respins → V1 se reface și se oprește din nou la demo; V2–6 rămân blocate; aprobările nu sunt inventate",
     "P4-T05 API (DW migrat): raport, decizie legată de raport, schimbare selectivă, aprobări pending, V2–6 blocate",
+    "P5-T01: un scenariu cu medie mare și un blocaj de siguranță rămâne BLOCK; elementul porții nu poate fi aprobat",
+    "P5-T01 API: intrarea nesigură este refuzată; un scenariu nesigur oprește producția înaintea imaginilor; BLOCK nu se aprobă manual",
+    "P5-T02 API: evaluări cu politica și modelul exacte; elementul „book” la poarta finală; reparația nativă regresivă nu este păstrată",
+    "P5-T05: schimbarea politicii (model/politică) este vizibilă: v1 lasă să treacă negative de calitate; rapoartele nu se amestecă",
+    "P5-T05 API: rulare, rapoarte, comparație și starea calibrării (fără acceptare: propus)",
     "v03: nicio lipsă nu poate fi aprobată implicit",
     "v03: aprobare închisă cu conținut schimbat refuză livrarea"
    ]
@@ -282,7 +309,7 @@
   {
    "id": "PROTECT_LEARNING",
    "status": "PASS",
-   "summary": "9/9 teste",
+   "summary": "13/13 teste",
    "detail": [
     "agenți și lecții",
     "P2-T04 API: export de colecție fără poartă refuzat cu motive; propunerea de canon cere decizie; propunere expirată refuzată",
@@ -292,7 +319,11 @@
     "v19 2.5: buget săptămânal și estimarea colecției",
     "v19 3.6: setul de aur rulează etapele de text și se compară cu referința",
     "P4-T02: finaluri redundante, politica lumii per colecție, specie afirmată pentru un personaj nedeterminat",
-    "P4-T02 API: la aprobarea seriei planul colecției este un element; un plan cu blocaje nu poate fi aprobat, iar producția nu continuă"
+    "P4-T02 API: la aprobarea seriei planul colecției este un element; un plan cu blocaje nu poate fi aprobat, iar producția nu continuă",
+    "P5-T04: o colecție coerentă nu are probleme mari; scopurile sunt pe volume",
+    "P5-T04 API: raportul de colecție este disponibil pe proiect",
+    "P5-T05: raport pe calibrare — confuzie, false-pass pe setul negativ, kappa, erori; același input repetat dă același rezultat",
+    "P5-T05 API: rulare, rapoarte, comparație și starea calibrării (fără acceptare: propus)"
    ]
   },
   {
@@ -325,7 +356,7 @@
   {
    "id": "RS0_SUITE_POSTGRES",
    "status": "PASS",
-   "summary": "219 trecute, 0 picate, 0 sărite (STORAGE=postgres)",
+   "summary": "262 trecute, 0 picate, 0 sărite (STORAGE=postgres)",
    "log": "docs/enterprise/baseline/logs/2026-10-02-rs0-postgres.log"
   },
   {

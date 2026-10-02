@@ -22,6 +22,7 @@ import { generationAllowed, pilotState } from './domain/pilot.js';
 import { volumeSafety, textSafety } from './quality/safety.js';
 import { assessText, assessBook, policyFor, nativeChecks, regressions } from './quality/assessment.js';
 import { visualConsistency } from './quality/visual.js';
+import { planRepairs, unitHashes, verifyExecution, resolution, MAX_CREATIVE_ATTEMPTS } from './quality/repair.js';
 import { storyContract, causality as storyCausality, voice as storyVoice, science as storyScience, ageFit, criticNotes } from './domain/story-contracts.js';
 /* P3-T03: the innermost durable unit (stage or item) of the current async flow: its lease fences every result write */
 export const FENCE = new AsyncLocalStorage();
@@ -1287,9 +1288,14 @@ export function applyItemChanges(pid) {
     E.prevStatus = 'awaiting_review'; E.task = { label: 'Modificări pe elemente' }; E.curStage = { key: '_task', base: 'modificari', vol: E.project.gate?.vol ?? null };
     await repo.patchProject(pid, { status: 'correcting', error: null });
     const gate = E.project.gate; const inst = gateInstance(gate); const appr = { ...(E.project.approvals?.[inst] || {}) };
-    const items = gateItems(E.bp, E.art, E.project, gate).filter(i => ['changes', 'rejected', 'approved_note'].includes(i.state));
+    let items = gateItems(E.bp, E.art, E.project, gate).filter(i => ['changes', 'rejected', 'approved_note'].includes(i.state));
     if(items.some(i=>['layout','bookcheck'].includes(i.kind)))throw {code:'validation',message:'Pentru machetă folosește Editează macheta; verificarea întregii cărți se face în preview, apoi aprobi sau notezi paginile care cer corecturi.'};
     if (!items.length) { await repo.patchProject(pid, { status: 'awaiting_review' }); return; }
+    /* P5-T06: bounded PagePatch plan — exact targets, explicit dependents, at most 2 creative attempts per item */
+    const attempts = { ...(E.project.repairAttempts || {}) }, plan = planRepairs({ items, approvals: appr, attempts });
+    const blockedIds = new Set(plan.needsOperator.map(x => x.id)); const t0 = Date.now(), vRep = gate.vol ?? 0, before = unitHashes(E.art, vRep, E.bp.structure.pages);
+    if (blockedIds.size) await logE(E, `${blockedIds.size} elemente au epuizat cele ${MAX_CREATIVE_ATTEMPTS} încercări creative: decizia îți aparține (editare manuală sau altă abordare).`, 'warn');
+    items = items.filter(i => !blockedIds.has(i.id));
     const byArt = {}; items.filter(i => i.kind === 'text').forEach(i => (byArt[i.key] = byArt[i.key] || []).push(i));
     const jobs = [...Object.entries(byArt).map(([k, its]) => ({ type: 'text', key: k, its })), ...items.filter(i => i.kind === 'doc').map(i => ({ type: 'doc', its: [i] })),
       ...items.filter(i => i.kind === 'image').map(i => ({ type: 'image', its: [i] })), ...items.filter(i => i.kind === 'ref').map(i => ({ type: 'ref', its: [i] }))];
@@ -1337,7 +1343,13 @@ export function applyItemChanges(pid) {
       await repo.patchProject(pid, { approvals: { [inst]: appr } });
     });
     await setStage(E, '_task', { status: 'done', finishedAt: now() });
-    await repo.patchProject(pid, { status: 'awaiting_review', approvals: { [inst]: appr } });
+    /* P5-T06: verify — nothing outside the plan changed; resolution only from the current full recheck; exact calls and hashes */
+    const art2 = await repo.artifacts(pid), after = unitHashes(art2, vRep, E.bp.structure.pages), verify = verifyExecution(before, after, plan);
+    const calls = Ledger.rows(r => r.pid === pid && r.t >= t0).map(r => ({ kind: r.kind, unit: r.unit || null, model: r.model || r.engine || null, ok: r.ok, ms: r.ms }));
+    for (const pt of plan.patches.filter(x => x.creative)) attempts[pt.id] = { count: (attempts[pt.id]?.count || 0) + 1, history: [...(attempts[pt.id]?.history || []), { at: now(), before: pt.target.map(u => before[u] || null), after: pt.target.map(u => after[u] || null), calls: calls.filter(c => pt.target.some(u => String(c.unit || '').includes(u.split(/[#:]/)[0]))).length }].slice(-5) };
+    const report = { at: now(), gate: inst, plan, verify, resolutions: plan.patches.map(pt => ({ id: pt.id, op: pt.op, ...resolution(pt, art2, { approval: appr[pt.id] || {} }) })), needsOperator: plan.needsOperator.map(x => ({ id: x.id, op: x.op, reason: x.reason, history: x.history })), calls };
+    if (!verify.ok) await logE(E, `Atenție: s-au schimbat elemente necerute (${verify.unrequested.join(', ')}).`, 'warn');
+    await repo.patchProject(pid, { status: 'awaiting_review', approvals: { [inst]: appr }, repairAttempts: attempts, repairs: [...(E.project.repairs || []), report].slice(-20) });
     await logE(E, `Modificări aplicate pe ${items.length} elemente.`);
   }, { label: 'Modificări pe elemente' });
 }

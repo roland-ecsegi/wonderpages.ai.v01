@@ -23,6 +23,7 @@ import { assessBook, policyFor } from './quality/assessment.js';
 import { pageVisual } from './quality/visual.js';
 import { collectionQA } from './quality/collection-qa.js';
 import { runEvaluation, calibrationStatus, compareReports } from './quality/evaluation.js';
+import { missingUnits } from './quality/repair.js';
 import { pngSize } from './security/safe-zip.js';
 import { reconcileReport, applyReconcile } from './migration/dw-reconcile.js';
 import { contractFromBlueprint, validateProjectInput, editionsFor } from './domain/product-contract.js';
@@ -200,4 +201,8 @@ export function registerEnterpriseRoutes({ on, json, need, localOnly, repo, stor
   on('POST', '/api/evaluation/compare', async (_, req) => { const b = await json(req), all = await reports(), a = all.find(r => r.id === b.a), c = all.find(r => r.id === b.b); if (!a || !c) throw { status: 404, message: 'Raport inexistent.' }; return compareReports(a, c); });
   on('POST', '/api/evaluation/accept', async (_, req) => { localOnly(req); const b = await json(req), all = await reports(); if (!all.some(r => r.id === b.calibration && r.split === 'calibration') || !all.some(r => r.id === b.holdout && r.split === 'holdout')) throw { status: 400, message: 'Alege un raport de calibrare și unul pe setul rezervat.' }; if (String(b.note || '').trim().length < 10) throw { status: 400, message: 'Scrie ce ai verificat la acceptare.' }; const acc = { calibration: b.calibration, holdout: b.holdout, note: String(b.note).slice(0, 1000), actor: 'operator@laptop', at: now() }; await storage.writeJSON('evaluation/acceptance.json', acc); return acc; });
   on('GET', '/api/evaluation/status', async () => { const all = await reports(), acc = await storage.readJSON('evaluation/acceptance.json', null); const pick = id => all.find(r => r.id === id); return calibrationStatus(acc ? [pick(acc.calibration), pick(acc.holdout)].filter(Boolean) : [all.filter(r => r.split === 'calibration').at(-1), all.filter(r => r.split === 'holdout').at(-1)].filter(Boolean), acc); });
+
+  /* P5-T06: repair reports (plan, verification, resolutions, items for the operator) and missing/failed units of a volume */
+  on('GET', '/api/projects/:pid/repairs', async ({ pid }) => { const p = need(pid); return { attempts: p.repairAttempts || {}, reports: p.repairs || [] }; });
+  on('GET', '/api/projects/:pid/missing/:v', async ({ pid, v }) => { const p = need(pid), bp = await repo.getBlueprint(pid), n = Number(v); if (!Number.isInteger(n) || n < 1 || n > bp.structure.volumes) throw { status: 400, message: 'Volum invalid.' }; return { volume: n, units: missingUnits(await repo.artifacts(pid), n - 1, { pages: bp.structure.pages, images: p.options?.images !== false }) }; });
 }
