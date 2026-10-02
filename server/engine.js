@@ -6,7 +6,8 @@
 import { complete } from './llm.js';
 import { bus, now, clone } from './repo.js';
 import { config } from './config.js';
-import { getAgent, requireAgent, startInstance } from './agents.js';
+import { getAgent, requireAgent, startInstance, registry as agentRegistry } from './agents.js';
+import { buildContext } from './agents-runtime/context-builder.js';
 import { lessonsFor, predictApproval, featuresOf, chooseVariant, findExamples, addSamples, rewardVariant, learnFromEvent, addExample } from './learning.js';
 import { recordCall, govConfig, beforeImage, canvaPaused, canvaCfg } from './governor.js';
 import { knownFailures, noteLessonUse, thresholdFor, noteVisualFailure, addProposals, listLessons, learningSettings } from './learning.js';
@@ -139,37 +140,41 @@ export function errMsg(e) {
 
 /* every call is a temporary instance of a permanent agent: its persona + its approved lessons come first */
 /* provenance (LL-022/023): which agent, model, prompt variant, lessons and blueprint version produced an artifact */
-function provenance(E, agentId, promptKey) { const a = getAgent(agentId); return { agent: agentId, model: a?.model || config.claudeCode.model, prompt: promptKey, lessons: lessonsFor(agentId, E.project.input?.[E.bp.variant_key], E.pid).map(l => l.id), blueprint: E.bp.version, at: now() }; }
+/* P3-T02: provenance comes from the real execution (effective model + override source + context manifest), not from the agent default */
+function provenance(E, agentId, promptKey) { const a = getAgent(agentId), last = E.lastContext?.agentId === agentId && E.lastContext?.scope?.prompt === promptKey ? E.lastContext : null; return { agent: agentId, model: last?.model?.model || a?.model || config.claudeCode.model, modelSource: last?.model?.source || null, context: last?.manifestHash || null, prompt: promptKey, lessons: last ? last.layers.experience.included.map(l => l.id) : lessonsFor(agentId, E.project.input?.[E.bp.variant_key], E.pid).map(l => l.id), blueprint: E.bp.version, at: now() }; }
+const persistedContexts = new Set();
+async function persistContext(pid, m) { const rel = `${pid ? `projects/${pid}` : '_context'}/context/${m.manifestHash}.json`; if (persistedContexts.has(rel)) return; await repo?.s?.writeJSON?.(rel, { ...m, at: now() }); persistedContexts.add(rel); }
 /* v19 (plan 1.1/1.2): the agent's charter + its lessons are the SYSTEM prompt; the task and its data are the message */
 export function agentSystem(agentId, age, pid = null, opts = {}) {
   const a = getAgent(agentId); if (!a) return '';
-  const lessons = lessonsFor(a.id, age, pid, opts);
-  return `${a.persona}\n\n${EDITORIAL_POLICY}${lessons.length ? `\n\nLESSONS LEARNED FROM THE PUBLISHER'S PAST REVIEWS (apply them):\n${lessons.map(l => '- ' + l.text).join('\n')}` : ''}`;
+  return buildContext({ agent: a, role: agentRegistry().contracts?.roles?.[a.id], policy: EDITORIAL_POLICY, lessons: listLessons(), age, pid, stage: opts.stage, promptKey: opts.prompt }).system;   // P3-T02
 }
 export function agentPrompt(agentId, prompt, age, pid = null) { const sys = agentSystem(agentId, age, pid); return sys ? `${sys}\n\n${prompt}` : prompt; }
 /* meta: { stage, vol, prompt, bp } for the ledger (plan 2.6); schema: JSON Schema of the reply (plan 1.3) */
-export async function agentComplete(prompt, { agent = 'producator', task = '', json = true, images, pid = null, age, signal, onText, skipBudget, schema = null, localSchema = false, meta = {}, model } = {}) {
+export async function agentComplete(prompt, { agent = 'producator', task = '', json = true, images, pid = null, age, signal, onText, skipBudget, schema = null, localSchema = false, meta = {}, model, onContext } = {}) {
   const a = requireAgent(agent);   // P3-T01: unknown agent ID is a contract error, never Producător by default
-  const end = startInstance(agent, pid, task); let ok = false; let info = null; const t0 = Date.now(); const useModel = a?.model === 'gpt-6-sol' ? 'gpt-6-sol' : (model || a?.model || config.claudeCode.model);
-  const system = agentSystem(agent, age, pid, { stage: meta.stage, prompt: meta.prompt });
+  /* P3-T02: one context build per call — system text, manifest (persisted), effective model with its source */
+  const ctxBuilt = buildContext({ agent: a, role: agentRegistry().contracts?.roles?.[a.id], policy: EDITORIAL_POLICY, lessons: listLessons(), age, pid, stage: meta.stage, promptKey: meta.prompt, prompt, override: meta.modelSource === 'model_variant' ? null : model, variant: meta.modelSource === 'model_variant' ? model : null, defaultModel: config.claudeCode.model });
+  const end = startInstance(agent, pid, task); let ok = false; let info = null; const t0 = Date.now(); const useModel = ctxBuilt.manifest.model.model;
+  const system = ctxBuilt.system; await persistContext(pid, ctxBuilt.manifest).catch(e => console.warn('[context]', e?.message || e)); onContext?.(ctxBuilt.manifest);
   if (meta.lessons !== false) noteLessonUse(agent, age, pid, { stage: meta.stage, prompt: meta.prompt });
   try { const r = await complete(prompt, { json, images, signal, onText, skipBudget, model: useModel, system, schema, onMeta: m => { info = m; } }); ok = true; recordCall(useModel === 'gpt-6-sol' ? 'text_gpt' : 'text'); return r; }
   finally {
     end(ok);
     const u = info?.usage || {};
     Ledger.record({ kind: 'text', pid, vol: meta.vol ?? null, stage: meta.stage || task || null, prompt: meta.prompt || null, agent, model: useModel, ok, ms: info?.ms ?? (Date.now() - t0), bytesIn: info?.bytesIn ?? Buffer.byteLength(prompt), bytesOut: info?.bytesOut ?? 0,
-      inTok: u.input_tokens ?? null, outTok: u.output_tokens ?? null, cacheRead: u.cache_read_input_tokens ?? null, cacheWrite: u.cache_creation_input_tokens ?? null, schema: info?.schema ?? (schema || localSchema ? 'local' : null), system: info?.system || null, bp: meta.bp ?? null, charter: a?.charterVersion || null });
+      inTok: u.input_tokens ?? null, outTok: u.output_tokens ?? null, cacheRead: u.cache_read_input_tokens ?? null, cacheWrite: u.cache_creation_input_tokens ?? null, schema: info?.schema ?? (schema || localSchema ? 'local' : null), system: info?.system || null, bp: meta.bp ?? null, charter: a?.charterVersion || null, context: ctxBuilt.manifest.manifestHash, modelSource: ctxBuilt.manifest.model.source });
   }
 }
 const agentOf = (E, stage, promptKey) => stage?.agent || E.bp.prompt_agents?.[promptKey] || 'producator';
-async function callLLM(E, prompt, { label, json = true, agent = 'producator', images, promptKey = null, schemaCtx = null, model } = {}) {
+async function callLLM(E, prompt, { label, json = true, agent = 'producator', images, promptKey = null, schemaCtx = null, model, modelSource = null } = {}) {
   if (E.stopped) throw { code: 'stopped' };
   const id = Math.random().toString(36).slice(2);
   LIVE.set(id, { pid: E.pid, label, kind: 'text', text: '', since: now(), agent }); emitLive();
   const cur = E.curStage || {};
   const full = promptKey ? schemaFor(E.bp, promptKey, schemaCtx || buildCtx(E)) : null;
   const { 'x-cli': cliOk, ...schema } = full || {};             // large documents are validated here only, so they keep every extra field
-  try { return await agentComplete(prompt, { agent, task: label, json, images, pid: E.pid, age: E.project.input?.[E.bp.variant_key], signal: E.ctl.signal, schema: full && cliOk !== false ? schema : null, localSchema: !!full, model: model || E.bp.prompt_models?.[promptKey] || undefined, meta: { stage: cur.base || cur.key || E.stageKey || '_task', vol: cur.vol ?? E.taskVol ?? null, prompt: promptKey, bp: E.bp.version }, onText: t => { const c = LIVE.get(id); if (c) { c.text = t; emitLive(); } } }); }
+  try { return await agentComplete(prompt, { agent, task: label, json, images, pid: E.pid, age: E.project.input?.[E.bp.variant_key], signal: E.ctl.signal, schema: full && cliOk !== false ? schema : null, localSchema: !!full, model: model || E.bp.prompt_models?.[promptKey] || undefined, onContext: m => { E.lastContext = m; }, meta: { stage: cur.base || cur.key || E.stageKey || '_task', vol: cur.vol ?? E.taskVol ?? null, prompt: promptKey, bp: E.bp.version, modelSource: modelSource || (model ? 'model_variant' : E.bp.prompt_models?.[promptKey] ? 'stage_override' : null) }, onText: t => { const c = LIVE.get(id); if (c) { c.text = t; emitLive(); } } }); }
   finally { LIVE.delete(id); emitLive(); }
 }
 export const imageEngineOf = E => E.project.options?.image_engine || IMAGE_DEFAULT.engine;

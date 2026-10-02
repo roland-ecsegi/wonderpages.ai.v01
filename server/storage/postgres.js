@@ -138,6 +138,7 @@ export class PostgresStorage {
     try {
       await tx.query('BEGIN');
       for (const [t, c] of [['artifacts', 'project_id'], ['comments', 'project_id'], ['project_blueprints', 'project_id'], ['review_events', 'project_id'], ...PROJECT_LEDGER_TABLES.map(t => [t, 'project_id']), ['projects', 'id']]) await tx.query(`DELETE FROM ${t} WHERE ${c} = $1`, [pid]);
+      await tx.query("DELETE FROM documents WHERE path LIKE $1", [`projects/${pid}/%`]);   // generic per-project documents (context manifests, …)
       await tx.query('COMMIT');
     } catch (e) { await tx.query('ROLLBACK'); throw e; } finally { tx.release(); }
     await this.files.remove(`projects/${pid}`);
