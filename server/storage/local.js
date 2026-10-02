@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { checkPreconditions } from '../persistence/preconditions.js';
 
 /* v19: writes of the same file are queued and each uses its own temporary name (two quick writes used to collide: ENOENT on rename) */
 let SEQ = 0; const CHAINS = new Map();
@@ -57,6 +58,7 @@ export class LocalStorage {
     return lockOn(pid, async () => {
       if (PENDING.has(pid)) await this.recoverJournal(pid);
       if (b.commandId) { const prev = await this.readJSON(`_commands/${pid}/${safeId(b.commandId)}.json`, null); if (prev) return { deduplicated: true, result: prev.result, revision: prev.revision }; }
+      await checkPreconditions(b.preconditions, rel => this.readJSON(rel, null));   // P3-T03: fencing inside the lock
       const projRel = b.projectId ? `projects/${b.projectId}/project.json` : null;
       const current = projRel ? ((await this.readJSON(projRel, null))?.revision || 0) : 0;
       if (b.expectedRevision != null && b.expectedRevision !== current) throw { status: 409, code: 'revision_conflict', currentRevision: current, expectedRevision: b.expectedRevision, message: `Proiectul s-a schimbat între timp (revizia ${current}, nu ${b.expectedRevision}). Reîncarcă și reaplică modificarea.` };

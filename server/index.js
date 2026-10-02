@@ -23,6 +23,7 @@ import { spawn } from 'node:child_process';
 import { startProject, pauseProject, switchTo, assertCanWork, activeProject, IMAGE_DEFAULT, gateItems, gateSummary, setItemDecisions, applyItemChanges, completeGate, expandStages, initEngine, runTask, stopEngine, decide, RUNNING, HANDLER_NAMES, agentComplete, learnFromEdit, trackProjectBackground, quietProjectBackground } from './engine.js';
 import { initAgents, listAgents, updateAgent, flushAgents } from './agents.js';
 import * as AgentsMod from './agents.js';
+import * as EngineMod from './engine.js';
 import { initLearning, listLessons, setLessonStatus, learningState, addManualLesson, seedLessons, setLessonScope, loadCalibration, setCalibrated } from './learning.js';
 import { initGovernor, flushGovernor, usage, setBudget, setWeeklyBudget, canvaUsage, setCanvaSettings } from './governor.js';
 import * as Training from './training.js';
@@ -92,6 +93,10 @@ for (const f of await fs.readdir(path.join(ROOT, 'blueprints'))) {
 }
 /* a server restart interrupts running work: mark it resumable */
 for (const p of repo.listProjects()) if (['running', 'correcting'].includes(p.status)) await repo.patchProject(p.id, { status: p.gate ? 'awaiting_review' : 'paused', error: 'Serverul a fost repornit. Reia de unde a rămas.' });
+/* P3-T03: leases of the previous process are reconciled; an external call without a confirmed result is never replayed blindly */
+const reconciled = {};
+for (const p of repo.listProjects()) { const r = await EngineMod.jobs?.reconcile(p.id).catch(e => ({ error: e.message })); if (r && (r.pending?.length || r.ambiguous?.length || r.resumeCheck?.length)) { reconciled[p.id] = r; if (r.ambiguous?.length) await repo.patchProject(p.id, { log: [...(p.log || []), { t: now(), text: `${r.ambiguous.length} unități au fost întrerupte după un apel extern fără rezultat confirmat; decide în Activitate dacă le reiei.`, kind: 'warn' }].slice(-120) }); } }
+if (Object.keys(reconciled).length) console.warn('[jobs reconcile]', JSON.stringify(reconciled));
 globalThis.__wpBootStage?.('Verific Claude…');
 await initLLM();
 /* P1-T03: read-only capability discovery (no generation, no API keys); unknown is never green */
@@ -388,6 +393,8 @@ on('PUT', '/api/settings/output', async (_, req) => { localOnly(req);
 });
 on('PUT', '/api/settings/drive-folder', async (_, req) => { localOnly(req); const r = await gdrive.chooseFolder((await json(req)).folder || ''); bus.emit('change', { scope: 'projects' }); return r; });
 on('GET', '/api/agents', async () => ({ agents: listAgents(), lessons: listLessons() }));
+on('GET', '/api/projects/:pid/jobs', async ({ pid }) => { need(pid); return { jobs: await EngineMod.jobs.list(pid) }; });   // P3-T03
+on('POST', '/api/projects/:pid/jobs/:key/resolve', async ({ pid, key }, req) => { localOnly(req); need(pid); if (RUNNING[pid]) throw { status: 409, message: 'Așteaptă operația activă.' }; const b = await json(req); return EngineMod.jobs.resolve(pid, decodeURIComponent(key), String(b.action || ''), 'operator@laptop'); });
 on('GET', '/api/agents/registry', async () => { const r = AgentsMod.registry(); return { contracts: r.contracts?.roles || {}, skills: r.contracts?.skills || {}, validation: r.contracts?.errors || [], profiles: r.profiles }; });   // P3-T01
 on('PUT', '/api/agents/:id', async ({ id }, req) => { localOnly(req); return updateAgent(id, await json(req)); });
 /* network access: configured only from the laptop itself */

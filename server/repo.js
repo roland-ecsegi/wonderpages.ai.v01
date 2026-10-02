@@ -122,7 +122,7 @@ export class Repo {
     /* P2-T03: the immutable version and its typed lineage edge are part of the same commit */
     const ops = [{ rel: `projects/${pid}/artifacts/${key}.json`, obj: doc }, { rel: versionRel(pid, key, doc.version), obj: versionDoc(key, doc, o.restoredFrom ? { restoredFrom: o.restoredFrom } : {}) }, ...(projDoc ? [{ rel: `projects/${pid}/project.json`, obj: projDoc }] : [])];
     if (doc.basedOn?.key) ops.push({ rel: `projects/${pid}/dependencies/${key}@${doc.version}.json`, obj: { id: `${key}@${doc.version}`, to: { key, version: doc.version }, from: { key: doc.basedOn.key, version: doc.basedOn.version ?? null, pageHash: doc.basedOn.pageHash ?? null }, type: /^ill_/.test(key) ? 'visual' : 'semantic', at: now() } });
-    const r = await this.commit({ projectId: proj ? pid : null, commandId: o.commandId, actor: o.by || 'agent', kind: 'artifact.write', expectedRevision: o.expectedRevision, bumpRevision: !!proj, ops, result: { key, version: doc.version }, events: o.commandId ? [{ kind: 'artifact.write', key, version: doc.version, by: doc.by, note: doc.note }] : [] });
+    const r = await this.commit({ projectId: proj ? pid : null, commandId: o.commandId, actor: o.by || 'agent', kind: 'artifact.write', expectedRevision: o.expectedRevision, bumpRevision: !!proj, ops, preconditions: o.fence ? [{ rel: o.fence.rel, lease: { token: o.fence.token } }] : undefined, result: { key, version: doc.version }, events: o.commandId ? [{ kind: 'artifact.write', key, version: doc.version, by: doc.by, note: doc.note }] : [] });
     if (r.deduplicated) { dedup = true; doc = map[key]; return; }
     map[key]=doc; if (proj) { proj.revision = r.revision; proj.updatedAt = projDoc.updatedAt; }
     });

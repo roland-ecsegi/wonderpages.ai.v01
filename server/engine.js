@@ -8,6 +8,13 @@ import { bus, now, clone } from './repo.js';
 import { config } from './config.js';
 import { getAgent, requireAgent, startInstance, registry as agentRegistry } from './agents.js';
 import { buildContext } from './agents-runtime/context-builder.js';
+import { AsyncLocalStorage } from 'node:async_hooks';
+import { Scheduler, INSTANCE, unitInputsHash } from './jobs/scheduler.js';
+import { canonicalHash } from './domain/canonical.js';
+/* P3-T03: the innermost durable unit (stage or item) of the current async flow: its lease fences every result write */
+export const FENCE = new AsyncLocalStorage();
+export let jobs = null;
+const noteExternal = info => { const f = FENCE.getStore(); return f ? jobs.markExternal(f.pid, f.key, f.token, info).catch(e => { if (e?.code === 'stale_lease') throw e; console.warn('[jobs external]', e?.message || e); }) : null; };
 import { lessonsFor, predictApproval, featuresOf, chooseVariant, findExamples, addSamples, rewardVariant, learnFromEvent, addExample } from './learning.js';
 import { recordCall, govConfig, beforeImage, canvaPaused, canvaCfg } from './governor.js';
 import { knownFailures, noteLessonUse, thresholdFor, noteVisualFailure, addProposals, listLessons, learningSettings } from './learning.js';
@@ -24,7 +31,7 @@ import { EDITORIAL_POLICY, editorialFindings } from './editorial.js';
 
 let repo, canva;
 export function initEngine(r, c) {
-  repo = r; canva = c;
+  repo = r; canva = c; jobs = r?.s?.commitBatch ? new Scheduler(r.s, { owner: INSTANCE }) : null;
   repo.onArtifactWrite = async (pid, key, prev, next) => {
     if (prev && /^(script|final)_\d+$/.test(key)) {
       const art = await repo.artifacts(pid);
@@ -157,6 +164,7 @@ export async function agentComplete(prompt, { agent = 'producator', task = '', j
   const ctxBuilt = buildContext({ agent: a, role: agentRegistry().contracts?.roles?.[a.id], policy: EDITORIAL_POLICY, lessons: listLessons(), age, pid, stage: meta.stage, promptKey: meta.prompt, prompt, override: meta.modelSource === 'model_variant' ? null : model, variant: meta.modelSource === 'model_variant' ? model : null, defaultModel: config.claudeCode.model });
   const end = startInstance(agent, pid, task); let ok = false; let info = null; const t0 = Date.now(); const useModel = ctxBuilt.manifest.model.model;
   const system = ctxBuilt.system; await persistContext(pid, ctxBuilt.manifest).catch(e => console.warn('[context]', e?.message || e)); onContext?.(ctxBuilt.manifest);
+  if (pid) await noteExternal({ provider: ctxBuilt.manifest.model.provider });   // P3-T03
   if (meta.lessons !== false) noteLessonUse(agent, age, pid, { stage: meta.stage, prompt: meta.prompt });
   try { const r = await complete(prompt, { json, images, signal, onText, skipBudget, model: useModel, system, schema, onMeta: m => { info = m; } }); ok = true; recordCall(useModel === 'gpt-6-sol' ? 'text_gpt' : 'text'); return r; }
   finally {
@@ -186,6 +194,7 @@ async function callImage(E, args, label) {
   const end = startInstance('director-artistic', E.pid, label); let ok = false; const t0 = Date.now();
   const hhmm = t => new Date(t).toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit' });
   const engine = args.provider || imageEngineOf(E);
+  await noteExternal({ provider: engine });   // P3-T03: recorded BEFORE the provider is asked
   try {
     if (engine === 'chatgpt') {
       for (let tries = 0; ; tries++) {
@@ -296,11 +305,34 @@ function applyBind(E, spec, ctx) {
   }
   return ctx;
 }
-async function saveArt(E, key, content, o = {}) { const d = await repo.writeArtifact(E.pid, key, content, o); E.art[key] = d; return d; }
+async function saveArt(E, key, content, o = {}) { const f = FENCE.getStore(); f?.outputs?.add(key); const d = await repo.writeArtifact(E.pid, key, content, f && jobs ? { ...o, fence: { rel: jobs.rel(f.pid, f.key), token: f.token } } : o); E.art[key] = d; return d; }
 async function setStage(E, key, patch) { await repo.patchProject(E.pid, { stages: { [key]: patch } }); }
 async function logE(E, text, kind = 'info') { const log = [...(E.project.log || []), { t: now(), text, kind }].slice(-120); await repo.patchProject(E.pid, { log }); }
 
 /* fan-out with checkpoints: finished items are never redone on resume */
+/* P3-T03: one durable unit — lease (fencing token), start, work under the fence, commit; release with the stop reason on failure */
+async function unit(E, key, label, extra, work) {
+  if (!jobs || !E.runId) return work();
+  const parent = FENCE.getStore();
+  extra = { ...extra, task: E.task ? canonicalHash(E.task) : null };   // a correction is new work: never "reused" (see reuseIf below)
+  const before = Object.fromEntries(Object.entries(E.art).map(([k, a]) => [k, a.version]));
+  const inputsHash = unitInputsHash({ stage: { key, parent: parent?.key || null }, project: E.project, artifacts: E.art, blueprintVersion: E.bp.version, extra });
+  const lease = await jobs.acquire(E.pid, key, { inputsHash, label, owner: `${INSTANCE}:${E.runOwner || E.runId}`, kind: parent ? 'item' : 'stage', reuseIf: E.task ? () => false : prev => prev.result?.inputsExcl === unitInputsHash({ stage: { key, parent: parent?.key || null }, project: E.project, artifacts: Object.fromEntries(Object.entries(E.art).filter(([k]) => !(prev.result?.outputs || []).includes(k))), blueprintVersion: E.bp.version, extra }) });
+  if (lease.reused) return null;
+  const f = { pid: E.pid, key, token: lease.token, outputs: new Set() }; (E.leases ||= new Map()).set(key, f);
+  await jobs.start(E.pid, key, lease.token);
+  try {
+    const out = await FENCE.run(f, work);
+    const outputs = [...f.outputs].sort(); for (const k of outputs) parent?.outputs?.add(k);   // attributed through the fence, not by diff (safe under concurrency)
+    const inputsExcl = unitInputsHash({ stage: { key, parent: parent?.key || null }, project: E.project, artifacts: Object.fromEntries(Object.entries(before).filter(([k]) => !outputs.includes(k)).map(([k, v]) => [k, { version: v }])), blueprintVersion: E.bp.version, extra });
+    await jobs.commit(E.pid, key, lease.token, { result: { outputs, versions: Object.fromEntries(outputs.map(k => [k, E.art[k].version])), inputsExcl } });
+    E.leases.delete(key); return out;
+  } catch (e) {
+    const status = e?.code === 'skip' ? 'skipped' : e?.code === 'paused' ? 'paused' : e?.code === 'stopped' ? 'cancelled' : e?.code === 'rate_limited' ? 'waiting_provider' : e?.code === 'stale_lease' ? null : 'failed';
+    if (status) await jobs.release(E.pid, key, lease.token, { status, stopReason: errMsg(e) }).catch(() => {});
+    E.leases.delete(key); throw e;
+  }
+}
 async function runItems(E, stage, items, labels, fn) {
   const prev = E.project.stages?.[stage.key] || {};
   const status = (Array.isArray(prev.items) && prev.items.length === items.length && prev.run === E.project.run)
@@ -312,7 +344,7 @@ async function runItems(E, stage, items, labels, fn) {
   const worker = async () => {
     while (queue.length && !fatal && !E.stopped && !E.pausing) {
       const i = queue.shift(); status[i] = 'running'; await flush();
-      try { await fn(items[i], i); status[i] = 'done'; }
+      try { await unit(E, `${stage.key}#${i}`, labels[i], { i, run: E.project.run }, () => fn(items[i], i)); status[i] = 'done'; }
       catch (e) {
         status[i] = 'error';
         if (stage.tolerate_item_errors && !HARD.has(e?.code)) { soft++; await logE(E, `${stage.label}, ${labels[i]}: ${errMsg(e)}`, 'warn'); }
@@ -752,8 +784,10 @@ export const HANDLER_NAMES = [...Object.keys(HANDLERS), 'review_gate'];
 /* ---------- lifecycle ---------- */
 async function withEngine(pid, body, task) {
   if (RUNNING[pid]) throw { code: 'busy', message: 'Proiectul rulează deja.' };
-  const E = { pid, stopped: false, ctl: new AbortController(), task };
+  const E = { pid, stopped: false, ctl: new AbortController(), task, runId: 'r' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6) };
   RUNNING[pid] = E; bus.emit('change', { scope: 'projects' });
+  /* P3-T03: leases held by this run are renewed while it works */
+  const hb = jobs ? setInterval(() => { for (const f of E.leases?.values() || []) jobs.heartbeat(f.pid, f.key, f.token).catch(() => {}); }, Math.max(1000, (jobs.ttl || 120000) / 3)) : null; hb?.unref?.();
   try {
     E.project = repo.getProject(pid); E.bp = await repo.getBlueprint(pid); E.stages = expandStages(E.bp); E.art = await repo.artifacts(pid);
     E.project.stages = E.project.stages || {};
@@ -778,7 +812,7 @@ async function withEngine(pid, body, task) {
       await logE(E, 'Eroare: ' + msg, 'error');
       console.error('[engine]', pid, e);
     }
-  } finally { if (E.prefetch) { E.stopped = true; try { E.ctl.abort(); } catch {} await E.prefetch.catch(() => {}); } delete RUNNING[pid]; bus.emit('change', { scope: 'projects' }); bus.emit('change', { scope: 'project', pid }); setTimeout(startPending, 300); }
+  } finally { if (hb) clearInterval(hb); if (E.prefetch) { E.stopped = true; try { E.ctl.abort(); } catch {} await E.prefetch.catch(() => {}); } delete RUNNING[pid]; bus.emit('change', { scope: 'projects' }); bus.emit('change', { scope: 'project', pid }); setTimeout(startPending, 300); }
 }
 /* queue: at most N projects generate at once; paused-by-limit projects resume by themselves */
 export function schedule(pid) {                      // continue after an approval if nothing else is working; otherwise stay paused
@@ -926,14 +960,14 @@ async function prefetchNext(E, vol) {
   if (vol >= (E.bp.structure?.volumes || 0)) return;
   const list = ['scripts', 'critic'].map(b => E.stages.find(s => s.base === b && s.vol === vol)).filter(Boolean); if (list.length < 2) return;
   if (list.some(s => ['done'].includes(E.project.stages?.[s.key]?.status))) return;
-  const sig = prefetchSig(E); const P = Object.create(E);
+  const sig = prefetchSig(E); const P = Object.create(E); P.runOwner = `prefetch:${E.runId}`; P.leases = new Map();
   const done = new Set();
   try {
     for (const st of list) {
       if (E.stopped || E.pausing) break;
       P.curStage = st; P.stageKey = st.key;
       await setStage(E, st.key, { status: 'running', startedAt: now(), error: null, prefetched: null, note: 'Se pregătește în avans' });
-      await HANDLERS[st.handler](P, st);
+      await unit(P, st.key, st.label, { stage: st.key, prefetch: sig }, () => HANDLERS[st.handler](P, st));
       await setStage(E, st.key, { status: 'prefetched', finishedAt: now(), prefetched: sig }); done.add(st.key);
     }
   } finally {                                                          // interrupted: what was not finished goes back to "pending" and is done normally later
@@ -971,15 +1005,16 @@ export function runPipeline(pid) {
         await setStage(E, stage.key, { status: 'done', finishedAt: now(), note: 'Pregătit în avans, în timp ce se desenau imaginile volumului anterior.' });
         await repo.patchProject(pid, { stageIndex: idx + 1 }); continue;
       }
-      if (['scripts', 'critic'].includes(stage.base) && (E.project.stages?.[stage.key]?.prefetched || E.project.stages?.[stage.key]?.status === 'prefetched'))
-        await setStage(E, stage.key, { items: [], run: -1, prefetched: null, note: 'Refăcut: notele, lecțiile sau regulile s-au schimbat după pregătirea în avans.' });   // stale: redo every item
+      if (['scripts', 'critic'].includes(stage.base) && (E.project.stages?.[stage.key]?.prefetched || E.project.stages?.[stage.key]?.status === 'prefetched')) {
+        if (jobs) { await jobs.takeover(pid, stage.key, { reason: 'pregătirea în avans a expirat' }); for (const j of await jobs.list(pid)) if (j.key.startsWith(stage.key + '#')) await jobs.takeover(pid, j.key, { reason: 'pregătirea în avans a expirat' }); }   // P3-T03: a stale prefetch can no longer write
+        await setStage(E, stage.key, { items: [], run: -1, prefetched: null, note: 'Refăcut: notele, lecțiile sau regulile s-au schimbat după pregătirea în avans.' }); }   // stale: redo every item
       if (stage.base === 'illustrations' && stage.vol != null && !E.prefetch && learningSettings().overlap && E.project.options?.overlap !== false && !E.project.options?.golden)
         E.prefetch = prefetchNext(E, stage.vol + 1).catch(e => { if (!['stopped', 'paused'].includes(e?.code)) logE(E, `Pregătirea în avans a volumului următor s-a oprit (${errMsg(e)}); se face normal la rândul ei.`, 'warn').catch(() => {}); });
       E.stageKey = stage.key; E.curStage = stage;
       await repo.patchProject(pid, { currentStage: stage.key, currentVolume: stage.vol ?? null });
       await setStage(E, stage.key, { status: 'running', startedAt: now(), error: null, warn: null });
       await logE(E, `Început: ${stage.label}`);
-      try { await HANDLERS[stage.handler](E, stage); } catch (e) { if (e?.code !== 'skip') throw e; }
+      try { await unit(E, stage.key, stage.label, { stage: stage.key }, () => HANDLERS[stage.handler](E, stage)); } catch (e) { if (e?.code !== 'skip') throw e; }
       if (E.project.stages[stage.key]?.status !== 'skipped') await setStage(E, stage.key, { status: 'done', finishedAt: now() });
       else await setStage(E, stage.key, { finishedAt: now() });
       await logE(E, `Gata: ${stage.label}`);

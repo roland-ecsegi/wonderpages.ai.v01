@@ -9,6 +9,7 @@ import path from 'node:path';
 import { LocalStorage } from './local.js';
 import { ROOT } from '../config.js';
 import { PROJECT_LEDGER_TABLES, applyMigrations } from '../persistence/migrations.js';
+import { checkPreconditions } from '../persistence/preconditions.js';
 
 const SCHEMA = `
 CREATE TABLE IF NOT EXISTS product_types (slug TEXT PRIMARY KEY, doc JSONB NOT NULL, updated_at TIMESTAMPTZ DEFAULT now());
@@ -85,6 +86,7 @@ export class PostgresStorage {
     if ((m = rel.match(/^projects\/([^/]+)\/decisions\/([^/]+)\.json$/))) return { t: 'decision', pid: m[1], id: m[2] };
     if ((m = rel.match(/^_commands\/([^/]+)\/([^/]+)\.json$/))) return { t: 'command', pid: m[1], id: m[2] };
     if ((m = rel.match(/^_migrations\/([^/]+)\.json$/))) return { t: 'migration', id: m[1] };
+    if ((m = rel.match(/^projects\/([^/]+)\/jobs\/([^/]+)\.json$/))) return { t: 'job', pid: m[1], key: m[2] };
     return { t: 'doc', path: rel };
   }
   async readJSON(rel, fallback = null) {
@@ -99,6 +101,7 @@ export class PostgresStorage {
     else if (r.t === 'decision') res = await this.q('SELECT doc FROM decision_records WHERE project_id = $1 AND id = $2', [r.pid, r.id]);
     else if (r.t === 'command') res = await this.q('SELECT doc FROM commands WHERE command_id = $1', [r.id]);
     else if (r.t === 'migration') res = await this.q('SELECT doc FROM migration_runs WHERE id = $1', [r.id]);
+    else if (r.t === 'job') res = await this.q('SELECT doc FROM jobs WHERE project_id = $1 AND job_key = $2', [r.pid, r.key]);
     else res = await this.q('SELECT doc FROM documents WHERE path = $1', [r.path]);
     return res.rows.length ? parse(res.rows[0].doc) : fallback;
   }
@@ -114,6 +117,7 @@ export class PostgresStorage {
     if (r.t === 'dependency') return q('INSERT INTO artifact_dependencies (project_id, id, doc) VALUES ($1, $2, $3::jsonb) ON CONFLICT (project_id, id) DO UPDATE SET doc = EXCLUDED.doc', [r.pid, r.id, j]);
     if (r.t === 'decision') return q('INSERT INTO decision_records (project_id, id, doc) VALUES ($1, $2, $3::jsonb) ON CONFLICT (project_id, id) DO UPDATE SET doc = EXCLUDED.doc', [r.pid, r.id, j]);
     if (r.t === 'command') return q('INSERT INTO commands (command_id, project_id, doc) VALUES ($1, $2, $3::jsonb) ON CONFLICT (command_id) DO NOTHING', [r.id, r.pid === '_global' ? null : r.pid, j]);
+    if (r.t === 'job') return q('INSERT INTO jobs (project_id, job_key, status, lease_token, doc, updated_at) VALUES ($1, $2, $3, $4, $5::jsonb, now()) ON CONFLICT (project_id, job_key) DO UPDATE SET status = EXCLUDED.status, lease_token = EXCLUDED.lease_token, doc = EXCLUDED.doc, updated_at = now()', [r.pid, r.key, obj.status || 'pending', Number(obj.lease?.token) || 0, j]);
     if (r.t === 'migration') return q('INSERT INTO migration_runs (id, doc) VALUES ($1, $2::jsonb) ON CONFLICT (id) DO UPDATE SET doc = EXCLUDED.doc', [r.id, j]);
     return q('INSERT INTO documents (path, doc, updated_at) VALUES ($1, $2::jsonb, now()) ON CONFLICT (path) DO UPDATE SET doc = EXCLUDED.doc, updated_at = now()', [r.path, j]);
   }
@@ -127,6 +131,7 @@ export class PostgresStorage {
     if ((m = relDir.match(/^projects\/([^/]+)\/dependencies$/))) return (await this.q('SELECT id FROM artifact_dependencies WHERE project_id = $1', [m[1]])).rows.map(r => ({ name: r.id + '.json', dir: false }));
     if ((m = relDir.match(/^projects\/([^/]+)\/decisions$/))) return (await this.q('SELECT id FROM decision_records WHERE project_id = $1 ORDER BY created_at', [m[1]])).rows.map(r => ({ name: r.id + '.json', dir: false }));
     if ((m = relDir.match(/^_commands\/([^/]+)$/))) return (await this.q('SELECT command_id FROM commands WHERE project_id = $1', [m[1]])).rows.map(r => ({ name: r.command_id + '.json', dir: false }));
+    if ((m = relDir.match(/^projects\/([^/]+)\/jobs$/))) return (await this.q('SELECT job_key FROM jobs WHERE project_id = $1', [m[1]])).rows.map(r => ({ name: r.job_key + '.json', dir: false }));
     if (relDir === '_migrations') return (await this.q('SELECT id FROM migration_runs ORDER BY created_at')).rows.map(r => ({ name: r.id + '.json', dir: false }));
     return this.files.list(relDir);
   }
@@ -149,6 +154,7 @@ export class PostgresStorage {
     try {
       await tx.query('BEGIN');
       if (b.commandId) { const prev = await tx.query('SELECT doc FROM commands WHERE command_id = $1', [b.commandId]); if (prev.rows.length) { await tx.query('ROLLBACK'); const d = parse(prev.rows[0].doc); return { deduplicated: true, result: d.result, revision: d.revision }; } }
+      await checkPreconditions(b.preconditions, async rel => { const r = this.route(rel); if (r.t === 'job') { const x = await tx.query('SELECT doc FROM jobs WHERE project_id = $1 AND job_key = $2 FOR UPDATE', [r.pid, r.key]); return x.rows.length ? parse(x.rows[0].doc) : null; } return this.readJSON(rel, null); });   // P3-T03: fencing inside the transaction
       let current = 0;
       if (b.projectId) { const r = await tx.query('SELECT revision FROM projects WHERE id = $1 FOR UPDATE', [b.projectId]); current = r.rows[0]?.revision || 0; }
       if (b.expectedRevision != null && b.expectedRevision !== current) throw { status: 409, code: 'revision_conflict', currentRevision: current, expectedRevision: b.expectedRevision, message: `Proiectul s-a schimbat între timp (revizia ${current}, nu ${b.expectedRevision}). Reîncarcă și reaplică modificarea.` };

@@ -14,13 +14,14 @@ export const MIGRATIONS = Object.freeze([
   { id: 5, name: 'artifact_dependencies', pg: ['CREATE TABLE IF NOT EXISTS artifact_dependencies (project_id TEXT NOT NULL, id TEXT NOT NULL, doc JSONB NOT NULL, created_at TIMESTAMPTZ DEFAULT now(), PRIMARY KEY (project_id, id))'] },
   { id: 6, name: 'decision_records', pg: ['CREATE TABLE IF NOT EXISTS decision_records (project_id TEXT NOT NULL, id TEXT NOT NULL, doc JSONB NOT NULL, created_at TIMESTAMPTZ DEFAULT now(), PRIMARY KEY (project_id, id))'] },
   { id: 7, name: 'outbox', pg: ['CREATE TABLE IF NOT EXISTS outbox (id BIGSERIAL PRIMARY KEY, project_id TEXT, kind TEXT NOT NULL, doc JSONB NOT NULL, created_at TIMESTAMPTZ DEFAULT now(), delivered_at TIMESTAMPTZ)'] },
-  { id: 8, name: 'migration_runs', pg: ['CREATE TABLE IF NOT EXISTS migration_runs (id TEXT PRIMARY KEY, doc JSONB NOT NULL, created_at TIMESTAMPTZ DEFAULT now())'] }
+  { id: 8, name: 'migration_runs', pg: ['CREATE TABLE IF NOT EXISTS migration_runs (id TEXT PRIMARY KEY, doc JSONB NOT NULL, created_at TIMESTAMPTZ DEFAULT now())'] },
+  { id: 9, name: 'jobs', pg: ['CREATE TABLE IF NOT EXISTS jobs (project_id TEXT NOT NULL, job_key TEXT NOT NULL, status TEXT NOT NULL, lease_token BIGINT NOT NULL DEFAULT 0, doc JSONB NOT NULL, updated_at TIMESTAMPTZ DEFAULT now(), PRIMARY KEY (project_id, job_key))', 'CREATE INDEX IF NOT EXISTS idx_jobs_status ON jobs (status)'] }
 ]);
 /* tables included in PostgreSQL snapshots; restore of an older snapshot leaves the newer tables empty */
 export const CORE_TABLES = ['product_types', 'projects', 'project_blueprints', 'artifacts', 'comments', 'review_events', 'documents'];
-export const LEDGER_TABLES = ['schema_migrations', 'commands', 'artifact_versions', 'artifact_dependencies', 'decision_records', 'outbox', 'migration_runs'];
+export const LEDGER_TABLES = ['schema_migrations', 'commands', 'artifact_versions', 'artifact_dependencies', 'decision_records', 'outbox', 'migration_runs', 'jobs'];
 /* project-scoped ledger tables (removed together with the project by an explicit purge) */
-export const PROJECT_LEDGER_TABLES = ['commands', 'artifact_versions', 'artifact_dependencies', 'decision_records', 'outbox'];
+export const PROJECT_LEDGER_TABLES = ['commands', 'artifact_versions', 'artifact_dependencies', 'decision_records', 'outbox', 'jobs'];
 export const checksumOf = m => canonicalHash({ id: m.id, name: m.name, pg: m.pg });
 export const SCHEMA_VERSION = MIGRATIONS[MIGRATIONS.length - 1].id;
 
