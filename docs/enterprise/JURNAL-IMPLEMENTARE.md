@@ -96,7 +96,7 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | 2026-10-02 | RS0 + TEST-P1-T01 după P1-T01 | 98/98 PASS, build 81 JS | prima rulare a picat 1 test nou (aserțiune dependentă de ordine: versiunea tipului 16 după testul de upgrade) — corectat în test, nu în cod |
 | 2026-10-02 | RS0 + TEST-P1-T03 | 104/104 PASS | prima rulare completă a picat testul nou (Canva deja conectat în suită) — corectat în test |
 | 2026-10-02 | RS0 + TEST-P1-T04 | 112/112 PASS | — |
-| 2026-10-02 | Închidere P1: baseline-report --with-tests --with-pg | 14 PASS · 0 FAIL · 3 NOT_RUN; RS0 117/117 |  |
+| 2026-10-02 | Închidere P1: baseline-report --with-tests --with-pg | 14 PASS · 0 FAIL · 3 NOT_RUN; RS0 117/117 | `docs/enterprise/baseline/BASELINE-REPORT.md` |
 
 ## Probleme deschise
 
