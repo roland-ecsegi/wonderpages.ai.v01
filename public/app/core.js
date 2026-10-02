@@ -136,6 +136,7 @@ async function loadProject() {
     const [pr, jb, pk, pl, rc, cq, lo] = await Promise.all([api('GET', `/projects/${pid}/progress`).catch(() => null), act ? api('GET', `/projects/${pid}/jobs`).catch(() => null) : null, act ? api('GET', `/projects/${pid}/packets`).catch(() => null) : null, api('GET', `/projects/${pid}/pilot`).catch(() => null), act && migrated ? api('GET', `/projects/${pid}/reconcile`).catch(() => null) : null, act ? api('GET', `/projects/${pid}/collection-qa`).catch(() => null) : null, book ? api('GET', `/projects/${pid}/layout?preset=digital`).catch(() => null) : null]);
     if (S.cur !== pid) return;
     (S.progress ||= {})[pid] = pr; if (jb) (S.jobs ||= {})[pid] = jb.jobs; if (pk) (S.packets ||= {})[pid] = pk.packets; (S.pilot ||= {})[pid] = pl; if (rc) (S.reconcile ||= {})[pid] = rc; if (cq) (S.collectionQA ||= {})[pid] = cq; if (lo) (S.layout ||= {})[pid] = lo;
+    if (S.wb && S.wb.pid === pid && S.wb.data && !S.wb.impact) loadWorkbench();
   } catch (e) { if (e.status === 404) S.projects = S.projects.filter(p => p.id !== pid); }
 }
 const refetch = { t: null, proj: false, all: false, busy: false };
@@ -160,6 +161,11 @@ async function runRefetch() {
 setInterval(() => { if ((S.live || []).some(c => c.pid === S.cur)) paintLive(); }, 1000);
 let extraT = null;
 function loadExtra(name) { clearTimeout(extraT); extraT = setTimeout(async () => { try { if (name === 'agents') S.agentsData = await api('GET', '/agents'); else { const [l, g, gd] = await Promise.all([api('GET', '/learning'), api('GET', '/ledger').catch(() => null), api('GET', '/golden').catch(() => null)]); S.learningData = l; S.ledgerData = g; S.goldenData = gd; } render(); } catch {} }, 200); }
+async function loadWorkbench() {
+  const w = S.wb; if (!w) return;
+  try { const d = await api('GET', `/projects/${w.pid}/workbench/${w.v + 1}/${w.p}`); if (S.wb === w) { w.data = d; render(); } }
+  catch (e) { if (S.wb === w) { S.wb = null; toast(e.message, 'error'); render(); } }
+}
 /* P6-T01: the book font's own measurements, shared by the preview, the export and the server planner */
 async function loadLayoutMetrics() {
   if (!window.WPLayout || WPLayout.ready()) return;
@@ -192,7 +198,7 @@ function parseRoute() {
   if (!parts.length) return { name: 'dashboard' };
   if (parts[0] === 'projects') return { name: 'projects' };
   if (parts[0] === 'new') return { name: 'new', slug: parts[1] || null };
-  if (parts[0] === 'p' && parts[1]) return { name: 'project', pid: parts[1], tab: resolveTab(parts[2] || 'progress') };
+  if (parts[0] === 'p' && parts[1]) { const tab = resolveTab(parts[2] || 'progress'), vol = Number(parts[3]), page = Number(parts[4]); return { name: 'project', pid: parts[1], tab, ...(tab === 'book' && Number.isInteger(vol) && vol >= 1 && Number.isInteger(page) && page >= 0 ? { vol, page } : {}) }; }   // P6-T02: #/p/<id>/book/<volume>/<page> opens that page's workbench
   if (parts[0] === 'studio') return { name: 'studio', slug: parts[1] || null };
   if (parts[0].startsWith('settings')) return { name: 'settings' };
   if (parts[0] === 'agents') return { name: 'agents' };
@@ -205,6 +211,7 @@ function onRoute() {
   const r = parseRoute(); S.route = r;
   if (r.name === 'project' || r.name === 'render') openProject(r.pid); else closeProject();
   if (r.name === 'render') runHeadless(r);
+  if (r.name === 'project' && r.vol) { S.book.v = r.vol - 1; S.book.picked = true; S.wb = { pid: r.pid, v: r.vol - 1, p: r.page, data: null, cmd: null, impact: null }; loadWorkbench(); } else if (S.wb && (r.name !== 'project' || r.tab !== 'book' || r.pid !== S.wb.pid)) S.wb = null;
   if (r.name === 'new' && r.slug && S.wiz.slug !== r.slug) initWizard(r.slug);
   if (r.name === 'new' && !r.slug) S.wiz.step = 2;
   if (r.name === 'agents' || r.name === 'learning') loadExtra(r.name);

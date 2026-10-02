@@ -310,6 +310,21 @@ const ACT = {
   'do-decide': el => doDecide(el.dataset.d),
   'modal-close': () => closeModal(),
   'vol': el => { S.book.v = Number(el.dataset.v); S.book.picked = true; S.editing = null; render(); },
+  /* P6-T02: page workbench */
+  'wb-page': el => { location.hash = `#/p/${S.cur}/book/${S.wb.v + 1}/${el.dataset.p}`; },
+  'wb-close': () => { S.wb = null; location.hash = `#/p/${S.cur}/book`; },
+  'wb-cancel': () => { if (S.wb) { S.wb.impact = null; S.wb.payload = null; render(); toast('Nicio modificare: impactul a fost doar previzualizat.'); } },
+  'wb-preview': async () => {
+    const w = S.wb; if (!w?.cmd) return; const val = id => $(id)?.value;
+    const payload = w.cmd === 'exact' ? { language: val('#wb-lang') || 'first', from: val('#wb-from') || '', to: val('#wb-to') || '' } : ['style', 'semantic'].includes(w.cmd) ? { language: val('#wb-lang') || 'first', note: val('#wb-note') || '' } : ['color', 'line'].includes(w.cmd) ? { note: val('#wb-note') || '' } : { family: val('#wb-family'), zone: val('#wb-zone'), motif: !!$('#wb-motif')?.checked };
+    try { w.impact = await api('POST', `/projects/${S.cur}/workbench/${w.v + 1}/${w.p}/preview`, { command: w.cmd, payload }); w.payload = payload; render(); setTimeout(() => $('#wb-impact')?.focus?.(), 20); } catch (e) { toast(e.message, 'error'); }
+  },
+  'wb-commit': async () => {
+    const w = S.wb; if (!w?.impact) return;
+    try { const r = await api('POST', `/projects/${S.cur}/workbench/${w.v + 1}/${w.p}/commit`, { command: w.cmd, payload: w.payload, previewHash: w.impact.previewHash }); w.impact = null; w.cmd = null; toast(r.started ? 'Modificarea țintită a pornit; pagina revine la revizie când e gata.' : r.verify?.ok ? 'Aplicat; nimic altceva nu s-a schimbat.' : 'Aplicat, dar s-au schimbat și alte unități: ' + (r.verify?.unrequested || []).join(', '), r.verify && !r.verify.ok ? 'error' : undefined); await loadProject(S.cur); await loadWorkbench(); }
+    catch (e) { if (e.code === 'stale_preview') { w.impact = null; render(); } toast(e.message, 'error'); }
+  },
+  'wb-restore': el => confirmAct('Restaurezi versiunea ' + el.dataset.version + '?', 'Se creează o versiune nouă cu conținutul ei; trecutul nu se rescrie, iar dependenții se revalidează.', 'Restaurează', async () => { const r = await api('POST', `/projects/${S.cur}/artifacts/${el.dataset.key}/restore`, { version: Number(el.dataset.version) }); toast(`Restaurat ca v${r.version}` + ((r.rebound || []).some(x => x.status === 'stale') ? '; dependenții cu altă scenă rămân depășiți.' : '.')); await loadProject(S.cur); await loadWorkbench(); }),
   'mode': el => { S.book.mode = el.dataset.m; render(); },
   'edit-text': el => { S.editing = { v: Number(el.dataset.v), p: Number(el.dataset.p) }; render(); setTimeout(() => $('#edit-text')?.focus(), 20); },
   'cancel-edit': () => { S.editing = null; document.activeElement?.blur(); render(); },
@@ -361,6 +376,7 @@ document.addEventListener('change', e => {
   }
   if (el.dataset.field) { S.wiz.values[el.dataset.field] = el.value; if (S.wiz.errors[el.dataset.field]) { delete S.wiz.errors[el.dataset.field]; } }
   if (el.dataset.opt) { S.wiz.options[el.dataset.opt] = el.checked; el.blur(); render(); }
+  if (el.dataset.actChange === 'wb-cmd' && S.wb) { S.wb.cmd = el.value || null; S.wb.impact = null; el.blur(); render(); return; }
   if (el.dataset.actChange === 'ver') { S.viewVersion[S.cur + '/' + el.dataset.key] = el.value; el.blur(); render(); }
   if (el.dataset.actChange === 'tree-sel') { S.sel[S.cur] = el.value; S.composer = null; el.blur(); render(); return; }
   if (el.dataset.actChange === 'agent-model') { ACT['agent-model'](el); el.blur(); return; }

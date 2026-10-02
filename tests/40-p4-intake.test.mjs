@@ -75,7 +75,7 @@ test('P4-T01: registrul de rute — fiecare link de proiect (inclusiv „preview
   for (const a of Object.values(aliases)) assert.ok(tabs.includes(a), a);
   const used = new Set();
   for (const f of fs.readdirSync(path.join(ROOT, 'public/app'))) for (const m of fs.readFileSync(path.join(ROOT, 'public/app', f), 'utf8').matchAll(/#\/p\/[^\n]{0,60}?(?:\$\{[^}]+\}|'\s*\+\s*[^+\n]+\+\s*')\/([a-z]+)/g)) used.add(m[1]);
-  assert.ok(used.has('preview'), 'linkul existent „Verifică macheta” este acoperit');
+  assert.ok(used.has('book') && !used.has('preview'), 'P6-T02: linkul generic „preview” a fost înlocuit cu linkuri exacte către pagina din atelier (aliasul rămâne pentru rutele vechi)');
   for (const t of used) assert.ok(tabs.includes(t) || aliases[t], `ruta „${t}” nu are funcție`);
 });
 

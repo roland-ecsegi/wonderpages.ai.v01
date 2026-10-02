@@ -10,7 +10,10 @@ import { planMigration, runMigration, listMigrations } from './migration/migrato
 import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT } from './config.js';
-import { RUNNING, expandStages, reassessVolume, prepareTextPacket, ingestTextPacket, prepareImagePacket, ingestImagePacket } from './engine.js';
+import { RUNNING, expandStages, reassessVolume, prepareTextPacket, ingestTextPacket, prepareImagePacket, ingestImagePacket, gateItems, setItemDecisions, applyItemChanges, assertCanWork } from './engine.js';
+import { pageWorkbench, commandImpact, itemIdFor, srcKeyOf } from './domain/workbench.js';
+import { unitHashes, verifyExecution, missingUnits } from './quality/repair.js';
+import { variantSet, backfillVersions } from './persistence/artifact-store.js';
 import { progressReport, inspectArtifact } from './observability/progress.js';
 import { inferFromText, contractPreview } from './domain/intake.js';
 import { matrixForArtifacts } from './domain/collection.js';
@@ -23,7 +26,6 @@ import { assessBook, policyFor } from './quality/assessment.js';
 import { pageVisual } from './quality/visual.js';
 import { collectionQA } from './quality/collection-qa.js';
 import { runEvaluation, calibrationStatus, compareReports } from './quality/evaluation.js';
-import { missingUnits } from './quality/repair.js';
 import { planLayout } from './domain/layout.js';
 import { pngSize } from './security/safe-zip.js';
 import { reconcileReport, applyReconcile } from './migration/dw-reconcile.js';
@@ -229,5 +231,42 @@ export function registerEnterpriseRoutes({ on, json, need, localOnly, repo, stor
     const rec = decisionRecord({ kind: 'layout_revision', actor: 'operator@laptop', state: 'approved', note: rev.note, scope: { volume: n, preset: plan.preset }, subject: { measurementHash: plan.measurementHash, rev: rev.rev } });
     await repo.commitProjectDecision(pid, { layoutRevisions: { ...(p.layoutRevisions || {}), [n]: [...prev, rev].slice(-20) } }, [rec], { actor: 'operator@laptop', kind: 'layout.revision' });
     return { ok: true, revision: rev, decision: rec.id };
+  });
+  /* P6-T02: integrated page workbench — page in context, commands with impact before commit, stale-bound commits */
+  const wbArgs = async (pid, v, pg) => { const p = need(pid), bp = await repo.getBlueprint(pid), n = Number(v), page = Number(pg); if (!Number.isInteger(n) || n < 1 || n > bp.structure.volumes) throw { status: 400, message: 'Volum invalid.' }; if (!Number.isInteger(page) || page < 0 || page > bp.structure.pages) throw { status: 400, message: 'Pagină invalidă.' }; return { p, bp, v: n - 1, page, art: await repo.artifacts(pid) }; };
+  on('GET', '/api/projects/:pid/workbench/:v/:pg', async ({ pid, v, pg }) => {
+    const { p, bp, v: vi, page, art } = await wbArgs(pid, v, pg), versions = {};
+    for (const key of [srcKeyOf(art, vi), `tr_${vi}`, `ill_${vi}_${page}`]) if (art[key]) { await backfillVersions(storage, pid, key, art[key]); versions[key] = await variantSet(storage, pid, key, art[key]); }
+    const plan = await measuredLayout(repo, pid, p, bp, art, vi).catch(() => null);
+    return pageWorkbench({ bp, art, project: p, v: vi, p: page, plan, versions, gateItems: p.gate ? gateItems(bp, art, p, p.gate) : [] });
+  });
+  on('POST', '/api/projects/:pid/workbench/:v/:pg/preview', async ({ pid, v, pg }, req) => {
+    const { p, bp, v: vi, page, art } = await wbArgs(pid, v, pg), b = await json(req), imp = commandImpact({ art, v: vi, p: page, command: b.command, payload: b.payload || {}, P: bp.structure.pages });
+    const out = { ...imp, next: undefined };
+    if (imp.command === 'exact') { const c = structuredClone(art[imp.key].content); c.pages[page - 1].text = imp.next; out.graph = impactForWrite(bp, art, imp.key, c); }
+    if (imp.ai) { const id = itemIdFor(imp, vi, page), items = p.gate ? gateItems(bp, art, p, p.gate) : []; out.item = id; const it = items.find(i => i.id === id); out.inGate = !!it; out.applicable = !!it && !it.missing && !it.blocked; out.otherPending = items.filter(i => i.id !== id && ['changes', 'rejected', 'approved_note'].includes(i.state)).map(i => i.label); }
+    return out;
+  });
+  on('POST', '/api/projects/:pid/workbench/:v/:pg/commit', async ({ pid, v, pg }, req) => {
+    localOnly(req); if (RUNNING[pid]) throw { status: 409, message: 'Așteaptă terminarea operației active.' };
+    const { p, bp, v: vi, page, art } = await wbArgs(pid, v, pg), b = await json(req), imp = commandImpact({ art, v: vi, p: page, command: b.command, payload: b.payload || {}, P: bp.structure.pages });
+    if (b.previewHash !== imp.previewHash) throw { status: 409, code: 'stale_preview', message: 'Pagina s-a schimbat după ce ai văzut impactul; verifică din nou impactul înainte de a aplica.' };
+    if (imp.ai) {
+      const id = itemIdFor(imp, vi, page), items = p.gate ? gateItems(bp, art, p, p.gate) : [];
+      const it = items.find(i => i.id === id);
+      if (!it) throw { status: 409, code: 'needs_gate', message: 'Comenzile cu AI rulează prin poarta de revizie deschisă care conține această pagină.' };
+      if (it.missing || it.blocked) throw { status: 409, code: 'item_not_applicable', message: imp.command === 'line' ? 'Pagina de colorat este depășită: se derivă din culoarea nouă când aprobi culoarea.' : 'Elementul lipsește sau nu a trecut verificarea; rezolvă mai întâi cauza.' };
+      assertCanWork(pid);
+      await setItemDecisions(pid, [{ id, state: 'changes', note: String(b.payload?.note || '').slice(0, 800), ...(imp.mode ? { mode: imp.mode } : {}) }], { actor: 'operator@laptop' });
+      applyItemChanges(pid);
+      return { ok: true, started: true, item: id, impact: { ...imp, next: undefined } };
+    }
+    const before = unitHashes(art, vi, bp.structure.pages), c = structuredClone(art[imp.key].content);
+    if (imp.command === 'exact') c.pages[page - 1].text = imp.next; else c.pages[page - 1].layout = imp.next;
+    const doc = await repo.writeArtifact(pid, imp.key, c, { by: 'user', note: imp.command === 'exact' ? `Atelier: înlocuire exactă pe pagina ${page}` : `Atelier: machetă pagina ${page}`, meta: art[imp.key]?.meta || {} });
+    const art2 = await repo.artifacts(pid), verify = verifyExecution(before, unitHashes(art2, vi, bp.structure.pages), { patches: [{ target: imp.changes, invalidates: imp.stale }] });
+    const rec = decisionRecord({ kind: 'workbench', actor: 'operator@laptop', state: 'approved', note: imp.label, scope: { volume: vi + 1, page, command: imp.command }, subject: { key: imp.key, version: doc.version, previewHash: imp.previewHash, changes: imp.changes, stale: imp.stale, verify: { ok: verify.ok, unrequested: verify.unrequested } } });
+    await repo.commitProjectDecision(pid, {}, [rec], { actor: 'operator@laptop', kind: 'workbench.' + imp.command });
+    return { ok: true, version: doc.version, verify, calls: [], decision: rec.id };
   });
 }
