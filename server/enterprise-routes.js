@@ -16,6 +16,7 @@ import { inferFromText, contractPreview } from './domain/intake.js';
 import { matrixForArtifacts } from './domain/collection.js';
 import { derivePageBlueprints, validatePageBlueprints } from './domain/page-blueprints.js';
 import { atlasFor } from './domain/atlas.js';
+import { storyContract } from './domain/story-contracts.js';
 import { contractFromBlueprint, validateProjectInput, editionsFor } from './domain/product-contract.js';
 import * as Ledger from './ledger.js';
 import { getCapabilities } from './providers/registry.js';
@@ -127,4 +128,7 @@ export function registerEnterpriseRoutes({ on, json, need, localOnly, repo, stor
   /* P4-T03: the 72 PageBlueprints and the visual canon (read-only, any project) */
   on('GET', '/api/projects/:pid/pageplans', async ({ pid }) => { need(pid); const bp = await repo.getBlueprint(pid), art = await repo.artifacts(pid); const { pages, sources } = derivePageBlueprints(bp, art); return { pages, sources, ...validatePageBlueprints(pages, { structure: bp.structure, bible: art.bible?.content }) }; });
   on('GET', '/api/projects/:pid/atlas', async ({ pid }) => { const p = need(pid), art = await repo.artifacts(pid); return atlasFor({ project: p, art, approvals: p.approvals?.['review_collection@c'] || {}, declaredRights: p.rightsDeclared || [] }); });
+
+  /* P4-T04: story/age/localization contract of one volume (read-only, citeable evidence) */
+  on('GET', '/api/projects/:pid/story/:v', async ({ pid, v }) => { const p = need(pid), bp = await repo.getBlueprint(pid), n = Number(v); if (!Number.isInteger(n) || n < 1 || n > bp.structure.volumes) throw { status: 400, message: 'Volum invalid.' }; const r = storyContract({ bp, art: await repo.artifacts(pid), input: p.input || {}, v: n - 1 }); if (!r) throw { status: 404, message: 'Volumul nu are încă manuscris.' }; return r; });
 }

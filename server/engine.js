@@ -18,6 +18,7 @@ import { canonicalHash } from './domain/canonical.js';
 import { matrixForArtifacts } from './domain/collection.js';
 import { derivePageBlueprints, validatePageBlueprints } from './domain/page-blueprints.js';
 import { atlasFor, landmarkContext } from './domain/atlas.js';
+import { storyContract, causality as storyCausality, voice as storyVoice, science as storyScience, ageFit, criticNotes } from './domain/story-contracts.js';
 /* P3-T03: the innermost durable unit (stage or item) of the current async flow: its lease fences every result write */
 export const FENCE = new AsyncLocalStorage();
 export let jobs = null;
@@ -569,6 +570,12 @@ export function lintScript(E, c, ctx) {
     if (off.length) soft.push(`Page ${n}: ${off.join(', ')} is not in the cast plan of this volume.`);
     const m = wre && t.match(wre); if (m) soft.push(`Page ${n}: the word "${m[2]}" may be unsuitable for the age.`);
   });
+  /* P4-T04: structured, citeable QA inputs for the critic (causality, age complexity, voice, science/T18) — never a cut */
+  try {
+    const chars = E.art.bible?.content?.characters || [], mainId = E.art.cast?.content?.main_character || chars.find(x => x.role === 'main')?.id, band = E.project.input?.[E.bp.variant_key];
+    const world = /^(none|fara|no|nu)/i.test(String(E.art.bible?.content?.world_rules?.magic || 'none')) ? 'natural' : 'fantasy', vb = Number.isInteger(ctx.i) ? E.art.series?.content?.volumes?.[ctx.i]?.story_bible : null;
+    soft.push(...criticNotes({ findings: [...storyCausality(c, { bible: vb, mainId, mainName: chars.find(x => x.id === mainId)?.name }).findings, ...ageFit(pages, band, E.bp.age_profiles?.[band] || {}).findings, ...storyVoice(pages, E.project.input?.language).findings, ...storyScience(pages, { world }).findings] }));
+  } catch (e) { console.warn('[story contract]', e?.message || e); }
   return { hard, soft };
 }
 /* 2.4: adaptation vs original, page by page (names never change; similar length) */
@@ -1161,6 +1168,7 @@ export function gateItems(bp, art, project, gate) {
       }
     }
     if (s.kind === 'collection') { const m = matrixForArtifacts(bp, art); out.push({ id: 'collection', kind: 'collection', label: 'Planul colecției: bibliile volumelor și cronologia distribuției', missing: !art.series || !art.cast || !art.bible, blocked: !m.ready, hash: m.hash, matrix: m }); }   // P4-T02: plan approved before bulk; blockers cannot be approved
+    if (s.kind === 'story' && v != null) { const sc = storyContract({ bp, art, input: project.input || {}, v }); out.push({ id: 'story:' + v, kind: 'story', v, label: `Contractul poveștii, volumul ${v + 1}: cauzalitate, vârstă, voce, știință${art['tr_' + v] ? ', ediția nativă' : ''}`, missing: !sc, blocked: !!sc && !sc.ready, hash: sc ? fingerprint([sc.causality, sc.findings.map(f => [f.code, f.page ?? null])]) : null, story: sc }); }   // P4-T04
     if (s.kind === 'pageplans') { const { pages, sources } = derivePageBlueprints(bp, art), r = validatePageBlueprints(pages, { structure: bp.structure, bible: art.bible?.content }); out.push({ id: 'pageplans', kind: 'pageplans', label: `Planul paginilor: ${r.count} din ${r.expected} PageBlueprints`, missing: !pages.length, blocked: !r.ready, hash: fingerprint([pages, r.findings.map(f => [f.code, f.page])]), check: { ...r, sources } }); }   // P4-T03
     if (s.kind === 'atlas') { const a = atlasFor({ project, art, approvals: project.approvals?.[gateInstance(gate)] || {}, declaredRights: project.rightsDeclared || [] }); out.push({ id: 'atlas', kind: 'atlas', label: 'Canonul vizual: atlasul personajelor', missing: !art.bible, blocked: false, hash: fingerprint([a.requirements.map(r => [r.character, r.view]), a.entries.map(e => [e.id, e.file, e.kind])]), atlas: a }); }   // P4-T03: proposals stay proposed
     if (s.kind === 'layout') for (let i=0;i<P;i++) {
