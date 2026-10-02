@@ -10,6 +10,7 @@ import { getAgent, requireAgent, startInstance, registry as agentRegistry } from
 import { buildContext } from './agents-runtime/context-builder.js';
 import { AsyncLocalStorage } from 'node:async_hooks';
 import { Scheduler, INSTANCE, unitInputsHash } from './jobs/scheduler.js';
+import { ExecutionBudget } from './jobs/budget.js';
 import { canonicalHash } from './domain/canonical.js';
 /* P3-T03: the innermost durable unit (stage or item) of the current async flow: its lease fences every result write */
 export const FENCE = new AsyncLocalStorage();
@@ -187,14 +188,25 @@ async function callLLM(E, prompt, { label, json = true, agent = 'producator', im
 }
 export const imageEngineOf = E => E.project.options?.image_engine || IMAGE_DEFAULT.engine;
 export const IMAGE_DEFAULT = { engine: 'canva' };
-async function callImage(E, args, label) {
+export const _callImage = (...a) => callImage(...a);   // test seam (P3-T04)
+/* P3-T04: one ExecutionBudget per image travels through the (single) provider hop: no wait-clock reset (C11), no bounce;
+   Canva records its accepted job before polling and resumes by lookup; an output that cannot be owned is ambiguous. */
+async function callImage(E, args, label, budget = null) {
   if (E.stopped) throw { code: 'stopped' };
+  budget = budget || new ExecutionBudget({ deadlineMs: canvaCfg.maxWaitMin * 60e3 });
   const id = Math.random().toString(36).slice(2);
   LIVE.set(id, { pid: E.pid, label, kind: 'image', text: '', since: now(), agent: 'director-artistic' }); emitLive();
   const end = startInstance('director-artistic', E.pid, label); let ok = false; const t0 = Date.now();
   const hhmm = t => new Date(t).toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit' });
   const engine = args.provider || imageEngineOf(E);
-  await noteExternal({ provider: engine });   // P3-T03: recorded BEFORE the provider is asked
+  const fence = FENCE.getStore(), resumeJobId = engine === 'canva' ? fence?.resumeProviderJobId || null : null; if (fence) fence.resumeProviderJobId = null;
+  await noteExternal({ provider: engine, ...(resumeJobId ? { providerJobId: resumeJobId, lookup: true } : {}) });   // P3-T03: recorded BEFORE the provider is asked
+  const hop = async (to, why) => {
+    if (!budget.can('providerHop')) throw { code: 'rate_limited', provider: engine, resetAt: Date.now() + canvaCfg.pauseMin * 60e3, budget: budget.snapshot(), message: 'Ambii furnizori de imagini cer pauză; proiectul așteaptă și reia singur mai târziu (fără alternare repetată).' };
+    budget.consume('providerHop', why);
+    await logE(E, `${why}; folosesc ${to === 'canva' ? 'Canva' : 'ChatGPT'} pentru această imagine (ai permis alternarea, o singură dată).`, 'warn');
+    return callImage(E, { ...args, provider: to }, label, budget);
+  };
   try {
     if (engine === 'chatgpt') {
       for (let tries = 0; ; tries++) {
@@ -204,8 +216,8 @@ async function callImage(E, args, label) {
           ok = true; recordCall('image_gpt'); return { ...r, engine };
         } catch (e) {
           if (e?.code !== 'image_pause') throw e;
-          if (E.project.options?.image_fallback && canva.status().connected && args.references?.length !== undefined) { await logE(E, 'ChatGPT cere pauză; folosesc Canva pentru această imagine (ai permis alternarea).', 'warn'); return await callImage(E, { ...args, provider: 'canva' }, label); }
-          if (Date.now() - t0 > canvaCfg.maxWaitMin * 60e3) throw { code: 'rate_limited', resetAt: Date.now() + 15 * 60e3, message: 'ChatGPT cere pauze lungi pentru imagini; proiectul continuă singur mai târziu.' };
+          if (E.project.options?.image_fallback && canva.status().connected && args.references?.length !== undefined) return await hop('canva', 'ChatGPT cere pauză');
+          if (budget.expired()) throw { code: 'rate_limited', resetAt: Date.now() + 15 * 60e3, budget: budget.snapshot(), message: 'ChatGPT cere pauze lungi pentru imagini; proiectul continuă singur mai târziu.' };
           const until = Date.now() + (canvaCfg.pauseMin + tries) * 60e3; const c = LIVE.get(id); if (c) { c.label = `${label} (ChatGPT: pauză până la ${hhmm(until)})`; emitLive(); }
           await logE(E, `ChatGPT a cerut o pauză pentru imagini; reiau la ${hhmm(until)}.`, 'warn');
           await new Promise((res, rej) => { const tm = setTimeout(res, until - Date.now()); E.ctl.signal.addEventListener('abort', () => { clearTimeout(tm); rej({ code: 'stopped' }); }, { once: true }); });
@@ -215,16 +227,16 @@ async function callImage(E, args, label) {
     for (;;) {
       await beforeImage(E.ctl.signal, (until, why) => { const c = LIVE.get(id); if (c) { c.label = `${label} (aștept până la ${hhmm(until)}${why ? ': ' + why : ''})`; emitLive(); } });
       const c = LIVE.get(id); if (c) { c.label = label; c.since = now(); emitLive(); }
-      try { const r = await canva.generate({ ...args, signal: E.ctl.signal }); ok = true; recordCall('image'); return { ...r, engine: 'canva' }; }
+      try { const r = await canva.generate({ ...args, signal: E.ctl.signal, resumeJobId, onAccepted: jobId => noteExternal({ provider: 'canva', providerJobId: jobId }) }); ok = true; recordCall('image'); return { ...r, engine: 'canva' }; }
       catch (e) {
         if (e?.code !== 'canva_pause') throw e;
-        if (E.project.options?.image_fallback && GPTImage.codexStatus().ready) { await logE(E, 'Canva cere pauză; folosesc ChatGPT pentru această imagine (ai permis alternarea).', 'warn'); return await callImage(E, { ...args, provider: 'chatgpt' }, label); }
+        if (E.project.options?.image_fallback && GPTImage.codexStatus().ready) return await hop('chatgpt', 'Canva cere pauză');
         const until = canvaPaused();                                      // wait politely, then retry the same image
-        if (Date.now() - t0 > canvaCfg.maxWaitMin * 60e3) throw { code: 'rate_limited', resetAt: until + canvaCfg.pauseMin * 60e3, message: 'Canva cere pauze lungi; proiectul continuă singur mai târziu.' };
+        if (budget.expired()) throw { code: 'rate_limited', resetAt: until + canvaCfg.pauseMin * 60e3, budget: budget.snapshot(), message: 'Canva cere pauze lungi; proiectul continuă singur mai târziu.' };
         await logE(E, `Canva a cerut o pauză; reiau imaginea la ${hhmm(until)}.`, 'warn');
       }
     }
-  } finally { end(ok); LIVE.delete(id); emitLive(); Ledger.record({ kind: 'image', pid: E.pid, vol: E.curStage?.vol ?? E.taskVol ?? null, stage: E.curStage?.base || E.curStage?.key || '_task', engine, ok, ms: Date.now() - t0, redraw: !!args.redraw || undefined }); }
+  } finally { end(ok); LIVE.delete(id); emitLive(); Ledger.record({ kind: 'image', pid: E.pid, vol: E.curStage?.vol ?? E.taskVol ?? null, stage: E.curStage?.base || E.curStage?.key || '_task', engine, ok, ms: Date.now() - t0, redraw: !!args.redraw || undefined, budget: budget.snapshot().used }); }
 }
 function checkOut(out, spec, ctx, schema = null) {
   if (out == null || typeof out !== 'object' || Array.isArray(out)) return 'the reply must be a single JSON object';
@@ -319,7 +331,8 @@ async function unit(E, key, label, extra, work) {
   const inputsHash = unitInputsHash({ stage: { key, parent: parent?.key || null }, project: E.project, artifacts: E.art, blueprintVersion: E.bp.version, extra });
   const lease = await jobs.acquire(E.pid, key, { inputsHash, label, owner: `${INSTANCE}:${E.runOwner || E.runId}`, kind: parent ? 'item' : 'stage', reuseIf: E.task ? () => false : prev => prev.result?.inputsExcl === unitInputsHash({ stage: { key, parent: parent?.key || null }, project: E.project, artifacts: Object.fromEntries(Object.entries(E.art).filter(([k]) => !(prev.result?.outputs || []).includes(k))), blueprintVersion: E.bp.version, extra }) });
   if (lease.reused) return null;
-  const f = { pid: E.pid, key, token: lease.token, outputs: new Set() }; (E.leases ||= new Map()).set(key, f);
+  const lastAttempt = lease.job.attempts?.[lease.job.attempts.length - 1];
+  const f = { pid: E.pid, key, token: lease.token, outputs: new Set(), resumeProviderJobId: lease.job.resolution?.action === 'retry' ? [...(lastAttempt?.external || [])].reverse().find(x => x.providerJobId)?.providerJobId || null : null }; (E.leases ||= new Map()).set(key, f);   // P3-T04: an accepted provider job is looked up, not regenerated
   await jobs.start(E.pid, key, lease.token);
   try {
     const out = await FENCE.run(f, work);
@@ -328,7 +341,7 @@ async function unit(E, key, label, extra, work) {
     await jobs.commit(E.pid, key, lease.token, { result: { outputs, versions: Object.fromEntries(outputs.map(k => [k, E.art[k].version])), inputsExcl } });
     E.leases.delete(key); return out;
   } catch (e) {
-    const status = e?.code === 'skip' ? 'skipped' : e?.code === 'paused' ? 'paused' : e?.code === 'stopped' ? 'cancelled' : e?.code === 'rate_limited' ? 'waiting_provider' : e?.code === 'stale_lease' ? null : 'failed';
+    const status = e?.code === 'ambiguous_output' ? 'ambiguous' : e?.code === 'skip' ? 'skipped' : e?.code === 'paused' ? 'paused' : e?.code === 'stopped' ? 'cancelled' : e?.code === 'rate_limited' ? 'waiting_provider' : e?.code === 'stale_lease' ? null : 'failed';
     if (status) await jobs.release(E.pid, key, lease.token, { status, stopReason: errMsg(e) }).catch(() => {});
     E.leases.delete(key); throw e;
   }

@@ -1,6 +1,6 @@
 {
  "kind": "wonderpages.defect-reproduction/1",
- "generatedAt": "2026-10-02T11:30:22.581Z",
+ "generatedAt": "2026-10-02T12:16:33.120Z",
  "defects": [
   {
    "id": "D-C16",
@@ -28,11 +28,11 @@
    "id": "D-AGENT-FALLBACK",
    "arch": "OUTPUT-07",
    "phase": "P3-T01",
-   "status": "REPRODUCED",
+   "status": "FIXED",
    "method": "dynamic",
    "evidence": [
-    "getAgent('agent-inexistent') → producator",
-    "server/agents.js:36"
+    "getAgent('agent-inexistent') → null",
+    "server/agents.js:46"
    ]
   },
   {
@@ -43,7 +43,7 @@
    "method": "dynamic",
    "evidence": [
     "gazdă din rețea: 0 seturi cunoscute; loopback (migrare legacy): 2",
-    "server/storage/postgres.js:35"
+    "server/storage/postgres.js:36"
    ]
   },
   {
@@ -60,19 +60,19 @@
    "id": "D-C11",
    "arch": "C11",
    "phase": "P3-T04",
-   "status": "INFERRED",
+   "status": "FIXED",
    "method": "static",
    "evidence": [
-    "2 apeluri recursive callImage cu alt provider",
-    "server/engine.js:193",
-    "server/engine.js:207"
+    "0 apeluri recursive callImage cu alt provider",
+    null,
+    null
    ]
   },
   {
    "id": "D-C12",
    "arch": "C12",
    "phase": "P3-T04",
-   "status": "INFERRED",
+   "status": "FIXED",
    "method": "static",
    "evidence": [
     "server/codeximage.js:56"

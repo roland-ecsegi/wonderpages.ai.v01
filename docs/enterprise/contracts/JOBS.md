@@ -10,3 +10,11 @@ Surse: `server/jobs/scheduler.js`, `server/persistence/preconditions.js`, integr
 - **Reluare**: o unitate comisă cu aceleași intrări (excluzând propriile ieșiri) este refolosită, nu reexecutată; o sarcină de corectură nu este niciodată refolosită.
 - **Ieșiri**: atribuite prin fence (nu prin diferență), deci corecte și când două elemente rulează concurent.
 - Exact-once la providerii externi **nu** este promis; commit-ul local este idempotent.
+
+## Buget comun, fallback limitat, proprietatea ieșirii (P3-T04)
+
+- `server/jobs/budget.js`: `ExecutionBudget` — retries de transport 2, reparare JSON 1, revizii creative 2, redesenare 1, **hop de provider 1**, termen global. Același buget trece prin fallback: ceasul de așteptare nu se resetează (C11 reparat), iar după un hop nu se mai alternează (ambii furnizori limitați → `waiting_provider`).
+- Canva: jobul acceptat se înregistrează (`providerJobId`) **înainte** de polling; o eroare după acceptare (răspuns pierdut, polling eșuat, timeout) este `ambiguous_output`, nu o regenerare. La reluarea aprobată de operator (`retry`), unitatea face întâi **lookup** pe jobul acceptat.
+- Codex imagini (C12): imaginea se atribuie doar dacă a apărut **exact un** fișier nou în timpul cererii **și** CLI-ul a reușit; mai multe fișiere noi (alt client în același folder) sau o imagine apărută după o eroare → `ambiguous_output`, fără atribuire după recență. Rezultatul atribuit poartă `requestId` și `owned: true`.
+- O unitate cu `ambiguous_output` devine `ambiguous` (decizie a operatorului); anularea întrerupe imediat orice așteptare.
+- Limită reziduală (INFERRED): dacă propria cerere eșuează în tăcere cu exit 0 și exact un alt client scrie o imagine în aceeași fereastră, atribuirea greșită rămâne posibilă; QA vizual pe imaginea efectivă este a doua barieră.

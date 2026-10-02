@@ -19,7 +19,7 @@ export async function initGovernor(s) {
   settings = u.settings || {}; if (settings.budget5h) govConfig.budget5h = settings.budget5h; if (settings.budget7d != null) govConfig.budget7d = settings.budget7d;
   if (settings.canva) applyCanvaSettings(settings.canva);
 }
-const persist = () => { clearTimeout(saveT); saveT = setTimeout(() => storage.writeJSON('usage.json', { calls: calls.slice(-20000), gptTextCalls: gptTextCalls.slice(-20000), gptImageCalls: gptImageCalls.slice(-20000), settings }).catch(e => console.error('[usage persistence]', e.message)), 2000); };
+const persist = () => { clearTimeout(saveT); saveT = setTimeout(() => storage?.writeJSON('usage.json', { calls: calls.slice(-20000), gptTextCalls: gptTextCalls.slice(-20000), gptImageCalls: gptImageCalls.slice(-20000), settings })?.catch(e => console.error('[usage persistence]', e.message)), 2000); };
 export function recordCall(kind = 'text') {
   if (kind === 'text_gpt') gptTextCalls.push(Date.now());
   else if (kind === 'image_gpt') gptImageCalls.push(Date.now());

@@ -169,17 +169,24 @@ export class Canva {
    * Generate one image. references: [{type:'MEDIA', id}] (character sheets, or the colour page
    * when producing its colouring-book version). Returns { buffer, mime, mediaId, link, raw }.
    */
-  async generate({ prompt, aspectRatio = 'SQUARE_1_1', references = [], signal }) {
-    const args = { prompt, aspectRatio, user_intent: INTENT };
-    if (references.length) args.imageReferences = references;
-    const start = await this.call('generate-image', args);
-    if (start?.isError) { const m = first(start, ['message', 'error', '_text']) || ''; if (PAUSE_RE.test(m)) throw pauseErr(m); throw { code: 'canva_failed', message: 'Canva a refuzat cererea: ' + m }; }
-    const jobId = first(start, ['jobId', 'job_id']);
-    if (!jobId) throw { code: 'canva_failed', message: 'Canva nu a returnat un jobId.' };
+  /* P3-T04: onAccepted(jobId) records the provider job BEFORE polling; resumeJobId looks an accepted job up instead of
+     generating again; a failure after acceptance (lost response, poll error, timeout) is `ambiguous_output`, not a retry. */
+  async generate({ prompt, aspectRatio = 'SQUARE_1_1', references = [], signal, onAccepted, resumeJobId = null }) {
+    let jobId = resumeJobId;
+    if (!jobId) {
+      const args = { prompt, aspectRatio, user_intent: INTENT };
+      if (references.length) args.imageReferences = references;
+      const start = await this.call('generate-image', args);
+      if (start?.isError) { const m = first(start, ['message', 'error', '_text']) || ''; if (PAUSE_RE.test(m)) throw pauseErr(m); throw { code: 'canva_failed', message: 'Canva a refuzat cererea: ' + m }; }
+      jobId = first(start, ['jobId', 'job_id']);
+      if (!jobId) throw { code: 'canva_failed', message: 'Canva nu a returnat un jobId.' };
+      await onAccepted?.(jobId);
+    }
     for (let i = 0; i < 120; i++) {
       if (signal?.aborted) throw { code: 'stopped' };
       await sleep(i < 2 ? Math.min(4000, POLL_MS) : POLL_MS);
-      const job = await this.call('get-generate-image-job', { jobId, user_intent: INTENT });
+      let job; try { job = await this.call('get-generate-image-job', { jobId, user_intent: INTENT }); }
+      catch (e) { if (e?.code === 'canva_not_connected' || e?.code === 'stopped') throw e; throw { code: 'ambiguous_output', providerJobId: jobId, provider: 'canva', message: 'Canva a acceptat cererea, dar răspunsul s-a pierdut; imaginea nu este atribuită până la verificare.' }; }
       const status = String(first(job, ['status']) || '').toUpperCase();
       if (status.includes('FAIL')) { const m = first(job, ['failureMessage']) || first(job, ['failureType']) || ''; if (PAUSE_RE.test(m)) throw pauseErr(m); throw { code: 'canva_failed', message: `Canva: ${m || 'generarea a eșuat'}` }; }
       if (status.includes('SUCCESS')) {
@@ -189,7 +196,7 @@ export class Canva {
         return { ...img, mediaId: first(job, ['media_id', 'mediaId']) || null, link, raw: job };
       }
     }
-    throw { code: 'canva_failed', message: 'Canva nu a terminat imaginea în 10 minute.' };
+    throw { code: 'ambiguous_output', providerJobId: jobId, provider: 'canva', message: 'Canva nu a terminat imaginea în 10 minute; jobul poate încă reuși — se verifică prin lookup, nu prin generare nouă.' };
   }
 
   /* ---------- v19 (plan 2.7–2.10): brand kits, brand templates + autofill, resize, comments; all included in Canva Pro ---------- */

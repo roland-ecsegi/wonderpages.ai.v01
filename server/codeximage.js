@@ -56,10 +56,9 @@ async function listImages() {
   const walk = async (d, depth) => { for (const e of await fsp.readdir(d, { withFileTypes: true }).catch(() => [])) { const f = path.join(d, e.name); if (e.isDirectory() && depth < 3) await walk(f, depth + 1); else if (/\.(png|jpe?g|webp)$/i.test(e.name)) { const st = await fsp.stat(f).catch(() => null); if (st) out.set(f, st.mtimeMs); } } };
   await walk(root, 0); return out;
 }
-async function newImage(before, since) {
-  let best = null; for (const [f, t] of await listImages()) if (!before.has(f) && t >= since && (!best || t > best.t)) best = { f, t };
-  return best?.f || null;
-}
+/* P3-T04 (C12): ownership — the output is attributed only when EXACTLY one new file appeared during OUR run and the CLI
+   succeeded; several new files (another client using the same folder) are ambiguous and never attributed by recency. */
+async function newImages(before, since) { const out = []; for (const [f, t] of await listImages()) if (!before.has(f) && t >= since) out.push(f); return out.sort(); }
 let queue = Promise.resolve();
 const SIZE = { PORTRAIT_4_5: '1024x1280', PORTRAIT_2_3: '1024x1536', SQUARE_1_1: '1024x1024', LANDSCAPE_3_2: '1536x1024' };
 const LIMIT_RE = /(rate limit|usage limit|limit reached|too many|try again (later|in)|quota|reached your|out of (image|usage))/i;
@@ -73,9 +72,13 @@ async function generateOne({ prompt, aspectRatio, files = [], signal, timeoutMs 
   const before = await listImages(); const since = Date.now() - 1500;
   const instr = `Use your built-in image generation tool to create exactly ONE image. Do not write code, do not run scripts, do not call any API, do not ask questions.${files.length ? ` The ${files.length} attached image(s) are references: follow them exactly for character identity, proportions, colours and markings${files.length === 1 && /colouring-book/i.test(prompt) ? ', and convert the attached picture as instructed' : ''}.` : ''}\nImage size: ${SIZE[aspectRatio] || '1024x1280'}, portrait unless stated otherwise.\n\nPROMPT:\n${prompt}\n\nWhen the image has been generated, reply with the single word DONE.`;
   const args = ['exec', '--skip-git-repo-check', '--sandbox', 'read-only','--ignore-user-config','--ignore-rules','--ephemeral','--enable','image_generation','--model','gpt-6-sol','-c','model_reasoning_effort=medium', ...files.flatMap(f => ['-i', f])];
+  const requestId = 'wp-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
   const r = await run(args, { input: instr, timeoutMs, signal });
-  const f = await newImage(before, since);
-  if (f) { const buffer = await fsp.readFile(f); state.lastError = '';state.generationVerified=true;state.verifiedAt=Date.now(); return { buffer, mime: /\.jpe?g$/i.test(f) ? 'image/jpeg' : /\.webp$/i.test(f) ? 'image/webp' : 'image/png', mediaId: null, link: null, file: f }; }
+  const fresh = await newImages(before, since);
+  if (fresh.length > 1) throw { code: 'ambiguous_output', provider: 'chatgpt', requestId, candidates: fresh.length, message: `Au apărut ${fresh.length} imagini noi în folderul Codex în timpul cererii (alt client activ?); niciuna nu este atribuită automat.` };
+  const f = fresh.length === 1 && r.code === 0 ? fresh[0] : null;
+  if (fresh.length === 1 && r.code !== 0) throw { code: 'ambiguous_output', provider: 'chatgpt', requestId, candidates: 1, message: 'Codex a raportat eroare, dar a apărut o imagine nouă; nu o atribui fără verificare.' };
+  if (f) { const buffer = await fsp.readFile(f); state.lastError = '';state.generationVerified=true;state.verifiedAt=Date.now(); return { buffer, mime: /\.jpe?g$/i.test(f) ? 'image/jpeg' : /\.webp$/i.test(f) ? 'image/webp' : 'image/png', mediaId: null, link: null, file: f, requestId, owned: true }; }
   const text = (r.out + '\n' + r.err).slice(-1500); state.lastError = text.slice(-300);state.generationVerified=false;state.verifiedAt=Date.now();
   if (LIMIT_RE.test(text)) throw { code: 'image_pause', message: 'ChatGPT cere o pauză pentru imagini.' };
   if (/(not logged in|login|unauthori[sz]ed|401|expired)/i.test(text)) throw { code: 'auth', message: 'Codex nu e autentificat cu ChatGPT: Setări > Motor de imagini > Autentifică ChatGPT.' };

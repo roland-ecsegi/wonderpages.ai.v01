@@ -70,7 +70,7 @@ try {
   }
   /* C12: Codex image output discovered by new files / mtime in a shared folder */
   {
-    const scan = /out\.set\(f, st\.mtimeMs\)/.test(src('server/codeximage.js'));
+    const scan = /out\.set\(f, st\.mtimeMs\)/.test(src('server/codeximage.js')) && !/code: 'ambiguous_output'/.test(src('server/codeximage.js'));
     rec('D-C12', 'C12', 'P3-T04', scan ? 'INFERRED' : 'FIXED', [lineOf('server/codeximage.js', /out\.set\(f, st\.mtimeMs\)/) || 'scan absent'], 'static');
   }
   /* C29: engineer charter says Claude-only; improve.js calls runClaudeCode directly */

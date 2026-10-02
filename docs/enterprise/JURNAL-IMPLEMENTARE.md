@@ -51,8 +51,8 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | P2-T05 | DONE | 3ba5bd1 | TEST-P2-T05 6/6; RS0 151/151 local + 151/151 PG | Pachet v2, migrator DW idempotent, rollback; D-C16 FIXED |
 | P3-T01 | DONE | 0f0b841 | TEST-P3-T01 6/6; RS0 157/157 | 11 RoleContracts, skills cu hash, ModelBinding separat, fără fallback |
 | P3-T02 | DONE | edec69d | TEST-P3-T02 5/5; RS0 162/162 | Context pe straturi, manifest exact, model efectiv, fără scurgeri |
-| P3-T03 | DONE | (acest commit) | TEST-P3-T03 7/7; RS0 169/169 local + 169/169 PG | Joburi durabile, lease+fencing în commit, reconciliere, ambiguous |
-| P3-T04 | PENDING | | | |
+| P3-T03 | DONE | c2051be | TEST-P3-T03 7/7; RS0 169/169 local + 169/169 PG | Joburi durabile, lease+fencing în commit, reconciliere, ambiguous |
+| P3-T04 | DONE | (acest commit) | TEST-P3-T04 5/5; RS0 174/174 | Buget comun, 1 hop, lookup job acceptat, ownership; C11/C12 FIXED |
 | P3-T05 | PENDING | | | |
 | P3-T06 | PENDING | | | |
 | P4-T01 | PENDING | | | |
@@ -106,6 +106,7 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | 2026-10-02 | RS0 + TEST-P3-T01 | 157/157 PASS | — |
 | 2026-10-02 | RS0 + TEST-P3-T02 | 162/162 PASS | — |
 | 2026-10-02 | RS0 + TEST-P3-T03 (local și PostgreSQL) | 169/169 + 169/169 PASS | prima rulare: corectura „rewrite” refolosită greșit (bug real în integrare) — corectat în cod: sarcinile de corectură nu se refolosesc |
+| 2026-10-02 | RS0 + TEST-P3-T04 | 174/174 PASS | — |
 
 ## Probleme deschise
 
@@ -119,6 +120,6 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 
 ## Checkpoint
 
-- Ultimul task închis: P3-T03
-- Următorul task: **P3-T04**
+- Ultimul task închis: P3-T04
+- Următorul task: **P3-T05**
 - Cum se reia: `npm ci && npm run build && BROWSER_PATH=/opt/pw-browsers/chromium npm test`; citește tabelul de mai sus și `docs/enterprise/records/`.

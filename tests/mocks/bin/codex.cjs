@@ -26,6 +26,7 @@ let input = ''; process.stdin.on('data', d => { input += d; }); process.stdin.on
   if (mode === 'pause' && S.bump('codex_pause') <= (st.pauseTimes || 1)) { console.error('You have reached your image usage limit, try again later'); process.exit(1); }
   const dir = path.join(process.env.CODEX_HOME || path.join(os.homedir(), '.codex'), 'generated_images', 'sess'); fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(path.join(dir, `img-${Date.now()}-${Math.random().toString(36).slice(2)}.png`), /colouring-book|black-and-white/i.test(input) ? PNG.lineart() : PNG.colour(7));
+  if (st.codexForeignImage) fs.writeFileSync(path.join(dir, `foreign-${Date.now()}.png`), PNG.colour(3));   // P3-T04: another client writes into the same folder during our run
   console.log('DONE');
 });
 }
