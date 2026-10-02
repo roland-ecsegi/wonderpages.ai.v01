@@ -1,4 +1,4 @@
-import { physicalPages, printDimensions } from './printprofile.js';
+import { physicalPages, printDimensions, destinationCheck, coverWrap } from './printprofile.js';
 export function validateFinalPdf(buffer, bp, project, { book, preset }) {
   const profile=(bp.export?.presets||[]).find(p=>p.key===preset);
   const base=book?.replace(/-cover$/,''),product=(bp.structure.books||[]).find(b=>b.key===base);
@@ -8,7 +8,7 @@ export function validateFinalPdf(buffer, bp, project, { book, preset }) {
   const count=Number(source.match(/\/Type\s*\/Pages\b(?:(?!endobj)[\s\S])*?\/Count\s+(\d+)/)?.[1]);
   if(count!==pages)throw {status:400,message:'PDF-ul are '+count+' pagini; produsul ales cere '+pages+'.'};
   let width,height;
-  if(cover){const interior=physicalPages(bp.structure.pages,product.mode,'kdp').length;width=format.trim_w_in*2+interior*(product.mode==='lineart'?0.002252:0.002347)+0.25;height=format.trim_h_in+0.25;}
+  if(cover){const ap=project.printProfiles?.kdp?.[product.key],w=coverWrap(format,destinationCheck({count:bp.structure.pages,book:product,profile:'kdp',ink:ap?.ink,paper:ap?.paper||'white'}));width=w.widthIn;height=w.heightIn;}   // P6-T04: spine from the approved ink/paper (default: the historic values)
   else if(preset==='kdp'){({width,height}=printDimensions(format,'kdp'));}
   else{const bleed=(profile.bleed_mm||0)/25.4;width=format.trim_w_in+2*bleed;height=format.trim_h_in+2*bleed;}
   const boxes=[...source.matchAll(/\/MediaBox\s*\[\s*0\s+0\s+([\d.]+)\s+([\d.]+)\s*\]/g)];

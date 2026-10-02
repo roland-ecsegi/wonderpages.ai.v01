@@ -132,10 +132,10 @@ async function loadProject() {
     const i = S.projects.findIndex(p => p.id === pid); if (i >= 0) S.projects[i] = { ...S.projects[i], ...d.project }; else S.projects.push(d.project);
     /* P3-T06: progress from durable units; units and manual packets only where they are shown */
     const act = S.route.tab === 'activity', migrated = d.project?.source?.kind === 'migration';
-    const book = S.route.tab === 'book';
-    const [pr, jb, pk, pl, rc, cq, lo] = await Promise.all([api('GET', `/projects/${pid}/progress`).catch(() => null), act ? api('GET', `/projects/${pid}/jobs`).catch(() => null) : null, act ? api('GET', `/projects/${pid}/packets`).catch(() => null) : null, api('GET', `/projects/${pid}/pilot`).catch(() => null), act && migrated ? api('GET', `/projects/${pid}/reconcile`).catch(() => null) : null, act ? api('GET', `/projects/${pid}/collection-qa`).catch(() => null) : null, book ? api('GET', `/projects/${pid}/layout?preset=digital`).catch(() => null) : null]);
+    const book = S.route.tab === 'book', exp = S.route.tab === 'export';
+    const [pr, jb, pk, pl, rc, cq, lo, pp] = await Promise.all([api('GET', `/projects/${pid}/progress`).catch(() => null), act ? api('GET', `/projects/${pid}/jobs`).catch(() => null) : null, act ? api('GET', `/projects/${pid}/packets`).catch(() => null) : null, api('GET', `/projects/${pid}/pilot`).catch(() => null), act && migrated ? api('GET', `/projects/${pid}/reconcile`).catch(() => null) : null, act ? api('GET', `/projects/${pid}/collection-qa`).catch(() => null) : null, book ? api('GET', `/projects/${pid}/layout?preset=digital`).catch(() => null) : null, exp ? api('GET', `/projects/${pid}/print-profiles`).catch(() => null) : null]);
     if (S.cur !== pid) return;
-    (S.progress ||= {})[pid] = pr; if (jb) (S.jobs ||= {})[pid] = jb.jobs; if (pk) (S.packets ||= {})[pid] = pk.packets; (S.pilot ||= {})[pid] = pl; if (rc) (S.reconcile ||= {})[pid] = rc; if (cq) (S.collectionQA ||= {})[pid] = cq; if (lo) (S.layout ||= {})[pid] = lo;
+    (S.progress ||= {})[pid] = pr; if (jb) (S.jobs ||= {})[pid] = jb.jobs; if (pk) (S.packets ||= {})[pid] = pk.packets; (S.pilot ||= {})[pid] = pl; if (rc) (S.reconcile ||= {})[pid] = rc; if (cq) (S.collectionQA ||= {})[pid] = cq; if (lo) (S.layout ||= {})[pid] = lo; if (pp) (S.printProfiles ||= {})[pid] = pp;
     if (S.wb && S.wb.pid === pid && S.wb.data && !S.wb.impact) loadWorkbench();
   } catch (e) { if (e.status === 404) S.projects = S.projects.filter(p => p.id !== pid); }
 }

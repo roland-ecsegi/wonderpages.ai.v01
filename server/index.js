@@ -46,7 +46,7 @@ import { fingerprint, fileHash, pageSequence, sceneFingerprint } from './contrac
 import { pageData } from './engine.js';
 import { deliveryFingerprint, currentReceipts, requiredBooks } from './delivery.js';
 import { editorialFindings } from './editorial.js';
-import { physicalPages, printDimensions } from './printprofile.js';
+import { physicalPages, printDimensions, destinationCheck, coverWrap } from './printprofile.js';
 import { contractFromBlueprint, validateContract, validateProjectInput, projectContractReport } from './domain/product-contract.js';
 import { appRightsInventory, projectRightsInventory, rightsStatus, rightsRecord, commercialReleaseCheck } from './domain/rights.js';
 import * as Capabilities from './providers/registry.js';
@@ -325,7 +325,10 @@ on('GET', '/api/projects/:pid/print-plan', async ({ pid }, _, url) => {
   const profile = url.searchParams.get('profile') === 'kdp' ? 'kdp' : 'digital', format = bp.formats?.[p.input?.[bp.format_key]];
   const pages = physicalPages(bp.structure.pages, book.mode, profile, book.back_cover);
   if (profile === 'kdp' && pages.length < 24) throw { status: 409, message: 'Interiorul nu îndeplinește numărul minim de pagini pentru acest profil.' };
-  return { profile, pages, ...printDimensions(format, profile), separateCover: profile === 'kdp', sourceScenes: bp.structure.pages, colourSpace: 'RGB', publicationValidated: false, semantics: profile === 'kdp' ? 'legacy-scene-expansion' : 'strict12', canonicalContentPages: bp.structure.pages };
+  /* P6-T04: versioned profile, physical→canonical map, ink/paper/gutter/cover rules (dated), approval of the legacy presentation */
+  const check = destinationCheck({ count: bp.structure.pages, book, profile, ink: url.searchParams.get('ink') || p.printProfiles?.[profile]?.[book.key]?.ink || null, paper: url.searchParams.get('paper') || p.printProfiles?.[profile]?.[book.key]?.paper || 'white', approval: p.printProfiles?.[profile]?.[book.key] || null });
+  return { profile, pages, ...printDimensions(format, profile), separateCover: profile === 'kdp', sourceScenes: bp.structure.pages, colourSpace: 'RGB', publicationValidated: false, semantics: profile === 'kdp' ? 'legacy-scene-expansion' : 'strict12', canonicalContentPages: bp.structure.pages,
+    check: { ...check, map: undefined }, map: check.map, cover: profile === 'kdp' ? coverWrap(format, check) : null, approved: !!check.approved, status: check.status };
 });
 on('POST', '/api/projects/:pid/exports', async ({ pid }, req, url) => {
   need(pid); const name = (url.searchParams.get('name') || 'export.pdf').replace(/[^a-zA-Z0-9._-]/g, '-').replace(/^\.+/, '');
@@ -334,6 +337,7 @@ on('POST', '/api/projects/:pid/exports', async ({ pid }, req, url) => {
   const p = need(pid), bp = await repo.getBlueprint(pid), art = await repo.artifacts(pid);
   const final = url.searchParams.get('kind') === 'final', vol = Number(url.searchParams.get('volume'));
   if(final && (!/%%EOF/.test(buf.subarray(-1024).toString('latin1')) || !/\/Type\s*\/Pages/.test(buf.toString('latin1')))) throw {status:400,message:'PDF final incomplet.'};
+  if (final && url.searchParams.get('preset') === 'kdp') { const bk = (bp.structure.books || []).find(b => b.key === String(url.searchParams.get('book') || '').replace(/-cover$/, '')); const ap = bk && p.printProfiles?.kdp?.[bk.key]; const ck = bk && destinationCheck({ count: bp.structure.pages, book: bk, profile: 'kdp', ink: ap?.ink, paper: ap?.paper || 'white', approval: ap }); if (!ck?.approved) throw { status: 409, code: 'profile_not_approved', message: 'Prezentarea legacy KDP (Poveste 28 / Colorat 26) nu este aprobată pentru această carte; aprob-o în Livrare înaintea exportului final.' }; }   // P6-T04
   if (final && (RUNNING[pid] || url.searchParams.get('fingerprint') !== deliveryFingerprint(p,bp,art,vol))) throw {status:409,message:'Conținutul s-a schimbat în timpul randării; regenerează PDF-ul.'};
   if (final && !volumeApproved(p, bp, vol, art)) throw { status: 409, message: 'Conținutul curent trebuie aprobat înaintea livrării finale.' };
   if (final) assertSafeRelease(p, bp, art, vol);   // P5-T01

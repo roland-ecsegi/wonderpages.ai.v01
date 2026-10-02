@@ -229,7 +229,7 @@ async function exportCoverWrap(v, opt = {}) {
   const plan = await api('GET', '/projects/'+p.id+'/print-plan?book='+book.key+'&profile=kdp');
   const fingerprint = S.delivery?.fingerprints?.[v] || '';
   const fmt = bi.fmt, bleed = 0.125, interior = plan.pages.length;
-  const spine = interior * (book.mode === 'lineart' ? 0.002252 : 0.002347);
+  const spine = plan.cover?.spineIn ?? interior * (book.mode === 'lineart' ? 0.002252 : 0.002347);   // P6-T04: from the approved ink/paper
   const W = fmt.trim_w_in * 2 + spine + bleed * 2, H = fmt.trim_h_in + bleed * 2, dpi = 300;
   const px = Math.round(W*dpi), ph = Math.round(H*dpi), half = Math.round((fmt.trim_w_in+bleed)*dpi), frontX=px-half;
   if (!opt.inPackage) { S.exporting={label:'Copertă separată: '+book.label+', volumul '+(v+1),i:1,n:1};render(); }

@@ -13,6 +13,7 @@ import { ROOT } from './config.js';
 import { RUNNING, expandStages, reassessVolume, prepareTextPacket, ingestTextPacket, prepareImagePacket, ingestImagePacket, gateItems, setItemDecisions, applyItemChanges, assertCanWork } from './engine.js';
 import { pageWorkbench, commandImpact, itemIdFor, srcKeyOf } from './domain/workbench.js';
 import { coloringQA, COLORING_QA_VERSION } from './quality/coloring.js';
+import { destinationCheck, coverWrap, PROFILE_VERSIONS, PROFILE_RULES } from './printprofile.js';
 import { unitHashes, verifyExecution, missingUnits } from './quality/repair.js';
 import { variantSet, backfillVersions } from './persistence/artifact-store.js';
 import { progressReport, inspectArtifact } from './observability/progress.js';
@@ -282,5 +283,29 @@ export function registerEnterpriseRoutes({ on, json, need, localOnly, repo, stor
       pages.push({ p: pg, status: stale ? 'stale' : measured.ok ? 'pass' : 'fail', file: c.lineart, colorFrom: c.lineFrom || null, color: c.color, stale, stored: c.lineQA ? { ok: c.lineQA.ok, version: c.lineQA.version || 0, for: c.lineQA.for || null } : null, measured: { ok: measured.ok, issues: measured.issues, metrics: measured.physical?.metrics || null, preset: measured.physical?.preset || preset }, candidates: c.lineCandidates || [] });
     }
     return { schema: 'wonderpages.coloring-report/1', version: COLORING_QA_VERSION, volume: n, preset, pages, ok: pages.every(x => x.status === 'pass') };
+  });
+  /* P6-T04: print profiles — explicit page semantics per book, dated rules, spread leaks after mapping, approval of the legacy presentation */
+  const profilesReport = (p, bp, art) => {
+    const fmt = bp.formats?.[p.input?.[bp.format_key]] || Object.values(bp.formats || {})[0], bps = derivePageBlueprints(bp, art).pages, out = [];
+    for (const key of Object.keys(PROFILE_VERSIONS).filter(k => k === 'digital' || (bp.export?.presets || []).some(x => x.key === k))) for (const book of bp.structure.books || []) {
+      const ap = p.printProfiles?.[key]?.[book.key] || null, base = destinationCheck({ count: bp.structure.pages, book, profile: key, ink: ap?.ink, paper: ap?.paper || 'white', approval: ap });
+      const leaks = []; for (let v = 1; v <= bp.structure.volumes; v++) for (const l of destinationCheck({ count: bp.structure.pages, book, profile: key, ink: ap?.ink, paper: ap?.paper || 'white', blueprints: bps.filter(b => b.volume === v) }).leaks) leaks.push({ ...l, volume: v });
+      out.push({ ...base, book: book.key, mode: book.mode, leaks, approval: ap, cover: key === 'kdp' && fmt ? coverWrap(fmt, base) : null });
+    }
+    return out;
+  };
+  on('GET', '/api/projects/:pid/print-profiles', async ({ pid }) => { const p = need(pid), bp = await repo.getBlueprint(pid); return { rules: PROFILE_RULES, versions: PROFILE_VERSIONS, canonicalContentPages: bp.structure.pages, profiles: profilesReport(p, bp, await repo.artifacts(pid)) }; });
+  on('POST', '/api/projects/:pid/print-profile', async ({ pid }, req) => {
+    localOnly(req); const p = need(pid), b = await json(req), bp = await repo.getBlueprint(pid), book = (bp.structure.books || []).find(x => x.key === b.book);
+    if (b.profile !== 'kdp') throw { status: 400, message: 'Numai prezentarea legacy KDP cere aprobare explicită.' };
+    if (!book) throw { status: 400, message: 'Carte necunoscută.' };
+    const before = contractFromBlueprint(bp).contractHash, ck = destinationCheck({ count: bp.structure.pages, book, profile: 'kdp', ink: b.ink || null, paper: b.paper || 'white' });
+    if (!ck.compatible) throw { status: 409, code: 'profile_incompatible', message: ck.reasons.join(' '), reasons: ck.reasons };
+    if (b.approve === false) { const next = { ...(p.printProfiles?.kdp || {}), [book.key]: null }; await repo.commitProjectDecision(pid, { printProfiles: { ...(p.printProfiles || {}), kdp: next } }, [decisionRecord({ kind: 'print_profile', actor: 'operator@laptop', state: 'rejected', note: String(b.note || 'retras').slice(0, 300), scope: { profile: 'kdp', book: book.key }, subject: { mapHash: ck.mapHash } })], { actor: 'operator@laptop', kind: 'print_profile.revoke' }); return { ok: true, revoked: true }; }
+    const ap = { profile: 'kdp', version: PROFILE_VERSIONS.kdp.version, semantics: 'legacy-scene-expansion', ink: ck.ink, paper: ck.paper, physicalPages: ck.physicalPages, canonicalContentPages: bp.structure.pages, mapHash: ck.mapHash, rules: PROFILE_RULES.version, at: now(), actor: 'operator@laptop', note: String(b.note || '').slice(0, 300) };
+    const rec = decisionRecord({ kind: 'print_profile', actor: 'operator@laptop', state: 'approved', note: ap.note, scope: { profile: 'kdp', book: book.key }, subject: { mapHash: ck.mapHash, ink: ap.ink, paper: ap.paper, physicalPages: ap.physicalPages, canonicalContentPages: ap.canonicalContentPages, rules: PROFILE_RULES.version } });
+    await repo.commitProjectDecision(pid, { printProfiles: { ...(p.printProfiles || {}), kdp: { ...(p.printProfiles?.kdp || {}), [book.key]: ap } } }, [rec], { actor: 'operator@laptop', kind: 'print_profile.approve' });
+    if (contractFromBlueprint(await repo.getBlueprint(pid)).contractHash !== before) throw { status: 500, message: 'Contractul canonic s-a schimbat (nu trebuia).' };
+    return { ok: true, approval: ap, decision: rec.id, check: destinationCheck({ count: bp.structure.pages, book, profile: 'kdp', ink: ap.ink, paper: ap.paper, approval: ap }).status };
   });
 }

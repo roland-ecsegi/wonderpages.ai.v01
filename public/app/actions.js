@@ -310,6 +310,9 @@ const ACT = {
   'do-decide': el => doDecide(el.dataset.d),
   'modal-close': () => closeModal(),
   'vol': el => { S.book.v = Number(el.dataset.v); S.book.picked = true; S.editing = null; render(); },
+  /* P6-T04: explicit approval of the legacy KDP presentation (never changes the 12 canonical pages) */
+  'pp-approve': el => { const b = el.dataset.book, ink = $('#pp-ink-' + b)?.value, paper = $('#pp-paper-' + b)?.value || 'white'; confirmAct('Aprobi prezentarea legacy KDP?', 'Cele 12 pagini canonice rămân aceleași; doar prezentarea de publicare (Poveste 28 / Colorat 26, copertă separată) se aprobă pentru această carte.', 'Aprob', async () => { await api('POST', `/projects/${S.cur}/print-profile`, { profile: 'kdp', book: b, ink, paper }); await loadProject(S.cur); render(); }); },
+  'pp-revoke': el => api('POST', `/projects/${S.cur}/print-profile`, { profile: 'kdp', book: el.dataset.book, approve: false, note: 'retras din Livrare' }).then(() => loadProject(S.cur)).then(render).catch(e => toast(e.message, 'error')),
   /* P6-T02: page workbench */
   'wb-page': el => { location.hash = `#/p/${S.cur}/book/${S.wb.v + 1}/${el.dataset.p}`; },
   'wb-close': () => { S.wb = null; location.hash = `#/p/${S.cur}/book`; },

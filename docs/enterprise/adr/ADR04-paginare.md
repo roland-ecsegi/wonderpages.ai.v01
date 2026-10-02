@@ -25,3 +25,23 @@ Creșterea tăcută a numărului de pagini sau eticheta „14 pagini KDP-ready�
 ## Reconsiderare
 
 Numai printr-o decizie explicită de ProductContract / nevoie de canal, nu prin paritate cu un competitor.
+
+## Extindere P6-T04 (2026-10-02): profiluri versionate și aprobarea prezentării legacy
+
+- `server/printprofile.js`: `PROFILE_VERSIONS` (digital/print `strict12`, kdp `legacy-scene-expansion`, fiecare cu `version`) și
+  `PROFILE_RULES` (versiunea 1, înregistrată la 2026-10-02, cu sursele KDP citate): bleed 0,125 in pe marginile exterioare;
+  minime de pagini pe cerneală — alb-negru 24, color premium 24, **color standard 72**; grosimea hârtiei pe pagină
+  (alb-negru alb 0,002252 / crem 0,0025; color premium alb 0,002347; color standard alb 0,002252); margine interioară după
+  numărul de pagini (24–150 → 0,375 in, …); text pe cotor numai de la 80 de pagini. Regulile se reverifică înainte de publicare.
+- `pageMap(count, book, profile)`: pagina fizică → pagina canonică, rol (copertă, conținut, ilustrație, text, preliminare,
+  verso gol), **parte** (pagina fizică 1 = recto) și **deschidere** (perechile 2–3, 4–5, …).
+- `spreadLeaks(map, PageBlueprints)`: o întrebare/cârlig al cărei răspuns ajunge pe aceeași deschidere fizică după mapare
+  este semnalată (de ex. în `strict12` digital paginile canonice 1–2 sunt pe deschiderea fizică 2–3).
+- `destinationCheck()`: `strict12` nu este niciodată compatibil KDP; prezentarea legacy este `requires_approval` până la
+  aprobarea explicită per carte (cerneală + hârtie + `mapHash` + versiunea profilului); color standard pentru 28 de pagini
+  este `incompatible` (nicio utilizare greșită a culorii standard). Nicio stare nu este „ready” (P6-T05 măsoară).
+- `POST /api/projects/:pid/print-profile` (aprobare / retragere, înregistrare de decizie `print_profile`; contractul canonic
+  de 12 pagini rămâne identic, verificat prin hash), `GET /api/projects/:pid/print-profiles` (toate profilurile × cărți,
+  cu scurgeri pe volume și coperta separată), `print-plan` include verificarea și coperta (cotor din cerneala/hârtia aprobată).
+- Exportul final KDP fără aprobarea cărții este refuzat (`profile_not_approved`); validatorul PDF calculează coperta cu
+  același cotor. Comportamentul 28/26 este neschimbat; doar etichetat și aprobat.
