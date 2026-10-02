@@ -5,7 +5,7 @@
 import { discover, effective, buildSnapshot, CHANNELS } from './capabilities.js';
 
 let storage = null, probes = {}, state = { discovery: null, probes: {}, history: [] };
-export async function initCapabilities(s, p) { storage = s; probes = p || {}; state = (await s.readJSON('capabilities.json', null)) || state; state.probes ||= {}; state.history ||= []; }
+export async function initCapabilities(s, p) { storage = s; probes = p || {}; state = (await s.readJSON('capabilities.json', null)) || { discovery: null, probes: {}, history: [] }; state.probes ||= {}; state.history ||= []; }
 const persist = () => storage?.writeJSON('capabilities.json', state);
 
 export async function runDiscovery(now = Date.now()) {
@@ -28,3 +28,14 @@ export function getCapabilities(now = Date.now()) {
 }
 /** Admission helper for later phases: may production use this channel automatically? */
 export function channelUsable(channel, now = Date.now()) { const s = getCapabilities(now).channels[channel]; return { usable: s?.status === 'supported', status: s?.status || 'unknown', reasons: s?.reasons || [] }; }
+
+/** P3-T05 — execution-time capability check. Unavailable or tool-limited channels are refused (manual exchange instead);
+ *  a provider-reported quota limit becomes a durable wait; a stale or never-run discovery does not block (status unknown). */
+export function assertExecutable(channel, { needsRefs = false } = {}) {
+  const s = getCapabilities().channels[channel]; if (!s || s.stale || !state.discovery) return { checked: false };
+  if (s.status === 'unavailable') throw { status: 409, code: 'capability_unavailable', channel, message: `${s.provider}: indisponibil (${s.reasons.join(' ')}). Folosește schimbul manual sau reconectează contul oficial.` };
+  if (s.quota?.status === 'limited') throw { code: 'rate_limited', provider: channel, resetAt: s.quota.resetAt || Date.now() + 15 * 60e3, message: `${s.provider}: limita inclusă este atinsă; aștept resetarea.` };
+  if (s.reasons.some(r => /Instrumente lipsă|Schema instrumentelor|Model indisponibil/.test(r))) throw { status: 409, code: 'capability_limited', channel, message: `${s.provider}: ${s.reasons.filter(r => /Instrumente|Schema|Model/.test(r)).join(' ')} Folosește schimbul manual până la o nouă verificare.` };
+  if (needsRefs && channel === 'canva-mcp' && s.toolInputs?.['generate-image'] && !s.toolInputs['generate-image'].includes('imageReferences')) throw { status: 409, code: 'capability_limited', reason: 'refs_unsupported', channel, message: 'Canva nu acceptă imagini de referință pentru acest cont/client; fără ele s-ar pierde identitatea personajelor. Folosește alt canal sau schimbul manual.' };
+  return { checked: true, status: s.status };
+}

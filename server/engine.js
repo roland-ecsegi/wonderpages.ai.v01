@@ -3,7 +3,8 @@
    exact cum îl descrie blueprint-ul. Rulează pe server, deci
    continuă și cu browserul închis.
    ============================================================ */
-import { complete } from './llm.js';
+import { complete, parseJSONLoose } from './llm.js';
+import crypto from 'node:crypto';
 import { bus, now, clone } from './repo.js';
 import { config } from './config.js';
 import { getAgent, requireAgent, startInstance, registry as agentRegistry } from './agents.js';
@@ -11,6 +12,8 @@ import { buildContext } from './agents-runtime/context-builder.js';
 import { AsyncLocalStorage } from 'node:async_hooks';
 import { Scheduler, INSTANCE, unitInputsHash } from './jobs/scheduler.js';
 import { ExecutionBudget } from './jobs/budget.js';
+import { sniffImage, pngSize } from './security/safe-zip.js';
+import { assertExecutable } from './providers/registry.js';
 import { canonicalHash } from './domain/canonical.js';
 /* P3-T03: the innermost durable unit (stage or item) of the current async flow: its lease fences every result write */
 export const FENCE = new AsyncLocalStorage();
@@ -165,6 +168,7 @@ export async function agentComplete(prompt, { agent = 'producator', task = '', j
   const ctxBuilt = buildContext({ agent: a, role: agentRegistry().contracts?.roles?.[a.id], policy: EDITORIAL_POLICY, lessons: listLessons(), age, pid, stage: meta.stage, promptKey: meta.prompt, prompt, override: meta.modelSource === 'model_variant' ? null : model, variant: meta.modelSource === 'model_variant' ? model : null, defaultModel: config.claudeCode.model });
   const end = startInstance(agent, pid, task); let ok = false; let info = null; const t0 = Date.now(); const useModel = ctxBuilt.manifest.model.model;
   const system = ctxBuilt.system; await persistContext(pid, ctxBuilt.manifest).catch(e => console.warn('[context]', e?.message || e)); onContext?.(ctxBuilt.manifest);
+  assertExecutable(ctxBuilt.manifest.model.provider === 'codex' ? 'codex-text' : 'claude-code-text');   // P3-T05: entitlement/capability checked at execution
   if (pid) await noteExternal({ provider: ctxBuilt.manifest.model.provider });   // P3-T03
   if (meta.lessons !== false) noteLessonUse(agent, age, pid, { stage: meta.stage, prompt: meta.prompt });
   try { const r = await complete(prompt, { json, images, signal, onText, skipBudget, model: useModel, system, schema, onMeta: m => { info = m; } }); ok = true; recordCall(useModel === 'gpt-6-sol' ? 'text_gpt' : 'text'); return r; }
@@ -200,6 +204,7 @@ async function callImage(E, args, label, budget = null) {
   const hhmm = t => new Date(t).toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit' });
   const engine = args.provider || imageEngineOf(E);
   const fence = FENCE.getStore(), resumeJobId = engine === 'canva' ? fence?.resumeProviderJobId || null : null; if (fence) fence.resumeProviderJobId = null;
+  assertExecutable(engine === 'chatgpt' ? 'codex-image' : 'canva-mcp', { needsRefs: !!args.references?.length });   // P3-T05
   await noteExternal({ provider: engine, ...(resumeJobId ? { providerJobId: resumeJobId, lookup: true } : {}) });   // P3-T03: recorded BEFORE the provider is asked
   const hop = async (to, why) => {
     if (!budget.can('providerHop')) throw { code: 'rate_limited', provider: engine, resetAt: Date.now() + canvaCfg.pauseMin * 60e3, budget: budget.snapshot(), message: 'Ambii furnizori de imagini cer pauză; proiectul așteaptă și reia singur mai târziu (fără alternare repetată).' };
@@ -1278,4 +1283,56 @@ export async function completeGate(pid, ctx = {}) {
   const bp = await repo.getBlueprint(pid); const items = gateItems(bp, await repo.artifacts(pid), p, p.gate); const c = gateSummary(items);
   if (!c.done) throw { status: 400, message: `Mai sunt ${c.total - c.approved} elemente neaprobate sau cu modificări neaplicate.` };
   return decide(pid, { decision: 'approved', note: '' }, ctx);
+}
+
+/* ============================================================
+   P3-T05 — operator exchange: the SAME prompt, context, schema and validators as the automatic path; the result
+   enters as a candidate with provenance "operator-exchange"; gates are unchanged (approval still required).
+   ============================================================ */
+async function packetEngine(pid) { const project = repo.getProject(pid); const bp = await repo.getBlueprint(pid); return { pid, project, bp, stages: expandStages(bp), art: await repo.artifacts(pid), ctl: new AbortController(), task: null }; }
+function packetHash(E, parts) { return canonicalHash({ ...parts, input: E.project.input, notes: E.project.notes || [], run: E.project.run || 1, upstream: Object.fromEntries(Object.entries(E.art).filter(([k]) => k !== parts.outKey).map(([k, a]) => [k, a.version]).sort()) }); }
+export async function prepareTextPacket(pid, stageKey) {
+  const E = await packetEngine(pid), stage = E.stages.find(s => s.key === stageKey);
+  if (!stage) throw { status: 404, message: 'Etapă necunoscută.' };
+  if (stage.handler !== 'llm_json' || stage.for_each) throw { status: 400, code: 'packet_unsupported', message: 'Schimbul manual de text este disponibil pentru etapele cu un singur document.' };
+  const ctx = applyBind(E, stage, buildCtx(E, { item: null, i: 0, n: 1 })), promptKey = stage.prompt, outKey = tpl(stage.out, ctx), agentId = agentOf(E, stage, promptKey);
+  const prompt = tpl(E.bp.prompts[promptKey], ctx), schema = schemaFor(E.bp, promptKey, ctx), age = E.project.input?.[E.bp.variant_key];
+  const system = agentSystem(agentId, age, pid, { stage: stage.base || stage.key, prompt: promptKey });
+  return { kind: 'text', stageKey, outKey, agentId, promptKey, prompt, system, schema, required: defFor(E.bp, outKey).required || [], inputsHash: packetHash(E, { stageKey, outKey, prompt, system, schema }) };
+}
+export async function ingestTextPacket(pid, packet, rawText, actor = 'operator@laptop') {
+  const fresh = await prepareTextPacket(pid, packet.stageKey);
+  if (fresh.inputsHash !== packet.inputsHash) throw { status: 409, code: 'stale_packet', message: 'Pachetul este expirat: proiectul s-a schimbat după emitere. Generează un pachet nou.' };
+  let out; try { out = parseJSONLoose(rawText); } catch { throw { status: 400, code: 'invalid_output', message: 'Rezultatul nu conține JSON valid.' }; }
+  const E = await packetEngine(pid), stage = E.stages.find(s => s.key === packet.stageKey), ctx = applyBind(E, stage, buildCtx(E, { item: null, i: 0, n: 1 }));
+  const problem = checkOut(out, { ...stage, required: fresh.required }, ctx, fresh.schema);
+  if (problem) throw { status: 400, code: 'invalid_output', message: 'Rezultatul nu respectă contractul: ' + problem };
+  const doc = await repo.writeArtifact(pid, fresh.outKey, out, { by: 'operator-exchange', stage: stage.key, note: 'Rezultat din schimbul manual (aceleași validări)', meta: { prov: { channel: 'operator-exchange', packetId: packet.id, agent: fresh.agentId, model: 'manual', prompt: fresh.promptKey, actor, inputsHash: fresh.inputsHash, at: now() } } });
+  const p = repo.getProject(pid);
+  if (!['done', 'skipped'].includes(p.stages?.[stage.key]?.status)) await repo.patchProject(pid, { stages: { [stage.key]: { status: 'done', imported: true, manual: true, finishedAt: now(), note: 'Completat prin schimb manual' } } });
+  return { artifact: fresh.outKey, version: doc.version };
+}
+export async function prepareImagePacket(pid, v, p) {
+  const E = await packetEngine(pid); const fmt = E.bp.formats?.[E.project.input?.[E.bp.format_key]] || {};
+  const contract = pageContract(E, v, p), style = E.art.bible?.content?.style_guide?.style_block || null;
+  const refs = []; for (const r of E.project.refs || []) { try { refs.push({ file: r.file, sha256: crypto.createHash('sha256').update(await repo.readFile(pid, r.file)).digest('hex') }); } catch {} }
+  for (const r of E.art.anchors?.content?.prompts || []) if (r.image) { try { refs.push({ file: r.image, sha256: crypto.createHash('sha256').update(await repo.readFile(pid, r.image)).digest('hex'), role: r.label || r.ref }); } catch {} }
+  const outKey = `ill_${v}_${p}`, aspect = fmt.trim_w_in && fmt.trim_h_in ? fmt.trim_w_in / fmt.trim_h_in : 1;
+  const prompt = `Children's picture-book illustration, ${pageLabel(v, p)}. Style: ${style || E.project.input?.visual_style || ''}. Scene contract (follow exactly, never add text or letters to the art): ${JSON.stringify(contract)}`;
+  return { kind: 'image', outKey, v, p, prompt, contract, refs, aspect, minShortSide: 1024, inputsHash: packetHash(E, { outKey, prompt, refs }) };
+}
+export async function ingestImagePacket(pid, packet, buffer, actor = 'operator@laptop') {
+  const fresh = await prepareImagePacket(pid, packet.v, packet.p);
+  if (fresh.inputsHash !== packet.inputsHash) throw { status: 409, code: 'stale_packet', message: 'Pachetul este expirat: scena sau referințele s-au schimbat. Generează un pachet nou.' };
+  const mime = sniffImage(buffer); if (!mime) throw { status: 400, code: 'invalid_output', message: 'Fișierul nu este o imagine PNG/JPEG/WebP.' };
+  const size = mime === 'image/png' ? pngSize(buffer) : null;
+  if (size) {
+    if (Math.min(size.width, size.height) < fresh.minShortSide) throw { status: 400, code: 'invalid_output', message: `Imaginea are ${size.width}×${size.height} px; latura scurtă trebuie să aibă cel puțin ${fresh.minShortSide} px.` };
+    if (Math.abs(size.width / size.height - fresh.aspect) / fresh.aspect > 0.03) throw { status: 400, code: 'invalid_output', message: `Raportul imaginii (${(size.width / size.height).toFixed(3)}) nu corespunde formatului (${fresh.aspect.toFixed(3)}).` };
+  }
+  const E = await packetEngine(pid), src = E.art[`final_${packet.v}`] ? `final_${packet.v}` : `script_${packet.v}`;
+  const rel = `images/manual-${packet.id}.${mime === 'image/jpeg' ? 'jpg' : mime.split('/')[1]}`; await repo.saveFile(pid, rel, buffer);
+  const prev = E.art[fresh.outKey]?.content || {};
+  const doc = await repo.writeArtifact(pid, fresh.outKey, { color: rel, engine: 'manual', provider: 'operator-exchange', ...(prev.lineart ? { linePending: true } : {}) }, { by: 'operator-exchange', note: 'Imagine din schimbul manual; QA vizual necesar', basedOn: { key: src, version: E.art[src]?.version ?? null, pageHash: sceneFingerprint(pageData(E.art[src]?.content, packet.p)) }, meta: { prov: { channel: 'operator-exchange', packetId: packet.id, actor, inputsHash: fresh.inputsHash, pixels: size ? [size.width, size.height] : null, at: now() } } });
+  return { artifact: fresh.outKey, version: doc.version, qa: 'required' };
 }

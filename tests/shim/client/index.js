@@ -13,7 +13,7 @@ export class Client {
     const st = S.read(); if ((st.canva || 'ok') === 'unauthorized') throw new UnauthorizedError('token expired');
     const names = ['generate-image', 'get-generate-image-job', 'create-upload-url', 'list-brand-kits', 'search-brand-templates', 'get-brand-template-dataset', 'autofill-design', 'resize-design', 'export-design', 'comment-on-design', 'list-comments'];
     const drop = st.canvaToolsDrop || [];
-    return { tools: names.filter(n => !drop.includes(n)).map(name => ({ name, inputSchema: { type: 'object', properties: st.canvaToolSchemaVariant && name === 'generate-image' ? { prompt: { type: 'string' }, extra: { type: 'string' } } : { prompt: { type: 'string' } } } })) };
+    return { tools: names.filter(n => !drop.includes(n)).map(name => ({ name, inputSchema: { type: 'object', properties: name === 'generate-image' ? (st.canvaToolSchemaVariant ? { prompt: { type: 'string' }, aspectRatio: { type: 'string' }, extra: { type: 'string' } } : { prompt: { type: 'string' }, aspectRatio: { type: 'string' }, imageReferences: { type: 'array' }, user_intent: { type: 'string' } }) : { prompt: { type: 'string' } } } })) };
   }
   async callTool({ name, arguments: a }) {
     const st = S.read(); const mode = st.canva || 'ok';

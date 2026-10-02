@@ -60,5 +60,5 @@ test('P1-T03 API: discovery read-only; proba reală inițiată de operator face 
   r = await api('POST', 'capabilities/discover'); assert.equal(r.body.channels['canva-mcp'].status, 'limited');
   setFake({ codex: 'ratelimit' });
   r = await api('POST', 'capabilities/discover'); assert.equal(r.body.channels['codex-text'].status, 'limited');
-  setFake({});
+  setFake({}); await api('POST', 'capabilities/discover');   // starea curată pentru testele următoare (P3-T05 verifică la execuție)
 });

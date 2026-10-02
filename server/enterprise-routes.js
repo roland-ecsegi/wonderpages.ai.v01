@@ -10,6 +10,8 @@ import { planMigration, runMigration, listMigrations } from './migration/migrato
 import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT } from './config.js';
+import { RUNNING, prepareTextPacket, ingestTextPacket, prepareImagePacket, ingestImagePacket } from './engine.js';
+import { createPacket, getPacket, listPackets, recordAttempt, assertUsable, packetZip } from './providers/operator-exchange.js';
 
 export function impactForWrite(bp, art, key, nextContent) {
   const prev = art[key]?.content;
@@ -61,5 +63,34 @@ export function registerEnterpriseRoutes({ on, json, need, localOnly, repo, stor
     const prop = { id: uid('cp'), ...proposeCanonChange(bp, art, b.bible, { actor: 'operator', reason: String(b.reason || '').slice(0, 1000) }), bible: b.bible, at: now() };
     await repo.patchProject(pid, { canonProposals: [...(p.canonProposals || []).filter(x => x.status === 'pending').slice(-19), prop] });
     return prop;
+  });
+
+  /* P3-T05: operator exchange — packet issue/list/download/result; same validators, provenance operator-exchange, gates unchanged */
+  on('POST', '/api/projects/:pid/packets', async ({ pid }, req) => {
+    localOnly(req); need(pid); const b = await json(req);
+    let spec;
+    if (b.kind === 'text') spec = await prepareTextPacket(pid, String(b.stageKey || ''));
+    else if (b.kind === 'image') { const v = Number(b.v), p = Number(b.p); if (!Number.isInteger(v) || !Number.isInteger(p) || v < 0 || p < 0) throw { status: 400, message: 'Pagină invalidă.' }; spec = await prepareImagePacket(pid, v, p); }
+    else throw { status: 400, message: 'Tip de pachet necunoscut (text sau image).' };
+    const doc = await createPacket(storage, pid, spec); return { ...doc, system: undefined };
+  });
+  on('GET', '/api/projects/:pid/packets', async ({ pid }) => { need(pid); return { packets: await listPackets(storage, pid) }; });
+  on('GET', '/api/projects/:pid/packets/:id/download', async ({ pid, id }, req, _, res) => {
+    localOnly(req); need(pid); const pk = await getPacket(storage, pid, id); if (!pk) throw { status: 404, message: 'Pachet inexistent.' };
+    const zip = await packetZip(repo, pid, pk); const buf = fs.readFileSync(zip); fs.rmSync(zip, { force: true });
+    res.writeHead(200, { 'content-type': 'application/zip', 'content-length': buf.length, 'content-disposition': `attachment; filename="${pk.id}.zip"` }); res.end(buf); return null;
+  });
+  on('POST', '/api/projects/:pid/packets/:id/result', async ({ pid, id }, req) => {
+    localOnly(req); need(pid); if (RUNNING[pid]) throw { status: 409, message: 'Oprește producția înainte de a importa un rezultat manual.' };
+    const pk = await getPacket(storage, pid, id); assertUsable(pk);
+    const isImage = /^image\//.test(String(req.headers['content-type'] || ''));
+    const body = isImage ? await readBody(req, 40 * 1024 * 1024) : await json(req);
+    try {
+      const r = pk.kind === 'text'
+        ? await ingestTextPacket(pid, pk, typeof body.text === 'string' ? body.text : JSON.stringify(body.output ?? ''))
+        : await ingestImagePacket(pid, pk, isImage ? body : Buffer.from(String(body.imageBase64 || ''), 'base64'));
+      await recordAttempt(storage, pid, pk, { ok: true, artifact: r.artifact, version: r.version });
+      return { ok: true, ...r };
+    } catch (e) { await recordAttempt(storage, pid, pk, { ok: false, code: e.code || null, message: String(e.message || e).slice(0, 300) }); throw e; }
   });
 }

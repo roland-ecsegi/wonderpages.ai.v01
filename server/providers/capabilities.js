@@ -58,7 +58,7 @@ export function buildSnapshot(channel, obs = {}, now = Date.now()) {
 
   function finish(r) {
     const ttl = Math.min(TTL.auth, obs.quota ? TTL.quota : TTL.auth, def.expectedTools ? TTL.tools : TTL.auth);
-    const snap = { kind: 'wonderpages.provider-capability/1', channel, capability: def.capability, provider: def.provider, ...r, executableVersion: obs.version || null, models: { configured: def.expectedModels || [], available: obs.models?.available || [], unavailable: unavailableModels, availability: obs.models?.available?.length ? 'verified' : 'unknown' }, quota: obs.quota ? { ...obs.quota } : { status: 'unknown', provenance: 'none' }, tools: Array.isArray(obs.tools) ? obs.tools : null, toolSchemaHash: obs.toolSchemaHash || null, realProbe: obs.realProbe || null, terms: { url: def.terms, entitlement: obs.realProbe?.ok ? 'observed' : 'unknown', acknowledgedAt: obs.termsAcknowledgedAt || null, note: 'Abonamentul nu dovedește drept de folosire automată nelimitată; condițiile se verifică la sursa oficială.' }, checkedAt: now, expiresAt: now + ttl };
+    const snap = { kind: 'wonderpages.provider-capability/1', channel, capability: def.capability, provider: def.provider, ...r, executableVersion: obs.version || null, models: { configured: def.expectedModels || [], available: obs.models?.available || [], unavailable: unavailableModels, availability: obs.models?.available?.length ? 'verified' : 'unknown' }, quota: obs.quota ? { ...obs.quota } : { status: 'unknown', provenance: 'none' }, tools: Array.isArray(obs.tools) ? obs.tools : null, toolInputs: obs.toolInputs || null, toolSchemaHash: obs.toolSchemaHash || null, realProbe: obs.realProbe || null, terms: { url: def.terms, entitlement: obs.realProbe?.ok ? 'observed' : 'unknown', acknowledgedAt: obs.termsAcknowledgedAt || null, note: 'Abonamentul nu dovedește drept de folosire automată nelimitată; condițiile se verifică la sursa oficială.' }, checkedAt: now, expiresAt: now + ttl };
     snap.green = snap.status === 'supported';
     return snap;
   }
@@ -92,7 +92,7 @@ export async function discover(probes, previous = {}, now = Date.now()) {
   const ci = await probe(probes.codexImage);
   out['codex-image'] = buildSnapshot('codex-image', { installed: ci ? ci.installed : null, version: ci?.version, auth: ci?.auth ?? null, quota: ci?.quota, realProbe: previous['codex-image']?.realProbe || (ci?.generationVerified ? { ok: true, at: ci.generationVerified } : null) }, now);
   const cv = await probe(probes.canva);
-  out['canva-mcp'] = buildSnapshot('canva-mcp', { installed: cv ? cv.installed : null, auth: cv?.auth ?? null, tools: cv?.tools ?? null, toolSchemaHash: cv?.toolSchemaHash, expectedToolSchemaHash: previous['canva-mcp']?.toolSchemaHash || null, quota: cv?.quota, realProbe: previous['canva-mcp']?.realProbe || null }, now);
+  out['canva-mcp'] = buildSnapshot('canva-mcp', { installed: cv ? cv.installed : null, auth: cv?.auth ?? null, tools: cv?.tools ?? null, toolInputs: cv?.toolInputs ?? null, toolSchemaHash: cv?.toolSchemaHash, expectedToolSchemaHash: previous['canva-mcp']?.toolSchemaHash || null, quota: cv?.quota, realProbe: previous['canva-mcp']?.realProbe || null }, now);
   out['operator-exchange'] = buildSnapshot('operator-exchange', {}, now);
   return { kind: 'wonderpages.capability-discovery/1', at: now, channels: out, probeErrors: errors, summary: Object.fromEntries(Object.entries(out).map(([k, s]) => [k, s.status])) };
 }
