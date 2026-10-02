@@ -61,8 +61,8 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | P4-T01 | DONE | 3cd9cf2 | TEST-P4-T01 7/7; RS0 191/191 | Intake local idee/manuscris, rezumat contract legat de creare (stale_form), limite explicite, registru rute; D-ROUTE-PREVIEW FIXED |
 | P4-T02 | DONE | eca756c | TEST-P4-T02 7/7; RS0 198/198 | kids-sc v16: 6 biblii de volum, matrice colecție + cronologie, constatări explicate, plan aprobat înainte de bulk |
 | P4-T03 | DONE | b1f765b | TEST-P4-T03 6/6; RS0 204/204 | kids-sc v17: 72 PageBlueprints înaintea porții seriei, payoff/deschideri/deținători, atlas cu aprobare explicită și drepturi de reutilizare |
-| P4-T04 | DONE | (acest commit) | TEST-P4-T04 9/9; RS0 213/213 | kids-sc v18: lanț cauzal cu citate, vârstă orientativă, voce, știință/T18, ediție nativă aliniată, fără tăieri tăcute |
-| P4-T05 | PENDING | | | |
+| P4-T04 | DONE | 4d31657 | TEST-P4-T04 9/9; RS0 213/213 | kids-sc v18: lanț cauzal cu citate, vârstă orientativă, voce, știință/T18, ediție nativă aliniată, fără tăieri tăcute |
+| P4-T05 | DONE | (acest commit) | TEST-P4-T05 6/6; RS0 219/219 local + 219/219 PG | Pilot demo→carte completă blochează V2–6 (inclusiv în avans); reconciliere DW01/DW02 selectivă; PHASE 4 închisă |
 | P5-T01 | PENDING | | | |
 | P5-T02 | PENDING | | | |
 | P5-T03 | PENDING | | | |
@@ -117,6 +117,8 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | 2026-10-02 | RS0 + TEST-P4-T02 | 198/198 PASS | prima rulare: 8 eșecuri — nume global duplicat în UI și hash de plan dependent de scenarii; corectate în cod; fixture P2-T04 actualizat la planul v16 |
 | 2026-10-02 | RS0 + TEST-P4-T03 | 204/204 PASS | prima rulare: fixture P2-T04 și numărul de prompturi personalizate DW depindeau de contractul vechi — ajustate |
 | 2026-10-02 | RS0 + TEST-P4-T04 | 213/213 PASS | prag de complexitate prea permisiv pentru 3-4 ani — aliniat |
+| 2026-10-02 | RS0 + TEST-P4-T05 | 219/219 PASS | politica pilot a schimbat comportamentul v19 2.12 pentru V2 — test actualizat (pregătire în avans de la V3) |
+| 2026-10-02 | Închidere P4: baseline-report --with-tests --with-pg | 15 PASS · 0 FAIL · 3 NOT_RUN; 219/219 local + 219/219 PostgreSQL | — |
 
 ## Probleme deschise
 
@@ -126,10 +128,10 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 
 ## Aprobări umane așteptate
 
-(niciuna încă)
+- Reconcilierea DW01/DW02 a proiectului Dinosaur World migrat: raportul este gata (GET /api/projects/:pid/reconcile); alegerea textului premisei și a contractului de întoarcere pe pagină este decizia operatorului. (WAITING_HUMAN; nu blochează fazele 5–7.)
 
 ## Checkpoint
 
-- Ultimul task închis: P4-T04
-- Următorul task: **P4-T05**
+- Ultimul task închis: P4-T05
+- Următorul task: **P5-T01**
 - Cum se reia: `npm ci && npm run build && BROWSER_PATH=/opt/pw-browsers/chromium npm test`; citește tabelul de mai sus și `docs/enterprise/records/`.

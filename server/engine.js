@@ -18,6 +18,7 @@ import { canonicalHash } from './domain/canonical.js';
 import { matrixForArtifacts } from './domain/collection.js';
 import { derivePageBlueprints, validatePageBlueprints } from './domain/page-blueprints.js';
 import { atlasFor, landmarkContext } from './domain/atlas.js';
+import { generationAllowed, pilotState } from './domain/pilot.js';
 import { storyContract, causality as storyCausality, voice as storyVoice, science as storyScience, ageFit, criticNotes } from './domain/story-contracts.js';
 /* P3-T03: the innermost durable unit (stage or item) of the current async flow: its lease fences every result write */
 export const FENCE = new AsyncLocalStorage();
@@ -989,6 +990,7 @@ function prefetchSig(E) {
 }
 async function prefetchNext(E, vol) {
   if (vol >= (E.bp.structure?.volumes || 0)) return;
+  if (!generationAllowed(E.bp, E.project, { vol, handler: 'llm_json' }).allowed) return;   // P4-T05: no speculative bulk before the pilot
   const list = ['scripts', 'critic'].map(b => E.stages.find(s => s.base === b && s.vol === vol)).filter(Boolean); if (list.length < 2) return;
   if (list.some(s => ['done'].includes(E.project.stages?.[s.key]?.status))) return;
   const sig = prefetchSig(E); const P = Object.create(E); P.runOwner = `prefetch:${E.runId}`; P.leases = new Map();
@@ -1031,6 +1033,8 @@ export function runPipeline(pid) {
         await logE(E, `${E.bp.gates?.[stage.gate]?.label || stage.label} te așteaptă.`);
         break;
       }
+      { const g = generationAllowed(E.bp, E.project, stage); if (!g.allowed) {   // P4-T05: no volume 2–6 generation before the pilot is decided
+        await repo.patchProject(pid, { status: 'paused', currentStage: stage.key, error: g.message }); await logE(E, g.message, 'warn'); break; } }
       if (E.prefetch && ['scripts', 'critic'].includes(stage.base)) { await E.prefetch.catch(() => {}); E.prefetch = null; }
       if (['scripts', 'critic'].includes(stage.base) && E.project.stages?.[stage.key]?.prefetched && E.project.stages[stage.key].prefetched === prefetchSig(E)) {   // 2.12: prepared in advance and nothing changed since
         await setStage(E, stage.key, { status: 'done', finishedAt: now(), note: 'Pregătit în avans, în timp ce se desenau imaginile volumului anterior.' });

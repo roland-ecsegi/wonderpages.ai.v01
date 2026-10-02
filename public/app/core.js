@@ -131,9 +131,10 @@ async function loadProject() {
     S.bp = d.blueprint; S.art = d.artifacts; S.comments = d.comments; S.review = d.review; S.editorial = d.editorial; S.preflight = d.preflight; S.delivery = d.delivery;
     const i = S.projects.findIndex(p => p.id === pid); if (i >= 0) S.projects[i] = { ...S.projects[i], ...d.project }; else S.projects.push(d.project);
     /* P3-T06: progress from durable units; units and manual packets only where they are shown */
-    const [pr, jb, pk] = await Promise.all([api('GET', `/projects/${pid}/progress`).catch(() => null), S.route.tab === 'activity' ? api('GET', `/projects/${pid}/jobs`).catch(() => null) : null, S.route.tab === 'activity' ? api('GET', `/projects/${pid}/packets`).catch(() => null) : null]);
+    const act = S.route.tab === 'activity', migrated = d.project?.source?.kind === 'migration';
+    const [pr, jb, pk, pl, rc] = await Promise.all([api('GET', `/projects/${pid}/progress`).catch(() => null), act ? api('GET', `/projects/${pid}/jobs`).catch(() => null) : null, act ? api('GET', `/projects/${pid}/packets`).catch(() => null) : null, api('GET', `/projects/${pid}/pilot`).catch(() => null), act && migrated ? api('GET', `/projects/${pid}/reconcile`).catch(() => null) : null]);
     if (S.cur !== pid) return;
-    (S.progress ||= {})[pid] = pr; if (jb) (S.jobs ||= {})[pid] = jb.jobs; if (pk) (S.packets ||= {})[pid] = pk.packets;
+    (S.progress ||= {})[pid] = pr; if (jb) (S.jobs ||= {})[pid] = jb.jobs; if (pk) (S.packets ||= {})[pid] = pk.packets; (S.pilot ||= {})[pid] = pl; if (rc) (S.reconcile ||= {})[pid] = rc;
   } catch (e) { if (e.status === 404) S.projects = S.projects.filter(p => p.id !== pid); }
 }
 const refetch = { t: null, proj: false, all: false, busy: false };

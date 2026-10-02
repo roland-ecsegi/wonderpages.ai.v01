@@ -84,7 +84,7 @@ test('v19 1.8: continuitatea volumului 2 folosește registrul aprobat', async ()
   const c = (await project(P.id)).artifacts.continuity.content;
   assert.equal(c.incremental, true); assert.equal(c.covers, 2);
   const st = (await project(P.id)).project.stages;
-  assert.match(st['scripts@2'].note || '', /Pregătit în avans/, 'scenariul vol. 2 s-a scris cât se desenau imaginile vol. 1 (2.12)');
+  assert.doesNotMatch(st['scripts@2'].note || '', /Pregătit în avans/, 'P4-T05: scenariul vol. 2 se scrie după aprobarea pilotului, nu în avans (2.12 continuă de la vol. 3)');
   assert.equal(st['critic@2'].status, 'done');
   const milo = c.ledger.find(x => x.id === 'milo'); assert.ok(milo.volumes.some(v => v.volume === 1) && milo.volumes.some(v => v.volume === 2), 'registrul păstrează vol. 1 și adaugă vol. 2');
 });
@@ -152,16 +152,19 @@ test('v19 3.6: setul de aur rulează etapele de text și se compară cu referin�
   assert.ok(!LOG().some(l => l.at >= run.at && ['describe_refs', 'visual_qa', 'adapt'].includes(l.kind)), 'fără imagini și fără adaptare');
 });
 
-test('v19 2.12: dacă notele se schimbă după pregătirea în avans, scenariul se reface', async () => {
+test('v19 2.12 + P4-T05: pregătirea în avans începe după pilot; dacă notele se schimbă, scenariul pregătit se reface', async () => {
   const P = await toReview1({});
   await approveAll(P.id); let p = await waitStatus(P.id, ['awaiting_review']); assert.equal(p.gate.key, 'review_2');
-  assert.equal(p.stages['scripts@2'].status, 'prefetched', 'pregătit în avans înainte să se deschidă poarta');
+  assert.notEqual(p.stages['scripts@2']?.status, 'prefetched', 'P4-T05: volumul 2 nu se pregătește înaintea aprobării pilotului');
+  await approveAll(P.id); p = await waitStatus(P.id, ['awaiting_review']); assert.equal(p.gate.key, 'review_1'); assert.equal(p.gate.vol, 1);
+  await approveAll(P.id); p = await waitStatus(P.id, ['awaiting_review']); assert.equal(p.gate.key, 'review_2'); assert.equal(p.gate.vol, 1);
+  assert.equal(p.stages['scripts@3'].status, 'prefetched', 'după pilot, vol. 3 se pregătește în avans cât se desenează vol. 2');
   const d = await project(P.id);
   await api('POST', `projects/${P.id}/items`, { decisions: d.review.items.map(i => ({ id: i.id, state: 'approved' })) });
   assert.equal((await api('POST', `projects/${P.id}/decide`, { decision: 'approved_with_notes', note: 'mai multe sunete' })).status, 200, 'poarta răspunde imediat (nimic nu mai rulează)');
-  p = await waitStatus(P.id, ['awaiting_review']); assert.equal(p.gate.vol, 1);
-  assert.match(p.stages['scripts@2'].note || '', /Refăcut/, 'scenariul pregătit cu notele vechi a fost refăcut');
-  const kinds = LOG().filter(l => l.at >= P.t0).map(l => l.kind); assert.ok(kinds.filter(k => k === 'script').length >= 3, 'vol. 1 + pregătit + refăcut');
+  p = await waitStatus(P.id, ['awaiting_review']); assert.equal(p.gate.vol, 2);
+  assert.match(p.stages['scripts@3'].note || '', /Refăcut/, 'scenariul pregătit cu notele vechi a fost refăcut');
+  const kinds = LOG().filter(l => l.at >= P.t0).map(l => l.kind); assert.ok(kinds.filter(k => k === 'script').length >= 4, 'vol. 1 + vol. 2 + vol. 3 pregătit + refăcut');
   await stop(P.id);
 });
 

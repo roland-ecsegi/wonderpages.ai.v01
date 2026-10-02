@@ -17,6 +17,8 @@ import { matrixForArtifacts } from './domain/collection.js';
 import { derivePageBlueprints, validatePageBlueprints } from './domain/page-blueprints.js';
 import { atlasFor } from './domain/atlas.js';
 import { storyContract } from './domain/story-contracts.js';
+import { pilotState } from './domain/pilot.js';
+import { reconcileReport, applyReconcile } from './migration/dw-reconcile.js';
 import { contractFromBlueprint, validateProjectInput, editionsFor } from './domain/product-contract.js';
 import * as Ledger from './ledger.js';
 import { getCapabilities } from './providers/registry.js';
@@ -131,4 +133,19 @@ export function registerEnterpriseRoutes({ on, json, need, localOnly, repo, stor
 
   /* P4-T04: story/age/localization contract of one volume (read-only, citeable evidence) */
   on('GET', '/api/projects/:pid/story/:v', async ({ pid, v }) => { const p = need(pid), bp = await repo.getBlueprint(pid), n = Number(v); if (!Number.isInteger(n) || n < 1 || n > bp.structure.volumes) throw { status: 400, message: 'Volum invalid.' }; const r = storyContract({ bp, art: await repo.artifacts(pid), input: p.input || {}, v: n - 1 }); if (!r) throw { status: 404, message: 'Volumul nu are încă manuscris.' }; return r; });
+
+  /* P4-T05: pilot state (V2–N blocked until the pilot is decided) and selective reconciliation of a migrated project */
+  on('GET', '/api/projects/:pid/pilot', async ({ pid }) => { const p = need(pid); return pilotState(await repo.getBlueprint(pid), p); });
+  on('GET', '/api/projects/:pid/reconcile', async ({ pid }) => { need(pid); return reconcileReport(await repo.artifacts(pid)); });
+  on('POST', '/api/projects/:pid/reconcile/apply', async ({ pid }, req) => {
+    localOnly(req); const p = need(pid); if (RUNNING[pid]) throw { status: 409, message: 'Oprește proiectul înainte de reconciliere.' };
+    const b = await json(req), art = await repo.artifacts(pid), report = reconcileReport(art);
+    if (b.reportHash !== report.hash) throw { status: 409, code: 'stale_report', message: 'Raportul s-a schimbat de la deschidere; reîncarcă-l înainte de a decide.' };
+    const { writes, applied } = applyReconcile(art, report, b.choices || {});
+    if (!applied.length) throw { status: 400, message: 'Nicio alegere de aplicat.' };
+    for (const [k, content] of Object.entries(writes)) await repo.writeArtifact(pid, k, content, { by: 'operator', note: 'Reconciliere selectivă (decizia operatorului): ' + [...new Set(applied.filter(a => a.path.startsWith(k === 'series' ? 'series' : k)).map(a => a.conflict))].join(', '), meta: art[k]?.meta || {} });
+    const rec = decisionRecord({ kind: 'reconcile', actor: 'operator@laptop', state: 'approved', note: String(b.note || '').slice(0, 500), scope: { conflicts: [...new Set(applied.map(a => a.conflict))] }, subject: { reportHash: report.hash, applied: applied.map(a => ({ conflict: a.conflict, path: a.path, from: a.from, to: a.to })) }, policy: policyHash(await repo.getBlueprint(pid), null) });
+    await repo.commitProjectDecision(pid, { reconciledAt: now() }, [rec], { actor: 'operator@laptop', kind: 'reconcile.apply' });
+    return { ok: true, applied, decision: rec.id, after: reconcileReport(await repo.artifacts(pid)) };
+  });
 }

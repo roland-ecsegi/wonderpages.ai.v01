@@ -312,11 +312,16 @@ function tabProgress(p) {
     <div class="cols"><div class="panel"><ul class="stage-list">${list}</ul></div>
     <div class="panel panel-pad"><h3 style="font-size:15px">Acum</h3>
       <p class="small muted" style="margin-top:4px">${cur.status === 'running' ? `${esc(curDef?.label || '')}${cur.total > 1 ? `: ${cur.done || 0} din ${cur.total} gata` : ''}` : p.status === 'awaiting_review' ? 'AI-ul s-a oprit la revizuire. Citește documentele și decide.' : 'Niciun pas activ.'}</p>
-      ${grid}<div class="live" id="live"></div></div></div>${unitsPanel(p)}`;
+      ${grid}<div class="live" id="live"></div></div></div>${pilotBanner(p)}${unitsPanel(p)}`;
 }
 /* P3-T06: measured progress from durable work units (current run); no invented ETA; waits and stop reasons explicit */
 const UNIT_ST = { committed: 'gata', skipped: 'sărit', executing: 'în lucru', leased: 'în lucru', checking: 'se verifică', waiting_provider: 'așteaptă furnizorul', ambiguous: 'necesită decizie', failed: 'eșuat', cancelled: 'anulat', paused: 'pe pauză', pending: 'urmează' };
 const QUOTA = { ok: 'verificată', limited: 'limitată', unknown: 'necunoscută' };
+/* P4-T05: demo → full pilot → bulk; volumes 2–N stay blocked (including prefetch) until the pilot is decided */
+function pilotBanner(p) {
+  const ps = S.pilot?.[p.id]; if (!ps || ps.policy !== 'pilot') return '';
+  return `<div class="panel panel-pad" id="pilot-state" data-approved="${ps.pilotApproved}" style="margin-top:16px"><h3 style="font-size:15px">Pilot: volumul ${esc(ps.pilotVolume)}</h3><p class="small">Demo: ${ps.demoApproved ? 'aprobat' : 'așteaptă decizia ta'} · Cartea completă a pilotului: ${ps.pilotApproved ? 'aprobată' : 'așteaptă decizia ta'}</p>${ps.pilotApproved ? '<p class="small muted">Volumele următoare se pot genera.</p>' : `<p class="small" style="color:var(--warn)">${esc(ps.message)}</p>`}</div>`;
+}
 function unitsPanel(p) {
   const r = S.progress?.[p.id]; if (!r) return '';
   const u = r.units, c = r.consumption;
@@ -641,7 +646,17 @@ function unitsActivity(p) {
   const keys = Object.keys(S.art || {}).sort();
   return `<div class="section"><h2>Unități de lucru</h2>${jobs.length ? `<div class="panel"><ul class="log" id="units-log">${jobs.slice(0, 80).map(row).join('')}</ul></div>` : `<div class="empty">Nicio unitate în rularea curentă.</div>`}</div>
     <div class="section"><h2>Inspector</h2><div class="panel panel-pad row"><select class="select" id="inspect-key" aria-label="Document de inspectat">${keys.map(k => `<option value="${esc(k)}" ${S.inspect?.key === k ? 'selected' : ''}>${esc(k)}</option>`).join('')}</select><button class="btn sm" data-act="inspect">Inspectează</button></div>${insp}</div>
+    ${reconcileHTML(p)}
     <div class="section"><h2>Schimb manual</h2>${packets.length ? `<div class="panel"><ul class="log">${packets.map(k => `<li><time>${clock(k.issuedAt)}</time><div><b>${esc(k.outKey)}</b> <span class="chip">${esc(k.status === 'ingested' ? 'importat' : 'emis')}</span> <a class="small" href="/api/projects/${esc(p.id)}/packets/${esc(k.id)}/download">descarcă pachetul</a>${(k.attempts || []).filter(a => !a.ok).slice(-1).map(a => `<div class="small" style="color:var(--warn)">ultima respingere: ${esc(a.message)}</div>`).join('')}</div></li>`).join('')}</ul></div>` : `<div class="empty">Niciun pachet emis. Un pachet conține promptul, contextul agentului, schema și referințele, pentru rularea în aplicația oficială a unui furnizor; rezultatul trece prin aceleași validări și aprobarea rămâne a ta.</div>`}</div>`;
+}
+/* P4-T05: selective reconciliation of a migrated project (dry-run report; each change is your decision) */
+function reconcileHTML(p) {
+  const r = S.reconcile?.[p.id]; if (!r) return '';
+  const fact = f => `<li>${f.ok ? '✓' : '✗'} ${esc({ 'p1-pebble-absent': 'p1: pietricica nu apare încă', 'p2-first-reveal': 'p2: prima dezvăluire a pietricelei', 'p9-mouth-action': 'p9: Tia ține frunza cu botul' }[f.id] || f.id)} <span class="faint">(${esc(f.evidence)})</span></li>`;
+  const conflict = c => c.id === 'DW01'
+    ? `<div class="panel panel-pad" style="margin-top:8px"><b>${esc(c.title)}</b><ul class="small">${c.fields.map(f => `<li><code>${esc(f.path)}</code><div class="faint">acum: ${esc(f.current)}</div><div>propus: ${esc(f.proposed)}</div></li>`).join('')}</ul><label class="small">Decizia ta: <select class="select" id="rc-DW01"><option value="">— nicio schimbare —</option><option value="align_to_pages">aliniază premisa la paginile 8–9</option><option value="keep">păstrează premisa (revizuiesc paginile)</option></select></label></div>`
+    : `<div class="panel panel-pad" style="margin-top:8px"><b>${esc(c.title)}</b><table class="tbl"><thead><tr><th>Pag.</th><th>Plan</th><th>Manuscris</th><th>Contractul intenționat</th></tr></thead><tbody>${c.pages.map(x => `<tr><td>${esc(x.n)}</td><td>${esc(x.plan)}</td><td>${esc(x.script)}</td><td><select class="select" data-rc-page="${esc(x.n)}"><option value="">—</option><option value="script">manuscrisul (${esc(x.script)})</option><option value="plan">planul (${esc(x.plan)})</option></select></td></tr>`).join('')}</tbody></table></div>`;
+  return `<div class="section" id="reconcile" data-conflicts="${esc(r.conflicts.length)}"><h2>Reconciliere (proiect migrat)</h2><p class="small muted">Raport fără modificări. Nimic nu se rescrie în întregime și nimic nu se aprobă: aplici doar ce alegi, iar textul și referințele neatinse rămân identice.</p><ul class="small">${r.facts.map(fact).join('')}</ul>${r.conflicts.map(conflict).join('')}${r.conflicts.length ? `<button class="btn sm" data-act="reconcile-apply" data-hash="${esc(r.hash)}" style="margin-top:8px">Aplică alegerile mele</button>` : '<p class="small">Niciun conflict deschis.</p>'}</div>`;
 }
 function inspectorHTML(r) {
   if (r.error) return `<div class="panel panel-pad err-text">${esc(r.error)}</div>`;

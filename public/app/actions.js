@@ -280,6 +280,9 @@ const ACT = {
     S.wiz.errors = errors; if (!Object.keys(errors).length) { S.wiz.step = 3; S.wiz.preview = null; loadPreview(); window.scrollTo(0, 0); } render();
   },
   'wiz-back': () => { S.wiz.step = 2; S.wiz.preview = null; render(); },
+  'reconcile-apply': el => { const choices = {}; const d1 = $('#rc-DW01')?.value; if (d1) choices.DW01 = d1; const pages = {}; document.querySelectorAll('[data-rc-page]').forEach(x => { if (x.value) pages[x.dataset.rcPage] = x.value; }); if (Object.keys(pages).length) choices.DW02 = pages;
+    if (!Object.keys(choices).length) return toast('Alege cel puțin o schimbare.');
+    confirmAct('Aplici alegerile?', 'Se schimbă doar câmpurile alese; decizia ta se înregistrează. Aprobările rămân de făcut.', 'Aplică', () => api('POST', `/projects/${S.cur}/reconcile/apply`, { choices, reportHash: el.dataset.hash }).then(r => { toast(`Aplicat: ${r.applied.length} schimbări.`); return loadProject(); }).then(render).catch(e => toast(e.message, 'error'))); },   // P4-T05
   'intake-infer': () => { const text = $('#intake-text')?.value || ''; S.wiz.intake = { text }; api('POST', '/intake/infer', { typeSlug: S.wiz.slug, text }).then(r => { S.wiz.intake = { text, result: r }; render(); }).catch(e => { S.wiz.intake = { text, error: e.message }; render(); }); },
   'intake-apply': () => { const r = S.wiz.intake?.result; if (!r) return; for (const [k, v] of Object.entries(r.values)) S.wiz.values[k] = Array.isArray(v) ? [...v] : v; S.wiz.intake = { text: S.wiz.intake.text }; toast('Formularul a fost completat; verifică fiecare câmp.'); render(); },
   'intake-cancel': () => { S.wiz.intake = { text: S.wiz.intake?.text || '' }; render(); },
