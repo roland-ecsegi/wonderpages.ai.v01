@@ -31,8 +31,9 @@ export class Client {
       if (j.polls++ < 1) return { content: [{ type: 'text', text: JSON.stringify({ status: 'IN_PROGRESS' }) }] };
       if (mode === 'jobfail') return { content: [{ type: 'text', text: JSON.stringify({ status: 'FAILED', failureMessage: 'generation failed' }) }] };
       const isLine = /colouring-book|coloring-book|black-and-white/i.test(j.prompt);
+      if (isLine && st.lineFail) return { content: [{ type: 'text', text: JSON.stringify({ status: 'FAILED', failureMessage: 'line derivation failed' }) }] };   // P6-T03
       const greyOnce = st.greyLineOnce && isLine && S.bump('grey_line') === 1;
-      const buf = isLine ? PNG.lineart(400, 500, { grey: greyOnce }) : PNG.colour(Number(a.jobId.split('-')[1]));
+      const buf = isLine ? PNG.lineart(400, 500, { grey: greyOnce, thin: !!st.lineThin }) : PNG.colour(Number(a.jobId.split('-')[1]));
       return { structuredContent: { status: 'SUCCESS', media_id: 'm-' + a.jobId }, content: [{ type: 'image', data: buf.toString('base64'), mimeType: 'image/png' }, { type: 'text', text: JSON.stringify({ status: 'SUCCESS', media_id: 'm-' + a.jobId, url: 'https://www.canva.com/design/fake-' + a.jobId }) }] };
     }
     /* v19: brand kits, brand templates + autofill, export, resize, comments (Canva Pro) */

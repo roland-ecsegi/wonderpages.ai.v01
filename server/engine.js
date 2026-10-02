@@ -38,6 +38,7 @@ import { schemaFor, validateSchema } from './schemas.js';
 import * as GPTImage from './codeximage.js';
 import path from 'node:path';
 import { analyzeLineart, judgeLineart, normalizeLineart } from './pngcheck.js';
+import { coloringQA } from './quality/coloring.js';
 import { pinVersion } from './persistence/artifact-store.js';
 import { decisionRecord, itemSubject, policyHash } from './domain/decisions.js';
 import { fingerprint, pageSequence, sceneFingerprint, rubricEvaluation, visualVerdicts, exactCorrection, parseExactCorrection } from './contracts.js';
@@ -498,25 +499,32 @@ async function imageOne(E, stage, v, p, instruction, opts = {}) {
       else {
         const lp = tpl(E.bp.templates[stage.lineart_template], ctx) + (opts.lineOnly && instruction ? ' Additional direction for this colouring page: ' + instruction : '');
         next.lineFrom = next.color; next.linePending = false;
+        /* P6-T03: a good colouring page of the SAME colour is kept when a new candidate fails; the failed candidate is retained for inspection */
+        const prevGood = opts.lineOnly && prev.lineart && prev.lineFrom === prev.color && prev.lineQA?.ok === true && (!prev.lineQA.for || prev.lineQA.for === prev.lineart) ? { lineart: prev.lineart, lineFrom: prev.lineFrom, lineQA: prev.lineQA, lineMediaId: prev.lineMediaId || null, ...(prev.lineartRaw ? { lineartRaw: prev.lineartRaw } : {}) } : null;
+        const keepCandidate = cand => { next.lineCandidates = [...(prev.lineCandidates || []), { ...cand, from: next.color, at: now() }].slice(-6); };
+        const cq = (raw, fin) => coloringQA(raw, { bp: E.bp, project: E.project, page, ill: prev, final: fin });
         try {
           const lineRefs = img.mediaId ? [{ type: 'MEDIA', id: img.mediaId }] : []; const lineEngine = img.mediaId ? (opts.provider || (next.engine === 'chatgpt' ? 'chatgpt' : engine)) : 'chatgpt';
           const li = await callImage(E, { prompt: lp, aspectRatio: aspectOf(stage, ctx), references: lineRefs, files: [next.color], provider: lineEngine }, `${tpl(stage.activity || stage.label, ctx)} (colorat)`);
           next.lineart = await repo.saveFile(E.pid, `${base('coloring', ver)}.${ext(li.mime)}`, li.buffer);
           next.lineMediaId = li.mediaId; next.status = 'complete';
           const age = E.project.input?.[E.bp.variant_key];
-          let q = judgeLineart(analyzeLineart(li.buffer), age);
+          let q = cq(li.buffer);
           if (!q.ok && q.issues.some(x => /gri|culoare/.test(x))) {         // one automatic retry for grey/colour
             const li2 = await callImage(E, { prompt: lp + ' STRICT: pure black lines on pure white only; absolutely no grey, no shading, no colour, no texture.', aspectRatio: aspectOf(stage, ctx), references: lineRefs, files: [next.color], provider: lineEngine }, `${tpl(stage.activity || stage.label, ctx)} (colorat, a doua încercare)`);
             next.lineart = await repo.saveFile(E.pid, `${base('coloring', ver)}.${ext(li2.mime)}`, li2.buffer); next.lineMediaId = li2.mediaId;
-            q = { ...judgeLineart(analyzeLineart(li2.buffer), age), retried: true };
+            q = { ...cq(li2.buffer), retried: true };
           }
           next.lineQA = q;
           if (!q.issues?.some(x => /culoare|umbre/.test(x))) {
             const raw = await repo.readFile(E.pid, next.lineart); const bw = normalizeLineart(raw);
-            if (bw) { next.lineartRaw = next.lineart; next.lineart = await repo.saveFile(E.pid, next.lineart.replace(/\.(png|jpg|webp)$/i, '.bw.png'), bw); next.lineQA = { ...q, normalized: true }; }
+            if (bw) { next.lineartRaw = next.lineart; next.lineart = await repo.saveFile(E.pid, next.lineart.replace(/\.(png|jpg|webp)$/i, '.bw.png'), bw); next.lineQA = { ...cq(raw, bw), ...(q.retried ? { retried: true } : {}), normalized: true }; }   // P6-T03: physical measures on the file that prints
           }
-          next.lineQA = { ...next.lineQA, for: next.lineart };   // P5-T03: the coloring check is bound to the exact file it judged
-        } catch (e) { next.status = 'color_only'; next.linePending = true; next.lineError = errMsg(e); await saveArt(E, key, next, { keep: 10, stage: stage.key, note: 'Culoarea păstrată; derivarea de colorat necesită reluare', basedOn: { key: srcKey, version: E.art[srcKey]?.version, pageHash: sceneFingerprint(page) } }); throw e; }
+          next.lineQA = { ...next.lineQA, for: next.lineart, colorFrom: next.color };   // P5-T03: the coloring check is bound to the exact file it judged
+          if (!next.lineQA.ok && prevGood) { keepCandidate({ file: next.lineart, raw: next.lineartRaw || null, qa: next.lineQA }); delete next.lineartRaw; Object.assign(next, prevGood); next.lineRejected = 'Candidatul nou nu a trecut verificarea; pagina de colorat bună a rămas.'; }
+          else if (!next.lineQA.ok) keepCandidate({ file: next.lineart, qa: next.lineQA, current: true });
+        } catch (e) { keepCandidate({ error: errMsg(e) }); if (prevGood) { Object.assign(next, prevGood, { status: 'complete', linePending: false, lineError: errMsg(e) }); await saveArt(E, key, next, { keep: 10, stage: stage.key, note: 'Derivarea nouă a eșuat; culoarea și pagina de colorat bună au rămas', basedOn: { key: srcKey, version: E.art[srcKey]?.version, pageHash: sceneFingerprint(page) } }); throw e; }
+          next.status = 'color_only'; next.linePending = true; next.lineError = errMsg(e); await saveArt(E, key, next, { keep: 10, stage: stage.key, note: 'Culoarea păstrată; derivarea de colorat necesită reluare', basedOn: { key: srcKey, version: E.art[srcKey]?.version, pageHash: sceneFingerprint(page) } }); throw e; }
       }
     }
   }

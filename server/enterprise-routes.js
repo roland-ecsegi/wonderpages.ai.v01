@@ -12,6 +12,7 @@ import path from 'node:path';
 import { ROOT } from './config.js';
 import { RUNNING, expandStages, reassessVolume, prepareTextPacket, ingestTextPacket, prepareImagePacket, ingestImagePacket, gateItems, setItemDecisions, applyItemChanges, assertCanWork } from './engine.js';
 import { pageWorkbench, commandImpact, itemIdFor, srcKeyOf } from './domain/workbench.js';
+import { coloringQA, COLORING_QA_VERSION } from './quality/coloring.js';
 import { unitHashes, verifyExecution, missingUnits } from './quality/repair.js';
 import { variantSet, backfillVersions } from './persistence/artifact-store.js';
 import { progressReport, inspectArtifact } from './observability/progress.js';
@@ -268,5 +269,18 @@ export function registerEnterpriseRoutes({ on, json, need, localOnly, repo, stor
     const rec = decisionRecord({ kind: 'workbench', actor: 'operator@laptop', state: 'approved', note: imp.label, scope: { volume: vi + 1, page, command: imp.command }, subject: { key: imp.key, version: doc.version, previewHash: imp.previewHash, changes: imp.changes, stale: imp.stale, verify: { ok: verify.ok, unrequested: verify.unrequested } } });
     await repo.commitProjectDecision(pid, {}, [rec], { actor: 'operator@laptop', kind: 'workbench.' + imp.command });
     return { ok: true, version: doc.version, verify, calls: [], decision: rec.id };
+  });
+  /* P6-T03: colouring pages measured at print size after placement (strokes, colourable spaces), bound to file and colour */
+  on('GET', '/api/projects/:pid/coloring/:v', async ({ pid, v }, req) => {
+    const p = need(pid), bp = await repo.getBlueprint(pid), n = Number(v); if (!Number.isInteger(n) || n < 1 || n > bp.structure.volumes) throw { status: 400, message: 'Volum invalid.' };
+    const art = await repo.artifacts(pid), preset = presetOf(req), src = art[`final_${n - 1}`] || art[`script_${n - 1}`], pages = [];
+    for (let pg = 0; pg <= bp.structure.pages; pg++) {
+      const c = art[`ill_${n - 1}_${pg}`]?.content; if (!c?.color) { pages.push({ p: pg, status: 'pending' }); continue; }
+      if (!c.lineart) { pages.push({ p: pg, status: c.linePending ? 'line_pending' : 'line_missing', candidates: c.lineCandidates || [] }); continue; }
+      let measured = null; try { const fin = await repo.readFile(pid, c.lineart), raw = c.lineartRaw ? await repo.readFile(pid, c.lineartRaw).catch(() => fin) : fin; measured = coloringQA(raw, { bp, project: p, page: src?.content?.pages?.[pg - 1] || null, ill: c, preset, final: fin }); } catch (e) { measured = { ok: false, issues: ['Fișierul paginii de colorat nu se poate citi: ' + (e.message || e)] }; }
+      const stale = !!(c.lineFrom && c.lineFrom !== c.color);
+      pages.push({ p: pg, status: stale ? 'stale' : measured.ok ? 'pass' : 'fail', file: c.lineart, colorFrom: c.lineFrom || null, color: c.color, stale, stored: c.lineQA ? { ok: c.lineQA.ok, version: c.lineQA.version || 0, for: c.lineQA.for || null } : null, measured: { ok: measured.ok, issues: measured.issues, metrics: measured.physical?.metrics || null, preset: measured.physical?.preset || preset }, candidates: c.lineCandidates || [] });
+    }
+    return { schema: 'wonderpages.coloring-report/1', version: COLORING_QA_VERSION, volume: n, preset, pages, ok: pages.every(x => x.status === 'pass') };
   });
 }

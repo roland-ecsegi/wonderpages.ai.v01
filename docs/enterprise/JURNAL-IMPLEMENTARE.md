@@ -38,6 +38,7 @@ Linux (container cloud), Node v22.22.0, npm 10.9.4, PostgreSQL 16 (binare locale
 | DEV-007 | kids-sc v18 → v19: verdict de siguranță obligatoriu în QA vizual și element de siguranță la porțile de volum. | AC-P5-T01. | Proiectele vechi: imaginile fără verdict sunt UNKNOWN la livrare (verificare de adult sau QA nou). |
 | DEV-008 | kids-sc v19 → v20: politica de calitate v2 (propusă), evaluarea textului final, recheck nativ, elementul „Evaluarea cărții”. | AC-P5-T02 (pragurile OUTPUT-13 doar pe versiunea țintă). | Tipurile/proiectele vechi rămân pe v1; +1 apel de evaluare per volum. |
 | DEV-009 | kids-sc v20 → v21: QA vizual raportează repere/deținători/elemente vizibile/focus pentru verificarea deterministă. | AC-P5-T03. | Verdictele vechi fără aceste câmpuri rămân valide (doar cele patru dimensiuni). |
+| DEV-010 | P6-T03: unitățile `line_weight` (zecimi de mm) și `min_region` (mm²) ale profilului de vârstă sunt interpretate și documentate (erau nedefinite). | AC-P6-T03 cere măsuri la dimensiunea de tipar. | Valorile și versiunea blueprint-ului neschimbate; `git revert`. |
 
 ## Starea taskurilor
 
@@ -73,8 +74,8 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | P5-T05 | DONE | 3ee1f6e | TEST-P5-T05 8/8; RS0 256/256 | Set de aur gold-v1 (44 cazuri, 3 vârste/2 limbi/temă rezervată), rapoarte cu confuzie/false-pass/kappa, contaminare, comparații oarbe; praguri propuse până la acceptare |
 | P5-T06 | DONE | d4b2f12 | TEST-P5-T06 6/6; RS0 262/262 local + 262/262 PG | PagePatch limitat (2 încercări creative), dependenți explicit, fără regenerări necerute, rezolvare doar cu recheck complet; PHASE 5 închisă |
 | P6-T01 | DONE | 945de9e | TEST-P6-T01 11/11; RS0 273/273 local + 273/273 PG | Plan de machetă măsurat cu metrica Andika (cod comun server/previzualizare/export), font ≥ profil, schimbare doar cu dovadă, încadrare care protejează reperele, hash identic preview/export |
-| P6-T02 | DONE | (acest commit) | TEST-P6-T02 7/7; RS0 280/280 local + 280/280 PG | Atelierul paginii: context complet, 6 comenzi distincte cu impact înainte de aplicare, hash de stare (stale_preview), AI doar prin poarta deschisă, restaurare cu variante aprobate fixate, link exact în loc de preview generic |
-| P6-T03 | PENDING | | | |
+| P6-T02 | DONE | c197048 | TEST-P6-T02 7/7; RS0 280/280 local + 280/280 PG | Atelierul paginii: context complet, 6 comenzi distincte cu impact înainte de aplicare, hash de stare (stale_preview), AI doar prin poarta deschisă, restaurare cu variante aprobate fixate, link exact în loc de preview generic |
+| P6-T03 | DONE | (acest commit) | TEST-P6-T03 5/5; RS0 285/285 local + 285/285 PG | Pagina de colorat măsurată la tipar după plasare (contur mm, spații mm², gri), legată de fișier și culoare; pagina bună și candidatul eșuat păstrate; fără acceptare automată |
 | P6-T04 | PENDING | | | |
 | P6-T05 | PENDING | | | |
 | P6-T06 | PENDING | | | |
@@ -131,6 +132,7 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | 2026-10-02 | Închidere P5: baseline-report --with-tests --with-pg | 15 PASS · 0 FAIL · 3 NOT_RUN; 262/262 local + 262/262 PostgreSQL | — |
 | 2026-10-02 | RS0 + TEST-P6-T01 | 273/273 PASS local + 273/273 PostgreSQL | — |
 | 2026-10-02 | RS0 + TEST-P6-T02 | 280/280 PASS local + 280/280 PostgreSQL | — |
+| 2026-10-02 | RS0 + TEST-P6-T03 | 285/285 PASS local + 285/285 PostgreSQL | — |
 
 ## Probleme deschise
 
@@ -145,6 +147,6 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 
 ## Checkpoint
 
-- Ultimul task închis: P6-T02
-- Următorul task: **P6-T03**
+- Ultimul task închis: P6-T03
+- Următorul task: **P6-T04**
 - Cum se reia: `npm ci && npm run build && BROWSER_PATH=/opt/pw-browsers/chromium npm test`; citește tabelul de mai sus și `docs/enterprise/records/`.
