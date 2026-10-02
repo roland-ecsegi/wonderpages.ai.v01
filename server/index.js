@@ -58,6 +58,7 @@ import { rebindDependents } from './persistence/rebind.js';
 import { registerEnterpriseRoutes, impactForWrite } from './enterprise-routes.js';
 import { EventStream } from './observability/events.js';
 import * as Intake from './domain/intake.js';
+import { volumeSafety, inputSafety } from './quality/safety.js';
 import { toolSchemaHash, hostConfig } from './providers/capabilities.js';
 import { checkIncludedQuota } from './subscription-usage.js';
 
@@ -164,6 +165,9 @@ on('GET', '/api/projects/:pid', async ({ pid }) => {
   const items = p.gate ? gateItems(bp, art, p, p.gate) : null;
   return { project: { ...p, running: !!RUNNING[pid] }, blueprint: bp, artifacts: art, comments: await repo.listComments(pid), editorial: editorialFindings(bp, art), preflight: runPreflight(bp, art, { structure: bp.structure, input: p.input, options: p.options, age_profile: bp.age_profiles?.[p.input?.[bp.variant_key]] || {} }), delivery: { fingerprints: Array.from({length:bp.structure.volumes},(_,v)=>deliveryFingerprint(p,bp,art,v)), volumes: Array.from({ length: bp.structure.volumes }, (_, v) => volumeApproved(p, bp, v, art)), collection: volumeApproved(p, bp, null, art) }, review: items ? { items, summary: gateSummary(items) } : null };
 });
+/* P5-T01: non-PASS safety subjects of a volume (or of the whole collection) — they block release, never a score */
+const safetyOf = (p, bp, art, vol) => (vol == null ? Array.from({ length: bp.structure.volumes }, (_, v) => v) : [vol]).flatMap(v => volumeSafety({ bp, art, project: p, v }).blocking);
+const assertSafeRelease = (p, bp, art, vol) => { const s = safetyOf(p, bp, art, vol); if (s.length) throw { status: 409, code: 'release_blocked', errors: releaseCheck(p, bp, art, vol, { approved: true, safety: s }).blockers.filter(b => b.code.startsWith('safety_')), message: `Siguranța copiilor: ${s.length} elemente nu sunt PASS (${[...new Set(s.map(x => x.verdict))].join(', ')}). Corectează sau verifică-le înainte de livrare.` }; };
 /* P1-T05: rights ledger — unknown/expired/restricted blocks commercial release, never internal editing */
 const projectRights = async (pid) => { const p = need(pid), art = await repo.artifacts(pid); const subjects = projectRightsInventory(p, art, p.rightsDeclared || []); const fonts = appRightsInventory(ROOT).records.filter(r => r.subject.kind === 'font' && /Andika/.test(r.id)); const all = [...subjects, ...fonts]; return { subjects: all.map(r => ({ ...r, ...rightsStatus(r) })), commercial: commercialReleaseCheck(all, all.map(r => r.subject.ref || r.id)), editing: { allowed: true } }; };
 on('GET', '/api/rights/app', async () => { const inv = appRightsInventory(ROOT); return { summary: inv.summary, records: inv.records.map(r => ({ ...r, ...rightsStatus(r) })) }; });
@@ -194,6 +198,7 @@ on('POST', '/api/projects', async (_, req) => {
   const tooLong = Intake.checkLimits(t, body.input); if (tooLong.length) throw { status: 422, code: 'input_too_long', errors: tooLong, message: tooLong.map(e => e.message).join(' ') };   // P4-T01: never cut silently
   const input = Intake.normalizeInput(t, cleanInput(body.input));   // first selected = source language, second = natural adaptation
   for (const f of t.input_schema?.fields || []) if (!['images', 'languages'].includes(f.type) && f.required && !String(input[f.key] ?? '').trim()) throw { status: 400, message: `Câmpul „${f.label}” este obligatoriu.` };
+  { const is = inputSafety(input); if (is.verdict === 'BLOCK') throw { status: 422, code: 'input_unsafe', errors: is.fields, message: 'Siguranța copiilor: ' + is.fields.flatMap(f => f.findings.filter(x => x.verdict === 'BLOCK').map(x => `„${x.quote}” — ${x.fix}`)).slice(0, 3).join(' ') }; }   // P5-T01: input safety
   if (body.previewHash != null && body.previewHash !== Intake.formHash(t, input)) throw { status: 409, code: 'stale_form', message: 'Formularul sau tipul de produs s-a schimbat după confirmare. Verifică din nou rezumatul înainte de creare.' };   // P4-T01
   const contract = contractFromBlueprint(t), cv = validateContract(contract), iv = cv.valid ? validateProjectInput(contract, input) : cv;   // P1-T01
   if (!iv.valid) throw { status: 422, code: 'contract_invalid', errors: iv.errors, message: iv.errors.map(e => e.message).join(' ') };
@@ -248,6 +253,7 @@ on('POST', '/api/projects/:pid/deliver', async ({ pid }, _, url) => {
   const p0 = need(pid); const vq = url.searchParams.get('volume'); const vol = vq == null || vq === 'all' ? null : Number(vq);
   if (vol != null && !(Number.isInteger(vol) && vol >= 0 && vol < 60)) throw { status: 400, message: 'Volum invalid.' };
   if (!volumeApproved(p0, await repo.getBlueprint(pid), vol, await repo.artifacts(pid))) throw { status: 409, message: vol == null ? 'Livrarea completă e posibilă doar după ce ai aprobat toate volumele.' : `Volumul ${vol + 1} nu are încă aprobarea finală dată de tine; livrarea nu e permisă.` };
+  assertSafeRelease(p0, await repo.getBlueprint(pid), await repo.artifacts(pid), vol);   // P5-T01
   const job = Render.startRender({ port: config.port, pid, vol, preset: url.searchParams.get('preset') || 'digital', onUpdate: j => repo.patchProject(pid, { rendering: { job: j.id, vol: j.vol, label: j.label, i: j.i, n: j.n, finished: j.finished, ok: j.ok ?? null, message: j.message || '', at: now() } }).catch(() => {}) });
   return { job };
 });
@@ -328,6 +334,7 @@ on('POST', '/api/projects/:pid/exports', async ({ pid }, req, url) => {
   if(final && (!/%%EOF/.test(buf.subarray(-1024).toString('latin1')) || !/\/Type\s*\/Pages/.test(buf.toString('latin1')))) throw {status:400,message:'PDF final incomplet.'};
   if (final && (RUNNING[pid] || url.searchParams.get('fingerprint') !== deliveryFingerprint(p,bp,art,vol))) throw {status:409,message:'Conținutul s-a schimbat în timpul randării; regenerează PDF-ul.'};
   if (final && !volumeApproved(p, bp, vol, art)) throw { status: 409, message: 'Conținutul curent trebuie aprobat înaintea livrării finale.' };
+  if (final) assertSafeRelease(p, bp, art, vol);   // P5-T01
   const book = url.searchParams.get('book'), lang = url.searchParams.get('lang') || 'first';
   if (final && !requiredBooks(p, bp).some(b => (b.book === book || (url.searchParams.get('preset') === 'kdp' && b.book + '-cover' === book)) && b.lang === lang)) throw { status: 400, message: 'Carte sau limbă necunoscută.' };
   if(final)validateFinalPdf(buf,bp,p,{book,preset:url.searchParams.get('preset')});
@@ -344,7 +351,7 @@ on('POST', '/api/projects/:pid/package', async ({ pid }, _, url) => { const vol 
   if (vol != null && !(Number.isInteger(vol) && vol >= 0 && vol < 60)) throw { status: 400, message: 'Volum invalid.' };
   const art0 = await repo.artifacts(pid);
   if (!volumeApproved(p0, bp0, vol, art0)) throw { status: 409, code: 'release_blocked', errors: releaseCheck(p0, bp0, art0, vol, { approved: false }).blockers, message: vol == null ? 'Colecția nu are toate porțile aprobate de tine; pachetul colecției nu se face.' : `Volumul ${vol + 1} nu are încă aprobarea finală dată de tine; pachetul nu se face.` };
-  { const rc = releaseCheck(p0, bp0, art0, vol, { approved: true }); if (!rc.eligible) throw { status: 409, code: 'release_blocked', errors: rc.blockers, message: 'Inventarul livrării este incomplet: ' + rc.blockers.slice(0, 3).map(b => b.message).join(' ') }; }   // P2-T04
+  { const rc = releaseCheck(p0, bp0, art0, vol, { approved: true, safety: safetyOf(p0, bp0, art0, vol) }); if (!rc.eligible) throw { status: 409, code: 'release_blocked', errors: rc.blockers, message: 'Inventarul livrării este incomplet: ' + rc.blockers.slice(0, 3).map(b => b.message).join(' ') }; }   // P2-T04
   const r = await buildPackage(repo, p0, { vol, approved: v => volumeApproved(p0, bp0, v, art0) });
   r.commercialRights = (await projectRights(pid)).commercial;   // P1-T05: the package is internal delivery; commercial eligibility is reported, not implied
   try { r.mirror = await mirrorDelivery([r.folder, r.zip]); } catch (e) { r.mirrorError = 'Copia în al doilea folder nu a reușit: ' + e.message; } if (r.final) await repo.patchProject(pid, vol == null ? { packagedAt: now(), packagePath: r.folder } : { delivered: { [vol]: { at: now(), zip: r.zip } } }); return r; });
@@ -567,7 +574,7 @@ on('PUT', '/api/thresholds', async (_, req) => { localOnly(req); const b = await
 on('GET', '/api/gdrive/login', async (_, req, ___, res) => {
   if (!LAN.isLocal(req)) { res.writeHead(302, { location: '/#/settings?gdrive=' + encodeURIComponent('conectarea Google Drive se face de pe laptop') }); res.end(); return null; } if (!gdrive.status().configured) { res.writeHead(302, { location: '/#/settings?gdrive=' + encodeURIComponent('lipsesc GOOGLE_CLIENT_ID și GOOGLE_CLIENT_SECRET în .env') }); res.end(); return null; } res.writeHead(302, { location: gdrive.loginUrl() }); res.end(); return null; });
 on('GET', '/oauth/google', async (_, __, url, res) => { let msg = 'ok'; try { await gdrive.finish(url.searchParams.get('code'), url.searchParams.get('state')); } catch (e) { msg = e.message; } bus.emit('change', { scope: 'projects' }); res.writeHead(302, { location: '/#/settings?gdrive=' + encodeURIComponent(msg) }); res.end(); return null; });
-on('POST', '/api/projects/:pid/gdrive', async ({ pid }, _, url) => { const p=need(pid),bp=await repo.getBlueprint(pid),vq=url.searchParams.get('volume'),v=vq==null?null:Number(vq);if(v!=null&&(!Number.isInteger(v)||v<0||v>=bp.structure.volumes))throw {status:400,message:'Volum invalid.'};if(!volumeApproved(p,bp,v,await repo.artifacts(pid)))throw {status:409,message:'Doar conținutul aprobat se poate trimite.'};{const rc=releaseCheck(p,bp,await repo.artifacts(pid),v,{approved:true});if(!rc.eligible)throw {status:409,code:'release_blocked',errors:rc.blockers,message:'Inventarul livrării este incomplet.'};}const zip=await checkedPackage(repo,p,v,{final:true});const r=await gdrive.upload(zip,v!=null?path.basename(projectFolder(p))+'-'+path.basename(zip):path.basename(zip));await repo.patchProject(pid,{...(v!=null?{driveLinks:{[v]:r.link}}:{driveLink:r.link,driveAt:now()}),driveFiles:[...(p.driveFiles||[]),{id:r.id,at:now()}]});return r; });
+on('POST', '/api/projects/:pid/gdrive', async ({ pid }, _, url) => { const p=need(pid),bp=await repo.getBlueprint(pid),vq=url.searchParams.get('volume'),v=vq==null?null:Number(vq);if(v!=null&&(!Number.isInteger(v)||v<0||v>=bp.structure.volumes))throw {status:400,message:'Volum invalid.'};if(!volumeApproved(p,bp,v,await repo.artifacts(pid)))throw {status:409,message:'Doar conținutul aprobat se poate trimite.'};{const a=await repo.artifacts(pid),rc=releaseCheck(p,bp,a,v,{approved:true,safety:safetyOf(p,bp,a,v)});if(!rc.eligible)throw {status:409,code:'release_blocked',errors:rc.blockers,message:'Inventarul livrării este incomplet.'};}const zip=await checkedPackage(repo,p,v,{final:true});const r=await gdrive.upload(zip,v!=null?path.basename(projectFolder(p))+'-'+path.basename(zip):path.basename(zip));await repo.patchProject(pid,{...(v!=null?{driveLinks:{[v]:r.link}}:{driveLink:r.link,driveAt:now()}),driveFiles:[...(p.driveFiles||[]),{id:r.id,at:now()}]});return r; });
 on('PUT', '/api/types/:slug', async ({ slug }, req) => {
   localOnly(req); const bp = await json(req);
   if (!bp?.slug || !/^[a-z0-9-]{2,40}$/.test(bp.slug)) throw { status: 400, message: 'Slug invalid.' };

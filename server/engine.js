@@ -19,6 +19,7 @@ import { matrixForArtifacts } from './domain/collection.js';
 import { derivePageBlueprints, validatePageBlueprints } from './domain/page-blueprints.js';
 import { atlasFor, landmarkContext } from './domain/atlas.js';
 import { generationAllowed, pilotState } from './domain/pilot.js';
+import { volumeSafety, textSafety } from './quality/safety.js';
 import { storyContract, causality as storyCausality, voice as storyVoice, science as storyScience, ageFit, criticNotes } from './domain/story-contracts.js';
 /* P3-T03: the innermost durable unit (stage or item) of the current async flow: its lease fences every result write */
 export const FENCE = new AsyncLocalStorage();
@@ -435,11 +436,12 @@ async function qaPages(E, stage, pages, { redraw = null, batch = 6 } = {}) {
     const verdicts = visualVerdicts(out, info.map((_, j) => useRefs.length + j));
     return info.map((x, j) => { const r = verdicts[j];
       const dims = ['anatomy', 'action', 'story', 'readability'].filter(k => r[k] === false);
-      const res = { v: x.v, p: x.p, ok: r.ok !== false && !dims.length, failed: dims, issues: r.issues || [], instruction: r.instruction || '' };
+      const safety = ['pass', 'review', 'block'].includes(String(r.safety || '').toLowerCase()) ? String(r.safety).toLowerCase() : null;   // P5-T01: separate from ok; absent → unknown
+      const res = { v: x.v, p: x.p, ok: r.ok !== false && !dims.length && safety !== 'block', failed: safety === 'block' ? [...dims, 'safety'] : dims, issues: r.issues || [], instruction: r.instruction || '', safety, safety_reasons: Array.isArray(r.safety_reasons) ? r.safety_reasons.map(String).slice(0, 6) : [] };
       if (!res.ok) { const code = c => (E.bp.rubric_visual || []).find(v => v.key === c)?.code || null; (res.issues.length ? res.issues : dims).forEach(t => noteVisualFailure(t, code(dims[0]))); }   // 3.9
       return res; });
   };
-  const save = async r => { const key = `ill_${r.v}_${r.p}`; if (E.art[key]) { const qa = { ok: r.ok, failed: r.failed, issues: r.issues, redrawn: !!r.redrawn, error: r.error || null, color: E.art[key].content.color, at: now() }; await repo.patchArtifact(E.pid, key, { content: { qa } }); E.art[key].content.qa = qa; } };
+  const save = async r => { const key = `ill_${r.v}_${r.p}`; if (E.art[key]) { const qa = { ok: r.ok, failed: r.failed, issues: r.issues, redrawn: !!r.redrawn, error: r.error || null, color: E.art[key].content.color, safety: r.safety || null, safety_reasons: r.safety_reasons || [], at: now() }; await repo.patchArtifact(E.pid, key, { content: { qa } }); E.art[key].content.qa = qa; } };
   await runItems(E, { key: stage.key, label: stage.label, concurrency: 2, tolerate_item_errors: true }, batches, batches.map(b => `${pageLabel(...b[0])} … ${pageLabel(...b[b.length - 1])}`), async list => {
     for (const r of await inspect(list)) {
       if (!r.ok && redraw && r.instruction) {
@@ -1033,6 +1035,9 @@ export function runPipeline(pid) {
         await logE(E, `${E.bp.gates?.[stage.gate]?.label || stage.label} te așteaptă.`);
         break;
       }
+      if (stage.vol != null && ['demo', 'polish', 'adapt', 'illustrations', 'coloring', 'native_edit'].includes(stage.base)) {   // P5-T01: a safety BLOCK in the text stops production of this volume
+        const sf = volumeSafety({ bp: E.bp, art: E.art, project: E.project, v: stage.vol, images: false }), b = sf.subjects.find(x => x.verdict === 'BLOCK');
+        if (b) { const msg = `Siguranță: ${b.artifact || ''} pagina ${b.page ?? ''} — „${b.findings[0]?.quote || ''}” (${b.findings[0]?.fix || ''}). Producția volumului ${stage.vol + 1} este oprită până corectezi textul.`; await repo.patchProject(pid, { status: 'paused', currentStage: stage.key, error: msg }); await logE(E, msg, 'warn'); break; } }
       { const g = generationAllowed(E.bp, E.project, stage); if (!g.allowed) {   // P4-T05: no volume 2–6 generation before the pilot is decided
         await repo.patchProject(pid, { status: 'paused', currentStage: stage.key, error: g.message }); await logE(E, g.message, 'warn'); break; } }
       if (E.prefetch && ['scripts', 'critic'].includes(stage.base)) { await E.prefetch.catch(() => {}); E.prefetch = null; }
@@ -1172,6 +1177,7 @@ export function gateItems(bp, art, project, gate) {
       }
     }
     if (s.kind === 'collection') { const m = matrixForArtifacts(bp, art); out.push({ id: 'collection', kind: 'collection', label: 'Planul colecției: bibliile volumelor și cronologia distribuției', missing: !art.series || !art.cast || !art.bible, blocked: !m.ready, hash: m.hash, matrix: m }); }   // P4-T02: plan approved before bulk; blockers cannot be approved
+    if (s.kind === 'safety' && v != null) { const sf = volumeSafety({ bp, art, project, v, images: (s.images ?? true) }); out.push({ id: 'safety:' + v, kind: 'safety', v, label: `Siguranța copiilor, volumul ${v + 1}: ${sf.verdict}`, missing: false, blocked: sf.verdict !== 'PASS', hash: fingerprint(sf.subjects.map(x => [x.id, x.verdict, x.hash])), safety: { ...sf, subjects: sf.subjects.filter(x => x.verdict !== 'PASS' || x.review) } }); }   // P5-T01: never compensated by scores
     if (s.kind === 'story' && v != null) { const sc = storyContract({ bp, art, input: project.input || {}, v }); out.push({ id: 'story:' + v, kind: 'story', v, label: `Contractul poveștii, volumul ${v + 1}: cauzalitate, vârstă, voce, știință${art['tr_' + v] ? ', ediția nativă' : ''}`, missing: !sc, blocked: !!sc && !sc.ready, hash: sc ? fingerprint([sc.causality, sc.findings.map(f => [f.code, f.page ?? null])]) : null, story: sc }); }   // P4-T04
     if (s.kind === 'pageplans') { const { pages, sources } = derivePageBlueprints(bp, art), r = validatePageBlueprints(pages, { structure: bp.structure, bible: art.bible?.content }); out.push({ id: 'pageplans', kind: 'pageplans', label: `Planul paginilor: ${r.count} din ${r.expected} PageBlueprints`, missing: !pages.length, blocked: !r.ready, hash: fingerprint([pages, r.findings.map(f => [f.code, f.page])]), check: { ...r, sources } }); }   // P4-T03
     if (s.kind === 'atlas') { const a = atlasFor({ project, art, approvals: project.approvals?.[gateInstance(gate)] || {}, declaredRights: project.rightsDeclared || [] }); out.push({ id: 'atlas', kind: 'atlas', label: 'Canonul vizual: atlasul personajelor', missing: !art.bible, blocked: false, hash: fingerprint([a.requirements.map(r => [r.character, r.view]), a.entries.map(e => [e.id, e.file, e.kind])]), atlas: a }); }   // P4-T03: proposals stay proposed

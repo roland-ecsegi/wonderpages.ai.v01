@@ -43,6 +43,7 @@ export function visualVerdicts(reply, indexes) {
     if (!Number.isInteger(r?.image) || !indexes.includes(r.image) || seen.has(r.image)) throw { code: 'validation', message: 'QA vizual: identificator de imagine necunoscut sau duplicat.' };
     seen.add(r.image);
     if (['ok', 'anatomy', 'action', 'story', 'readability'].some(k => typeof r[k] !== 'boolean') || !Array.isArray(r.issues) || r.issues.some(i => typeof i !== 'string')) throw { code: 'validation', message: `QA vizual: verdict incomplet pentru imaginea ${r.image}.` };
+    if (r.safety != null && !['pass', 'review', 'block'].includes(String(r.safety).toLowerCase())) throw { code: 'validation', message: `QA vizual: verdict de siguranță necunoscut pentru imaginea ${r.image}.` };   // P5-T01 (absent = unknown)
   }
   return indexes.map(i => pages.find(r => r.image === i));
 }

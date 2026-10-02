@@ -5,6 +5,7 @@
  *  - învăța echipa: exemplele de text aprobate, tiparele de greșeli văzute în imagini, regulile din registrul de lecții.
  * Format: arhivă .zip cu training.json la rădăcină (sau într-un singur folder) + fișierele referite.
  */
+import { textSafety } from './quality/safety.js';
 import zlib from 'node:zlib';
 import path from 'node:path';
 import { bus, now } from './repo.js';
@@ -41,15 +42,17 @@ export async function importPack(zipBuf) {
   /* what the team learns from the pack */
   let lessons = 0, examples = 0;
   const rules = man.lessons_file ? JSON.parse((await read(man.lessons_file)) || '[]') : (man.lessons || []);
-  for (const r of rules) { if (r?.agent && r?.text) { await learning.addManualLesson({ agent: r.agent, text: r.text, age: r.age || null, scope: r.scope || (r.age ? 'age' : 'global'), ref: r.ref || null, source: 'training' }).catch(() => {}); lessons++; } }
+  const unsafe = [];   // P5-T01: learning ingestion passes the same child-safety policy; BLOCK items are not learned
+  for (const r of rules) { if (r?.agent && r?.text && textSafety(r.text).verdict === 'BLOCK') { unsafe.push({ kind: 'lesson', ref: r.ref || r.text.slice(0, 60) }); continue; } if (r?.agent && r?.text) { await learning.addManualLesson({ agent: r.agent, text: r.text, age: r.age || null, scope: r.scope || (r.age ? 'age' : 'global'), ref: r.ref || null, source: 'training' }).catch(() => {}); lessons++; } }
   for (const ex of man.text_examples || []) {
     const md = await read(ex.file); if (!md) continue;
     const pages = parseStory(md, ex.language_marker);
+    if (pages.length && pages.some(pg => textSafety(pg.text || pg).verdict === 'BLOCK')) { unsafe.push({ kind: 'example', ref: ex.file }); continue; }
     if (pages.length) { await learning.addExample({ pid: `training:${man.id}:${ex.language}`, volume: ex.volume ?? 0, age: ex.age || man.age, language: ex.language, theme: ex.theme || man.name, title: ex.title || '', pages }); examples++; }
   }
   const failures = (man.image_examples || []).filter(x => x.verdict === 'reject' && x.issue).map(x => ({ pack: man.id, dimension: x.dimension || 'anatomy', issue: x.issue, fix: x.fix || '', ref: x.lesson || null }));
   await learning.setKnownFailures(man.id, failures);
-  const pack = { ...man, importedAt: now(), files: stored, applied: { lessons, examples, failures: failures.length } };
+  const pack = { ...man, importedAt: now(), files: stored, applied: { lessons, examples, failures: failures.length, unsafeSkipped: unsafe } };
   PACKS = PACKS.filter(p => p.id !== man.id); PACKS.push(pack);
   await storage.writeJSON('training.json', PACKS); bus.emit('change', { scope: 'learning' });
   return pack;

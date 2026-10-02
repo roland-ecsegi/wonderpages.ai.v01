@@ -18,6 +18,7 @@ import { derivePageBlueprints, validatePageBlueprints } from './domain/page-blue
 import { atlasFor } from './domain/atlas.js';
 import { storyContract } from './domain/story-contracts.js';
 import { pilotState } from './domain/pilot.js';
+import { volumeSafety, SAFETY_POLICY } from './quality/safety.js';
 import { reconcileReport, applyReconcile } from './migration/dw-reconcile.js';
 import { contractFromBlueprint, validateProjectInput, editionsFor } from './domain/product-contract.js';
 import * as Ledger from './ledger.js';
@@ -147,5 +148,21 @@ export function registerEnterpriseRoutes({ on, json, need, localOnly, repo, stor
     const rec = decisionRecord({ kind: 'reconcile', actor: 'operator@laptop', state: 'approved', note: String(b.note || '').slice(0, 500), scope: { conflicts: [...new Set(applied.map(a => a.conflict))] }, subject: { reportHash: report.hash, applied: applied.map(a => ({ conflict: a.conflict, path: a.path, from: a.from, to: a.to })) }, policy: policyHash(await repo.getBlueprint(pid), null) });
     await repo.commitProjectDecision(pid, { reconciledAt: now() }, [rec], { actor: 'operator@laptop', kind: 'reconcile.apply' });
     return { ok: true, applied, decision: rec.id, after: reconcileReport(await repo.artifacts(pid)) };
+  });
+
+  /* P5-T01: safety verdicts per volume, and the adult operator review that may clear REVIEW/UNKNOWN (never BLOCK) */
+  on('GET', '/api/projects/:pid/safety/:v', async ({ pid, v }) => { const p = need(pid), bp = await repo.getBlueprint(pid), n = Number(v); if (!Number.isInteger(n) || n < 1 || n > bp.structure.volumes) throw { status: 400, message: 'Volum invalid.' }; return volumeSafety({ bp, art: await repo.artifacts(pid), project: p, v: n - 1 }); });
+  on('POST', '/api/projects/:pid/safety/review', async ({ pid }, req) => {
+    localOnly(req); const p = need(pid), b = await json(req), bp = await repo.getBlueprint(pid), n = Number(b.v);
+    if (!Number.isInteger(n) || n < 1 || n > bp.structure.volumes) throw { status: 400, message: 'Volum invalid.' };
+    const reason = String(b.reason || '').trim(); if (reason.length < 5) throw { status: 400, message: 'Scrie ce ai verificat (motivul este obligatoriu).' };
+    const sf = volumeSafety({ bp, art: await repo.artifacts(pid), project: p, v: n - 1 }), sub = sf.subjects.find(x => x.id === b.subject);
+    if (!sub) throw { status: 404, message: 'Elementul nu există.' };
+    if (sub.raw === 'BLOCK') throw { status: 409, code: 'no_override', message: 'Un BLOCK de siguranță nu se poate aproba: corectează conținutul.' };
+    if (sub.raw === 'PASS') throw { status: 400, message: 'Elementul este deja PASS.' };
+    const review = { hash: sub.hash, decision: 'pass', reason: reason.slice(0, 500), actor: 'operator@laptop', at: now(), verdict: sub.raw, policy: SAFETY_POLICY.version };
+    const rec = decisionRecord({ kind: 'safety_review', actor: 'operator@laptop', state: 'approved', note: review.reason, scope: { volume: n, subject: sub.id }, subject: { hash: sub.hash, verdict: sub.raw, policy: SAFETY_POLICY }, policy: policyHash(bp, null) });
+    await repo.commitProjectDecision(pid, { safetyReviews: { ...(p.safetyReviews || {}), [sub.id]: review } }, [rec], { actor: 'operator@laptop', kind: 'safety.review' });
+    return { ok: true, review, decision: rec.id };
   });
 }

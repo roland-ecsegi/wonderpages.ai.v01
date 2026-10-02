@@ -57,8 +57,9 @@ export function expectedInventory(project, bp, art, vol) {
 }
 
 /** Release eligibility: approved gates (engine.volumeApproved) AND complete inventory AND no stale decision. */
-export function releaseCheck(project, bp, art, vol, { approved, staleDecisions = [] }) {
+export function releaseCheck(project, bp, art, vol, { approved, staleDecisions = [], safety = [] }) {
   const inv = expectedInventory(project, bp, art, vol), blockers = [];
+  for (const s of safety) blockers.push({ code: 'safety_' + String(s.verdict).toLowerCase(), id: s.id, message: `Siguranță ${s.verdict}: ${s.artifact || s.kind}${s.page != null ? ' pagina ' + s.page : ''}${s.findings?.[0]?.quote ? ` — „${s.findings[0].quote}”` : s.note ? ` — ${s.note}` : ''}` });   // P5-T01: any non-PASS blocks release
   if (!approved) blockers.push({ code: 'gate_not_approved', message: vol == null ? 'Colecția nu are toate porțile aprobate de tine.' : `Volumul ${vol + 1} nu are aprobarea finală.` });
   for (const m of inv.missing) blockers.push({ code: 'missing_artifact', id: m.id, message: `Lipsește: ${m.label}.` });
   for (const d of staleDecisions) blockers.push({ code: 'stale_decision', id: d.id, message: `Decizie expirată (${d.reasons.join(', ')}): ${d.label || d.id}.` });
