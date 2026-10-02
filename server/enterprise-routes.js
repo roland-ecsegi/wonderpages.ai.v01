@@ -20,6 +20,8 @@ import { storyContract } from './domain/story-contracts.js';
 import { pilotState } from './domain/pilot.js';
 import { volumeSafety, SAFETY_POLICY } from './quality/safety.js';
 import { assessBook, policyFor } from './quality/assessment.js';
+import { pageVisual } from './quality/visual.js';
+import { pngSize } from './security/safe-zip.js';
 import { reconcileReport, applyReconcile } from './migration/dw-reconcile.js';
 import { contractFromBlueprint, validateProjectInput, editionsFor } from './domain/product-contract.js';
 import * as Ledger from './ledger.js';
@@ -175,4 +177,12 @@ export function registerEnterpriseRoutes({ on, json, need, localOnly, repo, stor
   });
 
   on('POST', '/api/projects/:pid/assessment/:v/refresh', async ({ pid, v }, req) => { localOnly(req); const p = need(pid), bp = await repo.getBlueprint(pid), n = Number(v); if (!Number.isInteger(n) || n < 1 || n > bp.structure.volumes) throw { status: 400, message: 'Volum invalid.' }; if (RUNNING[pid]) throw { status: 409, message: 'Proiectul lucrează deja.' }; reassessVolume(pid, n - 1).catch(e => console.warn('[reassess]', e?.message || e)); return { ok: true, started: true }; });   // P5-T02
+
+  /* P5-T03: visual + coloring pair per page of a volume, on the real files (missing/stale/negative QA explained) */
+  on('GET', '/api/projects/:pid/visual/:v', async ({ pid, v }) => {
+    const p = need(pid), bp = await repo.getBlueprint(pid), n = Number(v); if (!Number.isInteger(n) || n < 1 || n > bp.structure.volumes) throw { status: 400, message: 'Volum invalid.' };
+    const art = await repo.artifacts(pid), size = async f => { try { return f ? pngSize(await repo.readFile(pid, f)) : null; } catch { return null; } }, pages = [];
+    for (let pg = 0; pg <= bp.structure.pages; pg++) { const c = art[`ill_${n - 1}_${pg}`]?.content; pages.push({ page: pg, ...pageVisual({ c, size: await size(c?.color), lineSize: await size(c?.lineart), format: bp.formats?.[p.input?.[bp.format_key]] || {}, requireLine: p.options?.images !== false }) }); }
+    return { volume: n, ok: pages.every(x => x.ok), pages };
+  });
 }

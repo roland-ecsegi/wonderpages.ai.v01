@@ -21,6 +21,7 @@ import { atlasFor, landmarkContext } from './domain/atlas.js';
 import { generationAllowed, pilotState } from './domain/pilot.js';
 import { volumeSafety, textSafety } from './quality/safety.js';
 import { assessText, assessBook, policyFor, nativeChecks, regressions } from './quality/assessment.js';
+import { visualConsistency } from './quality/visual.js';
 import { storyContract, causality as storyCausality, voice as storyVoice, science as storyScience, ageFit, criticNotes } from './domain/story-contracts.js';
 /* P3-T03: the innermost durable unit (stage or item) of the current async flow: its lease fences every result write */
 export const FENCE = new AsyncLocalStorage();
@@ -435,8 +436,12 @@ async function qaPages(E, stage, pages, { redraw = null, batch = 6 } = {}) {
     const ctx = buildCtx(E, { known_failures: knownFailures(), refs_list: useRefs.map((r, i) => ({ image: i, character: r.ref })), pages_list: info.map((x, j) => ({ image: useRefs.length + j, ...x.c, ids: undefined })) });
     const out = await callLLM(E, tpl(E.bp.prompts.visual_qa, ctx) + '\nSEQUENCE CONTEXT (reference only, no extra verdicts): ' + JSON.stringify(neighbours) + '\nCheck spatial direction, relative character size, handedness and landmark placement, object state, light and premature reveals against neighbouring images. Put any broken continuity or missing visual added value in the story verdict.', { label: `Directorul artistic verifică: ${info.map(x => x.c.page).join(', ')}`, agent: 'director-artistic', images });
     const verdicts = visualVerdicts(out, info.map((_, j) => useRefs.length + j));
+    const ageProfile = buildCtx(E).age_profile || {};
     return info.map((x, j) => { const r = verdicts[j];
-      const dims = ['anatomy', 'action', 'story', 'readability'].filter(k => r[k] === false);
+      const cons = visualConsistency(r, { contract: x.c, bible: E.art.bible?.content, ageProfile });   // P5-T03: the verdict must agree with the contract and the canon
+      const dims = [...new Set(['anatomy', 'action', 'story', 'readability'].filter(k => r[k] === false).concat(cons.failed))];
+      if (cons.issues.length) r.issues = [...(r.issues || []), ...cons.issues];
+      if (cons.failed.length && !r.instruction) r.instruction = 'Fix: ' + cons.issues.join(' ');
       const safety = ['pass', 'review', 'block'].includes(String(r.safety || '').toLowerCase()) ? String(r.safety).toLowerCase() : null;   // P5-T01: separate from ok; absent → unknown
       const res = { v: x.v, p: x.p, ok: r.ok !== false && !dims.length && safety !== 'block', failed: safety === 'block' ? [...dims, 'safety'] : dims, issues: r.issues || [], instruction: r.instruction || '', safety, safety_reasons: Array.isArray(r.safety_reasons) ? r.safety_reasons.map(String).slice(0, 6) : [] };
       if (!res.ok) { const code = c => (E.bp.rubric_visual || []).find(v => v.key === c)?.code || null; (res.issues.length ? res.issues : dims).forEach(t => noteVisualFailure(t, code(dims[0]))); }   // 3.9
@@ -508,6 +513,7 @@ async function imageOne(E, stage, v, p, instruction, opts = {}) {
             const raw = await repo.readFile(E.pid, next.lineart); const bw = normalizeLineart(raw);
             if (bw) { next.lineartRaw = next.lineart; next.lineart = await repo.saveFile(E.pid, next.lineart.replace(/\.(png|jpg|webp)$/i, '.bw.png'), bw); next.lineQA = { ...q, normalized: true }; }
           }
+          next.lineQA = { ...next.lineQA, for: next.lineart };   // P5-T03: the coloring check is bound to the exact file it judged
         } catch (e) { next.status = 'color_only'; next.linePending = true; next.lineError = errMsg(e); await saveArt(E, key, next, { keep: 10, stage: stage.key, note: 'Culoarea păstrată; derivarea de colorat necesită reluare', basedOn: { key: srcKey, version: E.art[srcKey]?.version, pageHash: sceneFingerprint(page) } }); throw e; }
       }
     }
@@ -1229,7 +1235,7 @@ export function gateItems(bp, art, project, gate) {
           const demo = s.pages === 'demo' ? bp.stages.find(st => st.key === bp.gates[gate.key]?.redo?.['ill_*']) : null;
           if (mode === 'line' && demo?.lineart_pages && !demo.lineart_pages.includes(p)) continue;
           const file = mode === 'line' ? c?.lineart : c?.color;
-          const failed = sourceChanged || (mode === 'line' ? c?.linePending || (c?.lineFrom && c.lineFrom !== c.color) || c?.lineQA?.ok === false || (bp.editorial_contract?.version===1 && c?.lineQA?.ok!==true) : c?.qa?.ok === false || (bp.editorial_contract?.version===1 && project.options?.visual_qa!==false && c?.qa?.ok!==true) || (c?.qa?.color && c.qa.color !== c.color));
+          const failed = sourceChanged || (mode === 'line' ? c?.linePending || (c?.lineFrom && c.lineFrom !== c.color) || c?.lineQA?.ok === false || (c?.lineQA?.for && c.lineQA.for !== c.lineart) || (bp.editorial_contract?.version===1 && c?.lineQA?.ok!==true) : c?.qa?.ok === false || (bp.editorial_contract?.version===1 && project.options?.visual_qa!==false && c?.qa?.ok!==true) || (c?.qa?.color && c.qa.color !== c.color));
           out.push({ id: 'img:' + key + ':' + mode, kind: 'image', key, v, p, mode, label: (p ? 'Pagina ' + p : 'Coperta') + (mode === 'line' ? ', de colorat' : ', color'), image: file, missing: !file, blocked: !!failed, hash: file ? fingerprint([file, scene, identities, mode === 'line' ? c.color : null]) : null });
         }
       }
