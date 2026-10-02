@@ -26,14 +26,14 @@ export class Scheduler {
   live(job) { return !!(job && ACTIVE.includes(job.status) && job.lease && job.lease.expiresAt > this.now()); }
 
   /** Lease a unit. A committed unit with the same inputs is reused (never re-executed); a live foreign lease refuses. */
-  acquire(pid, key, { inputsHash = null, label = '', owner = this.owner, kind = 'unit', reuseIf = null } = {}) {
+  acquire(pid, key, { inputsHash = null, label = '', owner = this.owner, kind = 'unit', reuseIf = null, meta = null } = {}) {
     return this.lock(pid + '/' + key, async () => {
       const prev = await this.get(pid, key);
-      if (prev?.status === 'committed' && (reuseIf ? reuseIf(prev) : (inputsHash == null || prev.inputsHash === inputsHash))) return { reused: true, job: prev };
+      if (prev?.status === 'committed' && (reuseIf ? reuseIf(prev) : (inputsHash == null || prev.inputsHash === inputsHash))) { if (meta && prev.meta?.run !== meta.run) { const job = { ...prev, meta: { ...prev.meta, ...meta, reusedFromRun: prev.meta?.run ?? null } }; await this.write(pid, job); return { reused: true, job }; } return { reused: true, job: prev }; }   // P3-T06: a reused unit counts in the current run, marked as reused
       if (prev?.status === 'ambiguous') throw { status: 409, code: 'ambiguous_unit', message: `„${prev.label || key}” a fost întreruptă după un apel extern fără rezultat confirmat. Decide în Activitate: reia (posibil consum dublu) sau anulează.`, key };
       if (prev && this.live(prev) && prev.lease.owner !== owner) throw { status: 409, code: 'job_leased', message: `Unitatea „${label || key}” este deja în lucru.`, owner: prev.lease.owner };
       const token = (prev?.lease?.token || 0) + 1;
-      const job = { schema: JOB_SCHEMA, key, pid, kind, label: label || prev?.label || key, inputsHash, generation: prev && prev.inputsHash !== inputsHash ? (prev.generation || 1) + 1 : prev?.generation || 1, status: 'leased', lease: { owner, token, expiresAt: this.now() + this.ttl }, attempts: prev?.attempts || [], checkpoint: prev?.status === 'checking' && prev.inputsHash === inputsHash ? prev.checkpoint : null, result: null, createdAt: prev?.createdAt || this.now() };
+      const job = { schema: JOB_SCHEMA, key, pid, kind, label: label || prev?.label || key, meta: meta || prev?.meta || null, inputsHash, generation: prev && prev.inputsHash !== inputsHash ? (prev.generation || 1) + 1 : prev?.generation || 1, status: 'leased', lease: { owner, token, expiresAt: this.now() + this.ttl }, attempts: prev?.attempts || [], checkpoint: prev?.status === 'checking' && prev.inputsHash === inputsHash ? prev.checkpoint : null, result: null, createdAt: prev?.createdAt || this.now() };
       await this.write(pid, job); return { token, job };
     });
   }

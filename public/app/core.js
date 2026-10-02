@@ -130,6 +130,10 @@ async function loadProject() {
     if (S.cur !== pid) return;
     S.bp = d.blueprint; S.art = d.artifacts; S.comments = d.comments; S.review = d.review; S.editorial = d.editorial; S.preflight = d.preflight; S.delivery = d.delivery;
     const i = S.projects.findIndex(p => p.id === pid); if (i >= 0) S.projects[i] = { ...S.projects[i], ...d.project }; else S.projects.push(d.project);
+    /* P3-T06: progress from durable units; units and manual packets only where they are shown */
+    const [pr, jb, pk] = await Promise.all([api('GET', `/projects/${pid}/progress`).catch(() => null), S.route.tab === 'activity' ? api('GET', `/projects/${pid}/jobs`).catch(() => null) : null, S.route.tab === 'activity' ? api('GET', `/projects/${pid}/packets`).catch(() => null) : null]);
+    if (S.cur !== pid) return;
+    (S.progress ||= {})[pid] = pr; if (jb) (S.jobs ||= {})[pid] = jb.jobs; if (pk) (S.packets ||= {})[pid] = pk.packets;
   } catch (e) { if (e.status === 404) S.projects = S.projects.filter(p => p.id !== pid); }
 }
 const refetch = { t: null, proj: false, all: false, busy: false };
@@ -159,7 +163,11 @@ async function boot() {
   try { await loadState(); } catch { S.offline = true; }
   S.booted = true;
   const es = new EventSource('/api/events');
-  es.addEventListener('change', e => { const ev = JSON.parse(e.data); if (ev.scope === 'improvements') { if (S.route.name === 'improvements') loadImprovements(); loadState().then(render).catch(() => {}); return; } if (ev.scope === 'agents' || ev.scope === 'learning') { if (ev.scope === 'learning') S.training = null; if (['agents', 'learning'].includes(S.route.name)) loadExtra(S.route.name); if (ev.scope === 'agents') return; } scheduleRefetch(ev.scope, ev.pid); });
+  /* P3-T06: each change has a durable id; a replayed or repeated id is applied once; `reset` means the gap cannot be replayed exactly */
+  const seen = id => { const n = Number(id); if (!Number.isInteger(n) || n <= 0) return false; if (n <= (S.lastEventId || 0)) return true; S.lastEventId = n; return false; };
+  es.addEventListener('hello', e => { const h = JSON.parse(e.data).head; if (Number.isInteger(h) && h > (S.lastEventId || 0)) S.lastEventId = h; });
+  es.addEventListener('reset', e => { S.lastEventId = JSON.parse(e.data).head || 0; S.progress = {}; scheduleRefetch('all'); });
+  es.addEventListener('change', e => { if (seen(e.lastEventId)) return; const ev = JSON.parse(e.data); if (ev.pid && S.progress) delete S.progress[ev.pid]; if (ev.scope === 'improvements') { if (S.route.name === 'improvements') loadImprovements(); loadState().then(render).catch(() => {}); return; } if (ev.scope === 'agents' || ev.scope === 'learning') { if (ev.scope === 'learning') S.training = null; if (['agents', 'learning'].includes(S.route.name)) loadExtra(S.route.name); if (ev.scope === 'agents') return; } scheduleRefetch(ev.scope, ev.pid); });
   es.addEventListener('live', e => { S.live = JSON.parse(e.data); paintLive(); });
   es.onerror = () => { S.offline = true; paintNav(); };
   es.onopen = () => { if (S.offline) { S.offline = false; scheduleRefetch('all'); } };

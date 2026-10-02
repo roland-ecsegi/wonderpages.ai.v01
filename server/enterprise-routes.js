@@ -10,7 +10,10 @@ import { planMigration, runMigration, listMigrations } from './migration/migrato
 import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT } from './config.js';
-import { RUNNING, prepareTextPacket, ingestTextPacket, prepareImagePacket, ingestImagePacket } from './engine.js';
+import { RUNNING, expandStages, prepareTextPacket, ingestTextPacket, prepareImagePacket, ingestImagePacket } from './engine.js';
+import { progressReport, inspectArtifact } from './observability/progress.js';
+import * as Ledger from './ledger.js';
+import { getCapabilities } from './providers/registry.js';
 import { createPacket, getPacket, listPackets, recordAttempt, assertUsable, packetZip } from './providers/operator-exchange.js';
 
 export function impactForWrite(bp, art, key, nextContent) {
@@ -92,5 +95,19 @@ export function registerEnterpriseRoutes({ on, json, need, localOnly, repo, stor
       await recordAttempt(storage, pid, pk, { ok: true, artifact: r.artifact, version: r.version });
       return { ok: true, ...r };
     } catch (e) { await recordAttempt(storage, pid, pk, { ok: false, code: e.code || null, message: String(e.message || e).slice(0, 300) }); throw e; }
+  });
+
+  /* P3-T06: truthful progress (durable units of the current run, measured-only estimate) and the artifact inspector */
+  const engineJobsNow = () => import('./engine.js').then(m => m.jobs);
+  on('GET', '/api/projects/:pid/progress', async ({ pid }) => {
+    const p = need(pid), bp = await repo.getBlueprint(pid), J = await engineJobsNow();
+    return progressReport({ project: p, stages: expandStages(bp), jobs: J ? await J.list(pid) : [], ledgerRows: Ledger.rows(r => r.pid === pid), capabilities: getCapabilities() });
+  });
+  on('GET', '/api/projects/:pid/inspect/:key', async ({ pid, key }) => {
+    const p = need(pid); if (!/^[a-z0-9_]{1,40}$/i.test(key)) throw { status: 400, message: 'Document invalid.' };
+    const art = (await repo.artifacts(pid))[key]; if (!art) throw { status: 404, message: 'Documentul nu există.' };
+    const J = await engineJobsNow(), hash = art.meta?.prov?.context;
+    const manifest = hash && /^[0-9a-f]{16,64}$/.test(hash) ? await storage.readJSON(`projects/${pid}/context/${hash}.json`, null) : null;
+    return inspectArtifact({ key, art, pid, jobs: J ? await J.list(pid) : [], ledgerRows: Ledger.rows(r => r.pid === pid), decisions: await repo.listDecisions(pid), projectDecisions: p.decisions || [], manifest });
   });
 }

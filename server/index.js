@@ -56,6 +56,7 @@ import { canonicalHash } from './domain/canonical.js';
 import { releaseCheck, expectedInventory, decisionStatus } from './domain/decisions.js';
 import { rebindDependents } from './persistence/rebind.js';
 import { registerEnterpriseRoutes, impactForWrite } from './enterprise-routes.js';
+import { EventStream } from './observability/events.js';
 import { toolSchemaHash, hostConfig } from './providers/capabilities.js';
 import { checkIncludedQuota } from './subscription-usage.js';
 
@@ -67,6 +68,7 @@ const canva = new Canva(storage, config.port);
 initEngine(repo, canva);
 await initAgents(storage); await initGovernor(storage);
 await Ledger.initLedger(storage);
+const Events = await new EventStream(storage).init();   // P3-T06: durable change stream (cursor replay across reconnects and restarts)
 await initLearning(storage, (prompt, o) => agentComplete(prompt, o)); await loadCalibration(); await Learning.loadKnownFailures(); await Learning.loadThresholds();
 await Training.initTraining(storage, Learning);
 Improve.initImprove({ learn: Learning, activeProject: () => activeProject() });
@@ -116,7 +118,7 @@ const shutdown = async () => {
   if (shuttingDown) return; shuttingDown = true;
   killClaude(); Render.killAll(); GPTImage.killAllCodex();
   try {
-    await Promise.all([flushGovernor(), flushAgents(), Learning.flushLearning(), Ledger.flushLedger(), flushRepo()]);
+    await Promise.all([flushGovernor(), flushAgents(), Learning.flushLearning(), Ledger.flushLedger(), flushRepo(), Events.flush()]);
     await storage.close?.(); process.exit(0);
   } catch (e) { console.error('[shutdown persistence]', e.message); process.exit(1); }
 };
@@ -444,7 +446,7 @@ on('DELETE', '/api/projects/:pid', async ({ pid }, req) => {
   if (!['ȘTERGE', 'STERGE', 'ŞTERGE'].includes(c)) throw { status: 400, message: 'Scrie ȘTERGE ca să confirmi.' };
   if (RUNNING[pid] || ['running', 'correcting'].includes(p.status)) throw { status: 409, message: 'Pune proiectul pe pauză înainte să îl ștergi.' };
   const release = await quietProjectBackground(pid);
-  try { return await Purge.purgeProject({ repo, storage, gdrive, p: clone(p) }); }
+  try { await Events.purgeProject(pid); return await Purge.purgeProject({ repo, storage, gdrive, p: clone(p) }); }   // P3-T06: the event stream forgets the id first, so the clean backup made by the purge has no trace either
   finally { release(); }
 });
 /* backups of the database: list, make one now, restore one (audit M7) — laptop only */
@@ -596,7 +598,8 @@ on('GET', '/oauth/callback', async (_, __, url, res) => {
 const clients = new Map();                              // res -> req (the device is re-checked at every ping)
 const MAX_SSE = 20;                                      // audit M2
 const push = (ev, data) => { for (const c of clients.keys()) c.write(`event: ${ev}\ndata: ${JSON.stringify(data)}\n\n`); };
-bus.on('change', ev => push('change', ev));
+const sseEvent = e => `id: ${e.id}\nevent: change\ndata: ${JSON.stringify(e)}\n\n`;
+bus.on('change', ev => { const e = Events.append(ev); for (const c of clients.keys()) c.write(sseEvent(e)); });   // P3-T06: ids let a reconnecting client replay exactly what it missed
 bus.on('live', calls => push('live', calls));
 const dropUnauthorized = () => { for (const [c, rq] of clients) if (!LAN.authorized(rq)) { try { c.end(); } catch {} clients.delete(c); } };
 setInterval(() => { dropUnauthorized(); for (const c of clients.keys()) c.write(': ping\n\n'); }, 25000).unref?.();
@@ -638,7 +641,12 @@ async function handler(req, res) {
     if (url.pathname === '/api/events') {
       if (clients.size >= MAX_SSE) { const oldest = clients.keys().next().value; try { oldest.end(); } catch {} clients.delete(oldest); }
       res.writeHead(200, { 'content-type': 'text/event-stream', 'cache-control': 'no-cache', connection: 'keep-alive' });
-      res.write(': hello\n\n'); clients.set(res, req); req.on('close', () => clients.delete(res)); return;
+      res.write('retry: 3000\n: hello\n\n');
+      const cursor = req.headers['last-event-id'] ?? url.searchParams.get('cursor');   // P3-T06: replay after disconnect/suspend/restart
+      const r = Events.since(cursor);
+      if (r.reset) res.write(`id: ${r.head}\nevent: reset\ndata: ${JSON.stringify({ reason: r.reason, head: r.head })}\n\n`);
+      else { for (const e of r.events) res.write(sseEvent(e)); if (cursor == null) res.write(`id: ${r.head}\nevent: hello\ndata: ${JSON.stringify({ head: r.head })}\n\n`); }
+      clients.set(res, req); req.on('close', () => clients.delete(res)); return;
     }
     const m = url.pathname.match(/^\/files\/(p[a-z0-9]{6,24})\/((?:images|exports|uploads)\/[A-Za-z0-9._-]+)$/);
     if (m) { try { sendUserFile(res, m[2], await repo.readFile(m[1], m[2]), 'private, max-age=31536000, immutable'); } catch { send(res, 404, { message: 'Fișier inexistent.' }); } return; }

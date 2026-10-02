@@ -298,7 +298,22 @@ function tabProgress(p) {
     <div class="cols"><div class="panel"><ul class="stage-list">${list}</ul></div>
     <div class="panel panel-pad"><h3 style="font-size:15px">Acum</h3>
       <p class="small muted" style="margin-top:4px">${cur.status === 'running' ? `${esc(curDef?.label || '')}${cur.total > 1 ? `: ${cur.done || 0} din ${cur.total} gata` : ''}` : p.status === 'awaiting_review' ? 'AI-ul s-a oprit la revizuire. Citește documentele și decide.' : 'Niciun pas activ.'}</p>
-      ${grid}<div class="live" id="live"></div></div></div>`;
+      ${grid}<div class="live" id="live"></div></div></div>${unitsPanel(p)}`;
+}
+/* P3-T06: measured progress from durable work units (current run); no invented ETA; waits and stop reasons explicit */
+const UNIT_ST = { committed: 'gata', skipped: 'sărit', executing: 'în lucru', leased: 'în lucru', checking: 'se verifică', waiting_provider: 'așteaptă furnizorul', ambiguous: 'necesită decizie', failed: 'eșuat', cancelled: 'anulat', paused: 'pe pauză', pending: 'urmează' };
+const QUOTA = { ok: 'verificată', limited: 'limitată', unknown: 'necunoscută' };
+function unitsPanel(p) {
+  const r = S.progress?.[p.id]; if (!r) return '';
+  const u = r.units, c = r.consumption;
+  const est = r.estimate?.value != null ? `≈ ${dur(r.estimate.value)} pentru etapa curentă (${esc(r.estimate.basis)}; fără așteptări și decizii)` : esc(r.estimate?.reason || 'Fără estimare.');
+  const waits = (r.waiting || []).map(w => `<li><span class="ic ${w.kind === 'human' ? 'waiting' : 'running'}"></span><div><div class="name">${esc(w.cause)}</div>${w.label ? `<div class="sub">${esc(w.label)}</div>` : ''}</div><div class="right">${w.resetAt ? 'reia la ' + clock(w.resetAt) : ''}</div></li>`).join('');
+  const quota = Object.entries(c.quota || {}).map(([k, v]) => `<span class="chip" title="${esc(k)}">${esc(k.replace(/-.*$/, ''))}: ${esc(QUOTA[v] || v)}</span>`).join(' ');
+  return `<div class="panel panel-pad" id="units-panel" style="margin-top:16px" data-run="${esc(r.run)}" data-committed="${esc(u.committed)}"><div class="row" style="justify-content:space-between"><h3 style="font-size:15px">Unități de lucru (rularea ${esc(r.run)})</h3><span class="faint small">din jurnalul durabil</span></div>
+    <p class="small" style="margin-top:6px"><b>${esc(u.committed)}</b> gata${u.reused ? ` (din care ${esc(u.reused)} refolosite)` : ''} · ${esc(u.skipped)} sărite · ${esc(u.executing + u.leased + u.checking)} în lucru · ${esc(u.waiting_provider)} așteaptă furnizorul · ${esc(u.ambiguous)} necesită decizie · ${esc(u.failed)} eșuate${u.superseded ? ` · <span class="faint">${esc(u.superseded)} din rulări anterioare (nu se numără)</span>` : ''}</p>
+    <p class="small muted">Estimare: ${est}</p>
+    <p class="small muted">Consum: ${esc(c.textCalls)} apeluri text, ${esc(c.imageCalls)} imagini; tokeni ${c.tokens.measuredCalls ? `măsurați la ${esc(c.tokens.measuredCalls)} apeluri (${esc(c.tokens.input)} intrare / ${esc(c.tokens.output)} ieșire)${c.tokens.unmeasuredCalls ? `, necunoscuți la ${esc(c.tokens.unmeasuredCalls)}` : ''}` : 'necunoscuți (nu au fost raportați)'}. Cotă: ${quota || 'necunoscută'}</p>
+    ${waits ? `<h4 style="margin-top:8px">Așteptări</h4><ul class="stage-list">${waits}</ul>` : ''}${r.stopReason ? `<p class="small err-text">Motivul opririi: ${esc(r.stopReason)}</p>` : ''}</div>`;
 }
 
 /* ---------- review studio ---------- */
@@ -601,6 +616,28 @@ function canvaCoverHTML(p) {
 
 /* ---------- activity ---------- */
 const DEC = { approved: 'Aprobat', approved_with_notes: 'Aprobat cu note', needs_correction: 'Corecții cerute', rejected: 'Respins' };
+/* P3-T06: durable units with stop reasons and attempts, manual exchange packets, and the artifact inspector */
+function unitsActivity(p) {
+  const jobs = (S.jobs?.[p.id] || []).filter(j => j.meta?.run === (p.run || 1)).slice().reverse();
+  const row = j => { const a = (j.attempts || [])[j.attempts.length - 1]; return `<li><time>${clock(j.committedAt || j.updatedAt)}</time><div><b>${esc(j.label || j.key)}</b> <span class="chip">${esc(UNIT_ST[j.status] || j.status)}</span>${j.meta?.reusedFromRun != null ? ' <span class="chip">refolosit</span>' : ''}${(j.result?.outputs || []).length ? `<div class="small muted">ieșiri: ${j.result.outputs.map(k => `<button class="linklike" data-act="inspect" data-key="${esc(k)}">${esc(k)} v${esc(j.result.versions?.[k] ?? '')}</button>`).join(', ')}</div>` : ''}${j.stopReason ? `<div class="small" style="color:var(--warn)">${esc(j.stopReason)}</div>` : ''}${a?.external?.length ? `<div class="small faint">${a.external.length} apel(uri) extern(e), încercarea ${esc(a.n)}</div>` : ''}${j.status === 'ambiguous' ? `<div class="row" style="margin-top:4px"><button class="btn sm" data-act="job-resolve" data-key="${esc(j.key)}" data-a="retry">Reia (posibil consum dublu)</button><button class="btn sm ghost" data-act="job-resolve" data-key="${esc(j.key)}" data-a="cancel">Anulează</button></div>` : ''}</div></li>`; };
+  const packets = (S.packets?.[p.id] || []);
+  const insp = S.inspect && S.inspect.pid === p.id ? inspectorHTML(S.inspect) : '';
+  const keys = Object.keys(S.art || {}).sort();
+  return `<div class="section"><h2>Unități de lucru</h2>${jobs.length ? `<div class="panel"><ul class="log" id="units-log">${jobs.slice(0, 80).map(row).join('')}</ul></div>` : `<div class="empty">Nicio unitate în rularea curentă.</div>`}</div>
+    <div class="section"><h2>Inspector</h2><div class="panel panel-pad row"><select class="select" id="inspect-key" aria-label="Document de inspectat">${keys.map(k => `<option value="${esc(k)}" ${S.inspect?.key === k ? 'selected' : ''}>${esc(k)}</option>`).join('')}</select><button class="btn sm" data-act="inspect">Inspectează</button></div>${insp}</div>
+    <div class="section"><h2>Schimb manual</h2>${packets.length ? `<div class="panel"><ul class="log">${packets.map(k => `<li><time>${clock(k.issuedAt)}</time><div><b>${esc(k.outKey)}</b> <span class="chip">${esc(k.status === 'ingested' ? 'importat' : 'emis')}</span> <a class="small" href="/api/projects/${esc(p.id)}/packets/${esc(k.id)}/download">descarcă pachetul</a>${(k.attempts || []).filter(a => !a.ok).slice(-1).map(a => `<div class="small" style="color:var(--warn)">ultima respingere: ${esc(a.message)}</div>`).join('')}</div></li>`).join('')}</ul></div>` : `<div class="empty">Niciun pachet emis. Un pachet conține promptul, contextul agentului, schema și referințele, pentru rularea în aplicația oficială a unui furnizor; rezultatul trece prin aceleași validări și aprobarea rămâne a ta.</div>`}</div>`;
+}
+function inspectorHTML(r) {
+  if (r.error) return `<div class="panel panel-pad err-text">${esc(r.error)}</div>`;
+  const pv = r.provenance, u = r.unit, cx = r.context;
+  return `<div class="panel panel-pad" id="inspector" data-key="${esc(r.key)}" data-version="${esc(r.version)}" data-unit="${esc(u?.key || '')}"><h3 style="font-size:15px">${esc(r.key)} · versiunea ${esc(r.version)}</h3>
+    <p class="small">Produs de: ${esc(pv?.channel === 'operator-exchange' ? 'schimb manual' : r.by || '—')}${pv?.agent ? `, agent ${esc(pv.agent)}` : ''}${pv?.model ? `, model ${esc(pv.model)}${pv.modelSource ? ` (${esc(pv.modelSource)})` : ''}` : ''}${pv?.prompt ? `, prompt ${esc(pv.prompt)}` : ''}</p>
+    ${u ? `<p class="small">Unitate: <b>${esc(u.label || u.key)}</b> (rularea ${esc(u.run)}${u.reusedFromRun != null ? `, refolosită din rularea ${esc(u.reusedFromRun)}` : ''}), ${u.attempts.length} încercări: ${u.attempts.map(a => `${esc(a.outcome || '—')}${a.external.length ? ` / ${a.external.length} apel(uri) extern(e)` : ''}${a.stopReason ? ` (${esc(a.stopReason)})` : ''}`).join('; ')}</p>` : `<p class="small muted">${esc(r.note || '')}</p>`}
+    ${cx ? `<p class="small muted">Context ${esc(cx.manifestHash.slice(0, 12))}: carta ${esc(cx.charterVersion || '—')}, rol ${esc(cx.roleVersion || '—')}, lecții ${cx.lessons.length ? esc(cx.lessons.join(', ')) : 'niciuna'}${cx.excludedLessons ? ` (${esc(cx.excludedLessons)} excluse)` : ''}</p>` : ''}
+    ${r.usage.length ? `<p class="small muted">Consum: ${r.usage.map(x => `${esc(x.kind)} ${esc(x.model || '')} ${x.ok ? 'ok' : 'eșuat'} ${dur(x.ms)}${x.inTok != null ? ` ${esc(x.inTok)}/${esc(x.outTok)} tokeni` : ''}`).join('; ')}</p>` : ''}
+    ${r.approvals.length ? `<p class="small">Aprobări: ${r.approvals.map(a => `v${esc(a.approvedVersion)}${a.current ? ' (versiunea curentă)' : ' (versiune anterioară)'}`).join(', ')}</p>` : '<p class="small muted">Neaprobat încă.</p>'}
+    <p class="small faint">Versiuni: ${r.versions.map(v => `v${esc(v.version)} ${esc(v.by || '')}`).join(' · ')}</p></div>`;
+}
 function tabActivity(p) {
   const dec = (p.decisions || []).slice().reverse();
   const log = (p.log || []).slice().reverse();
@@ -608,7 +645,7 @@ function tabActivity(p) {
   return `<div class="section" style="margin-top:0"><div class="row" style="justify-content:space-between"><h2>Puncte de salvare</h2><a class="btn sm" href="/api/projects/${esc(p.id)}/export.zip">Exportă proiectul (.zip)</a></div>${cps.length ? `<div class="panel"><ul class="log">${cps.map(c => `<li><time>${clock(c.at)}</time><div><b>${esc(c.label)}</b>${c.total ? `, ${c.done}/${c.total} elemente gata` : ''}<div class="muted small">${esc(c.reason)}; ${Object.keys(c.versions || {}).length} documente salvate cu versiunea lor</div></div></li>`).join('')}</ul></div>` : `<div class="empty small">Niciun punct de salvare încă. Se creează la fiecare pauză.</div>`}</div>
     <div class="section"><h2>Decizii de revizuire</h2>${dec.length ? `<div class="panel"><ul class="log">${dec.map(d => `<li><time>${clock(d.at)}</time><div><b>${esc(DEC[d.decision] || d.decision)}</b>, ${esc(S.bp.gates?.[d.gate]?.label || d.gate)}, runda ${esc(d.round)}${d.note ? `<div class="muted small" style="white-space:pre-wrap">${esc(d.note)}</div>` : ''}</div></li>`).join('')}</ul></div>` : `<div class="empty small">Nicio decizie încă.</div>`}</div>
     <div class="section"><h2>Jurnal</h2>${log.length ? `<div class="panel"><ul class="log">${log.map(l => `<li><time>${clock(l.t)}</time><div style="${l.kind === 'error' ? 'color:var(--err)' : l.kind === 'warn' ? 'color:var(--warn)' : ''}">${esc(l.text)}</div></li>`).join('')}</ul></div>` : `<div class="empty small">Jurnalul e gol.</div>`}</div>
-    <div class="section"><h2>Proiect</h2><div class="panel panel-pad row" style="justify-content:space-between"><span class="small muted">Creat ${clock(p.createdAt)}. Tip de produs fixat la versiunea ${esc(p.typeVersion)}, ca modificările ulterioare ale tipului să nu afecteze acest proiect.</span><span class="row">${p.status === 'archived' ? `<button class="btn sm" data-act="unarchive">Scoate din arhivă</button>` : `<button class="btn sm" data-act="archive" ${p.running ? 'disabled' : ''}>Arhivează</button>`}<button class="btn sm danger" data-act="delete-project" ${S.lan?.remote || p.running || ['running', 'correcting'].includes(p.status) ? 'disabled title="Ștergerea se face de pe laptop, după ce pui proiectul pe pauză"' : ''}>Șterge definitiv…</button></span></div></div>`;
+    <div class="section"><h2>Proiect</h2><div class="panel panel-pad row" style="justify-content:space-between"><span class="small muted">Creat ${clock(p.createdAt)}. Tip de produs fixat la versiunea ${esc(p.typeVersion)}, ca modificările ulterioare ale tipului să nu afecteze acest proiect.</span><span class="row">${p.status === 'archived' ? `<button class="btn sm" data-act="unarchive">Scoate din arhivă</button>` : `<button class="btn sm" data-act="archive" ${p.running ? 'disabled' : ''}>Arhivează</button>`}<button class="btn sm danger" data-act="delete-project" ${S.lan?.remote || p.running || ['running', 'correcting'].includes(p.status) ? 'disabled title="Ștergerea se face de pe laptop, după ce pui proiectul pe pauză"' : ''}>Șterge definitiv…</button></span></div></div>${unitsActivity(p)}`;
 }
 
 /* ---------- product type studio ---------- */

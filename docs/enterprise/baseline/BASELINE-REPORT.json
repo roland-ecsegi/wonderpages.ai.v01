@@ -1,31 +1,31 @@
 {
  "kind": "wonderpages.baseline-report/1",
- "generatedAt": "2026-10-02T11:37:25.847Z",
- "codeRevision": "730aa69",
+ "generatedAt": "2026-10-02T13:06:22.864Z",
+ "codeRevision": "2a42777",
  "checks": [
   {
    "id": "INVENTORY",
    "status": "PASS",
-   "summary": "194 fișiere (fără node_modules/.git/data), 6 ascunse",
+   "summary": "216 fișiere (fără node_modules/.git/data), 6 ascunse",
    "detail": {
-    "total": 194,
+    "total": 216,
     "byExt": {
-     ".md": 44,
+     ".md": 48,
      ".example": 1,
      "(none)": 3,
-     ".json": 11,
+     ".json": 14,
      ".bat": 4,
      ".vbs": 1,
      ".yml": 1,
      ".log": 4,
-     ".js": 70,
+     ".js": 78,
      ".ttf": 4,
      ".txt": 1,
      ".png": 3,
      ".html": 2,
      ".webmanifest": 1,
      ".zip": 1,
-     ".mjs": 36,
+     ".mjs": 43,
      ".ps1": 1,
      ".cjs": 4,
      ".cmd": 2
@@ -65,12 +65,19 @@
   {
    "id": "SOURCE_DRIFT_V04",
    "status": "PASS",
-   "summary": "124/137 fișiere v04 identice, 13 modificate (enterprise), 51 adăugate, 0 lipsă",
+   "summary": "116/137 fișiere v04 identice, 21 modificate (enterprise), 73 adăugate, 0 lipsă",
    "detail": {
-    "unchanged": 124,
+    "unchanged": 116,
     "modified": [
+     "public/app/actions.js",
+     "public/app/core.js",
+     "public/app/views.js",
+     "public/index.html",
+     "server/agents.js",
      "server/canva.js",
+     "server/codeximage.js",
      "server/engine.js",
+     "server/governor.js",
      "server/index.js",
      "server/projectpkg.js",
      "server/repo.js",
@@ -80,11 +87,14 @@
      "server/storage/postgres.js",
      "server/training.js",
      "tests/3-securitate.test.mjs",
+     "tests/mocks/bin/codex.cjs",
      "tests/run.mjs",
      "tests/shim/client/index.js"
     ],
     "missing": [],
     "added": [
+     "agents/contracts/role-contracts.json",
+     "agents/contracts/skills.json",
      "docs/enterprise/JURNAL-IMPLEMENTARE.md",
      "docs/enterprise/PROTECTED-BEHAVIOR.md",
      "docs/enterprise/adr/ADR04-paginare.md",
@@ -97,18 +107,25 @@
      "docs/enterprise/baseline/logs/2026-10-02-pg-qa.log",
      "docs/enterprise/baseline/logs/2026-10-02-rs0-postgres.log",
      "docs/enterprise/baseline/logs/2026-10-02-rs0.log",
+     "docs/enterprise/contracts/AGENT-REGISTRY.md",
      "docs/enterprise/contracts/CANON-AND-DEPENDENCIES.md",
      "docs/enterprise/contracts/DECISIONS.md",
+     "docs/enterprise/contracts/JOBS.md",
      "docs/enterprise/contracts/PERSISTENCE.md",
      "docs/enterprise/contracts/PRODUCT-CONTRACT.md",
      "docs/enterprise/contracts/PROVIDER-CAPABILITIES.md",
      "docs/enterprise/contracts/SECURITY-BASELINE.md",
+     "docs/enterprise/migration/DW-DRY-RUN.json",
+     "docs/enterprise/migration/DW-DRY-RUN.md",
      "docs/enterprise/records/P1.md",
      "docs/enterprise/records/P2.md",
+     "docs/enterprise/records/P3.md",
      "scripts/enterprise/baseline-report.mjs",
      "scripts/enterprise/editorial-baseline.mjs",
      "scripts/enterprise/pg-ephemeral.mjs",
      "scripts/enterprise/reproduce-defects.mjs",
+     "server/agents-runtime/context-builder.js",
+     "server/agents-runtime/registry.js",
      "server/domain/canon.js",
      "server/domain/canonical.js",
      "server/domain/decisions.js",
@@ -116,13 +133,19 @@
      "server/domain/product-contract.js",
      "server/domain/rights.js",
      "server/enterprise-routes.js",
+     "server/jobs/budget.js",
+     "server/jobs/scheduler.js",
      "server/migration/dw-reference.js",
      "server/migration/migrator.js",
      "server/migration/raw-compare.js",
+     "server/observability/events.js",
+     "server/observability/progress.js",
      "server/persistence/artifact-store.js",
      "server/persistence/migrations.js",
+     "server/persistence/preconditions.js",
      "server/persistence/rebind.js",
      "server/providers/capabilities.js",
+     "server/providers/operator-exchange.js",
      "server/providers/registry.js",
      "server/security/posture.js",
      "server/security/redact.js",
@@ -135,26 +158,33 @@
      "tests/25-p2-canon.test.mjs",
      "tests/26-p2-variants.test.mjs",
      "tests/27-p2-decisions.test.mjs",
-     "tests/28-p2-package.test.mjs"
+     "tests/28-p2-package.test.mjs",
+     "tests/30-p3-registry.test.mjs",
+     "tests/31-p3-context.test.mjs",
+     "tests/32-p3-jobs.test.mjs",
+     "tests/33-p3-fallback.test.mjs",
+     "tests/34-p3-exchange.test.mjs",
+     "tests/35-p3-progress.test.mjs",
+     "tests/cdp.mjs"
     ]
    }
   },
   {
    "id": "BUILD",
    "status": "PASS",
-   "summary": "PASS: 109 fișiere JavaScript, JSON, lockfile, fonturi și fișiere runtime; WonderPages AI — claude-gpt.v04",
+   "summary": "PASS: 124 fișiere JavaScript, JSON, lockfile, fonturi și fișiere runtime; WonderPages AI — claude-gpt.v04",
    "log": "docs/enterprise/baseline/logs/2026-10-02-build.log"
   },
   {
    "id": "RS0_SUITE",
    "status": "PASS",
-   "summary": "151 trecute, 0 picate, 0 sărite; browser PDF: da",
+   "summary": "184 trecute, 0 picate, 0 sărite; browser PDF: da",
    "log": "docs/enterprise/baseline/logs/2026-10-02-rs0.log"
   },
   {
    "id": "PROTECT_IMPORT",
    "status": "PASS",
-   "summary": "7/7 teste",
+   "summary": "8/8 teste",
    "detail": [
     "export și import de proiect: conținutul rămâne, aprobările se refac (audit C1)",
     "P1-T01 API: importul cu structură invalidă este refuzat explicit, fără proiect parțial",
@@ -162,13 +192,14 @@
     "P2-T04 API: DW importat intră Pregătit cu aprobări goale; deciziile originale sunt doar evidență",
     "P2-T05 API: arhiva v1 originală rămâne importabilă (compatibilitate)",
     "C1: „code” mălițios dintr-un proiect importat este neutralizat",
-    "C1: „code” cu ../ nu scoate folderul din destinație"
+    "C1: „code” cu ../ nu scoate folderul din destinație",
+    "P3-T05 API: pachet text — ZIP complet; rezultat invalid respins; valid importat cu proveniență; refolosire și hash învechit refuzate"
    ]
   },
   {
    "id": "PROTECT_APPROVALS",
    "status": "PASS",
-   "summary": "19/19 teste",
+   "summary": "20/20 teste",
    "detail": [
     "poarta seriei: aprobarea pe elemente e obligatorie (audit H1)",
     "aprobarea se invalidează când elementul se schimbă",
@@ -186,6 +217,7 @@
     "P2-T04 API: export de colecție fără poartă refuzat cu motive; propunerea de canon cere decizie; propunere expirată refuzată",
     "P2-T04 API: DW importat intră Pregătit cu aprobări goale; deciziile originale sunt doar evidență",
     "P2-T05 API: migrarea DW — dry-run, rulare legată de plan, raport fără pierderi, nimic generat, aprobări pending",
+    "P3-T02 API: execuția reală persistă manifestul; provenance poartă modelul efectiv și contextul",
     "v19 1.8: continuitatea volumului 2 folosește registrul aprobat",
     "v03: nicio lipsă nu poate fi aprobată implicit",
     "v03: aprobare închisă cu conținut schimbat refuză livrarea"
@@ -220,10 +252,12 @@
   {
    "id": "PROTECT_LEARNING",
    "status": "PASS",
-   "summary": "5/5 teste",
+   "summary": "7/7 teste",
    "detail": [
     "agenți și lecții",
     "P2-T04 API: export de colecție fără poartă refuzat cu motive; propunerea de canon cere decizie; propunere expirată refuzată",
+    "P3-T02: lecția altui rol, altui proiect, inactivă sau injectată este exclusă cu motiv",
+    "P3-T02: manifestul reproduce exact promptul de sistem; selecția este deterministă",
     "v19 3.3: retrospectiva volumului propune lecții, aplicate doar cu acordul tău",
     "v19 2.5: buget săptămânal și estimarea colecției",
     "v19 3.6: setul de aur rulează etapele de text și se compară cu referința"
@@ -259,7 +293,7 @@
   {
    "id": "RS0_SUITE_POSTGRES",
    "status": "PASS",
-   "summary": "151 trecute, 0 picate, 0 sărite (STORAGE=postgres)",
+   "summary": "184 trecute, 0 picate, 0 sărite (STORAGE=postgres)",
    "log": "docs/enterprise/baseline/logs/2026-10-02-rs0-postgres.log"
   },
   {

@@ -133,7 +133,11 @@ export class PostgresStorage {
     if ((m = relDir.match(/^_commands\/([^/]+)$/))) return (await this.q('SELECT command_id FROM commands WHERE project_id = $1', [m[1]])).rows.map(r => ({ name: r.command_id + '.json', dir: false }));
     if ((m = relDir.match(/^projects\/([^/]+)\/jobs$/))) return (await this.q('SELECT job_key FROM jobs WHERE project_id = $1', [m[1]])).rows.map(r => ({ name: r.job_key + '.json', dir: false }));
     if (relDir === '_migrations') return (await this.q('SELECT id FROM migration_runs ORDER BY created_at')).rows.map(r => ({ name: r.id + '.json', dir: false }));
-    return this.files.list(relDir);
+    /* P3-T05: generic JSON documents (e.g. work packets) live in `documents`; files (images, uploads) stay on disk */
+    const prefix = relDir.replace(/\/+$/, '') + '/';
+    const docs = (await this.q("SELECT path FROM documents WHERE path LIKE $1 ESCAPE '\\'", [prefix.replace(/[\\%_]/g, m => '\\' + m) + '%'])).rows.map(r => r.path.slice(prefix.length)).filter(n => n && !n.includes('/')).map(name => ({ name, dir: false }));
+    const files = await this.files.list(relDir).catch(e => { if (docs.length) return []; throw e; });
+    const seen = new Set(files.map(f => f.name)); return [...files, ...docs.filter(d => !seen.has(d.name))];
   }
   async exists(rel) { return (await this.readJSON(rel, null)) !== null || this.files.exists(rel); }
   /* learning data: every review decision, comment and manual edit, queryable later */

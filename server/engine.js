@@ -175,7 +175,7 @@ export async function agentComplete(prompt, { agent = 'producator', task = '', j
   finally {
     end(ok);
     const u = info?.usage || {};
-    Ledger.record({ kind: 'text', pid, vol: meta.vol ?? null, stage: meta.stage || task || null, prompt: meta.prompt || null, agent, model: useModel, ok, ms: info?.ms ?? (Date.now() - t0), bytesIn: info?.bytesIn ?? Buffer.byteLength(prompt), bytesOut: info?.bytesOut ?? 0,
+    Ledger.record({ kind: 'text', pid, unit: FENCE.getStore()?.key || null, vol: meta.vol ?? null, stage: meta.stage || task || null, prompt: meta.prompt || null, agent, model: useModel, ok, ms: info?.ms ?? (Date.now() - t0), bytesIn: info?.bytesIn ?? Buffer.byteLength(prompt), bytesOut: info?.bytesOut ?? 0,
       inTok: u.input_tokens ?? null, outTok: u.output_tokens ?? null, cacheRead: u.cache_read_input_tokens ?? null, cacheWrite: u.cache_creation_input_tokens ?? null, schema: info?.schema ?? (schema || localSchema ? 'local' : null), system: info?.system || null, bp: meta.bp ?? null, charter: a?.charterVersion || null, context: ctxBuilt.manifest.manifestHash, modelSource: ctxBuilt.manifest.model.source });
   }
 }
@@ -241,7 +241,7 @@ async function callImage(E, args, label, budget = null) {
         await logE(E, `Canva a cerut o pauză; reiau imaginea la ${hhmm(until)}.`, 'warn');
       }
     }
-  } finally { end(ok); LIVE.delete(id); emitLive(); Ledger.record({ kind: 'image', pid: E.pid, vol: E.curStage?.vol ?? E.taskVol ?? null, stage: E.curStage?.base || E.curStage?.key || '_task', engine, ok, ms: Date.now() - t0, redraw: !!args.redraw || undefined, budget: budget.snapshot().used }); }
+  } finally { end(ok); LIVE.delete(id); emitLive(); Ledger.record({ kind: 'image', pid: E.pid, unit: FENCE.getStore()?.key || null, vol: E.curStage?.vol ?? E.taskVol ?? null, stage: E.curStage?.base || E.curStage?.key || '_task', engine, ok, ms: Date.now() - t0, redraw: !!args.redraw || undefined, budget: budget.snapshot().used }); }
 }
 function checkOut(out, spec, ctx, schema = null) {
   if (out == null || typeof out !== 'object' || Array.isArray(out)) return 'the reply must be a single JSON object';
@@ -334,7 +334,7 @@ async function unit(E, key, label, extra, work) {
   extra = { ...extra, task: E.task ? canonicalHash(E.task) : null };   // a correction is new work: never "reused" (see reuseIf below)
   const before = Object.fromEntries(Object.entries(E.art).map(([k, a]) => [k, a.version]));
   const inputsHash = unitInputsHash({ stage: { key, parent: parent?.key || null }, project: E.project, artifacts: E.art, blueprintVersion: E.bp.version, extra });
-  const lease = await jobs.acquire(E.pid, key, { inputsHash, label, owner: `${INSTANCE}:${E.runOwner || E.runId}`, kind: parent ? 'item' : 'stage', reuseIf: E.task ? () => false : prev => prev.result?.inputsExcl === unitInputsHash({ stage: { key, parent: parent?.key || null }, project: E.project, artifacts: Object.fromEntries(Object.entries(E.art).filter(([k]) => !(prev.result?.outputs || []).includes(k))), blueprintVersion: E.bp.version, extra }) });
+  const lease = await jobs.acquire(E.pid, key, { inputsHash, label, owner: `${INSTANCE}:${E.runOwner || E.runId}`, kind: parent ? 'item' : 'stage', meta: { run: E.project.run || 1, stage: parent?.key || key, parent: parent?.key || null }, reuseIf: E.task ? () => false : prev => prev.result?.inputsExcl === unitInputsHash({ stage: { key, parent: parent?.key || null }, project: E.project, artifacts: Object.fromEntries(Object.entries(E.art).filter(([k]) => !(prev.result?.outputs || []).includes(k))), blueprintVersion: E.bp.version, extra }) });
   if (lease.reused) return null;
   const lastAttempt = lease.job.attempts?.[lease.job.attempts.length - 1];
   const f = { pid: E.pid, key, token: lease.token, outputs: new Set(), resumeProviderJobId: lease.job.resolution?.action === 'retry' ? [...(lastAttempt?.external || [])].reverse().find(x => x.providerJobId)?.providerJobId || null : null }; (E.leases ||= new Map()).set(key, f);   // P3-T04: an accepted provider job is looked up, not regenerated
