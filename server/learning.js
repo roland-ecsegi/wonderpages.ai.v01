@@ -6,6 +6,7 @@
  *  4. exemple aprobate, regăsite prin similaritate (TF-IDF) pentru proiectele noi
  *  5. metrici de progres în timp
  */
+import { groupedCv, cohortKey, variantReport, lessonEffect } from './knowledge/effectiveness.js';
 import { bus, now, uid } from './repo.js';
 import * as Ledger from './ledger.js';
 
@@ -22,6 +23,7 @@ export async function initLearning(s, complete) {
   PROPOSALS = (await s.readJSON('proposals.json', [])) || [];
   LSET = (await s.readJSON('learning-settings.json', {})) || {};
   EXAMPLES = (await s.readJSON('examples.json', [])) || [];
+  COHORTS = (await s.readJSON('bandit-cohorts.json', {})) || {};
 }
 
 /* ---------------- 1. lessons ---------------- */
@@ -58,12 +60,10 @@ export function refreshEffects() {
   let changed = false;
   for (const l of LESSONS) {
     if (!l.code) continue;
-    const withL = q.filter(r => (r.lessons || []).includes(l.id) && r.criteria[l.code] != null);
-    const before = q.filter(r => r.t < (l.createdAt || 0) && (!l.age || r.age === l.age) && r.criteria[l.code] != null && !(r.lessons || []).includes(l.id));
-    if (withL.length < 3 || before.length < 3) continue;
-    const m = a => a.reduce((x, r) => x + Number(r.criteria[l.code]), 0) / a.length;
-    const eff = Math.round((m(withL) - m(before)) * 100) / 100; const review = withL.length >= 5 && eff <= 0 && l.status === 'active';
-    if (l.effect !== eff || !!l.needsReview !== review) { l.effect = eff; l.effectN = withL.length; l.needsReview = review && !l.keptAt; changed = true; }
+    const r = lessonEffect(l, q);   // P7-T03: matched on age, blueprint version and stage; harmful = negative effect on ≥ 5 uses
+    if (r.effect == null) { if (l.effectReport?.status !== r.status) { l.effectReport = r; changed = true; } continue; }
+    const eff = r.effect, review = l.status === 'active' && (r.status === 'harmful' || (r.withN >= 5 && eff <= 0));
+    if (l.effect !== eff || !!l.needsReview !== (review && !l.keptAt) || l.effectReport?.status !== r.status) { l.effect = eff; l.effectN = r.withN; l.effectReport = r; l.harmful = r.status === 'harmful'; l.needsReview = review && !l.keptAt; changed = true; }
   }
   if (changed) { save('lessons.json', LESSONS); bus.emit('change', { scope: 'learning' }); }
 }
@@ -146,13 +146,9 @@ export async function addSamples(samples) {
   const pos = DATA.filter(d => d.y === 1).length, neg = DATA.length - pos;
   if (DATA.length >= 10 && pos && neg) {
     const m = trainLR(DATA);
-    let correct = 0; const folds = 4;                                   // k-fold estimate of accuracy
-    for (let f = 0; f < folds; f++) {
-      const test = DATA.filter((_, i) => i % folds === f), tr = DATA.filter((_, i) => i % folds !== f);
-      if (!test.length || !tr.some(d => d.y) || !tr.some(d => !d.y)) { correct += test.length * 0.5; continue; }
-      const mf = trainLR(tr); correct += test.filter(d => (predictWith(mf, d.x) >= 0.5) === (d.y === 1)).length;
-    }
-    MODEL = { ...m, samples: DATA.length, positives: pos, accuracy: correct / DATA.length, trainedAt: now() };
+    /* P7-T03: grouped validation — every project stays in one fold (no same-case leakage); training accuracy is labelled as such */
+    const validation = groupedCv(DATA.map(d => ({ ...d, group: d.group || d.pid || 'legacy' })), { train: trainLR, predict: predictWith });
+    MODEL = { ...m, samples: DATA.length, positives: pos, accuracy: validation.groupedCvAccuracy, validation, trainedAt: now() };
   }
   await save('preference-model.json', { data: DATA, model: MODEL }); bus.emit('change', { scope: 'learning' });
 }
@@ -185,11 +181,30 @@ function settle(stageKey) {
   bus.emit('change', { scope: 'learning' });
   return BANDIT[DEC(stageKey)];
 }
-export async function rewardVariant(stageKey, variant, success) {
+/* P7-T03: rewards are also kept per cohort (blueprint/prompt version, model, age); with a cohort, a competition is decided
+   only on samples from that cohort, never on a mix (version confound) */
+let COHORTS = {};
+export async function loadCohorts() { COHORTS = (await storage.readJSON('bandit-cohorts.json', {})) || {}; }
+export async function rewardVariant(stageKey, variant, success, ctx = null) {
   if (!stageKey || !variant) return;
   const k = `${stageKey}:${variant}`; const s = BANDIT[k] = BANDIT[k] || { a: 1, b: 1 };
-  if (success) s.a++; else s.b++; settle(stageKey); await save('bandit.json', BANDIT);
+  if (success) s.a++; else s.b++;
+  if (ctx) { const ck = cohortKey(ctx), c = ((COHORTS[stageKey] ||= {})[ck] ||= {}), cs = c[variant] ||= { a: 1, b: 1 }; if (success) cs.a++; else cs.b++; settleCohort(stageKey, ck); await save('bandit-cohorts.json', COHORTS); }
+  else if (!COHORTS[stageKey]) settle(stageKey);
+  await save('bandit.json', BANDIT);
 }
+function settleCohort(stageKey, ck) {
+  const arms = Object.entries(COHORTS[stageKey]?.[ck] || {}).map(([v, x]) => ({ v, ...x })), d = BANDIT[DEC(stageKey)] || null, live = arms.filter(x => !(d?.retired || []).includes(x.v));
+  if (live.length < 2 || live.some(x => x.a + x.b - 2 < 10)) return null;
+  const N = 2000, wins = Object.fromEntries(live.map(x => [x.v, 0]));
+  for (let i = 0; i < N; i++) { let best = null, bv = -1; for (const x of live) { const r = beta(x.a, x.b); if (r > bv) { bv = r; best = x.v; } } wins[best]++; }
+  const top = live.map(x => ({ ...x, p: wins[x.v] / N, mean: x.a / (x.a + x.b) })).sort((a, b) => b.p - a.p);
+  if (top[0].p < 0.95 || top[0].mean - top[1].mean < 0.1) return null;
+  BANDIT[DEC(stageKey)] = { winner: top[0].v, retired: [...new Set([...(d?.retired || []), ...top.slice(1).map(x => x.v)])], p: Math.round(top[0].p * 100) / 100, cohort: ck, at: now() };
+  bus.emit('change', { scope: 'learning' }); return BANDIT[DEC(stageKey)];
+}
+export const variantReports = () => Object.keys(COHORTS).map(st => variantReport(st, COHORTS[st]));
+export const trainPreference = d => trainLR(d), predictPreference = (m, x) => predictWith(m, x);
 export async function resetCompetition(stageKey) { delete BANDIT[DEC(stageKey)]; await save('bandit.json', BANDIT); bus.emit('change', { scope: 'learning' }); return { ok: true }; }
 export const competitionDecisions = () => Object.entries(BANDIT).filter(([k]) => k.endsWith(':__decision')).map(([k, v]) => ({ stage: k.replace(/:__decision$/, ''), ...v }));
 
@@ -314,7 +329,7 @@ export function learningState(projects) {
   return {
     perProject, lessons: { total: LESSONS.length, active: LESSONS.filter(l => l.status === 'active').length, candidates: LESSONS.filter(l => l.candidate && l.status === 'active').length, project: LESSONS.filter(l => scopeOf(l) === 'project' && l.status === 'active').length },
     calibration: calibration(projects),
-    model: MODEL ? { samples: MODEL.samples, positives: MODEL.positives, accuracy: MODEL.accuracy, trainedAt: MODEL.trainedAt, weights: MODEL.w.map((w, i) => ({ name: FEATURE_NAMES[i], w })) } : { samples: DATA.length },
+    model: MODEL ? { samples: MODEL.samples, positives: MODEL.positives, accuracy: MODEL.accuracy, validation: MODEL.validation || null, trainedAt: MODEL.trainedAt, weights: MODEL.w.map((w, i) => ({ name: FEATURE_NAMES[i], w })) } : { samples: DATA.length },
     bandit, examples: EXAMPLES.length,
     review: LESSONS.filter(l => l.needsReview && l.status === 'active').map(l => ({ id: l.id, agent: l.agent, text: l.text, code: l.code, effect: l.effect, uses: l.uses || 0 })),
     measured: LESSONS.filter(l => l.effect != null).map(l => ({ id: l.id, agent: l.agent, text: l.text, code: l.code, effect: l.effect, n: l.effectN })).sort((a, b) => b.effect - a.effect).slice(0, 12),

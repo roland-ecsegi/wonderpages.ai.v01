@@ -30,6 +30,7 @@ export const FENCE = new AsyncLocalStorage();
 export let jobs = null;
 const noteExternal = info => { const f = FENCE.getStore(); return f ? jobs.markExternal(f.pid, f.key, f.token, info).catch(e => { if (e?.code === 'stale_lease') throw e; console.warn('[jobs external]', e?.message || e); }) : null; };
 import { lessonsFor, predictApproval, featuresOf, chooseVariant, findExamples, addSamples, rewardVariant, learnFromEvent, addExample } from './learning.js';
+import { outcomeOf } from './knowledge/effectiveness.js';
 import { recordCall, govConfig, beforeImage, canvaPaused, canvaCfg } from './governor.js';
 import { knownFailures, noteLessonUse, thresholdFor, noteVisualFailure, addProposals, listLessons, learningSettings } from './learning.js';
 const listLessonsForRetro = () => listLessons().filter(l => l.status === 'active').slice(-60).map(l => ({ id: l.id, agent: l.agent, code: l.code || undefined, text: l.text }));
@@ -907,12 +908,15 @@ async function learnFromDecision(pid, p, bp, entry, targets, touched = new Set()
   const target = bp.age_profiles?.[age]?.max_chars;
   const corrected = new Set([...(p.gate?.corrected || []), ...touched]);   // v19: pages you changed item by item count as a correction too
   const samples = [];
-  const reward = async (a, ok) => { await rewardVariant(a.meta?.variant_stage, a.meta?.variant, ok); await rewardVariant(a.meta?.model_stage, a.meta?.model_variant, ok); };
+  /* P7-T03: an artifact repaired at this gate (targeted repair, P5-T06) is not a success of its original output */
+  const repaired = new Set((p.repairs || []).filter(r => r.gate === gateInstance(p.gate || { key: entry.gate, vol: entry.vol })).flatMap(r => r.verify?.changed || []).map(u => String(u).split(/[#:]/)[0]));
+  const ctxOf = a => ({ bp: bp.version, model: a.meta?.model_variant || a.meta?.prov?.model || null, age });
+  const reward = async (a, ok) => { await rewardVariant(a.meta?.variant_stage, a.meta?.variant, ok, ctxOf(a)); await rewardVariant(a.meta?.model_stage, a.meta?.model_variant, ok, ctxOf(a)); };
   for (const k of keys) {
-    const a = art[k]; const x = featuresOf(a.content, a.meta, target);
-    if (entry.decision === 'needs_correction' && targets.includes(k)) { samples.push({ x, y: 0 }); await reward(a, false); }
-    else if (entry.decision === 'rejected') { samples.push({ x, y: 0 }); await reward(a, false); }
-    else if (['approved', 'approved_with_notes'].includes(entry.decision)) { samples.push({ x, y: corrected.has(k) ? 0 : 1 }); await reward(a, !corrected.has(k)); }
+    const a = art[k]; const x = featuresOf(a.content, a.meta, target), o = outcomeOf({ decision: entry.decision, targeted: targets.includes(k), repaired: repaired.has(k), corrected: corrected.has(k) });
+    if (o.reward == null) continue;
+    samples.push({ x, y: o.reward, pid, group: pid, k }); await reward(a, o.reward === 1);
+    Ledger.record({ kind: 'outcome', pid, vol: entry.vol ?? null, stage: a.meta?.variant_stage || null, unit: k, result: o.result, variant: a.meta?.variant || null, model: ctxOf(a).model, bp: bp.version, age, lessons: a.meta?.prov?.lessons || [] });
   }
   await addSamples(samples);
   if (entry.decision !== 'approved') {

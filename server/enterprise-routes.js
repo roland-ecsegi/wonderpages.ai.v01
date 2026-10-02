@@ -21,6 +21,9 @@ import { buildCandidate, verifyCandidate, transition, recordProof, exportRelease
 import { checkedPackage } from './package-check.js';
 import * as Knowledge from './knowledge/store.js';
 import { ingestLessonsRegistry } from './knowledge/ll.js';
+import * as LearningMod from './learning.js';
+import { baselineAfter, EFFECT_VERSION } from './knowledge/effectiveness.js';
+import { volumeMetrics } from './domain/story-contracts.js';
 import { applyCandidate, revokeDerived } from './training.js';
 import { projectRightsInventory, appRightsInventory, commercialReleaseCheck } from './domain/rights.js';
 import { unitHashes, verifyExecution, missingUnits } from './quality/repair.js';
@@ -38,7 +41,7 @@ import { pageVisual } from './quality/visual.js';
 import { collectionQA } from './quality/collection-qa.js';
 import { runEvaluation, calibrationStatus, compareReports } from './quality/evaluation.js';
 import { planLayout } from './domain/layout.js';
-import { pngSize } from './security/safe-zip.js';
+import { pngSize, readZip } from './security/safe-zip.js';
 import { reconcileReport, applyReconcile } from './migration/dw-reconcile.js';
 import { contractFromBlueprint, validateProjectInput, editionsFor } from './domain/product-contract.js';
 import * as Ledger from './ledger.js';
@@ -377,4 +380,13 @@ export function registerEnterpriseRoutes({ on, json, need, localOnly, repo, stor
   on('POST', '/api/knowledge/candidates/:id/reject', async ({ id }, req) => { localOnly(req); const b = await json(req).catch(() => ({})); return { candidate: await Knowledge.rejectCandidate(id, b.reason) }; });
   on('POST', '/api/knowledge/sources/:id/revoke', async ({ id }, req) => { localOnly(req); const b = await json(req).catch(() => ({})); return Knowledge.revokeSource(id, revokeDerived, b.reason || 'revocată de operator'); });
   on('POST', '/api/knowledge/ingest-lessons-registry', async (_, req) => { localOnly(req); const r = await ingestLessonsRegistry(await fs.promises.readFile(path.join(ROOT, 'docs', 'LESSONS-LEARNED.md'), 'utf8')); return { source: r.source, reused: r.reused, counts: Knowledge.counts(r.source.id), quarantined: r.candidates.filter(c => c.status === 'quarantined').map(c => ({ id: c.id, ref: c.ref, flags: c.flags })) }; });
+  /* P7-T03: closed-loop effectiveness — grouped validation, cohort-matched variants, matched lesson effects, outcomes */
+  on('GET', '/api/learning/effectiveness', async () => {
+    LearningMod.refreshEffects();
+    const model = (await storage.readJSON('preference-model.json', {}))?.model || null;
+    const outcomes = Ledger.rows(r => r.kind === 'outcome'), by = {}; for (const o of outcomes) by[o.result] = (by[o.result] || 0) + 1;
+    const lessons = LearningMod.listLessons().filter(l => l.effectReport).map(l => ({ id: l.id, agent: l.agent, text: l.text, code: l.code, scope: l.scope, ...l.effectReport, needsReview: !!l.needsReview }));
+    let dw = null; try { const doc = JSON.parse([...readZip(await fs.promises.readFile(path.join(ROOT, 'reference/dinosaur-world-v04/dinosaur-world-proiect.v04.zip')))].find(([k]) => k.endsWith('/project.json'))[1].toString()), pages = doc.artifacts?.script_0?.content?.pages || []; if (pages.length) dw = baselineAfter({ baseline: volumeMetrics(pages) }); } catch {}
+    return { version: EFFECT_VERSION, model: model ? { samples: model.samples, validation: model.validation || null } : null, variants: LearningMod.variantReports(), lessons, harmful: lessons.filter(l => l.status === 'harmful'), outcomes: { total: outcomes.length, byResult: by }, confidenceNote: 'Încrederea istorică a lecțiilor este un proxy de politică, nu o probabilitate validată.', dinosaurWorld: dw };
+  });
 }
