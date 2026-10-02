@@ -32,6 +32,7 @@ Linux (container cloud), Node v22.22.0, npm 10.9.4, PostgreSQL 16 (binare locale
 | DEV-001 | Fixture-urile de import din `tests/3-securitate.test.mjs` (C1) primesc o structură validă 6×2×12; aserțiunile de securitate rămân identice. | P1-T01 face importul `kids-sc` cu structură invalidă refuzat (AC-P1-T01). Fixture-ul vechi avea `books: []` / `volumes: 1`, irelevant pentru scopul testului. Un test nou acoperă refuzul. | Revert commit P1-T01. |
 | DEV-002 | Ghidul și auditul PDF nu sunt disponibile. | Doar referințele de pagină din arhitectură. | Constatările G/A se folosesc doar așa cum sunt citate în arhitectură. |
 | DEV-003 | LAN fără HTTPS devine `lan-restricted` implicit: dispozitivele din rețea urmăresc și comentează, nu aprobă. | OUTPUT-26 / AC-P1-T04 („HTTPS pentru aprobări pe LAN … ori LAN restricted”). | Operatorul poate reveni la v04 de pe laptop: `PUT /api/settings/lan-transport {acceptPlainLan:true}`. |
+| DEV-004 | Tipul de produs kids-sc v15 → v16 (biblii de volum obligatorii, element „Planul colecției” la poarta seriei). | P4-T02 cere exact 6 biblii și aprobarea planului înainte de bulk. | Proiectele existente își păstrează blueprint-ul fixat (inclusiv DW v15); rollback prin revert. |
 
 ## Starea taskurilor
 
@@ -55,8 +56,8 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | P3-T04 | DONE | f2dd02b | TEST-P3-T04 5/5; RS0 174/174 | Buget comun, 1 hop, lookup job acceptat, ownership; C11/C12 FIXED |
 | P3-T05 | DONE | 2a42777 | TEST-P3-T05 6/6; RS0 180/180 | Verificare la execuție, refs_unsupported, login revocat, pachete text/imagine cu aceleași validări |
 | P3-T06 | DONE | 6700b69 | TEST-P3-T06 4/4; RS0 184/184 local + 184/184 PG | Flux SSE cu cursor, progres din unități durabile, estimare doar măsurată, inspector; PHASE 3 închisă |
-| P4-T01 | DONE | (acest commit) | TEST-P4-T01 7/7; RS0 191/191 | Intake local idee/manuscris, rezumat contract legat de creare (stale_form), limite explicite, registru rute; D-ROUTE-PREVIEW FIXED |
-| P4-T02 | PENDING | | | |
+| P4-T01 | DONE | 3cd9cf2 | TEST-P4-T01 7/7; RS0 191/191 | Intake local idee/manuscris, rezumat contract legat de creare (stale_form), limite explicite, registru rute; D-ROUTE-PREVIEW FIXED |
+| P4-T02 | DONE | (acest commit) | TEST-P4-T02 7/7; RS0 198/198 | kids-sc v16: 6 biblii de volum, matrice colecție + cronologie, constatări explicate, plan aprobat înainte de bulk |
 | P4-T03 | PENDING | | | |
 | P4-T04 | PENDING | | | |
 | P4-T05 | PENDING | | | |
@@ -111,6 +112,7 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | 2026-10-02 | RS0 + TEST-P3-T06 (local și PostgreSQL) | 184/184 + 184/184 PASS | prima rulare: urma proiectului șters în fluxul de evenimente (RS0 ștergere) și listarea pachetelor pe PG — corectate în cod |
 | 2026-10-02 | Închidere P3: baseline-report --with-tests --with-pg | 15 PASS · 0 FAIL · 3 NOT_RUN | o cursă în testul SSE nou (PG) — aserțiune corectată |
 | 2026-10-02 | RS0 + TEST-P4-T01 | 191/191 PASS | prima rulare: limitele de cuvânt ASCII nu recunoșteau „română” — corectat (Unicode) |
+| 2026-10-02 | RS0 + TEST-P4-T02 | 198/198 PASS | prima rulare: 8 eșecuri — nume global duplicat în UI și hash de plan dependent de scenarii; corectate în cod; fixture P2-T04 actualizat la planul v16 |
 
 ## Probleme deschise
 
@@ -124,6 +126,6 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 
 ## Checkpoint
 
-- Ultimul task închis: P4-T01
-- Următorul task: **P4-T02**
+- Ultimul task închis: P4-T02
+- Următorul task: **P4-T03**
 - Cum se reia: `npm ci && npm run build && BROWSER_PATH=/opt/pw-browsers/chromium npm test`; citește tabelul de mai sus și `docs/enterprise/records/`.

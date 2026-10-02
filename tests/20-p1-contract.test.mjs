@@ -8,10 +8,11 @@ import { canonicalHash } from '../server/domain/canonical.js';
 
 const BP = JSON.parse(fs.readFileSync(new URL('../blueprints/kids-sc.json', import.meta.url)));
 const V14 = JSON.parse(fs.readFileSync(new URL('./mocks/legacy-blueprint-v14.json', import.meta.url)));
+const V15 = JSON.parse(fs.readFileSync(new URL('./mocks/legacy-blueprint-v15.json', import.meta.url)));   // snapshot before P4-T02 (v16)
 const variant = mutate => { const b = structuredClone(BP); mutate(b); return b; };
 const codes = bp => validateContract(contractFromBlueprint(bp)).errors.map(e => e.code);
 
-test('P1-T01: contractul curent kids-sc v15 este valid, cu hash stabil la ordinea cheilor', () => {
+test('P1-T01: contractul curent kids-sc (v16) este valid, cu hash stabil la ordinea cheilor', () => {
   const c = contractFromBlueprint(BP);
   assert.deepEqual(validateContract(c), { valid: true, errors: [] });
   assert.equal(c.structure.volumes, 6); assert.equal(c.structure.contentPagesPerBook, 12);
@@ -58,8 +59,9 @@ test('P1-T01/ADR04: strict12 nu primește KDP-ready; profilul KDP legacy are map
   for (const p of c.renderingProfiles) assert.equal(profileCompatibility(c, p.key).ready, false, 'niciun profil nu devine ready fără măsurători');
 });
 
-test('P1-T01: snapshoturile v14/v15 rămân identificabile și valide', () => {
-  const c14 = contractFromBlueprint(V14), c15 = contractFromBlueprint(BP);
+test('P1-T01: snapshoturile v14/v15/v16 rămân identificabile și valide', () => {
+  const c14 = contractFromBlueprint(V14), c15 = contractFromBlueprint(V15), c16 = contractFromBlueprint(BP);
+  assert.ok(validateContract(c15).valid && validateContract(c16).valid); assert.equal(c16.blueprintVersion, 16); assert.notEqual(c15.blueprintHash, c16.blueprintHash);
   assert.ok(validateContract(c14).valid);
   assert.equal(c14.blueprintVersion, 14); assert.equal(c15.blueprintVersion, 15);
   assert.notEqual(c14.blueprintHash, c15.blueprintHash);

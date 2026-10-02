@@ -13,6 +13,7 @@ import { ROOT } from './config.js';
 import { RUNNING, expandStages, prepareTextPacket, ingestTextPacket, prepareImagePacket, ingestImagePacket } from './engine.js';
 import { progressReport, inspectArtifact } from './observability/progress.js';
 import { inferFromText, contractPreview } from './domain/intake.js';
+import { matrixForArtifacts } from './domain/collection.js';
 import { contractFromBlueprint, validateProjectInput, editionsFor } from './domain/product-contract.js';
 import * as Ledger from './ledger.js';
 import { getCapabilities } from './providers/registry.js';
@@ -117,4 +118,7 @@ export function registerEnterpriseRoutes({ on, json, need, localOnly, repo, stor
   const typeOr400 = slug => { const t = repo.getType(String(slug || '')); if (!t) throw { status: 400, message: 'Tip de produs necunoscut.' }; return t; };
   on('POST', '/api/intake/infer', async (_, req) => { const b = await json(req); return inferFromText(typeOr400(b.typeSlug), b.text); });
   on('POST', '/api/intake/preview', async (_, req) => { const b = await json(req), t = typeOr400(b.typeSlug); return contractPreview(t, b.input && typeof b.input === 'object' ? b.input : {}, { contract: contractFromBlueprint(t), validate: validateProjectInput, editions: editionsFor, source: b.source === 'pack' ? 'pack' : null }); });
+
+  /* P4-T02: the collection matrix (read-only, any project — also migrated ones such as Dinosaur World) */
+  on('GET', '/api/projects/:pid/collection', async ({ pid }) => { need(pid); return matrixForArtifacts(await repo.getBlueprint(pid), await repo.artifacts(pid)); });
 }

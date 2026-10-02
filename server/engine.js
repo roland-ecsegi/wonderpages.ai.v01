@@ -15,6 +15,7 @@ import { ExecutionBudget } from './jobs/budget.js';
 import { sniffImage, pngSize } from './security/safe-zip.js';
 import { assertExecutable } from './providers/registry.js';
 import { canonicalHash } from './domain/canonical.js';
+import { matrixForArtifacts } from './domain/collection.js';
 /* P3-T03: the innermost durable unit (stage or item) of the current async flow: its lease fences every result write */
 export const FENCE = new AsyncLocalStorage();
 export let jobs = null;
@@ -1154,6 +1155,7 @@ export function gateItems(bp, art, project, gate) {
         out.push({ id: 'text:' + k + ':' + (i + 1), kind: 'text', key: k, v, p: i + 1, lang: s.lang || (s.source === 'tr' ? 'second' : 'first'), label: 'Pagina ' + (i + 1), bookTitle:i===0?c?.title:null,backBlurb:i===0?c?.back_cover_blurb:null, missing: !pg || Number(pg.n) !== i + 1 || (!String(pg.text || '').trim() && pg.page_type !== 'wordless'), hash: pg ? fingerprint([pg, original,...(i===0?[c.title,c.back_cover_blurb,c.collection_title]:[])]) : null });
       }
     }
+    if (s.kind === 'collection') { const m = matrixForArtifacts(bp, art); out.push({ id: 'collection', kind: 'collection', label: 'Planul colecției: bibliile volumelor și cronologia distribuției', missing: !art.series || !art.cast || !art.bible, blocked: !m.ready, hash: m.hash, matrix: m }); }   // P4-T02: plan approved before bulk; blockers cannot be approved
     if (s.kind === 'layout') for (let i=0;i<P;i++) {
       const k=s.source+'_'+v, pg=art[k]?.content?.pages?.[i], tr=art['tr_'+v]?.content?.pages?.[i];
       out.push({id:'layout:'+k+':'+(i+1),kind:'layout',key:k,v,p:i+1,label:'Macheta paginii '+(i+1),missing:!pg,hash:pg?fingerprint([pg.layout,pg.text,tr?.text,art['ill_'+v+'_'+(i+1)]?.content?.color, project.input.page_format]):null});

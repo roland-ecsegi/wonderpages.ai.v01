@@ -17,7 +17,9 @@ async function gateProject(pid) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'wp-dec-')); const s = new LocalStorage(dir); await s.init(); await applyMigrations(s); const repo = new Repo(s);
   await repo.createProject({ id: pid, title: 'D', status: 'awaiting_review', input: { second_language: 'Romanian', languages: ['English', 'Romanian'], language: 'English' }, options: { images: false }, approvals: {} }, BP);
   const engine = await import('../server/engine.js'); engine.initEngine(repo, {});
-  for (const k of ['brief', 'series', 'bible', 'cast']) await repo.writeArtifact(pid, k, { text: 'abcd', k });
+  /* v16 (P4-T02): the collection plan is an approval item, so the fixture carries a minimal valid plan */
+  const plan = { series: { through_line: 'Milo', volumes: Array.from({ length: 6 }, (_, i) => ({ number: i + 1, title: 'V' + (i + 1), ending_type: 'e' + i, story_bible: { premise: 'Milo ' + i, protagonist: 'milo', goal: 'g', obstacle: 'o', climax_choice: 'c', resolution: 'r' } })) }, cast: { main_character: 'milo', characters: [{ id: 'milo', role: 'main', volumes: Array.from({ length: 6 }, (_, i) => ({ volume: i + 1, presence: i ? 'appears' : 'introduced' })) }] }, bible: { characters: [{ id: 'milo', name: 'Milo', role: 'main' }], world_rules: { magic: 'none' } } };
+  for (const k of ['brief', 'series', 'bible', 'cast']) await repo.writeArtifact(pid, k, plan[k] ? { ...plan[k], text: 'abcd', k } : { text: 'abcd', k });
   await repo.patchProject(pid, { gate: { key: 'review_collection', vol: null, round: 1 } });
   return { s, repo, dir, engine };
 }
