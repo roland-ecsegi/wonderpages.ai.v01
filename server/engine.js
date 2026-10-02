@@ -17,6 +17,7 @@ import * as GPTImage from './codeximage.js';
 import path from 'node:path';
 import { analyzeLineart, judgeLineart, normalizeLineart } from './pngcheck.js';
 import { pinVersion } from './persistence/artifact-store.js';
+import { decisionRecord, itemSubject, policyHash } from './domain/decisions.js';
 import { fingerprint, pageSequence, sceneFingerprint, rubricEvaluation, visualVerdicts, exactCorrection, parseExactCorrection } from './contracts.js';
 import { EDITORIAL_POLICY, editorialFindings } from './editorial.js';
 
@@ -1026,7 +1027,7 @@ export function runTask(pid, task) {
 }
 
 /* review decisions (the 4 buttons) */
-export async function decide(pid, { decision, note = '', targets = [], restart = 'phase' }) {
+export async function decide(pid, { decision, note = '', targets = [], restart = 'phase' }, ctx = {}) {
   const p = repo.getProject(pid); const bp = await repo.getBlueprint(pid);
   if (!p?.gate) throw { code: 'bad_request', message: 'Proiectul nu așteaptă un review.' };
   if (RUNNING[pid]) throw { code: 'busy', message: 'Proiectul rulează deja.' };
@@ -1041,6 +1042,9 @@ export async function decide(pid, { decision, note = '', targets = [], restart =
   const entry = { gate: p.gate.key, vol: p.gate.vol ?? null, round: p.gate.round || 1, decision, note, at: now(), ...(approvedVersions ? { approvedVersions } : {}) };
   await repo.logEvent(pid, 'decision', { ...entry, targets, restart, typeSlug: p.typeSlug, variant: p.variantLabel });
   const decisions = [...(p.decisions || []), entry];
+  /* P2-T04: the gate decision is a durable record bound to the exact approved versions and policy */
+  const gateRec = decisionRecord({ kind: 'gate', actor: ctx.actor || 'operator', state: decision, note, scope: { gate: p.gate.key, vol: p.gate.vol ?? null, round: p.gate.round || 1 }, subject: { approvedVersions: approvedVersions || null, contentHash: approvedVersions ? fingerprint(gateItems(bp, art0, p, p.gate).map(i => [i.id, i.hash])) : null, targets }, policy: policyHash(bp, p.gate.key) });
+  const commitGate = patch => repo.commitProjectDecision(pid, patch, [gateRec], { actor: ctx.actor || 'operator', expectedRevision: ctx.expectedRevision, commandId: ctx.commandId, kind: 'gate.decide' });
   const stages = expandStages(bp);
   const gIdx = stages.findIndex(s => s.handler === 'review_gate' && s.gate === p.gate.key && (s.vol ?? null) === (p.gate.vol ?? null));
   const gStage = stages[gIdx];
@@ -1052,19 +1056,19 @@ export async function decide(pid, { decision, note = '', targets = [], restart =
   if (entry.gate === 'review_2' && ['approved', 'approved_with_notes'].includes(decision) && !p.options?.golden) scheduleRetro(pid, entry.vol);
   if (decision === 'approved' || decision === 'approved_with_notes') {
     const gateKey = p.gate.key;
-    await repo.patchProject(pid, { decisions, log, notes: decision === 'approved_with_notes' ? [...(p.notes || []), note] : (p.notes || []), gate: null, stageIndex: gIdx + 1, status: 'paused', pausing: false, stages: { [gStage.key]: { status: 'done', finishedAt: now(), imported: false, approvedAt: now() } } });
+    await commitGate({ decisions, log, notes: decision === 'approved_with_notes' ? [...(p.notes || []), note] : (p.notes || []), gate: null, stageIndex: gIdx + 1, status: 'paused', pausing: false, stages: { [gStage.key]: { status: 'done', finishedAt: now(), imported: false, approvedAt: now() } } });
     for (const c of (await repo.listComments(pid)).filter(c => c.status === 'open' && c.gateKey === gateKey)) await repo.patchComment(pid, c.id, { status: 'resolved' });
     schedule(pid);
   } else if (decision === 'needs_correction') {
     if (!targets.length) throw { code: 'bad_request', message: 'Alege cel puțin un document de corectat.' };
-    await repo.patchProject(pid, { decisions, log, gate: { ...p.gate, corrected: [...new Set([...(p.gate.corrected || []), ...targets])] } });
+    await commitGate({ decisions, log, gate: { ...p.gate, corrected: [...new Set([...(p.gate.corrected || []), ...targets])] } });
     runTask(pid, { gateKey: p.gate.key, feedback: note, targets, label: 'Corecții din review', returnStatus: 'awaiting_review' });
   } else if (decision === 'rejected') {
-    if (restart === 'archive') { await repo.patchProject(pid, { decisions, log, gate: null, status: 'archived' }); return; }
+    if (restart === 'archive') { await commitGate({ decisions, log, gate: null, status: 'archived' }); return; }
     let start = 0;
     if (restart === 'phase') for (let i = gIdx - 1; i >= 0; i--) if (stages[i].handler === 'review_gate') { start = i + 1; break; }
     const reset = {}; stages.forEach((s, i) => { if (i >= start) reset[s.key] = { status: 'pending', items: [], done: 0, total: 0, error: null, warn: null, startedAt: null, finishedAt: null, imported: false, prefetched: null }; });
-    await repo.patchProject(pid, { decisions, log, rejections: [...(p.rejections || []), note], gate: null, stageIndex: start, status: 'paused', run: (p.run || 1) + 1, stages: reset });
+    await commitGate({ decisions, log, rejections: [...(p.rejections || []), note], gate: null, stageIndex: start, status: 'paused', run: (p.run || 1) + 1, stages: reset });
     schedule(pid);
   }
 }
@@ -1120,21 +1124,26 @@ export function gateItems(bp, art, project, gate) {
   return out;
 }
 export function gateSummary(items) { const c = { total: items.length, approved: 0, pending: 0, changes: 0, rejected: 0, approved_note: 0 }; items.forEach(i => { c[i.state] = (c[i.state] || 0) + 1; }); c.done = c.approved === c.total && c.total > 0; return c; }
-export async function setItemDecisions(pid, decisions) {
+export async function setItemDecisions(pid, decisions, ctx = {}) {
   const p = repo.getProject(pid); if (!p?.gate) throw { status: 400, message: 'Nu există o aprobare deschisă.' };
   if (RUNNING[pid]) throw { status: 409, message: 'Se aplică modificări; așteaptă să termine.' };
   const bp = await repo.getBlueprint(pid); const art = await repo.artifacts(pid); const items = gateItems(bp, art, p, p.gate);
   const inst = gateInstance(p.gate); const cur = { ...(p.approvals?.[inst] || {}) };
+  /* P2-T04: every item id must belong to the open gate (resource scope); unknown ids are refused, not skipped */
+  const unknown = decisions.map(d => d?.id).filter(id => !items.some(i => i.id === id));
+  if (unknown.length) throw { status: 400, code: 'resource_scope', message: `Elemente care nu aparțin aprobării deschise: ${unknown.slice(0, 5).join(', ')}. Reîncarcă pagina.` };
+  const records = [], pol = policyHash(bp, p.gate.key);
   for (const d of decisions) {
     const it = items.find(i => i.id === d.id); if (!it) continue;
     if (!['approved', 'approved_note', 'changes', 'rejected', 'pending'].includes(d.state)) continue;
     if (['approved', 'approved_note'].includes(d.state) && (it.missing || it.blocked)) throw { status: 409, message: 'Elementul lipsește sau nu a trecut verificarea: ' + it.label };
     if (['approved_note', 'changes', 'rejected'].includes(d.state) && !String(d.note || '').trim() && d.state !== 'rejected') throw { status: 400, message: `Scrie ce trebuie schimbat la „${it.label}”.` };
     const code = (bp.reason_codes || []).some(r => r.code === d.code) ? d.code : null;   // v19 (plan 2.2): optional reason from the rubric
+    if (d.state !== 'pending') records.push(decisionRecord({ kind: 'item', actor: ctx.actor || 'operator', state: d.state, note: d.note, scope: { gate: p.gate.key, vol: p.gate.vol ?? null, round: p.gate.round || 1, item: it.id }, subject: itemSubject(art, it), policy: pol, evidence: d.correction ? { correction: d.correction } : null }));
     if (d.state === 'pending') cur[it.id] = null; else cur[it.id] = { state: d.state, note: String(d.note || '').slice(0, 800), hash: it.hash, at: now(), ...(d.correction ? { correction: d.correction } : {}), ...(d.mode === 'adjust' || d.mode === 'rewrite' ? { mode: d.mode } : {}), ...(code ? { code } : {}), ...(['canva', 'chatgpt'].includes(d.engine) ? { engine: d.engine } : {}) };
     if (d.state !== 'approved' && d.state !== 'pending') { await repo.logEvent(pid, 'item_' + d.state, { gate: inst, item: it.id, note: d.note, code }); Ledger.record({ kind: 'item', pid, gate: p.gate.key, vol: p.gate.vol ?? null, item: it.id, itemKind: it.kind, decision: d.state, code, age: p.input?.[bp.variant_key] }); }
   }
-  await repo.patchProject(pid, { approvals: { [inst]: cur } });
+  await repo.commitProjectDecision(pid, { approvals: { [inst]: cur } }, records, { actor: ctx.actor || 'operator', expectedRevision: ctx.expectedRevision, commandId: ctx.commandId, kind: 'item.decide' });
   /* P2-T03: the exact version the operator approved is pinned (never evicted by retention) */
   for (const d of decisions) { const it = items.find(i => i.id === d.id); if (it?.key && art[it.key] && ['approved', 'approved_note'].includes(d.state)) await pinVersion(repo.s, pid, it.key, art[it.key].version, { reason: 'approved', ref: { gate: inst, item: it.id, hash: it.hash }, actor: 'operator' }).catch(e => console.warn('[pin]', e?.message || e)); }
   const derive = decisions.map(d => items.find(i => i.id === d.id && d.state === 'approved' && i.kind === 'image' && i.mode === 'color')).filter(i => i && art[i.key]?.content?.linePending && items.some(line => line.id === i.id.replace(':color', ':line')));
@@ -1211,9 +1220,9 @@ export function applyItemChanges(pid) {
   }, { label: 'Modificări pe elemente' });
 }
 /* everything approved: the gate closes and production continues */
-export async function completeGate(pid) {
+export async function completeGate(pid, ctx = {}) {
   const p = repo.getProject(pid); if (!p?.gate) throw { status: 400, message: 'Nu există o aprobare deschisă.' };
   const bp = await repo.getBlueprint(pid); const items = gateItems(bp, await repo.artifacts(pid), p, p.gate); const c = gateSummary(items);
   if (!c.done) throw { status: 400, message: `Mai sunt ${c.total - c.approved} elemente neaprobate sau cu modificări neaplicate.` };
-  return decide(pid, { decision: 'approved', note: '' });
+  return decide(pid, { decision: 'approved', note: '' }, ctx);
 }

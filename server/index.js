@@ -51,6 +51,7 @@ import * as Capabilities from './providers/registry.js';
 import { schemaStatus } from './persistence/migrations.js';
 import { getVersion, listVersions, variantSet, pinVersion, backfillVersions, retentionPlan, applyRetention } from './persistence/artifact-store.js';
 import { canonicalHash } from './domain/canonical.js';
+import { releaseCheck, expectedInventory, decisionStatus } from './domain/decisions.js';
 import { rebindDependents } from './persistence/rebind.js';
 import { registerEnterpriseRoutes, impactForWrite } from './enterprise-routes.js';
 import { toolSchemaHash, hostConfig } from './providers/capabilities.js';
@@ -246,10 +247,10 @@ on('POST', '/api/projects/:pid/deliver', async ({ pid }, _, url) => {
 });
 on('POST', '/api/render/:job/progress', async ({ job }, req) => { if (!LAN.isLocal(req)) throw { status: 403, message: 'Doar pe laptop.' }; return { ok: Render.progress(job, await json(req)) }; });
 on('POST', '/api/render/:job/done', async ({ job }, req) => { if (!LAN.isLocal(req)) throw { status: 403, message: 'Doar pe laptop.' }; const b = await json(req); return { ok: Render.finish(job, b.ok, b.message, b.result) }; });
-on('POST', '/api/projects/:pid/items', async ({ pid }, req) => { need(pid); const b = await json(req); return setItemDecisions(pid, b.decisions || []); });
+on('POST', '/api/projects/:pid/items', async ({ pid }, req) => { need(pid); const b = await json(req); return setItemDecisions(pid, b.decisions || [], commandCtx(req, b)); });
 on('POST', '/api/projects/:pid/items/apply', async ({ pid }) => { need(pid); if (RUNNING[pid]) throw { status: 409, message: 'Se lucrează deja la proiect.' }; assertCanWork(pid); applyItemChanges(pid); return { ok: true }; });
-on('POST', '/api/projects/:pid/gate/complete', async ({ pid }) => { need(pid); await completeGate(pid); return { ok: true }; });
-on('POST', '/api/projects/:pid/decide', async ({ pid }, req) => { need(pid); const b = await json(req); if (b.decision === 'needs_correction') assertCanWork(pid); await decide(pid, b); return { ok: true }; });
+on('POST', '/api/projects/:pid/gate/complete', async ({ pid }, req) => { need(pid); const b = await json(req).catch(() => ({})); await completeGate(pid, commandCtx(req, b)); return { ok: true }; });
+on('POST', '/api/projects/:pid/decide', async ({ pid }, req) => { need(pid); const b = await json(req); if (b.decision === 'needs_correction') assertCanWork(pid); await decide(pid, b, commandCtx(req, b)); return { ok: true }; });
 on('POST', '/api/projects/:pid/task', async ({ pid }, req) => {
   need(pid); if (RUNNING[pid]) throw { status: 409, message: 'Proiectul rulează deja.' }; assertCanWork(pid);
   const b = await json(req); if (!Array.isArray(b.targets) || !b.targets.length) throw { status: 400, message: 'Lipsesc țintele.' };
@@ -336,7 +337,8 @@ on('POST', '/api/projects/:pid/exports', async ({ pid }, req, url) => {
 on('POST', '/api/projects/:pid/package', async ({ pid }, _, url) => { const vol = url.searchParams.has('volume') ? Number(url.searchParams.get('volume')) : null; const p0 = need(pid); const bp0 = await repo.getBlueprint(pid);
   if (vol != null && !(Number.isInteger(vol) && vol >= 0 && vol < 60)) throw { status: 400, message: 'Volum invalid.' };
   const art0 = await repo.artifacts(pid);
-  if (!volumeApproved(p0, bp0, vol, art0)) throw { status: 409, message: `Volumul ${vol + 1} nu are încă aprobarea finală dată de tine; pachetul nu se face.` };
+  if (!volumeApproved(p0, bp0, vol, art0)) throw { status: 409, code: 'release_blocked', errors: releaseCheck(p0, bp0, art0, vol, { approved: false }).blockers, message: vol == null ? 'Colecția nu are toate porțile aprobate de tine; pachetul colecției nu se face.' : `Volumul ${vol + 1} nu are încă aprobarea finală dată de tine; pachetul nu se face.` };
+  { const rc = releaseCheck(p0, bp0, art0, vol, { approved: true }); if (!rc.eligible) throw { status: 409, code: 'release_blocked', errors: rc.blockers, message: 'Inventarul livrării este incomplet: ' + rc.blockers.slice(0, 3).map(b => b.message).join(' ') }; }   // P2-T04
   const r = await buildPackage(repo, p0, { vol, approved: v => volumeApproved(p0, bp0, v, art0) });
   r.commercialRights = (await projectRights(pid)).commercial;   // P1-T05: the package is internal delivery; commercial eligibility is reported, not implied
   try { r.mirror = await mirrorDelivery([r.folder, r.zip]); } catch (e) { r.mirrorError = 'Copia în al doilea folder nu a reușit: ' + e.message; } if (r.final) await repo.patchProject(pid, vol == null ? { packagedAt: now(), packagePath: r.folder } : { delivered: { [vol]: { at: now(), zip: r.zip } } }); return r; });
@@ -388,6 +390,8 @@ on('GET', '/api/agents', async () => ({ agents: listAgents(), lessons: listLesso
 on('PUT', '/api/agents/:id', async ({ id }, req) => { localOnly(req); return updateAgent(id, await json(req)); });
 /* network access: configured only from the laptop itself */
 /* P2-T01: an operator command may carry an idempotency key; a repeated key returns the first result */
+/* P2-T04: who decided (laptop operator or an authenticated LAN device), on which revision, with which idempotency key */
+const commandCtx = (req, b = {}) => ({ actor: LAN.isLocal(req) ? 'operator@laptop' : 'operator@lan', expectedRevision: Number.isInteger(b.expectedRevision) ? b.expectedRevision : undefined, commandId: commandIdOf(req) });
 const commandIdOf = req => { const c = String(req.headers['x-wp-command'] || ''); if (!c) return undefined; if (!/^[A-Za-z0-9_.-]{8,120}$/.test(c)) throw { status: 400, message: 'Identificator de comandă invalid.' }; return c; };
 on('GET', '/api/schema', async () => schemaStatus(storage));
 registerEnterpriseRoutes({ on, json, need, localOnly, repo, storage, commandIdOf });
@@ -554,7 +558,7 @@ on('PUT', '/api/thresholds', async (_, req) => { localOnly(req); const b = await
 on('GET', '/api/gdrive/login', async (_, req, ___, res) => {
   if (!LAN.isLocal(req)) { res.writeHead(302, { location: '/#/settings?gdrive=' + encodeURIComponent('conectarea Google Drive se face de pe laptop') }); res.end(); return null; } if (!gdrive.status().configured) { res.writeHead(302, { location: '/#/settings?gdrive=' + encodeURIComponent('lipsesc GOOGLE_CLIENT_ID și GOOGLE_CLIENT_SECRET în .env') }); res.end(); return null; } res.writeHead(302, { location: gdrive.loginUrl() }); res.end(); return null; });
 on('GET', '/oauth/google', async (_, __, url, res) => { let msg = 'ok'; try { await gdrive.finish(url.searchParams.get('code'), url.searchParams.get('state')); } catch (e) { msg = e.message; } bus.emit('change', { scope: 'projects' }); res.writeHead(302, { location: '/#/settings?gdrive=' + encodeURIComponent(msg) }); res.end(); return null; });
-on('POST', '/api/projects/:pid/gdrive', async ({ pid }, _, url) => { const p=need(pid),bp=await repo.getBlueprint(pid),vq=url.searchParams.get('volume'),v=vq==null?null:Number(vq);if(v!=null&&(!Number.isInteger(v)||v<0||v>=bp.structure.volumes))throw {status:400,message:'Volum invalid.'};if(!volumeApproved(p,bp,v,await repo.artifacts(pid)))throw {status:409,message:'Doar conținutul aprobat se poate trimite.'};const zip=await checkedPackage(repo,p,v,{final:true});const r=await gdrive.upload(zip,v!=null?path.basename(projectFolder(p))+'-'+path.basename(zip):path.basename(zip));await repo.patchProject(pid,{...(v!=null?{driveLinks:{[v]:r.link}}:{driveLink:r.link,driveAt:now()}),driveFiles:[...(p.driveFiles||[]),{id:r.id,at:now()}]});return r; });
+on('POST', '/api/projects/:pid/gdrive', async ({ pid }, _, url) => { const p=need(pid),bp=await repo.getBlueprint(pid),vq=url.searchParams.get('volume'),v=vq==null?null:Number(vq);if(v!=null&&(!Number.isInteger(v)||v<0||v>=bp.structure.volumes))throw {status:400,message:'Volum invalid.'};if(!volumeApproved(p,bp,v,await repo.artifacts(pid)))throw {status:409,message:'Doar conținutul aprobat se poate trimite.'};{const rc=releaseCheck(p,bp,await repo.artifacts(pid),v,{approved:true});if(!rc.eligible)throw {status:409,code:'release_blocked',errors:rc.blockers,message:'Inventarul livrării este incomplet.'};}const zip=await checkedPackage(repo,p,v,{final:true});const r=await gdrive.upload(zip,v!=null?path.basename(projectFolder(p))+'-'+path.basename(zip):path.basename(zip));await repo.patchProject(pid,{...(v!=null?{driveLinks:{[v]:r.link}}:{driveLink:r.link,driveAt:now()}),driveFiles:[...(p.driveFiles||[]),{id:r.id,at:now()}]});return r; });
 on('PUT', '/api/types/:slug', async ({ slug }, req) => {
   localOnly(req); const bp = await json(req);
   if (!bp?.slug || !/^[a-z0-9-]{2,40}$/.test(bp.slug)) throw { status: 400, message: 'Slug invalid.' };

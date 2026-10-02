@@ -83,6 +83,7 @@ export async function importProject(repo, storage, buf) {
     gate: null, decisions: [], approvals: {}, notes: (Array.isArray(src.notes) ? src.notes : []).filter(x => typeof x === 'string').slice(0, 50).map(x => x.slice(0, 2000)),
     rejections: [], refs, error: null, resumeAt: null, pausing: false, rendering: null, delivered: {},
     importedAt: now(), createdAt: now(), updatedAt: now(),
+    importedEvidence: { decisions: (Array.isArray(src.decisions) ? src.decisions : []).slice(-200).map(d => ({ gate: str(d?.gate, 60), vol: Number.isInteger(d?.vol) ? d.vol : null, decision: str(d?.decision, 40), at: Number(d?.at) || null })), approvals: Object.keys(src.approvals || {}).length, authority: 'none', note: 'Evidență istorică din arhivă; aprobările locale se refac.' },   // P2-T04
     log: [{ t: now(), text: `Proiect importat${Object.keys(stages).length ? ` cu ${Object.keys(stages).length} etape deja lucrate` : ''}. Toate aprobările se refac de către tine: fiecare poartă se redeschide când ajunge lucrul la ea.`, kind: 'info' }]
   };
   await repo.createProject(p, bp);

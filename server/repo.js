@@ -68,6 +68,22 @@ export class Repo {
     changed('projects'); changed('project', pid);
     return p;
   }
+  /** P2-T04: project state change + append-only decision records in ONE durable commit (revision CAS, dedupe). */
+  async commitProjectDecision(pid, patch, records = [], o = {}) {
+    const p = this.projects.get(pid); if (!p) throw new Error('Proiect inexistent: ' + pid);
+    let dedup = false;
+    await queued('p/' + pid, async () => {
+      if (o.commandId && await this.s.readJSON?.(`_commands/${pid}/${o.commandId}.json`, null)) { dedup = true; return; }
+      const next = deepMerge(clone(p), { ...patch, updatedAt: now() });
+      const ops = [{ rel: `projects/${pid}/project.json`, obj: next }, ...records.map(r => ({ rel: `projects/${pid}/decisions/${r.id}.json`, obj: r }))];
+      const r = await this.commit({ projectId: pid, commandId: o.commandId, actor: o.actor, kind: o.kind || 'decision', expectedRevision: o.expectedRevision, bumpRevision: true, ops, result: { decisions: records.map(x => x.id) }, events: records.map(x => ({ kind: 'decision', id: x.id, decisionKind: x.kind, state: x.state, actor: x.actor })) });
+      if (r.deduplicated) { dedup = true; return; }
+      next.revision = r.revision ?? next.revision; deepMerge(p, next);
+    });
+    if (!dedup) { changed('projects'); changed('project', pid); }
+    return { deduplicated: dedup, revision: p.revision };
+  }
+  async listDecisions(pid) { const files = (await this.s.list(`projects/${pid}/decisions`)).filter(f => f.name.endsWith('.json')); const docs = await Promise.all(files.map(f => this.s.readJSON(`projects/${pid}/decisions/${f.name}`, null))); return docs.filter(Boolean).sort((a, b) => a.at - b.at); }
   async getBlueprint(pid) {
     if (!this.bps.has(pid)) this.bps.set(pid, await this.s.readJSON(`projects/${pid}/blueprint.json`));
     return this.bps.get(pid);

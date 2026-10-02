@@ -46,8 +46,8 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | P1-T05 | DONE | (acest commit) | TEST-P1-T05 5/5; RS0 117/117; baseline 14/0/3 | RightsRecord; Andika OFL lipsă; LL-013 conflict |
 | P2-T01 | DONE | cc43b2d | TEST-P2-T01 7/7; RS0 124/124 local + 124/124 PostgreSQL | commitBatch atomic, CAS, dedupe, jurnal redo, migrări 1–8 |
 | P2-T02 | DONE | d6b6200 | TEST-P2-T02 8/8; RS0 132/132 | Canon SSOT, graf tipizat, impact fără regenerare; DW01/DW02 |
-| P2-T03 | DONE | (acest commit) | TEST-P2-T03 6/6; RS0 138/138 | Versiuni imuabile, pin aprobat/lansat, restaurare cu lineage, retenție dry-run |
-| P2-T04 | PENDING | | | |
+| P2-T03 | DONE | 8b0fdd4 | TEST-P2-T03 6/6; RS0 138/138 | Versiuni imuabile, pin aprobat/lansat, restaurare cu lineage, retenție dry-run |
+| P2-T04 | DONE | (acest commit) | TEST-P2-T04 7/7; RS0 145/145 | DecisionRecord atomic, scop, CAS, inventar așteptat, decizie de canon |
 | P2-T05 | PENDING | | | |
 | P3-T01 | PENDING | | | |
 | P3-T02 | PENDING | | | |
@@ -101,6 +101,7 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | 2026-10-02 | RS0 complet pe PostgreSQL 16 efemer (WP_TEST_DATABASE_URL) | 124/124 PASS | server verificat pe /api/schema (applied_at din PG) |
 | 2026-10-02 | RS0 + TEST-P2-T02 | 132/132 PASS | — |
 | 2026-10-02 | RS0 + TEST-P2-T03 | 138/138 PASS | — |
+| 2026-10-02 | RS0 + TEST-P2-T04 | 145/145 PASS | — |
 
 ## Probleme deschise
 
@@ -114,6 +115,6 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 
 ## Checkpoint
 
-- Ultimul task închis: P2-T03
-- Următorul task: **P2-T04**
+- Ultimul task închis: P2-T04
+- Următorul task: **P2-T05**
 - Cum se reia: `npm ci && npm run build && BROWSER_PATH=/opt/pw-browsers/chromium npm test`; citește tabelul de mai sus și `docs/enterprise/records/`.

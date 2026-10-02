@@ -5,6 +5,7 @@
 import { buildGraph, impactOf, textArtifactChanges, canonChanges } from './domain/dependencies.js';
 import { canonRevision, canonConflicts, projections, proposeCanonChange, AUTHORITY } from './domain/canon.js';
 import { uid, now } from './repo.js';
+import { decisionRecord, policyHash } from './domain/decisions.js';
 
 export function impactForWrite(bp, art, key, nextContent) {
   const prev = art[key]?.content;
@@ -27,6 +28,21 @@ export function registerEnterpriseRoutes({ on, json, need, localOnly, repo }) {
     need(pid); const b = await json(req); if (!/^[a-z0-9_]{1,40}$/i.test(String(b.key || ''))) throw { status: 400, message: 'Document invalid.' };
     const bp = await repo.getBlueprint(pid), art = await repo.artifacts(pid);
     return { key: b.key, ...impactForWrite(bp, art, b.key, b.content) };
+  });
+  /* P2-T04: decisions history (append-only), newest last */
+  on('GET', '/api/projects/:pid/decisions', async ({ pid }) => { need(pid); return { decisions: await repo.listDecisions(pid) }; });
+  /* P2-T04: applying a canon proposal is an explicit operator decision bound to the canon hash it was based on */
+  on('POST', '/api/projects/:pid/canon/proposals/:id/decide', async ({ pid, id }, req) => {
+    localOnly(req); const p = need(pid), b = await json(req), prop = (p.canonProposals || []).find(x => x.id === id);
+    if (!prop || prop.status !== 'pending') throw { status: 404, message: 'Propunere inexistentă sau deja decisă.' };
+    if (!['approved', 'rejected'].includes(b.state)) throw { status: 400, message: 'Decizie necunoscută.' };
+    if (b.state === 'rejected' && !String(b.reason || '').trim()) throw { status: 400, message: 'Motivul respingerii este obligatoriu.' };
+    const bp = await repo.getBlueprint(pid), art = await repo.artifacts(pid);
+    if (b.state === 'approved' && canonRevision(art).hash !== prop.baseCanonHash) throw { status: 409, code: 'stale_proposal', message: 'Canonul s-a schimbat după propunere; recalculează impactul înainte de aprobare.' };
+    if (b.state === 'approved') await repo.writeArtifact(pid, 'bible', prop.bible, { by: 'user', note: 'Schimbare de canon aprobată' + (b.reason ? ': ' + String(b.reason).slice(0, 120) : ''), meta: art.bible?.meta || {} });
+    const rec = decisionRecord({ kind: 'canon_change', actor: 'operator@laptop', state: b.state, note: b.reason, scope: { proposal: id }, subject: { baseCanonHash: prop.baseCanonHash, proposedHash: prop.proposedHash, bibleVersion: b.state === 'approved' ? (await repo.artifacts(pid)).bible.version : null, impact: { stale: prop.impact.stale.length, revalidate: prop.impact.revalidate.length } }, policy: policyHash(bp, null) });
+    await repo.commitProjectDecision(pid, { canonProposals: (p.canonProposals || []).map(x => (x.id === id ? { ...x, status: b.state, decidedAt: now(), decision: rec.id } : x)) }, [rec], { actor: 'operator@laptop', kind: 'canon.decide' });
+    return { ok: true, decision: rec };
   });
   /* P2-T02: a canon change is a proposal bound to the current canon hash; applying it is a decision (P2-T04) */
   on('POST', '/api/projects/:pid/canon/proposals', async ({ pid }, req) => {
