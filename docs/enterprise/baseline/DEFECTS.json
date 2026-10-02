@@ -1,6 +1,6 @@
 {
  "kind": "wonderpages.defect-reproduction/1",
- "generatedAt": "2026-10-02T15:24:37.869Z",
+ "generatedAt": "2026-10-02T16:52:25.187Z",
  "defects": [
   {
    "id": "D-C16",
@@ -53,8 +53,8 @@
    "status": "FIXED",
    "method": "static",
    "evidence": [
-    "public/app/ui.js:331",
-    "public/app/core.js:188"
+    "link absent",
+    "public/app/core.js:194"
    ]
   },
   {

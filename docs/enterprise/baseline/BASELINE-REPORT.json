@@ -1,31 +1,31 @@
 {
  "kind": "wonderpages.baseline-report/1",
- "generatedAt": "2026-10-02T15:03:47.028Z",
- "codeRevision": "3ee1f6e",
+ "generatedAt": "2026-10-02T16:51:55.717Z",
+ "codeRevision": "b5b4492",
  "checks": [
   {
    "id": "INVENTORY",
    "status": "PASS",
-   "summary": "255 fișiere (fără node_modules/.git/data), 6 ascunse",
+   "summary": "278 fișiere (fără node_modules/.git/data), 6 ascunse",
    "detail": {
-    "total": 255,
+    "total": 278,
     "byExt": {
-     ".md": 61,
+     ".md": 67,
      ".example": 1,
      "(none)": 3,
-     ".json": 16,
+     ".json": 17,
      ".bat": 4,
      ".vbs": 1,
      ".yml": 1,
      ".log": 4,
-     ".js": 91,
+     ".js": 100,
      ".ttf": 4,
      ".txt": 1,
      ".png": 3,
      ".html": 2,
      ".webmanifest": 1,
      ".zip": 1,
-     ".mjs": 54,
+     ".mjs": 61,
      ".ps1": 1,
      ".cjs": 4,
      ".cmd": 2
@@ -65,13 +65,14 @@
   {
    "id": "SOURCE_DRIFT_V04",
    "status": "PASS",
-   "summary": "109/137 fișiere v04 identice, 28 modificate (enterprise), 112 adăugate, 0 lipsă",
+   "summary": "105/137 fișiere v04 identice, 32 modificate (enterprise), 135 adăugate, 0 lipsă",
    "detail": {
-    "unchanged": 109,
+    "unchanged": 105,
     "modified": [
      "blueprints/kids-sc.json",
      "public/app/actions.js",
      "public/app/core.js",
+     "public/app/pdf.js",
      "public/app/ui.js",
      "public/app/views.js",
      "public/index.html",
@@ -83,6 +84,8 @@
      "server/engine.js",
      "server/governor.js",
      "server/index.js",
+     "server/pdfcheck.js",
+     "server/printprofile.js",
      "server/projectpkg.js",
      "server/repo.js",
      "server/snapshot.js",
@@ -95,6 +98,7 @@
      "tests/4-optimizare.test.mjs",
      "tests/mocks/bin/claude.cjs",
      "tests/mocks/bin/codex.cjs",
+     "tests/mocks/png.cjs",
      "tests/run.mjs",
      "tests/shim/client/index.js"
     ],
@@ -118,10 +122,12 @@
      "docs/enterprise/contracts/CANON-AND-DEPENDENCIES.md",
      "docs/enterprise/contracts/COLLECTION-QA.md",
      "docs/enterprise/contracts/COLLECTION.md",
+     "docs/enterprise/contracts/COLORING.md",
      "docs/enterprise/contracts/DECISIONS.md",
      "docs/enterprise/contracts/GOLD-SET.md",
      "docs/enterprise/contracts/INTAKE.md",
      "docs/enterprise/contracts/JOBS.md",
+     "docs/enterprise/contracts/LAYOUT.md",
      "docs/enterprise/contracts/OBSERVABILITY.md",
      "docs/enterprise/contracts/PAGE-BLUEPRINTS.md",
      "docs/enterprise/contracts/PERSISTENCE.md",
@@ -129,10 +135,13 @@
      "docs/enterprise/contracts/PRODUCT-CONTRACT.md",
      "docs/enterprise/contracts/PROVIDER-CAPABILITIES.md",
      "docs/enterprise/contracts/QUALITY-ASSESSMENT.md",
+     "docs/enterprise/contracts/READINESS.md",
+     "docs/enterprise/contracts/REPAIR.md",
      "docs/enterprise/contracts/SAFETY.md",
      "docs/enterprise/contracts/SECURITY-BASELINE.md",
      "docs/enterprise/contracts/STORY-CONTRACTS.md",
      "docs/enterprise/contracts/VISUAL-QUALITY.md",
+     "docs/enterprise/contracts/WORKBENCH.md",
      "docs/enterprise/migration/DW-DRY-RUN.json",
      "docs/enterprise/migration/DW-DRY-RUN.md",
      "docs/enterprise/records/P1.md",
@@ -140,9 +149,13 @@
      "docs/enterprise/records/P3.md",
      "docs/enterprise/records/P4.md",
      "docs/enterprise/records/P5.md",
+     "docs/enterprise/records/P6.md",
      "evaluation/gold/gold-v1.json",
+     "public/app/layout-measure.js",
+     "public/fonts/andika-metrics.json",
      "scripts/enterprise/baseline-report.mjs",
      "scripts/enterprise/editorial-baseline.mjs",
+     "scripts/enterprise/font-metrics.mjs",
      "scripts/enterprise/pg-ephemeral.mjs",
      "scripts/enterprise/reproduce-defects.mjs",
      "server/agents-runtime/context-builder.js",
@@ -153,13 +166,19 @@
      "server/domain/collection.js",
      "server/domain/decisions.js",
      "server/domain/dependencies.js",
+     "server/domain/font-metrics.js",
      "server/domain/intake.js",
+     "server/domain/layout.js",
      "server/domain/page-blueprints.js",
      "server/domain/pilot.js",
      "server/domain/product-contract.js",
+     "server/domain/release-candidate.js",
      "server/domain/rights.js",
      "server/domain/story-contracts.js",
+     "server/domain/workbench.js",
      "server/enterprise-routes.js",
+     "server/inspection/pdf-inspect.js",
+     "server/inspection/raster.js",
      "server/jobs/budget.js",
      "server/jobs/scheduler.js",
      "server/migration/dw-reconcile.js",
@@ -177,7 +196,9 @@
      "server/providers/registry.js",
      "server/quality/assessment.js",
      "server/quality/collection-qa.js",
+     "server/quality/coloring.js",
      "server/quality/evaluation.js",
+     "server/quality/readiness.js",
      "server/quality/repair.js",
      "server/quality/safety.js",
      "server/quality/visual.js",
@@ -210,6 +231,12 @@
      "tests/53-p5-collection-qa.test.mjs",
      "tests/54-p5-gold.test.mjs",
      "tests/55-p5-repair.test.mjs",
+     "tests/60-p6-layout.test.mjs",
+     "tests/61-p6-workbench.test.mjs",
+     "tests/62-p6-coloring.test.mjs",
+     "tests/63-p6-print-profiles.test.mjs",
+     "tests/64-p6-readiness.test.mjs",
+     "tests/65-p6-release.test.mjs",
      "tests/cdp.mjs",
      "tests/mocks/legacy-blueprint-v15.json"
     ]
@@ -218,13 +245,13 @@
   {
    "id": "BUILD",
    "status": "PASS",
-   "summary": "PASS: 148 fișiere JavaScript, JSON, lockfile, fonturi și fișiere runtime; WonderPages AI — claude-gpt.v04",
+   "summary": "PASS: 164 fișiere JavaScript, JSON, lockfile, fonturi și fișiere runtime; WonderPages AI — claude-gpt.v04",
    "log": "docs/enterprise/baseline/logs/2026-10-02-build.log"
   },
   {
    "id": "RS0_SUITE",
    "status": "PASS",
-   "summary": "262 trecute, 0 picate, 0 sărite; browser PDF: da",
+   "summary": "306 trecute, 0 picate, 0 sărite; browser PDF: da",
    "log": "docs/enterprise/baseline/logs/2026-10-02-rs0.log"
   },
   {
@@ -246,7 +273,7 @@
   {
    "id": "PROTECT_APPROVALS",
    "status": "PASS",
-   "summary": "30/30 teste",
+   "summary": "37/37 teste",
    "detail": [
     "poarta seriei: aprobarea pe elemente e obligatorie (audit H1)",
     "aprobarea se invalidează când elementul se schimbă",
@@ -276,6 +303,13 @@
     "P5-T02 API: evaluări cu politica și modelul exacte; elementul „book” la poarta finală; reparația nativă regresivă nu este păstrată",
     "P5-T05: schimbarea politicii (model/politică) este vizibilă: v1 lasă să treacă negative de calitate; rapoartele nu se amestecă",
     "P5-T05 API: rulare, rapoarte, comparație și starea calibrării (fără acceptare: propus)",
+    "P6-T02: atelierul paginii — 12 pagini + copertă, limbi, distribuție/obiecte, contract, verificări; AI doar prin poarta deschisă",
+    "P6-T04: interiorul strict de 12 pagini nu este niciodată compatibil KDP; prezentarea legacy 28/26 cere aprobare",
+    "P6-T04 Dinosaur World: contractul de 12 pagini și formatul ales rămân; prezentarea legacy se inspectează separat, neaprobată",
+    "P6-T04 API: profilurile proiectului; aprobarea explicită (fără schimbarea contractului); standard refuzat; exportul final KDP fără aprobare refuzat; retragere",
+    "P6-T06: candidatul complet se verifică reproductibil; aprobarea cere previzualizarea reală; export → verificat",
+    "P6-T06: drepturi lipsă → RIGHTS_MISSING; aprobare sau referință învechită → STALE_*",
+    "P6-T06 API: candidatul unui volum neaprobat nu trece; aprobarea și exportul sunt refuzate; proba digitală nu există",
     "v03: nicio lipsă nu poate fi aprobată implicit",
     "v03: aprobare închisă cu conținut schimbat refuză livrarea"
    ]
@@ -283,18 +317,20 @@
   {
    "id": "PROTECT_PDF",
    "status": "PASS",
-   "summary": "4/4 teste",
+   "summary": "6/6 teste",
    "detail": [
     "după aprobarea finală: pachet, PDF-uri (dacă există browser)",
     "v03: serverul verifică paginarea, dimensiunile și fontul în PDF-ul final",
     "/exports acceptă doar PDF-uri reale",
-    "v19 2.7–2.10: coperta din șablonul de brand Canva (autofill, export PDF, promovare, comentarii)"
+    "v19 2.7–2.10: coperta din șablonul de brand Canva (autofill, export PDF, promovare, comentarii)",
+    "P6-T05: font neîncorporat și glifă lipsă sunt găsite în PDF (nu în sursă)",
+    "P6-T05: PASS numai cu toate măsurile pe profilul real; PDF modificat sau depășit, artă lipsă și profil greșit opresc"
    ]
   },
   {
    "id": "PROTECT_BACKUP",
    "status": "PASS",
-   "summary": "8/8 teste",
+   "summary": "9/9 teste",
    "detail": [
     "v03: backupul și restaurarea păstrează împreună documentele și imaginile",
     "v03: o copie întreruptă nu devine backup valid și nu suprascrie copia existentă",
@@ -303,7 +339,8 @@
     "P2-T01: snapshot + restaurare păstrează registrul de comenzi; orfanii sunt detectați, nu șterși",
     "P2-T03: restaurarea creează o versiune nouă cu lineage; trecutul nu se rescrie; corupția este detectată",
     "P2-T03: re-legarea dependențelor după restaurare: scena identică → legat, scena diferită → rămâne expirat",
-    "copiile de siguranță: rândurile proiectului ies, celelalte rămân"
+    "copiile de siguranță: rândurile proiectului ies, celelalte rămân",
+    "P6-T02 API: greșeala exactă p7 locală; impact anulat; revizie învechită; culoare p4; doar linia p4; semantic p7; restaurare după > 5 candidați; previzualizare completă"
    ]
   },
   {
@@ -329,10 +366,12 @@
   {
    "id": "PROTECT_ATELIER",
    "status": "PASS",
-   "summary": "2/2 teste",
+   "summary": "4/4 teste",
    "detail": [
     "atelier: schimbarea trece verificările și testul de pornire în copie (audit #5)",
-    "atelier: scripturile de pornire nu pot fi modificate (audit H3)"
+    "atelier: scripturile de pornire nu pot fi modificate (audit H3)",
+    "P6-T02: atelierul paginii — 12 pagini + copertă, limbi, distribuție/obiecte, contract, verificări; AI doar prin poarta deschisă",
+    "P6-T02: UI fără link generic fals de previzualizare (legături exacte către pagina din atelier)"
    ]
   },
   {
@@ -356,7 +395,7 @@
   {
    "id": "RS0_SUITE_POSTGRES",
    "status": "PASS",
-   "summary": "262 trecute, 0 picate, 0 sărite (STORAGE=postgres)",
+   "summary": "306 trecute, 0 picate, 0 sărite (STORAGE=postgres)",
    "log": "docs/enterprise/baseline/logs/2026-10-02-rs0-postgres.log"
   },
   {

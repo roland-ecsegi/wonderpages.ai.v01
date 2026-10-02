@@ -10,13 +10,16 @@ import { planMigration, runMigration, listMigrations } from './migration/migrato
 import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT } from './config.js';
-import { RUNNING, expandStages, reassessVolume, prepareTextPacket, ingestTextPacket, prepareImagePacket, ingestImagePacket, gateItems, setItemDecisions, applyItemChanges, assertCanWork } from './engine.js';
+import { RUNNING, expandStages, reassessVolume, prepareTextPacket, ingestTextPacket, prepareImagePacket, ingestImagePacket, gateItems, setItemDecisions, applyItemChanges, assertCanWork, volumeApproved } from './engine.js';
 import { pageWorkbench, commandImpact, itemIdFor, srcKeyOf } from './domain/workbench.js';
 import { coloringQA, COLORING_QA_VERSION } from './quality/coloring.js';
 import { destinationCheck, coverWrap, PROFILE_VERSIONS, PROFILE_RULES } from './printprofile.js';
 import { readinessReport } from './quality/readiness.js';
 import { deliveryFingerprint } from './delivery.js';
-import { projectFolder } from './output.js';
+import { projectFolder, mirrorDelivery } from './output.js';
+import { buildCandidate, verifyCandidate, transition, recordProof, exportRelease } from './domain/release-candidate.js';
+import { checkedPackage } from './package-check.js';
+import { projectRightsInventory, appRightsInventory, commercialReleaseCheck } from './domain/rights.js';
 import { unitHashes, verifyExecution, missingUnits } from './quality/repair.js';
 import { variantSet, backfillVersions } from './persistence/artifact-store.js';
 import { progressReport, inspectArtifact } from './observability/progress.js';
@@ -317,5 +320,51 @@ export function registerEnterpriseRoutes({ on, json, need, localOnly, repo, stor
     const preset = presetOf(req); if (preset !== 'digital' && !(bp.export?.presets || []).some(x => x.key === preset)) throw { status: 400, message: 'Profil de export necunoscut.' };
     const art = await repo.artifacts(pid), plan = await measuredLayout(repo, pid, p, bp, art, n - 1, preset).catch(() => null);
     return readinessReport({ bp, project: p, art, v: n - 1, preset, plan, readFile: f => repo.readFile(pid, f), readPdf: name => fs.promises.readFile(path.join(projectFolder(p), 'PDF', path.basename(name))), fingerprint: deliveryFingerprint(p, bp, art, n - 1), langs: p.input?.second_language ? ['first', 'second'] : ['first'] });
+  });
+  /* P6-T06: ReleaseCandidate — exact approved snapshot + inventory + receipts + readiness + rights + disclosures; proof separate */
+  const rcState = async (pid, v, preset) => {
+    const p = need(pid), bp = await repo.getBlueprint(pid), art = await repo.artifacts(pid), plan = await measuredLayout(repo, pid, p, bp, art, v, preset).catch(() => null), fp = deliveryFingerprint(p, bp, art, v);
+    const readiness = await readinessReport({ bp, project: p, art, v, preset, plan, readFile: f => repo.readFile(pid, f), readPdf: name => fs.promises.readFile(path.join(projectFolder(p), 'PDF', path.basename(name))), fingerprint: fp, langs: p.input?.second_language ? ['first', 'second'] : ['first'] });
+    const recs = [...projectRightsInventory(p, art, p.rightsDeclared || []), ...appRightsInventory(ROOT).records.filter(r => r.subject.kind === 'font' && /Andika/.test(r.id))];
+    return { p, bp, art, fp, readiness, rights: commercialReleaseCheck(recs, recs.map(r => r.subject.ref || r.id)), receipts: art[`delivery_${v}`]?.content?.exports || [], approved: volumeApproved(p, bp, v, art) };
+  };
+  const rcVerify = (rc, st) => verifyCandidate(rc, { project: st.p, bp: st.bp, art: st.art, approved: st.approved, receipts: st.receipts, readiness: st.readiness, rights: st.rights, fingerprint: st.fp });
+  const rcSave = async (pid, rc, kind, rec = null) => { const p = need(pid); await repo.commitProjectDecision(pid, { releaseCandidates: { ...(p.releaseCandidates || {}), [rc.id]: rc } }, rec ? [rec] : [], { actor: 'operator@laptop', kind }); return rc; };
+  const rcGet = (pid, id) => { const rc = need(pid).releaseCandidates?.[id]; if (!rc) throw { status: 404, message: 'Candidat inexistent.' }; return rc; };
+  on('POST', '/api/projects/:pid/release-candidates', async ({ pid }, req) => {
+    localOnly(req); const b = await json(req), bp = await repo.getBlueprint(pid), v = Number(b.volume) - 1, preset = String(b.preset || 'digital');
+    if (!Number.isInteger(v) || v < 0 || v >= bp.structure.volumes) throw { status: 400, message: 'Volum invalid.' };
+    if (preset !== 'digital' && !(bp.export?.presets || []).some(x => x.key === preset)) throw { status: 400, message: 'Profil de export necunoscut.' };
+    const st = await rcState(pid, v, preset); let rc = buildCandidate({ project: st.p, bp, art: st.art, v, preset, receipts: st.receipts, readiness: st.readiness, rights: st.rights, profileRules: { version: PROFILE_RULES.version, recordedAt: PROFILE_RULES.recordedAt } });
+    const verification = rcVerify(rc, st); if (verification.ok) rc = transition(rc, 'checked', { verification });
+    await rcSave(pid, { ...rc, lastVerification: verification }, 'release_candidate.create');
+    return { candidate: rc, verification };
+  });
+  on('GET', '/api/projects/:pid/release-candidates', async ({ pid }) => { const p = need(pid), out = [];
+    for (const rc of Object.values(p.releaseCandidates || {}).sort((a, b) => b.createdAt - a.createdAt).slice(0, 20)) { const st = await rcState(pid, rc.volume - 1, rc.preset); out.push({ candidate: rc, verification: rcVerify(rc, st) }); }
+    return { candidates: out }; });
+  on('POST', '/api/projects/:pid/release-candidates/:id/approve', async ({ pid, id }, req) => {
+    localOnly(req); const b = await json(req), rc = rcGet(pid, id), st = await rcState(pid, rc.volume - 1, rc.preset), verification = rcVerify(rc, st);
+    const next = transition(rc, 'approved', { verification, previewed: b.previewed === true });
+    const rec = decisionRecord({ kind: 'release_candidate', actor: 'operator@laptop', state: 'approved', note: String(b.note || '').slice(0, 500), scope: { volume: rc.volume, preset: rc.preset, candidate: rc.id }, subject: { snapshotHash: rc.snapshot.hash, readinessHash: rc.readiness?.hash || null, receipts: rc.receipts.map(r => [r.book, r.lang, r.sha256]), previewed: true } });
+    await rcSave(pid, { ...next, lastVerification: verification, approvedBy: 'operator@laptop' }, 'release_candidate.approve', rec);
+    return { candidate: next, decision: rec.id };
+  });
+  on('POST', '/api/projects/:pid/release-candidates/:id/export', async ({ pid, id }, req) => {
+    localOnly(req); const rc = rcGet(pid, id), st = await rcState(pid, rc.volume - 1, rc.preset), verification = rcVerify(rc, st);
+    let next = transition(rc, 'exported', { verification });
+    const zip = await checkedPackage(repo, st.p, rc.volume - 1, { final: true });
+    const exp = await exportRelease({ zip, manifestPath: zip + '.release-candidate.json', manifest: { ...next, verification }, writeFile: (f, d) => fs.promises.writeFile(f, d), mirror: mirrorDelivery }), mirror = exp.mirror;   // the primary export survives a mirror failure
+    next = { ...next, export: exp };
+    const again = rcVerify(next, await rcState(pid, rc.volume - 1, rc.preset)); await checkedPackage(repo, need(pid), rc.volume - 1, { final: true });
+    next = transition(next, 'verified', { verification: again });
+    await rcSave(pid, { ...next, lastVerification: again }, 'release_candidate.export');
+    return { candidate: next, mirror };
+  });
+  on('POST', '/api/projects/:pid/release-candidates/:id/proof', async ({ pid, id }, req) => {
+    localOnly(req); const b = await json(req), rc = rcGet(pid, id), next = recordProof(rc, { kind: b.kind || 'print', status: b.status, receipt: b.receipt || null });
+    const rec = decisionRecord({ kind: 'release_proof', actor: 'operator@laptop', state: b.status === 'accepted' ? 'approved' : b.status === 'rejected' ? 'rejected' : 'pending', note: String(b.receipt?.note || '').slice(0, 300), scope: { volume: rc.volume, preset: rc.preset, candidate: rc.id }, subject: { proof: next.proof.print, reference: next.proof.receipt?.reference || null } });
+    await rcSave(pid, next, 'release_candidate.proof', rec);
+    return { candidate: next, physicalAccepted: next.proof.print === 'accepted' };
   });
 }

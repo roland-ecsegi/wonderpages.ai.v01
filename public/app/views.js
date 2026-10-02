@@ -645,11 +645,21 @@ function tabExport(p) {
     <div class="section" style="margin-top:0"><h2>Destinație</h2><div class="presets" role="radiogroup">${presets.map(x => `<label class="choice"><input type="radio" name="preset" value="${esc(x.key)}" data-act-change="preset" ${S.preset === x.key ? 'checked' : ''}><b>${esc(x.label)}</b><span>${esc(x.detail || '')}</span></label>`).join('')}</div></div>
     ${printProfileHTML(p)}
     ${readinessHTML(p)}
+    ${releaseCandidatesHTML(p)}
     <div class="section"><h2>Volume</h2>${p.rendering && !p.rendering.finished ? `<div class="notice m" style="margin-bottom:10px">Livrare pe laptop: ${esc(p.rendering.label)}${p.rendering.n ? `, pagina ${p.rendering.i} din ${p.rendering.n}` : ''}</div>` : p.rendering?.finished && Date.now() - (p.rendering.at || 0) < 10 * 60e3 ? `<div class="notice ${p.rendering.ok ? '' : 'err'}" style="margin-bottom:10px;${p.rendering.ok ? 'background:var(--ok-soft)' : ''}">${esc(p.rendering.message || '')}</div>` : ''}<div class="panel">${rows}</div><div id="xprog" class="small muted" style="margin-top:10px" aria-live="polite"></div></div>
     ${canvaCoverHTML(p)}
     <div class="section"><h2>Verificare finală</h2><div class="panel panel-pad"><ul class="checks" style="margin:0">${pf.map(x => `<li><span class="st ${cls(x.status)}"></span><div><b>${esc(x.label)}</b><div class="small muted">${esc(x.detail)}</div></div></li>`).join('')}</ul></div></div>`;
 }
 
+/* P6-T06: release candidates — exact snapshot + evidence, operator approval after the real preview, proof kept separate */
+const RC_LABEL = { prepared: 'pregătit (nu trece verificarea)', checked: 'verificat', approved: 'aprobat de tine', exported: 'exportat', verified: 'exportat și verificat' };
+function releaseCandidatesHTML(p) {
+  const list = (S.rcs || {})[p.id] || null, V = S.bp.structure.volumes;
+  return `<div class="section" id="release-candidates"><h2>Candidat de lansare</h2><div class="panel panel-pad"><p class="small muted">Leagă versiunile aprobate exacte, fișierele (hash), validarea destinației, drepturile și notele cerute de canal. Previzualizarea rămâne disponibilă oricând; acceptarea fizică se declară numai cu dovada probei.</p>
+    <div class="row">${Array.from({ length: V }, (_, v) => `<button class="btn sm" data-act="rc-create" data-v="${v}">Candidat volumul ${v + 1} (${esc(S.preset)})</button>`).join('')}<button class="btn sm ghost" data-act="rc-load">Reîncarcă</button></div>
+    ${(list || []).map(({ candidate: c, verification: vr }) => `<div class="xrow" data-rc="${esc(c.id)}" data-state="${esc(c.state)}" data-ok="${vr.ok}"><div style="min-width:0"><h4>Volumul ${c.volume} · ${esc(c.preset)} · <span class="badge ${vr.ok ? 'b-ok' : 'b-err'}">${esc(RC_LABEL[c.state] || c.state)}</span></h4>${vr.problems.slice(0, 6).map(x => `<div class="small"><b>${esc(x.code)}</b>: ${esc(x.message)}</div>`).join('')}<div class="tiny faint">Probă digitală: ${esc(c.proof.digital)} · probă tipar/platformă: ${esc(c.proof.print)}${c.proof.receipt ? ' (' + esc(c.proof.receipt.reference) + ')' : ''}${c.export?.mirror ? ' · copie secundară: ' + esc(c.export.mirror.status) : ''}</div></div>
+      <div class="row">${c.state === 'checked' && vr.ok ? `<label class="small"><input type="checkbox" id="rc-prev-${esc(c.id)}"> Am văzut previzualizarea reală</label><button class="btn sm primary" data-act="rc-approve" data-id="${esc(c.id)}">Aprobă candidatul</button>` : ''}${c.state === 'approved' ? `<button class="btn sm" data-act="rc-export" data-id="${esc(c.id)}">Exportă și verifică</button>` : ''}${c.proof.print === 'pending' ? `<input class="input" id="rc-ref-${esc(c.id)}" placeholder="Referința probei" style="width:160px"><button class="btn sm ghost" data-act="rc-proof" data-id="${esc(c.id)}">Probă acceptată</button>` : ''}</div></div>`).join('') || (list ? '<p class="small faint">Niciun candidat.</p>' : '')}</div></div>`;
+}
 /* P6-T05: readiness measured for the chosen destination (never a label without measurements) */
 const RD = { PASS: ['b-ok', 'gata (măsurat)'], NOT_READY: ['b-err', 'nu este gata'], UNMEASURED: ['b-y', 'nemăsurat complet'] };
 function readinessHTML(p) {
