@@ -12,6 +12,7 @@ import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { zipDir } from '../server/output.js';
 import { RELEASE_INCLUDE, runGate, sourceDigest, secretSentinel, shipped } from './enterprise/release-gate.mjs';
+import { licenseReport, noticesMarkdown } from './enterprise/licenses.mjs';
 
 const app = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const arg=name=>process.argv.find(x=>x.startsWith('--'+name+'='))?.slice(name.length+3);
@@ -37,6 +38,8 @@ if(!new RegExp(mixed?'^\\d{2}$':'^\\d{3}$').test(next))throw Error('Număr de ve
 const name=mixed?`wonderpages-ai.claude-gpt.v${next}`:`wonderpages-ai.v${next}`;
 const folder=path.join(versions,name),dest=folder+'.zip',previous=folder+'.previous';
 const pending = dest + '.part';
+/* P8-T03: one timestamp for the whole release (the gate's, or --at / SOURCE_DATE_EPOCH): same sources + evidence → same bytes */
+const releasedAt = arg('at') || (process.env.SOURCE_DATE_EPOCH ? new Date(Number(process.env.SOURCE_DATE_EPOCH) * 1000).toISOString() : evidence.at);
 const stage = await fs.mkdtemp(path.join(os.tmpdir(), 'wonderpages-release-'));
 const forbidden=new Set(['node_modules','.git','.env','data','_backup','.cache']);
 const digest=b=>crypto.createHash('sha256').update(b).digest('hex');
@@ -47,8 +50,9 @@ try {
   const staged=secretSentinel(stage,await fs.readdir(stage));
   if(!staged.ok)throw Error('Santinela de secrete a oprit release-ul: '+staged.hits.slice(0,3).map(h=>h.file+' ('+h.reason+')').join('; '));
   await fs.writeFile(path.join(stage,'RELEASE-EVIDENCE.json'),JSON.stringify({...evidence,release:name},null,2));
-  await fs.writeFile(path.join(stage,'RELEASE-MANIFEST.json'),JSON.stringify({edition:pkg.edition,version:pkg.version,release:name,at:new Date().toISOString(),gate:{status:evidence.status,at:evidence.at,source:evidence.source},versions:evidence.versions,files:await inventory(stage)},null,2));
-  const result=await zipDir(stage,pending,name);
+  await fs.writeFile(path.join(stage,'THIRD-PARTY-NOTICES.md'),noticesMarkdown(licenseReport(app),app));   // P8-T03
+  await fs.writeFile(path.join(stage,'RELEASE-MANIFEST.json'),JSON.stringify({edition:pkg.edition,version:pkg.version,release:name,at:releasedAt,gate:{status:evidence.status,at:evidence.at,source:evidence.source},versions:evidence.versions,files:(await inventory(stage)).sort((a,b)=>a.path<b.path?-1:a.path>b.path?1:0)},null,2));
+  const result=await zipDir(stage,pending,name,{mtime:releasedAt});
   if(path.dirname(previous)!==versions)throw Error('Destinație de release invalidă.');
   await fs.rm(previous,{recursive:true,force:true});
   try{await fs.access(folder);await fs.rename(folder,previous);}catch(e){if(e.code!=='ENOENT')throw e;}

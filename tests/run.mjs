@@ -23,7 +23,8 @@ const env = {
   DATA_DIR: path.join(tmp, 'data'), OUTPUT_DIR: path.join(tmp, 'out'),
   WP_FAKE_STATE: state, CODEX_HOME: path.join(tmp, 'codex'), CANVA_SPACING_SEC: '0', CANVA_POLL_MS: '30', CANVA_CONCURRENCY: '1',
   PATH: path.join(HERE, 'mocks', 'bin') + path.delimiter + process.env.PATH, ANTHROPIC_API_KEY: 'sk-test-must-be-stripped', OPENAI_API_KEY: 'sk-test-must-be-stripped',
-  GOOGLE_CLIENT_ID: 'test-client', GOOGLE_CLIENT_SECRET: 'test-secret', WP_BG: '', OPEN_BROWSER: '0'
+  GOOGLE_CLIENT_ID: 'test-client', GOOGLE_CLIENT_SECRET: 'test-secret', WP_BG: '', OPEN_BROWSER: '0',
+  WP_AUTO_BACKUP: '0'   // the 5-minute daily copy locks mutations for seconds; the backup tests call dailySnapshot directly
 };
 if (process.platform !== 'win32') for (const f of fs.readdirSync(path.join(HERE, 'mocks', 'bin'))) try { fs.chmodSync(path.join(HERE, 'mocks', 'bin', f), 0o755); } catch {}
 const server = spawn(process.execPath, ['--import', './tests/loader.mjs', 'server/start.js'], { cwd: ROOT, env, stdio: ['ignore', 'pipe', 'pipe'] });

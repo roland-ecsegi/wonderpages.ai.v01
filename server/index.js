@@ -17,7 +17,7 @@ import { Canva } from './canva.js';
 import { llmInfo, initLLM, verifyClaude, openLoginWindow } from './llm.js';
 import { killAll as killClaude, claudeFlags, schemaActive } from './claudecode.js';
 import os from 'node:os';
-import { buildPackage, openFolder, projectFolder, scheduleBackups, outputDir, setOutputDir, outputMirror, setOutputMirror, mirrorDelivery, mirrorBackup, listBackups, backupNow, restoreBackup } from './output.js';
+import { buildPackage, openFolder, projectFolder, scheduleBackups, outputDir, setOutputDir, outputMirror, setOutputMirror, mirrorDelivery, mirrorBackup, listBackups, backupNow, restoreBackup, outputPathCheck } from './output.js';
 import { ENV_DUPLICATES } from './config.js';
 import { spawn } from 'node:child_process';
 import { startProject, pauseProject, switchTo, assertCanWork, activeProject, IMAGE_DEFAULT, gateItems, gateSummary, setItemDecisions, applyItemChanges, completeGate, expandStages, initEngine, runTask, stopEngine, decide, RUNNING, HANDLER_NAMES, agentComplete, learnFromEdit, trackProjectBackground, quietProjectBackground } from './engine.js';
@@ -425,6 +425,7 @@ on('PUT', '/api/settings/output-mirror', async (_, req) => {
 });
 on('PUT', '/api/settings/output', async (_, req) => { localOnly(req);
   const { dir } = await json(req); if (!dir || !path.isAbsolute(dir)) throw { status: 400, message: 'Scrie o cale completă, de exemplu D:\\Carti\\WonderPages.' };
+  { const pc = outputPathCheck(dir); if (!pc.ok) throw { status: 400, code: 'path_too_long', message: pc.message, check: pc }; }   // P8-T03
   try { await fs.mkdir(dir, { recursive: true }); const t = path.join(dir, '.wonderpages-test'); await fs.writeFile(t, 'ok'); await fs.rm(t); } catch (e) { throw { status: 400, message: 'Nu pot scrie în acest folder: ' + e.message }; }
   SETTINGS.outputDir = dir; setOutputDir(dir); await storage.writeJSON('settings.json', SETTINGS); bus.emit('change', { scope: 'projects' }); return { ok: true, dir };
 });
@@ -523,6 +524,7 @@ on('GET', '/api/diagnostic', async () => {
   if (tested['@anthropic-ai/claude-code']) add('Versiune Claude Code testată', !ccv || ccv === tested['@anthropic-ai/claude-code'], ccv ? (ccv === tested['@anthropic-ai/claude-code'] ? `${ccv}, versiunea testată` : `${ccv} instalată; testată cu ${tested['@anthropic-ai/claude-code']}. Dacă apar erori la text, reinstalează versiunea testată.`) : 'necunoscută');
   const ct=codexTextStatus(); add('Codex pentru text',ct.ready,ct.version || 'Disponibilitate necunoscută');
   const cx = GPTImage.codexStatus(); if (cx.installed) add('Codex pentru imagini', cx.ready, `${cx.version || ''}${cx.ready ? '' : ' — neautentificat'}`);
+  { const pc = outputPathCheck(outputDir()); add('Lungimea căilor de livrare', pc.ok, pc.ok ? `folderul are ${pc.base} caractere (maxim ${pc.maxFolderLength})` : pc.message); }   // P8-T03
   let font = false; try { await fs.access(path.join(ROOT, 'public', 'fonts', 'Andika-Regular.ttf')); font = true; } catch {}
   add('Fontul cărților (Andika)', font, font ? 'instalat local: PDF-urile arată la fel și fără internet' : 'lipsește din public/fonts: rulează din nou instalatorul (cărțile ar ieși cu un font de rezervă)');
   if (ENV_DUPLICATES.length) add('Fișierul .env', false, `chei scrise de două ori (se folosește ultima): ${ENV_DUPLICATES.join(', ')}`);

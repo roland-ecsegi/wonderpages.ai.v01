@@ -17,7 +17,7 @@ import { destinationCheck, coverWrap, PROFILE_VERSIONS, PROFILE_RULES } from './
 import { readinessReport } from './quality/readiness.js';
 import { deliveryFingerprint } from './delivery.js';
 import { projectFolder, mirrorDelivery } from './output.js';
-import { buildCandidate, verifyCandidate, transition, recordProof, exportRelease } from './domain/release-candidate.js';
+import { buildCandidate, verifyCandidate, transition, recordProof, exportRelease, commercialStatus } from './domain/release-candidate.js';
 import { checkedPackage } from './package-check.js';
 import * as Knowledge from './knowledge/store.js';
 import { ingestLessonsRegistry } from './knowledge/ll.js';
@@ -350,7 +350,7 @@ export function registerEnterpriseRoutes({ on, json, need, localOnly, repo, stor
     return { candidate: rc, verification };
   });
   on('GET', '/api/projects/:pid/release-candidates', async ({ pid }) => { const p = need(pid), out = [];
-    for (const rc of Object.values(p.releaseCandidates || {}).sort((a, b) => b.createdAt - a.createdAt).slice(0, 20)) { const st = await rcState(pid, rc.volume - 1, rc.preset); out.push({ candidate: rc, verification: rcVerify(rc, st) }); }
+    for (const rc of Object.values(p.releaseCandidates || {}).sort((a, b) => b.createdAt - a.createdAt).slice(0, 20)) { const st = await rcState(pid, rc.volume - 1, rc.preset), verification = rcVerify(rc, st); out.push({ candidate: rc, verification, commercial: commercialStatus(rc, { verification }) }); }   // P8-T03: destination-specific commercial status
     return { candidates: out }; });
   on('POST', '/api/projects/:pid/release-candidates/:id/approve', async ({ pid, id }, req) => {
     localOnly(req); const b = await json(req), rc = rcGet(pid, id), st = await rcState(pid, rc.volume - 1, rc.preset), verification = rcVerify(rc, st);

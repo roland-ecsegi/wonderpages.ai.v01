@@ -86,7 +86,31 @@ export function recordProof(rc, { kind = 'print', status, receipt = null, actor 
   if (rc.proof.print === 'not_applicable') throw { status: 400, message: 'Destinația digitală nu are probă fizică.' };
   if (!['accepted', 'rejected', 'pending'].includes(status)) throw { status: 400, message: 'Stare de probă necunoscută.' };
   if (status === 'accepted' && !String(receipt?.reference || '').trim()) throw { status: 400, code: 'receipt_required', message: 'Acceptarea fizică/platformă cere dovada (referința probei sau a chitanței).' };
-  return { ...rc, proof: { ...rc.proof, print: status, receipt: status === 'pending' ? null : { reference: String(receipt?.reference || '').slice(0, 200), note: String(receipt?.note || '').slice(0, 500), actor, at: now() } }, history: [...rc.history, { state: rc.state, proof: status, at: now() }] };
+  return { ...rc, proof: { ...rc.proof, print: status, receipt: status === 'pending' ? null : { reference: String(receipt?.reference || '').slice(0, 200), note: String(receipt?.note || '').slice(0, 500), snapshotHash: rc.snapshot.hash, files: rc.receipts.map(r => r.sha256), actor, at: now() } }, history: [...rc.history, { state: rc.state, proof: status, at: now() }] };
+}
+
+/**
+ * P8-T03 — commercial status, destination-specific and evidence-based. A candidate speaks only for ITS destination
+ * (digital / kdp / print); other destinations are "not_evaluated" until they have their own candidate. Eligible only
+ * when: the live verification passes (approval, files, readiness, rights), the candidate was exported and verified,
+ * the export is the final deliverable (a source-only/project package is never a commercial deliverable), and — for
+ * physical/platform destinations — the proof receipt was recorded for exactly the current snapshot and files.
+ */
+export const DESTINATIONS = Object.freeze(['digital', 'kdp', 'print']);
+export function commercialStatus(rc, { verification, exportKind = 'final' } = {}) {
+  const reasons = [], add = (code, message) => reasons.push({ code, message });
+  for (const p of verification?.problems || []) if (/^RIGHTS_/.test(p.code)) add(p.code, p.message);
+  if (!verification) add('UNVERIFIED', 'Verificarea curentă nu a rulat.');
+  else if (verification.problems?.some(p => !/^RIGHTS_/.test(p.code))) add('VERIFICATION_FAILED', `Verificarea curentă nu trece: ${verification.problems.filter(p => !/^RIGHTS_/.test(p.code)).map(p => p.code).slice(0, 4).join(', ')}.`);
+  if (exportKind !== 'final') add('SOURCE_ONLY', 'Exportul este un pachet-sursă (proiect/manuscris), nu fișierele finale verificate: nu este un livrabil comercial.');
+  if (!['exported', 'verified'].includes(rc.state)) add('NOT_EXPORTED', `Candidatul este „${rc.state}”: livrarea finală nu a fost exportată și verificată.`);
+  if (rc.preset === 'digital') { if (rc.proof.digital !== 'validated') add('DIGITAL_UNVALIDATED', 'Validarea digitală (măsurată) nu a trecut.'); }
+  else if (rc.proof.print !== 'accepted') add(rc.proof.print === 'rejected' ? 'PROOF_REJECTED' : 'PROOF_PENDING', rc.proof.print === 'rejected' ? 'Proba fizică/platformă a fost respinsă.' : 'Lipsește dovada probei fizice/platformei (chitanță sau referință).');
+  else { const r = rc.proof.receipt, cur = verification?.snapshotHash; if (!r?.snapshotHash || (cur && r.snapshotHash !== cur)) add('PROOF_STALE', 'Dovada probei a fost înregistrată pentru alt conținut sau alte fișiere decât cele curente: repetă proba.'); }
+  const status = reasons.some(r => /^RIGHTS_/.test(r.code)) ? 'blocked_rights' : reasons.length ? 'not_eligible' : 'eligible';
+  return { destination: rc.preset, candidate: rc.id, volume: rc.volume, status, reasons, evidence: { snapshotHash: verification?.snapshotHash || null, readinessHash: verification?.readinessHash || null, proof: rc.proof, rights: rc.rights, state: rc.state },
+    otherDestinations: Object.fromEntries(DESTINATIONS.filter(d => d !== rc.preset).map(d => [d, 'not_evaluated'])),
+    limitations: ['Evaluare internă pe baza dovezilor înregistrate; nu este consultanță juridică și nu garantează acceptarea de către platformă sau tipografie.'] };
 }
 
 /** Export step: the manifest is written next to the verified package; a failing secondary copy never undoes the primary. */

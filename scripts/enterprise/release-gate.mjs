@@ -71,6 +71,9 @@ export async function runGate({ root = DEFAULT_ROOT, skipTests = false, env = pr
   }
   /* 4. secret sentinel over everything that ships */
   { const s = secretSentinel(root); add('secrets', true, s.ok ? 'PASS' : 'FAIL', s.ok ? 'niciun secret sau fișier privat în release' : s.hits.slice(0, 5).map(h => `${h.file}: ${h.reason}`).join('; ')); }
+  /* 4b. P8-T03: licenses of everything distributed/installed (allowlist + documented elections; font license texts) */
+  try { const { licenseReport } = await import(pathToFileURL(path.join(root, 'scripts/enterprise/licenses.mjs')).href); const l = licenseReport(root); add('licenses', true, l.ok ? 'PASS' : 'FAIL', l.ok ? `${l.packages.length} pachete permisive (${Object.entries(l.counts).map(([k, n]) => `${k} ${n}`).join(', ')}); ${l.fonts.length} fonturi cu textul OFL` : l.problems.slice(0, 5).map(x => `${x.code} ${x.package || x.font}`).join('; ')); }
+  catch (e) { add('licenses', true, 'FAIL', 'Licențele nu se pot evalua: ' + (e.message || e)); }
   /* 5. test suite with explicit mocks (real PDF when a browser exists) */
   if (skipTests) add('tests', true, 'NOT_RUN', 'rulare fără suită (--skip-tests): nu este un release valid');
   else { const r = node(['tests/run.mjs'], { timeout: 40 * 60e3 }); const sum = (r.stdout || '').match(/(\d+) trecute, (\d+) picate/); add('tests', true, r.status === 0 ? 'PASS' : 'FAIL', sum ? `${sum[1]} trecute, ${sum[2]} picate${env.BROWSER_PATH ? ', PDF real din browser' : ''}` : (r.stderr || r.stdout || '').trim().split('\n').slice(-3).join(' ').slice(0, 300)); }

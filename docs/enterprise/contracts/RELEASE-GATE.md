@@ -15,6 +15,7 @@ node scripts/pachet-versiune.mjs [--evidence=dovezi.json] [--output=dosar]     #
 | `contract` | ProductContract al fiecărui tip livrat (`blueprints/*.json`) | o regresie de contract (de ex. 11 pagini în loc de 12) |
 | `resources` | fonturi + metrici măsurate (hash-ul fontului), codul comun de măsurare, setul de aur, contractele de rol, suita de teste | o resursă lipsește sau metricile nu corespund fontului instalat |
 | `secrets` | santinela parcurge **fiecare fișier care s-ar livra**: secrete (chei Anthropic/OpenAI, tokenuri, chei private, URL-uri de bază de date cu parolă spre gazde ne-locale), fișiere private (`.env`, `data/`, `node_modules`, `.git`, backup, `.pem/.key`), fișiere temporare (`.log/.part/.tmp/.bak`, `.env.*`), legături simbolice | oricare dintre acestea |
+| `licenses` (P8-T03) | dependențele de producție din lockfile pe lista permisivă (licențele duble cu alegerea documentată) și textul OFL lângă fiecare font | o licență nepermisă/necunoscută sau un font fără textul licenței |
 | `tests` | suita completă cu mock-urile explicite (`tests/mocks/bin` primul în PATH, PDF real dacă există `BROWSER_PATH`) | un test pică; cu `--skip-tests` starea este `NOT_RUN` și poarta este **INCOMPLETE**, niciodată PASS |
 
 Șabloanele documentate (`sk-test-must-be-stripped`, gazde `example.com`, URL-uri construite din `${…}`) nu sunt secrete.

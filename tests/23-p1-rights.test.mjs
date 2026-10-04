@@ -2,6 +2,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { api, INPUT, ROOT } from './lib.mjs';
 import { rightsRecord, rightsStatus, commercialReleaseCheck, editingAllowed, appRightsInventory, projectRightsInventory } from '../server/domain/rights.js';
@@ -29,7 +30,12 @@ test('P1-T05: fiecare font și dependență are sursă și status; licența Andi
   const inv = appRightsInventory(ROOT);
   assert.ok(inv.records.every(r => r.source && r.subject.kind), 'sursă pentru fiecare înregistrare');
   const andika = inv.records.filter(r => r.id.startsWith('font:Andika'));
-  assert.equal(andika.length, 2); assert.ok(andika.every(r => rightsStatus(r).status === 'unknown' && r.licenseTextPresent === false));
+  /* P8-T03 added the official OFL text: the fonts are cleared now; without the text they are still flagged */
+  assert.equal(andika.length, 2); assert.ok(andika.every(r => rightsStatus(r).status === 'cleared' && r.licenseTextPresent === true));
+  const bare = fs.mkdtempSync(path.join(os.tmpdir(), 'wp-fonts-')); fs.mkdirSync(path.join(bare, 'public/fonts'), { recursive: true });
+  for (const f of ['Andika-Regular.ttf', 'Andika-Bold.ttf']) fs.copyFileSync(path.join(ROOT, 'public/fonts', f), path.join(bare, 'public/fonts', f)); fs.copyFileSync(path.join(ROOT, 'package-lock.json'), path.join(bare, 'package-lock.json'));
+  const missing = appRightsInventory(bare).records.filter(r => r.id.startsWith('font:Andika')); assert.ok(missing.length === 2 && missing.every(r => rightsStatus(r).status === 'unknown' && r.licenseTextPresent === false), 'licența Andika lipsă este semnalată');
+  fs.rmSync(bare, { recursive: true, force: true });
   const inst = inv.records.find(r => r.id.startsWith('font:InstrumentSans'));
   assert.equal(rightsStatus(inst).status, 'cleared');
   const lock = JSON.parse(fs.readFileSync(path.join(ROOT, 'package-lock.json'), 'utf8'));
@@ -67,7 +73,8 @@ test('P1-T05 API: registrul de drepturi pe proiect; declarația operatorului est
   assert.equal(put.status, 200); assert.equal(put.body.status, 'cleared'); assert.equal(put.body.record.reviewer, 'operator');
   d = await api('GET', `projects/${r.body.id}/rights`);
   assert.equal(d.body.subjects.find(s => s.id === 'manuscript:seed_story').status, 'cleared');
-  assert.equal(d.body.commercial.eligible, false, 'fontul Andika fără text de licență rămâne blocant');
+  assert.equal(d.body.commercial.eligible, true, 'manuscris declarat + textul OFL livrat → nimic nu mai blochează (P8-T03)'); assert.deepEqual(d.body.commercial.blockers, []);
+  assert.ok(d.body.commercial.items.filter(x => /Andika/.test(x.ref)).every(x => x.status === 'cleared'));
   const app = await api('GET', 'rights/app'); assert.equal(app.status, 200); assert.ok(app.body.summary.cleared > 100);
   await api('POST', `projects/${r.body.id}/archive`, { archived: true });
 });

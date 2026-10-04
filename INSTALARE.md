@@ -92,6 +92,8 @@ Dacă aveai o instalare mai veche (numele „tiparnita”), `instaleaza.bat` mut
 - **`npm test`** (într-un terminal deschis în folderul aplicației): pornește o copie temporară a aplicației cu servicii simulate și rulează testele automate (producție cap-coadă, aprobări, livrare PDF, import, Dali, atelier, securitate, optimizările din versiunea 19). Nu atinge proiectele tale și nu consumă din abonamente. La final scrie „Rezultat: N trecute, 0 picate”.
 
 ## 10. Actualizare la o versiune nouă
+**Recomandat (etapizat, cu revenire):** pune producția pe pauză, fă un backup (Setări › Backup), oprește aplicația (`opreste.bat`), apoi într-un terminal deschis în folderul aplicației: `node scripts\actualizare.mjs --release=C:\cale\wonderpages-ai.vNNN.zip`. Scriptul verifică versiunea (manifest + poarta de release), păstrează `.env` și `data`, pornește codul nou de probă și revine singur dacă ceva nu merge; `node scripts\actualizare.mjs --rollback` anulează ultima actualizare. Apoi rulează `instaleaza.bat`. Pașii manuali de mai jos rămân valabili.
+
 1. Pune proiectul care lucrează pe **pauză** (opțional: Activitate > Exportă proiectul).
 2. Dezarhivează noua versiune peste folderul vechi **sau** într-un folder nou și copiază `.env` din cel vechi.
 3. Rulează din nou `instaleaza.bat`. Oprește singur versiunea care rulează în fundal și o pornește pe cea nouă. Proiectele rămân în baza de date.

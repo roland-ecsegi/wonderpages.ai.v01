@@ -6,7 +6,7 @@ import fs from 'node:fs';
 import fsp from 'node:fs/promises';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
-import { config, APP_EDITION } from './config.js';
+import { config, APP_EDITION, ROOT } from './config.js';
 import { safeCode, inside } from './sanitize.js';
 import { deliveryFingerprint, currentReceipts, deliveryComplete } from './delivery.js';
 import { fileHash, fingerprint } from './contracts.js';
@@ -44,15 +44,27 @@ export function projectFolder(p) {
 const T = new Uint32Array(256).map((_, n) => { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1; return c >>> 0; });
 const crc32 = b => { let c = ~0; for (let i = 0; i < b.length; i++) c = T[(c ^ b[i]) & 0xff] ^ (c >>> 8); return (~c) >>> 0; };
 async function walk(dir, base = dir, out = []) {
-  for (const e of await fsp.readdir(dir, { withFileTypes: true })) {
+  for (const e of (await fsp.readdir(dir, { withFileTypes: true })).sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0))) {   // P8-T03: stable order (reproducible archives)
     const f = path.join(dir, e.name);
     if (e.isDirectory()) await walk(f, base, out); else out.push({ abs: f, rel: path.relative(base, f).split(path.sep).join('/') });
   }
   return out;
 }
-export async function zipDir(dir, outFile, rootName) {
+/* P8-T03 — Windows paths (MAX_PATH 260): a too-long output folder is refused up front and every delivered path is
+   checked before the package is published, with a clear message instead of a cryptic ENOENT halfway through. */
+export const pathLimit = () => Number(process.env.WP_PATH_LIMIT) || (process.platform === 'win32' ? 259 : 4095);
+/* deepest delivery under the output folder: project folder (code + 60-char slug) + Collection-Final/Canva/Volumul-06/ + a file name */
+export const DELIVERY_RESERVE = 1 + 81 + 1 + 'Collection-Final/Canva/Volumul-06/'.length + 80;
+export function outputPathCheck(dir, limit = pathLimit()) {
+  const base = path.resolve(dir).length, need = base + DELIVERY_RESERVE;
+  return { ok: need <= limit, limit, base, reserve: DELIVERY_RESERVE, maxFolderLength: limit - DELIVERY_RESERVE,
+    message: need <= limit ? null : `Folderul de ieșire are ${base} caractere; cu structura livrării căile ajung la ~${need}, peste limita de ${limit} a sistemului. Alege un folder mai scurt (cel mult ${limit - DELIVERY_RESERVE} caractere), de exemplu D:\\Carti.` };
+}
+export function longPaths(paths, limit = pathLimit()) { return paths.map(p => ({ path: p, length: p.length })).filter(x => x.length > limit).sort((a, b) => b.length - a.length); }
+export async function zipDir(dir, outFile, rootName, { mtime = null } = {}) {   // P8-T03: a fixed mtime makes the archive byte-reproducible
   const files = await walk(dir);
-  const d = new Date(); const time = (d.getHours() << 11) | (d.getMinutes() << 5) | (d.getSeconds() >> 1); const date = ((d.getFullYear() - 1980) << 9) | ((d.getMonth() + 1) << 5) | d.getDate();
+  const d = mtime ? new Date(mtime) : new Date(), U = !!mtime;   // fixed mtime → UTC fields, identical on every machine
+  const time = ((U ? d.getUTCHours() : d.getHours()) << 11) | ((U ? d.getUTCMinutes() : d.getMinutes()) << 5) | ((U ? d.getUTCSeconds() : d.getSeconds()) >> 1); const date = (((U ? d.getUTCFullYear() : d.getFullYear()) - 1980) << 9) | (((U ? d.getUTCMonth() : d.getMonth()) + 1) << 5) | (U ? d.getUTCDate() : d.getDate());
   const ws = fs.createWriteStream(outFile);
   let streamError=null;
   ws.on('error',e=>{streamError=e;});
@@ -124,9 +136,13 @@ export async function buildPackage(repo, p, { vol = null, approved = null } = {}
     '- PDF-urile sunt RGB. Dacă tipografia cere CMYK (PDF/X), conversia se face la tipografie.', ''
   ].join('\n');
   await fsp.mkdir(extra, { recursive: true }); await fsp.writeFile(path.join(extra, 'Detalii publicare.md'), md);
+  /* P8-T03: the font license travels with the delivered files (the release disclosure promises it) */
+  for (const lic of ['OFL-Andika.txt']) { const src = path.join(ROOT, 'public', 'fonts', lic); if (fs.existsSync(src)) { await fsp.mkdir(path.join(extra, 'Licente'), { recursive: true }); await fsp.copyFile(src, path.join(extra, 'Licente', lic)); } }
   const manifest = { edition: APP_EDITION, kind: final ? 'final' : 'assets-preview', completePDFs: final, project: p.id, blueprintVersion: bp.version, volumes: requested.map(v => ({ volume: v + 1, fingerprint: deliveryFingerprint(p, bp, art, v), artifacts: Object.fromEntries(Object.entries(art).filter(([k]) => /^(final|tr|ill)_/.test(k) && (k === 'final_' + v || k === 'tr_' + v || k.startsWith('ill_' + v + '_'))).map(([k, a]) => [k, a.version])) })), PDFs: receipts, at: Date.now() };
   await fsp.writeFile(path.join(folder, 'manifest.json'), JSON.stringify(manifest, null, 2));
   const zip = vol == null ? root+'.zip' : destination+'.zip', pending=zip+'.part';
+  { const tooLong = longPaths([...(await walk(folder)).map(f => path.join(destination, f.rel)), zip + '.receipt.json']);   // P8-T03
+    if (tooLong.length) throw { status: 409, code: 'path_too_long', message: `Calea „${tooLong[0].path}” are ${tooLong[0].length} caractere, peste limita de ${pathLimit()}. Alege un folder de ieșire mai scurt (Setări) sau un titlu mai scurt.`, paths: tooLong.slice(0, 5) }; }
   const z = await zipDir(folder,pending,path.basename(destination));
   const previous=destination+'.previous';await fsp.rm(previous,{recursive:true,force:true});
   if(fs.existsSync(destination))await fsp.rename(destination,previous);
@@ -226,6 +242,7 @@ async function pruneDailySnapshots(dir){
   }
 }
 export function scheduleBackups(storage, exclusive) {
+  if (process.env.WP_AUTO_BACKUP === '0') return;   // test/benchmark servers: a timer-driven copy would make unrelated mutations wait (409) mid-run
   const run = async () => {
     try {
       const result = await dailySnapshot(storage,exclusive);

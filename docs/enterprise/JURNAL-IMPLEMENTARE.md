@@ -85,9 +85,9 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | P7-T04 | DONE | 28007d2 | TEST-P7-T04 5/5; RS0 329/329 local + 329/329 PG | Înregistrări de experiență pe rol/skill/cohortă/model cu dovezi; Senior/Principal doar din criteriile OUTPUT-07 și după calibrare; reevaluare la schimbarea modelului; istoric versionat; experiența privată rolului |
 | P7-T05 | DONE | f116d0e | TEST-P7-T05 6/6; RS0 335/335 local + 335/335 PG; D-C29 FIXED | Atelier mai sigur: Inginerul legat de cartă, rutare RCA, hash-uri de bază, izolare node_modules, suita absentă = eșec, aplicare jurnalizată cu recuperare, reguli prin promovare |
 | P7-T06 | DONE | (acest commit) | TEST-P7-T06 5/5; RS0 340/340 local + 340/340 PG; D-C21 FIXED | Acțiunile lui Dali sunt propuneri validate de server (allowlist, intenție, rută, revizie), aplicate doar la confirmare; inspectorul memoriei rolului; PHASE 7 închisă |
-| P8-T01 | DONE | (acest commit) | TEST-P8-T01 5/5; poarta PASS; RS0 349/349 local + PG | poarta de release, RELEASE-EVIDENCE, /api/health, CI manual |
-| P8-T02 | DONE | (acest commit) | TEST-P8-T02 4/4; drill 12/12 local + PG (300 MB) | drill de recuperare, raport de recuperare, normalizare fără autoproducție, RPO/RTO măsurate |
-| P8-T03 | PENDING | | | |
+| P8-T01 | DONE | a6c3a67 | TEST-P8-T01 5/5; poarta PASS; RS0 349/349 local + PG | poarta de release, RELEASE-EVIDENCE, /api/health, CI manual |
+| P8-T02 | DONE | a6c3a67 | TEST-P8-T02 4/4; drill 12/12 local + PG (300 MB) | drill de recuperare, raport de recuperare, normalizare fără autoproducție, RPO/RTO măsurate |
+| P8-T03 | DONE | (acest commit) | TEST-P8-T03 5/5; poarta PASS (+licenses); RS0 354/354 local + PG | actualizare etapizată cu revenire, ZIP reproductibil, licențe/OFL, căi lungi, statut comercial pe destinație |
 | P8-T04 | PENDING | | | |
 | P8-T05 | PENDING | | | |
 | P8-T06 | PENDING | | | |
@@ -145,12 +145,14 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | 2026-10-02 | RS0 + TEST-P7-T06 | 340/340 PASS local + 340/340 PostgreSQL; D-C21 FIXED | — |
 | 2026-10-02 | Închidere P7: baseline-report --with-tests --with-pg | 15 PASS · 0 FAIL · 3 NOT_RUN; 340/340 local + 340/340 PostgreSQL; toate defectele FIXED (D-C26 MITIGATED) | — |
 | 2026-10-04 | RS0 + TEST-P8-T01/T02 + poarta de release completă | build/contract/resources/secrets PASS; 349/349 PASS local (PDF real) + 349/349 PostgreSQL | — |
+| 2026-10-04 | RS0 + TEST-P8-T03 + poarta de release | build/contract/resources/secrets/licenses PASS; 354/354 PASS local (PDF real) + 354/354 PostgreSQL | — |
 
 ## Probleme deschise
 
 - Defecte curente reproduse (P1-T02): vezi `baseline/DEFECTS.json`; fiecare are faza de remediere.
-- Textul licenței OFL pentru Andika lipsește din distribuție (P1-T05) → de adăugat din sursa oficială înaintea unui release (P8-T03).
-- dompurify / rgbcolor: licențe ne-standard, verificare manuală la release (P8-T03).
+- ~~Textul licenței OFL pentru Andika~~ → rezolvat în P8-T03 (`public/fonts/OFL-Andika.txt`, din depozitul oficial SIL; însoțește pachetele livrate).
+- ~~dompurify / rgbcolor~~ → rezolvat în P8-T03 (alegeri documentate: Apache-2.0, respectiv MIT; verificarea `licenses` din poartă).
+- Copia zilnică automată blochează mutațiile (409) cât durează (secunde, crește cu datele): comportament existent, documentat; măsurat în P8-T04 (contention).
 
 ## Aprobări umane așteptate
 
@@ -159,6 +161,6 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 
 ## Checkpoint
 
-- Ultimul task închis: P8-T02
-- Următorul task: **P8-T03**
+- Ultimul task închis: P8-T03
+- Următorul task: **P8-T04**
 - Cum se reia: `npm ci && npm run build && BROWSER_PATH=/opt/pw-browsers/chromium npm test`; citește tabelul de mai sus și `docs/enterprise/records/`.

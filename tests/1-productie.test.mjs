@@ -69,6 +69,7 @@ test('după aprobarea finală: pachet, PDF-uri (dacă există browser)', async (
   await approveAll(PID); await waitStatus(PID, ['paused', 'awaiting_review', 'completed']);
   let r = await api('POST', `projects/${PID}/package?volume=0`); assert.equal(r.status, 200); assert.ok(r.body.files > 10);
   const md = fs.readFileSync(path.join(r.body.folder, 'Extra', 'Detalii publicare.md'), 'utf8'); assert.match(md, /KDP/);
+  assert.match(fs.readFileSync(path.join(r.body.folder, 'Extra', 'Licente', 'OFL-Andika.txt'), 'utf8'), /SIL OPEN FONT LICENSE/);   // P8-T03: the font license travels with the delivery
   if (process.env.WP_QUICK) return t.skip('rulare rapidă: fără PDF');
   r = await api('POST', `projects/${PID}/deliver?volume=0`);
   if (r.status === 400 && r.body.code === 'no_browser') return t.skip('nu există Edge/Chrome pe acest calculator');
