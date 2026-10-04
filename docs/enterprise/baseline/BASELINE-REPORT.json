@@ -1,31 +1,31 @@
 {
  "kind": "wonderpages.baseline-report/1",
- "generatedAt": "2026-10-02T18:12:20.515Z",
- "codeRevision": "f116d0e",
+ "generatedAt": "2026-10-04T15:52:45.853Z",
+ "codeRevision": "6fb15d3",
  "checks": [
   {
    "id": "INVENTORY",
    "status": "PASS",
-   "summary": "297 fișiere (fără node_modules/.git/data), 6 ascunse",
+   "summary": "329 fișiere (fără node_modules/.git/data), 7 ascunse",
    "detail": {
-    "total": 297,
+    "total": 329,
     "byExt": {
-     ".md": 74,
+     ".md": 83,
      ".example": 1,
+     ".yml": 2,
      "(none)": 3,
-     ".json": 17,
+     ".json": 22,
      ".bat": 4,
      ".vbs": 1,
-     ".yml": 1,
      ".log": 4,
-     ".js": 106,
+     ".js": 109,
      ".ttf": 4,
-     ".txt": 1,
+     ".txt": 2,
      ".png": 3,
      ".html": 2,
      ".webmanifest": 1,
      ".zip": 1,
-     ".mjs": 67,
+     ".mjs": 80,
      ".ps1": 1,
      ".cjs": 4,
      ".cmd": 2
@@ -36,6 +36,7 @@
      ".claude/skills/ruleaza-teste/SKILL.md",
      ".claude/skills/texte-pentru-editor/SKILL.md",
      ".env.example",
+     ".github/workflows/ci.yml",
      ".gitignore"
     ],
     "entryPoints": {
@@ -65,18 +66,21 @@
   {
    "id": "SOURCE_DRIFT_V04",
    "status": "PASS",
-   "summary": "101/137 fișiere v04 identice, 36 modificate (enterprise), 154 adăugate, 0 lipsă",
+   "summary": "97/137 fișiere v04 identice, 40 modificate (enterprise), 186 adăugate, 0 lipsă",
    "detail": {
-    "unchanged": 101,
+    "unchanged": 97,
     "modified": [
      "blueprints/kids-sc.json",
+     "INSTALARE.md",
      "public/app/actions.js",
      "public/app/core.js",
      "public/app/pdf.js",
      "public/app/ui.js",
      "public/app/views.js",
+     "public/fonts/README.md",
      "public/index.html",
      "scripts/build.mjs",
+     "scripts/pachet-versiune.mjs",
      "server/agents.js",
      "server/assistant.js",
      "server/canva.js",
@@ -87,6 +91,7 @@
      "server/improve.js",
      "server/index.js",
      "server/learning.js",
+     "server/output.js",
      "server/pdfcheck.js",
      "server/printprofile.js",
      "server/projectpkg.js",
@@ -108,28 +113,36 @@
     ],
     "missing": [],
     "added": [
+     ".github/workflows/ci.yml",
      "agents/contracts/role-contracts.json",
      "agents/contracts/skills.json",
      "docs/enterprise/JURNAL-IMPLEMENTARE.md",
      "docs/enterprise/PROTECTED-BEHAVIOR.md",
+     "docs/enterprise/READINESS-LEDGER.md",
      "docs/enterprise/adr/ADR04-paginare.md",
      "docs/enterprise/baseline/BASELINE-REPORT.json",
      "docs/enterprise/baseline/BASELINE-REPORT.md",
+     "docs/enterprise/baseline/CAPACITY-REAL-ASSETS.json",
+     "docs/enterprise/baseline/CAPACITY.json",
      "docs/enterprise/baseline/DEFECTS.json",
      "docs/enterprise/baseline/EDITORIAL-BASELINE.json",
      "docs/enterprise/baseline/EDITORIAL-BASELINE.md",
+     "docs/enterprise/baseline/RECOVERY-DRILL.json",
      "docs/enterprise/baseline/logs/2026-10-02-build.log",
      "docs/enterprise/baseline/logs/2026-10-02-pg-qa.log",
      "docs/enterprise/baseline/logs/2026-10-02-rs0-postgres.log",
      "docs/enterprise/baseline/logs/2026-10-02-rs0.log",
      "docs/enterprise/contracts/AGENT-REGISTRY.md",
      "docs/enterprise/contracts/CANON-AND-DEPENDENCIES.md",
+     "docs/enterprise/contracts/CAPACITY.md",
      "docs/enterprise/contracts/COLLECTION-QA.md",
      "docs/enterprise/contracts/COLLECTION.md",
      "docs/enterprise/contracts/COLORING.md",
+     "docs/enterprise/contracts/DALI-ACTIONS.md",
      "docs/enterprise/contracts/DECISIONS.md",
      "docs/enterprise/contracts/EFFECTIVENESS.md",
      "docs/enterprise/contracts/GOLD-SET.md",
+     "docs/enterprise/contracts/INSTALL-UPGRADE.md",
      "docs/enterprise/contracts/INTAKE.md",
      "docs/enterprise/contracts/JOBS.md",
      "docs/enterprise/contracts/KNOWLEDGE-PROMOTION.md",
@@ -144,16 +157,21 @@
      "docs/enterprise/contracts/PROVIDER-CAPABILITIES.md",
      "docs/enterprise/contracts/QUALITY-ASSESSMENT.md",
      "docs/enterprise/contracts/READINESS.md",
+     "docs/enterprise/contracts/RECOVERY.md",
      "docs/enterprise/contracts/RELEASE-CANDIDATE.md",
+     "docs/enterprise/contracts/RELEASE-GATE.md",
      "docs/enterprise/contracts/REPAIR.md",
      "docs/enterprise/contracts/SAFER-CI.md",
      "docs/enterprise/contracts/SAFETY.md",
      "docs/enterprise/contracts/SECURITY-BASELINE.md",
      "docs/enterprise/contracts/STORY-CONTRACTS.md",
+     "docs/enterprise/contracts/UX-ACCESSIBILITY.md",
      "docs/enterprise/contracts/VISUAL-QUALITY.md",
      "docs/enterprise/contracts/WORKBENCH.md",
      "docs/enterprise/migration/DW-DRY-RUN.json",
      "docs/enterprise/migration/DW-DRY-RUN.md",
+     "docs/enterprise/migration/DW-P8-STATUS.json",
+     "docs/enterprise/migration/DW-P8-STATUS.md",
      "docs/enterprise/records/P1.md",
      "docs/enterprise/records/P2.md",
      "docs/enterprise/records/P3.md",
@@ -161,14 +179,23 @@
      "docs/enterprise/records/P5.md",
      "docs/enterprise/records/P6.md",
      "docs/enterprise/records/P7.md",
+     "docs/enterprise/records/P8.md",
      "evaluation/gold/gold-v1.json",
      "public/app/layout-measure.js",
+     "public/fonts/OFL-Andika.txt",
      "public/fonts/andika-metrics.json",
+     "scripts/actualizare.mjs",
      "scripts/enterprise/baseline-report.mjs",
+     "scripts/enterprise/capacity-bench.mjs",
+     "scripts/enterprise/dw-status.mjs",
      "scripts/enterprise/editorial-baseline.mjs",
      "scripts/enterprise/font-metrics.mjs",
+     "scripts/enterprise/licenses.mjs",
      "scripts/enterprise/pg-ephemeral.mjs",
+     "scripts/enterprise/recovery-drill.mjs",
+     "scripts/enterprise/release-gate.mjs",
      "scripts/enterprise/reproduce-defects.mjs",
+     "seeds/canon-facts.json",
      "server/agents-runtime/context-builder.js",
      "server/agents-runtime/registry.js",
      "server/domain/atlas.js",
@@ -204,6 +231,9 @@
      "server/migration/raw-compare.js",
      "server/observability/events.js",
      "server/observability/progress.js",
+     "server/ops/admission.js",
+     "server/ops/health.js",
+     "server/ops/recovery.js",
      "server/persistence/artifact-store.js",
      "server/persistence/migrations.js",
      "server/persistence/preconditions.js",
@@ -260,22 +290,29 @@
      "tests/73-p7-maturity.test.mjs",
      "tests/74-p7-improve.test.mjs",
      "tests/75-p7-dali.test.mjs",
+     "tests/80-p8-ci.test.mjs",
+     "tests/81-p8-recovery.test.mjs",
+     "tests/82-p8-install.test.mjs",
+     "tests/83-p8-capacity.test.mjs",
+     "tests/84-p8-ux.test.mjs",
+     "tests/85-p8-dw.test.mjs",
      "tests/cdp.mjs",
-     "tests/mocks/legacy-blueprint-v15.json"
+     "tests/mocks/legacy-blueprint-v15.json",
+     "tests/ux-audit.mjs"
     ]
    }
   },
   {
    "id": "BUILD",
    "status": "PASS",
-   "summary": "PASS: 176 fișiere JavaScript, JSON, lockfile, fonturi și fișiere runtime; WonderPages AI — claude-gpt.v04",
-   "log": "docs/enterprise/baseline/logs/2026-10-02-build.log"
+   "summary": "PASS: 192 fișiere JavaScript, JSON, lockfile, fonturi și fișiere runtime; WonderPages AI — claude-gpt.v04",
+   "log": "docs/enterprise/baseline/logs/2026-10-04-build.log"
   },
   {
    "id": "RS0_SUITE",
-   "status": "PASS",
-   "summary": "340 trecute, 0 picate, 0 sărite; browser PDF: da",
-   "log": "docs/enterprise/baseline/logs/2026-10-02-rs0.log"
+   "status": "FAIL",
+   "summary": "367 trecute, 1 picate, 0 sărite; browser PDF: da",
+   "log": "docs/enterprise/baseline/logs/2026-10-04-rs0.log"
   },
   {
    "id": "PROTECT_IMPORT",
@@ -298,7 +335,7 @@
   {
    "id": "PROTECT_APPROVALS",
    "status": "PASS",
-   "summary": "39/39 teste",
+   "summary": "45/45 teste",
    "detail": [
     "poarta seriei: aprobarea pe elemente e obligatorie (audit H1)",
     "aprobarea se invalidează când elementul se schimbă",
@@ -338,7 +375,13 @@
     "P7-T03: aprobarea după reparație nu este un succes al variantei originale",
     "P7-T06 Dinosaur World: Dali vede sursa migrată și raportul de reconciliere; aprobările nu sunt inventate",
     "v03: nicio lipsă nu poate fi aprobată implicit",
-    "v03: aprobare închisă cu conținut schimbat refuză livrarea"
+    "v03: aprobare închisă cu conținut schimbat refuză livrarea",
+    "P8-T01: copia curată trece verificările obligatorii; fără suită poarta este INCOMPLETE, nu PASS; versiunile sunt listate",
+    "P8-T01: pachetul este refuzat fără poartă trecută sau cu dovada altor surse; cu poarta trecută conține dovezile și versiunile",
+    "P8-T03: actualizare peste instalarea existentă — config/date/preferințe neschimbate (hash-uri protejate), fișiere eliminate/adăugate, smoke, revenire manuală completă",
+    "P8-T03: pornirea eșuată → revenire automată verificată; actualizarea întreruptă se anulează la reluare; versiune coruptă, poartă netrecută și dependențe schimbate sunt refuzate fără nicio schimbare",
+    "P8-T06: pachetul Enterprise DW dus-întors — toate artefactele și sursa brută identice, proiect nou, aprobări în așteptare",
+    "P8-T06 genericitate: aceeași aplicație rulează alte teme pentru 5–6 și 7–8 până la poarta colecției (furnizori simulați: genericitate, nu calitate)"
    ]
   },
   {
@@ -357,7 +400,7 @@
   {
    "id": "PROTECT_BACKUP",
    "status": "PASS",
-   "summary": "10/10 teste",
+   "summary": "16/16 teste",
    "detail": [
     "v03: backupul și restaurarea păstrează împreună documentele și imaginile",
     "v03: o copie întreruptă nu devine backup valid și nu suprascrie copia existentă",
@@ -368,13 +411,19 @@
     "P2-T03: re-legarea dependențelor după restaurare: scena identică → legat, scena diferită → rămâne expirat",
     "copiile de siguranță: rândurile proiectului ies, celelalte rămân",
     "P6-T02 API: greșeala exactă p7 locală; impact anulat; revizie învechită; culoare p4; doar linia p4; semantic p7; restaurare după > 5 candidați; previzualizare completă",
-    "P7-T05: aplicarea întreruptă se anulează complet la repornire (jurnal + backup)"
+    "P7-T05: aplicarea întreruptă se anulează complet la repornire (jurnal + backup)",
+    "P8-T02 local: drill complet — crash jurnal, restaurare întreruptă și completă, normalizare, fișier lipsă, copie secundară, migrare întreruptă, backup vechi/nou",
+    "P8-T02 PostgreSQL real: tranzacție întreruptă, restaurare cu rânduri pe tabel, migrare de schemă întreruptă fără stare parțială",
+    "P8-T02 API: restaurarea raportează ce s-a recuperat și nu pornește nimic automat",
+    "P8-T02 Dinosaur World: migrarea oprită de proces este curățată la pornire; originalul și proiectul migrat se restaurează independent, cu proveniența",
+    "P8-T04: benchmark pe un set declarat (local): p50/p95, scrieri comise, evenimentul UI, concurența Dali, blocarea de backup, amprentă și reținerea backupurilor",
+    "P8-T04 remediere: backupul incremental leagă fișierele neschimbate (lacăt și spațiu proporționale cu schimbarea); fiecare backup rămâne complet și independent la restaurare"
    ]
   },
   {
    "id": "PROTECT_LEARNING",
    "status": "PASS",
-   "summary": "17/17 teste",
+   "summary": "18/18 teste",
    "detail": [
     "agenți și lecții",
     "P2-T04 API: export de colecție fără poartă refuzat cu motive; propunerea de canon cere decizie; propunere expirată refuzată",
@@ -392,19 +441,21 @@
     "P7-T01: lecția, exemplul și tiparul promovate sunt revocate complet la ștergerea pachetului (index de revocare)",
     "P7-T02: sursa revocată — lecția nu mai poate fi promovată; rollback determinist al unei promovări",
     "P7-T03: transfer negativ — efectul potrivit (vârstă, versiune, etapă) marchează lecția dăunătoare; rollback-ul promovării",
-    "P7-T04: pragul atins → Senior (calibrat); neatins → nedovedit cu motivele; necalibrat → rămâne nedovedit"
+    "P7-T04: pragul atins → Senior (calibrat); neatins → nedovedit cu motivele; necalibrat → rămâne nedovedit",
+    "P8-T06 genericitate: aceeași aplicație rulează alte teme pentru 5–6 și 7–8 până la poarta colecției (furnizori simulați: genericitate, nu calitate)"
    ]
   },
   {
    "id": "PROTECT_ATELIER",
    "status": "PASS",
-   "summary": "5/5 teste",
+   "summary": "6/6 teste",
    "detail": [
     "atelier: schimbarea trece verificările și testul de pornire în copie (audit #5)",
     "atelier: scripturile de pornire nu pot fi modificate (audit H3)",
     "P6-T02: atelierul paginii — 12 pagini + copertă, limbi, distribuție/obiecte, contract, verificări; AI doar prin poarta deschisă",
     "P6-T02: UI fără link generic fals de previzualizare (legături exacte către pagina din atelier)",
-    "P7-T06: ruta invalidă este refuzată; rutele reale (inclusiv atelierul paginii) sunt acceptate"
+    "P7-T06: ruta invalidă este refuzată; rutele reale (inclusiv atelierul paginii) sunt acceptate",
+    "P8-T07: toate paginile cărții și ambele ediții sunt accesibile din atelier (deep link) la mobil"
    ]
   },
   {
@@ -423,13 +474,13 @@
    "id": "PG_QA",
    "status": "PASS",
    "summary": "PASS: PostgreSQL real — CRUD, istoric, backup DB+fișiere, restaurare, rollback tranzacțional; numărul proiectelor instalate păstrat.",
-   "log": "docs/enterprise/baseline/logs/2026-10-02-pg-qa.log"
+   "log": "docs/enterprise/baseline/logs/2026-10-04-pg-qa.log"
   },
   {
    "id": "RS0_SUITE_POSTGRES",
-   "status": "PASS",
-   "summary": "340 trecute, 0 picate, 0 sărite (STORAGE=postgres)",
-   "log": "docs/enterprise/baseline/logs/2026-10-02-rs0-postgres.log"
+   "status": "FAIL",
+   "summary": "367 trecute, 1 picate, 0 sărite (STORAGE=postgres)",
+   "log": "docs/enterprise/baseline/logs/2026-10-04-rs0-postgres.log"
   },
   {
    "id": "DW_REFERENCE",
@@ -650,11 +701,11 @@
   {
    "id": "RUNTIME",
    "status": "PASS",
-   "summary": "Node v22.22.0, npm 10.9.4, linux 6.18.44-fc-v51 x64",
+   "summary": "Node v22.22.0, npm 10.9.4, linux 6.18.44-fc-v64 x64",
    "detail": {
     "node": "v22.22.0",
     "npm": "10.9.4",
-    "platform": "linux 6.18.44-fc-v51 x64",
+    "platform": "linux 6.18.44-fc-v64 x64",
     "postgresBin": "/usr/lib/postgresql/16/bin",
     "browser": "/opt/pw-browsers/chromium",
     "claude": "/opt/node22/bin/claude",
@@ -688,8 +739,8 @@
   }
  ],
  "summary": {
-  "PASS": 15,
-  "FAIL": 0,
+  "PASS": 13,
+  "FAIL": 2,
   "NOT_RUN": 3
  }
 }

@@ -105,7 +105,9 @@ test('P8-T07 Dinosaur World în interfață: proiectul migrat se deschide, recon
   try {
     await page.goto(BASE + `/#/p/${id}/activity`); await settle(page); await page.waitFor(`!!document.querySelector('#reconcile')`);
     let a = await page.evaluate(AUDIT); assert.deepEqual(violations(a), [], 'Activitate (DW, mobil)');
-    const rec = await page.evaluate(`document.querySelector('#reconcile').textContent`); assert.match(rec, /Reconciliere/); assert.ok(Number(await page.evaluate(`document.querySelector('#reconcile').dataset.conflicts`)) >= 2, 'DW01 și DW02 vizibile cu opțiunile lor');
+    const rec = await page.evaluate(`document.querySelector('#reconcile').textContent`); assert.match(rec, /Reconciliere/); const open = (await api('GET', `projects/${id}/reconcile`)).body.conflicts.length;   // earlier tests may already have reconciled the shared migrated project
+    assert.equal(Number(await page.evaluate(`document.querySelector('#reconcile').dataset.conflicts`)), open, 'interfața arată exact conflictele deschise ale serverului');
+    if (open) assert.ok(await page.evaluate(`document.querySelectorAll('#reconcile select').length`) >= 1, 'conflictele deschise au opțiuni de ales');
     await page.evaluate(`location.hash = '#/p/${id}/export'`); await settle(page);
     a = await page.evaluate(AUDIT); assert.deepEqual(violations(a), [], 'Livrare (DW, mobil)');
     assert.match(await page.evaluate(`document.querySelector('#main').textContent`), /nemăsurat|nu este gata|necunoscut/i, 'tipar/canal: nicio pretenție de pregătire fără măsurători');
