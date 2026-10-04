@@ -10,7 +10,7 @@ import { config, APP_EDITION } from './config.js';
 import { safeCode, inside } from './sanitize.js';
 import { deliveryFingerprint, currentReceipts, deliveryComplete } from './delivery.js';
 import { fileHash, fingerprint } from './contracts.js';
-import { saveSnapshot } from './snapshot.js';
+import { saveSnapshot, verifySnapshot } from './snapshot.js';
 const fingerprintReceipt = fileHash;
 
 const slug = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^A-Za-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60) || 'proiect';
@@ -206,8 +206,10 @@ export async function dailySnapshot(storage, exclusive = fn => fn()) {
     return {...result,mirror};
   });
 }
+/* P8-T02: the second copy is verified (inventory + hashes) — a failed or partial copy is reported, the primary stays valid */
 export async function mirrorBackup(folder){
-  try{return await mirrorDelivery([folder]);}catch(e){console.warn('[backup mirror]',e.message);return {error:e.message};}
+  try{const r=await mirrorDelivery([folder]);if(!r||!r.copied)return r;const copy=path.join(MIRROR,path.relative(OUT,folder));await verifySnapshot(copy);return {...r,verified:true};}
+  catch(e){console.warn('[backup mirror]',e.message);return {error:e.message,verified:false};}
 }
 async function pruneDailySnapshots(dir){
   const daily=[];

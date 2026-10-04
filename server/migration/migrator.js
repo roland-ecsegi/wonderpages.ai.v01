@@ -74,8 +74,12 @@ export async function runMigration(repo, storage, buf, { planHash, currentBluepr
   const runRel = `_migrations/${plan.migrationId}.json`, prev = await storage.readJSON(runRel, null);
   if (prev?.status === 'committed' && repo.getProject(prev.projectId)) return { ...prev, alreadyMigrated: true };
   let pid = null;
+  /* P8-T02: a durable "running" marker first, so a process killed mid-migration is found and undone at startup */
+  await storage.writeJSON(runRel, { id: plan.migrationId, status: 'running', planHash: plan.planHash, sourceSha256: plan.sourceSha256, projectId: null, startedAt: now(), at: now() });
   try {
     const p = await importProject(repo, storage, buf); pid = p.id;
+    await storage.writeJSON(runRel, { id: plan.migrationId, status: 'running', planHash: plan.planHash, sourceSha256: plan.sourceSha256, projectId: pid, startedAt: now(), at: now() });
+    if (faultAt === 'crash-after-import') throw { code: 'migration_crash', crash: true, message: 'Oprire simulată a procesului după import.' };
     if (faultAt === 'after-import') throw { code: 'migration_fault', message: 'Eroare simulată după import.' };
     await storage.writeFile(`projects/${pid}/raw/source-${plan.sourceSha256.slice(0, 16)}.zip`, buf);   // T1
     const art = await repo.artifacts(pid);
@@ -101,9 +105,22 @@ export async function runMigration(repo, storage, buf, { planHash, currentBluepr
     await storage.writeJSON(runRel, run);
     return { ...run, report };
   } catch (e) {
+    if (e?.crash) throw e;   // simulated process death: nothing below runs, startup recovery must clean up
     if (pid) { try { await repo.deleteProject(pid); } catch (x) { console.warn('[migration rollback]', x?.message || x); } }
     await storage.writeJSON(runRel, { id: plan.migrationId, status: 'failed', planHash: plan.planHash, sourceSha256: plan.sourceSha256, error: String(e?.message || e).slice(0, 300), at: now() }).catch(() => {});
     throw e;
   }
+}
+/** P8-T02 — startup: a migration still "running" was interrupted by a process stop; its partial project is removed
+ *  (the source archive is untouched, the migration can be rerun from dry-run) and the run is marked interrupted. */
+export async function recoverMigrations(repo, storage) {
+  const out = [];
+  for (const run of await listMigrations(storage)) {
+    if (run.status !== 'running') continue;
+    let removed = false; if (run.projectId && repo.getProject(run.projectId)) { await repo.deleteProject(run.projectId); removed = true; }
+    await storage.writeJSON(`_migrations/${run.id}.json`, { ...run, status: 'interrupted', recoveredAt: now(), removedProject: removed ? run.projectId : null, note: 'Migrare întreruptă de oprirea procesului: proiectul parțial a fost eliminat; arhiva sursă este neatinsă, rulează din nou dry-run.' });
+    out.push({ id: run.id, removedProject: removed ? run.projectId : null });
+  }
+  return out;
 }
 export async function listMigrations(storage) { const out = []; for (const f of (await storage.list('_migrations').catch(() => [])).filter(x => x.name.endsWith('.json'))) { const d = await storage.readJSON(`_migrations/${f.name}`, null); if (d) out.push(d); } return out.sort((a, b) => b.at - a.at); }

@@ -6,11 +6,11 @@ installConsoleRedaction();   // P1-T04: secrets never reach wonderpages.log
 import { checkedPackage } from './package-check.js';
 import { reconcileStorage } from './reconcile.js';
 import http from 'node:http';
-import {saveSnapshot,restoreSnapshot,listSnapshots} from './snapshot.js';
+import {saveSnapshot,restoreSnapshot,listSnapshots,recoveryReport} from './snapshot.js';
 import {tlsEnabled,startTls} from './tls.js';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { config, ROOT, APP_EDITION } from './config.js';
+import { config, ROOT, APP_EDITION, APP_VERSION } from './config.js';
 import { createStorage } from './storage/index.js';
 import { Repo, bus, now, uid, clone, flushRepo } from './repo.js';
 import { Canva } from './canva.js';
@@ -66,6 +66,10 @@ import { volumeSafety, inputSafety } from './quality/safety.js';
 import { collectionQA, releaseIssues } from './quality/collection-qa.js';
 import { toolSchemaHash, hostConfig } from './providers/capabilities.js';
 import { checkIncludedQuota } from './subscription-usage.js';
+import { healthReport, providerState, REQUIRED_RESOURCES } from './ops/health.js';
+import { normalizeAfterStop } from './ops/recovery.js';
+import { recoverMigrations } from './migration/migrator.js';
+import { applyMigrations, SCHEMA_VERSION as DB_SCHEMA_VERSION } from './persistence/migrations.js';
 
 globalThis.__wpBootStage?.('Pornesc baza de date (Docker)…');
 const storage = await createStorage(config.storage);
@@ -86,6 +90,7 @@ await Dali.initAssistant(repo, storage, (prompt, o) => agentComplete(prompt, o),
   services: { claude: llmInfo().configured, claudeAuth: llmInfo().auth?.ok, canva: canva.status().connected, drive: gdrive.status().connected, lan: LAN.status().enabled }, usage: usage()
 }));
 await Improve.recoverInterruptedApplies(Dali.listImprovements()).then(r => { if (r.length) console.warn('[atelier] aplicări întrerupte, revenite:', r.join(', ')); }).catch(e => console.warn('[atelier]', e.message));   // P7-T05
+await recoverMigrations(repo, storage).then(r => { if (r.length) console.warn('[migrare] migrări întrerupte, curățate:', JSON.stringify(r)); }).catch(e => console.warn('[migrare]', e.message));   // P8-T02
 const SETTINGS = (await storage.readJSON('settings.json', {})) || {};
 if (SETTINGS.outputDir) setOutputDir(SETTINGS.outputDir);
 if (SETTINGS.outputMirror) setOutputMirror(SETTINGS.outputMirror);
@@ -101,11 +106,9 @@ for (const f of await fs.readdir(path.join(ROOT, 'blueprints'))) {
   const cur = repo.getType(bp.slug);
   if (!cur || Number(cur.version || 0) < Number(bp.version || 0)) await repo.putType({ ...bp, updatedAt: now() });
 }
-/* a server restart interrupts running work: mark it resumable */
-for (const p of repo.listProjects()) if (['running', 'correcting'].includes(p.status)) await repo.patchProject(p.id, { status: p.gate ? 'awaiting_review' : 'paused', error: 'Serverul a fost repornit. Reia de unde a rămas.' });
-/* P3-T03: leases of the previous process are reconciled; an external call without a confirmed result is never replayed blindly */
-const reconciled = {};
-for (const p of repo.listProjects()) { const r = await EngineMod.jobs?.reconcile(p.id).catch(e => ({ error: e.message })); if (r && (r.pending?.length || r.ambiguous?.length || r.resumeCheck?.length)) { reconciled[p.id] = r; if (r.ambiguous?.length) await repo.patchProject(p.id, { log: [...(p.log || []), { t: now(), text: `${r.ambiguous.length} unități au fost întrerupte după un apel extern fără rezultat confirmat; decide în Activitate dacă le reiei.`, kind: 'warn' }].slice(-120) }); } }
+/* a server restart interrupts running work: mark it resumable; P3-T03 leases of the previous process are reconciled and an
+   external call without a confirmed result is never replayed blindly (P8-T02: shared with the post-restore normalization) */
+const { reconciled } = await normalizeAfterStop(repo, EngineMod.jobs);
 if (Object.keys(reconciled).length) console.warn('[jobs reconcile]', JSON.stringify(reconciled));
 globalThis.__wpBootStage?.('Verific Claude…');
 await initLLM();
@@ -488,10 +491,21 @@ on('POST', '/api/backups/restore', async (_, req) => {
   localOnly(req); const b = await json(req); return exclusiveStorage(async()=>{
   if (!['RESTAUREAZĂ', 'RESTAUREAZA', 'RESTAUREAZǍ'].includes(String(b.confirm || '').trim().toUpperCase())) throw { status: 400, message: 'Scrie RESTAUREAZĂ ca să confirmi.' };
   const a = activeProject(); if (a || Object.keys(RUNNING).length) throw { status: 409, message: `Lucrează acum „${a?.title || 'un proiect'}”. Pune-l pe pauză, apoi restaurează.` };
-  let r;if(/^backup-v03-\d+\.wbackup$/.test(String(b.file))){const safety='backup-v03-'+Date.now()+'.wbackup';await Promise.all([flushGovernor(),flushAgents(),Learning.flushLearning(),Ledger.flushLedger(),flushRepo()]);await saveSnapshot(storage,path.join(outputDir(),'_backup',safety));r={...(await restoreSnapshot(storage,path.join(outputDir(),'_backup',b.file))),safety};await reloadPersistent();}else{if(storage.kind!=='postgres')throw {status:400,message:'Backup incompatibil.'};r=await restoreBackup(b.file);await reloadPersistent();}
+  let r;if(/^backup-v03-\d+\.wbackup$/.test(String(b.file))){const safety='backup-v03-'+Date.now()+'.wbackup';await Promise.all([flushGovernor(),flushAgents(),Learning.flushLearning(),Ledger.flushLedger(),flushRepo()]);await saveSnapshot(storage,path.join(outputDir(),'_backup',safety));const folder=path.join(outputDir(),'_backup',b.file);r={...(await restoreSnapshot(storage,folder)),safety};const recovery=await recoveryReport(storage,folder);await applyMigrations(storage);await reloadPersistent();const normalized=await normalizeAfterStop(repo,EngineMod.jobs,{reason:'Restaurat din backup: nimic nu pornește automat. Verifică proiectul și reia manual.',force:true,logPrefix:'După restaurare: '});r={...r,recovery,normalized};}   // P8-T02: measured recovery + no auto-productionelse{if(storage.kind!=='postgres')throw {status:400,message:'Backup incompatibil.'};r=await restoreBackup(b.file);await reloadPersistent();}
   const auto = process.env.WP_BG === '1'; if (auto) setTimeout(() => process.exit(0), 1500);   // the app reloads everything from the restored database
   return { ok: true, ...r, restart: auto ? 'auto' : 'manual' };
   });
+});
+/* P8-T01: sanitized health — the app's own parts; providers reported separately (a limited provider leaves the app healthy) */
+on('GET', '/api/health', async (_, __, ___, res) => {
+  let db = false; try { if (storage.q) await storage.q('SELECT 1'); db = true; } catch {}
+  let out = false; try { await fs.mkdir(outputDir(), { recursive: true }); const t = path.join(outputDir(), '.wp-health'); await fs.writeFile(t, 'ok'); await fs.rm(t); out = true; } catch {}
+  const resources = {}; for (const r of REQUIRED_RESOURCES) resources[r] = await fs.access(path.join(ROOT, r)).then(() => true, () => false);
+  const li = llmInfo(), u = usage(), ct = codexTextStatus(), cx = GPTImage.codexStatus(), cv = canva.status();
+  const h = healthReport({ database: { ok: db, kind: storage.kind }, output: { ok: out }, resources, schemaVersion: storage.kind === 'postgres' ? DB_SCHEMA_VERSION : null, version: APP_VERSION || null,
+    providers: { claudeText: providerState({ installed: !!li.configured, auth: li.auth?.ok ?? null, limited: u.text5h >= u.budget5h }), codexText: providerState({ installed: !!ct.installed, auth: ct.ready ? true : ct.installed ? (ct.auth ?? null) : null }), codexImage: providerState({ installed: !!cx.installed, auth: cx.installed ? (cx.ready ? true : cx.auth ?? null) : null }), canva: providerState({ installed: true, auth: cv.connected ? true : cv.needsAuth ? false : null }) } });
+  if (h.app.status === 'down') { send(res, 503, h); return null; }
+  return h;
 });
 on('GET', '/api/diagnostic', async () => {
   const out = []; const add = (name, ok, detail) => out.push({ name, ok, detail });

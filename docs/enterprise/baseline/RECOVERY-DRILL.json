@@ -1,0 +1,601 @@
+{
+  "schema": "wonderpages.recovery-drill/1",
+  "at": "2026-10-04T13:39:36.259Z",
+  "host": {
+    "platform": "linux",
+    "node": "v22.22.0",
+    "cpus": 4
+  },
+  "targets": {
+    "crashRpoCommits": 0,
+    "disasterRpoHours": 24,
+    "rtoHours": 2,
+    "status": "proposed_targets_not_measured_on_reference_host"
+  },
+  "results": {
+    "local": {
+      "kind": "local",
+      "schemaVersion": 9,
+      "dataset": {
+        "projects": 21,
+        "files": 193,
+        "bytes": 314634323,
+        "summary": {
+          "projects": 21,
+          "decisions": 20,
+          "jobs": 2,
+          "artifactVersions": 42,
+          "assets": 41,
+          "knowledge": 2,
+          "releaseCandidates": 0,
+          "migrations": 1
+        }
+      },
+      "steps": {
+        "crashBoundaries": {
+          "beforeJournal": "not_acked",
+          "afterJournal": {
+            "acked": false,
+            "replayed": 1,
+            "present": true
+          },
+          "rpoCommitsLost": 0
+        },
+        "interruptedRestore": {
+          "before-swap": {
+            "failed": true,
+            "currentDataUnchanged": true
+          },
+          "before-commit": {
+            "failed": true,
+            "currentDataUnchanged": true
+          }
+        },
+        "recovery": {
+          "ok": true,
+          "snapshot": "backup-v03-1791121103392.wbackup",
+          "at": 1791121106277,
+          "kind": "local",
+          "inventory": {
+            "expected": 193,
+            "matched": 193,
+            "missing": [],
+            "changed": []
+          },
+          "rows": null,
+          "rowMismatch": [],
+          "newerTablesEmpty": [],
+          "entities": {
+            "projects": {
+              "snapshot": 21,
+              "restored": 21
+            },
+            "decisions": {
+              "snapshot": 20,
+              "restored": 20
+            },
+            "jobs": {
+              "snapshot": 2,
+              "restored": 2
+            },
+            "artifactVersions": {
+              "snapshot": 42,
+              "restored": 42
+            },
+            "assets": {
+              "snapshot": 41,
+              "restored": 41
+            },
+            "knowledge": {
+              "snapshot": 2,
+              "restored": 2
+            },
+            "releaseCandidates": {
+              "snapshot": 0,
+              "restored": 0
+            },
+            "migrations": {
+              "snapshot": 1,
+              "restored": 1
+            }
+          },
+          "versions": {
+            "snapshot": {
+              "version": "19.4.0",
+              "edition": "WonderPages AI — claude-gpt.v04",
+              "schemaVersion": 9
+            },
+            "current": {
+              "version": "19.4.0",
+              "edition": "WonderPages AI — claude-gpt.v04",
+              "schemaVersion": 9
+            },
+            "note": null
+          }
+        },
+        "normalization": {
+          "paused": [
+            "drill000"
+          ],
+          "reconciled": {
+            "drill000": {
+              "pending": [
+                "text:script_1"
+              ],
+              "ambiguous": [
+                "image:p3"
+              ],
+              "resumeCheck": [],
+              "untouched": 0
+            }
+          },
+          "autoStarted": 0,
+          "jobs": [
+            {
+              "key": "text:script_1",
+              "status": "pending"
+            },
+            {
+              "key": "image:p3",
+              "status": "ambiguous"
+            }
+          ],
+          "projectStatus": "paused"
+        },
+        "migratedProject": {
+          "source": "migration",
+          "original": "dw-original",
+          "rawSourceIntact": true,
+          "lineage": true,
+          "approvals": 0
+        },
+        "missingFile": {
+          "reconcileMissing": [
+            "images/p2.png"
+          ],
+          "reportMissing": [
+            "projects/drill002/images/p2.png"
+          ],
+          "reportOk": false
+        },
+        "secondaryCopy": {
+          "failing": {
+            "error": true,
+            "verified": false
+          },
+          "working": {
+            "copied": 1,
+            "verified": true
+          },
+          "primaryValid": true
+        },
+        "interruptedMigration": {
+          "recovered": [
+            {
+              "id": "mig-partial",
+              "removedProject": "drillpart"
+            }
+          ],
+          "partialProjectGone": true,
+          "runStatus": "interrupted",
+          "committedUntouched": true
+        },
+        "interruptedSchemaMigration": {
+          "applicable": false,
+          "note": "Local: migrările sunt doar metadate scrise atomic (tmp + rename); nu există stare parțială."
+        },
+        "snapshotVersions": {
+          "oldRestored": true,
+          "oldReportOk": true,
+          "oldNote": "Backup dintr-o versiune mai veche: versiunea aplicației nu era înregistrată.",
+          "newerRefused": true
+        }
+      },
+      "measured": {
+        "snapshotMs": 2888,
+        "rtoMs": 4255,
+        "throughput": {
+          "datasetMb": 300.1,
+          "snapshotMbPerS": 103.9,
+          "restoreMbPerS": 70.5,
+          "note": "Estimare liniară pentru alte volume = volum ÷ debit; nu este o măsurătoare pe hostul de referință."
+        },
+        "disasterRpo": {
+          "commitsLost": 3,
+          "expectedLost": 3,
+          "windowMs": 12174,
+          "note": "Commit-urile făcute după ultimul backup se pierd la o restaurare după dezastru; cu backup zilnic fereastra maximă este 24 h."
+        }
+      },
+      "targets": {
+        "crashRpoCommits": 0,
+        "disasterRpoHours": 24,
+        "rtoHours": 2,
+        "status": "proposed_targets_not_measured_on_reference_host"
+      },
+      "failures": [],
+      "checks": [
+        {
+          "name": "crash: commit fără jurnal nu este confirmat; commit jurnalizat recuperat (RPO 0 pentru date comise)",
+          "ok": true
+        },
+        {
+          "name": "restaurare întreruptă: datele curente rămân neatinse",
+          "ok": true
+        },
+        {
+          "name": "inventar/hash-uri/versiuni/decizii recuperate",
+          "ok": true
+        },
+        {
+          "name": "pierderea după backup este măsurată, nu zero",
+          "ok": true
+        },
+        {
+          "name": "fără producție automată după restaurare",
+          "ok": true
+        },
+        {
+          "name": "proiectul migrat: sursă brută intactă, linie de proveniență, aprobări resetate",
+          "ok": true
+        },
+        {
+          "name": "fișier lipsă raportat",
+          "ok": true
+        },
+        {
+          "name": "a doua copie: eșecul raportat, copia bună verificată, primara validă",
+          "ok": true
+        },
+        {
+          "name": "migrare întreruptă curățată la pornire",
+          "ok": true
+        },
+        {
+          "name": "migrare de schemă întreruptă fără stare parțială",
+          "ok": true
+        },
+        {
+          "name": "backup vechi restaurabil; backup din schemă mai nouă refuzat",
+          "ok": true
+        },
+        {
+          "name": "RTO măsurat ≤ 2 h (acest host, acest set)",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    "postgres": {
+      "kind": "postgres",
+      "schemaVersion": 9,
+      "dataset": {
+        "projects": 21,
+        "files": 42,
+        "bytes": 314640500,
+        "summary": {
+          "projects": 21,
+          "decisions": 20,
+          "jobs": 2,
+          "artifactVersions": 42,
+          "assets": 41,
+          "knowledge": 0,
+          "releaseCandidates": 0,
+          "migrations": 1,
+          "rows": {
+            "product_types": 0,
+            "projects": 21,
+            "project_blueprints": 21,
+            "artifacts": 42,
+            "comments": 0,
+            "review_events": 0,
+            "documents": 2,
+            "schema_migrations": 9,
+            "commands": 0,
+            "artifact_versions": 42,
+            "artifact_dependencies": 0,
+            "decision_records": 20,
+            "outbox": 20,
+            "migration_runs": 1,
+            "jobs": 2
+          }
+        }
+      },
+      "steps": {
+        "crashBoundaries": {
+          "beforeCommit": {
+            "acked": false,
+            "present": false
+          },
+          "rpoCommitsLost": 0
+        },
+        "interruptedRestore": {
+          "before-swap": {
+            "failed": true,
+            "currentDataUnchanged": true
+          },
+          "before-commit": {
+            "failed": true,
+            "currentDataUnchanged": true
+          }
+        },
+        "recovery": {
+          "ok": true,
+          "snapshot": "backup-v03-1791121139444.wbackup",
+          "at": 1791121142699,
+          "kind": "postgres",
+          "inventory": {
+            "expected": 41,
+            "matched": 41,
+            "missing": [],
+            "changed": []
+          },
+          "rows": {
+            "product_types": {
+              "snapshot": 0,
+              "live": 0
+            },
+            "projects": {
+              "snapshot": 21,
+              "live": 21
+            },
+            "project_blueprints": {
+              "snapshot": 21,
+              "live": 21
+            },
+            "artifacts": {
+              "snapshot": 42,
+              "live": 42
+            },
+            "comments": {
+              "snapshot": 0,
+              "live": 0
+            },
+            "review_events": {
+              "snapshot": 0,
+              "live": 0
+            },
+            "documents": {
+              "snapshot": 2,
+              "live": 2
+            },
+            "schema_migrations": {
+              "snapshot": 9,
+              "live": 9
+            },
+            "commands": {
+              "snapshot": 0,
+              "live": 0
+            },
+            "artifact_versions": {
+              "snapshot": 42,
+              "live": 42
+            },
+            "artifact_dependencies": {
+              "snapshot": 0,
+              "live": 0
+            },
+            "decision_records": {
+              "snapshot": 20,
+              "live": 20
+            },
+            "outbox": {
+              "snapshot": 20,
+              "live": 20
+            },
+            "migration_runs": {
+              "snapshot": 1,
+              "live": 1
+            },
+            "jobs": {
+              "snapshot": 2,
+              "live": 2
+            }
+          },
+          "rowMismatch": [],
+          "newerTablesEmpty": [],
+          "entities": {
+            "projects": {
+              "snapshot": 21,
+              "restored": 21
+            },
+            "decisions": {
+              "snapshot": 20,
+              "restored": 20
+            },
+            "jobs": {
+              "snapshot": 2,
+              "restored": 2
+            },
+            "artifactVersions": {
+              "snapshot": 42,
+              "restored": 42
+            },
+            "assets": {
+              "snapshot": 41,
+              "restored": 41
+            },
+            "knowledge": {
+              "snapshot": 0,
+              "restored": 0
+            },
+            "releaseCandidates": {
+              "snapshot": 0,
+              "restored": 0
+            },
+            "migrations": {
+              "snapshot": 1,
+              "restored": 1
+            }
+          },
+          "versions": {
+            "snapshot": {
+              "version": "19.4.0",
+              "edition": "WonderPages AI — claude-gpt.v04",
+              "schemaVersion": 9
+            },
+            "current": {
+              "version": "19.4.0",
+              "edition": "WonderPages AI — claude-gpt.v04",
+              "schemaVersion": 9
+            },
+            "note": null
+          }
+        },
+        "normalization": {
+          "paused": [
+            "drill000"
+          ],
+          "reconciled": {
+            "drill000": {
+              "pending": [
+                "text:script_1"
+              ],
+              "ambiguous": [
+                "image:p3"
+              ],
+              "resumeCheck": [],
+              "untouched": 0
+            }
+          },
+          "autoStarted": 0,
+          "jobs": [
+            {
+              "key": "text:script_1",
+              "status": "pending"
+            },
+            {
+              "key": "image:p3",
+              "status": "ambiguous"
+            }
+          ],
+          "projectStatus": "paused"
+        },
+        "migratedProject": {
+          "source": "migration",
+          "original": "dw-original",
+          "rawSourceIntact": true,
+          "lineage": true,
+          "approvals": 0
+        },
+        "missingFile": {
+          "reconcileMissing": [
+            "images/p2.png"
+          ],
+          "reportMissing": [
+            "projects/drill002/images/p2.png"
+          ],
+          "reportOk": false
+        },
+        "secondaryCopy": {
+          "failing": {
+            "error": true,
+            "verified": false
+          },
+          "working": {
+            "copied": 1,
+            "verified": true
+          },
+          "primaryValid": true
+        },
+        "interruptedMigration": {
+          "recovered": [
+            {
+              "id": "mig-partial",
+              "removedProject": "drillpart"
+            }
+          ],
+          "partialProjectGone": true,
+          "runStatus": "interrupted",
+          "committedUntouched": true
+        },
+        "interruptedSchemaMigration": {
+          "failed": true,
+          "partialTable": null,
+          "recorded": 0,
+          "rerunClean": true
+        },
+        "snapshotVersions": {
+          "oldRestored": true,
+          "oldReportOk": true,
+          "oldNote": "Backup dintr-o versiune mai veche: versiunea aplicației nu era înregistrată.",
+          "newerRefused": true
+        }
+      },
+      "measured": {
+        "snapshotMs": 3266,
+        "rtoMs": 5300,
+        "throughput": {
+          "datasetMb": 300.1,
+          "snapshotMbPerS": 91.9,
+          "restoreMbPerS": 56.6,
+          "note": "Estimare liniară pentru alte volume = volum ÷ debit; nu este o măsurătoare pe hostul de referință."
+        },
+        "disasterRpo": {
+          "commitsLost": 3,
+          "expectedLost": 3,
+          "windowMs": 13402,
+          "note": "Commit-urile făcute după ultimul backup se pierd la o restaurare după dezastru; cu backup zilnic fereastra maximă este 24 h."
+        }
+      },
+      "targets": {
+        "crashRpoCommits": 0,
+        "disasterRpoHours": 24,
+        "rtoHours": 2,
+        "status": "proposed_targets_not_measured_on_reference_host"
+      },
+      "failures": [],
+      "checks": [
+        {
+          "name": "crash: commit fără jurnal nu este confirmat; commit jurnalizat recuperat (RPO 0 pentru date comise)",
+          "ok": true
+        },
+        {
+          "name": "restaurare întreruptă: datele curente rămân neatinse",
+          "ok": true
+        },
+        {
+          "name": "inventar/hash-uri/versiuni/decizii recuperate",
+          "ok": true
+        },
+        {
+          "name": "pierderea după backup este măsurată, nu zero",
+          "ok": true
+        },
+        {
+          "name": "fără producție automată după restaurare",
+          "ok": true
+        },
+        {
+          "name": "proiectul migrat: sursă brută intactă, linie de proveniență, aprobări resetate",
+          "ok": true
+        },
+        {
+          "name": "fișier lipsă raportat",
+          "ok": true
+        },
+        {
+          "name": "a doua copie: eșecul raportat, copia bună verificată, primara validă",
+          "ok": true
+        },
+        {
+          "name": "migrare întreruptă curățată la pornire",
+          "ok": true
+        },
+        {
+          "name": "migrare de schemă întreruptă fără stare parțială",
+          "ok": true
+        },
+        {
+          "name": "backup vechi restaurabil; backup din schemă mai nouă refuzat",
+          "ok": true
+        },
+        {
+          "name": "RTO măsurat ≤ 2 h (acest host, acest set)",
+          "ok": true
+        }
+      ],
+      "ok": true
+    }
+  }
+}

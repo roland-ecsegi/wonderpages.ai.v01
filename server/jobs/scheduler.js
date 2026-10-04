@@ -84,10 +84,10 @@ export class Scheduler {
   async list(pid) { const out = []; for (const f of (await this.s.list(`projects/${pid}/jobs`).catch(() => [])).filter(x => x.name.endsWith('.json'))) { const j = await this.s.readJSON(`projects/${pid}/jobs/${f.name}`, null); if (j) out.push(j); } return out.sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0)); }
 
   /** Startup reconciliation: leases of another process instance (or expired) are dead; classify without replaying externals. */
-  async reconcile(pid) {
+  async reconcile(pid, { force = false } = {}) {   // P8-T02: force = after a restore, every restored lease is dead whatever its expiry
     const summary = { pending: [], ambiguous: [], resumeCheck: [], untouched: 0 };
     for (const j of await this.list(pid)) {
-      const dead = ACTIVE.includes(j.status) && (!j.lease || j.lease.expiresAt <= this.now() || String(j.lease.owner).split(':')[0] !== String(this.owner).split(':')[0]);
+      const dead = ACTIVE.includes(j.status) && (force || !j.lease || j.lease.expiresAt <= this.now() || String(j.lease.owner).split(':')[0] !== String(this.owner).split(':')[0]);
       if (!dead) { summary.untouched++; continue; }
       const a = j.attempts[j.attempts.length - 1], external = (a?.external || []).length > 0;
       let status, reason;

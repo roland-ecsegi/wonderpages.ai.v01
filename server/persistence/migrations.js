@@ -25,12 +25,12 @@ export const PROJECT_LEDGER_TABLES = ['commands', 'artifact_versions', 'artifact
 export const checksumOf = m => canonicalHash({ id: m.id, name: m.name, pg: m.pg });
 export const SCHEMA_VERSION = MIGRATIONS[MIGRATIONS.length - 1].id;
 
-export async function applyMigrations(storage) {
+export async function applyMigrations(storage, migrations = MIGRATIONS) {   // P8-T02: the list is injectable for the interrupted-migration drill
   const applied = [];
   if (storage.kind === 'postgres') {
     await storage.q(MIGRATIONS[0].pg[0]);
     const done = new Map((await storage.q('SELECT id, checksum FROM schema_migrations')).rows.map(r => [r.id, r.checksum]));
-    for (const m of MIGRATIONS) {
+    for (const m of migrations) {
       const sum = checksumOf(m);
       if (done.has(m.id)) { if (done.get(m.id) !== sum) throw Error(`Migrarea ${m.id} (${m.name}) diferă de cea aplicată: oprire (integritate schema).`); continue; }
       const tx = await storage.pool.connect();
@@ -39,7 +39,7 @@ export async function applyMigrations(storage) {
     }
   } else {
     const meta = (await storage.readJSON('_meta/schema.json', null)) || { migrations: [] };
-    for (const m of MIGRATIONS) {
+    for (const m of migrations) {
       const sum = checksumOf(m), prev = meta.migrations.find(x => x.id === m.id);
       if (prev) { if (prev.checksum !== sum) throw Error(`Migrarea ${m.id} (${m.name}) diferă de cea aplicată: oprire (integritate schema).`); continue; }
       meta.migrations.push({ id: m.id, name: m.name, checksum: sum, appliedAt: Date.now() }); applied.push(m.id);

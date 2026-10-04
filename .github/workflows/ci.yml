@@ -1,0 +1,30 @@
+# P8-T01 — release gate in CI. Manual trigger only: no run per push, no provider spend.
+# tests/run.mjs puts tests/mocks/bin first on PATH: no real Claude/Codex/Canva call, no secrets needed.
+# Provider probes are runtime facts checked in the app (Setări › Diagnostic), never in CI.
+name: release-gate
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      BROWSER_PATH: /usr/bin/google-chrome
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Release gate (build, contract, resources, secrets, tests with mocks)
+        run: node scripts/enterprise/release-gate.mjs --out=release-evidence.json
+      - name: Keep the evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-evidence
+          path: release-evidence.json
+          if-no-files-found: warn
