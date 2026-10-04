@@ -151,6 +151,7 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | 2026-10-04 | Poarta de release + TEST-P8-T04…T07 | build/contract/resources/secrets/licenses PASS; 367/367 local (PDF real); grupul 8x 35/35 PostgreSQL după corecturile de izolare a testelor 83–85 | rularea completă de ieșire (local + PG) în curs |
 | 2026-10-04 | Închidere P8: baseline-report --with-tests --with-pg | 15 PASS · 0 FAIL · 3 NOT_RUN; 368/368 local + 368/368 PostgreSQL; toate defectele FIXED (D-C26 MITIGATED) | — |
 | 2026-10-04 | DW01 aplicat (decizia operatorului, varianta A) prin aplicația reală pe proiectul Enterprise separat | 3 câmpuri modificate, 0 modificări colaterale (diferență completă + verificare independentă pe pachet); DW01 închis, DW02 deschis; aprobări 0; originalul neschimbat | rollback: `34750b0` |
+| 2026-10-04 | DW02 aplicat (decizia operatorului, varianta A) pe proiectul Enterprise separat | 18 câmpuri în planul V1 + metadate de versiune, 0 modificări colaterale (verificare independentă pe pachet); niciun conflict de reconciliere rămas; aprobări 0; originalul neschimbat; producția oprită | rollback: `425b66a` (înainte de DW02), `34750b0` (înainte de DW01) |
 
 ## Probleme deschise
 
@@ -162,12 +163,14 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 ## Aprobări umane așteptate
 
 - ~~DW01~~ → **rezolvat 2026-10-04**: varianta A (aliniere la paginile 8–9), decizia operatorului; doar cele 3 câmpuri de premisă/rezumat V1 (`dinosaur-world-enterprise/DW01-DECIZIE.md`). Nu aprobă manuscrisul, volumul sau colecția.
-- Reconcilierea DW02 (încă deschisă) a proiectului Dinosaur World migrat: raportul este gata (GET /api/projects/:pid/reconcile); alegerea textului premisei și a contractului de întoarcere pe pagină este decizia operatorului. (WAITING_HUMAN; nu blochează fazele 5–7.)
+- ~~DW02~~ → **rezolvat 2026-10-04**: varianta A (manuscrisul este sursa pentru paginile 1, 2, 4–9), decizia operatorului; doar tip/cârlig/pagina răspunsului în planul V1 (`dinosaur-world-enterprise/DW02-DECIZIE.md`). Nu aprobă manuscrisul, V1, colecția sau layoutul.
+- Observații DW deschise, nereparate (`dinosaur-world-enterprise/OBSERVATII-DESCHISE.md`): O1 câmpurile payoff din planul V1; O2 întoarceri/dezvăluiri pe aceeași deschidere în V1–V6 (digital/print). De reevaluat la nivelul colecției.
+- Producția Dinosaur World este **oprită**: nu a început pilotul V1, nu s-au generat imagini; urmează evaluarea „Dinosaur World Creative Upgrade”, înaintea oricărei producții.
 - Dinosaur World real (P8-T05/T06): porțile de revizuire, furnizorul verificat în aplicația operatorului și acceptarea pilotului V1 (WAITING_HUMAN).
 - Setul de aur gold-v1: adjudecarea etichetelor (status pending_operator_review) și acceptarea raportului de calibrare (POST /api/evaluation/accept). Până atunci pragurile v2 rămân „propuse” și afirmațiile de maturitate (P7) sunt blocate. (WAITING_HUMAN)
 
 ## Checkpoint
 
 - Ultimul task închis: P8-T07 (faza 8 închisă; P8-T05 BLOCKED, P8-T06 PARTIAL)
-- Următorul task: **niciunul automat** — fazele 1–8 sunt executate; rămân aprobările umane din `docs/enterprise/READINESS-LEDGER.md` (DW01/DW02, porțile DW, pilotul V1 cu furnizor real, setul de aur, proba de tipar). PHASE 9 neactivată.
+- Următorul task: **evaluarea Dinosaur World Creative Upgrade** (doar analiză, la cererea operatorului) — nicio producție înainte de deciziile lui.
 - Cum se reia: `npm ci && npm run build && BROWSER_PATH=/opt/pw-browsers/chromium npm test`; citește tabelul de mai sus și `docs/enterprise/records/`.

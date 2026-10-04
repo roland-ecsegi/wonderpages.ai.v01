@@ -1,0 +1,366 @@
+{
+  "schema": "wonderpages.dw-decision/1",
+  "label": "DW02",
+  "at": "2026-10-04T18:48:29.778Z",
+  "project": "p607c4e032zxg",
+  "migratedNow": false,
+  "migration": null,
+  "choices": {
+    "DW02": "script"
+  },
+  "note": "Reconciliere DW02 (varianta A: manuscrisul este sursa corectă pentru paginile 1, 2, 4, 5, 6, 7, 8, 9), aprobată de operator la 2026-10-04. Domeniu: doar tipul de întoarcere, textul cârligului și pagina răspunsului din planul paginilor V1. NU reprezintă aprobarea manuscrisului, a V1, a colecției, a layoutului sau a vreunei porți de revizuire/calitate. Observații deschise, nereparate: câmpurile payoff din plan; întoarceri/dezvăluiri pe aceeași deschidere (spread/layout/print).",
+  "reportBefore": {
+    "hash": "cbe39432da1a9a99313c82989ad5f1bb73f01204e1bb0cfafbdfe14779d5dba4",
+    "conflicts": [
+      "DW02"
+    ]
+  },
+  "reportAfter": {
+    "hash": "c80ee2cb49e0d8cedb47ccfc58ccf8f00b5dabea8dccb3dd2ffd4a55b83d4c24",
+    "conflicts": []
+  },
+  "applied": [
+    {
+      "conflict": "DW02",
+      "path": "series.volumes[0].page_plan[1].turn.type",
+      "from": "quiet",
+      "to": "question"
+    },
+    {
+      "conflict": "DW02",
+      "path": "series.volumes[0].page_plan[2].turn.type",
+      "from": "quiet",
+      "to": "anticipation"
+    },
+    {
+      "conflict": "DW02",
+      "path": "series.volumes[0].page_plan[4].turn.type",
+      "from": "quiet",
+      "to": "question"
+    },
+    {
+      "conflict": "DW02",
+      "path": "series.volumes[0].page_plan[5].turn.type",
+      "from": "quiet",
+      "to": "reveal"
+    },
+    {
+      "conflict": "DW02",
+      "path": "series.volumes[0].page_plan[6].turn.type",
+      "from": "quiet",
+      "to": "anticipation"
+    },
+    {
+      "conflict": "DW02",
+      "path": "series.volumes[0].page_plan[7].turn.type",
+      "from": "quiet",
+      "to": "reveal"
+    },
+    {
+      "conflict": "DW02",
+      "path": "series.volumes[0].page_plan[8].turn.type",
+      "from": "quiet",
+      "to": "question"
+    },
+    {
+      "conflict": "DW02",
+      "path": "series.volumes[0].page_plan[9].turn.type",
+      "from": "quiet",
+      "to": "reveal"
+    }
+  ],
+  "decision": [
+    {
+      "schema": "wonderpages.decision/1",
+      "id": "dmuu6c4pf6ac6a1",
+      "kind": "reconcile",
+      "actor": "operator@laptop",
+      "state": "approved",
+      "note": "Reconciliere DW02 (varianta A: manuscrisul este sursa corectă pentru paginile 1, 2, 4, 5, 6, 7, 8, 9), aprobată de operator la 2026-10-04. Domeniu: doar tipul de întoarcere, textul cârligului și pagina răspunsului din planul paginilor V1. NU reprezintă aprobarea manuscrisului, a V1, a colecției, a layoutului sau a vreunei porți de revizuire/calitate. Observații deschise, nereparate: câmpurile payoff din plan; întoarceri/dezvăluiri pe aceeași deschidere (spread/layout/print).",
+      "scope": {
+        "conflicts": [
+          "DW02"
+        ]
+      },
+      "subject": {
+        "reportHash": "cbe39432da1a9a99313c82989ad5f1bb73f01204e1bb0cfafbdfe14779d5dba4",
+        "applied": [
+          {
+            "conflict": "DW02",
+            "path": "series.volumes[0].page_plan[1].turn.type",
+            "from": "quiet",
+            "to": "question"
+          },
+          {
+            "conflict": "DW02",
+            "path": "series.volumes[0].page_plan[2].turn.type",
+            "from": "quiet",
+            "to": "anticipation"
+          },
+          {
+            "conflict": "DW02",
+            "path": "series.volumes[0].page_plan[4].turn.type",
+            "from": "quiet",
+            "to": "question"
+          },
+          {
+            "conflict": "DW02",
+            "path": "series.volumes[0].page_plan[5].turn.type",
+            "from": "quiet",
+            "to": "reveal"
+          },
+          {
+            "conflict": "DW02",
+            "path": "series.volumes[0].page_plan[6].turn.type",
+            "from": "quiet",
+            "to": "anticipation"
+          },
+          {
+            "conflict": "DW02",
+            "path": "series.volumes[0].page_plan[7].turn.type",
+            "from": "quiet",
+            "to": "reveal"
+          },
+          {
+            "conflict": "DW02",
+            "path": "series.volumes[0].page_plan[8].turn.type",
+            "from": "quiet",
+            "to": "question"
+          },
+          {
+            "conflict": "DW02",
+            "path": "series.volumes[0].page_plan[9].turn.type",
+            "from": "quiet",
+            "to": "reveal"
+          }
+        ]
+      },
+      "policyHash": "e140904d8cb4ebb84d11b6875ca2c951a4d39443e8d43b426ecb27565c543ff5",
+      "evidence": null,
+      "supersedes": null,
+      "at": 1791139709139
+    }
+  ],
+  "artifactChanges": [
+    {
+      "path": "series.version",
+      "before": 3,
+      "after": 4
+    },
+    {
+      "path": "series.content.volumes[0].page_plan[0].turn.type",
+      "before": "quiet",
+      "after": "question"
+    },
+    {
+      "path": "series.content.volumes[0].page_plan[0].turn.hook",
+      "before": "",
+      "after": "Ce va găsi Milo?"
+    },
+    {
+      "path": "series.content.volumes[0].page_plan[0].turn.payoff_page",
+      "before": null,
+      "after": 2
+    },
+    {
+      "path": "series.content.volumes[0].page_plan[1].turn.type",
+      "before": "quiet",
+      "after": "anticipation"
+    },
+    {
+      "path": "series.content.volumes[0].page_plan[1].turn.hook",
+      "before": "",
+      "after": "Degetul se apropie de obiect."
+    },
+    {
+      "path": "series.content.volumes[0].page_plan[1].turn.payoff_page",
+      "before": null,
+      "after": 3
+    },
+    {
+      "path": "series.content.volumes[0].page_plan[3].turn.type",
+      "before": "quiet",
+      "after": "question"
+    },
+    {
+      "path": "series.content.volumes[0].page_plan[3].turn.hook",
+      "before": "",
+      "after": "Cine foșnește în tufă?"
+    },
+    {
+      "path": "series.content.volumes[0].page_plan[3].turn.payoff_page",
+      "before": null,
+      "after": 5
+    },
+    {
+      "path": "series.content.volumes[0].page_plan[4].turn.type",
+      "before": "quiet",
+      "after": "reveal"
+    },
+    {
+      "path": "series.content.volumes[0].page_plan[5].turn.type",
+      "before": "quiet",
+      "after": "anticipation"
+    },
+    {
+      "path": "series.content.volumes[0].page_plan[5].turn.hook",
+      "before": "",
+      "after": "De unde vine a doua sclipire?"
+    },
+    {
+      "path": "series.content.volumes[0].page_plan[5].turn.payoff_page",
+      "before": null,
+      "after": 7
+    },
+    {
+      "path": "series.content.volumes[0].page_plan[6].turn.type",
+      "before": "quiet",
+      "after": "reveal"
+    },
+    {
+      "path": "series.content.volumes[0].page_plan[7].turn.type",
+      "before": "quiet",
+      "after": "question"
+    },
+    {
+      "path": "series.content.volumes[0].page_plan[7].turn.hook",
+      "before": "",
+      "after": "Unde încap doi prieteni la adăpost?"
+    },
+    {
+      "path": "series.content.volumes[0].page_plan[7].turn.payoff_page",
+      "before": null,
+      "after": 9
+    },
+    {
+      "path": "series.content.volumes[0].page_plan[8].turn.type",
+      "before": "quiet",
+      "after": "reveal"
+    }
+  ],
+  "projectChanges": [
+    {
+      "path": "reconciledAt",
+      "before": 1791139301034,
+      "after": 1791139709139
+    }
+  ],
+  "versions": {
+    "bible": {
+      "before": 2,
+      "after": 2
+    },
+    "brief": {
+      "before": 2,
+      "after": 2
+    },
+    "canon_typed": {
+      "before": 1,
+      "after": 1
+    },
+    "cast": {
+      "before": 2,
+      "after": 2
+    },
+    "migration_report": {
+      "before": 1,
+      "after": 1
+    },
+    "refs": {
+      "before": 2,
+      "after": 2
+    },
+    "script_0": {
+      "before": 3,
+      "after": 3
+    },
+    "series": {
+      "before": 3,
+      "after": 4
+    }
+  },
+  "approvals": {
+    "before": 0,
+    "after": 0
+  },
+  "stages": {
+    "before": {
+      "refs": {
+        "status": "done",
+        "imported": true,
+        "finishedAt": 1791139283079
+      },
+      "brief": {
+        "status": "done",
+        "imported": true,
+        "finishedAt": 1791139283079
+      },
+      "series": {
+        "status": "done",
+        "imported": true,
+        "finishedAt": 1791139283079
+      },
+      "bible": {
+        "status": "done",
+        "imported": true,
+        "finishedAt": 1791139283079
+      },
+      "cast": {
+        "status": "done",
+        "imported": true,
+        "finishedAt": 1791139283079
+      },
+      "scripts@1": {
+        "status": "done",
+        "imported": true,
+        "finishedAt": 1791139283079
+      }
+    },
+    "after": {
+      "refs": {
+        "status": "done",
+        "imported": true,
+        "finishedAt": 1791139283079
+      },
+      "brief": {
+        "status": "done",
+        "imported": true,
+        "finishedAt": 1791139283079
+      },
+      "series": {
+        "status": "done",
+        "imported": true,
+        "finishedAt": 1791139283079
+      },
+      "bible": {
+        "status": "done",
+        "imported": true,
+        "finishedAt": 1791139283079
+      },
+      "cast": {
+        "status": "done",
+        "imported": true,
+        "finishedAt": 1791139283079
+      },
+      "scripts@1": {
+        "status": "done",
+        "imported": true,
+        "finishedAt": 1791139283079
+      }
+    },
+    "unchanged": true
+  },
+  "status": {
+    "before": "ready",
+    "after": "ready"
+  },
+  "original": {
+    "sha256": "7056e113bf5c84fdfc0f7b8f528713de6c8fe31e82b40fbab056544fe10e45e3",
+    "unchanged": true
+  },
+  "package": {
+    "file": "dinosaur-world-enterprise/pachet/dinosaur-world-enterprise.zip",
+    "sha256": "17c787a7b556a6fec5c082d74e7dd166c7562a8120e3d59855536f7eecf71cbe",
+    "bytes": 7959242
+  }
+}
