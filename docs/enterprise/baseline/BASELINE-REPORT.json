@@ -1,14 +1,14 @@
 {
  "kind": "wonderpages.baseline-report/1",
- "generatedAt": "2026-10-04T15:52:45.853Z",
- "codeRevision": "6fb15d3",
+ "generatedAt": "2026-10-04T16:12:10.840Z",
+ "codeRevision": "3a99317",
  "checks": [
   {
    "id": "INVENTORY",
    "status": "PASS",
-   "summary": "329 fișiere (fără node_modules/.git/data), 7 ascunse",
+   "summary": "333 fișiere (fără node_modules/.git/data), 7 ascunse",
    "detail": {
-    "total": 329,
+    "total": 333,
     "byExt": {
      ".md": 83,
      ".example": 1,
@@ -17,7 +17,7 @@
      ".json": 22,
      ".bat": 4,
      ".vbs": 1,
-     ".log": 4,
+     ".log": 8,
      ".js": 109,
      ".ttf": 4,
      ".txt": 2,
@@ -66,7 +66,7 @@
   {
    "id": "SOURCE_DRIFT_V04",
    "status": "PASS",
-   "summary": "97/137 fișiere v04 identice, 40 modificate (enterprise), 186 adăugate, 0 lipsă",
+   "summary": "97/137 fișiere v04 identice, 40 modificate (enterprise), 190 adăugate, 0 lipsă",
    "detail": {
     "unchanged": 97,
     "modified": [
@@ -132,6 +132,10 @@
      "docs/enterprise/baseline/logs/2026-10-02-pg-qa.log",
      "docs/enterprise/baseline/logs/2026-10-02-rs0-postgres.log",
      "docs/enterprise/baseline/logs/2026-10-02-rs0.log",
+     "docs/enterprise/baseline/logs/2026-10-04-build.log",
+     "docs/enterprise/baseline/logs/2026-10-04-pg-qa.log",
+     "docs/enterprise/baseline/logs/2026-10-04-rs0-postgres.log",
+     "docs/enterprise/baseline/logs/2026-10-04-rs0.log",
      "docs/enterprise/contracts/AGENT-REGISTRY.md",
      "docs/enterprise/contracts/CANON-AND-DEPENDENCIES.md",
      "docs/enterprise/contracts/CAPACITY.md",
@@ -310,8 +314,8 @@
   },
   {
    "id": "RS0_SUITE",
-   "status": "FAIL",
-   "summary": "367 trecute, 1 picate, 0 sărite; browser PDF: da",
+   "status": "PASS",
+   "summary": "368 trecute, 0 picate, 0 sărite; browser PDF: da",
    "log": "docs/enterprise/baseline/logs/2026-10-04-rs0.log"
   },
   {
@@ -478,8 +482,8 @@
   },
   {
    "id": "RS0_SUITE_POSTGRES",
-   "status": "FAIL",
-   "summary": "367 trecute, 1 picate, 0 sărite (STORAGE=postgres)",
+   "status": "PASS",
+   "summary": "368 trecute, 0 picate, 0 sărite (STORAGE=postgres)",
    "log": "docs/enterprise/baseline/logs/2026-10-04-rs0-postgres.log"
   },
   {
@@ -739,8 +743,8 @@
   }
  ],
  "summary": {
-  "PASS": 13,
-  "FAIL": 2,
+  "PASS": 15,
+  "FAIL": 0,
   "NOT_RUN": 3
  }
 }

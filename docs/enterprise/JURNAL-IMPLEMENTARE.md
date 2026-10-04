@@ -90,10 +90,10 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | P8-T01 | DONE | a6c3a67 | TEST-P8-T01 5/5; poarta PASS; RS0 349/349 local + PG | poarta de release, RELEASE-EVIDENCE, /api/health, CI manual |
 | P8-T02 | DONE | a6c3a67 | TEST-P8-T02 4/4; drill 12/12 local + PG (300 MB) | drill de recuperare, raport de recuperare, normalizare fără autoproducție, RPO/RTO măsurate |
 | P8-T03 | DONE | 6e17ce6 | TEST-P8-T03 5/5; poarta PASS (+licenses); RS0 354/354 local + PG | actualizare etapizată cu revenire, ZIP reproductibil, licențe/OFL, căi lungi, statut comercial pe destinație |
-| P8-T04 | DONE | (acest commit) | TEST-P8-T04 4/4; benchmark local+PG 1/10/100 + imagini reale | ținte API atinse; admitere pe disc; backup incremental (remediere lacăt) |
-| P8-T05 | BLOCKED | (acest commit) | TEST-P8-T05 (software) 1/1 | migrare/reconciliere/poarta pilotului verificate pe copie; blocat de furnizor real + deciziile operatorului |
-| P8-T06 | PARTIAL | (acest commit) | TEST-P8-T06 (software) 3/3 | dus-întors fără pierderi + genericitate; înainte/după și piloții reali depind de P8-T05 |
-| P8-T07 | DONE | (acest commit) | TEST-P8-T07 6/6 (browser, 4 dimensiuni) | poarta UX/accesibilitate + registrul final de pregătire |
+| P8-T04 | DONE | 6fb15d3 | TEST-P8-T04 4/4; benchmark local+PG 1/10/100 + imagini reale | ținte API atinse; admitere pe disc; backup incremental (remediere lacăt) |
+| P8-T05 | BLOCKED | 6fb15d3 | TEST-P8-T05 (software) 1/1 | migrare/reconciliere/poarta pilotului verificate pe copie; blocat de furnizor real + deciziile operatorului |
+| P8-T06 | PARTIAL | 6fb15d3 | TEST-P8-T06 (software) 3/3 | dus-întors fără pierderi + genericitate; înainte/după și piloții reali depind de P8-T05 |
+| P8-T07 | DONE | 6fb15d3 | TEST-P8-T07 6/6 (browser, 4 dimensiuni) | poarta UX/accesibilitate + registrul final de pregătire |
 
 ## Rulări de teste
 
@@ -149,6 +149,7 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | 2026-10-04 | RS0 + TEST-P8-T01/T02 + poarta de release completă | build/contract/resources/secrets PASS; 349/349 PASS local (PDF real) + 349/349 PostgreSQL | — |
 | 2026-10-04 | RS0 + TEST-P8-T03 + poarta de release | build/contract/resources/secrets/licenses PASS; 354/354 PASS local (PDF real) + 354/354 PostgreSQL | — |
 | 2026-10-04 | Poarta de release + TEST-P8-T04…T07 | build/contract/resources/secrets/licenses PASS; 367/367 local (PDF real); grupul 8x 35/35 PostgreSQL după corecturile de izolare a testelor 83–85 | rularea completă de ieșire (local + PG) în curs |
+| 2026-10-04 | Închidere P8: baseline-report --with-tests --with-pg | 15 PASS · 0 FAIL · 3 NOT_RUN; 368/368 local + 368/368 PostgreSQL; toate defectele FIXED (D-C26 MITIGATED) | — |
 
 ## Probleme deschise
 
@@ -160,10 +161,11 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 ## Aprobări umane așteptate
 
 - Reconcilierea DW01/DW02 a proiectului Dinosaur World migrat: raportul este gata (GET /api/projects/:pid/reconcile); alegerea textului premisei și a contractului de întoarcere pe pagină este decizia operatorului. (WAITING_HUMAN; nu blochează fazele 5–7.)
+- Dinosaur World real (P8-T05/T06): porțile de revizuire, furnizorul verificat în aplicația operatorului și acceptarea pilotului V1 (WAITING_HUMAN).
 - Setul de aur gold-v1: adjudecarea etichetelor (status pending_operator_review) și acceptarea raportului de calibrare (POST /api/evaluation/accept). Până atunci pragurile v2 rămân „propuse” și afirmațiile de maturitate (P7) sunt blocate. (WAITING_HUMAN)
 
 ## Checkpoint
 
-- Ultimul task închis: P8-T07
-- Următorul task: **închiderea fazei 8 (rularea de ieșire în curs) — apoi aprobările umane din registrul final**
+- Ultimul task închis: P8-T07 (faza 8 închisă; P8-T05 BLOCKED, P8-T06 PARTIAL)
+- Următorul task: **niciunul automat** — fazele 1–8 sunt executate; rămân aprobările umane din `docs/enterprise/READINESS-LEDGER.md` (DW01/DW02, porțile DW, pilotul V1 cu furnizor real, setul de aur, proba de tipar). PHASE 9 neactivată.
 - Cum se reia: `npm ci && npm run build && BROWSER_PATH=/opt/pw-browsers/chromium npm test`; citește tabelul de mai sus și `docs/enterprise/records/`.

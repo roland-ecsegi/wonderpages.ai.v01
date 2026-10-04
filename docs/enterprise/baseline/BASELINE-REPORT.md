@@ -1,13 +1,13 @@
-# Baseline report (2026-10-04, cod 6fb15d3)
+# Baseline report (2026-10-04, cod 3a99317)
 
 Generat de `scripts/enterprise/baseline-report.mjs`. NOT_RUN nu este PASS; istoricul este separat.
 
 | Check | Status | Rezumat | Log |
 |---|---|---|---|
-| INVENTORY | PASS | 329 fișiere (fără node_modules/.git/data), 7 ascunse |  |
-| SOURCE_DRIFT_V04 | PASS | 97/137 fișiere v04 identice, 40 modificate (enterprise), 186 adăugate, 0 lipsă |  |
+| INVENTORY | PASS | 333 fișiere (fără node_modules/.git/data), 7 ascunse |  |
+| SOURCE_DRIFT_V04 | PASS | 97/137 fișiere v04 identice, 40 modificate (enterprise), 190 adăugate, 0 lipsă |  |
 | BUILD | PASS | PASS: 192 fișiere JavaScript, JSON, lockfile, fonturi și fișiere runtime; WonderPages AI — claude-gpt.v04 | `docs/enterprise/baseline/logs/2026-10-04-build.log` |
-| RS0_SUITE | FAIL | 367 trecute, 1 picate, 0 sărite; browser PDF: da | `docs/enterprise/baseline/logs/2026-10-04-rs0.log` |
+| RS0_SUITE | PASS | 368 trecute, 0 picate, 0 sărite; browser PDF: da | `docs/enterprise/baseline/logs/2026-10-04-rs0.log` |
 | PROTECT_IMPORT | PASS | 11/11 teste |  |
 | PROTECT_APPROVALS | PASS | 45/45 teste |  |
 | PROTECT_PDF | PASS | 6/6 teste |  |
@@ -16,7 +16,7 @@ Generat de `scripts/enterprise/baseline-report.mjs`. NOT_RUN nu este PASS; istor
 | PROTECT_ATELIER | PASS | 6/6 teste |  |
 | PROTECT_LAN | PASS | 5/5 teste |  |
 | PG_QA | PASS | PASS: PostgreSQL real — CRUD, istoric, backup DB+fișiere, restaurare, rollback tranzacțional; numărul proiectelor instalate păstrat. | `docs/enterprise/baseline/logs/2026-10-04-pg-qa.log` |
-| RS0_SUITE_POSTGRES | FAIL | 367 trecute, 1 picate, 0 sărite (STORAGE=postgres) | `docs/enterprise/baseline/logs/2026-10-04-rs0-postgres.log` |
+| RS0_SUITE_POSTGRES | PASS | 368 trecute, 0 picate, 0 sărite (STORAGE=postgres) | `docs/enterprise/baseline/logs/2026-10-04-rs0-postgres.log` |
 | DW_REFERENCE | PASS | sha256 7056e113bf5c…, manifest 5/5, 6 artefacte, 6 volume, 72 planuri, 12 pagini V1, 2 PNG; producție nepornită |  |
 | RUNTIME | PASS | Node v22.22.0, npm 10.9.4, linux 6.18.44-fc-v64 x64 |  |
 | PROVIDERS_REAL | NOT_RUN | Fără apeluri reale în baseline (claude: instalat, codex: absent); discovery în P1-T03 |  |
@@ -27,4 +27,4 @@ Generat de `scripts/enterprise/baseline-report.mjs`. NOT_RUN nu este PASS; istor
 
 - 2026-10-01: 91/91 PASS (simulați) — Audit_Full_WonderPages_AI_v04.pdf pp. 250–251 / docs/v04/RAPORT-V04.md. raport istoric; nu este rezultatul acestei rulări
 
-Total: 13 PASS · 2 FAIL · 3 NOT_RUN
+Total: 15 PASS · 0 FAIL · 3 NOT_RUN
