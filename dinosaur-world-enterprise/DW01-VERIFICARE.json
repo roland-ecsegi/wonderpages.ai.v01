@@ -1,0 +1,239 @@
+{
+  "schema": "wonderpages.dw-decision/1",
+  "label": "DW01",
+  "at": "2026-10-04T18:41:41.496Z",
+  "project": "p607c4e032zxg",
+  "migratedNow": false,
+  "migration": null,
+  "choices": {
+    "DW01": "align_to_pages",
+    "premise": "Milo găsește o pietricică strălucitoare, o urmărește pe cărare, o cunoaște pe Tia și se adăpostesc împreună de ploaie sub o frunză lată."
+  },
+  "note": "Reconciliere DW01 (varianta A, aliniere la paginile 8–9), aprobată de operator la 2026-10-04. Domeniu: doar cele 3 câmpuri de premisă/rezumat V1. NU reprezintă aprobarea manuscrisului V1, a volumului, a colecției sau a altor porți de revizuire/calitate.",
+  "reportBefore": {
+    "hash": "3ec8493caa56b4fece3b7bae7a6b067ed9fea7df2b5502209af543a3f60f4617",
+    "conflicts": [
+      "DW01",
+      "DW02"
+    ]
+  },
+  "reportAfter": {
+    "hash": "cbe39432da1a9a99313c82989ad5f1bb73f01204e1bb0cfafbdfe14779d5dba4",
+    "conflicts": [
+      "DW02"
+    ]
+  },
+  "applied": [
+    {
+      "conflict": "DW01",
+      "path": "series.volumes[0].summary",
+      "from": "Milo găsește o pietricică strălucitoare, o urmărește pe cărare, o cunoaște pe Tia și împreună o feresc de ploaie.",
+      "to": "Milo găsește o pietricică strălucitoare, o urmărește pe cărare, o cunoaște pe Tia și se adăpostesc împreună de ploaie sub o frunză lată."
+    },
+    {
+      "conflict": "DW01",
+      "path": "series.volumes[0].story_bible.premise",
+      "from": "Milo găsește o pietricică strălucitoare, o urmărește pe cărare, o cunoaște pe Tia și împreună o feresc de ploaie.",
+      "to": "Milo găsește o pietricică strălucitoare, o urmărește pe cărare, o cunoaște pe Tia și se adăpostesc împreună de ploaie sub o frunză lată."
+    },
+    {
+      "conflict": "DW01",
+      "path": "script_0.story_bible.premise",
+      "from": "Milo găsește o pietricică strălucitoare, o urmărește pe cărare, o cunoaște pe Tia și împreună o feresc de ploaie.",
+      "to": "Milo găsește o pietricică strălucitoare, o urmărește pe cărare, o cunoaște pe Tia și se adăpostesc împreună de ploaie sub o frunză lată."
+    }
+  ],
+  "decision": [
+    {
+      "schema": "wonderpages.decision/1",
+      "id": "dmuu63dt630b9e3",
+      "kind": "reconcile",
+      "actor": "operator@laptop",
+      "state": "approved",
+      "note": "Reconciliere DW01 (varianta A, aliniere la paginile 8–9), aprobată de operator la 2026-10-04. Domeniu: doar cele 3 câmpuri de premisă/rezumat V1. NU reprezintă aprobarea manuscrisului V1, a volumului, a colecției sau a altor porți de revizuire/calitate.",
+      "scope": {
+        "conflicts": [
+          "DW01"
+        ]
+      },
+      "subject": {
+        "reportHash": "3ec8493caa56b4fece3b7bae7a6b067ed9fea7df2b5502209af543a3f60f4617",
+        "applied": [
+          {
+            "conflict": "DW01",
+            "path": "series.volumes[0].summary",
+            "from": "Milo găsește o pietricică strălucitoare, o urmărește pe cărare, o cunoaște pe Tia și împreună o feresc de ploaie.",
+            "to": "Milo găsește o pietricică strălucitoare, o urmărește pe cărare, o cunoaște pe Tia și se adăpostesc împreună de ploaie sub o frunză lată."
+          },
+          {
+            "conflict": "DW01",
+            "path": "series.volumes[0].story_bible.premise",
+            "from": "Milo găsește o pietricică strălucitoare, o urmărește pe cărare, o cunoaște pe Tia și împreună o feresc de ploaie.",
+            "to": "Milo găsește o pietricică strălucitoare, o urmărește pe cărare, o cunoaște pe Tia și se adăpostesc împreună de ploaie sub o frunză lată."
+          },
+          {
+            "conflict": "DW01",
+            "path": "script_0.story_bible.premise",
+            "from": "Milo găsește o pietricică strălucitoare, o urmărește pe cărare, o cunoaște pe Tia și împreună o feresc de ploaie.",
+            "to": "Milo găsește o pietricică strălucitoare, o urmărește pe cărare, o cunoaște pe Tia și se adăpostesc împreună de ploaie sub o frunză lată."
+          }
+        ]
+      },
+      "policyHash": "e140904d8cb4ebb84d11b6875ca2c951a4d39443e8d43b426ecb27565c543ff5",
+      "evidence": null,
+      "supersedes": null,
+      "at": 1791139301034
+    }
+  ],
+  "artifactChanges": [
+    {
+      "path": "script_0.version",
+      "before": 2,
+      "after": 3
+    },
+    {
+      "path": "script_0.content.story_bible.premise",
+      "before": "Milo găsește o pietricică strălucitoare, o urmărește pe cărare, o cunoaște pe Tia și împreună o feresc de ploaie.",
+      "after": "Milo găsește o pietricică strălucitoare, o urmărește pe cărare, o cunoaște pe Tia și se adăpostesc împreună de ploaie sub o frunză lată."
+    },
+    {
+      "path": "series.version",
+      "before": 2,
+      "after": 3
+    },
+    {
+      "path": "series.content.volumes[0].summary",
+      "before": "Milo găsește o pietricică strălucitoare, o urmărește pe cărare, o cunoaște pe Tia și împreună o feresc de ploaie.",
+      "after": "Milo găsește o pietricică strălucitoare, o urmărește pe cărare, o cunoaște pe Tia și se adăpostesc împreună de ploaie sub o frunză lată."
+    },
+    {
+      "path": "series.content.volumes[0].story_bible.premise",
+      "before": "Milo găsește o pietricică strălucitoare, o urmărește pe cărare, o cunoaște pe Tia și împreună o feresc de ploaie.",
+      "after": "Milo găsește o pietricică strălucitoare, o urmărește pe cărare, o cunoaște pe Tia și se adăpostesc împreună de ploaie sub o frunză lată."
+    }
+  ],
+  "projectChanges": [
+    {
+      "path": "reconciledAt",
+      "after": 1791139301034
+    }
+  ],
+  "versions": {
+    "bible": {
+      "before": 2,
+      "after": 2
+    },
+    "brief": {
+      "before": 2,
+      "after": 2
+    },
+    "canon_typed": {
+      "before": 1,
+      "after": 1
+    },
+    "cast": {
+      "before": 2,
+      "after": 2
+    },
+    "migration_report": {
+      "before": 1,
+      "after": 1
+    },
+    "refs": {
+      "before": 2,
+      "after": 2
+    },
+    "script_0": {
+      "before": 2,
+      "after": 3
+    },
+    "series": {
+      "before": 2,
+      "after": 3
+    }
+  },
+  "approvals": {
+    "before": 0,
+    "after": 0
+  },
+  "stages": {
+    "before": {
+      "refs": {
+        "status": "done",
+        "imported": true,
+        "finishedAt": 1791139283079
+      },
+      "brief": {
+        "status": "done",
+        "imported": true,
+        "finishedAt": 1791139283079
+      },
+      "series": {
+        "status": "done",
+        "imported": true,
+        "finishedAt": 1791139283079
+      },
+      "bible": {
+        "status": "done",
+        "imported": true,
+        "finishedAt": 1791139283079
+      },
+      "cast": {
+        "status": "done",
+        "imported": true,
+        "finishedAt": 1791139283079
+      },
+      "scripts@1": {
+        "status": "done",
+        "imported": true,
+        "finishedAt": 1791139283079
+      }
+    },
+    "after": {
+      "refs": {
+        "status": "done",
+        "imported": true,
+        "finishedAt": 1791139283079
+      },
+      "brief": {
+        "status": "done",
+        "imported": true,
+        "finishedAt": 1791139283079
+      },
+      "series": {
+        "status": "done",
+        "imported": true,
+        "finishedAt": 1791139283079
+      },
+      "bible": {
+        "status": "done",
+        "imported": true,
+        "finishedAt": 1791139283079
+      },
+      "cast": {
+        "status": "done",
+        "imported": true,
+        "finishedAt": 1791139283079
+      },
+      "scripts@1": {
+        "status": "done",
+        "imported": true,
+        "finishedAt": 1791139283079
+      }
+    },
+    "unchanged": true
+  },
+  "status": {
+    "before": "ready",
+    "after": "ready"
+  },
+  "original": {
+    "sha256": "7056e113bf5c84fdfc0f7b8f528713de6c8fe31e82b40fbab056544fe10e45e3",
+    "unchanged": true
+  },
+  "package": {
+    "file": "dinosaur-world-enterprise/pachet/dinosaur-world-enterprise.zip",
+    "sha256": "a48ea49f3801bf709a029aaac4f439a15912b3f99d57dc2b1316095f334b17a2",
+    "bytes": 7852532
+  }
+}

@@ -150,6 +150,7 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | 2026-10-04 | RS0 + TEST-P8-T03 + poarta de release | build/contract/resources/secrets/licenses PASS; 354/354 PASS local (PDF real) + 354/354 PostgreSQL | — |
 | 2026-10-04 | Poarta de release + TEST-P8-T04…T07 | build/contract/resources/secrets/licenses PASS; 367/367 local (PDF real); grupul 8x 35/35 PostgreSQL după corecturile de izolare a testelor 83–85 | rularea completă de ieșire (local + PG) în curs |
 | 2026-10-04 | Închidere P8: baseline-report --with-tests --with-pg | 15 PASS · 0 FAIL · 3 NOT_RUN; 368/368 local + 368/368 PostgreSQL; toate defectele FIXED (D-C26 MITIGATED) | — |
+| 2026-10-04 | DW01 aplicat (decizia operatorului, varianta A) prin aplicația reală pe proiectul Enterprise separat | 3 câmpuri modificate, 0 modificări colaterale (diferență completă + verificare independentă pe pachet); DW01 închis, DW02 deschis; aprobări 0; originalul neschimbat | rollback: `34750b0` |
 
 ## Probleme deschise
 
@@ -160,7 +161,8 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 
 ## Aprobări umane așteptate
 
-- Reconcilierea DW01/DW02 a proiectului Dinosaur World migrat: raportul este gata (GET /api/projects/:pid/reconcile); alegerea textului premisei și a contractului de întoarcere pe pagină este decizia operatorului. (WAITING_HUMAN; nu blochează fazele 5–7.)
+- ~~DW01~~ → **rezolvat 2026-10-04**: varianta A (aliniere la paginile 8–9), decizia operatorului; doar cele 3 câmpuri de premisă/rezumat V1 (`dinosaur-world-enterprise/DW01-DECIZIE.md`). Nu aprobă manuscrisul, volumul sau colecția.
+- Reconcilierea DW02 (încă deschisă) a proiectului Dinosaur World migrat: raportul este gata (GET /api/projects/:pid/reconcile); alegerea textului premisei și a contractului de întoarcere pe pagină este decizia operatorului. (WAITING_HUMAN; nu blochează fazele 5–7.)
 - Dinosaur World real (P8-T05/T06): porțile de revizuire, furnizorul verificat în aplicația operatorului și acceptarea pilotului V1 (WAITING_HUMAN).
 - Setul de aur gold-v1: adjudecarea etichetelor (status pending_operator_review) și acceptarea raportului de calibrare (POST /api/evaluation/accept). Până atunci pragurile v2 rămân „propuse” și afirmațiile de maturitate (P7) sunt blocate. (WAITING_HUMAN)
 

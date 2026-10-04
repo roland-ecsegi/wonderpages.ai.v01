@@ -3,3 +3,4 @@ data/
 .env
 *.log
 stop.flag
+dinosaur-world-enterprise/out/
