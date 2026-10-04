@@ -293,6 +293,9 @@ const ACT = {
   'reconcile-apply': el => { const choices = {}; const d1 = $('#rc-DW01')?.value; if (d1) choices.DW01 = d1; const pages = {}; document.querySelectorAll('[data-rc-page]').forEach(x => { if (x.value) pages[x.dataset.rcPage] = x.value; }); if (Object.keys(pages).length) choices.DW02 = pages;
     if (!Object.keys(choices).length) return toast('Alege cel puțin o schimbare.');
     confirmAct('Aplici alegerile?', 'Se schimbă doar câmpurile alese; decizia ta se înregistrează. Aprobările rămân de făcut.', 'Aplică', () => api('POST', `/projects/${S.cur}/reconcile/apply`, { choices, reportHash: el.dataset.hash }).then(r => { toast(`Aplicat: ${r.applied.length} schimbări.`); return loadProject(); }).then(render).catch(e => toast(e.message, 'error'))); },   // P4-T05
+  'cu-start': () => { const direction = $('#cu-direction')?.value || ''; confirmAct('Pornești propunerea?', 'Agenții scriu doar o propunere separată; proiectul nu se schimbă și nu se aprobă nimic.', 'Pornește', () => api('POST', `/projects/${S.cur}/creative/proposals`, { direction }).then(r => { S.cuView = { pid: S.cur, id: r.id }; toast('Propunerea a pornit.'); return loadProject(); }).then(render).catch(e => toast(e.message, 'error'))); },
+  'cu-resume': el => api('POST', `/projects/${S.cur}/creative/proposals/${el.dataset.id}/resume`).then(() => { toast('Propunerea se reia.'); return loadProject(); }).then(render).catch(e => toast(e.message, 'error')),
+  'cu-open': el => { S.cuView = { pid: S.cur, id: el.dataset.id }; loadProject().then(render); },
   'intake-infer': () => { const text = $('#intake-text')?.value || ''; S.wiz.intake = { text }; api('POST', '/intake/infer', { typeSlug: S.wiz.slug, text }).then(r => { S.wiz.intake = { text, result: r }; render(); }).catch(e => { S.wiz.intake = { text, error: e.message }; render(); }); },
   'intake-apply': () => { const r = S.wiz.intake?.result; if (!r) return; for (const [k, v] of Object.entries(r.values)) S.wiz.values[k] = Array.isArray(v) ? [...v] : v; S.wiz.intake = { text: S.wiz.intake.text }; toast('Formularul a fost completat; verifică fiecare câmp.'); render(); },
   'intake-cancel': () => { S.wiz.intake = { text: S.wiz.intake?.text || '' }; render(); },
@@ -405,6 +408,7 @@ document.addEventListener('change', e => {
 document.addEventListener('input', e => {
   const el = e.target;
   if (el.dataset.field) S.wiz.values[el.dataset.field] = el.value;
+  if (el.id === 'cu-direction') S.cuDirection = el.value;
   if (el.dataset.bind === 'q') { S.q = el.value; clearTimeout(S._qt); S._qt = setTimeout(() => { const pos = el.selectionStart; doRender(); const n = $('[data-bind="q"]'); if (n) { n.focus(); n.setSelectionRange(pos, pos); } }, 200); }
 });
 /* select text in the reader to comment on a fragment */

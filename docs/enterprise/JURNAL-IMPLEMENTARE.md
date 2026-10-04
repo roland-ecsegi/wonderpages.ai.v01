@@ -94,6 +94,7 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | P8-T05 | BLOCKED | 6fb15d3 | TEST-P8-T05 (software) 1/1 | migrare/reconciliere/poarta pilotului verificate pe copie; blocat de furnizor real + deciziile operatorului |
 | P8-T06 | PARTIAL | 6fb15d3 | TEST-P8-T06 (software) 3/3 | dus-întors fără pierderi + genericitate; înainte/după și piloții reali depind de P8-T05 |
 | P8-T07 | DONE | 6fb15d3 | TEST-P8-T07 6/6 (browser, 4 dimensiuni) | poarta UX/accesibilitate + registrul final de pregătire |
+| CU (a+b+c+d+e) | DONE (mecanic) | (acest commit) | TEST-CU 18/18 local + PG; poarta PASS; RS0 386/386 local + 386/386 PG | fluxul Creative Upgrade Proposal (doar propunere, agenți permanenți), dosarul BEFORE DW reproductibil, criterii structurale automate, O3 remediat generic; Creative Upgrade-ul real DW = BLOCKED (furnizor neautentic aici) |
 
 ## Rulări de teste
 
@@ -152,6 +153,7 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | 2026-10-04 | Închidere P8: baseline-report --with-tests --with-pg | 15 PASS · 0 FAIL · 3 NOT_RUN; 368/368 local + 368/368 PostgreSQL; toate defectele FIXED (D-C26 MITIGATED) | — |
 | 2026-10-04 | DW01 aplicat (decizia operatorului, varianta A) prin aplicația reală pe proiectul Enterprise separat | 3 câmpuri modificate, 0 modificări colaterale (diferență completă + verificare independentă pe pachet); DW01 închis, DW02 deschis; aprobări 0; originalul neschimbat | rollback: `34750b0` |
 | 2026-10-04 | DW02 aplicat (decizia operatorului, varianta A) pe proiectul Enterprise separat | 18 câmpuri în planul V1 + metadate de versiune, 0 modificări colaterale (verificare independentă pe pachet); niciun conflict de reconciliere rămas; aprobări 0; originalul neschimbat; producția oprită | rollback: `425b66a` (înainte de DW02), `34750b0` (înainte de DW01) |
+| 2026-10-04 | Creative Upgrade (a+b+c+d+e): poarta de release + suita completă local + PostgreSQL | build/contract/resources/secrets/licenses PASS; 386/386 local (PDF real) + 386/386 PostgreSQL; TEST-CU 18/18 (furnizor simulat: dovezi mecanice) | `docs/enterprise/records/CU.md` |
 
 ## Probleme deschise
 
@@ -164,13 +166,14 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 
 - ~~DW01~~ → **rezolvat 2026-10-04**: varianta A (aliniere la paginile 8–9), decizia operatorului; doar cele 3 câmpuri de premisă/rezumat V1 (`dinosaur-world-enterprise/DW01-DECIZIE.md`). Nu aprobă manuscrisul, volumul sau colecția.
 - ~~DW02~~ → **rezolvat 2026-10-04**: varianta A (manuscrisul este sursa pentru paginile 1, 2, 4–9), decizia operatorului; doar tip/cârlig/pagina răspunsului în planul V1 (`dinosaur-world-enterprise/DW02-DECIZIE.md`). Nu aprobă manuscrisul, V1, colecția sau layoutul.
-- Observații DW deschise, nereparate (`dinosaur-world-enterprise/OBSERVATII-DESCHISE.md`): O1 câmpurile payoff din planul V1; O2 întoarceri/dezvăluiri pe aceeași deschidere în V1–V6 (digital/print). De reevaluat la nivelul colecției.
-- Producția Dinosaur World este **oprită**: nu a început pilotul V1, nu s-au generat imagini; urmează evaluarea „Dinosaur World Creative Upgrade”, înaintea oricărei producții.
+- Observații DW deschise, nereparate (`dinosaur-world-enterprise/OBSERVATII-DESCHISE.md`): O1 câmpurile payoff din planul V1; O2 întoarceri/dezvăluiri pe aceeași deschidere în V1–V6 (digital/print). De reevaluat la nivelul colecției (incluse în dosarul BEFORE). O3 (constatare reconciliată afișată activă) → **remediat generic**.
+- Creative Upgrade real Dinosaur World: **BLOCKED / NOT_RUN** — se rulează în aplicația Enterprise Local a operatorului, cu furnizorul autentic (Claude Pro; ChatGPT dacă un agent e legat de GPT); propunerea rezultată se revizuiește de operator; aplicarea ei este o operație separată, cu aprobarea lui.
+- Producția Dinosaur World este **oprită**: nu a început pilotul V1, nu s-au generat imagini, nu s-a rulat Creative Upgrade-ul real.
 - Dinosaur World real (P8-T05/T06): porțile de revizuire, furnizorul verificat în aplicația operatorului și acceptarea pilotului V1 (WAITING_HUMAN).
 - Setul de aur gold-v1: adjudecarea etichetelor (status pending_operator_review) și acceptarea raportului de calibrare (POST /api/evaluation/accept). Până atunci pragurile v2 rămân „propuse” și afirmațiile de maturitate (P7) sunt blocate. (WAITING_HUMAN)
 
 ## Checkpoint
 
-- Ultimul task închis: P8-T07 (faza 8 închisă; P8-T05 BLOCKED, P8-T06 PARTIAL)
-- Următorul task: **evaluarea Dinosaur World Creative Upgrade** (doar analiză, la cererea operatorului) — nicio producție înainte de deciziile lui.
+- Ultimul task închis: CU (a+b+c+d+e) — fluxul Creative Upgrade Proposal implementat și verificat mecanic; O3 remediat
+- Următorul task: **decizia operatorului** — Gold Set/calibrare, release actualizat, instalarea Enterprise Local cu furnizorul real, apoi Creative Upgrade-ul real (nimic din acestea nu a pornit)
 - Cum se reia: `npm ci && npm run build && BROWSER_PATH=/opt/pw-browsers/chromium npm test`; citește tabelul de mai sus și `docs/enterprise/records/`.

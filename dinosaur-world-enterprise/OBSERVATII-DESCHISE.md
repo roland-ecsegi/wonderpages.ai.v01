@@ -31,6 +31,23 @@ indiferent de DW02; după DW02 aplicația o vede și pentru V1.
 
 De reevaluat la etapa de machetă/profil, pentru toată colecția (acceptare argumentată, alt tip de cârlig sau altă așezare).
 
+## O3 — Vederea canonului arăta `finding:DW01` după reconcilierea validă → **REZOLVAT generic** (Creative Upgrade, a+b+c+d+e)
+
+Cauza: constatările de canon ale migrării (`project.canonFindings`) erau listate ca active fără să se țină cont de
+deciziile operatorului care le închid. Remediere generică (fără DW/DW01 în cod): `findingStatus(findings, decisions)`
+în `server/domain/canon.js` — o constatare este rezolvată numai de o decizie **aprobată** al cărei domeniu o numește
+(`scope.conflicts`); vederea canonului (`GET /api/projects/:pid/canon`) întoarce conflictele active și, separat,
+`resolvedFindings` cu decizia, actorul, momentul și nota. Pista de audit rămâne neatinsă (`canonFindings` nu se șterge).
+Pe proiectul Enterprise: `finding:DW01` nu mai este activ, apare în istoric cu decizia `dmuu63dt630b9e3`. Singurul element
+activ rămas este proiecția `series.volumes[0].summary` = **unverified** — lăsată intenționat neverificată (nu există o
+evaluare semantică reală care s-o poată marca verificată). Teste de regresie: `tests/86-creative-upgrade.test.mjs`.
+
+## O1/O2 — rămân deschise
+
+Nu au fost reparate. Sunt incluse ca observații deschise în dosarul BEFORE (`CREATIVE-BASELINE.json`:
+`findings.observations.payoffMismatches` = 5, `sharedOpenings` = 14 pe mapările digital/print) și sunt intrare pentru o
+propunere Creative Upgrade sau pentru revizia de machetă.
+
 ## Notă informativă (nu este conflict)
 
 Manuscrisul are două câmpuri de întoarcere: `turn` (cârligul care pleacă de pe pagină) și câmpul mai vechi `page_turn`

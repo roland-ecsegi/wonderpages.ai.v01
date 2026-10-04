@@ -17,11 +17,18 @@ let input = ''; process.stdin.on('data', d => { input += d; }); process.stdin.on
   if (text) {
     if (mode === 'ratelimit') { console.error('You have reached your usage limit. Try again later.'); process.exit(1); }
     const result = answer(input, st);
+    if (String(result.kind || '').startsWith('creative_upgrade:')) S.log('codex', { kind: result.kind });   // Creative Upgrade: the step, for order checks
+    const finishText = () => {
+    if (result.fail === 'auth') { console.error('Error: Not logged in'); process.exit(1); }
+    if (result.fail) { console.error('Simulated internal error'); process.exit(1); }
     const body = mode === 'badjson' ? 'This is not JSON.' : result.text ?? JSON.stringify(result.json);
     fs.writeFileSync(a[a.indexOf('--output-last-message') + 1], body);
     console.log(JSON.stringify({ type: 'item.completed', item: { type: 'agent_message', text: body } }));
     console.log(JSON.stringify({ type: 'turn.completed', usage: { input_tokens: Math.ceil(input.length / 4), output_tokens: 200 } }));
     process.exit(0);
+    };
+    if (result.delayMs) setTimeout(finishText, result.delayMs); else finishText();
+    return;
   }
   if (mode === 'pause' && S.bump('codex_pause') <= (st.pauseTimes || 1)) { console.error('You have reached your image usage limit, try again later'); process.exit(1); }
   const dir = path.join(process.env.CODEX_HOME || path.join(os.homedir(), '.codex'), 'generated_images', 'sess'); fs.mkdirSync(dir, { recursive: true });

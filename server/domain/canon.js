@@ -45,7 +45,20 @@ export function projections(art) {
   return out;
 }
 
-export function canonConflicts(bp, art, findings = []) {
+/**
+ * Stored findings (e.g. recorded at migration) are an AUDIT TRAIL and are never deleted. A finding is active until an
+ * approved decision explicitly covers it (`scope.conflicts` lists its id); then it is reported as resolved, with the
+ * decision that resolved it, instead of as an open conflict. Generic: no project or finding id is special.
+ */
+export function findingStatus(findings = [], decisions = []) {
+  const active = [], resolved = [];
+  for (const f of findings) {
+    const d = decisions.filter(x => x?.state === 'approved' && Array.isArray(x?.scope?.conflicts) && x.scope.conflicts.includes(f.id)).sort((a, b) => (b.at || 0) - (a.at || 0))[0];
+    if (d) resolved.push({ ...f, resolvedBy: { decision: d.id, kind: d.kind, actor: d.actor, at: d.at, note: d.note || '' } }); else active.push(f);
+  }
+  return { active, resolved };
+}
+export function canonConflicts(bp, art, findings = [], { decisions = [] } = {}) {
   const out = [], vols = art.series?.content?.volumes || [];
   vols.forEach((vol, v) => {
     const scr = art[`final_${v}`]?.content || art[`script_${v}`]?.content; if (!scr?.pages) return;
@@ -58,7 +71,7 @@ export function canonConflicts(bp, art, findings = []) {
     const v = Number(pr.field.match(/\[(\d+)\]/)?.[1]);
     if (art[`script_${v}`] || art[`final_${v}`]) out.push({ id: `projection:${pr.field}`, kind: pr.status === 'stale' ? 'stale_projection' : 'unverified_projection', field: pr.field, volume: v + 1, authority: pr.authority, requiresAssessment: true, resolution: 'Verificare semantică față de manuscrisul aprobat (P5-T04); dacă diferă, proiecția se regenerează din autoritate, nu invers.' });
   }
-  for (const f of findings) out.push({ id: `finding:${f.id}`, kind: 'semantic_conflict', source: f.source || 'assessment', title: f.title, evidence: f.evidence, requiresDecision: true });
+  for (const f of findingStatus(findings, decisions).active) out.push({ id: `finding:${f.id}`, kind: 'semantic_conflict', source: f.source || 'assessment', title: f.title, evidence: f.evidence, requiresDecision: true });   // O3: resolved findings are reported separately
   return out;
 }
 

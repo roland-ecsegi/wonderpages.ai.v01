@@ -16,6 +16,17 @@ registru nu este o afirmație de piață, de pregătire SaaS Enterprise sau de p
 | P8-T06 înainte/după | **PARTIAL** | dus-întors fără pierderi + genericitate demonstrate; comparația înainte/după și piloții reali depind de P8-T05 |
 | P8-T07 UX/accesibilitate | DONE | `tests/84-p8-ux.test.mjs`, `docs/enterprise/contracts/UX-ACCESSIBILITY.md` |
 
+## După faza 8 (cererea operatorului, 2026-10-04)
+
+| Element | Stare | Dovezi |
+|---|---|---|
+| DW01 / DW02 (reconcilieri, deciziile operatorului) | aplicate pe proiectul Enterprise separat | `dinosaur-world-enterprise/DW01-*`, `DW02-*` |
+| O3 (constatare reconciliată afișată activă) | **FIXED generic** | `server/domain/canon.js` (`findingStatus`), teste 86 |
+| O1 / O2 (payoff plan vs manuscris; cârlige pe aceeași deschidere) | **deschise, nereparate** (intenționat) | `dinosaur-world-enterprise/OBSERVATII-DESCHISE.md`, dosarul BEFORE |
+| Fluxul Creative Upgrade Proposal (doar propunere) | implementat; verificat **mecanic** cu furnizor simulat | `docs/enterprise/contracts/CREATIVE-UPGRADE.md`, `tests/86-creative-upgrade.test.mjs` |
+| Dosarul BEFORE Dinosaur World | înghețat, reproductibil | `dinosaur-world-enterprise/CREATIVE-BASELINE.json` |
+| Creative Upgrade real Dinosaur World | **BLOCKED / NOT_RUN** — furnizorul din acest mediu nu este Claude Pro al operatorului (`checkClaudeAuth` → `ok:false`, `oauth_token`) | se rulează în aplicația Enterprise Local a operatorului |
+
 ## Porți dure principale (verificate)
 
 Contractul de produs 6×2×12; un singur proiect activ; aprobările invalidate la schimbare; siguranța (BLOCK oprește
@@ -34,6 +45,7 @@ propuse; poarta de release; restaurare fără producție automată; admitere pe 
 | CI pe GitHub | workflow-ul manual nu a fost declanșat din această sesiune (fără publicare externă) | operatorul |
 | Windows | `instaleaza.bat` și fluxul de actualizare pe Windows nu au fost rulate aici (testat pe Linux) | operatorul, pe laptopul de referință |
 | Hostul de referință | capacitatea și RPO/RTO sunt măsurate pe acest host, nu pe al clientului | operatorul |
+| Creative Upgrade real (propunerea agenților pentru DW) | furnizorul autentic (Claude Pro în aplicația operatorului); calitatea creativă o evaluează operatorul — testele 86 sunt doar mecanice | operatorul, pe Enterprise Local |
 | PHASE 9 (multi-tenant / SaaS) | neactivată, conform cererii | — |
 
 ## Cum se reia

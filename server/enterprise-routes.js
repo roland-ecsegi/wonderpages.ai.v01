@@ -3,7 +3,7 @@
  * ctx: { on, json, need, localOnly, repo, storage, commandIdOf }
  */
 import { buildGraph, impactOf, textArtifactChanges, canonChanges } from './domain/dependencies.js';
-import { canonRevision, canonConflicts, projections, proposeCanonChange, AUTHORITY } from './domain/canon.js';
+import { canonRevision, canonConflicts, projections, proposeCanonChange, AUTHORITY, findingStatus } from './domain/canon.js';
 import { uid, now } from './repo.js';
 import { decisionRecord, policyHash } from './domain/decisions.js';
 import { planMigration, runMigration, listMigrations } from './migration/migrator.js';
@@ -11,7 +11,7 @@ import { dwReferencePages } from './migration/dw-reference.js';
 import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT } from './config.js';
-import { RUNNING, expandStages, reassessVolume, prepareTextPacket, ingestTextPacket, prepareImagePacket, ingestImagePacket, gateItems, setItemDecisions, applyItemChanges, assertCanWork, volumeApproved } from './engine.js';
+import { RUNNING, agentComplete, expandStages, reassessVolume, prepareTextPacket, ingestTextPacket, prepareImagePacket, ingestImagePacket, gateItems, setItemDecisions, applyItemChanges, assertCanWork, volumeApproved } from './engine.js';
 import { pageWorkbench, commandImpact, itemIdFor, srcKeyOf } from './domain/workbench.js';
 import { coloringQA, COLORING_QA_VERSION } from './quality/coloring.js';
 import { destinationCheck, coverWrap, PROFILE_VERSIONS, PROFILE_RULES } from './printprofile.js';
@@ -49,6 +49,10 @@ import { reconcileReport, applyReconcile } from './migration/dw-reconcile.js';
 import { contractFromBlueprint, validateProjectInput, editionsFor } from './domain/product-contract.js';
 import * as Ledger from './ledger.js';
 import { getCapabilities } from './providers/registry.js';
+import { createUpgradeService, STEPS } from './creative/upgrade.js';
+import { checkCodexText } from './codextext.js';
+import { llmInfo } from './llm.js';
+import { checkClaudeAuth } from './claudecode.js';
 import { createPacket, getPacket, listPackets, recordAttempt, assertUsable, packetZip } from './providers/operator-exchange.js';
 
 /** P6-T01: the layout plan of a volume with the real pixel sizes of its illustrations (crop measured on the files). */
@@ -76,10 +80,37 @@ export function registerEnterpriseRoutes({ on, json, need, localOnly, repo, stor
   on('POST', '/api/migrations/run', async (_, req, url) => { localOnly(req); return runMigration(repo, storage, await readBody(req, 600 * 1024 * 1024), { planHash: String(url.searchParams.get('plan') || ''), currentBlueprint: currentBlueprint() }); });
   on('GET', '/api/migrations', async (_, req) => { localOnly(req); return { runs: await listMigrations(storage) }; });
   on('GET', '/api/projects/:pid/migration-report', async ({ pid }) => { need(pid); const a = (await repo.artifacts(pid)).migration_report; if (!a) throw { status: 404, message: 'Proiectul nu provine dintr-o migrare.' }; return a.content; });
+  /* Creative Upgrade Proposal: frozen baseline + proposal-only workflow of the permanent agents. There is deliberately
+     no "apply" route: applying a proposal is a separate, later operation that needs the operator's explicit approval. */
+  /* every provider the five agents are bound to must be the operator's own plan: Claude Code logged in with Claude Pro,
+     Codex logged in with ChatGPT (never an API key, never another session's token) */
+  const creativeProvider = async () => {
+    const ids = [...new Set(STEPS.map(s => s.agent).filter(Boolean))], bindings = Object.fromEntries(ids.map(id => [id, AgentsMod.getAgent(id)?.model === 'gpt-6-sol' ? 'codex' : 'claude-code']));
+    const providers = {};
+    if (Object.values(bindings).includes('claude-code')) {
+      const info = llmInfo();
+      if (!info.configured) providers['claude-code'] = { authentic: false, message: 'Claude Code nu este instalat pe acest calculator.' };
+      else { const a = await checkClaudeAuth(); providers['claude-code'] = { authentic: a.ok === true, method: a.method || null, subscription: a.subscription || null, model: info.model, message: a.ok === true ? '' : (a.message || 'Claude Code nu este autentificat cu abonamentul Claude Pro al operatorului.') }; }
+    }
+    if (Object.values(bindings).includes('codex')) { const c = await checkCodexText(); providers.codex = { authentic: c.ready === true, installed: c.installed, message: c.ready ? '' : (c.installed ? 'Codex nu este autentificat cu contul ChatGPT al operatorului.' : 'Codex CLI nu este instalat.') }; }
+    const bad = Object.entries(providers).filter(([, v]) => !v.authentic);
+    return { configured: Object.values(providers).every(v => v.message !== 'Claude Code nu este instalat pe acest calculator.' && v.installed !== false), authentic: !bad.length, bindings, providers, message: bad.map(([k, v]) => `${k}: ${v.message}`).join(' ') };
+  };
+  const CU = createUpgradeService({ repo, storage, complete: agentComplete, checkProvider: creativeProvider, roles: () => AgentsMod.registry().contracts?.roles || {}, skills: () => AgentsMod.registry().contracts?.skills || {}, isProjectBusy: pid => !!RUNNING[pid] });
+  const baselineSummary = b => ({ hash: b.hash, schema: b.schema, project: b.project, contract: b.contract, counts: b.counts, projectFingerprint: b.projectFingerprint, findings: { canonActive: b.findings.canonActive.length, canonResolved: b.findings.canonResolved.length, collectionQA: b.findings.collectionQA.length, payoffMismatches: b.findings.observations.payoffMismatches.length, sharedOpenings: b.findings.observations.sharedOpenings.length } });
+  on('GET', '/api/projects/:pid/creative/readiness', async ({ pid }) => { need(pid); return CU.readiness(pid); });
+  on('POST', '/api/projects/:pid/creative/baselines', async ({ pid }, req) => { localOnly(req); need(pid); return baselineSummary(await CU.createBaseline(pid)); });
+  on('GET', '/api/projects/:pid/creative/baselines', async ({ pid }) => { need(pid); return { baselines: await CU.listBaselines(pid) }; });
+  on('GET', '/api/projects/:pid/creative/baselines/:hash', async ({ pid, hash }) => { need(pid); return CU.getBaseline(pid, hash); });
+  on('POST', '/api/projects/:pid/creative/proposals', async ({ pid }, req) => { localOnly(req); need(pid); const b = await json(req); const r = await CU.start(pid, { baseline: b.baseline || null, direction: b.direction || '', supersedes: b.supersedes || null }); return { id: r.id, status: r.status }; });
+  on('GET', '/api/projects/:pid/creative/proposals', async ({ pid }) => { need(pid); return { proposals: await CU.list(pid) }; });
+  on('GET', '/api/projects/:pid/creative/proposals/:id', async ({ pid, id }) => { need(pid); return CU.view(pid, id); });
+  on('POST', '/api/projects/:pid/creative/proposals/:id/resume', async ({ pid, id }, req) => { localOnly(req); need(pid); const r = await CU.resume(pid, id); return { id: r.id, status: r.status }; });
   /* P2-T02: canon authority, projections and conflicts (read-only) */
   on('GET', '/api/projects/:pid/canon', async ({ pid }) => {
     need(pid); const bp = await repo.getBlueprint(pid), art = await repo.artifacts(pid), p = repo.getProject(pid);
-    return { authority: AUTHORITY, revision: canonRevision(art), projections: projections(art), conflicts: canonConflicts(bp, art, p.canonFindings || []), proposals: (p.canonProposals || []).map(x => ({ ...x, impact: { stale: x.impact.stale.length, revalidate: x.impact.revalidate.length } })) };
+    const decisions = await repo.listDecisions(pid).catch(() => []), fs0 = findingStatus(p.canonFindings || [], decisions);
+    return { authority: AUTHORITY, revision: canonRevision(art), projections: projections(art), conflicts: canonConflicts(bp, art, p.canonFindings || [], { decisions }), resolvedFindings: fs0.resolved.map(f => ({ id: `finding:${f.id}`, title: f.title, source: f.source || 'assessment', evidence: f.evidence, resolvedBy: f.resolvedBy })), proposals: (p.canonProposals || []).map(x => ({ ...x, impact: { stale: x.impact.stale.length, revalidate: x.impact.revalidate.length } })) };
   });
   /* P2-T02: impact preview before committing an edit (nothing is written) */
   on('POST', '/api/projects/:pid/impact', async ({ pid }, req) => {

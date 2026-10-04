@@ -4,6 +4,8 @@
  * instance on the workspace data; provider mocks on PATH so nothing reaches a real provider).
  *   node scripts/enterprise/dw-workspace.mjs status
  *   node scripts/enterprise/dw-workspace.mjs apply --choices='{"DW01":"align_to_pages","premise":"…"}' --note="…" --label=DW01
+ *   node scripts/enterprise/dw-workspace.mjs baseline   → CREATIVE-BASELINE.json (frozen BEFORE dossier for a Creative
+ *     Upgrade proposal; read-only for the project: its fingerprint is checked before and after)
  * `apply` migrates the read-only original archive into the workspace when no Enterprise project exists yet, records the
  * full state BEFORE, applies ONLY the given reconciliation choices through POST /reconcile/apply (report hash checked),
  * records the state AFTER, diffs every field of every artifact and of the project, exports the Enterprise package
@@ -14,7 +16,7 @@ import os from 'node:os';
 import net from 'node:net';
 import path from 'node:path';
 import crypto from 'node:crypto';
-import { spawn } from 'node:child_process';
+import { spawn, execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
@@ -79,5 +81,17 @@ try {
       original: { sha256: originalBefore, unchanged: originalBefore === originalAfter }, package: { file: path.relative(ROOT, pkgFile), sha256: sha(pkg), bytes: pkg.length } };
     fs.writeFileSync(path.join(WS, `${label}-VERIFICARE.json`), JSON.stringify(rep, null, 2) + '\n');
     console.log(JSON.stringify({ label, applied: rep.applied.length, artifactChanges: artifactChanges.map(c => c.path), projectChanges: projectChanges.map(c => c.path), reportAfter: rep.reportAfter.conflicts, decision: newDecisions.map(d => ({ kind: d.kind, state: d.state, scope: d.scope })), approvals: rep.approvals, stagesUnchanged: rep.stages.unchanged, original: rep.original }, null, 1));
+  }
+  else if (cmd === 'baseline') {
+    const before = await snapshot(srv.api, pid), sum = await srv.api('POST', `/api/projects/${pid}/creative/baselines`), b = await srv.api('GET', `/api/projects/${pid}/creative/baselines/${sum.hash}`), after = await snapshot(srv.api, pid);
+    const fileSha = f => { try { return sha(fs.readFileSync(path.join(WS, f))); } catch { return null; } };
+    const commit = c => { try { execFileSync('git', ['cat-file', '-e', `${c}^{commit}`], { cwd: ROOT, stdio: 'ignore' }); return { commit: c, present: true }; } catch { return { commit: c, present: false }; } };
+    const { createdAt, ...frozen } = b;
+    const doc = { schema: 'wonderpages.dw-creative-baseline/1', project: pid, baseline: frozen,
+      provenance: { original: { file: path.relative(ROOT, ORIGINAL), sha256: originalBefore, unchanged: originalBefore === sha(fs.readFileSync(ORIGINAL)) }, enterprisePackage: { file: 'dinosaur-world-enterprise/pachet/dinosaur-world-enterprise.zip', sha256: fileSha('pachet/dinosaur-world-enterprise.zip') },
+        decisions: Object.fromEntries(['DW01-DECIZIE.md', 'DW01-VERIFICARE.json', 'DW02-DECIZIE.md', 'DW02-VERIFICARE.json', 'OBSERVATII-DESCHISE.md'].map(f => [f, fileSha(f)])), checkpoints: ['34750b0', '425b66a', '5028cde'].map(commit) },
+      projectUnchanged: JSON.stringify(before) === JSON.stringify(after), note: 'Dosar BEFORE înghețat (intrarea unei propuneri Creative Upgrade). Nu conține conținut creativ nou; proiectul nu a fost modificat.' };
+    fs.writeFileSync(path.join(WS, 'CREATIVE-BASELINE.json'), JSON.stringify(doc, null, 1) + '\n');
+    console.log(JSON.stringify({ hash: frozen.hash, counts: frozen.counts, projectFingerprint: frozen.projectFingerprint, projectUnchanged: doc.projectUnchanged, original: doc.provenance.original.unchanged, findings: sum.findings, checkpoints: doc.provenance.checkpoints }, null, 1));
   }
 } finally { await srv.stop(); }

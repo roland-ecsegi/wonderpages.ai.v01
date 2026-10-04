@@ -19,7 +19,31 @@ const page = (n, lang = 'EN') => ({ n, text: lang === 'RO' ? `Milo și Tia găse
 const arch = { beginning: { pages: '1-3', summary: 'a' }, development: { pages: '4-6', summary: 'b' }, climax: { pages: '7-9', summary: 'c' }, ending: { pages: '10-12', summary: 'd' }, emotional_arc: 'curiozitate', educational_intent: ['culori'], why_age_fit: 'scurt' };
 const script = () => ({ title: 'Milo and the Shiny Leaf', architecture: arch, story_bible:{premise:'friends find a leaf',theme:'curiosity',protagonist:'Milo',goal:'find the owner',obstacle:'wind',inciting_incident:'leaf falls',escalation:'wind rises',climax_choice:'Milo helps Tia',resolution:'find tree',ending:'return home',world_rules:'natural meadow',causality:{goal:{page:1,quote:'a gentle surprise on page 1'},choice:{page:7,quote:'a gentle surprise on page 7'},consequence:{page:11,quote:'a gentle surprise on page 11'}}}, cover: { scene: 'Milo and Tia hero shot', characters: ['milo', 'tia'], objects: ['leaf'], location: 'meadow' }, pages: Array.from({ length: 12 }, (_, i) => page(i + 1)) });
 const labels = { volume: 'Volume', storybook: 'Storybook', coloring_book: 'Coloring book', title_page: 'A story and colouring book', rights: 'All rights reserved.', ai_notice: 'Text and illustrations created with the help of AI and reviewed by the publisher.' };
+/* SIMULARE Creative Upgrade: răspunsuri MECANICE derivate doar din baseline-ul primit (id-uri, numărători, premise copiate
+   pentru KEEP). Textele sunt marcate [MOCK]; nu sunt conținut creativ și nu dovedesc calitate. Comutatoare în st.cu. */
+function creativeUpgrade(p, st) {
+  const step = (p.match(/CREATIVE UPGRADE PROPOSAL — STEP: (\S+)/) || [])[1], cu = st.cu || {}, n = S.bump(`cu_${step}`);
+  const b = jsonAfter('BASELINE (frozen', p) || {}, sofar = jsonAfter('PROPOSAL SO FAR:', p) || { sections: {} }, objs = jsonAfter('OBJECTIONS TO ANSWER:', p) || [];
+  const V = b.contract?.volumes || 6, P = b.contract?.pagesPerBook || 12, chars = (b.canon?.characters || []).map(c => c.id), vols = Array.from({ length: V }, (_, i) => i + 1);
+  const dec = (element, decision, extra = {}) => ({ element, decision, argument: `[MOCK] argument ${decision} pentru ${element}`, evidence: [element.startsWith('new:') ? 'operator_direction' : element], impact: '[MOCK] impact', scope: { volumes: vols }, dependencies: [], risk: { level: 'low', note: '[MOCK] risc' }, ...extra });
+  const out = j => ({ kind: `creative_upgrade:${step}`, json: j, ...(cu.fail?.step === step && n <= (cu.fail.times || 1) ? { fail: cu.fail.kind || 'upstream' } : {}), ...(cu.delay?.step === step ? { delayMs: cu.delay.ms || 3000 } : {}) });
+  if (cu.invalid?.step === step && n <= (cu.invalid.times || 1)) return out({ mock: 'ieșire invalidă intenționată' });
+  if (step === 'direction') return out({ evaluation: { strengths: ['[MOCK] punct forte'], weaknesses: ['[MOCK] punct slab'] }, direction: '[MOCK] direcție simulată', ageFit: `[MOCK] potrivire ${b.project?.ageBand}`, risks: [{ risk: '[MOCK] risc', mitigation: '[MOCK] atenuare' }],
+    decisions: [dec('series:through_line', 'KEEP'), ...chars.map(id => dec(`character:${id}`, 'KEEP')), dec('new:world_rule:mock_rule', 'NEW')] });
+  if (step === 'structure') return out({ arc: { through_line: '[MOCK] fir', volumes: vols.map(v => ({ n: v, premise: b.series?.volumes?.[v - 1]?.story_bible?.premise || `[MOCK] premisă V${v}`, characters: chars, goal: '[MOCK] scop', obstacle: '[MOCK] obstacol', discovery: '[MOCK] descoperire', choice: '[MOCK] alegere', consequence: '[MOCK] consecință', payoff: '[MOCK] răsplată', links: v > 1 ? [{ to: v - 1, kind: 'callback', what: '[MOCK] callback' }] : [] })) },
+    beforeAfter: [{ element: 'volume:1', before: '[MOCK]', after: '[MOCK]' }], observationsImpact: [{ observation: 'payoffMismatches', impact: '[MOCK]' }], decisions: vols.map(v => dec(`volume:${v}`, 'KEEP')) });
+  if (step === 'continuity') { const cast = (b.canon?.characters || []).map((c, i) => ({ id: c.id, name: cu.keepModified && i === 0 ? `${c.name} MOCK` : c.name, species: c.species || '[MOCK] specie', personality: '[MOCK] personalitate', role: i ? 'secondary' : 'main', reason: '[MOCK] motiv', volumes: cu.conflict && i === chars.length - 1 ? vols.slice(0, -1) : vols, relations: [] }));
+    return out({ cast, continuity: { callbacks: [{ from: 2, to: 1, what: '[MOCK] callback' }], issues: [] }, decisions: (b.canon?.locations || []).slice(0, 1).map(l => dec(`location:${l.id}`, 'KEEP')) }); }
+  if (step === 'narrative') return out({ pilot: { volume: 1, pages: Array.from({ length: P }, (_, i) => ({ n: i + 1, beat: `[MOCK] moment ${i + 1}`, characters: chars.slice(0, 2), turn: i % 2 === 0 && i + 1 < P ? { type: 'question', hook: '[MOCK] cârlig', payoff_page: i + 2 } : { type: 'quiet' }, purpose: '[MOCK] scop' })) },
+    volumeMoments: vols.map(v => ({ volume: v, moment: '[MOCK] moment cheie' })), decisions: [dec('page_plan:V1-P01', 'IMPROVE')] });
+  if (step === 'critique') return out({ objections: cu.noObjections ? [] : [{ id: 'O-1', target: 'arc', severity: 'major', text: '[MOCK] obiecție la arc', evidence: ['volume:1'] }, { id: 'O-2', target: 'pilot', severity: 'minor', text: '[MOCK] obiecție la pilot', evidence: ['page_plan:V1-P01'] }], verdict: cu.critiqueVerdict || 'revise', summary: '[MOCK] critică' });
+  if (step.startsWith('revision:')) { const owner = step.slice(9), revised = owner === 'arhitect-serie' && sofar.sections?.arc ? { arc: { ...sofar.sections.arc, through_line: '[MOCK] fir revizuit' } } : owner === 'scriitor' && sofar.sections?.pilot ? { pilot: sofar.sections.pilot } : {};
+    return out({ responses: (cu.unanswered ? [] : objs).map(o => ({ objection: o.id, resolution: 'accepted', change: '[MOCK] schimbare', reason: '[MOCK] motiv' })), revised }); }
+  if (step === 'final_review') return out({ verdict: cu.finalVerdict || 'accept', summary: '[MOCK] revizie finală', remaining: [] });
+  return out({});
+}
 function answer(p, st) {
+  if (p.includes('CREATIVE UPGRADE PROPOSAL — STEP:')) return creativeUpgrade(p, st);
   if (p.includes('Return the requested JSON object with ok set to OK.')) return { kind: 'verify_codex_json', json: { ok: 'OK' } };
   if (p.includes('Reply with exactly OK.')) return { kind: 'verify_codex', text: 'OK' };
   if (p.includes('Reply with the single word OK')) return { kind: 'verify', text: 'OK' };
@@ -81,6 +105,16 @@ function main() {
   const schema = argOf('--json-schema'); let schemaOk = null; if (schema) { try { JSON.parse(schema); schemaOk = true; } catch { schemaOk = false; } }
   S.log('claude', { kind: a.kind, bytes: input.length, sysBytes: sys.length, sysHead: sys.split('\n').slice(2, 3).join('').slice(0, 60), schema: schemaOk, maxTurns: argOf('--max-turns'), model: args[args.indexOf('--model') + 1], tools: args.includes('--tools') ? args[args.indexOf('--tools') + 1] : null, allowed: args.includes('--allowedTools') ? args[args.indexOf('--allowedTools') + 1] : null, perm: args.includes('--permission-mode') ? args[args.indexOf('--permission-mode') + 1] : null, cwd: process.cwd(), mode, apiKeyInEnv: !!process.env.ANTHROPIC_API_KEY });
   if (mode === 'hang') { setTimeout(() => {}, 3600e3); return; }
+  if (a.delayMs && !a._delayed) { a._delayed = true; return setTimeout(() => finish(a, mode), a.delayMs); }
+  finish(a, mode);
+}
+function finish(a, mode) {
+  if (a.fail === 'ratelimit') { const t = Math.floor(Date.now() / 1000) + 3600; console.log(JSON.stringify({ type: 'result', subtype: 'success', is_error: true, result: `Claude AI usage limit reached|${t}` })); process.exit(1); }
+  if (a.fail === 'auth') { process.stderr.write('Invalid API key · Please run /login\n'); process.exit(1); }
+  if (a.fail === 'upstream') { process.stderr.write('Simulated internal error\n'); process.exit(1); }
+  const schema = argOf('--json-schema'); let schemaOk = null; if (schema) { try { JSON.parse(schema); schemaOk = true; } catch { schemaOk = false; } }
+  const sysFile = argOf('--system-prompt-file'); let sys = ''; try { if (sysFile) sys = fs.readFileSync(sysFile, 'utf8'); } catch {}
+  const st = S.read();
   if (mode === 'auth') { process.stderr.write('Invalid API key · Please run /login\n'); process.exit(1); }
   if (mode === 'ratelimit') { const t = Math.floor(Date.now() / 1000) + 3600; const r = `Claude AI usage limit reached|${t}`; console.log(JSON.stringify({ type: 'result', subtype: 'success', is_error: true, result: r })); process.exit(1); }
   if (schema && st.schemaBroken) { console.log(JSON.stringify({ type: 'result', subtype: 'error_max_turns', is_error: true, result: '' })); process.exit(1); }

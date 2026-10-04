@@ -1,0 +1,3104 @@
+{
+ "schema": "wonderpages.dw-creative-baseline/1",
+ "project": "p607c4e032zxg",
+ "baseline": {
+  "schema": "wonderpages.creative-baseline/1",
+  "project": {
+   "id": "p607c4e032zxg",
+   "title": "Dinosaur World",
+   "revision": 13,
+   "status": "ready",
+   "ageBand": "3-4",
+   "languages": [
+    "English",
+    "Romanian"
+   ],
+   "source": {
+    "kind": "migration",
+    "original": "p5405a8a96j4w",
+    "at": 1791139283344
+   },
+   "originalSha256": "7056e113bf5c84fdfc0f7b8f528713de6c8fe31e82b40fbab056544fe10e45e3"
+  },
+  "contract": {
+   "hash": "b04df8c0b29661776137a3b32ca1ef84b650fd18b99e8a202a046716e6af07e3",
+   "volumes": 6,
+   "pagesPerBook": 12,
+   "books": [
+    "story",
+    "coloring"
+   ],
+   "ageBands": [
+    "3-4",
+    "5-6",
+    "7-8"
+   ],
+   "languages": [
+    "English",
+    "Romanian"
+   ]
+  },
+  "artifacts": {
+   "bible": {
+    "version": 2,
+    "hash": "f43b9b4fc462804d4c6ea98e"
+   },
+   "brief": {
+    "version": 2,
+    "hash": "62936fd91d2fe5a3765398e7"
+   },
+   "canon_typed": {
+    "version": 1,
+    "hash": "964d164f16dea511c16d82b9"
+   },
+   "cast": {
+    "version": 2,
+    "hash": "40b57767f2427e95c496d8b9"
+   },
+   "migration_report": {
+    "version": 1,
+    "hash": "4f62942bee6c68b07f9fad0b"
+   },
+   "refs": {
+    "version": 2,
+    "hash": "dfd64f848cfa720b0c960f73"
+   },
+   "script_0": {
+    "version": 3,
+    "hash": "1a9af804da03a77ee2aa38a2"
+   },
+   "series": {
+    "version": 4,
+    "hash": "75df2a130fbd38a07d608833"
+   }
+  },
+  "inventory": {
+   "series": {
+    "through_line": "Milo crește de la un pui curios care descoperă lucruri singur la un prieten care își adună și prețuiește prietenii; fiecare volum adaugă o descoperire despre lume și una despre prietenie.",
+    "volumes": [
+     {
+      "n": 1,
+      "title": "Milo and the Shiny Pebble",
+      "summary": "Milo găsește o pietricică strălucitoare, o urmărește pe cărare, o cunoaște pe Tia și se adăpostesc împreună de ploaie sub o frunză lată.",
+      "main_setting": "poiana cu ferigi",
+      "ending_type": "somn liniștit acasă",
+      "learning_goal": "curiozitate și grijă",
+      "emotional_arc": "calm, curiozitate, bucurie, grijă, liniște",
+      "story_bible": {
+       "premise": "Milo găsește o pietricică strălucitoare, o urmărește pe cărare, o cunoaște pe Tia și se adăpostesc împreună de ploaie sub o frunză lată.",
+       "theme": "curiozitate și grijă",
+       "protagonist": "milo",
+       "goal": "Să ducă pietricica acasă și să împartă descoperirea.",
+       "obstacle": "Pietricica se rostogolește, iar ploaia întrerupe joaca.",
+       "inciting_incident": "O atingere mică pune pietricica în mișcare.",
+       "escalation": "De la urmărire singur la descoperire împreună; apoi ploaia cere o soluție.",
+       "climax_choice": "Milo observă frunza lată, iar Tia o poate ține cu botul; Milo îi face loc sub ea.",
+       "resolution": "Se întorc împreună, pietricica rămâne în cuib, fiecare merge apoi acasă.",
+       "ending": "Încredere și amintire împărtășită, fără teaser.",
+       "world_rules": "Fără magie; sclipirile sunt reflexii naturale. Anatomia, identitatea și relațiile urmează bible și cast; fiecare personaj are propria casă.",
+       "continuity": "Volumul 1; distribuția și relațiile urmează cast.",
+       "status": "editorial_plan_requires_review"
+      }
+     },
+     {
+      "n": 2,
+      "title": "Milo and the Echo Hill",
+      "summary": "Pe un deal, Milo strigă și aude un ecou; împreună cu Tia descoperă că e propria lor voce și inventează un joc cu rândul.",
+      "main_setting": "dealul ecoului",
+      "ending_type": "un cântec cântat împreună",
+      "learning_goal": "sunetul și ecoul; așteptatul rândului",
+      "emotional_arc": "mirare, amuzament, joc, bucurie",
+      "story_bible": {
+       "premise": "Pe un deal, Milo strigă și aude un ecou; împreună cu Tia descoperă că e propria lor voce și inventează un joc cu rândul.",
+       "theme": "sunetul și ecoul; așteptatul rândului",
+       "protagonist": "milo",
+       "goal": "Să afle cine îi răspunde de pe deal.",
+       "obstacle": "Răspunsul nu apare ca personaj și îl surprinde.",
+       "inciting_incident": "Milo strigă, iar glasul îi revine.",
+       "escalation": "Repetă, schimbă sunetul și așteaptă; Tia încearcă și ea.",
+       "climax_choice": "Milo tace ca să audă răspunsul Tiei și înțelege jocul cu rândul.",
+       "resolution": "Inventeză un refren scurt, alternând vocile.",
+       "ending": "Un joc pe care îl pot relua, fără explicație de manual.",
+       "world_rules": "Fără magie; sclipirile sunt reflexii naturale. Anatomia, identitatea și relațiile urmează bible și cast; fiecare personaj are propria casă.",
+       "continuity": "Volumul 2; distribuția și relațiile urmează cast.",
+       "status": "editorial_plan_requires_review"
+      }
+     },
+     {
+      "n": 3,
+      "title": "Milo and the Lost Feather",
+      "summary": "Milo găsește o pană colecționată și pierdută de Pip; îl ascultă pe prietenul timid și i-o înapoiază. Pana nu provine din corpul pterozaurului.",
+      "main_setting": "poiana cu flori și copacul înalt",
+      "ending_type": "Pip zboară și le face cu aripa",
+      "learning_goal": "ajutorul și returnarea lucrurilor pierdute",
+      "emotional_arc": "curiozitate, căutare, empatie, bucurie",
+      "story_bible": {
+       "premise": "Milo găsește o pană colorată și caută cui aparține; îl cunoaște pe Pip, un pui de pterozaur, și i-o dă înapoi.",
+       "theme": "ajutorul și returnarea lucrurilor pierdute",
+       "protagonist": "milo",
+       "goal": "Să găsească proprietarul unei pene găsite.",
+       "obstacle": "Indiciile sunt incomplete, iar Pip este prea timid să ceară obiectul.",
+       "inciting_incident": "Milo găsește pana lângă copac.",
+       "escalation": "Caută pe jos, urmărește o umbră, apoi ascultă vocea mică a lui Pip.",
+       "climax_choice": "Milo se oprește din întrebări și îl lasă pe Pip să spună că o colecționase.",
+       "resolution": "Îi înapoiază pana; Pip alege să se apropie.",
+       "ending": "Pip îi salută cu aripa; pana rămâne obiect colecționat, nu o parte din corp.",
+       "world_rules": "Fără magie; sclipirile sunt reflexii naturale. Anatomia, identitatea și relațiile urmează bible și cast; fiecare personaj are propria casă.",
+       "continuity": "Volumul 3; distribuția și relațiile urmează cast.",
+       "status": "editorial_plan_requires_review"
+      }
+     },
+     {
+      "n": 4,
+      "title": "Milo and the Fruit Tree",
+      "summary": "Fructele sunt prea sus; Milo, Tia și Pip lucrează împreună ca să le culeagă și le împart.",
+      "main_setting": "livada dinozaurilor",
+      "ending_type": "un picnic împărțit",
+      "learning_goal": "cooperare și răbdare",
+      "emotional_arc": "dorință, încercări, idee, cooperare, mulțumire",
+      "story_bible": {
+       "premise": "Fructele sunt prea sus; Milo, Tia și Pip lucrează împreună ca să le culeagă și le împart.",
+       "theme": "cooperare și răbdare",
+       "protagonist": "milo",
+       "goal": "Să adune fructe pentru un picnic împreună.",
+       "obstacle": "Fructele sunt prea sus pentru Milo și Tia.",
+       "inciting_incident": "Un fruct cade, dar celelalte rămân pe ramura joasă.",
+       "escalation": "Milo se întinde fără să ajungă, Tia stabilizază un recipient, Pip observă fructele coapte.",
+       "climax_choice": "Milo împarte sarcinile potrivit corpurilor: Pip desprinde un fruct cu ciocul, Tia îl rostogolește, Milo îl strânge.",
+       "resolution": "Adună puține fructe și le împart.",
+       "ending": "Picnic mulțumit, fără cățărat periculos sau fructe culese fără limită.",
+       "world_rules": "Fără magie; sclipirile sunt reflexii naturale. Anatomia, identitatea și relațiile urmează bible și cast; fiecare personaj are propria casă.",
+       "continuity": "Volumul 4; distribuția și relațiile urmează cast.",
+       "status": "editorial_plan_requires_review"
+      }
+     },
+     {
+      "n": 5,
+      "title": "Milo and the Rainbow",
+      "summary": "După ploaie apare un curcubeu; Milo și Tia numără culorile și le regăsesc în flori și fructe.",
+      "main_setting": "pajiștea de după ploaie",
+      "ending_type": "o pictură făcută cu flori",
+      "learning_goal": "culorile și lumina naturală",
+      "emotional_arc": "mirare, joacă, descoperire, creativitate",
+      "story_bible": {
+       "premise": "După ploaie apare un curcubeu; Milo și Tia numără culorile și le regăsesc în flori și fructe.",
+       "theme": "culorile și lumina naturală",
+       "protagonist": "milo",
+       "goal": "Să păstreze culorile curcubeului după ce dispare.",
+       "obstacle": "Curcubeul se estompează când vremea se schimbă.",
+       "inciting_incident": "Milo observă banda colorată după ploaie.",
+       "escalation": "Privește mai atent și caută aceleași culori în lucrurile de lângă el.",
+       "climax_choice": "Milo alege o colecție mică de frunze și flori căzute, iar Tia aranjează cu botul.",
+       "resolution": "Fac o imagine din culorile găsite.",
+       "ending": "Curcubeul dispare, dar joaca și imaginea rămân; fără a pretinde că au prins lumina.",
+       "world_rules": "Fără magie; sclipirile sunt reflexii naturale. Anatomia, identitatea și relațiile urmează bible și cast; fiecare personaj are propria casă.",
+       "continuity": "Volumul 5; distribuția și relațiile urmează cast.",
+       "status": "editorial_plan_requires_review"
+      }
+     },
+     {
+      "n": 6,
+      "title": "Milo and the Friendship Picnic",
+      "summary": "Milo își adună prietenii și își amintesc împreună aventurile; pietricica strălucitoare devine darul lui pentru prieteni.",
+      "main_setting": "poiana cu ferigi",
+      "ending_type": "o sărbătoare la apus, cu toți prietenii",
+      "learning_goal": "amintiri și recunoștință",
+      "emotional_arc": "nerăbdare, emoție, amintire, recunoștință",
+      "story_bible": {
+       "premise": "Milo își adună prietenii și își amintesc împreună aventurile; pietricica strălucitoare devine darul lui pentru prieteni.",
+       "theme": "amintiri și recunoștință",
+       "protagonist": "milo",
+       "goal": "Să pregătească un picnic la care fiecare prieten să aibă un loc.",
+       "obstacle": "Pregătirea singur îl grăbește și îi încurcă lucrurile.",
+       "inciting_incident": "Milo așază pietricica în mijlocul poienii ca semn al întâlnirii.",
+       "escalation": "Pregătește locuri, uită unul, apoi ascultă ce își doresc Tia și Pip.",
+       "climax_choice": "Milo acceptă ajutor și mută pietricica astfel încât fiecare să o vadă.",
+       "resolution": "Toți contribuie și își amintesc un moment diferit.",
+       "ending": "Sărbătoare completă la apus, fără listă moralizatoare sau reluarea integrală a volumului 1.",
+       "world_rules": "Fără magie; sclipirile sunt reflexii naturale. Anatomia, identitatea și relațiile urmează bible și cast; fiecare personaj are propria casă.",
+       "continuity": "Volumul 6; distribuția și relațiile urmează cast.",
+       "status": "editorial_plan_requires_review"
+      }
+     }
+    ]
+   },
+   "pagePlans": [
+    {
+     "id": "V1-P01",
+     "volume": 1,
+     "page": 1,
+     "beat": "Milo se trezește în cuib.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "confort",
+     "state": "Milo se trezește în cuib.",
+     "imageValue": "Feriga se întinde ca Milo.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "question",
+      "hook": "Ce va găsi Milo?",
+      "payoffPage": 2,
+      "payoff": "Milo se trezește în cuib."
+     }
+    },
+    {
+     "id": "V1-P02",
+     "volume": 1,
+     "page": 2,
+     "beat": "Găsește pietricica.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "mirare",
+     "state": "Găsește pietricica.",
+     "imageValue": "Umbra încadrează sclipirea.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "anticipation",
+      "hook": "Degetul se apropie de obiect.",
+      "payoffPage": 3,
+      "payoff": "Găsește pietricica."
+     }
+    },
+    {
+     "id": "V1-P03",
+     "volume": 1,
+     "page": 3,
+     "beat": "O atingere o pune în mișcare.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "bucurie",
+     "state": "O atingere o pune în mișcare.",
+     "imageValue": "Urme de picioare mici.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "O atingere o pune în mișcare."
+     }
+    },
+    {
+     "id": "V1-P04",
+     "volume": 1,
+     "page": 4,
+     "beat": "Pietricica dispare spre ferigi.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "curiozitate",
+     "state": "Pietricica dispare spre ferigi.",
+     "imageValue": "O frunză tremură înainte de întâlnire.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "question",
+      "hook": "Cine foșnește în tufă?",
+      "payoffPage": 5,
+      "payoff": "Pietricica dispare spre ferigi."
+     }
+    },
+    {
+     "id": "V1-P05",
+     "volume": 1,
+     "page": 5,
+     "beat": "Tia apare din tufă.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "întâlnire",
+     "state": "Tia apare din tufă.",
+     "imageValue": "Tia se apleacă să vadă obiectul.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "reveal",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Tia apare din tufă."
+     }
+    },
+    {
+     "id": "V1-P06",
+     "volume": 1,
+     "page": 6,
+     "beat": "Milo o invită și urmăresc două sclipiri.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "invitație",
+     "state": "Milo o invită și urmăresc două sclipiri.",
+     "imageValue": "Loc pentru doi pe cărare.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "anticipation",
+      "hook": "De unde vine a doua sclipire?",
+      "payoffPage": 7,
+      "payoff": "Milo o invită și urmăresc două sclipiri."
+     }
+    },
+    {
+     "id": "V1-P07",
+     "volume": 1,
+     "page": 7,
+     "beat": "Descoperă o singură pietricică și reflexia ei.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "surpriză",
+     "state": "Descoperă o singură pietricică și reflexia ei.",
+     "imageValue": "Reflexia se deformează la atingerea apei.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "reveal",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Descoperă o singură pietricică și reflexia ei."
+     }
+    },
+    {
+     "id": "V1-P08",
+     "volume": 1,
+     "page": 8,
+     "beat": "Începe ploaia; prietenii caută adăpost.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "nedumerire",
+     "state": "Începe ploaia; prietenii caută adăpost.",
+     "imageValue": "O picătură rotundă pe guler.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "question",
+      "hook": "Unde încap doi prieteni la adăpost?",
+      "payoffPage": 9,
+      "payoff": "Începe ploaia; prietenii caută adăpost."
+     }
+    },
+    {
+     "id": "V1-P09",
+     "volume": 1,
+     "page": 9,
+     "beat": "Împart acoperișul frunzei.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "grijă",
+     "state": "Împart acoperișul frunzei.",
+     "imageValue": "Nasuri uscate sub frunză.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "reveal",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Împart acoperișul frunzei."
+     }
+    },
+    {
+     "id": "V1-P10",
+     "volume": 1,
+     "page": 10,
+     "beat": "Se întorc pe cărare.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "liniște",
+     "state": "Se întorc pe cărare.",
+     "imageValue": "Două feluri de urme.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Se întorc pe cărare."
+     }
+    },
+    {
+     "id": "V1-P11",
+     "volume": 1,
+     "page": 11,
+     "beat": "Pietricica primește un loc în cuib.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "mulțumire",
+     "state": "Pietricica primește un loc în cuib.",
+     "imageValue": "Adâncitura oprește rostogolirea.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Pietricica primește un loc în cuib."
+     }
+    },
+    {
+     "id": "V1-P12",
+     "volume": 1,
+     "page": 12,
+     "beat": "Rămas-bun; fiecare acasă.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "siguranță",
+     "state": "Rămas-bun; fiecare acasă.",
+     "imageValue": "Două drumuri spre două case.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Rămas-bun; fiecare acasă."
+     }
+    },
+    {
+     "id": "V2-P01",
+     "volume": 2,
+     "page": 1,
+     "beat": "Milo și Tia ajung la deal.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "curiozitate",
+     "state": "Milo și Tia ajung la deal.",
+     "imageValue": "Umbrele celor doi au lungimi diferite pe pantă.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Milo și Tia ajung la deal."
+     }
+    },
+    {
+     "id": "V2-P02",
+     "volume": 2,
+     "page": 2,
+     "beat": "Milo spune un salut.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "joacă",
+     "state": "Milo spune un salut.",
+     "imageValue": "Gulerul Tiei este orientat spre Milo, atent.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "question",
+      "hook": "Milo spune un salut. — așteaptă următorul răspuns.",
+      "payoffPage": 3,
+      "payoff": "Salutul revine și îl miră."
+     }
+    },
+    {
+     "id": "V2-P03",
+     "volume": 2,
+     "page": 3,
+     "beat": "Salutul revine și îl miră.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "surpriză",
+     "state": "Salutul revine și îl miră.",
+     "imageValue": "Gulerul Tiei se ridică ușor în surpriză.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Salutul revine și îl miră."
+     }
+    },
+    {
+     "id": "V2-P04",
+     "volume": 2,
+     "page": 4,
+     "beat": "Caută un posibil prieten ascuns.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "căutare",
+     "state": "Caută un posibil prieten ascuns.",
+     "imageValue": "Un loc gol arată că nu apare alt personaj.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "question",
+      "hook": "Caută un posibil prieten ascuns. — așteaptă următorul răspuns.",
+      "payoffPage": 5,
+      "payoff": "Un sunet diferit revine."
+     }
+    },
+    {
+     "id": "V2-P05",
+     "volume": 2,
+     "page": 5,
+     "beat": "Un sunet diferit revine.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "descoperire",
+     "state": "Un sunet diferit revine.",
+     "imageValue": "Frunza de lângă ei tremură în pauza de ascultare.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Un sunet diferit revine."
+     }
+    },
+    {
+     "id": "V2-P06",
+     "volume": 2,
+     "page": 6,
+     "beat": "Tia spune un cuvânt scurt.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "invitație",
+     "state": "Tia spune un cuvânt scurt.",
+     "imageValue": "Milo își îndreaptă corpul spre Tia.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Tia spune un cuvânt scurt."
+     }
+    },
+    {
+     "id": "V2-P07",
+     "volume": 2,
+     "page": 7,
+     "beat": "Milo se grăbește și vocile se suprapun.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "încurcătură amuzantă",
+     "state": "Milo se grăbește și vocile se suprapun.",
+     "imageValue": "Expresiile amuzate arată suprapunerea, fără litere desenate.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "question",
+      "hook": "Milo se grăbește și vocile se suprapun. — așteaptă următorul răspuns.",
+      "payoffPage": 8,
+      "payoff": "Se opresc să asculte."
+     }
+    },
+    {
+     "id": "V2-P08",
+     "volume": 2,
+     "page": 8,
+     "beat": "Se opresc să asculte.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "atenție",
+     "state": "Se opresc să asculte.",
+     "imageValue": "Amândoi stau nemișcați să audă.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "question",
+      "hook": "Se opresc să asculte. — așteaptă următorul răspuns.",
+      "payoffPage": 9,
+      "payoff": "Milo îi lasă Tiei primul rând."
+     }
+    },
+    {
+     "id": "V2-P09",
+     "volume": 2,
+     "page": 9,
+     "beat": "Milo îi lasă Tiei primul rând.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "răbdare",
+     "state": "Milo îi lasă Tiei primul rând.",
+     "imageValue": "Milo îi face loc Tiei, fără să vorbească peste ea.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Milo îi lasă Tiei primul rând."
+     }
+    },
+    {
+     "id": "V2-P10",
+     "volume": 2,
+     "page": 10,
+     "beat": "Vocile primesc pe rând răspuns.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "bucurie",
+     "state": "Vocile primesc pe rând răspuns.",
+     "imageValue": "Alternanța pozițiilor marchează rândurile.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Vocile primesc pe rând răspuns."
+     }
+    },
+    {
+     "id": "V2-P11",
+     "volume": 2,
+     "page": 11,
+     "beat": "Inventeză un refren.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "creativitate",
+     "state": "Inventeză un refren.",
+     "imageValue": "Un pas pe ritmul jocului adaugă umor.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Inventeză un refren."
+     }
+    },
+    {
+     "id": "V2-P12",
+     "volume": 2,
+     "page": 12,
+     "beat": "Coboară cântând, fără să mai caute un personaj invizibil.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "mulțumire",
+     "state": "Coboară cântând, fără să mai caute un personaj invizibil.",
+     "imageValue": "Umbrele lor coboară împreună.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Coboară cântând, fără să mai caute un personaj invizibil."
+     }
+    },
+    {
+     "id": "V3-P01",
+     "volume": 3,
+     "page": 1,
+     "beat": "Milo găsește pana lângă copac.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "curiozitate",
+     "state": "Milo găsește pana lângă copac.",
+     "imageValue": "Pana este mai lungă decât lăbuța lui Milo.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "question",
+      "hook": "Milo găsește pana lângă copac. — așteaptă următorul răspuns.",
+      "payoffPage": 8,
+      "payoff": "Pip spune că pana este din colecția lui."
+     }
+    },
+    {
+     "id": "V3-P02",
+     "volume": 3,
+     "page": 2,
+     "beat": "O privește fără să o poarte pe corp.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "atenție",
+     "state": "O privește fără să o poarte pe corp.",
+     "imageValue": "Milo o ține separat de corp.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "O privește fără să o poarte pe corp."
+     }
+    },
+    {
+     "id": "V3-P03",
+     "volume": 3,
+     "page": 3,
+     "beat": "Caută un proprietar pe cărare.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "căutare",
+     "state": "Caută un proprietar pe cărare.",
+     "imageValue": "Un mic semn pe sol sugerează drumul, fără proprietar inventat.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Caută un proprietar pe cărare."
+     }
+    },
+    {
+     "id": "V3-P04",
+     "volume": 3,
+     "page": 4,
+     "beat": "Un foșnet îl oprește.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "anticipare",
+     "state": "Un foșnet îl oprește.",
+     "imageValue": "Frunzele se mișcă într-un singur loc.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Un foșnet îl oprește."
+     }
+    },
+    {
+     "id": "V3-P05",
+     "volume": 3,
+     "page": 5,
+     "beat": "O umbră mică trece deasupra.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "mirare",
+     "state": "O umbră mică trece deasupra.",
+     "imageValue": "Umbra aparține unui personaj încă nevăzut.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "question",
+      "hook": "O umbră mică trece deasupra. — așteaptă următorul răspuns.",
+      "payoffPage": 6,
+      "payoff": "Apare Pip, timid, pe o ramură joasă."
+     }
+    },
+    {
+     "id": "V3-P06",
+     "volume": 3,
+     "page": 6,
+     "beat": "Apare Pip, timid, pe o ramură joasă.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "timiditate",
+     "state": "Apare Pip, timid, pe o ramură joasă.",
+     "imageValue": "Pip își strânge aripile, timid.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Apare Pip, timid, pe o ramură joasă."
+     }
+    },
+    {
+     "id": "V3-P07",
+     "volume": 3,
+     "page": 7,
+     "beat": "Milo pune o întrebare și așteaptă.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "răbdare",
+     "state": "Milo pune o întrebare și așteaptă.",
+     "imageValue": "Milo coboară obiectul la nivelul lui Pip.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "question",
+      "hook": "Milo pune o întrebare și așteaptă. — așteaptă următorul răspuns.",
+      "payoffPage": 8,
+      "payoff": "Pip spune că pana este din colecția lui."
+     }
+    },
+    {
+     "id": "V3-P08",
+     "volume": 3,
+     "page": 8,
+     "beat": "Pip spune că pana este din colecția lui.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "înțelegere",
+     "state": "Pip spune că pana este din colecția lui.",
+     "imageValue": "Pip arată cu ciocul spre pană.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Pip spune că pana este din colecția lui."
+     }
+    },
+    {
+     "id": "V3-P09",
+     "volume": 3,
+     "page": 9,
+     "beat": "Milo i-o oferă fără condiții.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "grijă",
+     "state": "Milo i-o oferă fără condiții.",
+     "imageValue": "Milo lasă spațiu în loc să se apropie brusc.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Milo i-o oferă fără condiții."
+     }
+    },
+    {
+     "id": "V3-P10",
+     "volume": 3,
+     "page": 10,
+     "beat": "Pip o ia cu ciocul.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "ușurare",
+     "state": "Pip o ia cu ciocul.",
+     "imageValue": "Ciocul poartă obiectul, aripile rămân aripi.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Pip o ia cu ciocul."
+     }
+    },
+    {
+     "id": "V3-P11",
+     "volume": 3,
+     "page": 11,
+     "beat": "Pip se apropie și îl salută cu aripa.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "prietenie",
+     "state": "Pip se apropie și îl salută cu aripa.",
+     "imageValue": "Pip face primul pas spre Milo.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Pip se apropie și îl salută cu aripa."
+     }
+    },
+    {
+     "id": "V3-P12",
+     "volume": 3,
+     "page": 12,
+     "beat": "Milo pleacă liniștit; Pip păstrează pana la locul lui.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "liniște",
+     "state": "Milo pleacă liniștit; Pip păstrează pana la locul lui.",
+     "imageValue": "Pana stă în locul de colecție, separat de anatomie.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Milo pleacă liniștit; Pip păstrează pana la locul lui."
+     }
+    },
+    {
+     "id": "V4-P01",
+     "volume": 4,
+     "page": 1,
+     "beat": "Prietenii descoperă copacul cu fructe.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "curiozitate",
+     "state": "Prietenii descoperă copacul cu fructe.",
+     "imageValue": "Un singur fruct copt conduce privirea.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Prietenii descoperă copacul cu fructe."
+     }
+    },
+    {
+     "id": "V4-P02",
+     "volume": 4,
+     "page": 2,
+     "beat": "Milo își dorește un fruct copt.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "dorință",
+     "state": "Milo își dorește un fruct copt.",
+     "imageValue": "Milo privește fructul, Tia îl privește pe Milo.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Milo își dorește un fruct copt."
+     }
+    },
+    {
+     "id": "V4-P03",
+     "volume": 4,
+     "page": 3,
+     "beat": "Se întinde, dar nu ajunge.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "mică frustrare",
+     "state": "Se întinde, dar nu ajunge.",
+     "imageValue": "Distanța față de ramură explică încercarea nereușită.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "question",
+      "hook": "Se întinde, dar nu ajunge. — așteaptă următorul răspuns.",
+      "payoffPage": 4,
+      "payoff": "Tia observă un fruct deja căzut."
+     }
+    },
+    {
+     "id": "V4-P04",
+     "volume": 4,
+     "page": 4,
+     "beat": "Tia observă un fruct deja căzut.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "observare",
+     "state": "Tia observă un fruct deja căzut.",
+     "imageValue": "Tia atinge cu botul fructul de pe sol.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Tia observă un fruct deja căzut."
+     }
+    },
+    {
+     "id": "V4-P05",
+     "volume": 4,
+     "page": 5,
+     "beat": "Milo propune să adune pentru toți.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "generozitate",
+     "state": "Milo propune să adune pentru toți.",
+     "imageValue": "Milo indică trei locuri la picnic.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Milo propune să adune pentru toți."
+     }
+    },
+    {
+     "id": "V4-P06",
+     "volume": 4,
+     "page": 6,
+     "beat": "Pip vede ramura joasă de sus.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "speranță",
+     "state": "Pip vede ramura joasă de sus.",
+     "imageValue": "Umbra lui Pip arată înălțimea mică, sigură.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Pip vede ramura joasă de sus."
+     }
+    },
+    {
+     "id": "V4-P07",
+     "volume": 4,
+     "page": 7,
+     "beat": "O încercare prea grăbită nu desprinde fructul.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "încercare",
+     "state": "O încercare prea grăbită nu desprinde fructul.",
+     "imageValue": "Fructul încă atașat arată cauza eșecului.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "question",
+      "hook": "O încercare prea grăbită nu desprinde fructul. — așteaptă următorul răspuns.",
+      "payoffPage": 9,
+      "payoff": "Pip desprinde un fruct cu ciocul."
+     }
+    },
+    {
+     "id": "V4-P08",
+     "volume": 4,
+     "page": 8,
+     "beat": "Milo propune sarcini pe rând.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "încredere",
+     "state": "Milo propune sarcini pe rând.",
+     "imageValue": "Privirile dintre prieteni marchează coordonarea.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "question",
+      "hook": "Milo propune sarcini pe rând. — așteaptă următorul răspuns.",
+      "payoffPage": 9,
+      "payoff": "Pip desprinde un fruct cu ciocul."
+     }
+    },
+    {
+     "id": "V4-P09",
+     "volume": 4,
+     "page": 9,
+     "beat": "Pip desprinde un fruct cu ciocul.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "concentrare",
+     "state": "Pip desprinde un fruct cu ciocul.",
+     "imageValue": "Ciocul ține fructul; nu apar mâini suplimentare.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Pip desprinde un fruct cu ciocul."
+     }
+    },
+    {
+     "id": "V4-P10",
+     "volume": 4,
+     "page": 10,
+     "beat": "Tia îl rostogolește spre Milo.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "cooperare",
+     "state": "Tia îl rostogolește spre Milo.",
+     "imageValue": "Botul Tiei împinge fructul pe sol.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Tia îl rostogolește spre Milo."
+     }
+    },
+    {
+     "id": "V4-P11",
+     "volume": 4,
+     "page": 11,
+     "beat": "Milo împarte porțiile.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "bucurie",
+     "state": "Milo împarte porțiile.",
+     "imageValue": "Porțiile sunt vizibile, fără cifre în imagine.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Milo împarte porțiile."
+     }
+    },
+    {
+     "id": "V4-P12",
+     "volume": 4,
+     "page": 12,
+     "beat": "Picnic împreună, cu puține fructe și mult loc.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "mulțumire",
+     "state": "Picnic împreună, cu puține fructe și mult loc.",
+     "imageValue": "Un spațiu comun, fără grămezi de fructe.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Picnic împreună, cu puține fructe și mult loc."
+     }
+    },
+    {
+     "id": "V5-P01",
+     "volume": 5,
+     "page": 1,
+     "beat": "Ploaia se oprește.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "liniște",
+     "state": "Ploaia se oprește.",
+     "imageValue": "O picătură rămâne pe vârful unei frunze.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Ploaia se oprește."
+     }
+    },
+    {
+     "id": "V5-P02",
+     "volume": 5,
+     "page": 2,
+     "beat": "Milo vede curcubeul.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "mirare",
+     "state": "Milo vede curcubeul.",
+     "imageValue": "Privirile conduc spre banda naturală de lumină.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "question",
+      "hook": "Milo vede curcubeul. — așteaptă următorul răspuns.",
+      "payoffPage": 3,
+      "payoff": "Tia observă o culoare."
+     }
+    },
+    {
+     "id": "V5-P03",
+     "volume": 5,
+     "page": 3,
+     "beat": "Tia observă o culoare.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "atenție",
+     "state": "Tia observă o culoare.",
+     "imageValue": "Gulerul Tiei are o culoare apropiată de cea observată.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Tia observă o culoare."
+     }
+    },
+    {
+     "id": "V5-P04",
+     "volume": 5,
+     "page": 4,
+     "beat": "Privesc o altă culoare.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "joacă",
+     "state": "Privesc o altă culoare.",
+     "imageValue": "Milo compară vizual fără să explice optica.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Privesc o altă culoare."
+     }
+    },
+    {
+     "id": "V5-P05",
+     "volume": 5,
+     "page": 5,
+     "beat": "Curcubeul începe să se estompeze.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "mică dezamăgire",
+     "state": "Curcubeul începe să se estompeze.",
+     "imageValue": "O margine estompată arată schimbarea vremii.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "question",
+      "hook": "Curcubeul începe să se estompeze. — așteaptă următorul răspuns.",
+      "payoffPage": 6,
+      "payoff": "Milo caută culoarea într-o floare căzută."
+     }
+    },
+    {
+     "id": "V5-P06",
+     "volume": 5,
+     "page": 6,
+     "beat": "Milo caută culoarea într-o floare căzută.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "curiozitate",
+     "state": "Milo caută culoarea într-o floare căzută.",
+     "imageValue": "Floarea este deja căzută, planta rămâne întreagă.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Milo caută culoarea într-o floare căzută."
+     }
+    },
+    {
+     "id": "V5-P07",
+     "volume": 5,
+     "page": 7,
+     "beat": "Tia găsește o frunză diferită.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "cooperare",
+     "state": "Tia găsește o frunză diferită.",
+     "imageValue": "Tia împinge frunza cu botul.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Tia găsește o frunză diferită."
+     }
+    },
+    {
+     "id": "V5-P08",
+     "volume": 5,
+     "page": 8,
+     "beat": "O culoare nu are încă un corespondent.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "căutare",
+     "state": "O culoare nu are încă un corespondent.",
+     "imageValue": "Un loc gol din aranjament arată lipsa.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "question",
+      "hook": "O culoare nu are încă un corespondent. — așteaptă următorul răspuns.",
+      "payoffPage": 9,
+      "payoff": "Milo observă o pietricică potrivită."
+     }
+    },
+    {
+     "id": "V5-P09",
+     "volume": 5,
+     "page": 9,
+     "beat": "Milo observă o pietricică potrivită.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "descoperire",
+     "state": "Milo observă o pietricică potrivită.",
+     "imageValue": "O pietricică completează culoarea căutată.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Milo observă o pietricică potrivită."
+     }
+    },
+    {
+     "id": "V5-P10",
+     "volume": 5,
+     "page": 10,
+     "beat": "Aranjează obiectele fără să rupă plante.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "creativitate",
+     "state": "Aranjează obiectele fără să rupă plante.",
+     "imageValue": "Fiecare pune un singur obiect, cu anatomie corectă.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Aranjează obiectele fără să rupă plante."
+     }
+    },
+    {
+     "id": "V5-P11",
+     "volume": 5,
+     "page": 11,
+     "beat": "Privesc imaginea colorată.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "mândrie blândă",
+     "state": "Privesc imaginea colorată.",
+     "imageValue": "Reacțiile lor adaugă satisfacție.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Privesc imaginea colorată."
+     }
+    },
+    {
+     "id": "V5-P12",
+     "volume": 5,
+     "page": 12,
+     "beat": "Curcubeul a dispărut, dar joaca lor poate continua.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "mulțumire",
+     "state": "Curcubeul a dispărut, dar joaca lor poate continua.",
+     "imageValue": "Aranjamentul rămâne sub cerul acum limpede.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Curcubeul a dispărut, dar joaca lor poate continua."
+     }
+    },
+    {
+     "id": "V6-P01",
+     "volume": 6,
+     "page": 1,
+     "beat": "Milo pregătește poiana pentru picnic.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "anticipare",
+     "state": "Milo pregătește poiana pentru picnic.",
+     "imageValue": "Milo așază prima frunză pentru locul de picnic.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Milo pregătește poiana pentru picnic."
+     }
+    },
+    {
+     "id": "V6-P02",
+     "volume": 6,
+     "page": 2,
+     "beat": "Pietricica marchează centrul.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "grijă",
+     "state": "Pietricica marchează centrul.",
+     "imageValue": "Pietricica este aceeași ca în volumul 1.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Pietricica marchează centrul."
+     }
+    },
+    {
+     "id": "V6-P03",
+     "volume": 6,
+     "page": 3,
+     "beat": "Milo așază un loc pentru Tia.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "generozitate",
+     "state": "Milo așază un loc pentru Tia.",
+     "imageValue": "Locul Tiei este suficient de lat pentru patrupedă.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Milo așază un loc pentru Tia."
+     }
+    },
+    {
+     "id": "V6-P04",
+     "volume": 6,
+     "page": 4,
+     "beat": "Își dă seama că lipsește locul lui Pip.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "nedumerire",
+     "state": "Își dă seama că lipsește locul lui Pip.",
+     "imageValue": "Un spațiu încă liber spune cine lipsește.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "question",
+      "hook": "Își dă seama că lipsește locul lui Pip. — așteaptă următorul răspuns.",
+      "payoffPage": 6,
+      "payoff": "Pip vine cu un mic lucru de împărțit."
+     }
+    },
+    {
+     "id": "V6-P05",
+     "volume": 6,
+     "page": 5,
+     "beat": "Îl caută printr-un salut.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "invitație",
+     "state": "Îl caută printr-un salut.",
+     "imageValue": "O umbră se apropie înainte de sosirea prietenului.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "question",
+      "hook": "Îl caută printr-un salut. — așteaptă următorul răspuns.",
+      "payoffPage": 6,
+      "payoff": "Pip vine cu un mic lucru de împărțit."
+     }
+    },
+    {
+     "id": "V6-P06",
+     "volume": 6,
+     "page": 6,
+     "beat": "Pip vine cu un mic lucru de împărțit.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "bucurie",
+     "state": "Pip vine cu un mic lucru de împărțit.",
+     "imageValue": "Pip ține obiectul cu ciocul.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Pip vine cu un mic lucru de împărțit."
+     }
+    },
+    {
+     "id": "V6-P07",
+     "volume": 6,
+     "page": 7,
+     "beat": "Tia aduce fructe într-un recipient stabil.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "reciprocitate",
+     "state": "Tia aduce fructe într-un recipient stabil.",
+     "imageValue": "Tia împinge recipientul cu botul, nu cu mâini.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Tia aduce fructe într-un recipient stabil."
+     }
+    },
+    {
+     "id": "V6-P08",
+     "volume": 6,
+     "page": 8,
+     "beat": "Milo încearcă să facă totul deodată.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "agitație blândă",
+     "state": "Milo încearcă să facă totul deodată.",
+     "imageValue": "Un obiect scăpat blând arată graba fără pericol.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "question",
+      "hook": "Milo încearcă să facă totul deodată. — așteaptă următorul răspuns.",
+      "payoffPage": 9,
+      "payoff": "Se oprește și primește ajutor."
+     }
+    },
+    {
+     "id": "V6-P09",
+     "volume": 6,
+     "page": 9,
+     "beat": "Se oprește și primește ajutor.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "încredere",
+     "state": "Se oprește și primește ajutor.",
+     "imageValue": "Milo se oprește și privește ajutorul oferit.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Se oprește și primește ajutor."
+     }
+    },
+    {
+     "id": "V6-P10",
+     "volume": 6,
+     "page": 10,
+     "beat": "Fiecare contribuie cu o acțiune simplă.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "cooperare",
+     "state": "Fiecare contribuie cu o acțiune simplă.",
+     "imageValue": "Fiecare corp are o contribuție diferită.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Fiecare contribuie cu o acțiune simplă."
+     }
+    },
+    {
+     "id": "V6-P11",
+     "volume": 6,
+     "page": 11,
+     "beat": "Pietricica le amintește prima întâlnire.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "recunoștință",
+     "state": "Pietricica le amintește prima întâlnire.",
+     "imageValue": "Privirile către pietricică evocă întâlnirea.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Pietricica le amintește prima întâlnire."
+     }
+    },
+    {
+     "id": "V6-P12",
+     "volume": 6,
+     "page": 12,
+     "beat": "Picnic la apus, toate locurile ocupate, colecția se încheie.",
+     "purpose": "Un singur moment lizibil; acțiunea schimbă situația.",
+     "emotion": "apartenență",
+     "state": "Picnic la apus, toate locurile ocupate, colecția se încheie.",
+     "imageValue": "Toate locurile sunt ocupate, un cadru larg încheie colecția.",
+     "characters": [],
+     "objects": [],
+     "location": null,
+     "turn": {
+      "type": "quiet",
+      "hook": "",
+      "payoffPage": null,
+      "payoff": "Picnic la apus, toate locurile ocupate, colecția se încheie."
+     }
+    }
+   ],
+   "planSources": {
+    "1": "series.page_plan",
+    "2": "series.page_plan",
+    "3": "series.page_plan",
+    "4": "series.page_plan",
+    "5": "series.page_plan",
+    "6": "series.page_plan"
+   },
+   "cast": {
+    "characters": [
+     {
+      "id": "milo",
+      "role": "main",
+      "volumes": [
+       {
+        "volume": 1,
+        "purpose": "conduce acțiunea",
+        "presence": "introduced"
+       },
+       {
+        "volume": 2,
+        "purpose": "conduce acțiunea",
+        "presence": "appears"
+       },
+       {
+        "volume": 3,
+        "purpose": "conduce acțiunea",
+        "presence": "appears"
+       },
+       {
+        "volume": 4,
+        "purpose": "conduce acțiunea",
+        "presence": "appears"
+       },
+       {
+        "volume": 5,
+        "purpose": "conduce acțiunea",
+        "presence": "appears"
+       },
+       {
+        "volume": 6,
+        "purpose": "conduce acțiunea",
+        "presence": "appears"
+       }
+      ]
+     },
+     {
+      "id": "tia",
+      "role": "secondary",
+      "volumes": [
+       {
+        "volume": 1,
+        "purpose": "prietenia se formează: întâlnire, împărțire, invitație, adăpost împreună",
+        "presence": "introduced"
+       },
+       {
+        "volume": 2,
+        "purpose": "joacă jocul ecoului cu rândul",
+        "presence": "appears"
+       },
+       {
+        "volume": 3,
+        "purpose": "Milo se gândește să-i povestească despre pană",
+        "presence": "mentioned"
+       },
+       {
+        "volume": 4,
+        "purpose": "are ideea cu coarnele pentru culesul fructelor",
+        "presence": "returns"
+       },
+       {
+        "volume": 5,
+        "purpose": "numără culorile curcubeului",
+        "presence": "appears"
+       },
+       {
+        "volume": 6,
+        "purpose": "își amintește prima întâlnire",
+        "presence": "appears"
+       }
+      ]
+     },
+     {
+      "id": "pip",
+      "role": "secondary",
+      "volumes": [
+       {
+        "volume": 1,
+        "purpose": "",
+        "presence": "absent"
+       },
+       {
+        "volume": 2,
+        "purpose": "",
+        "presence": "absent"
+       },
+       {
+        "volume": 3,
+        "purpose": "primește pana înapoi",
+        "presence": "introduced"
+       },
+       {
+        "volume": 4,
+        "purpose": "zboară până la ramurile de sus",
+        "presence": "returns"
+       },
+       {
+        "volume": 5,
+        "purpose": "",
+        "presence": "absent"
+       },
+       {
+        "volume": 6,
+        "purpose": "vine la sărbătoarea prieteniei",
+        "presence": "returns"
+       }
+      ]
+     }
+    ],
+    "appearances": [
+     {
+      "volume": 1,
+      "protagonist": "milo",
+      "introduced": [
+       "milo",
+       "tia"
+      ],
+      "appears": [],
+      "returns": [],
+      "mentioned": []
+     },
+     {
+      "volume": 2,
+      "protagonist": "milo",
+      "introduced": [],
+      "appears": [
+       "milo",
+       "tia"
+      ],
+      "returns": [],
+      "mentioned": []
+     },
+     {
+      "volume": 3,
+      "protagonist": "milo",
+      "introduced": [
+       "pip"
+      ],
+      "appears": [
+       "milo"
+      ],
+      "returns": [],
+      "mentioned": [
+       "tia"
+      ]
+     },
+     {
+      "volume": 4,
+      "protagonist": "milo",
+      "introduced": [],
+      "appears": [
+       "milo"
+      ],
+      "returns": [
+       "tia",
+       "pip"
+      ],
+      "mentioned": []
+     },
+     {
+      "volume": 5,
+      "protagonist": "milo",
+      "introduced": [],
+      "appears": [
+       "milo",
+       "tia"
+      ],
+      "returns": [],
+      "mentioned": []
+     },
+     {
+      "volume": 6,
+      "protagonist": "milo",
+      "introduced": [],
+      "appears": [
+       "milo",
+       "tia"
+      ],
+      "returns": [
+       "pip"
+      ],
+      "mentioned": []
+     }
+    ]
+   },
+   "canon": {
+    "characters": [
+     {
+      "id": "milo",
+      "name": "Milo",
+      "species": null,
+      "canonical_description": "Milo: a small, chubby baby dinosaur of stylized, species-indeterminate design; bright teal body with a soft felt-like texture, cream belly, cream chin and cream toes, exactly three coral-orange oval spots on the left flank, large warm-brown eyes with white highlights, small dark eyebrow marks, rosy cheeks, gentle smile; stands upright on two stubby legs, short pudgy arms with small rounded cream claws, long curved tail with a cream underside. Identity landmarks and their anatomical anchors: [{\"id\": \"spot-left-upper\", \"side\": \"left\", \"body_region\": \"flanc, treimea superioară\", \"anchor\": \"Sub rădăcina brațului stâng, anterior și mai sus decât celelalte două pete; păstrează relația cu umărul și baza cozii.\", \"relative_size\": \"{\\\"rank\\\": \\\"largest\\\", \\\"relative_to\\\": \\\"spot-left-upper\\\", \\\"scale\\\": 1}\", \"shape\": \"oval înclinat spre direcția umărului\", \"colour\": \"#F07F4E\", \"occlusion_rule\": \"Brațul stâng sau obiectul ținut pot acoperi pata; nu o muta pentru a o face vizibilă.\", \"status\": \"proposed_for_user_review\"}, {\"id\": \"spot-left-rear\", \"side\": \"left\", \"body_region\": \"flanc, zona posterioară mediană\", \"anchor\": \"Între pata superioară și baza cozii, mai posterior și mai jos decât pata superioară.\", \"relative_size\": \"{\\\"rank\\\": \\\"middle\\\", \\\"relative_to\\\": \\\"spot-left-upper\\\", \\\"approximate_scale\\\": 0.7}\", \"shape\": \"oval alungit, orientare conform referinței\", \"colour\": \"#F07F4E\", \"occlusion_rule\": \"La vedere frontală/dreaptă poate lipsi din imagine; nu se copiază pe flancul drept.\", \"status\": \"proposed_for_user_review\"}, {\"id\": \"spot-left-lower\", \"side\": \"left\", \"body_region\": \"flanc, deasupra coapsei stângi\", \"anchor\": \"Mai jos decât celelalte două, ușor anterior față de pata posterioară; ansamblul formează un triunghi neregulat.\", \"relative_size\": \"{\\\"rank\\\": \\\"smallest\\\", \\\"relative_to\\\": \\\"spot-left-upper\\\", \\\"approximate_scale\\\": 0.6}\", \"shape\": \"oval scurt\", \"colour\": \"#F07F4E\", \"occlusion_rule\": \"Poate fi ascunsă de coapsă sau perspectivă; nu se împarte și nu se multiplică.\", \"status\": \"proposed_for_user_review\"}, {\"id\": \"cream-belly\", \"side\": \"midline\", \"body_region\": \"partea ventrală a trunchiului\", \"anchor\": \"Din zona de sub bărbie până la abdomen; marginea urmează volumul corpului, nu marginea cadrului.\", \"relative_size\": \"conform referinței originale\", \"shape\": \"zonă continuă, rotunjită\", \"colour\": \"#F5E6C4\", \"occlusion_rule\": \"Obiectul ținut la piept acoperă local zona crem; nu adăuga o a doua burtă.\", \"status\": \"proposed_for_user_review\"}]. Missing views require approval; never invent a validated turnaround.",
+      "personality": "curios, blând, grijuliu, puțin nerăbdător; se bucură de lucruri mici",
+      "voice": "Replici scurte, întrebări concrete, sunete jucăușe. Vocabular: uite, hai, țac, hop. Exemple: Uite ce am găsit! / Încă una? / Un acoperiș pentru doi!",
+      "role": "main"
+     },
+     {
+      "id": "tia",
+      "name": "Tia",
+      "species": "Triceratops",
+      "canonical_description": "Tia: a baby Triceratops, four-legged, warm orange body covered with small darker orange freckle-dots, cream muzzle, cream belly and cream toes, lavender scalloped frill with lighter lavender spots, exactly three cream horns (two brow horns and one small nose horn), big brown eyes with small eyelashes, friendly open smile. Identity landmarks and their anatomical anchors: [{\"id\": \"horn-brow-left\", \"side\": \"left\", \"body_region\": \"deasupra ochiului stâng\", \"anchor\": \"Atașat frontal, imediat deasupra ochiului stâng; simetric anatomic cu horn-brow-right.\", \"relative_size\": \"mai mare decât cornul nazal\", \"shape\": \"con scurt cu vârf rotunjit\", \"colour\": \"#F3E3C3\", \"occlusion_rule\": \"Un corn poate fi ascuns de perspectivă; numărul anatomic rămâne trei, fără corn suplimentar.\", \"status\": \"proposed_for_user_review\"}, {\"id\": \"horn-brow-right\", \"side\": \"right\", \"body_region\": \"deasupra ochiului drept\", \"anchor\": \"Atașat frontal, imediat deasupra ochiului drept.\", \"relative_size\": \"pereche a cornului stâng\", \"shape\": \"con scurt cu vârf rotunjit\", \"colour\": \"#F3E3C3\", \"occlusion_rule\": \"Poate fi ocultat de capul văzut din profil; nu îl muta pe guler.\", \"status\": \"proposed_for_user_review\"}, {\"id\": \"horn-nose\", \"side\": \"midline\", \"body_region\": \"centrul botului\", \"anchor\": \"Pe axa mediană, deasupra nărilor și înaintea ochilor.\", \"relative_size\": \"mai mic decât fiecare corn supraorbital\", \"shape\": \"con scurt rotunjit\", \"colour\": \"#F3E3C3\", \"occlusion_rule\": \"Poate fi ascuns de un obiect ținut în bot; nu îl confunda cu un corn de frunte.\", \"status\": \"proposed_for_user_review\"}, {\"id\": \"lavender-frill\", \"side\": \"bilateral\", \"body_region\": \"gulerul din spatele capului\", \"anchor\": \"Centrat pe craniu, margine festonată; rădăcina rămâne în spatele obrajilor.\", \"relative_size\": \"conform referinței originale\", \"shape\": \"evantai festonat\", \"colour\": \"#B39DDB\", \"occlusion_rule\": \"Capul poate ascunde centrul; conturul nu devine aripi sau accesorii.\", \"status\": \"proposed_for_user_review\"}]. Missing views require approval; never invent a validated turnaround.",
+      "personality": "veselă, prietenoasă, ingenioasă; îi place să ajute",
+      "voice": "Răspunsuri scurte și concrete; o idee la fiecare replică. Vocabular: împreună, rândul tău, aici, încape. Exemple: Și pentru mine? / Rândul tău! / Încăpem amândoi.",
+      "role": "secondary"
+     },
+     {
+      "id": "pip",
+      "name": "Pip",
+      "species": "pterosaur",
+      "canonical_description": "Pip: a baby pterosaur with a small round honey-yellow body, cream belly, one short rounded crest, big green eyes, a short rounded beak, two soft wings with a tiny thumb claw at each wing joint, two small feet; friendly and slightly shy. Identity landmarks and their anatomical anchors: [{\"id\": \"single-crest\", \"side\": \"midline\", \"body_region\": \"partea superioară a capului\", \"anchor\": \"O singură creastă scurtă, pe axa mediană a craniului; designul final se aprobă înainte de volumul 3.\", \"relative_size\": \"scurtă față de înălțimea capului\", \"shape\": \"rotunjită\", \"colour\": \"#F4C542\", \"occlusion_rule\": \"Poate fi ascunsă în vedere de sus; nu adăuga a doua creastă.\", \"status\": \"proposed_for_user_review\"}, {\"id\": \"green-eyes\", \"side\": \"bilateral\", \"body_region\": \"față\", \"anchor\": \"Câte un ochi verde pe fiecare parte, proporții juvenile.\", \"relative_size\": \"mari față de bot\", \"shape\": \"rotund-oval\", \"colour\": \"#5DAA5A\", \"occlusion_rule\": \"Ochiul îndepărtat poate fi ascuns în profil; nu produce un al treilea ochi.\", \"status\": \"proposed_for_user_review\"}]. Missing views require approval; never invent a validated turnaround.",
+      "personality": "timid la început, apoi jucăuș și recunoscător",
+      "voice": "Inițial ezitant, apoi propoziții scurte și clare. Vocabular: poate, a mea, pot, vin. Exemple: Cred că e a mea. / Pot să încerc. / Vin și eu!",
+      "role": "secondary"
+     }
+    ],
+    "locations": [
+     {
+      "id": "fern-nest",
+      "name": "cuibul de ferigi al lui Milo",
+      "description": "un cuib rotund din ferigi moi, la marginea poienii"
+     },
+     {
+      "id": "fern-path",
+      "name": "cărarea cu ferigi",
+      "description": "o cărare moale care coboară ușor printre ferigi"
+     },
+     {
+      "id": "puddle-clearing",
+      "name": "poienița cu balta",
+      "description": "o poieniță mică cu o baltă limpede"
+     },
+     {
+      "id": "tia-home",
+      "name": "casa Tiei",
+      "description": "un adăpost cald între pietre mari și rotunde"
+     },
+     {
+      "id": "echo-hill",
+      "name": "dealul ecoului",
+      "description": "A gently sloping open hill next to a rounded rock face; no cliff, cave or hidden creature."
+     },
+     {
+      "id": "pip-tree",
+      "name": "copacul lui Pip",
+      "description": "A low rounded tree beside a flower clearing, with a broad reachable perch for Pip."
+     },
+     {
+      "id": "fruit-orchard",
+      "name": "poiana cu fructe",
+      "description": "A small clearing with one low fruit tree; a stable ground-level picnic area."
+     },
+     {
+      "id": "rainbow-meadow",
+      "name": "pajiștea după ploaie",
+      "description": "A bright open meadow after gentle rain; fallen leaves and flowers on the ground, no magical light source."
+     }
+    ],
+    "objects": [
+     {
+      "id": "shiny-pebble",
+      "name": "pietricica strălucitoare",
+      "canonical_description": "a small, smooth, rounded, shiny blue-grey pebble that fits in two small hands; it gleams where sunlight touches it"
+     },
+     {
+      "id": "broad-leaf",
+      "name": "frunza lată",
+      "canonical_description": "one broad, bright green leaf with a sturdy stem, large enough to shelter two small dinosaurs"
+     },
+     {
+      "id": "found-feather",
+      "name": "pana găsită",
+      "canonical_description": "one soft coloured feather collected earlier by Pip and kept as a favourite found object; it is not part of his wing or body"
+     }
+    ],
+    "world_rules": {
+     "magic": "none",
+     "effects": "Sparkles and gleams are sunlight reflected on wet or smooth surfaces; rainbows appear after rain; nothing glows by itself.",
+     "continuity": "Aceleași personaje, proporții și repere se reutilizează între volume. Tia apare prima dată la pagina 5 a volumului 1; Pip apare prima dată în volumul 3. Fiecare doarme la propria casă.",
+     "education": "Descoperirile sunt trăite prin acțiune, fără o morală finală și fără promisiuni de dezvoltare garantată."
+    },
+    "style_guide": {
+     "line": "fără contururi; forme definite de lumină",
+     "mood": "calm, cald, jucăuș",
+     "palette": [
+      {
+       "hex": "#2BB3AE",
+       "name": "teal"
+      },
+      {
+       "hex": "#6DBE6A",
+       "name": "fern green"
+      },
+      {
+       "hex": "#F5E6C4",
+       "name": "warm cream"
+      },
+      {
+       "hex": "#BFE3F2",
+       "name": "sky"
+      }
+     ],
+     "lighting": "lumină naturală caldă; ploaie blândă cu cer luminos",
+     "style_block": "High-end 3D animated-feature look: soft rounded chubby proportions, velvety matte textures, large glossy eyes, warm natural lighting, simple uncluttered backgrounds, one clear focal action."
+    }
+   },
+   "manuscripts": {
+    "1": {
+     "source": "script_0",
+     "title": "Milo and the Shiny Pebble",
+     "story_bible": {
+      "premise": "Milo găsește o pietricică strălucitoare, o urmărește pe cărare, o cunoaște pe Tia și se adăpostesc împreună de ploaie sub o frunză lată.",
+      "theme": "curiozitate și grijă",
+      "protagonist": "milo",
+      "goal": "Să ducă pietricica acasă și să împartă descoperirea.",
+      "obstacle": "Pietricica se rostogolește, iar ploaia întrerupe joaca.",
+      "inciting_incident": "O atingere mică pune pietricica în mișcare.",
+      "escalation": "De la urmărire singur la descoperire împreună; apoi ploaia cere o soluție.",
+      "climax_choice": "Milo observă frunza lată, iar Tia o poate ține cu botul; Milo îi face loc sub ea.",
+      "resolution": "Se întorc împreună, pietricica rămâne în cuib, fiecare merge apoi acasă.",
+      "ending": "Încredere și amintire împărtășită, fără teaser.",
+      "world_rules": "Fără magie; sclipirile sunt reflexii naturale. Anatomia, identitatea și relațiile urmează bible și cast; fiecare personaj are propria casă.",
+      "continuity": "Volumul 1; distribuția și relațiile urmează cast.",
+      "status": "prepared_script_requires_review"
+     },
+     "pages": [
+      {
+       "n": 1,
+       "text": "Morning warmed Milo’s fern nest. He stretched up, up, up. “Hello, morning!” The ferns whispered, rustle-rustle. Milo poked his nose outside. What would he find today?",
+       "text_ro": "Dimineața încălzea cuibul de ferigi al lui Milo. S-a întins sus, sus, sus. „Bună dimineața!” Ferigile au șoptit: foș-foș. Milo și-a scos botul afară. Ce avea să găsească azi?",
+       "characters": [
+        "milo"
+       ],
+       "objects": [],
+       "location": "fern-nest",
+       "turn": {
+        "type": "question",
+        "hook": "Ce va găsi Milo?",
+        "payoff_page": 2,
+        "payoff": "Pietricica este descoperită.",
+        "spread": 1,
+        "purpose": "Milo se trezește în cuib.",
+        "spread_profile": "digital: single-page viewing; KDP: image/text pair per narrative scene"
+       },
+       "page_turn": "quiet"
+      },
+      {
+       "n": 2,
+       "text": "A little flash winked beside the path. Milo leaned closer. A smooth pebble lay in the grass. “Hello, little sparkle!” He reached out with one small toe.",
+       "text_ro": "O sclipire mică i-a făcut cu ochiul de lângă cărare. Milo s-a aplecat. În iarbă era o pietricică netedă. „Bună, mică sclipire!” A întins spre ea un deget rotunjit de la picior.",
+       "characters": [
+        "milo"
+       ],
+       "objects": [
+        "shiny-pebble"
+       ],
+       "location": "fern-path",
+       "turn": {
+        "type": "anticipation",
+        "hook": "Degetul se apropie de obiect.",
+        "payoff_page": 3,
+        "payoff": "Atingerea îl pune în mișcare.",
+        "spread": 2,
+        "purpose": "Găsește pietricica.",
+        "spread_profile": "digital: single-page viewing; KDP: image/text pair per narrative scene"
+       },
+       "page_turn": "reveal"
+      },
+      {
+       "n": 3,
+       "text": "Tap! The pebble wobbled. Roll, roll, roll—it slipped down the gentle slope. “Wait for me!” Milo laughed. His short legs went pat-pat-pat after it.",
+       "text_ro": "Țac! Pietricica s-a clătinat. Rostogol, rostogol—a pornit pe panta domoală. „Așteaptă-mă!”, a râs Milo. Piciorușele lui au pornit după ea: trop-trop-trop.",
+       "characters": [
+        "milo"
+       ],
+       "objects": [
+        "shiny-pebble"
+       ],
+       "location": "fern-path",
+       "turn": {
+        "type": "quiet",
+        "hook": "",
+        "payoff_page": null,
+        "payoff": "O atingere o pune în mișcare.",
+        "spread": 3,
+        "rationale": "Pauză sau răspuns; nu fiecare pagină cere suspans.",
+        "purpose": "O atingere o pune în mișcare.",
+        "spread_profile": "digital: single-page viewing; KDP: image/text pair per narrative scene"
+       },
+       "page_turn": "quiet"
+      },
+      {
+       "n": 4,
+       "text": "Over a root. Past a log. Hop! Milo followed. Then the pebble vanished into a fern bush. Rustle-rustle. Something in the bush rustled back. “Who’s there?”",
+       "text_ro": "Peste o rădăcină. Pe lângă un buștean. Hop! Milo a urmat-o. Apoi pietricica a dispărut într-o tufă de ferigi. Foș-foș. Din tufă a răspuns un alt foșnet. „Cine-i acolo?”",
+       "characters": [
+        "milo"
+       ],
+       "objects": [
+        "shiny-pebble"
+       ],
+       "location": "fern-path",
+       "turn": {
+        "type": "question",
+        "hook": "Cine foșnește în tufă?",
+        "payoff_page": 5,
+        "payoff": "Tia se prezintă.",
+        "spread": 4,
+        "purpose": "Pietricica dispare spre ferigi.",
+        "spread_profile": "digital: single-page viewing; KDP: image/text pair per narrative scene"
+       },
+       "page_turn": "quiet"
+      },
+      {
+       "n": 5,
+       "text": "A round face peeped through the ferns. Three little horns. A lavender frill. “I’m Tia.” “I’m Milo!” He lifted the pebble in both paws. “Look what I found!”",
+       "text_ro": "Dintre ferigi s-a ivit un chip rotund. Trei cornițe. Un guler liliachiu. „Eu sunt Tia.” „Eu sunt Milo!” A ridicat pietricica în ambele lăbuțe. „Uite ce am găsit!”",
+       "characters": [
+        "milo",
+        "tia"
+       ],
+       "objects": [
+        "shiny-pebble"
+       ],
+       "location": "fern-path",
+       "turn": {
+        "type": "reveal",
+        "hook": "",
+        "payoff_page": null,
+        "payoff": "Tia apare din tufă.",
+        "spread": 5,
+        "rationale": "Pauză sau răspuns; nu fiecare pagină cere suspans.",
+        "purpose": "Tia apare din tufă.",
+        "spread_profile": "digital: single-page viewing; KDP: image/text pair per narrative scene"
+       },
+       "page_turn": "reveal"
+      },
+      {
+       "n": 6,
+       "text": "“It shines!” said Tia. Milo set the pebble down and gave it a tiny push. “Come with me!” They followed it to a puddle—and saw another sparkle.",
+       "text_ro": "„Strălucește!”, a spus Tia. Milo a pus pietricica jos și a împins-o puțin. „Vino cu mine!” Au urmărit-o până la o baltă—și au văzut încă o sclipire.",
+       "characters": [
+        "milo",
+        "tia"
+       ],
+       "objects": [
+        "shiny-pebble"
+       ],
+       "location": "fern-path",
+       "turn": {
+        "type": "anticipation",
+        "hook": "De unde vine a doua sclipire?",
+        "payoff_page": 7,
+        "payoff": "Este reflexia, nu o a doua pietricică.",
+        "spread": 6,
+        "purpose": "Milo o invită și urmăresc două sclipiri.",
+        "spread_profile": "digital: single-page viewing; KDP: image/text pair per narrative scene"
+       },
+       "page_turn": "quiet"
+      },
+      {
+       "n": 7,
+       "text": "One pebble beside the water. One sparkle in the water. Tia leaned close. Her nose made a ripple. The second sparkle wiggled! “One pebble, two sparkles!” Milo giggled.",
+       "text_ro": "O pietricică lângă apă. O sclipire în apă. Tia și-a apropiat botul. Apa a făcut un cerc. A doua sclipire s-a legănat! „O pietricică, două sclipiri!”, a chicotit Milo.",
+       "characters": [
+        "milo",
+        "tia"
+       ],
+       "objects": [
+        "shiny-pebble"
+       ],
+       "location": "puddle-clearing",
+       "turn": {
+        "type": "reveal",
+        "hook": "",
+        "payoff_page": null,
+        "payoff": "Descoperă o singură pietricică și reflexia ei.",
+        "spread": 7,
+        "rationale": "Pauză sau răspuns; nu fiecare pagină cere suspans.",
+        "purpose": "Descoperă o singură pietricică și reflexia ei.",
+        "spread_profile": "digital: single-page viewing; KDP: image/text pair per narrative scene"
+       },
+       "page_turn": "reveal"
+      },
+      {
+       "n": 8,
+       "text": "Plip! A drop tickled Milo’s nose. Plop! Another tapped Tia’s frill. The puddle filled with little rings. “We’re getting wet!” Milo looked around. Where could two friends fit?",
+       "text_ro": "Pic! O picătură l-a gâdilat pe Milo pe nas. Pac! Alta a atins gulerul Tiei. Balta s-a umplut de cerculețe. „Ne udăm!” Milo a privit în jur. Unde încăpeau doi prieteni?",
+       "characters": [
+        "milo",
+        "tia"
+       ],
+       "objects": [
+        "shiny-pebble"
+       ],
+       "location": "puddle-clearing",
+       "turn": {
+        "type": "question",
+        "hook": "Unde încap doi prieteni la adăpost?",
+        "payoff_page": 9,
+        "payoff": "Împart frunza ținută de Tia.",
+        "spread": 8,
+        "purpose": "Începe ploaia; prietenii caută adăpost.",
+        "spread_profile": "digital: single-page viewing; KDP: image/text pair per narrative scene"
+       },
+       "page_turn": "quiet"
+      },
+      {
+       "n": 9,
+       "text": "Milo spotted a broad leaf. “A roof for two!” Tia gripped its stem in her mouth. Milo shuffled closer, pebble against his chest. Above their heads: drip-drop. Underneath: dry noses!",
+       "text_ro": "Milo a zărit o frunză lată. „Un acoperiș pentru doi!” Tia i-a prins tulpina cu botul. Milo s-a apropiat, cu pietricica la piept. Deasupra: pic-pic. Dedesubt: două nasuri uscate!",
+       "characters": [
+        "milo",
+        "tia"
+       ],
+       "objects": [
+        "shiny-pebble",
+        "broad-leaf"
+       ],
+       "location": "puddle-clearing",
+       "turn": {
+        "type": "reveal",
+        "hook": "",
+        "payoff_page": null,
+        "payoff": "Împart acoperișul frunzei.",
+        "spread": 9,
+        "rationale": "Pauză sau răspuns; nu fiecare pagină cere suspans.",
+        "purpose": "Împart acoperișul frunzei.",
+        "spread_profile": "digital: single-page viewing; KDP: image/text pair per narrative scene"
+       },
+       "page_turn": "reveal"
+      },
+      {
+       "n": 10,
+       "text": "Soon the rain grew soft. Milo carried the pebble home. Tia padded beside him. Splish went Milo. Splash went Tia. Neither hurried now. They had a friend to walk with.",
+       "text_ro": "Curând, ploaia s-a potolit. Milo ducea pietricica acasă. Tia mergea alături. Pleosc, a făcut Milo. Pleosc, a făcut Tia. Acum nu se mai grăbeau. Aveau un prieten lângă ei.",
+       "characters": [
+        "milo",
+        "tia"
+       ],
+       "objects": [
+        "shiny-pebble"
+       ],
+       "location": "fern-path",
+       "turn": {
+        "type": "quiet",
+        "hook": "",
+        "payoff_page": null,
+        "payoff": "Se întorc pe cărare.",
+        "spread": 10,
+        "rationale": "Pauză sau răspuns; nu fiecare pagină cere suspans.",
+        "purpose": "Se întorc pe cărare.",
+        "spread_profile": "digital: single-page viewing; KDP: image/text pair per narrative scene"
+       },
+       "page_turn": "quiet"
+      },
+      {
+       "n": 11,
+       "text": "At the fern nest, Milo tucked the pebble into a little hollow. Tia touched it with her nose. Tap. This time, it stayed. “Our sparkle,” said Milo. Tia smiled.",
+       "text_ro": "La cuib, Milo a așezat pietricica într-o adâncitură. Tia a atins-o cu botul. Țac. De data asta, a rămas locului. „Sclipirea noastră”, a spus Milo. Tia a zâmbit.",
+       "characters": [
+        "milo",
+        "tia"
+       ],
+       "objects": [
+        "shiny-pebble"
+       ],
+       "location": "fern-nest",
+       "turn": {
+        "type": "quiet",
+        "hook": "",
+        "payoff_page": null,
+        "payoff": "Pietricica primește un loc în cuib.",
+        "spread": 11,
+        "rationale": "Pauză sau răspuns; nu fiecare pagină cere suspans.",
+        "purpose": "Pietricica primește un loc în cuib.",
+        "spread_profile": "digital: single-page viewing; KDP: image/text pair per narrative scene"
+       },
+       "page_turn": "quiet"
+      },
+      {
+       "n": 12,
+       "text": "The sky turned pink. “Good night, Milo!” Tia trotted towards her own cosy rocks. “Good night, Tia!” Milo curled up in his fern nest. Beside him, the pebble rested too.",
+       "text_ro": "Cerul s-a colorat în roz. „Noapte bună, Milo!” Tia a pornit spre adăpostul ei dintre pietre. „Noapte bună, Tia!” Milo s-a cuibărit în ferigi. Lângă el, se odihnea și pietricica.",
+       "characters": [
+        "milo",
+        "tia"
+       ],
+       "objects": [
+        "shiny-pebble"
+       ],
+       "location": "fern-nest",
+       "turn": {
+        "type": "quiet",
+        "hook": "",
+        "payoff_page": null,
+        "payoff": "Rămas-bun; fiecare acasă.",
+        "spread": 12,
+        "rationale": "Pauză sau răspuns; nu fiecare pagină cere suspans.",
+        "purpose": "Rămas-bun; fiecare acasă.",
+        "spread_profile": "digital: single-page viewing; KDP: image/text pair per narrative scene"
+       },
+       "page_turn": "quiet"
+      }
+     ]
+    }
+   },
+   "brief": {
+    "logline": "Milo, un pui de dinozaur turcoaz, curios și blând, descoperă lumea caldă a ferigilor împreună cu prietenii lui: fiecare volum e o mică aventură cu o descoperire, o problemă ușoară și o soluție găsită împreună.",
+    "narrative_rules": [
+     "un eveniment clar pe pagină",
+     "personajul principal conduce acțiunea",
+     "fără pericol real sau răufăcători",
+     "finaluri variate între volume",
+     "fiecare personaj doarme la el acasă",
+     "Dorință clară, încercări cu consecințe, escaladare blândă și o alegere a protagonistului care produce rezolvarea.",
+     "Textul și imaginea împart informația: imaginea adaugă reacție, indiciu sau umor, fără a repeta fiecare propoziție.",
+     "În volumul 1, ploaia cere un adăpost pentru prieteni; pietricica nu trebuie salvată de un pericol inventat.",
+     "Fiecare page turn are răspuns pe o pagină ulterioară, fără dezvăluire prematură pe aceeași deschidere."
+    ],
+    "core_values": [
+     "curiozitate",
+     "grijă față de ceilalți",
+     "prietenie și cooperare",
+     "răbdare"
+    ],
+    "age_application": {
+     "selected": "3-4",
+     "read_aloud": "Fraze scurte și concrete, alternanță între mișcare și pauză; repetiție cu variație.",
+     "tension": "Curiozitate și obstacole mici; fără furtună, apă periculoasă sau abandon.",
+     "word_budget": "Orientativ 300–500 de cuvinte per poveste 3+, adaptat încadrării. Nu este o regulă de tăiere automată.",
+     "other_profiles": "5+ permite mai multe încercări/dialog/indicii; 7+ motive și consecințe mai nuanțate, în formatul ilustrat configurat. Proiectul curent rămâne 3–4 ani."
+    }
+   }
+  },
+  "index": [
+   {
+    "ref": "series:through_line",
+    "kind": "series",
+    "path": "series.through_line"
+   },
+   {
+    "ref": "brief",
+    "kind": "brief",
+    "path": "brief"
+   },
+   {
+    "ref": "volume:1",
+    "kind": "volume",
+    "path": "series.volumes[0]"
+   },
+   {
+    "ref": "volume:2",
+    "kind": "volume",
+    "path": "series.volumes[1]"
+   },
+   {
+    "ref": "volume:3",
+    "kind": "volume",
+    "path": "series.volumes[2]"
+   },
+   {
+    "ref": "volume:4",
+    "kind": "volume",
+    "path": "series.volumes[3]"
+   },
+   {
+    "ref": "volume:5",
+    "kind": "volume",
+    "path": "series.volumes[4]"
+   },
+   {
+    "ref": "volume:6",
+    "kind": "volume",
+    "path": "series.volumes[5]"
+   },
+   {
+    "ref": "character:milo",
+    "kind": "character",
+    "path": "bible.characters[milo]"
+   },
+   {
+    "ref": "character:tia",
+    "kind": "character",
+    "path": "bible.characters[tia]"
+   },
+   {
+    "ref": "character:pip",
+    "kind": "character",
+    "path": "bible.characters[pip]"
+   },
+   {
+    "ref": "location:fern-nest",
+    "kind": "location",
+    "path": "bible.world.locations[fern-nest]"
+   },
+   {
+    "ref": "location:fern-path",
+    "kind": "location",
+    "path": "bible.world.locations[fern-path]"
+   },
+   {
+    "ref": "location:puddle-clearing",
+    "kind": "location",
+    "path": "bible.world.locations[puddle-clearing]"
+   },
+   {
+    "ref": "location:tia-home",
+    "kind": "location",
+    "path": "bible.world.locations[tia-home]"
+   },
+   {
+    "ref": "location:echo-hill",
+    "kind": "location",
+    "path": "bible.world.locations[echo-hill]"
+   },
+   {
+    "ref": "location:pip-tree",
+    "kind": "location",
+    "path": "bible.world.locations[pip-tree]"
+   },
+   {
+    "ref": "location:fruit-orchard",
+    "kind": "location",
+    "path": "bible.world.locations[fruit-orchard]"
+   },
+   {
+    "ref": "location:rainbow-meadow",
+    "kind": "location",
+    "path": "bible.world.locations[rainbow-meadow]"
+   },
+   {
+    "ref": "object:shiny-pebble",
+    "kind": "object",
+    "path": "bible.objects[shiny-pebble]"
+   },
+   {
+    "ref": "object:broad-leaf",
+    "kind": "object",
+    "path": "bible.objects[broad-leaf]"
+   },
+   {
+    "ref": "object:found-feather",
+    "kind": "object",
+    "path": "bible.objects[found-feather]"
+   },
+   {
+    "ref": "world_rule:magic",
+    "kind": "world_rule",
+    "path": "bible.world_rules.magic"
+   },
+   {
+    "ref": "world_rule:effects",
+    "kind": "world_rule",
+    "path": "bible.world_rules.effects"
+   },
+   {
+    "ref": "world_rule:continuity",
+    "kind": "world_rule",
+    "path": "bible.world_rules.continuity"
+   },
+   {
+    "ref": "world_rule:education",
+    "kind": "world_rule",
+    "path": "bible.world_rules.education"
+   },
+   {
+    "ref": "page_plan:V1-P01",
+    "kind": "page_plan",
+    "path": "pagePlans[V1-P01]"
+   },
+   {
+    "ref": "page_plan:V1-P02",
+    "kind": "page_plan",
+    "path": "pagePlans[V1-P02]"
+   },
+   {
+    "ref": "page_plan:V1-P03",
+    "kind": "page_plan",
+    "path": "pagePlans[V1-P03]"
+   },
+   {
+    "ref": "page_plan:V1-P04",
+    "kind": "page_plan",
+    "path": "pagePlans[V1-P04]"
+   },
+   {
+    "ref": "page_plan:V1-P05",
+    "kind": "page_plan",
+    "path": "pagePlans[V1-P05]"
+   },
+   {
+    "ref": "page_plan:V1-P06",
+    "kind": "page_plan",
+    "path": "pagePlans[V1-P06]"
+   },
+   {
+    "ref": "page_plan:V1-P07",
+    "kind": "page_plan",
+    "path": "pagePlans[V1-P07]"
+   },
+   {
+    "ref": "page_plan:V1-P08",
+    "kind": "page_plan",
+    "path": "pagePlans[V1-P08]"
+   },
+   {
+    "ref": "page_plan:V1-P09",
+    "kind": "page_plan",
+    "path": "pagePlans[V1-P09]"
+   },
+   {
+    "ref": "page_plan:V1-P10",
+    "kind": "page_plan",
+    "path": "pagePlans[V1-P10]"
+   },
+   {
+    "ref": "page_plan:V1-P11",
+    "kind": "page_plan",
+    "path": "pagePlans[V1-P11]"
+   },
+   {
+    "ref": "page_plan:V1-P12",
+    "kind": "page_plan",
+    "path": "pagePlans[V1-P12]"
+   },
+   {
+    "ref": "page_plan:V2-P01",
+    "kind": "page_plan",
+    "path": "pagePlans[V2-P01]"
+   },
+   {
+    "ref": "page_plan:V2-P02",
+    "kind": "page_plan",
+    "path": "pagePlans[V2-P02]"
+   },
+   {
+    "ref": "page_plan:V2-P03",
+    "kind": "page_plan",
+    "path": "pagePlans[V2-P03]"
+   },
+   {
+    "ref": "page_plan:V2-P04",
+    "kind": "page_plan",
+    "path": "pagePlans[V2-P04]"
+   },
+   {
+    "ref": "page_plan:V2-P05",
+    "kind": "page_plan",
+    "path": "pagePlans[V2-P05]"
+   },
+   {
+    "ref": "page_plan:V2-P06",
+    "kind": "page_plan",
+    "path": "pagePlans[V2-P06]"
+   },
+   {
+    "ref": "page_plan:V2-P07",
+    "kind": "page_plan",
+    "path": "pagePlans[V2-P07]"
+   },
+   {
+    "ref": "page_plan:V2-P08",
+    "kind": "page_plan",
+    "path": "pagePlans[V2-P08]"
+   },
+   {
+    "ref": "page_plan:V2-P09",
+    "kind": "page_plan",
+    "path": "pagePlans[V2-P09]"
+   },
+   {
+    "ref": "page_plan:V2-P10",
+    "kind": "page_plan",
+    "path": "pagePlans[V2-P10]"
+   },
+   {
+    "ref": "page_plan:V2-P11",
+    "kind": "page_plan",
+    "path": "pagePlans[V2-P11]"
+   },
+   {
+    "ref": "page_plan:V2-P12",
+    "kind": "page_plan",
+    "path": "pagePlans[V2-P12]"
+   },
+   {
+    "ref": "page_plan:V3-P01",
+    "kind": "page_plan",
+    "path": "pagePlans[V3-P01]"
+   },
+   {
+    "ref": "page_plan:V3-P02",
+    "kind": "page_plan",
+    "path": "pagePlans[V3-P02]"
+   },
+   {
+    "ref": "page_plan:V3-P03",
+    "kind": "page_plan",
+    "path": "pagePlans[V3-P03]"
+   },
+   {
+    "ref": "page_plan:V3-P04",
+    "kind": "page_plan",
+    "path": "pagePlans[V3-P04]"
+   },
+   {
+    "ref": "page_plan:V3-P05",
+    "kind": "page_plan",
+    "path": "pagePlans[V3-P05]"
+   },
+   {
+    "ref": "page_plan:V3-P06",
+    "kind": "page_plan",
+    "path": "pagePlans[V3-P06]"
+   },
+   {
+    "ref": "page_plan:V3-P07",
+    "kind": "page_plan",
+    "path": "pagePlans[V3-P07]"
+   },
+   {
+    "ref": "page_plan:V3-P08",
+    "kind": "page_plan",
+    "path": "pagePlans[V3-P08]"
+   },
+   {
+    "ref": "page_plan:V3-P09",
+    "kind": "page_plan",
+    "path": "pagePlans[V3-P09]"
+   },
+   {
+    "ref": "page_plan:V3-P10",
+    "kind": "page_plan",
+    "path": "pagePlans[V3-P10]"
+   },
+   {
+    "ref": "page_plan:V3-P11",
+    "kind": "page_plan",
+    "path": "pagePlans[V3-P11]"
+   },
+   {
+    "ref": "page_plan:V3-P12",
+    "kind": "page_plan",
+    "path": "pagePlans[V3-P12]"
+   },
+   {
+    "ref": "page_plan:V4-P01",
+    "kind": "page_plan",
+    "path": "pagePlans[V4-P01]"
+   },
+   {
+    "ref": "page_plan:V4-P02",
+    "kind": "page_plan",
+    "path": "pagePlans[V4-P02]"
+   },
+   {
+    "ref": "page_plan:V4-P03",
+    "kind": "page_plan",
+    "path": "pagePlans[V4-P03]"
+   },
+   {
+    "ref": "page_plan:V4-P04",
+    "kind": "page_plan",
+    "path": "pagePlans[V4-P04]"
+   },
+   {
+    "ref": "page_plan:V4-P05",
+    "kind": "page_plan",
+    "path": "pagePlans[V4-P05]"
+   },
+   {
+    "ref": "page_plan:V4-P06",
+    "kind": "page_plan",
+    "path": "pagePlans[V4-P06]"
+   },
+   {
+    "ref": "page_plan:V4-P07",
+    "kind": "page_plan",
+    "path": "pagePlans[V4-P07]"
+   },
+   {
+    "ref": "page_plan:V4-P08",
+    "kind": "page_plan",
+    "path": "pagePlans[V4-P08]"
+   },
+   {
+    "ref": "page_plan:V4-P09",
+    "kind": "page_plan",
+    "path": "pagePlans[V4-P09]"
+   },
+   {
+    "ref": "page_plan:V4-P10",
+    "kind": "page_plan",
+    "path": "pagePlans[V4-P10]"
+   },
+   {
+    "ref": "page_plan:V4-P11",
+    "kind": "page_plan",
+    "path": "pagePlans[V4-P11]"
+   },
+   {
+    "ref": "page_plan:V4-P12",
+    "kind": "page_plan",
+    "path": "pagePlans[V4-P12]"
+   },
+   {
+    "ref": "page_plan:V5-P01",
+    "kind": "page_plan",
+    "path": "pagePlans[V5-P01]"
+   },
+   {
+    "ref": "page_plan:V5-P02",
+    "kind": "page_plan",
+    "path": "pagePlans[V5-P02]"
+   },
+   {
+    "ref": "page_plan:V5-P03",
+    "kind": "page_plan",
+    "path": "pagePlans[V5-P03]"
+   },
+   {
+    "ref": "page_plan:V5-P04",
+    "kind": "page_plan",
+    "path": "pagePlans[V5-P04]"
+   },
+   {
+    "ref": "page_plan:V5-P05",
+    "kind": "page_plan",
+    "path": "pagePlans[V5-P05]"
+   },
+   {
+    "ref": "page_plan:V5-P06",
+    "kind": "page_plan",
+    "path": "pagePlans[V5-P06]"
+   },
+   {
+    "ref": "page_plan:V5-P07",
+    "kind": "page_plan",
+    "path": "pagePlans[V5-P07]"
+   },
+   {
+    "ref": "page_plan:V5-P08",
+    "kind": "page_plan",
+    "path": "pagePlans[V5-P08]"
+   },
+   {
+    "ref": "page_plan:V5-P09",
+    "kind": "page_plan",
+    "path": "pagePlans[V5-P09]"
+   },
+   {
+    "ref": "page_plan:V5-P10",
+    "kind": "page_plan",
+    "path": "pagePlans[V5-P10]"
+   },
+   {
+    "ref": "page_plan:V5-P11",
+    "kind": "page_plan",
+    "path": "pagePlans[V5-P11]"
+   },
+   {
+    "ref": "page_plan:V5-P12",
+    "kind": "page_plan",
+    "path": "pagePlans[V5-P12]"
+   },
+   {
+    "ref": "page_plan:V6-P01",
+    "kind": "page_plan",
+    "path": "pagePlans[V6-P01]"
+   },
+   {
+    "ref": "page_plan:V6-P02",
+    "kind": "page_plan",
+    "path": "pagePlans[V6-P02]"
+   },
+   {
+    "ref": "page_plan:V6-P03",
+    "kind": "page_plan",
+    "path": "pagePlans[V6-P03]"
+   },
+   {
+    "ref": "page_plan:V6-P04",
+    "kind": "page_plan",
+    "path": "pagePlans[V6-P04]"
+   },
+   {
+    "ref": "page_plan:V6-P05",
+    "kind": "page_plan",
+    "path": "pagePlans[V6-P05]"
+   },
+   {
+    "ref": "page_plan:V6-P06",
+    "kind": "page_plan",
+    "path": "pagePlans[V6-P06]"
+   },
+   {
+    "ref": "page_plan:V6-P07",
+    "kind": "page_plan",
+    "path": "pagePlans[V6-P07]"
+   },
+   {
+    "ref": "page_plan:V6-P08",
+    "kind": "page_plan",
+    "path": "pagePlans[V6-P08]"
+   },
+   {
+    "ref": "page_plan:V6-P09",
+    "kind": "page_plan",
+    "path": "pagePlans[V6-P09]"
+   },
+   {
+    "ref": "page_plan:V6-P10",
+    "kind": "page_plan",
+    "path": "pagePlans[V6-P10]"
+   },
+   {
+    "ref": "page_plan:V6-P11",
+    "kind": "page_plan",
+    "path": "pagePlans[V6-P11]"
+   },
+   {
+    "ref": "page_plan:V6-P12",
+    "kind": "page_plan",
+    "path": "pagePlans[V6-P12]"
+   },
+   {
+    "ref": "manuscript:V1-P01",
+    "kind": "manuscript_page",
+    "path": "script_0.pages[1]"
+   },
+   {
+    "ref": "manuscript:V1-P02",
+    "kind": "manuscript_page",
+    "path": "script_0.pages[2]"
+   },
+   {
+    "ref": "manuscript:V1-P03",
+    "kind": "manuscript_page",
+    "path": "script_0.pages[3]"
+   },
+   {
+    "ref": "manuscript:V1-P04",
+    "kind": "manuscript_page",
+    "path": "script_0.pages[4]"
+   },
+   {
+    "ref": "manuscript:V1-P05",
+    "kind": "manuscript_page",
+    "path": "script_0.pages[5]"
+   },
+   {
+    "ref": "manuscript:V1-P06",
+    "kind": "manuscript_page",
+    "path": "script_0.pages[6]"
+   },
+   {
+    "ref": "manuscript:V1-P07",
+    "kind": "manuscript_page",
+    "path": "script_0.pages[7]"
+   },
+   {
+    "ref": "manuscript:V1-P08",
+    "kind": "manuscript_page",
+    "path": "script_0.pages[8]"
+   },
+   {
+    "ref": "manuscript:V1-P09",
+    "kind": "manuscript_page",
+    "path": "script_0.pages[9]"
+   },
+   {
+    "ref": "manuscript:V1-P10",
+    "kind": "manuscript_page",
+    "path": "script_0.pages[10]"
+   },
+   {
+    "ref": "manuscript:V1-P11",
+    "kind": "manuscript_page",
+    "path": "script_0.pages[11]"
+   },
+   {
+    "ref": "manuscript:V1-P12",
+    "kind": "manuscript_page",
+    "path": "script_0.pages[12]"
+   }
+  ],
+  "decisions": [
+   {
+    "id": "dmuu63dt630b9e3",
+    "kind": "reconcile",
+    "state": "approved",
+    "actor": "operator@laptop",
+    "scope": {
+     "conflicts": [
+      "DW01"
+     ]
+    },
+    "at": 1791139301034
+   },
+   {
+    "id": "dmuu6c4pf6ac6a1",
+    "kind": "reconcile",
+    "state": "approved",
+    "actor": "operator@laptop",
+    "scope": {
+     "conflicts": [
+      "DW02"
+     ]
+    },
+    "at": 1791139709139
+   }
+  ],
+  "findings": {
+   "reconcile": [],
+   "canonActive": [
+    {
+     "id": "projection:series.volumes[0].summary",
+     "kind": "unverified_projection",
+     "field": "series.volumes[0].summary"
+    }
+   ],
+   "canonResolved": [
+    {
+     "id": "DW01",
+     "title": "Premisă reziduală „protejarea pietrei de ploaie” vs paginile 8–9 (adăpostul prietenilor)",
+     "resolvedBy": {
+      "decision": "dmuu63dt630b9e3",
+      "kind": "reconcile",
+      "actor": "operator@laptop",
+      "at": 1791139301034,
+      "note": "Reconciliere DW01 (varianta A, aliniere la paginile 8–9), aprobată de operator la 2026-10-04. Domeniu: doar cele 3 câmpuri de premisă/rezumat V1. NU reprezintă aprobarea manuscrisului V1, a volumului, a colecției sau a altor porți de revizuire/calitate."
+     }
+    }
+   ],
+   "projections": [
+    {
+     "field": "series.volumes[0].summary",
+     "status": "unverified"
+    },
+    {
+     "field": "script_0.story_bible",
+     "status": "identical_copy"
+    },
+    {
+     "field": "series.volumes[1].summary",
+     "status": "unverified"
+    },
+    {
+     "field": "series.volumes[2].summary",
+     "status": "unverified"
+    },
+    {
+     "field": "series.volumes[3].summary",
+     "status": "unverified"
+    },
+    {
+     "field": "series.volumes[4].summary",
+     "status": "unverified"
+    },
+    {
+     "field": "series.volumes[5].summary",
+     "status": "unverified"
+    }
+   ],
+   "collectionQA": [
+    {
+     "code": "PLAN_PREMISE_MISMATCH",
+     "severity": "medium",
+     "message": "Volumul 3: premisa canonică diferă de series.summary."
+    }
+   ],
+   "pagePlans": [
+    {
+     "code": "SPREAD_LEAK",
+     "severity": "major",
+     "page": "V1-P02"
+    },
+    {
+     "code": "SPREAD_LEAK",
+     "severity": "major",
+     "page": "V1-P04"
+    },
+    {
+     "code": "SPREAD_LEAK",
+     "severity": "major",
+     "page": "V1-P06"
+    },
+    {
+     "code": "SPREAD_LEAK",
+     "severity": "major",
+     "page": "V1-P08"
+    },
+    {
+     "code": "SPREAD_LEAK",
+     "severity": "major",
+     "page": "V2-P02"
+    },
+    {
+     "code": "SPREAD_LEAK",
+     "severity": "major",
+     "page": "V2-P04"
+    },
+    {
+     "code": "SPREAD_LEAK",
+     "severity": "major",
+     "page": "V2-P08"
+    },
+    {
+     "code": "SPREAD_LEAK",
+     "severity": "major",
+     "page": "V4-P08"
+    },
+    {
+     "code": "SPREAD_LEAK",
+     "severity": "major",
+     "page": "V5-P02"
+    },
+    {
+     "code": "SPREAD_LEAK",
+     "severity": "major",
+     "page": "V5-P08"
+    },
+    {
+     "code": "SPREAD_LEAK",
+     "severity": "major",
+     "page": "V6-P08"
+    }
+   ],
+   "observations": {
+    "payoffMismatches": [
+     {
+      "volume": 1,
+      "page": 1,
+      "plan": "Milo se trezește în cuib.",
+      "manuscript": "Pietricica este descoperită."
+     },
+     {
+      "volume": 1,
+      "page": 2,
+      "plan": "Găsește pietricica.",
+      "manuscript": "Atingerea îl pune în mișcare."
+     },
+     {
+      "volume": 1,
+      "page": 4,
+      "plan": "Pietricica dispare spre ferigi.",
+      "manuscript": "Tia se prezintă."
+     },
+     {
+      "volume": 1,
+      "page": 6,
+      "plan": "Milo o invită și urmăresc două sclipiri.",
+      "manuscript": "Este reflexia, nu o a doua pietricică."
+     },
+     {
+      "volume": 1,
+      "page": 8,
+      "plan": "Începe ploaia; prietenii caută adăpost.",
+      "manuscript": "Împart frunza ținută de Tia."
+     }
+    ],
+    "sharedOpenings": [
+     {
+      "mapping": "digital",
+      "volume": 1,
+      "page": 1,
+      "payoffPage": 2
+     },
+     {
+      "mapping": "digital",
+      "volume": 2,
+      "page": 7,
+      "payoffPage": 8
+     },
+     {
+      "mapping": "digital",
+      "volume": 3,
+      "page": 5,
+      "payoffPage": 6
+     },
+     {
+      "mapping": "digital",
+      "volume": 3,
+      "page": 7,
+      "payoffPage": 8
+     },
+     {
+      "mapping": "digital",
+      "volume": 4,
+      "page": 3,
+      "payoffPage": 4
+     },
+     {
+      "mapping": "digital",
+      "volume": 5,
+      "page": 5,
+      "payoffPage": 6
+     },
+     {
+      "mapping": "digital",
+      "volume": 6,
+      "page": 5,
+      "payoffPage": 6
+     },
+     {
+      "mapping": "print",
+      "volume": 1,
+      "page": 1,
+      "payoffPage": 2
+     },
+     {
+      "mapping": "print",
+      "volume": 2,
+      "page": 7,
+      "payoffPage": 8
+     },
+     {
+      "mapping": "print",
+      "volume": 3,
+      "page": 5,
+      "payoffPage": 6
+     },
+     {
+      "mapping": "print",
+      "volume": 3,
+      "page": 7,
+      "payoffPage": 8
+     },
+     {
+      "mapping": "print",
+      "volume": 4,
+      "page": 3,
+      "payoffPage": 4
+     },
+     {
+      "mapping": "print",
+      "volume": 5,
+      "page": 5,
+      "payoffPage": 6
+     },
+     {
+      "mapping": "print",
+      "volume": 6,
+      "page": 5,
+      "payoffPage": 6
+     }
+    ]
+   }
+  },
+  "counts": {
+   "volumes": 6,
+   "pagePlans": 72,
+   "characters": 3,
+   "locations": 8,
+   "objects": 3,
+   "manuscriptVolumes": 1,
+   "pagesPerBook": 12
+  },
+  "projectFingerprint": "a37a3d70815951808115cfdc27f2fd14a6a8c1926287b6dcfe3c80089c09f9a6",
+  "externalSource": {
+   "kind": "migration",
+   "originalSha256": "7056e113bf5c84fdfc0f7b8f528713de6c8fe31e82b40fbab056544fe10e45e3"
+  },
+  "hash": "4a109e8d51c7e07faf8e4f5fd8ad555f7e243278adabab540c4a100fd907ce4c"
+ },
+ "provenance": {
+  "original": {
+   "file": "reference/dinosaur-world-v04/dinosaur-world-proiect.v04.zip",
+   "sha256": "7056e113bf5c84fdfc0f7b8f528713de6c8fe31e82b40fbab056544fe10e45e3",
+   "unchanged": true
+  },
+  "enterprisePackage": {
+   "file": "dinosaur-world-enterprise/pachet/dinosaur-world-enterprise.zip",
+   "sha256": "17c787a7b556a6fec5c082d74e7dd166c7562a8120e3d59855536f7eecf71cbe"
+  },
+  "decisions": {
+   "DW01-DECIZIE.md": "ef58de6d442d8d80b6ae439ec73d8cc7b458a180b0c7fbbe6c401dbdb95bba3c",
+   "DW01-VERIFICARE.json": "8d7bdde10604d28da49b371e4d002e05528367d07e8f219093bf1b54eb376358",
+   "DW02-DECIZIE.md": "4f1dd5b34598816ceef68257dffce0c70035824f32ef1314eb5dc7c40065da9a",
+   "DW02-VERIFICARE.json": "15580f0993c0963f5772ed7dc7b4d1c179cd79636c890a3e6277bca5f02f2353",
+   "OBSERVATII-DESCHISE.md": "c7fa5976a584a2213eb5558c3a772c78e4739dc720245cde5966225cb6f25241"
+  },
+  "checkpoints": [
+   {
+    "commit": "34750b0",
+    "present": true
+   },
+   {
+    "commit": "425b66a",
+    "present": true
+   },
+   {
+    "commit": "5028cde",
+    "present": true
+   }
+  ]
+ },
+ "projectUnchanged": true,
+ "note": "Dosar BEFORE înghețat (intrarea unei propuneri Creative Upgrade). Nu conține conținut creativ nou; proiectul nu a fost modificat."
+}
