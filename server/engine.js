@@ -7,6 +7,8 @@ import { complete, parseJSONLoose } from './llm.js';
 import crypto from 'node:crypto';
 import { bus, now, clone } from './repo.js';
 import { config } from './config.js';
+import { outputDir } from './output.js';
+import { assertAdmission, admissionCheck } from './ops/admission.js';
 import { getAgent, requireAgent, startInstance, registry as agentRegistry } from './agents.js';
 import { buildContext } from './agents-runtime/context-builder.js';
 import { AsyncLocalStorage } from 'node:async_hooks';
@@ -983,8 +985,10 @@ export function startProject(pid) {
   const p = repo.getProject(pid); if (!p) throw { status: 404, message: 'Proiect inexistent.' };
   if (RUNNING[pid]) return { ok: true };
   if (['awaiting_review', 'completed', 'archived'].includes(p.status)) throw { status: 400, message: 'Proiectul nu are nimic de pornit acum.' };
-  assertFree(pid); runPipeline(pid); return { ok: true };
+  assertFree(pid); assertAdmission(admissionDirs()); runPipeline(pid); return { ok: true };   // P8-T04: no start without free space
 }
+/* P8-T04: the folders production writes to */
+export const admissionDirs = () => ({ date: config.storage.dataDir, 'fișiere finale': outputDir() });
 /* graceful pause: what is in progress finishes and is saved, then a checkpoint is written */
 export async function pauseProject(pid) {
   const E = RUNNING[pid]; const p = repo.getProject(pid);
@@ -1087,6 +1091,7 @@ export function runPipeline(pid) {
       if (['scripts', 'critic'].includes(stage.base) && (E.project.stages?.[stage.key]?.prefetched || E.project.stages?.[stage.key]?.status === 'prefetched')) {
         if (jobs) { await jobs.takeover(pid, stage.key, { reason: 'pregătirea în avans a expirat' }); for (const j of await jobs.list(pid)) if (j.key.startsWith(stage.key + '#')) await jobs.takeover(pid, j.key, { reason: 'pregătirea în avans a expirat' }); }   // P3-T03: a stale prefetch can no longer write
         await setStage(E, stage.key, { items: [], run: -1, prefetched: null, note: 'Refăcut: notele, lecțiile sau regulile s-au schimbat după pregătirea în avans.' }); }   // stale: redo every item
+      { const a = admissionCheck(admissionDirs()); if (!a.ok) { await repo.patchProject(pid, { status: 'paused', currentStage: stage.key, error: a.message }); await logE(E, a.message, 'warn'); break; } }   // P8-T04: pause before a stage, not halfway through it
       if (stage.base === 'illustrations' && stage.vol != null && !E.prefetch && learningSettings().overlap && E.project.options?.overlap !== false && !E.project.options?.golden)
         E.prefetch = prefetchNext(E, stage.vol + 1).catch(e => { if (!['stopped', 'paused'].includes(e?.code)) logE(E, `Pregătirea în avans a volumului următor s-a oprit (${errMsg(e)}); se face normal la rândul ei.`, 'warn').catch(() => {}); });
       E.stageKey = stage.key; E.curStage = stage;

@@ -1,0 +1,143 @@
+{
+  "schema": "wonderpages.capacity/1",
+  "at": "2026-10-04T14:50:39.767Z",
+  "host": {
+    "platform": "linux",
+    "cpus": 4,
+    "cpuModel": "Intel(R) Xeon(R) Processor @ 2.80GHz",
+    "memGb": 16,
+    "node": "v22.22.0"
+  },
+  "targets": {
+    "readP95Ms": 1000,
+    "writeP95Ms": 2000,
+    "eventMs": 2000,
+    "status": "proposed_targets"
+  },
+  "results": [
+    {
+      "archived": 3,
+      "storage": "local",
+      "assetKb": 1600,
+      "seedMs": 14563,
+      "bootMs": 1187,
+      "reads": {
+        "state": {
+          "n": 40,
+          "p50": 1.9,
+          "p95": 3.7,
+          "max": 4.6
+        },
+        "activeProject": {
+          "n": 40,
+          "p50": 12.8,
+          "p95": 16.7,
+          "max": 19
+        },
+        "archivedProject": {
+          "n": 40,
+          "p50": 10.8,
+          "p95": 16.1,
+          "max": 16.7
+        },
+        "jobs": {
+          "n": 40,
+          "p50": 0.9,
+          "p95": 1.1,
+          "max": 1.2
+        },
+        "learning": {
+          "n": 40,
+          "p50": 0.8,
+          "p95": 1.1,
+          "max": 2.1
+        },
+        "health": {
+          "n": 40,
+          "p50": 2.1,
+          "p95": 3.3,
+          "max": 6.7
+        },
+        "ledger": {
+          "n": 40,
+          "p50": 0.8,
+          "p95": 1.5,
+          "max": 5
+        }
+      },
+      "concurrentReads": {
+        "concurrency": 8,
+        "n": 40,
+        "p50": 22.8,
+        "p95": 28.1,
+        "max": 30.6
+      },
+      "writes": {
+        "n": 20,
+        "p50": 3.5,
+        "p95": 5.7,
+        "max": 12.8
+      },
+      "commitWrites": {
+        "n": 20,
+        "p50": 3.4,
+        "p95": 5.1,
+        "max": 6.8
+      },
+      "eventMs": {
+        "n": 5,
+        "p50": 124.7,
+        "p95": 125.4,
+        "max": 125.4
+      },
+      "eventMissed": 0,
+      "daliCalls": 12,
+      "readsUnderContention": {
+        "n": 40,
+        "p50": 10.3,
+        "p95": 23,
+        "max": 26.9
+      },
+      "layoutStatus": 200,
+      "layoutPlan": {
+        "n": 5,
+        "p50": 23.9,
+        "p95": 43.1,
+        "max": 43.1
+      },
+      "backupLock": {
+        "status": 200,
+        "lockMs": 13546,
+        "writesTried": 200,
+        "writesRejected409": 200
+      },
+      "backupLockIncremental": {
+        "status": 200,
+        "lockMs": 510,
+        "linked": 1848,
+        "copied": 11
+      },
+      "rssMb": 145,
+      "peakRssMb": 146,
+      "diskMb": 1098.6,
+      "footprintMbPerProject": 274.65,
+      "backupRetentionMb": 15380,
+      "verdict": {
+        "readP95Ms": 28.1,
+        "readOk": true,
+        "writeOk": true,
+        "eventOk": true
+      },
+      "ok": true
+    }
+  ],
+  "dw": {
+    "referenceArchiveMb": 3.6,
+    "note": "Arhiva DW conține textele, planurile și 2 imagini de referință; ilustrațiile finale nu există încă (P8-T05), deci dimensiunea reală a unui volum ilustrat nu este măsurată. Estimare: 6 volume × 13 imagini × (color + linie) × dimensiunea medie a imaginilor de referință."
+  },
+  "notAMeasurement": [
+    "debitul real al furnizorilor AI (mock-urile răspund instantaneu)",
+    "randarea PDF în browser (P6-T05 măsoară separat)",
+    "hostul de referință al clientului"
+  ]
+}

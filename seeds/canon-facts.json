@@ -1,0 +1,7 @@
+{
+  "schema": "wonderpages.canon-facts/1",
+  "note": "Fapte canonice reconciliate pe care cunoașterea importată nu le poate suprascrie (P7-T01). Date, nu cod: aplicația generică nu conține specificul unui proiect. Expresiile sunt regulate (fără diferență de majuscule).",
+  "facts": [
+    { "id": "DW-V1-p9", "project": "Dinosaur World", "page": 9, "label": "Dinosaur World V1 p9: adăpostul prietenilor sub frunză (motivul reconciliat)", "subject": "\\b(page|pagina|p\\.?)\\s*9\\b", "contradicts": "\\b(current|stream|curent|parau|puddle|baltoac|pushing the pebble|impinge pietricica)\\b" }
+  ]
+}

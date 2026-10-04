@@ -17,10 +17,12 @@ export function providerState({ installed, auth, limited } = {}) {
   return 'unknown';
 }
 
-export function healthReport({ database = { ok: false }, output = { ok: false }, resources = {}, providers = {}, schemaVersion = null, version = null, at = new Date().toISOString() } = {}) {
+export function healthReport({ database = { ok: false }, output = { ok: false }, resources = {}, providers = {}, disk = null, schemaVersion = null, version = null, at = new Date().toISOString() } = {}) {
   const missing = REQUIRED_RESOURCES.filter(r => resources[r] !== true);
   const components = { database: { ok: database.ok === true, kind: ['postgres', 'local'].includes(database.kind) ? database.kind : null }, output: { ok: output.ok === true }, resources: { ok: !missing.length, missing } };
-  const status = !components.database.ok ? 'down' : !components.output.ok || !components.resources.ok ? 'degraded' : 'ok';
+  /* P8-T04: free space against the admission minimum — labels and MB only, never paths */
+  if (disk) components.disk = { ok: disk.ok === true, minFreeMb: Number(disk.minFreeMb) || null, free: (disk.disks || []).map(d => ({ label: String(d.label), freeMb: Number.isFinite(d.freeMb) ? d.freeMb : null })) };
+  const status = !components.database.ok ? 'down' : !components.output.ok || !components.resources.ok || (components.disk && !components.disk.ok) ? 'degraded' : 'ok';
   const prov = Object.fromEntries(Object.entries(providers).map(([k, v]) => [k, STATES.has(v) ? v : 'unknown']));
   const usable = Object.values(prov).filter(v => v === 'available').length;
   return { schema: HEALTH_SCHEMA, at, app: { status, version, schemaVersion, components }, providers: { ...prov, summary: usable ? (usable === Object.keys(prov).length ? 'all_available' : 'partial') : 'none_available', note: 'Starea furnizorilor nu schimbă sănătatea aplicației: producția așteaptă, aplicația rămâne utilizabilă.' } };

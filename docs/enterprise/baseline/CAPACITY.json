@@ -1,0 +1,721 @@
+{
+  "schema": "wonderpages.capacity/1",
+  "at": "2026-10-04T14:50:03.661Z",
+  "host": {
+    "platform": "linux",
+    "cpus": 4,
+    "cpuModel": "Intel(R) Xeon(R) Processor @ 2.80GHz",
+    "memGb": 16,
+    "node": "v22.22.0"
+  },
+  "targets": {
+    "readP95Ms": 1000,
+    "writeP95Ms": 2000,
+    "eventMs": 2000,
+    "status": "proposed_targets"
+  },
+  "results": [
+    {
+      "archived": 1,
+      "storage": "local",
+      "assetKb": 8,
+      "seedMs": 4677,
+      "bootMs": 781,
+      "reads": {
+        "state": {
+          "n": 40,
+          "p50": 2.2,
+          "p95": 4.1,
+          "max": 6.3
+        },
+        "activeProject": {
+          "n": 40,
+          "p50": 12.7,
+          "p95": 16.3,
+          "max": 18
+        },
+        "archivedProject": {
+          "n": 40,
+          "p50": 11,
+          "p95": 16.4,
+          "max": 18.1
+        },
+        "jobs": {
+          "n": 40,
+          "p50": 0.9,
+          "p95": 1.6,
+          "max": 7
+        },
+        "learning": {
+          "n": 40,
+          "p50": 0.9,
+          "p95": 1.2,
+          "max": 2.1
+        },
+        "health": {
+          "n": 40,
+          "p50": 2.6,
+          "p95": 3.9,
+          "max": 7.7
+        },
+        "ledger": {
+          "n": 40,
+          "p50": 0.8,
+          "p95": 1.7,
+          "max": 5.4
+        }
+      },
+      "concurrentReads": {
+        "concurrency": 8,
+        "n": 40,
+        "p50": 22.2,
+        "p95": 30.9,
+        "max": 35.3
+      },
+      "writes": {
+        "n": 20,
+        "p50": 2.6,
+        "p95": 3.2,
+        "max": 10.9
+      },
+      "commitWrites": {
+        "n": 20,
+        "p50": 2.1,
+        "p95": 2.8,
+        "max": 3.9
+      },
+      "eventMs": {
+        "n": 5,
+        "p50": 125.1,
+        "p95": 126,
+        "max": 126
+      },
+      "eventMissed": 0,
+      "daliCalls": 13,
+      "readsUnderContention": {
+        "n": 40,
+        "p50": 13,
+        "p95": 24.6,
+        "max": 34.9
+      },
+      "layoutStatus": 200,
+      "layoutPlan": {
+        "n": 5,
+        "p50": 9.3,
+        "p95": 27.5,
+        "max": 27.5
+      },
+      "backupLock": {
+        "status": 200,
+        "lockMs": 1154,
+        "writesTried": 200,
+        "writesRejected409": 200
+      },
+      "backupLockIncremental": {
+        "status": 200,
+        "lockMs": 285,
+        "linked": 1162,
+        "copied": 11
+      },
+      "rssMb": 125,
+      "peakRssMb": 126,
+      "diskMb": 4.7,
+      "footprintMbPerProject": 2.35,
+      "backupRetentionMb": 66,
+      "verdict": {
+        "readP95Ms": 30.9,
+        "readOk": true,
+        "writeOk": true,
+        "eventOk": true
+      },
+      "ok": true
+    },
+    {
+      "archived": 10,
+      "storage": "local",
+      "assetKb": 8,
+      "seedMs": 16524,
+      "bootMs": 1437,
+      "reads": {
+        "state": {
+          "n": 40,
+          "p50": 2.3,
+          "p95": 3.4,
+          "max": 10.4
+        },
+        "activeProject": {
+          "n": 40,
+          "p50": 12.3,
+          "p95": 15.7,
+          "max": 17.4
+        },
+        "archivedProject": {
+          "n": 40,
+          "p50": 10.1,
+          "p95": 15.8,
+          "max": 19.3
+        },
+        "jobs": {
+          "n": 40,
+          "p50": 0.8,
+          "p95": 1,
+          "max": 1.2
+        },
+        "learning": {
+          "n": 40,
+          "p50": 0.7,
+          "p95": 0.8,
+          "max": 1.5
+        },
+        "health": {
+          "n": 40,
+          "p50": 2.2,
+          "p95": 3.7,
+          "max": 9.8
+        },
+        "ledger": {
+          "n": 40,
+          "p50": 0.6,
+          "p95": 0.9,
+          "max": 0.9
+        }
+      },
+      "concurrentReads": {
+        "concurrency": 8,
+        "n": 40,
+        "p50": 23.9,
+        "p95": 33.4,
+        "max": 34.9
+      },
+      "writes": {
+        "n": 20,
+        "p50": 2.5,
+        "p95": 3.2,
+        "max": 5.5
+      },
+      "commitWrites": {
+        "n": 20,
+        "p50": 2.6,
+        "p95": 3,
+        "max": 3.2
+      },
+      "eventMs": {
+        "n": 5,
+        "p50": 123.8,
+        "p95": 125.6,
+        "max": 125.6
+      },
+      "eventMissed": 0,
+      "daliCalls": 12,
+      "readsUnderContention": {
+        "n": 40,
+        "p50": 10.8,
+        "p95": 23.5,
+        "max": 38.6
+      },
+      "layoutStatus": 200,
+      "layoutPlan": {
+        "n": 5,
+        "p50": 7,
+        "p95": 22.8,
+        "max": 22.8
+      },
+      "backupLock": {
+        "status": 200,
+        "lockMs": 2974,
+        "writesTried": 200,
+        "writesRejected409": 200
+      },
+      "backupLockIncremental": {
+        "status": 200,
+        "lockMs": 1040,
+        "linked": 4240,
+        "copied": 11
+      },
+      "rssMb": 136,
+      "peakRssMb": 140,
+      "diskMb": 15.9,
+      "footprintMbPerProject": 1.45,
+      "backupRetentionMb": 223,
+      "verdict": {
+        "readP95Ms": 33.4,
+        "readOk": true,
+        "writeOk": true,
+        "eventOk": true
+      },
+      "ok": true
+    },
+    {
+      "archived": 100,
+      "storage": "local",
+      "assetKb": 8,
+      "seedMs": 99949,
+      "bootMs": 6399,
+      "reads": {
+        "state": {
+          "n": 40,
+          "p50": 2.3,
+          "p95": 3.2,
+          "max": 9.6
+        },
+        "activeProject": {
+          "n": 40,
+          "p50": 11.3,
+          "p95": 18,
+          "max": 21.1
+        },
+        "archivedProject": {
+          "n": 40,
+          "p50": 10.4,
+          "p95": 16.5,
+          "max": 19.9
+        },
+        "jobs": {
+          "n": 40,
+          "p50": 0.7,
+          "p95": 1.1,
+          "max": 1.1
+        },
+        "learning": {
+          "n": 40,
+          "p50": 0.7,
+          "p95": 1.2,
+          "max": 1.3
+        },
+        "health": {
+          "n": 40,
+          "p50": 1.8,
+          "p95": 3,
+          "max": 3.9
+        },
+        "ledger": {
+          "n": 40,
+          "p50": 0.5,
+          "p95": 1.7,
+          "max": 4.8
+        }
+      },
+      "concurrentReads": {
+        "concurrency": 8,
+        "n": 40,
+        "p50": 20.9,
+        "p95": 28.8,
+        "max": 32
+      },
+      "writes": {
+        "n": 20,
+        "p50": 1.8,
+        "p95": 3.6,
+        "max": 4
+      },
+      "commitWrites": {
+        "n": 20,
+        "p50": 1.7,
+        "p95": 7.1,
+        "max": 13.9
+      },
+      "eventMs": {
+        "n": 5,
+        "p50": 124.1,
+        "p95": 124.8,
+        "max": 124.8
+      },
+      "eventMissed": 0,
+      "daliCalls": 12,
+      "readsUnderContention": {
+        "n": 40,
+        "p50": 12.1,
+        "p95": 28.6,
+        "max": 33
+      },
+      "layoutStatus": 200,
+      "layoutPlan": {
+        "n": 5,
+        "p50": 9.2,
+        "p95": 22,
+        "max": 22
+      },
+      "backupLock": {
+        "status": 200,
+        "lockMs": 19936,
+        "writesTried": 200,
+        "writesRejected409": 200
+      },
+      "backupLockIncremental": {
+        "status": 200,
+        "lockMs": 7874,
+        "linked": 35020,
+        "copied": 11
+      },
+      "rssMb": 210,
+      "peakRssMb": 228,
+      "diskMb": 128.1,
+      "footprintMbPerProject": 1.27,
+      "backupRetentionMb": 1793,
+      "verdict": {
+        "readP95Ms": 28.8,
+        "readOk": true,
+        "writeOk": true,
+        "eventOk": true
+      },
+      "ok": true
+    },
+    {
+      "archived": 1,
+      "storage": "postgres",
+      "assetKb": 8,
+      "seedMs": 1026,
+      "bootMs": 801,
+      "reads": {
+        "state": {
+          "n": 40,
+          "p50": 2.4,
+          "p95": 2.9,
+          "max": 16.5
+        },
+        "activeProject": {
+          "n": 40,
+          "p50": 11.6,
+          "p95": 17.6,
+          "max": 23.7
+        },
+        "archivedProject": {
+          "n": 40,
+          "p50": 10.5,
+          "p95": 14.6,
+          "max": 18.9
+        },
+        "jobs": {
+          "n": 40,
+          "p50": 0.9,
+          "p95": 1.2,
+          "max": 1.4
+        },
+        "learning": {
+          "n": 40,
+          "p50": 0.6,
+          "p95": 0.9,
+          "max": 1.6
+        },
+        "health": {
+          "n": 40,
+          "p50": 2.3,
+          "p95": 3.4,
+          "max": 6.4
+        },
+        "ledger": {
+          "n": 40,
+          "p50": 0.8,
+          "p95": 0.9,
+          "max": 1
+        }
+      },
+      "concurrentReads": {
+        "concurrency": 8,
+        "n": 40,
+        "p50": 25.8,
+        "p95": 38.5,
+        "max": 41
+      },
+      "writes": {
+        "n": 20,
+        "p50": 3.2,
+        "p95": 3.9,
+        "max": 6.9
+      },
+      "commitWrites": {
+        "n": 20,
+        "p50": 1.7,
+        "p95": 2.7,
+        "max": 3.3
+      },
+      "eventMs": {
+        "n": 5,
+        "p50": 124.2,
+        "p95": 149.7,
+        "max": 149.7
+      },
+      "eventMissed": 0,
+      "daliCalls": 12,
+      "readsUnderContention": {
+        "n": 40,
+        "p50": 11.3,
+        "p95": 20.7,
+        "max": 30.3
+      },
+      "layoutStatus": 200,
+      "layoutPlan": {
+        "n": 5,
+        "p50": 7.9,
+        "p95": 21.9,
+        "max": 21.9
+      },
+      "backupLock": {
+        "status": 200,
+        "lockMs": 504,
+        "writesTried": 200,
+        "writesRejected409": 200
+      },
+      "backupLockIncremental": {
+        "status": 200,
+        "lockMs": 123,
+        "linked": 624,
+        "copied": 0
+      },
+      "rssMb": 129,
+      "peakRssMb": 129,
+      "diskMb": 3.7,
+      "dbMb": 9,
+      "footprintMbPerProject": 6.35,
+      "backupRetentionMb": 178,
+      "verdict": {
+        "readP95Ms": 38.5,
+        "readOk": true,
+        "writeOk": true,
+        "eventOk": true
+      },
+      "ok": true
+    },
+    {
+      "archived": 10,
+      "storage": "postgres",
+      "assetKb": 8,
+      "seedMs": 4011,
+      "bootMs": 1568,
+      "reads": {
+        "state": {
+          "n": 40,
+          "p50": 1.8,
+          "p95": 2.8,
+          "max": 3.9
+        },
+        "activeProject": {
+          "n": 40,
+          "p50": 10.8,
+          "p95": 17.3,
+          "max": 23
+        },
+        "archivedProject": {
+          "n": 40,
+          "p50": 9.7,
+          "p95": 12.6,
+          "max": 18
+        },
+        "jobs": {
+          "n": 40,
+          "p50": 0.8,
+          "p95": 1,
+          "max": 2.1
+        },
+        "learning": {
+          "n": 40,
+          "p50": 0.6,
+          "p95": 0.8,
+          "max": 1.3
+        },
+        "health": {
+          "n": 40,
+          "p50": 1.9,
+          "p95": 2.9,
+          "max": 3.9
+        },
+        "ledger": {
+          "n": 40,
+          "p50": 0.5,
+          "p95": 0.6,
+          "max": 0.7
+        }
+      },
+      "concurrentReads": {
+        "concurrency": 8,
+        "n": 40,
+        "p50": 21.3,
+        "p95": 26.7,
+        "max": 28.1
+      },
+      "writes": {
+        "n": 20,
+        "p50": 2.7,
+        "p95": 8.5,
+        "max": 9.5
+      },
+      "commitWrites": {
+        "n": 20,
+        "p50": 1.8,
+        "p95": 3.1,
+        "max": 3.5
+      },
+      "eventMs": {
+        "n": 5,
+        "p50": 124.4,
+        "p95": 125.3,
+        "max": 125.3
+      },
+      "eventMissed": 0,
+      "daliCalls": 12,
+      "readsUnderContention": {
+        "n": 40,
+        "p50": 10.7,
+        "p95": 25.3,
+        "max": 27.8
+      },
+      "layoutStatus": 200,
+      "layoutPlan": {
+        "n": 5,
+        "p50": 9.1,
+        "p95": 21.5,
+        "max": 21.5
+      },
+      "backupLock": {
+        "status": 200,
+        "lockMs": 1461,
+        "writesTried": 200,
+        "writesRejected409": 200
+      },
+      "backupLockIncremental": {
+        "status": 200,
+        "lockMs": 443,
+        "linked": 2028,
+        "copied": 0
+      },
+      "rssMb": 166,
+      "peakRssMb": 166,
+      "diskMb": 11.9,
+      "dbMb": 10.6,
+      "footprintMbPerProject": 2.05,
+      "backupRetentionMb": 315,
+      "verdict": {
+        "readP95Ms": 26.7,
+        "readOk": true,
+        "writeOk": true,
+        "eventOk": true
+      },
+      "ok": true
+    },
+    {
+      "archived": 100,
+      "storage": "postgres",
+      "assetKb": 8,
+      "seedMs": 30636,
+      "bootMs": 7260,
+      "reads": {
+        "state": {
+          "n": 40,
+          "p50": 2,
+          "p95": 2.5,
+          "max": 3
+        },
+        "activeProject": {
+          "n": 40,
+          "p50": 10.4,
+          "p95": 15.6,
+          "max": 22
+        },
+        "archivedProject": {
+          "n": 40,
+          "p50": 9.6,
+          "p95": 13.4,
+          "max": 17.7
+        },
+        "jobs": {
+          "n": 40,
+          "p50": 1.1,
+          "p95": 4,
+          "max": 8.4
+        },
+        "learning": {
+          "n": 40,
+          "p50": 0.8,
+          "p95": 1.1,
+          "max": 1.9
+        },
+        "health": {
+          "n": 40,
+          "p50": 2.5,
+          "p95": 3.7,
+          "max": 6.1
+        },
+        "ledger": {
+          "n": 40,
+          "p50": 0.6,
+          "p95": 0.8,
+          "max": 1
+        }
+      },
+      "concurrentReads": {
+        "concurrency": 8,
+        "n": 40,
+        "p50": 21.1,
+        "p95": 29,
+        "max": 31.9
+      },
+      "writes": {
+        "n": 20,
+        "p50": 2.7,
+        "p95": 6.9,
+        "max": 21.5
+      },
+      "commitWrites": {
+        "n": 20,
+        "p50": 1.9,
+        "p95": 2.2,
+        "max": 3.8
+      },
+      "eventMs": {
+        "n": 5,
+        "p50": 124.3,
+        "p95": 133.6,
+        "max": 133.6
+      },
+      "eventMissed": 0,
+      "daliCalls": 14,
+      "readsUnderContention": {
+        "n": 40,
+        "p50": 10.7,
+        "p95": 26.2,
+        "max": 35.1
+      },
+      "layoutStatus": 200,
+      "layoutPlan": {
+        "n": 5,
+        "p50": 7.7,
+        "p95": 28.3,
+        "max": 28.3
+      },
+      "backupLock": {
+        "status": 200,
+        "lockMs": 12421,
+        "writesTried": 200,
+        "writesRejected409": 200
+      },
+      "backupLockIncremental": {
+        "status": 200,
+        "lockMs": 4376,
+        "linked": 16068,
+        "copied": 0
+      },
+      "rssMb": 328,
+      "peakRssMb": 454,
+      "diskMb": 94.1,
+      "dbMb": 27,
+      "footprintMbPerProject": 1.2,
+      "backupRetentionMb": 1695,
+      "verdict": {
+        "readP95Ms": 29,
+        "readOk": true,
+        "writeOk": true,
+        "eventOk": true
+      },
+      "ok": true
+    }
+  ],
+  "dw": {
+    "referenceArchiveMb": 3.6,
+    "note": "Arhiva DW conține textele, planurile și 2 imagini de referință; ilustrațiile finale nu există încă (P8-T05), deci dimensiunea reală a unui volum ilustrat nu este măsurată. Estimare: 6 volume × 13 imagini × (color + linie) × dimensiunea medie a imaginilor de referință."
+  },
+  "notAMeasurement": [
+    "debitul real al furnizorilor AI (mock-urile răspund instantaneu)",
+    "randarea PDF în browser (P6-T05 măsoară separat)",
+    "hostul de referință al clientului"
+  ]
+}

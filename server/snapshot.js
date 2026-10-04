@@ -16,7 +16,7 @@ const TABLES=[...CORE_TABLES,...LEDGER_TABLES];   // P2-T01: ledger tables trave
 const hash=b=>crypto.createHash('sha256').update(b).digest('hex');
 const within=(root,file)=>file.startsWith(path.resolve(root)+path.sep);
 async function files(root,base=root,out=[]){for(const e of await fs.readdir(root,{withFileTypes:true})){const p=path.join(root,e.name);if(e.isSymbolicLink())throw Error('Snapshotul nu acceptă legături simbolice.');if(e.isDirectory())await files(p,base,out);else out.push({path:path.relative(base,p).split(path.sep).join('/'),sha256:hash(await fs.readFile(p)),bytes:(await fs.stat(p)).size});}return out;}
-export async function saveSnapshot(storage,dest){
+export async function saveSnapshot(storage,dest,{full=process.env.WP_SNAPSHOT_FULL==='1'}={}){
   const source=storage.kind==='postgres'?storage.files.root:storage.root;
   if(path.resolve(dest)===path.resolve(source)||within(source,path.resolve(dest)))throw Error('Backupul trebuie salvat în afara datelor active.');
   await storage.flush?.();
@@ -27,10 +27,41 @@ export async function saveSnapshot(storage,dest){
   if(storage.kind==='postgres'){
     const tx=await storage.pool.connect();try{await tx.query('BEGIN ISOLATION LEVEL REPEATABLE READ READ ONLY');database={};for(const t of TABLES)database[t]=(await tx.query('SELECT * FROM '+t)).rows;await tx.query('COMMIT');}catch(e){await tx.query('ROLLBACK');throw e;}finally{tx.release();}
   }
-  await fs.cp(source,path.join(stage,'files'),{recursive:true});
-  if(database)await fs.writeFile(path.join(stage,'database.json'),JSON.stringify(database));
-  const inventory=await files(stage);const summary=entitySummary(inventory.filter(f=>f.path.startsWith('files/')).map(f=>f.path.slice(6)),database);await fs.writeFile(path.join(stage,'manifest.json'),JSON.stringify({version:1,kind:storage.kind,at:Date.now(),app:appVersions(),summary,files:inventory},null,2));await fs.rename(stage,dest);return {folder:dest,files:inventory.length};
+  const prev=full?null:await previousSnapshot(dest),copy=await copyTree(source,path.join(stage,'files'),prev);
+  const inventory=copy.out;if(database){const b=Buffer.from(JSON.stringify(database));await fs.writeFile(path.join(stage,'database.json'),b);inventory.push({path:'database.json',sha256:hash(b),bytes:b.length});}
+  inventory.sort((a,b)=>a.path<b.path?-1:a.path>b.path?1:0);const at=Date.now();
+  const incremental=prev?{base:path.basename(prev.f),linked:copy.linked,copied:copy.copied,fullAt:prev.m.incremental?.fullAt||prev.m.at}:{base:null,linked:0,copied:copy.copied,fullAt:at};
+  const summary=entitySummary(inventory.filter(f=>f.path.startsWith('files/')).map(f=>f.path.slice(6)),database);await fs.writeFile(path.join(stage,'manifest.json'),JSON.stringify({version:1,kind:storage.kind,at,app:appVersions(),summary,incremental,files:inventory},null,2));await fs.rename(stage,dest);return {folder:dest,files:inventory.length,linked:copy.linked,copied:copy.copied};
   }finally{await fs.rm(stage,{recursive:true,force:true});}
+}
+/* P8-T04 — incremental snapshots: a data file unchanged since the previous snapshot (same path, size and mtime) is
+   hard-linked to that snapshot's immutable copy and keeps its recorded hash; only changed files are copied and hashed.
+   Every snapshot stays a complete, independent folder (verification and restore read it like a full copy). Shared
+   inodes are the trade-off: a full copy is made again at least weekly, and the mirror copy is always independent. */
+const FULL_EVERY_MS=7*24*3600e3;
+async function previousSnapshot(dest){
+  const target=path.resolve(dest),dir=path.dirname(target);let best=null;
+  for(const n of await fs.readdir(dir).catch(()=>[])){
+    if(!/^backup-v03-\d+\.wbackup$/.test(n))continue;const f=path.join(dir,n);if(f===target)continue;
+    try{const st=await fs.lstat(f);if(!st.isDirectory()||st.isSymbolicLink())continue;const m=JSON.parse(await fs.readFile(path.join(f,'manifest.json'),'utf8'));if(m.version===1&&Array.isArray(m.files)&&m.files.some(x=>x.src)&&(!best||m.at>best.m.at))best={f,m};}catch{}
+  }
+  if(best&&Date.now()-(best.m.incremental?.fullAt||best.m.at)>FULL_EVERY_MS)return null;
+  return best;
+}
+async function copyTree(source,target,prev){
+  const out=[],map=new Map(prev?prev.m.files.filter(x=>x.src).map(x=>[x.path,x]):[]);let linked=0,copied=0;
+  async function walk(rel){
+    for(const e of await fs.readdir(path.join(source,rel),{withFileTypes:true})){
+      const r=rel?rel+'/'+e.name:e.name,abs=path.join(source,r),to=path.join(target,r),key='files/'+r;
+      if(e.isSymbolicLink())throw Error('Snapshotul nu acceptă legături simbolice.');
+      if(e.isDirectory()){await fs.mkdir(to,{recursive:true});await walk(r);continue;}
+      if(!e.isFile())continue;
+      const st=await fs.stat(abs),p=map.get(key);
+      if(p&&p.bytes===st.size&&p.src.mtimeMs===st.mtimeMs){try{await fs.link(path.join(prev.f,key),to);out.push({path:key,sha256:p.sha256,bytes:st.size,src:{mtimeMs:st.mtimeMs},linked:true});linked++;continue;}catch{}}   // other volume / no hard links: copy
+      await fs.copyFile(abs,to);const b=await fs.readFile(to);out.push({path:key,sha256:hash(b),bytes:b.length,src:{mtimeMs:st.mtimeMs}});copied++;
+    }
+  }
+  await fs.mkdir(target,{recursive:true});await walk('');return {out,linked,copied};
 }
 export async function verifySnapshot(folder){
   const m=JSON.parse(await fs.readFile(path.join(folder,'manifest.json'),'utf8'));

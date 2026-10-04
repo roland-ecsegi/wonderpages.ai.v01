@@ -7,6 +7,7 @@ import { canonRevision, canonConflicts, projections, proposeCanonChange, AUTHORI
 import { uid, now } from './repo.js';
 import { decisionRecord, policyHash } from './domain/decisions.js';
 import { planMigration, runMigration, listMigrations } from './migration/migrator.js';
+import { dwReferencePages } from './migration/dw-reference.js';
 import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT } from './config.js';
@@ -389,7 +390,7 @@ export function registerEnterpriseRoutes({ on, json, need, localOnly, repo, stor
     const model = (await storage.readJSON('preference-model.json', {}))?.model || null;
     const outcomes = Ledger.rows(r => r.kind === 'outcome'), by = {}; for (const o of outcomes) by[o.result] = (by[o.result] || 0) + 1;
     const lessons = LearningMod.listLessons().filter(l => l.effectReport).map(l => ({ id: l.id, agent: l.agent, text: l.text, code: l.code, scope: l.scope, ...l.effectReport, needsReview: !!l.needsReview }));
-    let dw = null; try { const doc = JSON.parse([...readZip(await fs.promises.readFile(path.join(ROOT, 'reference/dinosaur-world-v04/dinosaur-world-proiect.v04.zip')))].find(([k]) => k.endsWith('/project.json'))[1].toString()), pages = doc.artifacts?.script_0?.content?.pages || []; if (pages.length) dw = baselineAfter({ baseline: volumeMetrics(pages) }); } catch {}
+    let dw = null; try { const pages = dwReferencePages(ROOT); if (pages.length) dw = baselineAfter({ baseline: volumeMetrics(pages) }); } catch {}   // legacy-migration adapter (P8-T06: no project paths in generic routes)
     return { version: EFFECT_VERSION, model: model ? { samples: model.samples, validation: model.validation || null } : null, variants: LearningMod.variantReports(), lessons, harmful: lessons.filter(l => l.status === 'harmful'), outcomes: { total: outcomes.length, byResult: by }, confidenceNote: 'Încrederea istorică a lecțiilor este un proxy de politică, nu o probabilitate validată.', dinosaurWorld: dw };
   });
   /* P7-T04: experience records per role/skill/cohort/binding and evidence-based maturity (granted only after calibration) */

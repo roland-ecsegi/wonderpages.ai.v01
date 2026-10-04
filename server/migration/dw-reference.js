@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import path from 'node:path';
 /**
  * P1-T02/P1-T05 — read-only verification of the Dinosaur World reference archive (OUTPUT-28).
  * Verifies the PROJECT-MANIFEST (bytes + sha256 per entry), counts the protected baseline
@@ -66,4 +68,11 @@ export function dwFindings(doc) {
   out.push({ id: 'DW06', status: 'INFERRED', title: 'Unele planuri pot avea diferențiere insuficientă în finaluri/beat-uri', evidence: (A.series?.content?.volumes || []).map(v => `V${v.number}: ${v.ending_type}`), note: 'Se evaluează prin matricea de colecție (P4-T02/P5-T04); nu se declară defect din planuri.' });
   out.push({ id: 'DW07', status: doc.project?.status === 'ready' && !Object.keys(doc.project?.approvals || {}).length ? 'VERIFIED' : 'NOT_OBSERVED', title: 'Import ready, aprobări goale; custom prompts și ref-uri originale', evidence: [`status=${doc.project?.status}`, `approvals=${Object.keys(doc.project?.approvals || {}).length}`, `refs=${(doc.project?.refs || []).length}`] });
   return out;
+}
+
+/** V1 manuscript pages of the read-only reference archive (baseline for the before/after report; [] when absent). */
+export function dwReferencePages(root) {
+  const f = path.join(root, 'reference', 'dinosaur-world-v04', 'dinosaur-world-proiect.v04.zip'); if (!fs.existsSync(f)) return [];
+  const doc = JSON.parse([...readZip(fs.readFileSync(f))].find(([k]) => k.endsWith('/project.json'))[1].toString());
+  return doc.artifacts?.script_0?.content?.pages || [];
 }

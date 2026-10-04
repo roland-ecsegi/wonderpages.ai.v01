@@ -68,6 +68,7 @@ import { toolSchemaHash, hostConfig } from './providers/capabilities.js';
 import { checkIncludedQuota } from './subscription-usage.js';
 import { healthReport, providerState, REQUIRED_RESOURCES } from './ops/health.js';
 import { normalizeAfterStop } from './ops/recovery.js';
+import { admissionCheck, minFreeMb, setMinFreeMb } from './ops/admission.js';
 import { recoverMigrations } from './migration/migrator.js';
 import { applyMigrations, SCHEMA_VERSION as DB_SCHEMA_VERSION } from './persistence/migrations.js';
 
@@ -93,6 +94,7 @@ await Improve.recoverInterruptedApplies(Dali.listImprovements()).then(r => { if 
 await recoverMigrations(repo, storage).then(r => { if (r.length) console.warn('[migrare] migrări întrerupte, curățate:', JSON.stringify(r)); }).catch(e => console.warn('[migrare]', e.message));   // P8-T02
 const SETTINGS = (await storage.readJSON('settings.json', {})) || {};
 if (SETTINGS.outputDir) setOutputDir(SETTINGS.outputDir);
+if (SETTINGS.minFreeMb != null) try { setMinFreeMb(SETTINGS.minFreeMb); } catch {}   // P8-T04
 if (SETTINGS.outputMirror) setOutputMirror(SETTINGS.outputMirror);
 IMAGE_DEFAULT.engine = SETTINGS.imageEngine || 'canva'; IMAGE_DEFAULT.fallback = !!SETTINGS.imageFallback;
 GPTImage.checkCodex().catch(e => console.warn('[images status]', e.message));
@@ -423,6 +425,8 @@ on('PUT', '/api/settings/output-mirror', async (_, req) => {
   if (dir) { if (!path.isAbsolute(dir)) throw { status: 400, message: 'Scrie o cale completă.' }; try { await fs.mkdir(dir, { recursive: true }); const t = path.join(dir, '.wonderpages-test'); await fs.writeFile(t, 'ok'); await fs.rm(t); } catch (e) { throw { status: 400, message: 'Nu pot scrie în acest folder: ' + e.message }; } }
   SETTINGS.outputMirror = dir || null; setOutputMirror(SETTINGS.outputMirror); await storage.writeJSON('settings.json', SETTINGS); bus.emit('change', { scope: 'projects' }); return { ok: true, dir: SETTINGS.outputMirror };
 });
+/* P8-T04: minimum free space for starting/continuing production (MB) */
+on('PUT', '/api/settings/admission', async (_, req) => { localOnly(req); const b = await json(req); SETTINGS.minFreeMb = setMinFreeMb(b.minFreeMb); await storage.writeJSON('settings.json', SETTINGS); return { minFreeMb: minFreeMb(), check: admissionCheck(EngineMod.admissionDirs()) }; });
 on('PUT', '/api/settings/output', async (_, req) => { localOnly(req);
   const { dir } = await json(req); if (!dir || !path.isAbsolute(dir)) throw { status: 400, message: 'Scrie o cale completă, de exemplu D:\\Carti\\WonderPages.' };
   { const pc = outputPathCheck(dir); if (!pc.ok) throw { status: 400, code: 'path_too_long', message: pc.message, check: pc }; }   // P8-T03
@@ -503,7 +507,7 @@ on('GET', '/api/health', async (_, __, ___, res) => {
   let out = false; try { await fs.mkdir(outputDir(), { recursive: true }); const t = path.join(outputDir(), '.wp-health'); await fs.writeFile(t, 'ok'); await fs.rm(t); out = true; } catch {}
   const resources = {}; for (const r of REQUIRED_RESOURCES) resources[r] = await fs.access(path.join(ROOT, r)).then(() => true, () => false);
   const li = llmInfo(), u = usage(), ct = codexTextStatus(), cx = GPTImage.codexStatus(), cv = canva.status();
-  const h = healthReport({ database: { ok: db, kind: storage.kind }, output: { ok: out }, resources, schemaVersion: storage.kind === 'postgres' ? DB_SCHEMA_VERSION : null, version: APP_VERSION || null,
+  const h = healthReport({ database: { ok: db, kind: storage.kind }, output: { ok: out }, resources, disk: admissionCheck(EngineMod.admissionDirs()), schemaVersion: storage.kind === 'postgres' ? DB_SCHEMA_VERSION : null, version: APP_VERSION || null,
     providers: { claudeText: providerState({ installed: !!li.configured, auth: li.auth?.ok ?? null, limited: u.text5h >= u.budget5h }), codexText: providerState({ installed: !!ct.installed, auth: ct.ready ? true : ct.installed ? (ct.auth ?? null) : null }), codexImage: providerState({ installed: !!cx.installed, auth: cx.installed ? (cx.ready ? true : cx.auth ?? null) : null }), canva: providerState({ installed: true, auth: cv.connected ? true : cv.needsAuth ? false : null }) } });
   if (h.app.status === 'down') { send(res, 503, h); return null; }
   return h;

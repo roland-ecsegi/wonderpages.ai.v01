@@ -29,6 +29,7 @@ export class Client {
     if (name === 'get-generate-image-job') {
       const j = JOBS.get(a.jobId); if (!j) return { content: [{ type: 'text', text: JSON.stringify({ status: 'FAILED', failureMessage: 'unknown job' }) }] };
       if (j.polls++ < 1) return { content: [{ type: 'text', text: JSON.stringify({ status: 'IN_PROGRESS' }) }] };
+      if (st.canvaDelayMs) await new Promise(r => setTimeout(r, Math.min(5000, st.canvaDelayMs)));   // P8-T04: slow image generation (contention measurements)
       if (mode === 'jobfail') return { content: [{ type: 'text', text: JSON.stringify({ status: 'FAILED', failureMessage: 'generation failed' }) }] };
       const isLine = /colouring-book|coloring-book|black-and-white/i.test(j.prompt);
       if (isLine && st.lineFail) return { content: [{ type: 'text', text: JSON.stringify({ status: 'FAILED', failureMessage: 'line derivation failed' }) }] };   // P6-T03

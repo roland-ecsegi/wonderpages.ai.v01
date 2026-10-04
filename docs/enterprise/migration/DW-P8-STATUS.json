@@ -1,0 +1,167 @@
+{
+  "schema": "wonderpages.dw-status/1",
+  "at": "2026-10-04T14:41:25.876Z",
+  "status": "BLOCKED",
+  "original": {
+    "sha256": "7056e113bf5c84fdfc0f7b8f528713de6c8fe31e82b40fbab056544fe10e45e3",
+    "unchanged": true
+  },
+  "migration": {
+    "status": "committed",
+    "preserved": 6,
+    "changed": 0,
+    "new": [
+      "canon_typed",
+      "migration_report",
+      "versiuni fixate (migration)",
+      "raw/source"
+    ],
+    "findings": [
+      "DW01"
+    ],
+    "lost": 0,
+    "approvals": 0
+  },
+  "reconcile": [
+    {
+      "id": "DW01",
+      "options": [
+        "align_to_pages",
+        "keep"
+      ],
+      "recommended": "align_to_pages"
+    },
+    {
+      "id": "DW02",
+      "options": [
+        "script",
+        "plan"
+      ],
+      "recommended": "script"
+    }
+  ],
+  "pilotGate": [
+    {
+      "volume": 1,
+      "allowed": true
+    },
+    {
+      "volume": 2,
+      "allowed": false
+    },
+    {
+      "volume": 3,
+      "allowed": false
+    },
+    {
+      "volume": 4,
+      "allowed": false
+    },
+    {
+      "volume": 5,
+      "allowed": false
+    },
+    {
+      "volume": 6,
+      "allowed": false
+    }
+  ],
+  "content": [
+    {
+      "volume": 1,
+      "script": true,
+      "final": false,
+      "illustrations": 0
+    },
+    {
+      "volume": 2,
+      "script": false,
+      "final": false,
+      "illustrations": 0
+    },
+    {
+      "volume": 3,
+      "script": false,
+      "final": false,
+      "illustrations": 0
+    },
+    {
+      "volume": 4,
+      "script": false,
+      "final": false,
+      "illustrations": 0
+    },
+    {
+      "volume": 5,
+      "script": false,
+      "final": false,
+      "illustrations": 0
+    },
+    {
+      "volume": 6,
+      "script": false,
+      "final": false,
+      "illustrations": 0
+    }
+  ],
+  "blockers": [
+    {
+      "kind": "operator_decision",
+      "id": "DW01",
+      "what": "Premisa V1 spune că prietenii feresc pietricica de ploaie; paginile 8–9 îi adăpostesc pe prieteni",
+      "options": [
+        "align_to_pages",
+        "keep"
+      ],
+      "recommended": "align_to_pages"
+    },
+    {
+      "kind": "operator_decision",
+      "id": "DW02",
+      "what": "8 pagini au alt tip de întoarcere în manuscris decât în planul paginilor V1",
+      "options": [
+        "script",
+        "plan"
+      ],
+      "recommended": "script"
+    },
+    {
+      "kind": "operator_decision",
+      "id": "GATES",
+      "what": "Aprobarea canonului, a textului și a demo-ului (porțile de revizuire) — decizii creative ale operatorului."
+    },
+    {
+      "kind": "provider",
+      "id": "PROVIDER",
+      "what": "Un furnizor real verificat (Claude Pro / Canva Pro în aplicația operatorului) sau schimbul manual pentru ieșirile V1; în această sesiune nu există furnizor real verificat."
+    },
+    {
+      "kind": "operator_decision",
+      "id": "PILOT",
+      "what": "Acceptarea pilotului V1 deblochează V2–6 (P4-T05)."
+    },
+    {
+      "kind": "production",
+      "id": "V2-6",
+      "what": "Volumele 2–6 cu toate edițiile (EN+RO) și colorat, apoi QA de colecție și verificările de release."
+    }
+  ],
+  "acceptance": {
+    "contentComplete": false,
+    "editionsChosen": false,
+    "gatesPassed": false,
+    "operatorAccepted": false,
+    "printReadiness": "necunoscută (nicio probă fizică)"
+  },
+  "note": "Calea software fără furnizor și fără decizii rulează integral; producția reală DW (V1 pilot, V2–6, ediții, colorat) rămâne blocată de furnizor + deciziile operatorului. Ieșirile simulate nu sunt dovezi DW.",
+  "roundtrip": {
+    "status": "PASS",
+    "artifacts": 8,
+    "changed": [],
+    "rawSourceIdentical": true,
+    "newProjectId": true,
+    "approvalsAfterImport": 0,
+    "statusAfterImport": "ready",
+    "lost": 0
+  }
+}

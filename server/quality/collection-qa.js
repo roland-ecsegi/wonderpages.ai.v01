@@ -65,9 +65,10 @@ export function collectionQA({ bp, art, project, motifs = null }) {
     const shared = [...words(la)].filter(w => words(lb).has(w)), motifShare = shared.filter(w => [...declared].some(m => m.includes(w)));
     if (jaccard(la, lb) >= 0.5 && motifShare.length < shared.length * 0.7) add('ENDING_REPEAT', 'medium', `Volumele ${written[a] + 1} și ${written[b] + 1} se termină cu același final, reformulat.`, { volumes: [written[a] + 1, written[b] + 1] }, [{ artifact: bookKey(written[a]), path: 'pages[12].text', quote: la.slice(0, 120) }, { artifact: bookKey(written[b]), path: 'pages[12].text', quote: lb.slice(0, 120) }]);
   }
-  /* stale premises and turn-contract divergences (DW01/DW02 shapes) with their exact fields and pages */
+  /* stale premises and turn-contract divergences found by the legacy-migration adapter (finding ids DW01/DW02), worded
+     from the finding itself — the generic QA carries no project text (P8-T06) */
   for (const c of reconcileReport(art).conflicts) {
-    if (c.id === 'DW01') add('PROJECTION_MISMATCH', 'high', 'Volumul 1: premisa (3 copii) contrazice paginile 8–9 (adăpostul prietenilor). Reconcilierea este decizia ta.', { volumes: [1], pages: c.evidence.pages, artifacts: ['series', 'script_0'] }, c.fields.map(f => ({ artifact: f.path.split('.')[0], path: f.path, quote: f.current })));
+    if (c.id === 'DW01') add('PROJECTION_MISMATCH', 'high', `Volumul 1: ${c.title} (paginile ${c.evidence.pages.join('–')}). Reconcilierea este decizia ta.`, { volumes: [1], pages: c.evidence.pages, artifacts: ['series', 'script_0'] }, c.fields.map(f => ({ artifact: f.path.split('.')[0], path: f.path, quote: f.current })));
     if (c.id === 'DW02') add('TURN_CONTRACT_DIVERGENCE', 'medium', `Volumul 1: ${c.pages.length} pagini au alt tip de întoarcere în manuscris decât în plan.`, { volumes: [1], pages: c.pages.map(p => p.n), artifacts: ['series', 'script_0'] }, c.pages.map(p => ({ artifact: 'series', path: `volumes[0].page_plan[${p.n}].turn.type`, quote: `${p.plan} ≠ ${p.script}` })));
   }
   /* plan-level arc/diversity (P4-T02) */

@@ -12,6 +12,7 @@
  * every promoted item is recorded in the source's revocation index, so revoking/deleting the source removes ALL of it.
  * Imports can never touch the charter, skills, agents or active knowledge directly.
  */
+import { readFileSync } from 'node:fs';
 import { uid, now, bus } from '../repo.js';
 import { canonicalHash } from '../domain/canonical.js';
 
@@ -28,10 +29,13 @@ const INJECTION = [/\bignor(e|ă|a)\b.{0,30}\b(previous|prior|all|above|instruc|
 const NEG = /\b(never|not|no|without|nu|niciodata|fara|interzis)\b/, POS = /\b(always|must|should|mereu|trebuie|intotdeauna)\b/;
 const STOP = new Set('the a an and or of to in on for with is are be page pagina si sau de la in pe cu din un o ca nu never not always must should mereu trebuie fara niciodata'.split(' '));
 const words = s => new Set(norm(s).replace(/[^a-z0-9 ]/g, ' ').split(' ').filter(w => w.length > 3 && !STOP.has(w)));
-/** Canonical facts imported knowledge must not overwrite (reconciled canon). */
-export const CANON_FACTS = Object.freeze([
-  { id: 'DW-V1-p9', page: 9, label: 'Dinosaur World V1 p9: adăpostul prietenilor sub frunză (motivul reconciliat)', subject: /\b(page|pagina|p\.?)\s*9\b/i, contradicts: /\b(current|stream|curent|parau|puddle|baltoac|pushing the pebble|impinge pietricica)\b/i }
-]);
+/** Canonical facts imported knowledge must not overwrite (reconciled canon) — DATA (seeds/canon-facts.json), so the
+ *  generic scanner carries no project specifics (P8-T06 genericity). */
+export function loadCanonFacts(file = new URL('../../seeds/canon-facts.json', import.meta.url)) {
+  try { return Object.freeze(JSON.parse(readFileSync(file, 'utf8')).facts.map(f => Object.freeze({ id: f.id, page: f.page ?? null, label: f.label, subject: new RegExp(f.subject, 'i'), contradicts: new RegExp(f.contradicts, 'i') }))); }
+  catch { return Object.freeze([]); }
+}
+export const CANON_FACTS = loadCanonFacts();
 
 export function scanCandidate(c, { sourceFiles = {}, active = [], canon = CANON_FACTS } = {}) {
   const flags = [], text = String(c.text || ''), add = (code, detail) => flags.push({ code, detail });

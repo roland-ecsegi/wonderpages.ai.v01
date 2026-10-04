@@ -80,7 +80,7 @@ async function engineer(prompt, agent, label) {
 export function classifyIncident(it) {
   const t = `${it?.title || ''} ${it?.description || ''}`.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
   if (/\b(401|403|unauthori[sz]ed|token|autentific|login|reconect|quota|limita|rate limit|timeout|offline|conexiun|canva nu|codex nu|claude nu)\b/.test(t)) return { kind: 'infrastructure', route: 'code_or_settings', constraint: 'Problemă de infrastructură (autentificare/furnizor/rețea): nu se modifică poveștile, scenele sau prompturile de conținut.' };
-  if (/\b(pagina \d+|page \d+|ilustrati|textul|scena|personaj|tia|milo|rima|greseala de tipar|typo|colorat|culoare)\b/.test(t) && !/\b(buton|interfata|ecran|server|eroare|crash|export|pdf|aplicati)\b/.test(t)) return { kind: 'content', route: 'content_repair', constraint: 'Defect de conținut: se repară în carte (atelierul paginii / reparația țintită), nu în codul aplicației.' };
+  if (/\b(pagina \d+|page \d+|ilustrati|textul|scena|personaj|rima|greseala de tipar|typo|colorat|culoare)\b/.test(t) && !/\b(buton|interfata|ecran|server|eroare|crash|export|pdf|aplicati)\b/.test(t)) return { kind: 'content', route: 'content_repair', constraint: 'Defect de conținut: se repară în carte (atelierul paginii / reparația țintită), nu în codul aplicației.' };
   return { kind: 'code', route: 'isolated_patch', constraint: null };
 }
 const sha = b => crypto.createHash('sha256').update(b).digest('hex');

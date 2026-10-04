@@ -39,6 +39,8 @@ Linux (container cloud), Node v22.22.0, npm 10.9.4, PostgreSQL 16 (binare locale
 | DEV-008 | kids-sc v19 → v20: politica de calitate v2 (propusă), evaluarea textului final, recheck nativ, elementul „Evaluarea cărții”. | AC-P5-T02 (pragurile OUTPUT-13 doar pe versiunea țintă). | Tipurile/proiectele vechi rămân pe v1; +1 apel de evaluare per volum. |
 | DEV-009 | kids-sc v20 → v21: QA vizual raportează repere/deținători/elemente vizibile/focus pentru verificarea deterministă. | AC-P5-T03. | Verdictele vechi fără aceste câmpuri rămân valide (doar cele patru dimensiuni). |
 | DEV-010 | P6-T03: unitățile `line_weight` (zecimi de mm) și `min_region` (mm²) ale profilului de vârstă sunt interpretate și documentate (erau nedefinite). | AC-P6-T03 cere măsuri la dimensiunea de tipar. | Valorile și versiunea blueprint-ului neschimbate; `git revert`. |
+| DEV-011 | P8-T04: backupurile devin incrementale (legături fizice pentru fișierele neschimbate, copie completă săptămânală, `WP_SNAPSHOT_FULL=1`). | Lacătul de backup bloca mutațiile zeci de secunde, liniar cu datele (măsurat). | Formatul `.wbackup` v1 și retenția de 14 neschimbate; revenire: `WP_SNAPSHOT_FULL=1` / `git revert`. |
+| DEV-012 | Faptul canonic DW-V1-p9 mutat din cod în `seeds/canon-facts.json`; mesajele QA de migrare și clasificatorul atelierului fără text DW. | P8-T06: aplicația generică nu conține specificul unui proiect. | Comportament identic (test 70); revenire `git revert`. |
 
 ## Starea taskurilor
 
@@ -87,11 +89,11 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | P7-T06 | DONE | (acest commit) | TEST-P7-T06 5/5; RS0 340/340 local + 340/340 PG; D-C21 FIXED | Acțiunile lui Dali sunt propuneri validate de server (allowlist, intenție, rută, revizie), aplicate doar la confirmare; inspectorul memoriei rolului; PHASE 7 închisă |
 | P8-T01 | DONE | a6c3a67 | TEST-P8-T01 5/5; poarta PASS; RS0 349/349 local + PG | poarta de release, RELEASE-EVIDENCE, /api/health, CI manual |
 | P8-T02 | DONE | a6c3a67 | TEST-P8-T02 4/4; drill 12/12 local + PG (300 MB) | drill de recuperare, raport de recuperare, normalizare fără autoproducție, RPO/RTO măsurate |
-| P8-T03 | DONE | (acest commit) | TEST-P8-T03 5/5; poarta PASS (+licenses); RS0 354/354 local + PG | actualizare etapizată cu revenire, ZIP reproductibil, licențe/OFL, căi lungi, statut comercial pe destinație |
-| P8-T04 | PENDING | | | |
-| P8-T05 | PENDING | | | |
-| P8-T06 | PENDING | | | |
-| P8-T07 | PENDING | | | |
+| P8-T03 | DONE | 6e17ce6 | TEST-P8-T03 5/5; poarta PASS (+licenses); RS0 354/354 local + PG | actualizare etapizată cu revenire, ZIP reproductibil, licențe/OFL, căi lungi, statut comercial pe destinație |
+| P8-T04 | DONE | (acest commit) | TEST-P8-T04 4/4; benchmark local+PG 1/10/100 + imagini reale | ținte API atinse; admitere pe disc; backup incremental (remediere lacăt) |
+| P8-T05 | BLOCKED | (acest commit) | TEST-P8-T05 (software) 1/1 | migrare/reconciliere/poarta pilotului verificate pe copie; blocat de furnizor real + deciziile operatorului |
+| P8-T06 | PARTIAL | (acest commit) | TEST-P8-T06 (software) 3/3 | dus-întors fără pierderi + genericitate; înainte/după și piloții reali depind de P8-T05 |
+| P8-T07 | DONE | (acest commit) | TEST-P8-T07 6/6 (browser, 4 dimensiuni) | poarta UX/accesibilitate + registrul final de pregătire |
 
 ## Rulări de teste
 
@@ -146,6 +148,7 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | 2026-10-02 | Închidere P7: baseline-report --with-tests --with-pg | 15 PASS · 0 FAIL · 3 NOT_RUN; 340/340 local + 340/340 PostgreSQL; toate defectele FIXED (D-C26 MITIGATED) | — |
 | 2026-10-04 | RS0 + TEST-P8-T01/T02 + poarta de release completă | build/contract/resources/secrets PASS; 349/349 PASS local (PDF real) + 349/349 PostgreSQL | — |
 | 2026-10-04 | RS0 + TEST-P8-T03 + poarta de release | build/contract/resources/secrets/licenses PASS; 354/354 PASS local (PDF real) + 354/354 PostgreSQL | — |
+| 2026-10-04 | Poarta de release + TEST-P8-T04…T07 | build/contract/resources/secrets/licenses PASS; 367/367 local (PDF real); grupul 8x 35/35 PostgreSQL după corecturile de izolare a testelor 83–85 | rularea completă de ieșire (local + PG) în curs |
 
 ## Probleme deschise
 
@@ -161,6 +164,6 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 
 ## Checkpoint
 
-- Ultimul task închis: P8-T03
-- Următorul task: **P8-T04**
+- Ultimul task închis: P8-T07
+- Următorul task: **închiderea fazei 8 (rularea de ieșire în curs) — apoi aprobările umane din registrul final**
 - Cum se reia: `npm ci && npm run build && BROWSER_PATH=/opt/pw-browsers/chromium npm test`; citește tabelul de mai sus și `docs/enterprise/records/`.
