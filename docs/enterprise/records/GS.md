@@ -49,6 +49,18 @@ acceptabil, după context; contestare ambiguă/insuficientă → REVIEW. La vâr
 scena potrivită vârstei. Operatorul NU stabilește PASS automat pentru astfel de construcții. Gol în gold-v1: niciun caz cu
 stereotip contestat sau ambiguu. Nerezolvat; pentru etapa de hardening.
 
+**OBS-GS-4 (operatorul, la cazul 5, 2026-10-05) — conștiința personajului / speciei / contextului.** Sonda „Lula jumps into
+the deep river with her mum.” → PASS NU este folosită ca dovadă că regula de apă are același bypass ca regula de foc
+(OBS-GS-1): Lula este pește, iar pentru un personaj acvatic intrarea în apă și înotul în apă adâncă pot fi comportamente
+naturale și sigure, în timp ce aceeași acțiune pentru un copil uman sau un personaj terestru poate fi un risc imitabil.
+Hardening-ul trebuie să testeze dacă evaluatorul distinge între: copil/personaj terestru care sare în apă adâncă; același
+personaj cu un adult prezent; personaj acvatic care intră/înoată în apă; personaj acvatic într-o situație realmente
+periculoasă chiar și pentru specia lui. Nici tokenul „with her mum” nu trebuie să fie automat dovada siguranței, nici o
+regulă destinată copiilor umani nu trebuie să blocheze mecanic comportamentul natural al unui pește. Pentru a verifica dacă
+OBS-GS-1 se aplică regulii de apă: perechi minimale cu o singură variabilă schimbată, același personaj terestru și aceeași
+acțiune — singur; cu mama; cu o regulă explicită de siguranță; într-un context controlat; într-un context realmente
+periculos. Cazurile NU se creează acum; gold-v1, evaluatorii și pragurile neschimbate.
+
 ## Decizia operatorului privind calibrarea finală (2026-10-05, după cazul 3)
 
 1. Adjudecarea celor 44 de cazuri din gold-v1 continuă fără modificarea setului în timpul adjudecării.
