@@ -1134,3 +1134,68 @@ caz de aur): 17 × 9 + **T08 = 6,9** → **v1 REJECT cu `reasons: []`** (v2: REJ
 (respingere doar prin medie, `reasons: []`): **v1 rejection explainability is incomplete for at least two distinct rejection
 mechanisms: aggregate-score failure and critical-criterion failure** — fără generalizare la toate modurile de eșec fără probe. Aceeași
 familie; fără observație nouă.
+
+*Cazul 43 (`quality-dinosaurs-7-8-English-07`, intrarea 43) — al patrulea negativ de calitate (operatorul, 2026-10-05).* Răspunsul
+criticului: **nota 7 la toate cele 18 criterii** (inclusiv criticele T01, T07, T08), aceeași frază ca dovadă, nicio problemă — nu o
+variantă cu o singură valoare (toate cele 18 note diferă de baseline-ul 37). Confirmat negativ / neacceptabil; acord structurat pe
+politica-țintă v2: verdict DA, raționament **INCOMPLETE** (intenționat). Rezultate executate (inclusiv evaluarea comună v1/v2: scor 7,
+media nu trece pragul 8, nicio criterie critică eșuată la pragul 7 al rubricii, „nu trece”), separat:
+
+| | v1 (activă) | v2 (politica-țintă) |
+|---|---|---|
+| Media exactă / afișată | 7,0 / 7,0 → **eșuează** (< 8) | 7,0 / 7,0 → **eșuează** (< 8) |
+| Criterii critice | T01/T07/T08 = 7 ≥ 7 — trec (exact la prag) | T01/T08 = 7 < 8 → **eșuează (T01, T08)** |
+| Minimul pe criteriu | — | 7 ≥ 7 — trece (exact la prag) |
+| Existența dovezilor | doar consemnată | trece |
+| Rezultat | **REJECT** | **REJECT** |
+| Condiții de respingere active | media 7 < 8 | media 7 < 8 **și** T01/T08 < 8 |
+| Motive raportate | **`[]`** | „Criterii critice sub 8: T01, T08.” |
+| Motiv omis | media (toate) | **media 7,0 < 8** |
+| Gold agreement | **DA** | **DA** |
+| Decision implementation correctness | **DA** | **DA** |
+| Explicabilitate / raționament | **INCOMPLETĂ** (motiv lipsă) | **INCOMPLETĂ** (motiv parțial) |
+
+*Raționament v2 = INCOMPLETE:* motivul raportat e adevărat și suficient singur pentru respingere (deci nu NO), dar explicația nu
+reprezintă complet condițiile care au determinat verdictul (deci nu YES). Regula de raționament, precizată de operator pentru consecvență
+(fără relaxare la calitate): **YES** — toate cauzele material relevante și independente care determină verdictul sunt reprezentate
+corect în raționament/explicație, în limita proprietății testate; **INCOMPLETE** — verdict corect și raționament prezent corect, dar una
+sau mai multe cauze material relevante lipsesc sau nu sunt reprezentate suficient; **NO** — verdictul coincide, dar explicația e
+greșită, accidentală sau mecanismul invocat nu justifică rezultatul. **Decision implementation correctness ≠ explainability
+completeness:** v2 verifică media (DA) și T01/T08 (DA), calculează corect verdictul (DA), dar nu explică toate condițiile eșuate (NU) —
+defect al stratului de raportare a motivelor, nu „implementation failed” pentru întreaga poartă.
+*Decizia editorială a operatorului:* **un răspuns uniform de 7/10 pe toate cele 18 criterii nu trebuie să primească acceptare
+automată**; politica editorială curentă: **overall quality mean < 8 → REJECT / repair / re-evaluate** (7,0 nu e o situație marginală).
+Pragul pe medie are altă funcție decât minimele pe criterii: minimele protejează împotriva unui defect sever local (cazul 41: *one
+severe weakness hidden by a high mean*); media protejează împotriva *many individually non-catastrophic weaknesses accumulating into
+globally mediocre quality* (cazul 43: *no criterion below the floor, but the entire assessment is uniformly too weak*) — ambele sunt
+justificate. Proprietatea principală a cazului: **aggregate quality floor prevents uniformly mediocre assessments from passing even
+when individual floors are not violated.** Policy validity: operator-adjudicated editorial policy ≠ empirically optimized threshold —
+cazul 43 nu demonstrează că exact 8,000… e frontiera optimă, iar semantica numerică exactă (exact vs rotunjit) nu e încă reconciliată
+(OBS-GS-19). Primul negativ de calitate în care v1 și v2 sunt de acord (nu discriminează politicile, spre deosebire de 40–42).
+*Ce se poate afirma:* operator adjudication confirms that a uniformly 7/10 quality assessment should not receive automatic acceptance;
+both v1 and v2 reject case 43; v2’s verdict is correct but its reported explanation is incomplete because it omits the failed
+aggregate-mean condition; v1’s verdict is correct but provides no rejection reason. NU: underlying content was validated as mediocre;
+NU: mean = 8 empirically optimized; NU: quality v2 validated. OBS-GS-18 rămâne: aceeași frază nu justifică 18 note de 7; cazul testează
+comportamentul porții asupra evaluării furnizate; Layer 3/4 rămân nevalidate.
+
+*Extensie OBS-GS-19 (operatorul, la cazul 43, 2026-10-05) — dovadă directă pe un caz de aur.* Cazul de aur 43 demonstrează direct (nu
+doar prin sonde adversariale): **v1** — REJECT exclusiv prin media agregată → `reasons: []` (**missing rejection explanation**); **v2** —
+REJECT prin media agregată și prin pragul critic, dar `reasons` raportează numai pragul critic (**partial rejection explanation**).
+Direcție pentru hardening (NU se implementează; denumirile NU sunt contract de API): **fiecare condiție de eșec activă care contribuie
+independent la verdict produce un cod de motiv / un motiv pentru operator** — conceptual, pentru cazul 43 v2: echivalentul
+`QUALITY_MEAN_BELOW_THRESHOLD` și `QUALITY_CRITICAL_BELOW_THRESHOLD: T01,T08`. Relevanță pentru Dali/operator: dacă se spune doar „T01
+și T08 sunt sub 8”, fără „și scorul global e 7,0 față de minimum 8”, operatorul primește o imagine incompletă; după repararea T01/T08
+evaluarea ar putea fi respinsă în continuare din cauza mediei — **explanation completeness are impact direct asupra actionability of
+repair** (Dali nu se modifică acum).
+
+*Extensie OBS-GS-20 (operatorul, la cazul 43, 2026-10-05).* **Uniform 7/10 is insufficient for automatic acceptance; aggregate mean
+floor remains justified as a distinct non-compensatory quality mechanism.** Limită: **case 43 does not empirically establish 8.0 as the
+optimal universal boundary.** Legătură cu OBS-GS-19: pragul operațional exact se reconciliază cu problema exactMean vs roundedMean;
+recomandarea arhitecturală rămâne *decision value = exact/raw metric, display value = rounded metric* (codul și contractul nu se
+modifică acum). Pragul mediei (comun v1 și v2) nu depinde de pragul propus v2, deci circularitatea e mai slabă decât la 40–42, dar
+eticheta tot nu înlocuiește adjudecarea editorială independentă (dată aici de operator).
+
+*Extensie OBS-GS-12 (operatorul, la cazul 43, 2026-10-05).* Clasificare: **distinct score-pattern control — uniform mediocre
+aggregate-quality failure.** Limite: același conținut sintetic ca toate cazurile de calitate; aceeași structură generică a dovezilor;
+tipar de note distinct; NU dovadă independentă despre calitatea conținutului; NU caz de discriminare v1/v2. **Score-pattern independence
+≠ underlying-content independence** — axele rămân separate.
