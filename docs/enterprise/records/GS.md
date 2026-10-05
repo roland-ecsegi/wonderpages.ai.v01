@@ -590,3 +590,47 @@ setul v2 se separă: **STIMULUS PROPERTY** (ce proprietăți are efectiv textul)
 poate afirma legitim din dovezi). Previne afirmații de tipul „traducerea e fidelă, deci evaluatorul a validat fidelitatea”. NU se
 implementează acum nicio schemă nouă și structura gold-v1 nu se schimbă; principiul rămâne pentru hardening/setul v2. Contabilizarea
 raționamentului ține separat NO și INCOMPLETE (raportate uneori împreună ca „problematic reasoning”, fără a le contopi semantic).
+
+*Cazul 31 (`localization-space-5-6-Romanian-06`, intrarea 31) — held-out, known-calque rule family (operatorul, 2026-10-05).*
+„Nova had a good time.” → „Nova a avut un timp bun.”; rezultat executat: exact TR_CALQUE (regula din catalog `(au|a|am|ai|ați) avut
+un timp bun`), numele Nova păstrat, fără coduri suplimentare; confirmat; acord de verdict DA; acord de raționament YES (defect real →
+regula relevantă îl detectează → reason code corect; română naturală: „Nova s-a distrat”). Nu e exclus: nu e duplicat exact al cazului 28
+(stimul, personaj, formă verbală, temă și hash diferite). Demonstrează: **known catalog rule works on a new stimulus / grammatical
+variant / held-out theme**; NU demonstrează: **generalization to an unseen calque**.
+
+*Extensie OBS-GS-12 (operatorul, la cazul 31, 2026-10-05) — held-out by theme ≠ held-out by tested property.* Cazul 31 (set rezervat)
+și cazul 28 (calibrare: „Lula and the crab had a good time.” → „Lula și crabul au avut un timp bun.”) exercită același idiom („had a
+good time”) și aceeași familie de regulă din catalog. Trei niveluri de independență, de păstrat pentru hardening / setul v2 (fără
+schimbarea schemei acum): **STIMULUS INDEPENDENCE** (textul concret e diferit); **DOMAIN/THEME INDEPENDENCE** (tema lipsește din
+calibrare); **PROPERTY/PATTERN INDEPENDENCE** (fenomenul sau tiparul concret nu e deja reprezentat în calibrare). Cazul 31: stimul — DA;
+temă — DA („space” lipsește din calibrarea de localizare: dinosaurs, dinosaurs, sea, forest, forest); familie de proprietate — NU; calc
+nevăzut — NU. Principiu: **a held-out split is meaningful only relative to the capability/generalization claim being evaluated** —
+pentru „generalization to a new theme” cazul 31 oferă ceva dovadă; pentru „known rule robustness across grammatical variants” oferă
+dovadă relevantă; pentru „generalization to unseen calques” NU oferă dovadă. Aceeași observație poate fi held-out pe o axă și familiară
+pe alta. Formulare de raport: **„Held-out localization: 1/1 verdict agreement on one independent space-theme stimulus exercising a
+previously represented known-calque rule family. No evidence of unseen-calque generalization from this held-out case.”** — NU „1/1
+held-out localization generalization”.
+
+**Închiderea categoriei de localizare din gold-v1 (operatorul, la cazul 31, 2026-10-05).** 6/6 cazuri brute adjudecate: 6 stimuli
+valizi, 0 excluși, toate verdictele în acord cu evaluatorul.
+- *Calibrare (5):* cazul 26 — control pozitiv; nicio încălcare a regulilor de localizare implementate; fidelitatea semantică
+  neverificată efectiv; raționament INCOMPLETE. Cazul 27 — negativ; TR_CALQUE; expresie din catalog „face sens”; raționament YES.
+  Cazul 28 — negativ; TR_CALQUE; expresie din catalog „au avut un timp bun”; raționament YES. Cazul 29 — negativ; TR_UNTRANSLATED;
+  cuvânt funcțional englezesc din listă „the”; raționament YES; probele arată eșecuri de precision și de recall în afara stimulului.
+  Cazul 30 — control pozitiv; nicio încălcare a regulilor implementate; fidelitatea semantică neverificată efectiv; raționament INCOMPLETE.
+- *Set rezervat (1):* cazul 31 — negativ; TR_CALQUE; stimul nou + temă nouă; aceeași familie idiom/regulă ca la cazul 28; raționament YES.
+
+Se poate afirma: the current evaluator agrees with all six valid gold-v1 localization labels; it correctly detects the represented
+known-calque cases and the represented listed untranslated-token case; the held-out space stimulus is correctly classified using a
+known calque rule family. NU se poate afirma: localization evaluator validated; semantic fidelity validated; Romanian naturalness
+validated; untranslated-English detection validated generally; unseen-calque generalization validated; held-out localization
+generalization validated broadly.
+
+*Lecție metodologică (legată de OBS-GS-12, OBS-GS-13, OBS-GS-14; fără OBS nouă):* **6/6 Gold Set verdict agreement coexistă cu false
+positives și false negatives executate în afara celor șase stimuli** — fals pozitiv „are” (OBS-GS-14); fals negative „berries”,
+„finds” (OBS-GS-13, secundar OBS-GS-7); mutații semantice nedetectate (OBS-GS-13). Nu e o contradicție: benchmarkul actual nu acoperă
+suficient spațiul comportamental al evaluatorului — unul dintre motivele principale pentru care gold-v1 nu se folosește singur pentru
+acceptarea finală. Direcții conceptuale pentru setul v2 (nu se construiesc și nu se etichetează acum), cu split-ul rezervat definit și
+după proprietatea a cărei generalizare se afirmă, fără contaminare relevantă pentru afirmație: calc cunoscut în calibrare; variantă
+gramaticală a unui calc cunoscut; calc nevăzut în setul rezervat; traducere naturală dar neliterală; mutație semantică; omisiune;
+adăugare nesusținută; token netradus cunoscut; token de conținut netradus nevăzut; token comun/ambiguu între limbi; controale pozitive curate.
