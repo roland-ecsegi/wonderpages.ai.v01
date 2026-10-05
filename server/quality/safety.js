@@ -45,8 +45,8 @@ const CANON_AQUATIC = /(fish|trout|salmon|shark|whale|dolphin|octopus|crab|seal|
 /* ---------- imitable hazards (category dangerous_imitation) ---------- */
 const HAZARDS = [
   { id: 'fire-play', verdict: 'BLOCK', fix: 'Un copil poate imita: arată regula de siguranță sau scoate momentul.',
-    find: c => { let a = findAction(c, { en: ['play'], ro: ['joac', 'juca', 'jucat', 'jucam', 'jucau'] }), o = a && after(c, a.index, R('fire|matches|match|a lighter|lighter|focul|foc|chibrituri|chibritul|chibrit|bricheta|brichete')); if (o) return { a, o };
-      a = findAction(c, { en: ['light', 'strike'], ro: ['aprind', 'aprins'] }); o = a && after(c, a.index, R('a match|the match|matches|match|chibrit|chibrituri|chibritul')); if (o) return { a, o };
+    find: c => { let a = findAction(c, { en: ['play'], ro: ['joac', 'juca', 'jucat', 'jucam', 'jucau'] }), o = a && after(c, a.index, R('fire|matches|match|a lighter|lighter|focul|foc|chibrit\\p{L}*|brichet\\p{L}*')); if (o) return { a, o };
+      a = findAction(c, { en: ['light', 'strike'], ro: ['aprind', 'aprins'] }); o = a && after(c, a.index, R('a match|the match|matches|match|chibrit\\p{L}*')); if (o) return { a, o };
       const b = fold(c).match(R('bricheta|brichete')); return b ? { a: { index: b.index, word: b[0] }, o: { index: b.index, word: b[0] } } : null; } },
   { id: 'heights-window', verdict: 'BLOCK', fix: 'Fără cățărat pe fereastră/balcon/aragaz fără un adult și fără regula de siguranță.',
     find: c => { const a = findAction(c, { en: ['climb'], ro: ['urc', 'catar', 'cater'] }), o = a && after(c, a.index, R('window sill|window|sill|balcony|railing|stove|pervaz|pervazul|geam|geamul|fereastra|ferestre|balustrada|balustradei|balcon|balconului|aragaz|aragazul')); return o ? { a, o } : null; } },
@@ -101,6 +101,8 @@ export function textSafety(text, { age = null, canon = null } = {}) {
         const hit = h.find(c, { sentence: sent }); if (!hit) continue;
         const base = { rule: h.id, category: 'dangerous_imitation', kind: 'safety', layer: 'structured', match: hit.o.word || hit.a.word, fix: h.fix };
         if (negatedBefore(c, hit.a.index)) { mitigated.push({ rule: h.id, outcome: 'negated', reasonCode: 'SAFETY_HAZARD_NEGATED', quote: c }); continue; }
+        const gerund = /^(?:\p{L}+ing|to \p{L}+)\b/iu.test(fold(c).slice(Math.max(0, hit.a.index - 3)).trim()) && hit.a.index <= 3 || /(?<![\p{L}])to\s*$/.test(fold(c).slice(0, hit.a.index));
+        if (gerund && WARNING.test(fold(c))) { mitigated.push({ rule: h.id, outcome: 'warning_statement', reasonCode: 'SAFETY_WARNING_STATEMENT', quote: c }); continue; }
         const prev = cls.slice(0, ci).join(' '), despite = DESPITE.test(fold(c)) || (PROHIBITION.test(fold(prev)) && !negatedBefore(c, hit.a.index));
         if (h.water) {   // character capability (OBS-GS-4): natural water behaviour of an aquatic character is not an imitation risk
           const aquatic = AQUATIC.test(fs) || [...canonAquatic].some(n => fs.includes(n));

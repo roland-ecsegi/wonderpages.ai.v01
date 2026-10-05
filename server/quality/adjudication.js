@@ -21,6 +21,8 @@ export { caseHash, goldHash, applyAdjudications };
 
 export const ADJ_SCHEMA = 'wonderpages.gold-adjudication/1';
 export const SET_SCHEMA = 'wonderpages.gold-set/1';
+/** gold-set/2 adds per-case metadata (property, labelSource, roles, independence, provenance) and a sealed held-out */
+export const SET_SCHEMAS = Object.freeze([SET_SCHEMA, 'wonderpages.gold-set/2']);
 export const DECISIONS = Object.freeze(['confirm', 'correct', 'exclude']);
 /** a case-level status in a set file that means "already adjudicated by the operator" (e.g. in a later set version) */
 export const CONFIRMED_STATUSES = Object.freeze(['operator_confirmed', 'operator_corrected']);
@@ -36,7 +38,7 @@ const entryHash = e => { const { hash, ...rest } = e; return canonicalHash(rest)
 /** The active set of a directory: the highest-version file with the gold-set schema (never a fixed name). */
 export function loadActiveGold(dir) {
   const sets = fs.readdirSync(dir).filter(f => f.endsWith('.json')).map(f => { try { return { file: path.join(dir, f), gold: JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8')) }; } catch { return null; } })
-    .filter(x => x?.gold?.manifest?.schema === SET_SCHEMA && Array.isArray(x.gold.cases));
+    .filter(x => SET_SCHEMAS.includes(x?.gold?.manifest?.schema) && Array.isArray(x.gold.cases));
   if (!sets.length) throw { status: 404, message: 'Niciun set de aur în directorul de evaluare.' };
   return sets.sort((a, b) => (b.gold.manifest.version - a.gold.manifest.version) || String(a.gold.manifest.id).localeCompare(b.gold.manifest.id))[0];
 }
@@ -79,6 +81,7 @@ function entryErrors(e, c) {
   const errors = [];
   if (!DECISIONS.includes(e.decision)) errors.push({ code: 'DECISION_UNKNOWN', message: `Decizie necunoscută: ${e.decision}.` });
   if (e.decision === 'correct') errors.push(...correctionErrors(c, e.result));
+  if (e.decision === 'confirm' && c.label == null) errors.push({ code: 'LABEL_REQUIRED', message: 'O confirmare cere o etichetă propusă.' });
   if (e.decision === 'confirm' && (e.result?.label !== c.label || canonicalHash(e.result?.expected ?? null) !== canonicalHash(c.expected))) errors.push({ code: 'CONFIRM_RESULT', message: 'O confirmare păstrează exact eticheta propusă.' });
   if (e.decision === 'exclude' && e.result !== null) errors.push({ code: 'EXCLUDE_RESULT', message: 'O excludere nu are etichetă rezultată.' });
   if (['correct', 'exclude'].includes(e.decision) && String(e.note || '').trim().length < 3) errors.push({ code: 'NOTE_REQUIRED', message: 'Corectura și excluderea cer o notă a operatorului.' });
@@ -98,6 +101,7 @@ export function makeEntry({ gold, entries, caseId, decision, result = undefined,
   const c = gold.cases.find(x => x.id === caseId); if (!c) throw { status: 404, code: 'CASE_UNKNOWN', message: `Cazul „${caseId}” nu există în ${gold.manifest.id}.` };
   const chain = verifyChain(entries); if (!chain.ok) throw { status: 409, code: 'CHAIN_BROKEN', message: 'Jurnalul existent nu trece verificarea; nu se adaugă nimic.', errors: chain.errors };
   if (decision === 'confirm' && result !== undefined) throw { status: 400, code: 'CONFIRM_RESULT', message: 'O confirmare nu primește altă etichetă.' };
+  if (decision === 'confirm' && c.label == null) throw { status: 400, code: 'LABEL_REQUIRED', message: 'Cazul nu are etichetă propusă (politică nedecisă): operatorul atribuie eticheta cu „correct”.' };
   if (decision === 'exclude' && result !== undefined && result !== null) throw { status: 400, code: 'EXCLUDE_RESULT', message: 'O excludere nu primește etichetă.' };
   const prevForCase = [...entries].reverse().find(e => e.caseId === caseId) || null;
   const e = { schema: ADJ_SCHEMA, seq: entries.length + 1, set: setRef(gold), caseId, caseHash: caseHash(c), proposed: { label: c.label, expected: c.expected, by: c.adjudication?.by || null }, system: systemVerdict(c, { policy }),
@@ -144,17 +148,21 @@ export function adjudicationState(gold, log) {
  * complete and consistent adjudication, both reports on the adjudicated set version, produced after the last
  * adjudication change and on the current set content.
  */
-export function acceptanceCheck({ gold, state, calibration, holdout, note }) {
+export function acceptanceCheck({ gold, state, calibration, holdout, note, validation = null }) {
   const reasons = [], add = (code, message) => reasons.push({ code, message });
+
   if (state.inconsistencies.length) add('ADJUDICATION_INCONSISTENT', `Jurnalul adjudecărilor are ${state.inconsistencies.length} probleme (${[...new Set(state.inconsistencies.map(i => i.code))].join(', ')}).`);
   if (state.pending.length) add('ADJUDICATION_INCOMPLETE', `${state.pending.length} din ${state.counts.required} cazuri nu sunt adjudecate.`);
   for (const [name, r, split] of [['calibrare', calibration, 'calibration'], ['set rezervat', holdout, 'holdout']]) {
     if (!r || r.split !== split) { add('REPORT_MISSING', `Lipsește raportul pe ${name}.`); continue; }
     if (r.dataset?.id !== gold.manifest.id || r.dataset?.version !== gold.manifest.version) add('REPORT_SET_MISMATCH', `Raportul pe ${name} este pentru ${r.dataset?.id} v${r.dataset?.version}, nu pentru setul adjudecat.`);
     else if (r.dataset?.goldHash !== state.set.goldHash) add('REPORT_STALE_SET', `Setul s-a schimbat după raportul pe ${name}.`);
+    if (r.versions?.evaluator !== EVALUATOR_VERSION) add('REPORT_STALE_EVALUATOR', `Raportul pe ${name} folosește evaluatorul v${r.versions?.evaluator}; evaluatorul curent este v${EVALUATOR_VERSION}.`);
     if (!r.adjudicationState || r.adjudicationState.hash !== state.hash) add('REPORT_STALE_ADJUDICATION', `Adjudecările s-au schimbat după raportul pe ${name} (sau raportul precede adjudecarea completă).`);
     else if (r.adjudicationState.complete !== true) add('REPORT_BEFORE_COMPLETE_ADJUDICATION', `Raportul pe ${name} a fost generat înaintea adjudecării complete.`);
   }
   if (String(note || '').trim().length < 10) add('NOTE_REQUIRED', 'Scrie ce ai verificat la acceptare.');
+  /* §21: adjudication complete ≠ validation complete ≠ acceptance — acceptance needs a COMPLETE validation state */
+  if (!validation || validation.complete !== true) add('VALIDATION_INCOMPLETE', `Validarea setului nu este completă${validation ? ` (${validation.failing.join(', ')})` : ''}: acceptarea nu este posibilă doar pentru că toate cazurile au fost adjudecate.`);
   return { ok: !reasons.length, reasons };
 }

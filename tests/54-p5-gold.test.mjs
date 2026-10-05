@@ -78,7 +78,7 @@ test('P5-T05 Dinosaur World în subsetul de bază: textul V1 trece aceiași eval
 });
 
 test('P5-T05 API: rulare, rapoarte, comparație și starea calibrării (fără acceptare: propus)', async () => {
-  const g = await api('GET', 'evaluation/gold'); assert.equal(g.status, 200); assert.equal(g.body.manifest.id, 'gold-v1'); assert.ok(g.body.counts.holdout >= 1);
+  const g = await api('GET', 'evaluation/gold'); assert.equal(g.status, 200); assert.equal(g.body.manifest.id, 'gold-v2', 'setul activ = versiunea cea mai mare (gold-v1 rămâne benchmarkul înghețat „Before”)'); assert.ok(g.body.counts.holdout >= 1);
   const a = (await api('POST', 'evaluation/run', { split: 'calibration', policy: 1 })).body, b = (await api('POST', 'evaluation/run', { split: 'calibration', policy: 2 })).body;
   const cmp = await api('POST', 'evaluation/compare', { a: a.id, b: b.id }); assert.equal(cmp.status, 200); assert.deepEqual(cmp.body.changedVersions, ['qualityPolicy']);
   const st = (await api('GET', 'evaluation/status')).body; assert.equal(st.thresholdsStatus, 'proposed'); assert.equal(st.maturityClaimsAllowed, false);

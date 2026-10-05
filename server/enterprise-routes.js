@@ -256,6 +256,7 @@ export function registerEnterpriseRoutes({ on, json, need, localOnly, repo, stor
   const EV = createEvaluationService({ goldDir: process.env.WP_GOLD_DIR || path.join(ROOT, 'evaluation', 'gold'), storage, now });
   on('GET', '/api/evaluation/gold', async () => EV.gold());
   on('GET', '/api/evaluation/adjudication', async () => EV.adjudication());   // read-only: decisions are recorded with scripts/enterprise/gold-adjudicate.mjs
+  on('GET', '/api/evaluation/validation', async () => EV.validation());   // §21: computed (adjudication ≠ validation ≠ acceptance)
   on('POST', '/api/evaluation/run', async (_, req) => { localOnly(req); const b = await json(req); return EV.run({ split: b.split, policy: b.policy }); });
   on('GET', '/api/evaluation/reports', async () => ({ reports: (await EV.reports()).map(r => ({ id: r.id, split: r.split, versions: r.versions, dataset: r.dataset, at: r.at, overall: r.overall, adjudicationState: r.adjudicationState || null })) }));
   on('POST', '/api/evaluation/compare', async (_, req) => { const b = await json(req), all = await EV.reports(), a = all.find(r => r.id === b.a), c = all.find(r => r.id === b.b); if (!a || !c) throw { status: 404, message: 'Raport inexistent.' }; return compareReports(a, c); });

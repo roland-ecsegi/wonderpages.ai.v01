@@ -12,6 +12,7 @@ import { LocalStorage } from '../server/storage/local.js';
 import { loadActiveGold, logFileFor, readLog, verifyChain, adjudicationState, makeEntry, appendEntry, acceptanceCheck, caseHash } from '../server/quality/adjudication.js';
 import { runEvaluation, calibrationStatus, compareReports } from '../server/quality/evaluation.js';
 import { createEvaluationService } from '../server/quality/evaluation-service.js';
+import { validationState } from '../server/quality/validation.js';
 import { adjudicate } from '../scripts/enterprise/gold-adjudicate.mjs';
 
 const REAL_DIR = path.join(ROOT, 'evaluation/gold');
@@ -24,6 +25,8 @@ function fixtureDir({ id = 'gold-test', version = 1 } = {}) {
   const pick = [REAL.cases.find(c => c.kind === 'safety' && c.label === 'positive' && c.split === 'calibration'), REAL.cases.find(c => c.kind === 'safety' && c.label === 'negative' && c.split === 'calibration'),
     REAL.cases.find(c => c.kind === 'quality' && c.label === 'negative' && c.split === 'calibration'), REAL.cases.find(c => c.split === 'holdout' && c.kind === 'safety')];
   const gold = { manifest: { ...structuredClone(REAL.manifest), id, version, caseCount: pick.length }, cases: structuredClone(pick) };
+  /* §21: a set declares what its validation requires; the fixture has no sealed held-out and no coverage minima */
+  delete gold.manifest.holdoutSeal; gold.manifest.validationRequirements = { adjudicationComplete: true, noUnlabeledAfterAdjudication: true, integrityClean: true, regressionRegistryPasses: true, holdoutEvaluatedOnCurrentEvaluator: true };
   fs.writeFileSync(path.join(dir, `${id}.json`), JSON.stringify(gold));
   return { dir, gold, log: logFileFor(dir, gold) };
 }
@@ -76,7 +79,10 @@ test('ADJ acceptare: refuzată cu cazuri neadjudecate, jurnal inconsecvent, rapo
   const early = reportsFor(F, st);   // reports generated BEFORE the adjudication is complete
   adjudicateAll(F); st = adjudicationState(F.gold, readLog(F.log)); assert.equal(st.complete, true);
   let chk = acceptanceCheck({ gold: F.gold, state: st, ...early, note }); assert.ok(chk.reasons.some(r => r.code === 'REPORT_STALE_ADJUDICATION'), JSON.stringify(chk.reasons));
-  R = reportsFor(F, st); chk = acceptanceCheck({ gold: F.gold, state: st, ...R, note }); assert.equal(chk.ok, true, JSON.stringify(chk.reasons));
+  R = reportsFor(F, st); chk = acceptanceCheck({ gold: F.gold, state: st, ...R, note });
+  assert.deepEqual(chk.reasons.map(r => r.code), ['VALIDATION_INCOMPLETE'], '§21: adjudecarea completă + rapoartele potrivite NU ajung fără o validare completă');
+  const val = validationState({ gold: F.gold, adjudication: st, reports: [R.calibration, R.holdout], regression: { ok: true, tracked: 1, failing: [] } }); assert.equal(val.complete, true, JSON.stringify(val.failing));
+  chk = acceptanceCheck({ gold: F.gold, state: st, ...R, note, validation: val }); assert.equal(chk.ok, true, JSON.stringify(chk.reasons));
   assert.ok(acceptanceCheck({ gold: F.gold, state: st, ...R, note: 'scurt' }).reasons.some(r => r.code === 'NOTE_REQUIRED'));
   const other = structuredClone(F.gold); other.manifest.version = 2; const R2 = { calibration: runEvaluation(other, { split: 'calibration', adjudication: st }), holdout: R.holdout };
   assert.ok(acceptanceCheck({ gold: F.gold, state: st, ...R2, note }).reasons.some(r => r.code === 'REPORT_SET_MISMATCH'));
@@ -111,7 +117,7 @@ test('ADJ serviciu: adjudecarea completă NU înseamnă acceptare; acceptarea se
   cal = await EV.run({ split: 'calibration' }); hold = await EV.run({ split: 'holdout' });
   const acc = await EV.accept({ calibration: cal.id, holdout: hold.id, note: 'am verificat fiecare caz și raportul' });
   assert.equal(acc.adjudicationHash, EV.adjudication().hash); assert.equal(acc.set.id, 'gold-svc');
-  s = await EV.status(); assert.equal(s.thresholdsStatus, 'validated'); assert.equal(s.maturityClaimsAllowed, true);
+  s = await EV.status(); assert.equal(s.thresholdsStatus, 'validated'); assert.equal(s.maturityClaimsAllowed, true); assert.deepEqual(s.phases, { adjudicationComplete: true, validationComplete: true, acceptancePerformed: true, acceptanceStale: false });
   record(F, F.gold.cases[0].id, 'confirm', { note: 'reconfirm' });
   s = await EV.status(); assert.equal(s.thresholdsStatus, 'proposed', 'acceptarea veche nu mai acoperă adjudecările noi'); assert.ok(s.reasons.some(r => /trebuie reluată/.test(r)));
   assert.equal(calibrationStatus([cal, hold], { by: 'operator' }).thresholdsStatus, 'validated', 'compatibil: fără stare curentă, comportamentul anterior');

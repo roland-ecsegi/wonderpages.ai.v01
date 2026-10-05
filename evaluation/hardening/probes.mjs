@@ -112,3 +112,14 @@ export const PROBES = [
   { id: 'P-Q06', kind: 'quality', obs: ['OBS-GS-19'], input: { reply: 'case43' }, expect: { v1: { pass: false, codes: ['QUALITY_MEAN_BELOW_THRESHOLD'] }, v2: { pass: false, codes: ['QUALITY_MEAN_BELOW_THRESHOLD', 'QUALITY_CRITICAL_BELOW_FLOOR'] } }, src: 'Cazul 43 (caz de aur): motiv lipsă (v1) / parțial (v2)' },
   { id: 'P-Q07', kind: 'quality', obs: ['OBS-GS-20'], input: { reply: { all: 9, T07: 7.5 } }, expect: null, src: 'Cazul 42: asimetria T07 — întrebare de politică deschisă (fără etichetă)' }
 ];
+
+/* fixtures for the quality probes (the gold-v1 synthetic content and replies they were executed on) */
+const CODES = Array.from({ length: 18 }, (_, i) => 'T' + String(i + 1).padStart(2, '0'));
+const page = (n, text) => ({ n, text });
+export const PROBE_CONTENTS = {
+  gold: { title: 'gold', pages: Array.from({ length: 12 }, (_, i) => page(i + 1, `Milo and Tia find a gentle surprise on page ${i + 1}.`)) },
+  theEnd: { title: 'p', pages: Array.from({ length: 12 }, (_, i) => page(i + 1, 'The end.')) },
+  monster: { title: 'p', pages: [page(1, 'Milo and Tia find a gentle surprise.'), ...Array.from({ length: 11 }, (_, i) => page(i + 2, 'The monster ate the screaming children one by one in the dark.'))] }
+};
+export const PROBE_REPLY_CASES = { case37: 'quality-dinosaurs-3-4-English-01', case43: 'quality-dinosaurs-7-8-English-07' };
+export const probeReply = spec => ({ criteria: CODES.map(code => ({ code, score: spec[code] ?? spec.all, evidence: 'Milo and Tia find a gentle surprise' })), issues: [] });

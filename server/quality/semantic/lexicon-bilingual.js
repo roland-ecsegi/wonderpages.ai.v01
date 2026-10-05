@@ -24,7 +24,7 @@ export const CONCEPTS = [
   /* animals */
   C('fox', 'object', 'fox', 'vulp*'), C('dog', 'object', 'dog|puppy', 'caine|cainele|caini|catel*'), C('cat', 'object', 'cat|kitten', 'pisic*'), C('crab', 'object', 'crab', 'crab*'), C('duck', 'object', 'duck', 'rata|rate|rata|ratusca|ratoi*'),
   C('bear', 'object', 'bear', 'urs*'), C('bird', 'object', 'bird', 'pasare|pasarea|pasari*|pasarica'), C('fish', 'object', 'fish', 'peste|pestele|pesti|pestis*'), C('rabbit', 'object', 'rabbit|bunny', 'iepur*'), C('mouse', 'object', 'mouse', 'soarec*|soricel*'),
-  C('horse', 'object', 'horse', 'cal|calul|cai|caii'), C('cow', 'object', 'cow', 'vaca|vacile|vaci'), C('goat', 'object', 'goat', 'capra|capre|ied|iedul|iezi'), C('wolf', 'object', 'wolf', 'lup|lupul|lupi|lupii'), C('owl', 'object', 'owl', 'bufnit*'), C('frog', 'object', 'frog', 'broasca|broaste|broscut*'),
+  C('horse', 'object', 'horse', 'cal|calul|cai|caii'), C('cow', 'object', 'cow', 'vaca|vacile|vaci'), C('goat', 'object', 'goat', 'capr*|ied*|iez*'), C('wolf', 'object', 'wolf', 'lup|lupul|lupi|lupii'), C('owl', 'object', 'owl', 'bufnit*'), C('frog', 'object', 'frog', 'broasca|broaste|broscut*'),
   C('dinosaur', 'object', 'dinosaur|dino', 'dinozaur*'), C('robot', 'object', 'robot', 'robot*'), C('butterfly', 'object', 'butterfly', 'flutur*'),
   /* people / family */
   C('grandma', 'object', 'grandma|grandmother|granny', 'bunica|bunici|bunicii'), C('mother', 'object', 'mum|mom|mother|mommy', 'mama|mami|mamei'), C('father', 'object', 'dad|father|daddy', 'tata|tati|tatal'),

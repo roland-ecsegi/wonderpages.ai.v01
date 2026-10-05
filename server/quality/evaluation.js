@@ -14,21 +14,35 @@ import { textSafety } from './safety.js';
 import { ageFit, localization, science } from '../domain/story-contracts.js';
 import { assessText, QUALITY_POLICIES } from './assessment.js';
 
-export const EVALUATOR_VERSION = 1;
-const norm = s => String(s ?? '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim();
+export const EVALUATOR_VERSION = 2;   // 2 = hardened evaluators (records/HARDENING.md); reports from version 1 are not comparable
+const norm = s => String(s ?? '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim();
 const tokens = s => new Set(norm(s).split(' ').filter(w => w.length > 2));
 const jacc = (a, b) => { const A = tokens(a), B = tokens(b); if (!A.size || !B.size) return 0; let n = 0; for (const w of A) if (B.has(w)) n++; return n / (A.size + B.size - n); };
-const caseText = c => [c.input.text, c.input.page, c.input.source, c.input.native].filter(Boolean).join(' ');
+export const caseText = c => [c.input.text, c.input.page, c.input.source, c.input.native].filter(Boolean).join(' ');
 const CONTENT = Object.freeze({ title: 'gold', pages: Array.from({ length: 12 }, (_, i) => ({ n: i + 1, text: `Milo and Tia find a gentle surprise on page ${i + 1}.` })) });
-const BP_V = v => ({ rubric: Array.from({ length: 18 }, (_, i) => ({ code: 'T' + String(i + 1).padStart(2, '0'), critical: ['T01', 'T07', 'T08'].includes('T' + String(i + 1).padStart(2, '0')) })), schemas: { critic: {} }, version: 21, ...(v === 2 ? { quality_policy: { version: 2 } } : {}) });
+const BP_V = (v, pages = null) => ({ rubric: Array.from({ length: 18 }, (_, i) => ({ code: 'T' + String(i + 1).padStart(2, '0'), critical: ['T01', 'T07', 'T08'].includes('T' + String(i + 1).padStart(2, '0')) })), schemas: { critic: {} }, version: 21, ...(pages ? { structure: { pages } } : {}), ...(v === 2 ? { quality_policy: { version: 2 } } : {}) });
+const sub = (need = [], have = []) => need.every(x => have.includes(x));
+const none = (bad = [], have = []) => !bad.some(x => have.includes(x));
 
-/** Each evaluator returns { predicted: 'positive'|'negative', detail } for one case. */
+/**
+ * Each evaluator returns { predicted: 'positive'|'negative', exact, detail } for one case. `exact` requires the label AND the
+ * reasons the case expects (Gold-v2: rules/codes/reasons that must be present, codes that must be absent) — verdict and
+ * reasoning agreement are measured together (OBS-GS-5). Gold-v1 cases keep their original expected shapes.
+ */
 export const EVALUATORS = Object.freeze({
-  safety: c => { const r = textSafety(c.input.text, { age: c.age }); const ok = r.verdict === c.expected.verdict; return { predicted: r.verdict === 'PASS' ? 'positive' : 'negative', exact: ok, detail: r.verdict }; },
-  age: c => { const f = ageFit([{ n: 1, text: c.input.page }], c.input.band).findings.some(x => x.code === 'AGE_COMPLEXITY'); return { predicted: f ? 'negative' : 'positive', exact: f === c.expected.AGE_COMPLEXITY, detail: f }; },
-  localization: c => { const codes = localization({ pages: [{ n: 1, text: c.input.source }] }, { pages: [{ n: 1, text: c.input.native }] }, { names: c.input.names || [] }).findings.map(f => f.code); return { predicted: codes.length ? 'negative' : 'positive', exact: (c.expected.codes || []).every(x => codes.includes(x)) && (codes.length > 0) === ((c.expected.codes || []).length > 0), detail: codes }; },
-  science: c => { const rules = science([{ n: 1, text: c.input.text }], { world: 'natural' }).findings.filter(f => f.code === 'SCIENCE_CLAIM').map(f => f.rule); return { predicted: rules.length ? 'negative' : 'positive', exact: c.expected.rule ? rules.includes(c.expected.rule) : !rules.length, detail: rules }; },
-  quality: (c, { policy = 2 } = {}) => { const a = assessText({ reply: c.input.reply, content: CONTENT, bp: BP_V(policy), stage: { critic_prompt: 'critic', critical_threshold: 7 }, policy: QUALITY_POLICIES[policy] }); return { predicted: a.pass ? 'positive' : 'negative', exact: a.pass === c.expected.acceptable, detail: { score: a.score, reasons: a.reasons } }; }
+  safety: c => { const r = textSafety(c.input.text, { age: c.age, canon: c.input.canon || null }), rules = [...new Set(r.findings.map(f => f.rule))]; const ok = r.verdict === c.expected.verdict && sub(c.expected.rules, rules); return { predicted: r.verdict === 'PASS' ? 'positive' : 'negative', exact: ok, detail: c.expected.rules || c.input.canon !== undefined || c.labelSource ? { verdict: r.verdict, rules, reasonCodes: [...new Set(r.findings.map(f => f.reasonCode))], mitigated: r.mitigated.map(m => m.reasonCode) } : r.verdict }; },
+  age: c => {
+    const codes = [...new Set(ageFit([{ n: 1, text: c.input.page }], c.input.band).findings.map(x => x.code))];
+    if ('AGE_COMPLEXITY' in c.expected) { const f = codes.includes('AGE_COMPLEXITY'); return { predicted: f ? 'negative' : 'positive', exact: f === c.expected.AGE_COMPLEXITY, detail: f }; }   // gold-v1 shape
+    const signals = codes.filter(x => x.startsWith('AGE_')); return { predicted: signals.length ? 'negative' : 'positive', exact: sub(c.expected.signals, signals) && none(c.expected.absent, signals) && (signals.length > 0) === ((c.expected.signals || []).length > 0), detail: { signals } };
+  },
+  localization: c => { const codes = [...new Set(localization({ pages: [{ n: 1, text: c.input.source }] }, { pages: [{ n: 1, text: c.input.native }] }, { names: c.input.names || [] }).findings.map(f => f.code))]; return { predicted: codes.length ? 'negative' : 'positive', exact: sub(c.expected.codes, codes) && none(c.expected.absent, codes) && (codes.length > 0) === ((c.expected.codes || []).length > 0), detail: codes }; },
+  science: c => { const r = science([{ n: 1, text: c.input.text }], { world: c.input.world || 'natural', canon: c.input.canon?.characters || [] }), rules = r.findings.filter(f => f.code === 'SCIENCE_CLAIM').map(f => f.rule); return { predicted: rules.length ? 'negative' : 'positive', exact: c.expected.rule ? rules.includes(c.expected.rule) : !rules.length, detail: c.labelSource ? { rules, review: r.findings.filter(f => f.code === 'SCIENCE_REVIEW').map(f => f.rule) } : rules }; },
+  quality: (c, { policy = 2 } = {}) => {
+    const v = c.policyVersion || policy, content = c.input.content || CONTENT, a = assessText({ reply: c.input.reply, content, bp: BP_V(v, c.input.structurePages || null), stage: { critic_prompt: 'critic', critical_threshold: 7 }, policy: QUALITY_POLICIES[v] });
+    const codes = [...new Set(a.reasonCodes.map(r => r.code))], ev = a.evidence.codes || [];
+    return { predicted: a.pass ? 'positive' : 'negative', exact: a.pass === c.expected.acceptable && sub(c.expected.reasons, codes) && sub(c.expected.evidence, ev), detail: { score: a.score, exactScore: a.exactScore, reasons: a.reasons, reasonCodes: codes, evidence: ev } };
+  }
 });
 
 const kappa = m => { const n = m.tp + m.fp + m.tn + m.fn; if (!n) return null; const po = (m.tp + m.tn) / n, pe = ((m.tp + m.fp) * (m.tp + m.fn) + (m.tn + m.fn) * (m.tn + m.fp)) / (n * n); return pe === 1 ? 1 : Math.round((po - pe) / (1 - pe) * 1000) / 1000; };
@@ -61,15 +75,17 @@ export function runEvaluation(source, { split = 'calibration', policy = 2, repea
   const gold = adjudication ? applyAdjudications(source, adjudication) : source;
   const manifestHash = canonicalHash(gold.manifest), cases = gold.cases.filter(c => split === 'all' || c.split === split);
   const rows = [], nondeterministic = [];
+  const unlabeled = [];
   for (const c of cases) {
     const ev = EVALUATORS[c.kind]; if (!ev) continue;
+    if (c.label == null) { unlabeled.push(c.id); continue; }   // an undecided editorial policy: never scored until the operator labels it
     const runs = Array.from({ length: Math.max(1, repeat) }, () => ev(c, { policy }));
     if (new Set(runs.map(r => JSON.stringify(r))).size > 1) nondeterministic.push(c.id);
     rows.push({ id: c.id, kind: c.kind, theme: c.theme, age: c.age, language: c.language, label: c.label, ...runs[0] });
   }
   const by = key => Object.fromEntries([...new Set(rows.map(r => r[key]))].map(v => [v, metrics(rows.filter(r => r[key] === v))]));
   const evaluators = Object.fromEntries([...new Set(rows.map(r => r.kind))].map(k => [k, { ...metrics(rows.filter(r => r.kind === k)), errors: rows.filter(r => r.kind === k && (!r.exact || (r.predicted !== r.label))).map(r => ({ id: r.id, label: r.label, predicted: r.predicted, detail: r.detail })) }]));
-  return { schema: 'wonderpages.evaluation-report/1', id: 'ev-' + crypto.randomBytes(5).toString('hex'), dataset: { id: gold.manifest.id, version: gold.manifest.version, manifestHash, goldHash: goldHash(source), caseCount: source.cases.length, evaluatedCases: gold.cases.length, rights: gold.manifest.rights }, split, versions: { evaluator: EVALUATOR_VERSION, qualityPolicy: policy }, at: Date.now(),
+  return { schema: 'wonderpages.evaluation-report/1', id: 'ev-' + crypto.randomBytes(5).toString('hex'), dataset: { id: gold.manifest.id, version: gold.manifest.version, manifestHash, goldHash: goldHash(source), caseCount: source.cases.length, evaluatedCases: gold.cases.length, rights: gold.manifest.rights }, split, versions: { evaluator: EVALUATOR_VERSION, qualityPolicy: policy }, at: Date.now(), unlabeled,
     overall: metrics(rows), evaluators, cohorts: { age: by('age'), language: by('language'), theme: by('theme') }, determinism: { repeat, nondeterministic }, contamination: contamination(gold),
     adjudication: gold.manifest.adjudication, adjudicationState: adjudication ? { hash: adjudication.hash, complete: adjudication.complete, counts: adjudication.counts } : null, limitations: gold.manifest.limitations };
 }
@@ -100,7 +116,9 @@ export function calibrationStatus(reports = [], acceptance = null, current = nul
   if (cal && !cal.contamination.clean) reasons.push('Setul rezervat este contaminat.');
   if (cal && cal.determinism.nondeterministic.length) reasons.push('Evaluatori nedeterminiști.');
   if (current?.adjudication && !current.adjudication.complete) reasons.push(`Adjudecarea setului nu este completă (${current.adjudication.pending.length} în așteptare, ${current.adjudication.inconsistencies.length} probleme).`);
+  if (current?.validation && !current.validation.complete) reasons.push(`Validarea setului nu este completă (${current.validation.failing.join(', ')}).`);
   if (!acceptance) reasons.push('Operatorul nu a acceptat încă raportul de calibrare (aprobare umană).');
+  else if (current?.validation && (acceptance.validationHash !== current.validation.hash || acceptance.evaluatorVersion !== EVALUATOR_VERSION)) reasons.push('Acceptarea operatorului privește altă stare de validare sau altă versiune a evaluatorului: trebuie reluată.');
   else if (current?.adjudication && (acceptance.adjudicationHash !== current.adjudication.hash || acceptance.goldHash !== current.adjudication.set.goldHash)) reasons.push('Acceptarea operatorului privește alte adjudecări sau alt conținut al setului: trebuie reluată.');
   return { thresholdsStatus: reasons.length ? 'proposed' : 'validated', maturityClaimsAllowed: !reasons.length, reasons };
 }

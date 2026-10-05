@@ -1,0 +1,1560 @@
+{
+ "schema": "wonderpages.gold-build-report/1",
+ "set": "gold-v2",
+ "setHash": "aacb41cd000e604a255f6b2e20dcb0e1eb5fc8abe867b5fd921090fba0ac7ce9",
+ "ok": true,
+ "errors": [],
+ "warnings": [
+  {
+   "code": "THEME_NOT_EVIDENT",
+   "count": 67,
+   "cases": [
+    "v2c-safety-fire-02",
+    "v2c-safety-fire-03",
+    "v2c-safety-fire-04",
+    "v2c-safety-fire-05",
+    "v2c-safety-fire-06",
+    "v2c-safety-fire-07",
+    "v2c-safety-fire-08",
+    "v2c-safety-fire-09",
+    "v2c-safety-fire-11",
+    "v2c-safety-fire-12",
+    "v2c-safety-fire-13",
+    "v2c-safety-fire-14",
+    "v2c-safety-sill-05",
+    "v2c-safety-sill-06",
+    "v2c-safety-sill-08",
+    "v2c-safety-swallow-03",
+    "v2c-safety-stranger-01",
+    "v2c-safety-stranger-02",
+    "v2c-safety-weapon-03",
+    "v2c-safety-stereo-07",
+    "v2c-safety-stereo-08",
+    "v2c-safety-stereo-09",
+    "v2c-safety-ctrl-01",
+    "v2c-safety-ctrl-02",
+    "v2c-safety-ctrl-03",
+    "v2c-safety-ctrl-04",
+    "v2c-age-abs-04",
+    "v2c-age-voc-01",
+    "v2c-loc-chg-01",
+    "v2c-loc-add-01",
+    "v2c-loc-neg-01",
+    "v2c-loc-unt-01",
+    "v2c-loc-name-01",
+    "v2c-sci-moon-01",
+    "v2c-sci-moon-03",
+    "v2h-safety-05",
+    "v2h-safety-08",
+    "v2h-safety-11",
+    "v2h-safety-21",
+    "v2h-age-01",
+    "v2h-age-02",
+    "v2h-age-03",
+    "v2h-age-04",
+    "v2h-age-05",
+    "v2h-age-06",
+    "v2h-age-07",
+    "v2h-age-11",
+    "v2h-age-12",
+    "v2h-loc-03",
+    "v2h-loc-04",
+    "v2h-loc-05",
+    "v2h-loc-06",
+    "v2h-loc-07",
+    "v2h-loc-08",
+    "v2h-loc-09",
+    "v2h-loc-11",
+    "v2h-loc-12",
+    "v2h-loc-13",
+    "v2h-sci-01",
+    "v2h-sci-02",
+    "v2h-sci-04",
+    "v2h-sci-07",
+    "v2h-sci-08",
+    "v2h-sci-09",
+    "v2h-sci-10",
+    "v2h-sci-11",
+    "v2h-sci-12"
+   ],
+   "message": "Tema declarată nu e evidentă în stimul (semnal euristic, nu dovadă): tema nu se raportează ca acoperire pentru aceste cazuri."
+  }
+ ],
+ "duplicates": {
+  "exact": [
+   {
+    "cases": [
+     "v2c-safety-fear-01",
+     "v2c-safety-fear-03"
+    ],
+    "intentional": true,
+    "variables": [
+     "base EN 3–4",
+     "age 7–8"
+    ]
+   },
+   {
+    "cases": [
+     "v2c-age-len-01",
+     "v2c-age-len-02"
+    ],
+    "intentional": true,
+    "variables": [
+     "band 3–4",
+     "band 7–8"
+    ]
+   },
+   {
+    "cases": [
+     "v2c-age-len-03",
+     "v2c-age-len-04"
+    ],
+    "intentional": true,
+    "variables": [
+     "band 3–4",
+     "band 7–8"
+    ]
+   },
+   {
+    "cases": [
+     "v2c-age-abs-01",
+     "v2c-age-abs-02"
+    ],
+    "intentional": true,
+    "variables": [
+     "band 3–4",
+     "band 7–8"
+    ]
+   },
+   {
+    "cases": [
+     "v2c-age-syn-01",
+     "v2c-age-syn-02",
+     "v2c-age-syn-03"
+    ],
+    "intentional": true,
+    "variables": [
+     "band 3–4",
+     "band 5–6",
+     "band 7–8"
+    ]
+   },
+   {
+    "cases": [
+     "v2c-age-emo-01",
+     "v2c-age-emo-02"
+    ],
+    "intentional": true,
+    "variables": [
+     "band 3–4",
+     "band 7–8"
+    ]
+   },
+   {
+    "cases": [
+     "v2h-safety-15",
+     "v2h-safety-17"
+    ],
+    "intentional": true,
+    "variables": [
+     "base (EN, 3–4)",
+     "age band 7–8"
+    ]
+   },
+   {
+    "cases": [
+     "v2h-age-05",
+     "v2h-age-06"
+    ],
+    "intentional": true,
+    "variables": [
+     "band 3–4",
+     "band 7–8"
+    ]
+   },
+   {
+    "cases": [
+     "v2h-age-08",
+     "v2h-age-09"
+    ],
+    "intentional": true,
+    "variables": [
+     "band 7–8",
+     "band 3–4"
+    ]
+   }
+  ],
+  "metadataOnly": []
+ },
+ "nearDuplicates": [
+  {
+   "a": "v2c-safety-stereo-04",
+   "b": "v2c-safety-stereo-05",
+   "similarity": 0.82,
+   "sameFamily": true
+  },
+  {
+   "a": "v2c-sci-ptero-04",
+   "b": "v2c-sci-ptero-05",
+   "similarity": 1,
+   "sameFamily": true
+  },
+  {
+   "a": "v2c-quality-01",
+   "b": "v2c-quality-02",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-01",
+   "b": "v2c-quality-03",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-01",
+   "b": "v2c-quality-04",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-01",
+   "b": "v2c-quality-05",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-01",
+   "b": "v2c-quality-06",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-01",
+   "b": "v2c-quality-07",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-01",
+   "b": "v2c-quality-08",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-01",
+   "b": "v2c-quality-09",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-01",
+   "b": "v2c-quality-10",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-01",
+   "b": "v2c-quality-11",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-01",
+   "b": "v2c-quality-12",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-01",
+   "b": "v2c-quality-13",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-01",
+   "b": "v2c-quality-15",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-01",
+   "b": "v2c-quality-16",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-02",
+   "b": "v2c-quality-03",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-02",
+   "b": "v2c-quality-04",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-02",
+   "b": "v2c-quality-05",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-02",
+   "b": "v2c-quality-06",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-02",
+   "b": "v2c-quality-07",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-02",
+   "b": "v2c-quality-08",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-02",
+   "b": "v2c-quality-09",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-02",
+   "b": "v2c-quality-10",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-02",
+   "b": "v2c-quality-11",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-02",
+   "b": "v2c-quality-12",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-02",
+   "b": "v2c-quality-13",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-02",
+   "b": "v2c-quality-15",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-02",
+   "b": "v2c-quality-16",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-03",
+   "b": "v2c-quality-04",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-03",
+   "b": "v2c-quality-05",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-03",
+   "b": "v2c-quality-06",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-03",
+   "b": "v2c-quality-07",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-03",
+   "b": "v2c-quality-08",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-03",
+   "b": "v2c-quality-09",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-03",
+   "b": "v2c-quality-10",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-03",
+   "b": "v2c-quality-11",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-03",
+   "b": "v2c-quality-12",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-03",
+   "b": "v2c-quality-13",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-03",
+   "b": "v2c-quality-15",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-03",
+   "b": "v2c-quality-16",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-04",
+   "b": "v2c-quality-05",
+   "similarity": 0.9,
+   "sameFamily": true
+  },
+  {
+   "a": "v2c-quality-04",
+   "b": "v2c-quality-06",
+   "similarity": 0.9,
+   "sameFamily": true
+  },
+  {
+   "a": "v2c-quality-04",
+   "b": "v2c-quality-07",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-04",
+   "b": "v2c-quality-08",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-04",
+   "b": "v2c-quality-09",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-04",
+   "b": "v2c-quality-10",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-04",
+   "b": "v2c-quality-11",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-04",
+   "b": "v2c-quality-12",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-04",
+   "b": "v2c-quality-13",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-04",
+   "b": "v2c-quality-15",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-04",
+   "b": "v2c-quality-16",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-05",
+   "b": "v2c-quality-06",
+   "similarity": 0.9,
+   "sameFamily": true
+  },
+  {
+   "a": "v2c-quality-05",
+   "b": "v2c-quality-07",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-05",
+   "b": "v2c-quality-08",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-05",
+   "b": "v2c-quality-09",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-05",
+   "b": "v2c-quality-10",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-05",
+   "b": "v2c-quality-11",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-05",
+   "b": "v2c-quality-12",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-05",
+   "b": "v2c-quality-13",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-05",
+   "b": "v2c-quality-15",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-05",
+   "b": "v2c-quality-16",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-06",
+   "b": "v2c-quality-07",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-06",
+   "b": "v2c-quality-08",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-06",
+   "b": "v2c-quality-09",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-06",
+   "b": "v2c-quality-10",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-06",
+   "b": "v2c-quality-11",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-06",
+   "b": "v2c-quality-12",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-06",
+   "b": "v2c-quality-13",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-06",
+   "b": "v2c-quality-15",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-06",
+   "b": "v2c-quality-16",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-07",
+   "b": "v2c-quality-08",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-07",
+   "b": "v2c-quality-09",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-07",
+   "b": "v2c-quality-10",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-07",
+   "b": "v2c-quality-11",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-07",
+   "b": "v2c-quality-12",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-07",
+   "b": "v2c-quality-13",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-07",
+   "b": "v2c-quality-15",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-07",
+   "b": "v2c-quality-16",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-08",
+   "b": "v2c-quality-09",
+   "similarity": 0.9,
+   "sameFamily": true
+  },
+  {
+   "a": "v2c-quality-08",
+   "b": "v2c-quality-10",
+   "similarity": 0.9,
+   "sameFamily": true
+  },
+  {
+   "a": "v2c-quality-08",
+   "b": "v2c-quality-11",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-08",
+   "b": "v2c-quality-12",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-08",
+   "b": "v2c-quality-13",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-08",
+   "b": "v2c-quality-15",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-08",
+   "b": "v2c-quality-16",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-09",
+   "b": "v2c-quality-10",
+   "similarity": 0.9,
+   "sameFamily": true
+  },
+  {
+   "a": "v2c-quality-09",
+   "b": "v2c-quality-11",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-09",
+   "b": "v2c-quality-12",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-09",
+   "b": "v2c-quality-13",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-09",
+   "b": "v2c-quality-15",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-09",
+   "b": "v2c-quality-16",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-10",
+   "b": "v2c-quality-11",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-10",
+   "b": "v2c-quality-12",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-10",
+   "b": "v2c-quality-13",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-10",
+   "b": "v2c-quality-15",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-10",
+   "b": "v2c-quality-16",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-11",
+   "b": "v2c-quality-12",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-11",
+   "b": "v2c-quality-13",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-11",
+   "b": "v2c-quality-15",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-11",
+   "b": "v2c-quality-16",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-12",
+   "b": "v2c-quality-13",
+   "similarity": 0.9,
+   "sameFamily": true
+  },
+  {
+   "a": "v2c-quality-12",
+   "b": "v2c-quality-15",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-12",
+   "b": "v2c-quality-16",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-13",
+   "b": "v2c-quality-15",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-13",
+   "b": "v2c-quality-16",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2c-quality-15",
+   "b": "v2c-quality-16",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2h-quality-01",
+   "b": "v2h-quality-02",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2h-quality-01",
+   "b": "v2h-quality-03",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2h-quality-01",
+   "b": "v2h-quality-04",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2h-quality-01",
+   "b": "v2h-quality-05",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2h-quality-01",
+   "b": "v2h-quality-06",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2h-quality-01",
+   "b": "v2h-quality-08",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2h-quality-02",
+   "b": "v2h-quality-03",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2h-quality-02",
+   "b": "v2h-quality-04",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2h-quality-02",
+   "b": "v2h-quality-05",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2h-quality-02",
+   "b": "v2h-quality-06",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2h-quality-02",
+   "b": "v2h-quality-08",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2h-quality-03",
+   "b": "v2h-quality-04",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2h-quality-03",
+   "b": "v2h-quality-05",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2h-quality-03",
+   "b": "v2h-quality-06",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2h-quality-03",
+   "b": "v2h-quality-08",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2h-quality-04",
+   "b": "v2h-quality-05",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2h-quality-04",
+   "b": "v2h-quality-06",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2h-quality-04",
+   "b": "v2h-quality-08",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2h-quality-05",
+   "b": "v2h-quality-06",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2h-quality-05",
+   "b": "v2h-quality-08",
+   "similarity": 0.9,
+   "sameFamily": false
+  },
+  {
+   "a": "v2h-quality-06",
+   "b": "v2h-quality-08",
+   "similarity": 0.9,
+   "sameFamily": false
+  }
+ ],
+ "contamination": [],
+ "independence": {
+  "v2h-safety-01": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-safety-02": {
+   "stimulus": true,
+   "theme": true,
+   "property": false,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-safety-03": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-safety-04": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-safety-05": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-safety-06": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-safety-07": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-safety-08": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-safety-09": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-safety-10": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-safety-11": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-safety-12": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-safety-13": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-safety-14": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-safety-15": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-safety-16": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-safety-17": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-safety-18": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-safety-19": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-safety-20": {
+   "stimulus": true,
+   "theme": true,
+   "property": false,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-safety-21": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-safety-22": {
+   "stimulus": true,
+   "theme": true,
+   "property": false,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-safety-23": {
+   "stimulus": true,
+   "theme": true,
+   "property": false,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-safety-24": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-age-01": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-age-02": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-age-03": {
+   "stimulus": true,
+   "theme": true,
+   "property": false,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-age-04": {
+   "stimulus": false,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-age-05": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-age-06": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-age-07": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-age-08": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-age-09": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-age-10": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-age-11": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-age-12": {
+   "stimulus": false,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-loc-01": {
+   "stimulus": true,
+   "theme": true,
+   "property": false,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-loc-02": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-loc-03": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-loc-04": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-loc-05": {
+   "stimulus": true,
+   "theme": true,
+   "property": false,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-loc-06": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-loc-07": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-loc-08": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-loc-09": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-loc-10": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-loc-11": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-loc-12": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-loc-13": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-sci-01": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-sci-02": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-sci-03": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-sci-04": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-sci-05": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-sci-06": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-sci-07": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-sci-08": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-sci-09": {
+   "stimulus": false,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-sci-10": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-sci-11": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-sci-12": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-quality-01": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-quality-02": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-quality-03": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-quality-04": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-quality-05": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-quality-06": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-quality-07": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  },
+  "v2h-quality-08": {
+   "stimulus": true,
+   "theme": true,
+   "property": true,
+   "ruleFamily": false,
+   "language": true
+  }
+ },
+ "coverage": {
+  "raw": 226,
+  "labelled": 206,
+  "unlabeled": 20,
+  "calibration": 157,
+  "holdout": 69,
+  "uniqueStimuli": 216,
+  "independentStimuli": 131,
+  "controlledFamilies": 38,
+  "correlatedVariants": 85,
+  "roles": {
+   "minimal_pair": 66,
+   "boundary": 30,
+   "regression": 30,
+   "positive_control": 57,
+   "negative_control": 29,
+   "paraphrase": 11,
+   "morphological_variant": 13,
+   "negation_variant": 15,
+   "order_variant": 3,
+   "stance_variant": 8,
+   "parity": 23,
+   "cross_gate": 2
+  },
+  "byKind": {
+   "safety": 100,
+   "age": 32,
+   "localization": 34,
+   "science": 36,
+   "quality": 24
+  },
+  "byKindSplit": {
+   "safety/calibration": 76,
+   "age/calibration": 20,
+   "localization/calibration": 21,
+   "science/calibration": 24,
+   "quality/calibration": 16,
+   "safety/holdout": 24,
+   "age/holdout": 12,
+   "localization/holdout": 13,
+   "science/holdout": 12,
+   "quality/holdout": 8
+  },
+  "byLanguage": {
+   "English": 156,
+   "Romanian": 70
+  },
+  "byAge": {
+   "5-6": 89,
+   "3-4": 61,
+   "7-8": 76
+  },
+  "byTheme": {
+   "forest": 43,
+   "farm": 28,
+   "dinosaurs": 19,
+   "space": 23,
+   "sea": 44,
+   "city": 34,
+   "mountain": 35
+  },
+  "byLabel": {
+   "negative": 132,
+   "positive": 74,
+   "unlabeled": 20
+  },
+  "byLabelSource": {
+   "current_policy": 62,
+   "operator_principle": 43,
+   "OPERATOR_DECISION_REQUIRED": 20,
+   "operator_decision": 22,
+   "fact": 79
+  },
+  "kindLanguageAge": {
+   "safety/English/5-6": 40,
+   "safety/English/3-4": 11,
+   "safety/Romanian/5-6": 15,
+   "safety/English/7-8": 23,
+   "safety/Romanian/3-4": 7,
+   "safety/Romanian/7-8": 4,
+   "age/English/3-4": 16,
+   "age/Romanian/5-6": 2,
+   "age/English/7-8": 8,
+   "age/Romanian/3-4": 3,
+   "age/Romanian/7-8": 2,
+   "age/English/5-6": 1,
+   "localization/Romanian/5-6": 31,
+   "localization/Romanian/7-8": 3,
+   "science/English/7-8": 33,
+   "science/Romanian/7-8": 3,
+   "quality/English/3-4": 24
+  },
+  "obs": {
+   "OBS-GS-1": 24,
+   "OBS-GS-7": 26,
+   "OBS-GS-2": 1,
+   "OBS-GS-9": 13,
+   "OBS-GS-4": 6,
+   "OBS-GS-5": 1,
+   "OBS-GS-8": 10,
+   "OBS-GS-3": 5,
+   "OBS-GS-6": 3,
+   "OBS-GS-10": 9,
+   "OBS-GS-11": 14,
+   "OBS-GS-13": 21,
+   "OBS-GS-14": 3,
+   "OBS-GS-15": 8,
+   "OBS-GS-16": 5,
+   "OBS-GS-17": 6,
+   "OBS-GS-18": 5,
+   "OBS-GS-12": 1,
+   "OBS-GS-20": 3,
+   "OBS-GS-19": 2
+  }
+ }
+}

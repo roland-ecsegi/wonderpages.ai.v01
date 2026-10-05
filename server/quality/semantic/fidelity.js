@@ -16,11 +16,16 @@ const EN_ONLY_FUNCTION = ['the', 'and', 'with', 'of', 'is', 'you', 'this', 'that
 const EN_ORTHO = /(th|wh|sh|ck|oo|ee|w|y|k|q)|(?:ies|ing|ed|ness|ful|ly)$|[^aeiouăâîs]s$/i;
 const NEG_EN = /(?<![\p{L}])(not|never|no|nobody|nothing|cannot)(?![\p{L}])|n['’]t(?![\p{L}])/giu, NEG_RO = /(?<![\p{L}])(nu|niciodata|nimeni|nimic|nici)(?![\p{L}])|(?<![\p{L}])n-/giu;
 
-function conceptsOf(text, lang) {
+/** concepts found in a text; `ambiguous` = concepts reached only through a polysemous word (e.g. RO „mare”: big / sea) */
+function conceptsOf(text, lang, prefer = null) {
   const found = new Map(); let f = ' ' + fold(text).replace(/[^\p{L}\s'-]/gu, ' ').replace(/\s+/g, ' ') + ' ';
   if (lang === 'ro') {   // multiword phrases first, consumed so their words are not counted twice
     for (const c of CONCEPTS) for (const form of c.ro.filter(x => x.includes(' '))) { const k = ' ' + form + ' '; if (f.includes(k)) { found.set(c.id, c); f = f.split(k).join(' '); } }
-    for (const w of wordsOf(f)) for (const c of CONCEPTS) if (c.ro.some(r => (r.endsWith('*') ? w.startsWith(r.slice(0, -1)) : w === r))) found.set(c.id, c);
+    for (const w of wordsOf(f)) {   // a polysemous word counts only for the sense the source has (if any)
+      const hits = CONCEPTS.filter(c => c.ro.some(r => (r.endsWith('*') ? w.startsWith(r.slice(0, -1)) : w === r)));
+      const keep = hits.length > 1 && prefer ? hits.filter(c => prefer.has(c.id)) : [];
+      for (const c of (keep.length ? keep : hits)) found.set(c.id, c);
+    }
   } else for (const w of wordsOf(f)) { const l = lemma(w); for (const c of CONCEPTS) if (c.en.includes(l) || c.en.includes(w)) found.set(c.id, c); }
   return found;
 }
@@ -47,7 +52,7 @@ export function fidelityFindings(srcText, tgtText, { names = [], page = null } =
   const copied = tWords.find(w => w.length >= 3 && srcSet.has(fold(w)) && EN_ORTHO.test(w) && !EN_ONLY_FUNCTION.includes(w.toLowerCase()) && !/^\p{Lu}/u.test(w));
   if (copied && copied !== fn) out.push({ code: 'TR_UNTRANSLATED', severity: 'major', page, quote: copied, layer: 'structured', message: `Pagina ${page}: „${copied}” e copiat din original, netradus.` });
   /* fidelity on the concepts both sides can express */
-  const S = conceptsOf(src, 'en'), T = conceptsOf(tgt, 'ro'), add = (code, msg, extra) => out.push({ code, severity: 'minor', advisory: true, page, layer: 'lexicon-bounded', message: `Pagina ${page}: ${msg}`, ...extra });
+  const S = conceptsOf(src, 'en'), T = conceptsOf(tgt, 'ro', S), add = (code, msg, extra) => out.push({ code, severity: 'minor', advisory: true, page, layer: 'lexicon-bounded', message: `Pagina ${page}: ${msg}`, ...extra });
   const missing = [...S.values()].filter(c => counted(c) && !T.has(c.id)), extra = [...T.values()].filter(c => counted(c) && !S.has(c.id));
   const mA = missing.filter(c => c.type === 'action'), xA = extra.filter(c => c.type === 'action');
   if (mA.length && xA.length) add('TR_MEANING_CHANGED', `acțiunea „${mA[0].id}” din original apare ca „${xA[0].id}”.`, { from: mA[0].id, to: xA[0].id });
