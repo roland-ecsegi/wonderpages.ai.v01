@@ -104,4 +104,29 @@ set rezervat (decizie de operator, vezi `GOLD-V2-OPERATOR-DECISIONS.md` D-20).
 
 ## 6. Teste
 
-Vezi §7 (completat la finalul H6).
+| Rulare | Cod testat | Rezultat |
+|---|---|---|
+| Suita completă înainte de hardening (rapidă, fără browser) | `784f5ac` | 395 teste: 385 trec, 1 picat intermitent (P8-T03, ENOTEMPTY la ștergerea unui director temporar; trece izolat), 9 sărite (lipsea `BROWSER_PATH`) |
+| Suita completă locală, cu browser (`BROWSER_PATH=/opt/pw-browsers/chromium node tests/run.mjs`) | `c14aaa2` | **428 / 428 trec**, 0 picate, 0 sărite, 0 anulate |
+| Suita completă pe PostgreSQL 16 efemer (`WP_TEST_DATABASE_URL`, `scripts/enterprise/pg-ephemeral.mjs`) | `c14aaa2` | **428 / 428 trec**, 0 picate, 0 sărite, 0 anulate (inclusiv testele „PostgreSQL real” P2-T01, P3-T03, P8-T02) |
+
+Testele noi ale hardening-ului: `88-hardening-quality` (5), `89-hardening-safety` (8), `90-hardening-age-localization` (6),
+`91-hardening-science` (6), `92-gold-v2` (8).
+
+Testele 54 și 87 au fost actualizate pentru schimbări de arhitectură legitime:
+- setul activ e acum `gold-v2`;
+- acceptarea cere o stare de validare completă: `VALIDATION_INCOMPLETE` e adăugat ca ultim motiv, iar `phases` apare în status.
+
+Niciun test nu a fost sărit, dezactivat sau slăbit. Commit-ul cu rapoartele (`75e45e0`) conține doar documente și dovada
+`probes-after.json`. Nu schimbă cod.
+
+## 7. Starea finală
+
+**HARDENING COMPLET (evaluatori întăriți, nevalidați) · GOLD-V2 CONSTRUIT ȘI SIGILAT · ADJUDECAREA GOLD-V2 NEÎNCEPUTĂ (0/226) ·
+VALIDARE NOT_COMPLETE · ACCEPTARE NEEFECTUATĂ.** Gold-v1 e neschimbat. Pragurile rămân „propuse”. Maturitatea nu e promovată.
+Dinosaur World e neatins. Fără P9.
+
+Rapoarte:
+- `GOLD-V2-DESIGN.md` (proiectare + acoperire);
+- `HARDENING-LIMITATIONS.md`;
+- `GOLD-V2-OPERATOR-DECISIONS.md` (D-01…D-22).
