@@ -14,7 +14,8 @@ semantic), neimplementată. D-04: DECISĂ (opțiunea E, rafinată după natura h
 mecanism de pericol ↔ mecanism de control), neimplementată. D-06: DECISĂ (opțiunea D, rafinată; Page → Book →
 Volume → Collection), neimplementată. D-07: DECISĂ (opțiunea C, locul = dovadă, nu verdict),
 neimplementată. D-08: DECISĂ (opțiunea D, gradată; contestat → REVIEW), neimplementată.
-D-09: DECISĂ (opțiunea D; motiv, aplicabilitate, contrafactual, referință), neimplementată. Tabelul de mai jos rămâne prezentarea inițială, nu se rescrie.
+D-09: DECISĂ (opțiunea D; motiv, aplicabilitate, contrafactual, referință), neimplementată. D-10: DECISĂ (opțiunea C,
+rafinată semantic), neimplementată. Tabelul de mai jos rămâne prezentarea inițială, nu se rescrie.
 
 **Cum se înregistrează:**
 - **Pentru un caz:** `node scripts/enterprise/gold-adjudicate.mjs record --case=<id> --decision=correct --label=positive|negative

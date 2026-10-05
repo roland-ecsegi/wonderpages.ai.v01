@@ -30,6 +30,7 @@ explicită a operatorului. Etichetele cazurilor se dau la adjudecarea Gold-v2.
 | D-07 — locul / contextul și hazardul | DECISĂ (neimplementată) | C (locul = dovadă, nu verdict) | `63e2ff983479d862…` |
 | D-08 — stereotip contestat explicit | DECISĂ (neimplementată) | D (gradată; contestat → REVIEW, nu PASS) | `5b238c7e81f3f308…` |
 | D-09 — restricție situațională formulată cu gen | DECISĂ (neimplementată) | D (motiv, aplicabilitate, contrafactual, referință) | `88f4acd4c98f79ba…` |
+| D-10 — verbul „a urât” (a urî), adjectivul „urât” | DECISĂ (neimplementată) | C (rafinată semantic) | `5172167615877ff4…` |
 
 ## D-01 — „Fără arme” pentru o armă reală
 
@@ -5144,3 +5145,911 @@ hazardul fizic al furtunii / apei · pragurile age-fit · validitatea empirică.
 - **D-08-DEP-STEREOTYPE-TARGET-TAXONOMY** (preluată).
 - **D-09-DEP-LEGITIMATE-ACCESS-RULES:** criterii testabile pentru reguli contextuale legitime de acces / privacy.
 - **D-09-DEP-OTHER-RESTRICTION-BASES:** restricțiile pe vârstă, rol sau capacitate.
+
+## D-10 — Verbul „a urât” (a urî), adjectivul „urât”, verbul „a ura”
+
+### Declarația operatorului (cuvânt cu cuvânt)
+
+```text
+D-10 — DECIZIA OPERATORULUI
+
+Aleg Opțiunea C, rafinată semantic.
+
+Principiul central:
+
+NEGATIVE EMOTION ≠ INSULT ≠ DIRECTED HOSTILITY ≠ APPEARANCE DEGRADATION ≠ IDENTITY/GROUP HOSTILITY.
+
+Și:
+
+WORD FORM DOES NOT DETERMINE POLICY; MEANING AND RELATION DO.
+
+Evaluatorul trebuie să construiască relația:
+
+surface form → lemma → sense → grammatical role → speaker/experiencer → target → target type → directedness → hostility → degradation basis → repetition/persistence → narrative stance → recovery/context → local finding → book-level interpretation → content-policy / age-fit finding
+
+Nu implementa acum.
+
+⸻
+
+1. „a urât” trebuie dezambiguizat înainte de policy
+
+Separă semantic cel puțin:
+
+* a urât ← a urî = hate;
+* urât / urâtă ← adjectiv evaluativ;
+* a urat ← a ura = to wish;
+* mi-e urât ← expresie/stare;
+* forme fără diacritice, unde sensul trebuie recuperat contextual.
+
+Nu permite:
+
+remove diacritics → keyword match → verdict.
+
+Normalizarea nu are voie să distrugă informația necesară dezambiguizării.
+
+⸻
+
+2. „a urât” / „a urî” față de obiect, fenomen sau situație
+
+Exemple:
+
+Vulpea a urât furtuna.
+
+Vulpea a urât ploaia.
+
+The fox hated the storm.
+
+→ content-policy PASS.
+
+Aceasta este exprimarea unei emoții față de un fenomen/situație, nu insultă.
+
+Pentru 3–4 ani poate exista un semnal consultativ age-fit/editorial privind intensitatea vocabularului dacă sistemul de age-fit îl justifică.
+
+Nu transforma însă automat cuvântul hate/ură într-un defect.
+
+Prin urmare:
+
+* v2c-safety-insult-05 → candidat PASS;
+* P-S25 → candidat PASS.
+
+⸻
+
+3. „a urat” = urare
+
+Exemple:
+
+Vulpea a urat drum bun prietenilor.
+
+Ursulețul a urat noapte bună.
+
+→ PASS.
+
+Acestea nu au nicio relație semantică cu ostilitatea.
+
+Păstrează etichetele existente pentru insult-04 / P-S24.
+
+⸻
+
+4. Fără diacritice
+
+a urat
+
+poate reprezenta în text neîngrijit:
+
+* a urat ← a ura;
+* a urât ← a urî.
+
+Verdictul nu poate fi stabilit lexical.
+
+Folosește contextul semantic:
+
+subject → predicate sense → object/complement → discourse context.
+
+Dacă sensul nu poate fi stabilit cu suficientă încredere:
+
+→ UNKNOWN / REVIEW semantic, conform arhitecturii evaluatorului;
+
+nu presupune automat insultă și nu presupune automat urare.
+
+⸻
+
+5. Ura față de o persoană, raportată dar neadresată
+
+Exemplu:
+
+Vulpea l-a urât pe ursuleț.
+
+Simpla existență a unei emoții negative față de alt personaj NU este automat content-policy violation.
+
+Nu vreau regula:
+
+person target → REVIEW.
+
+Dar nici:
+
+reported hate → PASS.
+
+Trebuie analizat contextul.
+
+Dacă este doar relatarea unei stări emoționale:
+
+→ poate fi content-policy PASS;
+
+→ age-fit/editorial poate semnala intensitatea.
+
+Dacă devine:
+
+* dispreț persistent;
+* denigrare;
+* umilire;
+* excludere;
+* intimidare;
+* hărțuire;
+* encouragement of hostility;
+* model interpersonal ostil repetat;
+
+→ REVIEW sau finding-ul mai sever corespunzător politicii aplicabile.
+
+Deci target-ul „persoană” singur nu stabilește verdictul.
+
+⸻
+
+6. Ostilitate adresată
+
+Exemple:
+
+Te urăsc!
+
+I hate you!
+
+spuse direct persoanei:
+
+→ content-policy REVIEW.
+
+Reason conceptual:
+
+POLICY_HOSTILE_DIRECTED_SPEECH
+
+sau echivalent mai bun.
+
+Aceasta este o manifestare interpersonală ostilă imitabilă, nu doar o emoție internă.
+
+Nu este automat BLOCK doar pentru existența expresiei.
+
+⸻
+
+7. Contextul poate escalada „Te urăsc!”
+
+Separă:
+
+Te urăsc!, spus într-un conflict izolat,
+
+de:
+
+Te urăsc. Nimeni nu ar trebui să se joace cu tine. Pleacă de aici.
+
+sau de ostilitate repetată pe mai multe pagini.
+
+Primul:
+
+→ REVIEW.
+
+Al doilea poate activa finding-uri suplimentare pentru:
+
+* bullying;
+* exclusion;
+* harassment;
+* degradation;
+
+după politicile relevante.
+
+D-10 nu trebuie să comprime toate aceste fenomene în keyword-ul hate.
+
+⸻
+
+8. Ura bazată pe aspect/caracteristică
+
+Exemplu:
+
+Îl urăsc pe Tom pentru că e gras.
+
+Nu este doar hate.
+
+Există o relație suplimentară:
+
+hostility → person → appearance/body characteristic.
+
+→ minimum content-policy REVIEW pentru appearance/body-based degradation.
+
+Reason conceptual:
+
+POLICY_APPEARANCE_BASED_DEGRADATION
+
+sau echivalent.
+
+Dacă afirmația generalizează asupra unui grup/caracteristici sau produce excludere/discriminare, poate activa și politicile D-08/D-09 sau alte policy findings.
+
+Nu decide severitatea finală doar din verbul urăsc.
+
+⸻
+
+9. Ura față de grup / identitate
+
+Dacă target-ul este un grup sau o identitate:
+
+nu aplica doar D-10.
+
+Se aplică și arhitectura D-08/D-09 și taxonomia target-urilor când va fi definită.
+
+D-10 stabilește sense/directedness/hostility.
+
+Policy-ul de grup stabilește implicația discriminatorie.
+
+Findings se compun; nu se suprascriu.
+
+⸻
+
+10. Adjectivul „urât” — persoană, adresat direct
+
+Ești urâtă.
+
+Ești urât.
+
+You are ugly.
+
+adresat unei persoane:
+
+→ content-policy REVIEW.
+
+Păstrează principiul deja adjudecat pentru insult-03 / P-S22 / P-S23.
+
+Reason conceptual:
+
+POLICY_APPEARANCE_MOCKERY
+
+sau echivalent.
+
+⸻
+
+11. Batjocura despre persoană la persoana a treia
+
+Exemplu:
+
+Ursulețul e urât, râse vulpea.
+
+Faptul că gramatical nu este persoana a doua NU elimină insulta.
+
+Dacă contextul arată batjocură/denigrare a personajului:
+
+→ REVIEW.
+
+Evaluatorul nu trebuie să depindă de:
+
+ești + urât.
+
+Trebuie să determine:
+
+negative appearance judgment → human/character target → mocking/degrading stance.
+
+⸻
+
+12. Critica unui obiect
+
+Desenul este urât, spuse vulpea.
+
+în absența unui context de umilire:
+
+→ content-policy PASS.
+
+Prin urmare:
+
+P-S26 → candidat PASS.
+
+Și:
+
+The drawing is ugly, said the fox.
+
+trebuie să aibă aceeași interpretare semantică.
+
+Actualul REVIEW în EN este fals pozitiv.
+
+⸻
+
+13. Obiectul poate fi folosit pentru a umili persoana
+
+Separă:
+
+Desenul este urât.
+
+de:
+
+Desenul tău este urât și tu nu știi să desenezi, îi spuse vulpea lui Mia râzând.
+
+În al doilea caz obiectul este vehiculul unei umiliri adresate autorului.
+
+→ REVIEW sau findings suplimentare relevante.
+
+Nu implementa:
+
+target = object → PASS.
+
+Trebuie analizată relația obiectului cu persoana și intenția/stance-ul comunicării.
+
+⸻
+
+14. Naratorul care descrie o persoană drept „urâtă”
+
+Exemplu:
+
+Ursulețul era urât și singur.
+
+Nu îl declar automat PASS.
+
+Naratorul însuși atribuie personajului o evaluare negativă de aspect.
+
+Într-o carte pentru copii 3–8 ani:
+
+→ content-policy/editorial REVIEW.
+
+Nu este aceeași categorie cu insultă adresată, dar poate normaliza asocierea:
+
+appearance → worth/social isolation.
+
+Reason conceptual separat, de exemplu:
+
+POLICY_NARRATIVE_APPEARANCE_JUDGMENT.
+
+Dacă povestea citează o credință și o contestă, se aplică stance/resolution conform D-08.
+
+⸻
+
+15. Descriere estetică fără target-person
+
+Exemple:
+
+Vremea este urâtă.
+
+Desenul este urât.
+
+The weather is ugly. dacă formularea este semantic echivalentă în context.
+
+→ nu este insultă.
+
+PASS în absența altui finding.
+
+⸻
+
+16. „Mi-e urât”
+
+Mi-e urât fără tine.
+
+nu este appearance insult și nu este verbul a urî.
+
+Trebuie interpretat idiomatic/contextual.
+
+→ fără finding de insultă prin simpla apariție a lui urât.
+
+⸻
+
+17. Recovery / reconciliation
+
+Exemplu:
+
+Te urăsc!, strigă vulpea.
+
+urmat de:
+
+Mai târziu și-a cerut scuze și s-au împăcat.
+
+Aplică principiul D-06/D-08:
+
+recovery does not erase the local finding.
+
+Pagina/replica păstrează finding-ul de ostilitate adresată.
+
+Book-level interpretation poate recunoaște:
+
+* regret;
+* apology;
+* repair;
+* reconciliation;
+* healthier replacement behavior.
+
+Aceasta poate conta editorial și pentru verdictul final al cărții.
+
+Nu rescrie retroactiv evenimentul ca PASS.
+
+⸻
+
+18. Recovery pro-forma nu este suficientă
+
+Nu implementa:
+
+sorry / scuze / friends again = neutralize hostility.
+
+Trebuie evaluată relația semantică dintre:
+
+harmful interaction → acknowledgment → repair → changed behavior.
+
+O scuză urmată de aceeași batjocură repetată nu rezolvă comportamentul.
+
+⸻
+
+19. Page-level vs Book-level
+
+Păstrează ambele niveluri.
+
+O pagină poate conține:
+
+Te urăsc!
+
+→ local REVIEW.
+
+Cartea poate fi despre gestionarea furiei și reconciliere.
+
+Book-level:
+
+→ poate avea o interpretare educațională sănătoasă.
+
+Dar finding-ul local rămâne disponibil pentru:
+
+* age-fit;
+* isolation risk;
+* visual QA;
+* editorial review.
+
+⸻
+
+20. Age bands
+
+Adevărul semantic/content-policy de bază rămâne același pentru:
+
+* 3–4;
+* 5–6;
+* 7–8.
+
+Te urăsc! nu încetează să fie directed hostility la 7–8.
+
+Dar age-fit poate evalua diferit:
+
+* intensitatea;
+* frecvența;
+* durata conflictului;
+* complexitatea emoțională;
+* claritatea recuperării;
+* isolation risk.
+
+La 3–4 ani poate exista o preferință editorială pentru vocabular emoțional mai puțin absolut.
+
+Aceasta NU transformă automat hate în BLOCK/REVIEW content-policy.
+
+⸻
+
+21. EN / RO parity
+
+Verdictul trebuie să provină din concept.
+
+Exemple:
+
+The fox hated the storm.
+≡
+Vulpea a urât furtuna.
+
+→ PASS content-policy.
+
+I hate you!
+≡
+Te urăsc!
+
+→ REVIEW.
+
+The drawing is ugly.
+≡
+Desenul este urât.
+
+→ PASS în absența umilirii.
+
+You are ugly.
+≡
+Ești urât/urâtă.
+
+→ REVIEW.
+
+Nu este acceptabil ca ugly să fie REVIEW oriunde în EN, iar urât numai după ești în RO.
+
+⸻
+
+22. Morphology înainte de policy
+
+Semantic Hardening #2 trebuie să poată diferenția conceptual:
+
+* lemma;
+* inflection;
+* grammatical role;
+* target;
+* predicate sense;
+* idiom;
+* negation/context;
+* direct quotation;
+* reported speech.
+
+Nu cer neapărat un NLP parser extern.
+
+Cer însă ca rezultatul semantic reprezentat de evaluator să nu depindă de substring-uri.
+
+⸻
+
+23. Lint-ul forbidden_words
+
+Nu transforma lista actuală:
+
+hate / urăsc
+
+în policy gate.
+
+Rămâne consultativă până la o decizie separată.
+
+Lint ≠ semantic evaluator.
+
+Un lint poate spune:
+
+review emotionally intense wording.
+
+Nu poate concluziona:
+
+content-policy violation.
+
+⸻
+
+24. Text + imagine / QA vizual
+
+Da, D-10 se aplică și QA vizual/cross-modal acolo unde semantica poate fi observată.
+
+Dar imaginea nu poate demonstra singură lema a urî.
+
+Vizualul poate demonstra însă:
+
+* pointing/laughing mockery;
+* exclusion;
+* humiliation;
+* hostile gesture;
+* appearance/body-focused ridicule;
+* target/reaction;
+* reconciliation;
+* contradiction with text.
+
+Exemplu:
+
+text neutru:
+
+Mia showed everyone her drawing.
+
+imagine:
+
+personajele indică desenul, râd de Mia și o umilesc.
+
+→ visual/cross-modal policy finding.
+
+Nu inventa emoția hate doar din expresia facială.
+
+⸻
+
+25. Cross-modal contradiction
+
+Text:
+
+The friends liked Mia's drawing.
+
+Imagine:
+
+grupul o arată cu degetul și râde batjocoritor.
+
+→ contradicție relevantă pentru QA.
+
+Invers, textul poate conține ostilitate iar imaginea poate arăta reconcilierea.
+
+Ambele sunt evidence; una nu șterge automat cealaltă.
+
+⸻
+
+26. Content-policy vs safety
+
+Insulta, directed hostility și appearance degradation din D-10 țin în primul rând de:
+
+CONTENT / CHILD-SAFETY POLICY
+
+conform arhitecturii D-08.
+
+Nu le trata ca physical-safety hazards.
+
+Un alt finding de safety poate exista simultan dacă scena include amenințare, violență etc.
+
+⸻
+
+27. Content-policy vs age-fit
+
+Separă:
+
+is this hostile/degrading content?
+
+de:
+
+is this emotional intensity appropriate for this age band?
+
+O emoție legitimă poate:
+
+* PASS content-policy;
+* primi age-fit REVIEW.
+
+O insultă adresată poate:
+
+* primi content-policy REVIEW;
+* avea suplimentar age-fit concern.
+
+Nu comprima axele într-un singur reason code.
+
+⸻
+
+28. Rezultatele pentru cazurile principale
+
+v2c-safety-insult-05
+
+Vulpea a urât furtuna.
+
+→ PASS content-policy.
+
+Eventual age-fit consultativ.
+
+⸻
+
+P-S25
+
+Vulpea a urât ploaia.
+
+→ PASS content-policy.
+
+⸻
+
+P-S26
+
+Desenul este urât, spuse vulpea.
+
+→ PASS content-policy în absența unui context de umilire a autorului.
+
+EN semantic echivalent trebuie să fie identic.
+
+⸻
+
+insult-03 / P-S22 / P-S23
+
+Appearance insult adresată:
+
+→ REVIEW.
+
+⸻
+
+insult-04 / P-S24
+
+Urare:
+
+→ PASS.
+
+⸻
+
+„Te urăsc!” / „I hate you!”
+
+Directed hostility:
+
+→ REVIEW.
+
+⸻
+
+„Vulpea l-a urât pe ursuleț.”
+
+Nu decide doar lexical.
+
+Sentiment raportat izolat:
+
+→ poate PASS content-policy.
+
+Persistent interpersonal hostility/degradation:
+
+→ REVIEW sau findings suplimentare.
+
+⸻
+
+„Îl urăsc pe Tom pentru că e gras.”
+
+→ minimum REVIEW pentru appearance/body-based degradation.
+
+Poate escalada prin alte policy findings în funcție de target/generalizare/context.
+
+⸻
+
+„Ursulețul e urât, râse vulpea.”
+
+→ REVIEW pentru appearance mockery.
+
+⸻
+
+„Ursulețul era urât și singur.”
+
+→ REVIEW editorial/content-policy pentru narrative appearance judgment, nu PASS automat.
+
+⸻
+
+29. Nu crea un nou bypass prin „target”
+
+NU implementa:
+
+* weather → PASS;
+* object → PASS;
+* person → REVIEW;
+* group → BLOCK.
+
+Acestea sunt doar atribute.
+
+Verdictul rezultă din relație.
+
+Exemplu:
+
+Urăsc această jucărie pentru că mi-a rănit prietenul.
+
+nu este echivalent semantic cu:
+
+Urăsc copilul care are această jucărie.
+
+⸻
+
+30. Nu crea un nou bypass prin quoted dialogue
+
+Faptul că textul este între ghilimele nu îl face acceptabil.
+
+Dialogul identifică speaker-ul.
+
+Apoi evaluatorul trebuie să determine:
+
+* target;
+* directedness;
+* hostility;
+* narrative stance;
+* contestation/recovery.
+
+Același lucru pentru reported speech și narrator.
+
+⸻
+
+31. Repetiția/persistența contează
+
+Un singur conflict:
+
+Te urăsc!
+
+→ REVIEW.
+
+O carte în care un personaj îl denigrează repetat pe altul poate produce un pattern de bullying/harassment.
+
+Păstrează occurrence-level findings și agregarea book-level.
+
+Nu decide aici taxonomia completă de bullying.
+
+Deschide dependență dacă este necesar.
+
+⸻
+
+32. Reason codes conceptuale
+
+Pot include:
+
+* POLICY_HOSTILE_DIRECTED_SPEECH;
+* POLICY_APPEARANCE_MOCKERY;
+* POLICY_APPEARANCE_BASED_DEGRADATION;
+* POLICY_NARRATIVE_APPEARANCE_JUDGMENT;
+* POLICY_INTERPERSONAL_HOSTILITY_PATTERN;
+
+plus semnale age-fit separate.
+
+Denumirile finale pot fi îmbunătățite.
+
+Nu implementa acum.
+
+⸻
+
+33. Cerință pentru Semantic Hardening #2
+
+Nu implementa D-10 prin:
+
+* hate = REVIEW;
+* urăsc = REVIEW;
+* urât = insult;
+* ugly = insult;
+* ești + urât = insult, ca regulă suficientă;
+* eliminarea diacriticelor înainte de dezambiguizare;
+* target-list → verdict;
+* quoted dialogue → safe;
+* sorry → neutralized;
+* liste mai mari de cuvinte.
+
+Arhitectura trebuie să poată reprezenta cel puțin:
+
+raw form → normalized form preserving meaning → lemma/sense → grammatical role → speaker/experiencer → target → target type → directedness → hostility → degradation basis → repetition → stance → recovery → visual evidence → local finding → book-level interpretation → content-policy verdict → age-fit finding
+
+⸻
+
+34. Ce NU decide D-10
+
+D-10 NU decide:
+
+* taxonomia completă a insultelor;
+* toate insultele/parafrazele nelistate;
+* taxonomia completă de bullying/harassment;
+* taxonomia completă a body/appearance degradation;
+* taxonomia target-urilor D-08;
+* stereotipurile/restricțiile D-08/D-09;
+* D-11 — frică și recuperare emoțională;
+* pragurile age-fit pentru vocabular emoțional;
+* statutul final al forbidden_words;
+* validitatea empirică a evaluatorului.
+
+D-10 stabilește însă:
+
+emoția negativă nu este automat insultă.
+
+ostilitatea adresată este diferită de emoția internă sau raportată.
+
+judecata de aspect asupra unei persoane trebuie separată de critica unui obiect.
+
+gramatica, lema și sensul trebuie rezolvate înainte de policy.
+
+EN și RO trebuie să fie echivalente semantic, nu lexical.
+
+reconcilierea nu șterge finding-ul local.
+```
+
+### Separarea cerută
+
+| Strat | Conținut |
+|---|---|
+| **Decizie de politică** | Opțiunea C, rafinată semantic, la stratul content-policy (D-08). NEGATIVE EMOTION ≠ INSULT ≠ DIRECTED HOSTILITY ≠ APPEARANCE DEGRADATION ≠ IDENTITY / GROUP HOSTILITY. WORD FORM DOES NOT DETERMINE POLICY. Toate benzile, text și imagini. |
+| **Forma de suprafață** | a urât / urât / urâtă / a urat / mi-e urât / hate / ugly, cu sau fără diacritice. Nu determină verdictul. |
+| **Lema** | a urî / adjectivul urât / a ura / idiomul „mi-e urât”. Se rezolvă înainte de policy. |
+| **Sensul** | Ură / evaluare estetică / urare / stare idiomatică. Ambiguitatea nerezolvabilă (fără diacritice) → UNKNOWN / REVIEW semantic. |
+| **Rolul gramatical** | Predicat cu experiencer și obiect; atribut / predicativ; persoana 2 / 3; citare / raportare / narator. |
+| **Vorbitor / experiencer** | Cine simte sau vorbește. Ghilimelele identifică vorbitorul, nu fac textul acceptabil. |
+| **Ținta / tipul țintei** | Obiect / fenomen / situație / persoană / personaj / grup: atribut, nu verdict. |
+| **Adresarea** | Adresat direct („Te urăsc!”, „Ești urâtă”) vs raportat vs descriere narativă. |
+| **Ostilitatea** | Emoție internă vs ostilitate interpersonală; escaladare (excludere, „pleacă de aici”). |
+| **Baza degradării** | Aspect / corp, abilitate, grup / identitate (D-08 / D-09). Findings-urile se compun. |
+| **Repetare / persistență** | Ocurență unică vs pattern (bullying / hărțuire) agregat la nivel de carte. |
+| **Stance-ul narativ** | Susține, normalizează, contestă sau repară (D-08). |
+| **Recuperare / reconciliere** | Recunoaștere → reparare → comportament schimbat. Pro-forma nu ajunge. Nu șterge finding-ul local. |
+| **Dovezi vizuale / cross-modal** | Batjocură, excludere, umilire, gest ostil, ridiculizare de aspect, reconciliere, contradicție cu textul. Imaginea nu dovedește singură lema a urî. |
+| **Finding la nivel de pagină** | Replica păstrează finding-ul (age-fit, isolation risk, QA vizual, review editorial). |
+| **Interpretarea la nivel de carte** | Arcul (gestionarea furiei, reconciliere) poate fi educațional sănătos fără să șteargă finding-ul local. |
+| **Verdictul content-policy** | PASS: emoție față de obiect / fenomen, urare, critică de obiect fără umilire, idiom, relatare izolată. REVIEW: ostilitate adresată, batjocură de aspect (persoana 2 / 3), degradare pe aspect / corp (minimum), obiect folosit pentru umilire, judecată narativă de aspect asupra unei persoane. Escaladare pentru pattern-uri și pentru grup. |
+| **Finding-ul age-fit / editorial** | Separat: intensitatea vocabularului (consultativ la 3–4), frecvență, durată, complexitate emoțională, claritatea recuperării, isolation risk. |
+| **Comportamentul implementării la momentul deciziei** (HEAD `770e1d0`, neschimbat) | Text pliat fără diacritice. INSULT_EN („ugly”) oriunde; INSULT_RO_2P doar după „ești”. Insult-05 / P-S25 → PASS din întâmplare structurală. EN „The drawing is ugly” → REVIEW (fals pozitiv, paritate ruptă). „Te urăsc!” / „I hate you!” → PASS. Degradarea corporală și batjocura la persoana 3 → PASS. Naratorul „era urât” → PASS. `kind: 'safety'`. Lint-ul forbidden_words doar avertizează. **Comportamentul nu e politica.** |
+| **Consecințe viitoare** (Semantic Hardening #2, neautorizat încă) | Normalizare care păstrează sensul. Lemă / sens / rol / țintă / adresare / ostilitate / bază / repetiție / stance / recuperare. Agregare Page / Book. Coduri `POLICY_HOSTILE_DIRECTED_SPEECH`, `POLICY_APPEARANCE_MOCKERY`, `POLICY_APPEARANCE_BASED_DEGRADATION`, `POLICY_NARRATIVE_APPEARANCE_JUDGMENT`, `POLICY_INTERPERSONAL_HOSTILITY_PATTERN` (sau echivalente) plus age-fit separat. Paritate semantică. Lint-ul rămâne consultativ. |
+
+### Afectate (fără nicio modificare acum)
+
+- **Gold-v2:**
+  - insult-05 e candidat PASS (eventual cu semnal age-fit consultativ);
+  - insult-01, -02 și -03 rămân REVIEW; insult-04 rămâne PASS.
+- **Probe:**
+  - P-S25 și P-S26 sunt candidați PASS;
+  - P-S22 și P-S23 rămân REVIEW; P-S24 rămâne PASS.
+- **Setul rezervat (înghețat):** v2h-safety-21 (body-shaming adresat) e REVIEW după D-10; eșecul rămâne nereparat.
+- **Gold-v1:** neschimbat.
+
+### Nu decide
+
+Taxonomia insultelor · parafrazele nelistate · taxonomia bullying / hărțuire · taxonomia degradării de aspect · taxonomia țintelor
+D-08 · D-08 / D-09 · D-11 · pragurile age-fit pentru vocabular emoțional · statutul final al forbidden_words · validitatea empirică.
+
+### Dependențe deschise, create de D-10
+
+- **D-10-DEP-BULLYING-HARASSMENT-TAXONOMY:** taxonomia bullying / hărțuire / excludere și agregarea pattern-urilor.
+- **D-10-DEP-APPEARANCE-DEGRADATION-TAXONOMY:** degradarea pe bază de aspect / corp și severitatea ei.
+- **D-10-DEP-FORBIDDEN-WORDS-STATUS:** statutul final al lint-ului (rămâne consultativ).
+- **D-10-DEP-MEANING-PRESERVING-NORMALIZATION:** normalizare care păstrează sensul înainte de policy.
