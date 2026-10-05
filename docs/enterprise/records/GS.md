@@ -1017,3 +1017,54 @@ threshold case ≠ independent validation of policy threshold; împreună: nu aj
 demonstrează un defect de age fit, dovadă relevantă și o adjudecare independentă a severității. **OBS-GS-19** rămâne separată
 (precizie, rotunjire, exact vs afișat, explicabilitatea respingerii); OBS-GS-20 privește cine justifică pragul, independența etichetei,
 circularitatea calibrării și validitatea politicii.
+
+*Cazul 41 (`quality-sea-3-4-English-05`, intrarea 41) — al doilea negativ de calitate (operatorul, 2026-10-05).* Răspunsul criticului =
+baseline-ul 37 cu o singură diferență: **T13 = 6,5** (T13 = „Agency: the main character drives the key actions; secondary characters
+never dominate”, criteriu necritic). Confirmat negativ / neacceptabil; acord structurat pe politica-țintă v2 (verdict DA, raționament
+YES). Rezultate executate, separat:
+
+| | v1 (activă) | v2 (politica-țintă) |
+|---|---|---|
+| Media exactă / afișată | 8,8611 / 8,9 — trece | 8,8611 / 8,9 — trece |
+| Criterii critice | T01/T07/T08 = 9 ≥ 7 — trec | T01/T08 = 9 ≥ 8 — trec |
+| Minimul pe criteriu | — (v1 nu are minim pe criterii necritice) | niciun criteriu < 7 → **T13 = 6,5 eșuează** |
+| Existența dovezilor | doar consemnată | trece |
+| Rezultat | **ACCEPT** | **REJECT** |
+| Motive | `[]` | „Criterii sub 7: T13.” |
+| Gold agreement | **NU** | **DA** |
+| Implementation correctness | **DA** | **DA** |
+
+v1 descris corect: **v1’s compensatory policy accepts case 41, while the operator-adjudicated editorial outcome rejects T13=6.5** — NU
+„v1 fails to implement quality policy” (policy disagreement, nu defect). Raționament v2 YES la nivelul cazului: verdictul e determinat
+de T13 < 7 (nu de medie), cu motiv explicit; limita privind universalitatea regulii aparține OBS-GS-20 / policy validity, nu
+raționamentului cazului. Rotunjirea (OBS-GS-19) nu intervine (8,8611 și 8,9 > 8), iar problema `reasons: []` nu apare la v2. OBS-GS-18
+rămâne: aceeași frază e dovada pentru T13 = 6,5; cazul validează răspunsul porții la evaluarea furnizată și decizia editorială *if T13
+really is 6.5, automatic acceptance should be blocked* — NU că criticul a măsurat corect această poveste sintetică la T13 = 6,5.
+*Decizia editorială a operatorului (specifică):* **„Operator adjudication: T13 Agency at 6.5 is insufficient for automatic acceptance
+and should trigger repair/re-evaluation.”** 17 criterii foarte bune nu trebuie să poată ascunde complet o problemă serioasă de agenție a
+protagonistului; „necritic” nu înseamnă „compensabil fără limită”. Coexistă cu decizia de la cazul 40 (T01 critic → minimum 8) fără a
+declara toate criteriile echivalente: *critical criterion with stricter floor* ≠ *non-critical criterion with no meaningful floor at
+all*. NU: „Operator validated minCriterion=7 for every rubric criterion.”
+*Policy validity:* operatorul confirmă specific că T13 = 6,5 trebuie să blocheze; **universal minCriterion=7 across all T01–T18 rămâne
+nevalidat.** *Clasificare (OBS-GS-12):* **controlled policy-discrimination variant of case 37 — non-critical floor dimension** (40
+discriminează pragul critic T01; 41 discriminează compensarea unei note necritice mici / minimul pe criteriu); același baseline
+sintetic — utile pentru discriminarea politicilor, NU stimuli independenți de calitate a conținutului.
+*Ce se poate afirma:* operator adjudication rejects T13 Agency = 6.5 despite a high aggregate score; this supports a non-compensatory
+floor for this demonstrated T13 condition; v2 produces the operator-adjudicated outcome, v1 does not. NU: all non-critical criteria
+require ≥ 7; NU: universal minCriterion=7 validated; NU: v2 quality policy validated; NU: v2 globally superior to v1.
+
+*Extensie OBS-GS-20 (operatorul, la cazul 41, 2026-10-05) — specific threshold adjudication ≠ universal threshold validation.* v2
+conține `minCriterion = 7` pentru toate cele 18 criterii; gold-v1 oferă aici un singur stimul (T13 = 6,5). Self-consistency-ul *T13 =
+6.5 → v2 universal rule rejects → Gold says negative* nu demonstrează independent că aceeași regulă e potrivită pentru T02, T03, T04,
+T05, T06 etc. *Case 41 supports the v2 outcome for T13=6.5, but case 41 alone does not independently validate the universal
+minCriterion=7 policy across all 18 criteria.* Există dovadă editorială în favoarea unui minim și pentru anumite criterii necritice, dar
+nu încă pentru forma universală exactă. Direcții pentru setul v2 (nu se creează acum): criterii unde < 7 trebuie clar să blocheze;
+criterii unde o slăbiciune moderată poate fi compensabilă; criterii dependente de context; criterii inaplicabile anumitor structuri;
+combinații de două sau mai multe slăbiciuni moderate; un singur defect sever ascuns de o medie mare — apoi decizia între **one
+universal floor** și **criterion-specific floors / criterion classes / applicability-aware thresholds** (nu se decide și nu se
+implementează acum). Circularitatea nu se reproduce în v2: NU doar „T04 = 6.9 → negative, T05 = 6.9 → negative…”, ci conținut relevant,
+dovadă relevantă pentru criteriu, evaluare justificată, adjudecare independentă a operatorului și cazuri-limită controlate.
+
+*Extensie OBS-GS-12 (operatorul, la cazul 41, 2026-10-05) — policy-domain coverage.* O regulă cu domeniu de 18 criterii e exersată de un
+caz de aur într-o singură instanță (T13): **rule coverage ≠ policy-domain coverage** — testul unei instanțe a unei reguli universale nu
+validează toate instanțele ei.
