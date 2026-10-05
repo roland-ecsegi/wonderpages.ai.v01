@@ -45,7 +45,20 @@ export function contamination(gold) {
   return { clean: !problems.length, problems };
 }
 
-export function runEvaluation(gold, { split = 'calibration', policy = 2, repeat = 2 } = {}) {
+/* set identity: content hash per case (its adjudication block excluded) and over the whole set */
+export const caseHash = c => { const { adjudication, ...rest } = c || {}; return canonicalHash(rest); };
+export const goldHash = gold => canonicalHash({ manifest: gold.manifest, cases: gold.cases.map(c => [c.id, caseHash(c)]) });
+/** The set as the operator adjudicated it (in memory): corrected labels applied, excluded cases removed. */
+export function applyAdjudications(gold, state) {
+  const out = structuredClone(gold);
+  out.cases = out.cases.filter(c => state.effective[c.id]?.decision !== 'exclude').map(c => { const e = state.effective[c.id]; if (!e) return c; return { ...c, ...(e.decision === 'correct' ? { label: e.result.label, expected: e.result.expected } : {}), adjudication: { status: e.decision === 'correct' ? 'operator_corrected' : 'operator_confirmed', entry: e.hash } }; });
+  return out;
+}
+
+/** adjudication: the current adjudication state (server/quality/adjudication.js); the run then uses the operator's
+ *  labels and the report is bound to that state (hash), so a later change makes the report stale. */
+export function runEvaluation(source, { split = 'calibration', policy = 2, repeat = 2, adjudication = null } = {}) {
+  const gold = adjudication ? applyAdjudications(source, adjudication) : source;
   const manifestHash = canonicalHash(gold.manifest), cases = gold.cases.filter(c => split === 'all' || c.split === split);
   const rows = [], nondeterministic = [];
   for (const c of cases) {
@@ -56,14 +69,15 @@ export function runEvaluation(gold, { split = 'calibration', policy = 2, repeat 
   }
   const by = key => Object.fromEntries([...new Set(rows.map(r => r[key]))].map(v => [v, metrics(rows.filter(r => r[key] === v))]));
   const evaluators = Object.fromEntries([...new Set(rows.map(r => r.kind))].map(k => [k, { ...metrics(rows.filter(r => r.kind === k)), errors: rows.filter(r => r.kind === k && (!r.exact || (r.predicted !== r.label))).map(r => ({ id: r.id, label: r.label, predicted: r.predicted, detail: r.detail })) }]));
-  return { schema: 'wonderpages.evaluation-report/1', id: 'ev-' + crypto.randomBytes(5).toString('hex'), dataset: { id: gold.manifest.id, version: gold.manifest.version, manifestHash, caseCount: gold.cases.length, rights: gold.manifest.rights }, split, versions: { evaluator: EVALUATOR_VERSION, qualityPolicy: policy }, at: Date.now(),
+  return { schema: 'wonderpages.evaluation-report/1', id: 'ev-' + crypto.randomBytes(5).toString('hex'), dataset: { id: gold.manifest.id, version: gold.manifest.version, manifestHash, goldHash: goldHash(source), caseCount: source.cases.length, evaluatedCases: gold.cases.length, rights: gold.manifest.rights }, split, versions: { evaluator: EVALUATOR_VERSION, qualityPolicy: policy }, at: Date.now(),
     overall: metrics(rows), evaluators, cohorts: { age: by('age'), language: by('language'), theme: by('theme') }, determinism: { repeat, nondeterministic }, contamination: contamination(gold),
-    adjudication: gold.manifest.adjudication, limitations: gold.manifest.limitations };
+    adjudication: gold.manifest.adjudication, adjudicationState: adjudication ? { hash: adjudication.hash, complete: adjudication.complete, counts: adjudication.counts } : null, limitations: gold.manifest.limitations };
 }
 /** Reports are comparable only for the same dataset version and split; a policy/evaluator swap is shown, never hidden. */
 export function compareReports(a, b) {
   if (a.dataset.id !== b.dataset.id || a.dataset.version !== b.dataset.version || a.dataset.manifestHash !== b.dataset.manifestHash) throw { status: 409, code: 'not_comparable', message: 'Rapoartele folosesc seturi de date diferite; nu se compară.' };
   if (a.split !== b.split) throw { status: 409, code: 'not_comparable', message: 'Rapoartele folosesc împărțiri diferite (calibrare vs rezervat).' };
+  if ((a.adjudicationState?.hash ?? null) !== (b.adjudicationState?.hash ?? null)) throw { status: 409, code: 'not_comparable', message: 'Rapoartele folosesc adjudecări diferite ale setului; nu se compară.' };
   const changed = Object.entries(a.versions).filter(([k, v]) => b.versions[k] !== v).map(([k]) => k);
   const delta = Object.fromEntries(Object.keys({ ...a.evaluators, ...b.evaluators }).map(k => [k, { accuracy: (b.evaluators[k]?.accuracy ?? 0) - (a.evaluators[k]?.accuracy ?? 0), falsePassRate: (b.evaluators[k]?.falsePassRate ?? 0) - (a.evaluators[k]?.falsePassRate ?? 0) }]));
   return { changedVersions: changed, delta, note: changed.length ? `Schimbare de ${changed.join(', ')}: diferențele se atribuie acestei schimbări, nu se amestecă rapoartele.` : 'Aceleași versiuni.' };
@@ -77,13 +91,16 @@ export function blindPair(a, b, seed = 'seed') {
 }
 export const revealPreference = (pair, choice) => { if (!['left', 'right', 'tie'].includes(choice)) throw { status: 400, message: 'Alegere necunoscută.' }; return { pair: pair.pair, winner: choice === 'tie' ? null : pair.sealed[choice], choice }; };
 /** Maturity claims (P7) may use thresholds only after a clean calibration + holdout report AND the operator's acceptance. */
-export function calibrationStatus(reports = [], acceptance = null) {
+/** current (optional): { adjudication: state } — an acceptance bound to other adjudications/set content is stale. */
+export function calibrationStatus(reports = [], acceptance = null, current = null) {
   const cal = reports.find(r => r.split === 'calibration'), hold = reports.find(r => r.split === 'holdout');
   const reasons = [];
   if (!cal) reasons.push('Lipsește raportul pe setul de calibrare.');
   if (!hold) reasons.push('Lipsește raportul pe setul rezervat.');
   if (cal && !cal.contamination.clean) reasons.push('Setul rezervat este contaminat.');
   if (cal && cal.determinism.nondeterministic.length) reasons.push('Evaluatori nedeterminiști.');
+  if (current?.adjudication && !current.adjudication.complete) reasons.push(`Adjudecarea setului nu este completă (${current.adjudication.pending.length} în așteptare, ${current.adjudication.inconsistencies.length} probleme).`);
   if (!acceptance) reasons.push('Operatorul nu a acceptat încă raportul de calibrare (aprobare umană).');
+  else if (current?.adjudication && (acceptance.adjudicationHash !== current.adjudication.hash || acceptance.goldHash !== current.adjudication.set.goldHash)) reasons.push('Acceptarea operatorului privește alte adjudecări sau alt conținut al setului: trebuie reluată.');
   return { thresholdsStatus: reasons.length ? 'proposed' : 'validated', maturityClaimsAllowed: !reasons.length, reasons };
 }

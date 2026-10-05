@@ -94,7 +94,8 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | P8-T05 | BLOCKED | 6fb15d3 | TEST-P8-T05 (software) 1/1 | migrare/reconciliere/poarta pilotului verificate pe copie; blocat de furnizor real + deciziile operatorului |
 | P8-T06 | PARTIAL | 6fb15d3 | TEST-P8-T06 (software) 3/3 | dus-întors fără pierderi + genericitate; înainte/după și piloții reali depind de P8-T05 |
 | P8-T07 | DONE | 6fb15d3 | TEST-P8-T07 6/6 (browser, 4 dimensiuni) | poarta UX/accesibilitate + registrul final de pregătire |
-| CU (a+b+c+d+e) | DONE (mecanic) | (acest commit) | TEST-CU 18/18 local + PG; poarta PASS; RS0 386/386 local + 386/386 PG | fluxul Creative Upgrade Proposal (doar propunere, agenți permanenți), dosarul BEFORE DW reproductibil, criterii structurale automate, O3 remediat generic; Creative Upgrade-ul real DW = BLOCKED (furnizor neautentic aici) |
+| CU (a+b+c+d+e) | DONE (mecanic) | 30110bb | TEST-CU 18/18 local + PG; poarta PASS; RS0 386/386 local + 386/386 PG | fluxul Creative Upgrade Proposal (doar propunere, agenți permanenți), dosarul BEFORE DW reproductibil, criterii structurale automate, O3 remediat generic; Creative Upgrade-ul real DW = BLOCKED (furnizor neautentic aici) |
+| GS (adjudecare gold) | IN_PROGRESS | (acest commit) | TEST-GS 8/8; poarta PASS 394/394 local + 394/394 PG | jurnal de adjudecare append-only (golul 1), acceptarea blocată până la adjudecare completă și rapoarte corespunzătoare (golul 2); cazul 1 confirmat de operator; 43 în așteptare; acceptarea finală în Enterprise Local |
 
 ## Rulări de teste
 
@@ -154,6 +155,7 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | 2026-10-04 | DW01 aplicat (decizia operatorului, varianta A) prin aplicația reală pe proiectul Enterprise separat | 3 câmpuri modificate, 0 modificări colaterale (diferență completă + verificare independentă pe pachet); DW01 închis, DW02 deschis; aprobări 0; originalul neschimbat | rollback: `34750b0` |
 | 2026-10-04 | DW02 aplicat (decizia operatorului, varianta A) pe proiectul Enterprise separat | 18 câmpuri în planul V1 + metadate de versiune, 0 modificări colaterale (verificare independentă pe pachet); niciun conflict de reconciliere rămas; aprobări 0; originalul neschimbat; producția oprită | rollback: `425b66a` (înainte de DW02), `34750b0` (înainte de DW01) |
 | 2026-10-04 | Creative Upgrade (a+b+c+d+e): poarta de release + suita completă local + PostgreSQL | build/contract/resources/secrets/licenses PASS; 386/386 local (PDF real) + 386/386 PostgreSQL; TEST-CU 18/18 (furnizor simulat: dovezi mecanice) | `docs/enterprise/records/CU.md` |
+| 2026-10-05 | GS: poarta de release + suita completă | build/contract/resources/secrets/licenses PASS; 394/394 local (PDF real) + 394/394 PostgreSQL; TEST-GS 8/8 | `docs/enterprise/records/GS.md` |
 
 ## Probleme deschise
 
@@ -170,10 +172,10 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 - Creative Upgrade real Dinosaur World: **BLOCKED / NOT_RUN** — se rulează în aplicația Enterprise Local a operatorului, cu furnizorul autentic (Claude Pro; ChatGPT dacă un agent e legat de GPT); propunerea rezultată se revizuiește de operator; aplicarea ei este o operație separată, cu aprobarea lui.
 - Producția Dinosaur World este **oprită**: nu a început pilotul V1, nu s-au generat imagini, nu s-a rulat Creative Upgrade-ul real.
 - Dinosaur World real (P8-T05/T06): porțile de revizuire, furnizorul verificat în aplicația operatorului și acceptarea pilotului V1 (WAITING_HUMAN).
-- Setul de aur gold-v1: adjudecarea etichetelor (status pending_operator_review) și acceptarea raportului de calibrare (POST /api/evaluation/accept). Până atunci pragurile v2 rămân „propuse” și afirmațiile de maturitate (P7) sunt blocate. (WAITING_HUMAN)
+- Setul de aur gold-v1: adjudecarea în curs, caz cu caz, prin jurnalul `evaluation/gold/gold-v1.adjudications.jsonl` (1/44 la 2026-10-05); acceptarea raportului de calibrare se face separat, de operator, în Enterprise Local (refuzată de aplicație până la adjudecarea completă). Până atunci pragurile v2 rămân „propuse” și afirmațiile de maturitate (P7) sunt blocate. (WAITING_HUMAN)
 
 ## Checkpoint
 
-- Ultimul task închis: CU (a+b+c+d+e) — fluxul Creative Upgrade Proposal implementat și verificat mecanic; O3 remediat
-- Următorul task: **decizia operatorului** — Gold Set/calibrare, release actualizat, instalarea Enterprise Local cu furnizorul real, apoi Creative Upgrade-ul real (nimic din acestea nu a pornit)
+- Ultimul task închis: GS infrastructură (jurnal de adjudecare + blocarea acceptării premature); cazul 1 adjudecat
+- Următorul task: **adjudecarea cazului 2 din gold-v1** (decizia operatorului); apoi cazurile 3–44, raportul, release-ul, Enterprise Local (acceptarea acolo)
 - Cum se reia: `npm ci && npm run build && BROWSER_PATH=/opt/pw-browsers/chromium npm test`; citește tabelul de mai sus și `docs/enterprise/records/`.
