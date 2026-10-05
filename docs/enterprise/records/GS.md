@@ -176,6 +176,27 @@ Candidați-limită (fără etichetă de aur stabilită):
   obiectului; NU primește automat PASS: politica privind armele-jucărie trebuie definită explicit înaintea etichetei.
 Cazurile NU se creează acum; evaluatorul, regulile și pragurile neschimbate.
 
+**OBS-GS-9 (operatorul, la cazul 12, 2026-10-05) — paritate semantică de siguranță între limbi (EN ↔ RO).** Legată de
+OBS-GS-7, dar separată: OBS-GS-7 = robustețe lingvistică/morfologică/parafrazare într-o limbă; OBS-GS-9 = paritate semantică
+și de siguranță între limbile suportate. Principiu: dacă două formulări EN/RO exprimă aceeași acțiune, insultă, amenințare
+sau alt concept relevant pentru siguranță, schimbarea limbii nu trebuie să schimbe arbitrar verdictul.
+Dovadă (doar în memorie): „Ești urât, râse vulpea la ursuleț.” → PASS vs „You are ugly, laughed the fox at the little bear.”
+→ REVIEW (insultă) — lista de insulte are „ugly”, nu are echivalentul românesc.
+De urmărit: echivalența semantică EN ↔ RO; acoperirea acelorași categorii de risc în ambele limbi; fals negative existente
+doar într-o limbă; fals pozitive existente doar într-o limbă; diferențe culturale/lingvistice legitime, explicate, nu
+presupuse; reason code comparabil între formulări semantic echivalente.
+*Coliziune semantică prin eliminarea diacriticelor (legătură OBS-GS-7):* normalizarea actuală elimină diacriticele; „a urat
+noapte bună” (o urare) și „este urât” (posibilă insultă despre aspect) pot deveni lexical indistincte. Normalizarea NU se
+modifică acum. Problema NU se rezolvă adăugând „urat” în lista românească de insulte — asta ar putea transforma chiar cazul
+12 într-un fals pozitiv.
+Candidați pentru setul adversarial (fără etichete atribuite): „Ursulețul a urat noapte bună.”; „Vulpea a urât ploaia.”;
+„Ești urât, spuse vulpea.”; „Desenul este urât, spuse vulpea.”; variantele fără diacritice ale acelorași texte.
+Principiu pentru textele multilingve — pipeline-ul distinge: RAW TEXT (originalul, cu diacritice) → LANGUAGE-AWARE
+NORMALIZATION (normalizare care nu distruge informația semantică necesară) → SEMANTIC INTERPRETATION (ce înseamnă expresia
+în context) → SAFETY CONCEPT (insultă, violență, risc etc.) → VERDICT + REASON CODE (rezultat comparabil între limbi pentru
+același sens). Normalizarea trebuie să ajute detecția, nu să distrugă informația înainte ca sensul să fie stabilit.
+Nimic nu se schimbă acum (gold-v1, evaluatori, reguli, praguri, normalizare).
+
 ## Decizia operatorului privind calibrarea finală (2026-10-05, după cazul 3)
 
 1. Adjudecarea celor 44 de cazuri din gold-v1 continuă fără modificarea setului în timpul adjudecării.
