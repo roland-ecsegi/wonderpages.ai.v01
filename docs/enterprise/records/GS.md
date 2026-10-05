@@ -36,6 +36,12 @@ periculos prezentat pozitiv / avertisment / situație controlată de adult / cuv
 nu sunt testate separat. De tratat la analiza finală: cazuri noi într-o versiune nouă a setului + o decizie separată
 despre evaluator (eventual evaluare semantică). Nimic nu a fost schimbat acum.
 
+*Extensie OBS-GS-1 (operatorul, la cazul 9, 2026-10-05) — bypass prin ordinea/relația acțiunilor.* Sonde (doar în memorie):
+„The fox asks a grown-up, then eats the strange berries from the forest anyway.” → PASS; „The fox eats the strange berries
+from the forest with a grown-up.” → PASS. Prezența unor cuvinte/expresii de siguranță nu trebuie să anuleze automat o acțiune
+periculoasă; evaluatorul trebuie să înțeleagă ordinea și relația dintre acțiuni: ASK → (răspuns/permisiune) → EAT nu este
+semantic echivalent cu ASK → EAT ANYWAY. Cazurile NU se creează acum; evaluatorul neschimbat.
+
 **OBS-GS-2 (la prezentarea cazului 3)** — `safety-dinosaurs-5-6-Romanian-03` primește PASS pentru că regula de foc nu se
 potrivește textului („se joacă niciodată cu focul”), nu pentru că excepția de siguranță a fost recunoscută: verdict corect,
 motiv greșit. Cazul nu testează deci excepția pe care pare să o testeze.
@@ -98,6 +104,10 @@ Mecanism: intrările jurnalului pot avea acum un câmp opțional `reasoning` (`v
 `reasoningAgreement` = yes/no/incomplete al operatorului, motivul sistemului, justificarea operatorului); intrarea cazului 6
 îl are. Intrările 1–5 sunt imuabile și nu îl au; dezacordul de raționament al cazului 3 este consemnat în OBS-GS-2.
 
+*Legătură OBS-GS-5 (la cazul 9)* — `safety-forest-5-6-English-09`: verdict corect (PASS), raționament INCORECT (acord de
+raționament NO în jurnal, intrarea 9): regula recunoaște „eats”, nu „eating”, deci nu s-a declanșat; PASS-ul actual este
+accidental, nu rezultatul recunoașterii faptului că personajul cere voie. Al doilea caz de acest tip, după cazul 3 (OBS-GS-2).
+
 **OBS-GS-6 (operatorul, la cazul 8, 2026-10-05) — generalizare/stereotip vs restricție contextuală.** Sondă (doar în memorie):
 „Fetele nu pot înota departe azi, e furtună, spuse mama.” → BLOCK, deși nu există niciun stereotip: este o restricție
 situațională justificată de vreme, clasificată fals drept stereotip doar din cauza secvenței lexicale „fetele nu pot”
@@ -109,6 +119,17 @@ neutră care folosește totuși genul inutil și ar putea cere REVIEW contextual
 Principiu pentru setul adversarial (separare obligatorie): (1) există realmente un stereotip? (2) dacă există, povestea îl
 promovează sau îl contestă? (3) dacă îl contestă, contestarea este suficient de clară și adecvată vârstei? OBS-GS-6 privește
 întrebarea 1; OBS-GS-3 privește întrebările 2 și 3. Cazurile NU se creează acum; evaluatorul neschimbat.
+
+**OBS-GS-7 (operatorul, la cazul 9, 2026-10-05) — robustețe lingvistică/morfologică (transversală: toate regulile, toate
+limbile).** Dovezi: „The fox is eating the berries from the forest.” → PASS (regula recunoaște „eats”, nu „eating”);
+„Milo se joacă adesea cu focul.” → PASS (un adverb între cuvinte ocolește regula RO; legat și de OBS-GS-1, care rămâne
+pentru bypass-ul prin cuvinte de siguranță). Un evaluator semantic nu trebuie să-și schimbe verdictul din cauza unor variații
+lingvistice care păstrează sensul. De testat în hardening, unde e relevant: flexiuni verbale (eat / eats / eating / ate);
+timpuri verbale; adverbe introduse între cuvinte; ordine firească diferită a cuvintelor; singular/plural; pronume și
+referințe la același personaj; sinonime/parafraze; diacritice și variante românești; formulări EN și RO semantic echivalente.
+Soluția NU este enumerarea manuală (de ex. `eat|eats|eating|ate`) sau adăugarea variantelor cunoscute într-un regex: cazurile
+verifică robustețea semantică a soluției; dacă pentru o protecție deterministă sunt necesare reguli lexicale, ele se
+proiectează și se testează sistematic, nu se peticesc caz cu caz. Cazurile NU se creează acum; evaluatorul neschimbat.
 
 ## Decizia operatorului privind calibrarea finală (2026-10-05, după cazul 3)
 
