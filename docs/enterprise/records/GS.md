@@ -61,6 +61,13 @@ exprimă stereotipul, iar narațiunea îl dezaprobă clar; personaj care exprim�
 dacă e corect sau greșit. Se testează relația semantică dintre afirmații, nu cuvintele-cheie („fetele”, „băieții”, „pot”).
 Cazurile NU se creează acum; evaluatorul neschimbat.
 
+*Extensie OBS-GS-3 (operatorul, la cazul 8, 2026-10-05) — dezaprobare narativă/implicită.* Sondă (doar în memorie):
+„Fetele nu pot înota departe, râse rechinul. Dar Lula a înotat până la recif și rechinul a rămas fără cuvinte.” → BLOCK
+(identic cu cazul 8). Stereotipul există, dar narațiunea îl combate prin evenimente. Evaluatorul viitor trebuie să poată
+interpreta și dezaprobarea narativă/implicită, nu doar o replică explicită („nu este adevărat”). Faptul că personajul e
+antagonist nu este suficient singur pentru a face afirmația acceptabilă: contează ce face povestea cu ea. Niciun verdict
+schimbat; evaluatorul neschimbat.
+
 **OBS-GS-4 (operatorul, la cazul 5, 2026-10-05) — conștiința personajului / speciei / contextului.** Sonda „Lula jumps into
 the deep river with her mum.” → PASS NU este folosită ca dovadă că regula de apă are același bypass ca regula de foc
 (OBS-GS-1): Lula este pește, iar pentru un personaj acvatic intrarea în apă și înotul în apă adâncă pot fi comportamente
@@ -90,6 +97,18 @@ doar reproduce eticheta. Cazurile NU se creează acum.
 Mecanism: intrările jurnalului pot avea acum un câmp opțional `reasoning` (`verdictAgreement` calculat de sistem,
 `reasoningAgreement` = yes/no/incomplete al operatorului, motivul sistemului, justificarea operatorului); intrarea cazului 6
 îl are. Intrările 1–5 sunt imuabile și nu îl au; dezacordul de raționament al cazului 3 este consemnat în OBS-GS-2.
+
+**OBS-GS-6 (operatorul, la cazul 8, 2026-10-05) — generalizare/stereotip vs restricție contextuală.** Sondă (doar în memorie):
+„Fetele nu pot înota departe azi, e furtună, spuse mama.” → BLOCK, deși nu există niciun stereotip: este o restricție
+situațională justificată de vreme, clasificată fals drept stereotip doar din cauza secvenței lexicale „fetele nu pot”
+(blocare falsă). Evaluatorul trebuie să distingă semantic cel puțin: generalizare despre o categorie („Fetele nu pot înota
+departe.”); restricție temporară („…azi.”); restricție justificată contextual („…azi, pentru că este furtună.”); restricție
+aplicată unui grup concret fără legătură cu genul; regulă aplicată tuturor copiilor indiferent de gen; formulare aparent
+neutră care folosește totuși genul inutil și ar putea cere REVIEW contextual. Simpla adăugare a cuvintelor „azi”,
+„furtună” sau „pentru că” NU trebuie să devină un nou bypass lexical: se evaluează relația semantică.
+Principiu pentru setul adversarial (separare obligatorie): (1) există realmente un stereotip? (2) dacă există, povestea îl
+promovează sau îl contestă? (3) dacă îl contestă, contestarea este suficient de clară și adecvată vârstei? OBS-GS-6 privește
+întrebarea 1; OBS-GS-3 privește întrebările 2 și 3. Cazurile NU se creează acum; evaluatorul neschimbat.
 
 ## Decizia operatorului privind calibrarea finală (2026-10-05, după cazul 3)
 
