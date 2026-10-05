@@ -706,3 +706,48 @@ e completă; că sistemul nu poate verifica alte relații științifice.
 *Direcții pentru setul v2 (nu se creează acum):* stimuli controlați care separă două entități doar menționate; relație directă; relație
 indirectă prin fosile/urme/documente; aceeași perioadă vs perioade diferite; coexistență afirmată explicit; coexistență implicată prin
 acțiune; entitate umană exprimată prin termeni diferiți; real-world vs fantasy explicit; afirmație istorică corectă vs anacronică.
+
+*Cazul 34 (`science-forest-7-8-English-03`, intrarea 34) — operatorul, 2026-10-05.* „Bats are blind, said the owl.”; rezultat executat:
+exact `bats-blind`; confirmat; acord de verdict DA; acord de raționament INCOMPLETE. Stimulul nu conține nicio corectare, contestare sau
+alt context care să arate copilului că afirmația bufniței e falsă; atribuirea către un personaj nu face, singură, informația falsă
+acceptabilă — un personaj poate greși intenționat, dar atunci e nevoie de contextul narativ care stabilește ce face povestea cu
+afirmația, iar aici lipsește. Evaluatorul nu stabilește cine afirmă, dacă naratorul susține, dacă textul contestă, corectează imediat
+sau prezintă afirmația ca să demonteze un mit; reacționează la tiparul lexical.
+
+**OBS-GS-17 (operatorul, la cazul 34, 2026-10-05) — Scientific claim attribution, narrative stance & misconception correction.**
+Principiu: **presence of a false proposition in text ≠ narrative endorsement of that proposition.** Dimensiuni de distins (model
+conceptual, NU se implementează): CLAIM CONTENT (ce afirmație); SPEAKER / SOURCE (cine o spune); NARRATIVE STANCE (povestea o susține,
+o lasă necontestată sau o contestă); CORRECTION (apare sau nu); CORRECTION SCOPE/TIMING (suficient de clară și de apropiată pentru
+copil); FINAL TAKEAWAY (ce rămâne probabil cititorului). Dovezi executate (în afară de cazul de aur, sondele NU sunt cazuri de aur):
+- *Caz de aur — defect real:* „Bats are blind, said the owl.” → `bats-blind`; mit fără corectare; verdict negativ justificat.
+- *FALS POZITIV — demontare explicită (cea mai puternică dovadă de stance):* „Many people think bats are blind, but bats can see.” →
+  `bats-blind`; evaluatorul confundă *mentioning a misconception in order to correct it* cu *asserting the misconception as fact*.
+- *Corectare pe aceeași pagină — CAZ-LIMITĂ DE POLITICĂ, NU automat fals pozitiv:* „Bats are blind, said the owl. "No, we can see,"
+  laughed the bat.” → `bats-blind`. În hardening se stabilește dacă un mit corectat imediat, explicit și clar pentru vârstă e PASS,
+  REVIEW sau alt verdict conform politicii produsului; nu se decide acum. Rezultatul arată doar că evaluatorul nu demonstrează
+  înțelegerea corectării.
+- *Control de negație:* „Bats are not blind.” → niciun cod; comportament corect pe proba executată, NU dovadă de înțelegere semantică a
+  negației fără teste suplimentare.
+- *FALS NEGATIV — parafrază:* „Bats cannot see anything at all.” → niciun cod; același mit fără tiparul fix (coverage /
+  semantic-paraphrase failure).
+- *Paritate:* „Liliecii sunt orbi, a spus bufnița.” → `bats-blind`.
+*Delimitare (legate, necombinate):* OBS-GS-15 → identitate și taxonomie; OBS-GS-16 → relații factuale între entități, temporalitate /
+coexistență, context de lume; OBS-GS-17 → statutul epistemic/narativ al afirmației (cine o spune; povestea o adoptă, o contestă sau o
+corectează). Legătură secundară cu **OBS-GS-3** (problematic statement present ≠ story endorses problematic statement; GS-3 rămâne
+pentru stereotip/stance narativ, GS-17 pentru afirmații științifice/stance narativ), printr-un principiu transversal, posibilă cerință
+arhitecturală comună ulterioară: **content detection must be separated from narrative/epistemic stance**. Legătură secundară cu
+**OBS-GS-7** (robustețe la parafrază) pentru fals negativ; proprietarul principal rămâne OBS-GS-17 (trebuie determinat ce afirmație
+factuală e făcută realmente și cu ce stance).
+*Fără liste de expresii:* hardening-ul NU adaugă „cannot see”, „can't see”, „unable to see”, „people think”, „but” sau alte excepții
+regex. Ținta conceptuală: TEXT → CLAIM EXTRACTION → SPEAKER/ATTRIBUTION → FACTUAL CONTENT → NARRATIVE/EPISTEMIC STANCE →
+CORRECTION/RESOLUTION → AGE-AWARE TAKEAWAY → SCIENTIFIC KNOWLEDGE → VERDICT + REASON.
+*Corectarea unui mit nu e automat defect — clase de testat în setul v2 (fără PASS/BLOCK/REVIEW atribuite acum în abstract; etichetele
+se stabilesc ulterior cu politica editorială și teste controlate pe grupă de vârstă):* myth asserted as fact; myth mentioned as
+misconception; myth spoken by character, uncorrected; myth immediately corrected; myth corrected much later; correction ambiguous;
+explicit educational debunking.
+*Unitatea de evaluare:* page-level factual check vs story-context factual check — mitul pe pagina N și corectarea pe pagina N+1 pot fi
+citite greșit de un evaluator strict pe pagină, dar o corectare vagă sau foarte târzie nu trebuie să neutralizeze automat o afirmație
+falsă puternică. Direcție pentru v2: **evaluation scope and correction window must be explicit** (dimensiunea ferestrei nu se decide acum).
+*Ce demonstrează cazul 34:* **the evaluator correctly flags the represented explicit myth formulation „Bats are blind”.** NU: the
+evaluator understands the scientific misconception; NU: understands narrative attribution; NU: understands misconception correction;
+NU: detects paraphrases of the same misconception — pentru ultimele trei, probele executate oferă dovezi contrare.
