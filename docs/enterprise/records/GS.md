@@ -538,3 +538,34 @@ Limita rămâne (OBS-GS-13; secundar OBS-GS-7): known-calque detection ≠ gener
 catalog detection ≠ unseen-calque generalization. Comportament corect demonstrat pe cel puțin două expresii diferite din catalog;
 nedemonstrate: variante morfologice/sintactice nevăzute, calcuri absente din catalog, naturalețe generală, fidelitate semantică,
 completitudine, păstrarea tonului și a funcției narative. Nicio observație nouă.
+
+*Extensie OBS-GS-13 (operatorul, la cazul 29, 2026-10-05) — defecte de recall demonstrate (secundar OBS-GS-7).* Cazul 29
+(`localization-forest-5-6-Romanian-04`, intrarea 29): TR_UNTRANSLATED pe „the”, executat; confirmat; acord de verdict DA; acord de
+raționament YES (untranslated English token present → token correctly detected → correct reason code). Ce demonstrează: **correct
+detection of one known untranslated English function word („the”)**; NU **general untranslated-English detection capability**.
+Raportarea distinge **known listed untranslated-token detection** de **general contextual language contamination detection**.
+Defecte DEMONSTRATE (sonde executate, NU cazuri de aur): substantiv englezesc netradus nedetectat — „Vulpea găsește berries.” → niciun
+cod; verb englezesc netradus nedetectat — „Vulpea finds fructele.” → niciun cod. Cauză: lista TR_UNTRANSLATED are acoperire foarte
+restrânsă (cuvinte funcționale). Concluzie limitată: **untranslated-content-token detection is incomplete** — NU „all English
+nouns/verbs are missed” (doar două probe executate).
+
+**OBS-GS-14 (operatorul, la cazul 29, 2026-10-05) — identificarea contextuală a limbii și ambiguitatea tokenurilor între limbi.**
+Defect DEMONSTRAT (sondă executată, NU caz de aur): **fals pozitiv** — „Vulpea are fructe.” (română corectă: „The fox has berries.”) →
+TR_UNTRANSLATED pe „are”. „are” există ca token în engleză, dar și legitim și foarte frecvent în română; în această propoziție funcția
+lui e fără ambiguitate românească, iar evaluatorul îl clasifică drept cuvânt englezesc netradus. Principiu: **token membership in an
+English word list ≠ proof that the token is English in the current context.** Nu e o problemă de acoperire: evaluatorul identifică
+greșit limba tokenului în context. Distinctă de OBS-GS-7 (robustețe/parafraze), OBS-GS-9 (paritatea verdictelor de siguranță EN↔RO) și
+OBS-GS-13 (fidelitate/completitudine SOURCE↔TARGET); legături secundare posibile.
+Nu se generalizează dincolo de dovadă: categoria conceptuală pentru hardening este **cross-lingual homograph / shared-token
+ambiguity**, dar în acest moment doar „are” este dovadă executată; alte cuvinte se testează înainte de a fi declarate defecte.
+*Două moduri de eșec separate (axe independente):* **A — fals pozitiv (precision):** română corectă blocată („are” → OBS-GS-14);
+**B — fals negativ (recall):** engleză rămasă nedetectată („berries”, „finds” → OBS-GS-13, secundar OBS-GS-7). Un detector poate eșua
+pe una sau pe ambele; evaluatorul actual demonstrează probleme pe ambele, prin probele executate.
+Principiu de arhitectură (NU se implementează; nu se alege acum nicio bibliotecă de detecție a limbii, LLM sau alt mecanism — decizie
+pentru hardening, după construirea benchmarkului): **WORD LIST MEMBERSHIP nu este suficient pentru LANGUAGE IDENTIFICATION**;
+conceptual: TOKEN / PHRASE → TARGET-LANGUAGE CONTEXT → POSSIBLE LANGUAGE INTERPRETATIONS → GRAMMATICAL / SEMANTIC ROLE → SOURCE↔TARGET
+EVIDENCE → CONFIDENCE → UNTRANSLATED / VALID TARGET TOKEN / AMBIGUOUS → REASON CODE.
+Perechi minimale pentru setul v2 (direcții, fără etichete și fără rezultate inventate), testând separat precision și recall: token clar
+englezesc într-un text românesc; token clar românesc; token comun ambelor limbi folosit cu sens românesc; token comun folosit cu sens
+englezesc; caz contextual ambiguu; token englezesc de conținut (nu doar cuvânt funcțional); propoziție complet localizată fără
+contaminare. Nimic nu se schimbă acum.
