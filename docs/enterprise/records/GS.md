@@ -1199,3 +1199,67 @@ eticheta tot nu înlocuiește adjudecarea editorială independentă (dată aici 
 aggregate-quality failure.** Limite: același conținut sintetic ca toate cazurile de calitate; aceeași structură generică a dovezilor;
 tipar de note distinct; NU dovadă independentă despre calitatea conținutului; NU caz de discriminare v1/v2. **Score-pattern independence
 ≠ underlying-content independence** — axele rămân separate.
+
+*Cazul 44 (`quality-space-5-6-English-08`, intrarea 44) — singurul caz de calitate din setul rezervat; ultimul caz (operatorul,
+2026-10-05).* Răspunsul criticului = baseline-ul 37 cu **T01 = 7,4** (Age fit, critic) și **T14 = 6,8** („Ending: warm and complete,
+no artificial sequel teaser”, necritic). Confirmat negativ / neacceptabil; acord structurat pe politica-țintă v2 (verdict DA,
+raționament YES). Rezultate executate, separat:
+
+| | v1 (activă) | v2 (politica-țintă) |
+|---|---|---|
+| Media exactă / afișată | 8,7889 / 8,8 — trece | 8,7889 / 8,8 — trece |
+| Criterii critice | T01 = 7,4 ≥ 7; T07/T08 = 9 — trec | T01/T08 ≥ 8 → **T01 = 7,4 eșuează** |
+| Minimul pe criteriu | — (fără minim universal) | ≥ 7 → **T14 = 6,8 eșuează** |
+| Existența dovezilor | doar consemnată | trece |
+| Rezultat | **ACCEPT** | **REJECT** |
+| Condiții de respingere active | niciuna | T01 < 8 și T14 < 7 |
+| Motive raportate | `[]` (normal pentru ACCEPT) | „Criterii sub 7: T14.”, „Criterii critice sub 8: T01.” |
+| Motiv omis | — | niciunul |
+| Gold agreement | **NU** | **DA** |
+| Implementation correctness | **DA** | **DA** |
+
+v1: policy disagreement, nu defect de implementare. Sonde executate (NU cazuri de aur): doar T01 = 7,4 (T14 = 9) → v1 ACCEPT, v2
+REJECT („Criterii critice sub 8: T01.”); doar T14 = 6,8 (T01 = 9) → v1 ACCEPT, v2 REJECT („Criterii sub 7: T14.”); cazul 44 cu
+`age=3-4, theme=dinosaurs` → rezultat identic pe ambele politici. Cele două condiții v2 sunt independent suficiente în implementare —
+dar **implementation independence ≠ independent editorial validation** (T01 are suport editorial anterior; T14 nu).
+*Justificarea etichetei:* T01 = 7,4 e suficient singur — la cazul 40 operatorul a adjudecat independent T01 = 7,5 ca insuficient;
+pentru același criteriu, aceeași scală și aceeași direcție a notei, prin monotonie 7,4 nu poate deveni suficient. Eticheta negativă se
+confirmă independent de orice decizie nouă asupra T14.
+*T14 = 6,8 rămâne NEVALIDAT editorial:* v2 policy application for T14 = correct; T14 rejection reason = correct according to v2;
+**independent editorial validation of T14 floor = NOT ESTABLISHED** (NU „T14 ≥ 7 has now been independently validated”).
+*Raționament YES fără contradicție:* A. Implementation correctness — DA; B. Gold agreement — DA; C. Policy validity — T01 floor: DA
+pentru condiția relevantă (cazul 40 + monotonie); T14 / minim universal necritic: NU, încă nevalidat. Raționamentul YES descrie
+corectitudinea mecanismului pentru cazul furnizat, nu validarea editorială a fiecărei reguli interne v2.
+*Held-out — formulare strictă:* **„Held-out quality: 1/1 Gold agreement on one new score combination exercising previously represented
+v2 rule families, including a new criterion instance (T14) and the first simultaneous two-failure combination. This does not
+demonstrate independent theme/age generalization or independent validation of the universal non-critical floor.”** — NU „v2
+generalized to unseen quality conditions”. OBS-GS-18: aceeași frază nu justifică T01 = 7,4 sau T14 = 6,8; cazul demonstrează
+comportamentul porții asupra evaluării furnizate, nu că povestea are age fit 7,4 și ending 6,8.
+
+*Extensie OBS-GS-20 (operatorul, la cazul 44, 2026-10-05).* **Threshold monotonicity within the same criterion and scoring direction:**
+dacă criteriul e același, scala e aceeași, nota mai mare = rezultat mai bun și nu există o schimbare contextuală care modifică
+semnificația notei, o valoare mai mică decât una deja adjudecată ca insuficientă nu poate deveni acceptabilă (T01: 7,5 insuficient →
+7,4 insuficient) — inferență îngustă, intra-criteriu, care nu validează toate valorile sau toate criteriile. Distincție: **case verdict
+independently justified ≠ all active policy rules independently validated**; T14 floor rămâne nevalidat; **combined-rule
+self-consistency ≠ independent policy validation.**
+
+*Extensie OBS-GS-12 (operatorul, la cazul 44, 2026-10-05).* Clasificare: **held-out combined policy-condition control — correlated
+synthetic content, new score combination.** Axe separate: score combination independence — DA; simultaneous-failure pattern
+independence — DA; T01 rule-family independence — NU (cazul 40); universal-minimum rule-family independence — NU (cazul 41); T14
+criterion-instance novelty — DA; underlying content independence — NU; demonstrated theme independence — NU; demonstrated age
+independence — NU (sonda cu metadate schimbate: rezultat identic). Nu se reduce la un singur „held-out passed”.
+
+*Extensie OBS-GS-19 (operatorul, la cazul 44, 2026-10-05) — control pozitiv de explicabilitate.* Media exactă și cea rotunjită sunt
+peste prag; toate condițiile active sunt raportate: **when two currently implemented v2 failure conditions are active and mean passes,
+both active failures are reported in this executed case.** NU se declară explicabilitatea validată în general — cazul 43 arată
+contrariul când eșuează și media.
+
+**Închiderea adjudecării gold-v1 (2026-10-05).** 44/44 cazuri adjudecate prin jurnalul append-only (44 de intrări; capul lanțului
+`abf3051162e3…`; lanț valid; nicio inconsecvență): **40 confirmate · 0 corectate · 4 excluse**; populația validă de evaluare: 40.
+Raționament (din jurnal): YES 19 · INCOMPLETE 15 · NO 1 · fără câmp 9 (cazurile 1–5, înainte de introducerea câmpului — defectul de
+raționament al cazului 3 e în OBS-GS-2; excluderile 21–24, unde câmpul nu se aplică). `gold-v1.json` neschimbat (sha256
+`603fa00a…`). Starea, formulată explicit: **GOLD-V1 ADJUDICATION COMPLETE** — **GOLD-V1 VALIDATION NOT COMPLETE** — **GOLD-V1 FINAL
+ACCEPTANCE NOT PERFORMED.** Acceptarea rămâne refuzată de aplicație (fără rapoarte corespunzătoare: `REPORT_MISSING`, `NOTE_REQUIRED`)
+și, prin decizia operatorului, se face doar de operator în Enterprise Local, după etapa separată de hardening. Nu s-a rulat nicio
+acceptare, nu s-au promovat agenți, nu s-a modificat maturitatea, nu s-a declarat politica v2 validată. Raportul de închidere:
+`docs/enterprise/records/GS-CLOSURE.md`.
