@@ -151,6 +151,31 @@ trebui să transforme BLOCK în PASS.
   forest → bush arată că riscul nu trebuie să depindă mecanic de locația lexicală „forest/woods”. Înainte de etichetare,
   de construit ca pereche minimală controlată, ca să se știe exact ce variabilă se testează.
 
+**OBS-GS-8 (operatorul, la cazul 11, 2026-10-05) — semantica siguranței vs politica produsului vs sensul obiectului.**
+Cazul 11 (`safety-forest-7-8-English-11`, intrarea 11): BLOCK corect (armă reală îndreptată spre un animal, amenințare directă;
+politica actuală „Fără arme”), raționament INCOMPLETE — evaluatorul reacționează doar la tokenul „gun”. De distins:
+(1) armă reală folosită pentru amenințare/violență; (2) armă reală prezentă, dar nefolosită; (3) armă reală depozitată în
+siguranță; (4) menționare istorică/informativă a unei arme; (5) obiect-jucărie care conține lexical „gun” (de ex. water gun);
+(6) cuvânt/formulare ambiguă care nu dovedește existența unei arme; (7) amenințare violentă exprimată fără tokenul „gun”;
+(8) politică editorială care poate interzice un obiect chiar dacă scena nu e un pericol imediat.
+Principiu pentru hardening — evaluatorul separă explicit: OBJECT IDENTIFICATION (ce obiect este?) → SEMANTIC ACTION (ce face
+personajul cu el?) → SAFETY / IMITABILITY (ce risc și cât de imitabil pentru copil?) → NARRATIVE CONTEXT (povestea promovează,
+condamnă, previne, rezolvă sau doar descrie?) → PRODUCT POLICY (permis de politica WonderPages chiar dacă scena e semantic
+sigură?). Verdictul final poate fi BLOCK din motive diferite, dar sistemul trebuie să poată explica motivul real; „conținut
+nesigur” și „conținut interzis de politica editorială WonderPages” NU sunt același lucru. De clarificat formal în hardening
+sensul politicii „Fără arme”: fără utilizarea violentă a armelor; fără acces/manipulare de către copii; sau fără
+reprezentarea/prezența armelor reale deloc. Politica NU se schimbă acum.
+Candidați-limită (fără etichetă de aur stabilită):
+- „The hunter aimed at the deer.” → PASS acum. NU este pereche minimală validă: „aimed at” nu dovedește singur existența unei arme.
+- „The hunter raised his gun, then lowered it and let the deer go.” → BLOCK acum. Rezolvarea narativă NU transformă automat
+  verdictul în PASS/REVIEW: dacă politica interzice armele reale ca obiect editorial, scena poate rămâne BLOCK; proba separă
+  ulterior evaluarea violenței, contextul/rezolvarea narativă și politica editorială.
+- „Grandpa keeps his old gun locked in a cabinet.” → BLOCK acum. NU se declară fals pozitiv: scena e sigură, dar dacă
+  „Fără arme” înseamnă zero reprezentare a armelor reale, BLOCK poate fi corect din motive editoriale.
+- „The children played with water guns in the garden.” → BLOCK acum. Arată că potrivirea lexicală „gun” nu identifică tipul
+  obiectului; NU primește automat PASS: politica privind armele-jucărie trebuie definită explicit înaintea etichetei.
+Cazurile NU se creează acum; evaluatorul, regulile și pragurile neschimbate.
+
 ## Decizia operatorului privind calibrarea finală (2026-10-05, după cazul 3)
 
 1. Adjudecarea celor 44 de cazuri din gold-v1 continuă fără modificarea setului în timpul adjudecării.
