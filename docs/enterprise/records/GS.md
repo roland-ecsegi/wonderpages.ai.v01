@@ -1068,3 +1068,69 @@ dovadă relevantă pentru criteriu, evaluare justificată, adjudecare independen
 *Extensie OBS-GS-12 (operatorul, la cazul 41, 2026-10-05) — policy-domain coverage.* O regulă cu domeniu de 18 criterii e exersată de un
 caz de aur într-o singură instanță (T13): **rule coverage ≠ policy-domain coverage** — testul unei instanțe a unei reguli universale nu
 validează toate instanțele ei.
+
+*Cazul 42 (`quality-forest-5-6-English-06`, intrarea 42) — al treilea negativ de calitate (operatorul, 2026-10-05).* Răspunsul criticului
+= baseline-ul 37 cu o singură diferență: **T08 = 7** (T08 = „Format: exact page count; text length close to the age guideline…”,
+criteriu critic). Confirmat negativ / neacceptabil; acord structurat pe politica-țintă v2 (verdict DA, raționament YES). Rezultate
+executate, separat:
+
+| | v1 (activă) | v2 (politica-țintă) |
+|---|---|---|
+| Media exactă / afișată | 8,8889 / 8,9 — trece | 8,8889 / 8,9 — trece |
+| Criterii critice | T01/T07/T08 ≥ 7 → T08 = 7 trece **exact la prag (inclusiv)** | T01/T08 ≥ 8 → **T08 = 7 eșuează** |
+| Minimul pe criteriu | — | ≥ 7 → 7 trece **exact la prag** |
+| Existența dovezilor | doar consemnată | trece |
+| Rezultat | **ACCEPT** | **REJECT** |
+| Motive | `[]` | „Criterii critice sub 8: T08.” |
+| Gold agreement | **NU** | **DA** |
+| Implementation correctness | **DA** | **DA** |
+
+Diferența de verdict se atribuie fără ambiguitate **pragului critic T08: 7 vs 8** — nu mediei, rotunjirii, existenței dovezilor sau
+minimului universal (T08 = 7 e simultan exact la pragul critic v1, exact la minimul universal v2 și sub pragul critic v2). Dezacordul v1
+= policy disagreement, nu defect de implementare. OBS-GS-18 rămâne obligatorie: dovada „Milo and Tia find a gentle surprise” nu spune
+nimic despre numărul de pagini, numărul de cuvinte, ghidul de vârstă sau abaterea de la el — cazul demonstrează *gate behavior given
+T08=7*, nu *critic correctly determined T08=7 from the underlying content*.
+*Decizia editorială a operatorului (specifică):* **„An assessment reporting T08=7 should not receive automatic quality acceptance.”**
+T08 atinge direct conformitatea produsului cu blueprint-ul și cu profilul de vârstă; e **non-compensator** (note excelente în rest nu
+transformă o conformitate insuficientă de format în ACCEPT). Pentru politica operațională curentă: **T08 < 8 → REJECT / repair /
+re-evaluate.** Policy validity: decizie specifică pe T08 = 7; T08 ≥ 8 acceptat ca politică editorială curentă; **current editorial
+threshold decision ≠ empirically optimized threshold** (nu „8 has been empirically proven to be the mathematically optimal T08
+threshold”).
+*Separare arhitecturală pentru hardening (nu se modifică acum):* T08 amestecă proprietăți de natură diferită — **deterministic contract
+property** (*exact page count*, verificabil mecanic față de Product Contract / BookBlueprint; pentru tipul actual de produs, 12 pagini
+de conținut = constrângere structurală, nu opinie estetică a criticului) și **evaluative property** (*text length close to the age
+guideline*, care poate cere măsurare deterministă, toleranțe, context editorial și eventual evaluarea criticului). Principiu:
+**deterministic structural compliance should not depend solely on a critic score.** Direcții pentru setul v2 (nu se creează acum):
+cazuri de conținut controlate — wrong page count; correct page count; text length clearly outside age guideline; text length near
+permitted boundary; justified variation; unjustified variation — cu validatori determiniști pentru proprietățile măsurabile, critic /
+evaluator pentru cele editoriale și poarta care combină dovezile (NU doar „T08=7 → negative / T08=8 → positive”).
+*Asimetria T07 vs T01/T08 în v2 (sondă executată, NU caz de aur):* 17 × 9 + **T07 = 7,5** („Safety and values”, critic în rubrică) →
+**ACCEPT pe v1 și pe v2** — v2 aplică pragul critic 8 la T01 și T08 (`criticalCodes: ["T01","T08"]`), dar nu și la T07 (care rămâne la
+pragul critic 7 al rubricii și la minimul universal 7). Asimetria NU se declară acum greșită (există un motiv arhitectural posibil:
+siguranța are și o poartă separată), dar **NU** se concluzionează „T07 can safely remain at 7 because textSafety exists” — valorile și
+întreaga semnificație a lui T07 nu se presupun acoperite de `textSafety`. Întrebare pentru hardening: **Which responsibilities belong to
+the independent safety gate, which remain in quality T07, and why does v2 apply a stricter quality threshold to T01/T08 but not T07?**
+— de verificat ulterior: dacă poarta de siguranță acoperă toate proprietățile T07, dacă acoperă valorile, dacă responsabilitățile sunt
+clare, fără goluri și fără contradicții între verdicte. Consemnată deocamdată în zona OBS-GS-20 / hardening-ul politicii de calitate,
+fără OBS-GS-21 (se separă doar dacă probe sau cazuri ulterioare demonstrează o problemă distinctă de responsabilitate între porți).
+**T07 treatment NU e validat.**
+*Ce se poate afirma după cazul 42:* **„Operator adjudication supports T01≥8 and T08≥8 as current automatic-acceptance floors for the
+demonstrated conditions”**; **„v2 correctly implements those two adjudicated outcomes in cases 40 and 42”**; **„v1 correctly implements
+its own older policy but disagrees with those operator-adjudicated outcomes.”** Două decizii specifice (T01 = 7,5 și T08 = 7,
+insuficiente), NU regula „all critical criteria must be ≥ 8” (T07 nu a fost adjudecat astfel). NU: all v2 quality thresholds validated;
+NU: v2 globally superior; NU: T07 treatment validated.
+
+*Extensie OBS-GS-20 (operatorul, la cazul 42, 2026-10-05).* **T08=7 is operator-adjudicated as insufficient for automatic acceptance**;
+rămâne *specific threshold adjudication ≠ universal threshold validation* — cazul 42 nu validează toate criteriile critice, toate
+criteriile necritice, orice prag 8 sau întreaga politică v2.
+
+*Extensie OBS-GS-12 (operatorul, la cazul 42, 2026-10-05).* Clasificare: **controlled policy-discrimination variant of case 37 — T08
+critical-format threshold.** Nu e dovadă independentă despre conținut, dar e mai informativ decât controalele 38/39 pentru diferența
+v1/v2, pentru că izolează efectiv o regulă divergentă.
+
+*Extensie OBS-GS-19 (operatorul, la cazul 42, 2026-10-05) — explicabilitatea respingerii v1 prin criteriu critic.* Sondă executată (NU
+caz de aur): 17 × 9 + **T08 = 6,9** → **v1 REJECT cu `reasons: []`** (v2: REJECT cu „Criterii sub 7: T08.” și „Criterii critice sub
+8: T08.”). Poarta calculează intern criteriile critice eșuate, dar nu le pune în lista de motive. Împreună cu proba de la cazul 39
+(respingere doar prin medie, `reasons: []`): **v1 rejection explainability is incomplete for at least two distinct rejection
+mechanisms: aggregate-score failure and critical-criterion failure** — fără generalizare la toate modurile de eșec fără probe. Aceeași
+familie; fără observație nouă.
