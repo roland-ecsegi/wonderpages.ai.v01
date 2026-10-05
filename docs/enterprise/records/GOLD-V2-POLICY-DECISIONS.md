@@ -28,6 +28,7 @@ explicită a operatorului. Etichetele cazurilor se dau la adjudecarea Gold-v2.
 | D-05 — supravegherea activă a adultului | DECISĂ (neimplementată) | D (rafinată: mecanism de pericol ↔ mecanism de control) | `bb43f07402307747…` |
 | D-06 — act periculos, apoi avertisment / lecție | DECISĂ (neimplementată) | D (rafinată; Page → Book → Volume → Collection) | `755aa28f8cb4143e…` |
 | D-07 — locul / contextul și hazardul | DECISĂ (neimplementată) | C (locul = dovadă, nu verdict) | `63e2ff983479d862…` |
+| D-08 — stereotip contestat explicit | DECISĂ (neimplementată) | D (gradată; contestat → REVIEW, nu PASS) | `5b238c7e81f3f308…` |
 
 ## D-01 — „Fără arme” pentru o armă reală
 
@@ -3652,3 +3653,747 @@ generală a hazardurilor de mediu · validitatea empirică.
 - **D-07-DEP-CONTROLLED-LOCATION-PAIR:** perechea controlată forest ≡ bush, pentru testare (nu în setul rezervat actual).
 - **D-07-DEP-ENVIRONMENTAL-HAZARDS:** politica generală a hazardurilor de mediu și extragerea proprietăților fizice.
 - **D-07-DEP-IDENTITY-CONFIDENCE:** încrederea în identitate (narator / canon vs presupunere vs ambiguu), testabil.
+
+## D-08 — Stereotip contestat explicit
+
+### Declarația operatorului (cuvânt cu cuvânt)
+
+```text
+D-08 — DECIZIA OPERATORULUI
+
+Aleg Opțiunea D — evaluare semantică gradată după sursă, țintă, stance, claritatea contestării, persistență și rezolvarea narativă, cu REVIEW, nu PASS automat, pentru stereotipul autentic și clar contestat.
+
+Principiul central este:
+
+STEREOTYPE EXPOSURE ≠ STEREOTYPE ENDORSEMENT.
+
+Dar și:
+
+CHALLENGE PHRASE ≠ AUTOMATIC NEUTRALIZATION.
+
+WonderPages trebuie să păstreze simultan:
+
+stereotype claim → speaker/source → target → local exposure → narrative stance → challenge/rejection → challenge strength → replacement message → repetition/persistence → visual reinforcement/contradiction → book-level resolution → policy verdict → age-fit/editorial verdict
+
+Nu implementa acum.
+
+⸻
+
+1. Stereotip necontestat sau susținut
+
+Dacă povestea afirmă/promovează un stereotip de grup/identitate fără contestare relevantă:
+
+→ BLOCK.
+
+Exemplu:
+
+Girls can't build rockets.
+
+Dacă afirmația rămâne mesajul susținut de poveste:
+
+→ BLOCK.
+
+⸻
+
+2. Contestarea autentică nu produce PASS automat
+
+Dacă stereotipul este exprimat pentru a fi ulterior combătut:
+
+nu șterge finding-ul inițial.
+
+Exemplu:
+
+Girls can't build rockets, said the robot. Everyone can build rockets, said Mum.
+
+Trebuie păstrate simultan:
+
+* stereotipul a fost expus;
+* sursa lui;
+* ținta;
+* povestea îl respinge;
+* contra-mesajul este relevant;
+* mesajul final nu susține stereotipul.
+
+Verdict candidat:
+
+→ REVIEW.
+
+Nu PASS automat.
+
+⸻
+
+3. Respingere explicită fără contra-afirmație
+
+That's not true.
+
+sau:
+
+Nu e adevărat.
+
+este o respingere explicită dacă referentul este neambiguu.
+
+Nu o clasifica drept stereotip necontestat.
+
+Dar este mai puțin completă educațional decât:
+
+That's not true. Girls and boys can both build rockets.
+
+Prin urmare:
+
+stereotype → unambiguous explicit rejection
+
+→ candidat REVIEW.
+
+Păstrează însă diferența dintre:
+
+* explicit rejection;
+* explicit rejection + healthy replacement.
+
+Această diferență poate conta în evaluarea editorială/age-fit.
+
+⸻
+
+4. Contra-mesaj relevant
+
+Contra-mesajul trebuie să răspundă semantic aceleiași afirmații.
+
+Exemplu corect:
+
+Girls can't build rockets.
+Everyone can build rockets.
+
+Contestarea este relevantă.
+
+Exemplu incorect:
+
+Girls can't build rockets.
+Everyone can sing.
+
+Nu contestă afirmația.
+
+→ stereotipul rămâne necontestat.
+
+Nu implementa potrivirea prin repetarea aceluiași verb.
+
+Trebuie evaluată relația semantică dintre claim și counterclaim.
+
+⸻
+
+5. Contestare slabă sau ambiguă
+
+Exemple:
+
+Hmm, maybe.
+
+I'm not sure that's always true.
+
+pot indica distanțare, dar nu reprezintă neapărat o respingere suficientă.
+
+→ REVIEW.
+
+Reason-ul trebuie să indice ambiguitatea.
+
+Nu BLOCK automat și nu PASS.
+
+⸻
+
+6. Falsă contestare / întărire
+
+Exemplu:
+
+That's true, but girls can help.
+
+nu contestă stereotipul.
+
+Îl poate chiar întări.
+
+→ BLOCK.
+
+La fel, o formulare aparent inclusivă nu trebuie să fie tratată ca remediere dacă păstrează premisa discriminatorie.
+
+⸻
+
+7. Cine exprimă stereotipul contează
+
+Separă:
+
+* narrator;
+* character dialogue;
+* quoted belief;
+* antagonist;
+* social/world belief;
+* remembered statement;
+* hypothetical claim.
+
+Un antagonist care spune stereotipul NU este suficient pentru a-l face acceptabil.
+
+Trebuie analizat ce face povestea cu afirmația.
+
+⸻
+
+8. Naratorul ca voce autoritativă
+
+Dacă naratorul afirmă stereotipul ca adevăr al poveștii:
+
+Girls can't build rockets. So Mia watched the boys.
+
+→ candidat BLOCK.
+
+Naratorul are o greutate diferită de replica unui personaj.
+
+Nu trata toate propozițiile identic doar pentru că au aceleași cuvinte.
+
+⸻
+
+9. Credință atribuită lumii poveștii
+
+Formulări precum:
+
+Everyone in the town believed that girls couldn't build rockets.
+
+NU sunt automat endorsement al naratorului.
+
+Aici naratorul raportează o credință.
+
+Trebuie urmărit ce face povestea cu ea.
+
+Dacă:
+
+...but Mia built the fastest rocket and changed their minds.
+
+atunci avem:
+
+attributed stereotype → narrative challenge/resolution
+
+→ candidat REVIEW.
+
+⸻
+
+10. Dezaprobare prin evenimente
+
+Contestarea nu trebuie să fie obligatoriu verbală.
+
+Exemplu:
+
+The robot said girls couldn't build rockets. Mia built the fastest rocket in the contest.
+
+Poate reprezenta o contestare narativă.
+
+Dar evaluatorul trebuie să determine dacă evenimentul chiar infirmă claim-ul și dacă povestea îl prezintă astfel.
+
+Nu cere lexical:
+
+But...
+
+sau:
+
+Dar....
+
+⸻
+
+11. Contradicția naratorului trebuie reprezentată
+
+Dacă naratorul afirmă inițial stereotipul ca adevăr și apoi povestea îl contrazice fără a clarifica stance-ul:
+
+nu presupune automat nici endorsement, nici rezolvare completă.
+
+→ REVIEW pentru stance contradictoriu/ambiguu, dacă există o infirmare reală.
+
+Dacă mesajul final continuă să susțină stereotipul:
+
+→ BLOCK.
+
+⸻
+
+12. Repetarea după contestare
+
+Repetarea stereotipului este relevantă, dar nu folosesc regula rigidă:
+
+repeated once = BLOCK.
+
+Trebuie urmărită traiectoria întregii povești.
+
+Contestat → repetat → fără rezolvare
+
+→ BLOCK.
+
+Contestat → repetat ca parte a conflictului → rezolvare finală clară
+
+→ candidat REVIEW.
+
+Finding-urile locale rămân păstrate.
+
+⸻
+
+13. Page-level exposure vs Book-level stance
+
+Aplică principiul stabilit la D-06.
+
+O pagină poate conține un stereotip real.
+
+Book-level poate demonstra că întreaga poveste îl combate.
+
+Ambele sunt adevărate simultan.
+
+Nu permite:
+
+book resolves stereotype → page finding deleted.
+
+Și nici:
+
+page contains stereotype → entire anti-stereotype book automatically BLOCK.
+
+⸻
+
+14. Isolation risk
+
+Evaluează separat riscul ca pagina să funcționeze izolată.
+
+Exemplu:
+
+pagina 4:
+
+Girls can't build rockets!
+
+cu o imagine care pare să confirme mesajul.
+
+Pagina 8:
+
+Mia dovedește contrariul.
+
+Cartea poate avea stance anti-stereotip.
+
+Dar pagina 4 are un isolation/exposure risk real, mai ales pentru vârste mici.
+
+Acesta trebuie păstrat pe axa editorială/age-fit.
+
+⸻
+
+15. Target-ul nu trebuie hard-coded pe gen
+
+D-08 NU trebuie implementată ca:
+
+girls/boys → stereotype detector.
+
+Arhitectura semantică trebuie să poată reprezenta stereotipuri despre grupuri sau caracteristici de identitate relevante pentru conținutul destinat copiilor.
+
+De exemplu, conceptual:
+
+* sex/gen;
+* origine/etnie/naționalitate;
+* religie;
+* dizabilitate;
+* vârstă;
+* caracteristici corporale;
+* alte grupări/identități relevante.
+
+Exemplu:
+
+Old people can't learn new things.
+
+nu trebuie să devină PASS doar pentru că evaluatorul actual caută exclusiv termeni de gen.
+
+⸻
+
+16. Taxonomia target-urilor rămâne o dependență
+
+D-08 stabilește că motorul NU poate fi gender-only.
+
+Dar NU stabilesc aici o taxonomie exhaustivă și aceeași severitate pentru toate tipurile de generalizare.
+
+Păstrează o dependență explicită:
+
+STEREOTYPE_TARGET_TAXONOMY
+
+care trebuie să definească:
+
+* ce constituie target de grup/identitate;
+* diferența dintre stereotip, descriere factuală și context relevant;
+* severitatea;
+* contextul;
+* eventualele diferențe de policy.
+
+Nu implementa o listă improvizată acum.
+
+⸻
+
+17. Natura regulii — decizie explicită
+
+Nu mai clasifica stereotipurile generic ca physical safety.
+
+Creează conceptual un strat distinct:
+
+CONTENT / CHILD-SAFETY POLICY
+
+sau o denumire arhitecturală echivalentă.
+
+Asta trebuie separat de:
+
+* physical/imitation safety;
+* age-fit;
+* educational/editorial quality.
+
+Un stereotip susținut/reinforced poate fi:
+
+→ BLOCK la content/policy gate.
+
+Un stereotip autentic contestat poate fi:
+
+→ REVIEW.
+
+Prin urmare, faptul că nu este „physical safety” NU înseamnă că nu poate bloca publicarea.
+
+⸻
+
+18. BLOCK și REVIEW au semnificații diferite
+
+BLOCK
+
+Pentru:
+
+* stereotype endorsed;
+* stereotype reinforced;
+* stereotype unchallenged unde politica îl interzice;
+* fake challenge care păstrează mesajul;
+* unresolved repetition.
+
+REVIEW
+
+Pentru:
+
+* explicit challenge;
+* healthy replacement;
+* narrative challenge;
+* ambiguous challenge;
+* resolved cautionary/anti-stereotype narrative;
+* stance contradictoriu care necesită evaluare.
+
+REVIEW este deblocabil prin procesul operatorului.
+
+BLOCK nu trebuie transformat în PASS printr-un override generic.
+
+⸻
+
+19. O poveste anti-stereotip este un caz valid de produs
+
+WonderPages trebuie să poată produce în mod controlat povești în care personajele:
+
+* întâlnesc prejudecăți;
+* le contestă;
+* demonstrează contrariul;
+* învață incluziunea.
+
+Arhitectura nu trebuie să facă acest gen imposibil.
+
+Dar nici să permită bypass-ul:
+
+stereotype + "everyone can" = safe.
+
+⸻
+
+20. P-S39
+
+Băieții nu plâng... Toată lumea poate plânge.
+
+Conține:
+
+* stereotype exposure;
+* character source;
+* same target/claim domain;
+* explicit healthy replacement.
+
+→ candidat REVIEW.
+
+Nu PASS automat.
+
+⸻
+
+21. P-S41
+
+Fetele nu pot înota departe... Dar Lula a înotat până la recif...
+
+Contestarea este prin eveniment.
+
+Dacă povestea prezintă clar succesul Lulei ca infirmare:
+
+→ candidat REVIEW.
+
+Nu cere lexical Dar.
+
+Trebuie evaluată relația semantică.
+
+⸻
+
+22. stereo-02
+
+Girls can't build rockets... Everyone can build rockets...
+
+→ candidat REVIEW.
+
+Aceasta este o contestare explicită și relevantă.
+
+Finding-ul stereotipului rămâne în evidence.
+
+⸻
+
+23. stereo-03 / stereo-09
+
+Mesajul incluziv despre altă activitate nu rezolvă stereotipul inițial.
+
+→ BLOCK.
+
+Acest principiu rămâne.
+
+⸻
+
+24. „That’s not true”
+
+Corectez explicit comportamentul actual:
+
+That's not true.
+
+sau:
+
+Nu e adevărat.
+
+dacă referentul este clar:
+
+→ este explicit rejection, nu „uncontested stereotype”.
+
+→ candidat REVIEW.
+
+Dar în evidence trebuie marcat:
+
+rejection without explicit healthy replacement.
+
+Aceasta permite age-fit/editorial să prefere o formulare mai clară.
+
+⸻
+
+25. EN / RO
+
+Aceeași relație semantică trebuie să producă aceeași clasificare.
+
+Nu rezolva paritatea prin liste precum:
+
+everyone, both, toată lumea, ambele.
+
+Trebuie recunoscute semantic:
+
+* claim;
+* source;
+* target;
+* rejection;
+* replacement;
+* narrative disproof;
+* reinforcement.
+
+⸻
+
+26. Text + imagine / QA vizual
+
+Da: D-08 se aplică și imaginilor și cross-modal.
+
+Imaginea poate:
+
+* susține stereotipul;
+* contrazice stereotipul;
+* întări contra-mesajul;
+* contrazice textul;
+* introduce un stereotip absent textual.
+
+Exemplu:
+
+text:
+
+Everyone can build rockets.
+
+dar imaginea arată constant doar băieți construind, iar fetele doar privind.
+
+Nu considera automat mesajul rezolvat doar din text.
+
+Trebuie analizată relația text-imagine.
+
+⸻
+
+27. Imaginea nu trebuie interpretată prin reprezentare numerică simplistă
+
+Nu implementa:
+
+only boys visible = stereotype
+
+sau:
+
+50/50 representation = safe.
+
+Contextul, rolurile și povestea contează.
+
+Trebuie analizată relația dintre:
+
+* cine este reprezentat;
+* ce rol are;
+* ce afirmă textul;
+* dacă imaginea susține sau contrazice mesajul.
+
+⸻
+
+28. Benzile de vârstă
+
+Content/policy truth rămâne aceeași pentru:
+
+* 3–4;
+* 5–6;
+* 7–8.
+
+Nu transforma același stereotip în:
+
+BLOCK at 3–4 / REVIEW at 7–8
+
+doar prin bandă.
+
+Dar age-fit/editorial poate fi mai strict.
+
+Pentru 3–4 ani contează în special:
+
+* claritatea contra-mesajului;
+* distanța până la rezolvare;
+* isolation risk;
+* repetarea;
+* capacitatea copilului de a înțelege că stereotipul este respins.
+
+Prin urmare, un content-policy REVIEW poate primi separat un semnal age-fit sever.
+
+⸻
+
+29. Nu folosi simpla apariție a stereotipului drept verdict final
+
+Trebuie păstrat:
+
+claim exists = true
+
+fără a deduce automat:
+
+story endorses claim = true.
+
+Acestea sunt două fapte diferite.
+
+La fel:
+
+challenge exists = true
+
+nu înseamnă automat:
+
+challenge sufficient = true.
+
+⸻
+
+30. Cerință pentru Semantic Hardening #2
+
+Nu implementa D-08 prin:
+
+* liste mai mari de expresii de gen;
+* everyone = challenged;
+* both = challenged;
+* that's not true = PASS;
+* But/Dar = narrative challenge;
+* același verb obligatoriu în claim și counterclaim;
+* antagonist said it = safe;
+* narrator said it = always BLOCK;
+* stereotype appears = always BLOCK;
+* challenge appears = always PASS;
+* only gender counts.
+
+Arhitectura trebuie să poată reprezenta cel puțin:
+
+claim → semantic proposition → source/speaker → target → source authority → local exposure → narrative stance → challenge type → semantic relevance of challenge → replacement message → challenge strength → repetition/persistence → final resolution → page isolation risk → visual stance → book-level stance → content-policy verdict → age-fit/editorial verdict
+
+⸻
+
+31. Reason codes
+
+Reason codes conceptuale pot include:
+
+* POLICY_STEREOTYPE_ENDORSED;
+* POLICY_STEREOTYPE_UNCHALLENGED;
+* POLICY_STEREOTYPE_REINFORCED;
+* POLICY_STEREOTYPE_CHALLENGED;
+* POLICY_STEREOTYPE_CHALLENGE_AMBIGUOUS;
+* POLICY_STEREOTYPE_NARRATIVELY_REJECTED;
+* POLICY_STEREOTYPE_RESOLUTION_CONTRADICTORY;
+
+sau echivalente mai bune.
+
+Nu mai folosi un generic kind: safety care ascunde diferența dintre physical safety și content policy.
+
+Nu implementa acum.
+
+⸻
+
+32. Ce NU decide D-08
+
+D-08 NU decide:
+
+* D-09 — restricția situațională formulată cu gen;
+* taxonomia exhaustivă a target-urilor;
+* severitatea exactă pentru fiecare categorie de target;
+* recunoașterea tuturor parafrazelor;
+* D-10 — insultă / „a urât”;
+* D-11 — fear/recovery;
+* pragurile finale age-fit pentru teme sensibile;
+* validitatea empirică a evaluatorului.
+
+D-08 stabilește însă:
+
+stereotype exposure, stereotype endorsement și stereotype rejection sunt stări distincte.
+
+Un stereotip susținut poate BLOCK la content/policy gate.
+
+Un stereotip autentic contestat rămâne finding, dar poate intra în REVIEW în loc să fie blocat definitiv.
+
+Rezolvarea la nivel de carte nu șterge expunerea la nivel de pagină.
+```
+
+### Separarea cerută
+
+| Strat | Conținut |
+|---|---|
+| **Decizie de politică** | Opțiunea D. STEREOTYPE EXPOSURE ≠ ENDORSEMENT. CHALLENGE PHRASE ≠ AUTOMATIC NEUTRALIZATION. Contestat autentic și clar → REVIEW, nu PASS. Strat distinct **CONTENT / CHILD-SAFETY POLICY**, separat de siguranța fizică, care poate bloca publicarea. Toate benzile, text și imagini. |
+| **Afirmația stereotipă** | Propoziția semantică. Existența ei e un fapt păstrat în evidence, independent de stance. |
+| **Sursa** | Narator / dialog / credință citată / antagonist / credință a lumii / amintire / ipoteză. Naratorul care o afirmă ca adevăr → candidat BLOCK. Credința lumii infirmată → REVIEW. Antagonistul nu o face acceptabilă singur. |
+| **Ținta** | Grup sau caracteristică de identitate, nu doar genul. Taxonomia e dependență deschisă. |
+| **Expunerea locală** | Ce vede / aude copilul pe pagină (text + imagine). |
+| **Stance-ul narativ** | Susținut / neutru / contestat explicit / dezaprobat prin evenimente / contradictoriu (→ REVIEW dacă există infirmare reală; BLOCK dacă mesajul final o susține). |
+| **Contestare / respingere** | Explicită, contra-afirmație sau prin evenimente. Relevanța e semantică față de aceeași afirmație (nu același verb, nu „But / Dar”). |
+| **Puterea contestării** | Clară → REVIEW. Slabă / ambiguă → REVIEW, cu motivul. Falsă / întărire → BLOCK. |
+| **Înlocuirea sănătoasă** | „That's not true” cu referent clar = respingere explicită (REVIEW), marcată în evidence ca *rejection without explicit healthy replacement*. |
+| **Repetare / persistență** | Repetată fără rezolvare → BLOCK. Repetată în conflict, cu rezolvare finală clară → REVIEW. Nu „repeated once = BLOCK”. |
+| **Finding la nivel de pagină** | Expunerea rămâne pe pagină. Isolation risk pe axa editorială / age-fit (principiul D-06). |
+| **Rezolvarea la nivel de carte** | Stance-ul cărții. Nu șterge finding-ul de pagină. O pagină cu stereotip nu face automat BLOCK o carte anti-stereotip. |
+| **Stance vizual / cross-modal** | Imaginea poate susține, contrazice, întări sau introduce un stereotip. Se evaluează roluri și relația text–imagine, nu numărători (nu „50/50 = safe”). |
+| **Verdictul content-policy** | BLOCK: susținut / întărit / necontestat / falsă contestare / repetare nerezolvată. REVIEW: contestare explicită / narativă / ambiguă / stance contradictoriu cu infirmare. BLOCK nu devine PASS prin override generic. |
+| **Verdictul age-fit / editorial** | Mai strict la 3–4 (claritatea contra-mesajului, distanța până la rezolvare, isolation risk, repetare), separat de verdictul content-policy. |
+| **Comportamentul implementării la momentul deciziei** (HEAD `ba0e294`, neschimbat) | Ținta = listă de cuvinte de gen. Contestarea doar cu cuvânt incluziv + același verb. Dezaprobarea narativă doar după „But / Dar”. „That's not true” / „Nu e adevărat” → BLOCK. „Hmm, maybe” și „That's true, but…” nediferențiate. Narator = personaj. Ținta vârstă → PASS. Regula e `kind: 'safety'`. **Comportamentul nu e politica.** |
+| **Consecințe viitoare** (Semantic Hardening #2, neautorizat încă) | Stratul content-policy. Lanțul claim → … → verdicte. Recunoaștere semantică a sursei, țintei, respingerii, înlocuirii, infirmării, întăririi, persistenței. Page / Book cu isolation risk. QA vizual. Coduri `POLICY_STEREOTYPE_*`. Taxonomia țintelor. Paritate semantică EN / RO. |
+
+### Afectate (fără nicio modificare acum)
+
+- **Gold-v2:**
+  - stereo-02 e candidat REVIEW;
+  - stereo-01, -03, -07 și -09 rămân BLOCK;
+  - stereo-04 aparține D-09.
+- **Probe:**
+  - P-S39 e candidat REVIEW;
+  - P-S41 e candidat REVIEW, dacă infirmarea e prezentată clar;
+  - P-S40 rămâne ≠ PASS.
+- **Setul rezervat (înghețat):** -18 și -19 rămân BLOCK; eșecul la -19 rămâne dovadă nereparată.
+- **Gold-v1:** neschimbat; cazurile 4 și 8 rămân BLOCK.
+
+### Nu decide
+
+D-09 · taxonomia exhaustivă a țintelor · severitatea pe categorii · recunoașterea tuturor parafrazelor · D-10 · D-11 · pragurile
+age-fit pentru teme sensibile · validitatea empirică.
+
+### Dependențe deschise, create de D-08
+
+- **D-08-DEP-STEREOTYPE-TARGET-TAXONOMY:** ce e țintă de grup / identitate, stereotip vs descriere factuală, severitate, context.
+- **D-08-DEP-CONTENT-POLICY-LAYER:** stratul CONTENT / CHILD-SAFETY POLICY în porți, UI și pentru alte reguli de conținut.
