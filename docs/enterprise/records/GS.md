@@ -886,3 +886,31 @@ evidence relevant but insufficient for score; evidence valid for one criterion b
 by content; criterion supported locally but contradicted elsewhere in the book; fabricated quote; correct quote; partial quote /
 context distortion; critic score internally inconsistent with its own evidence; și separat: gate policy correctness vs critic
 correctness vs content quality correctness.
+
+*Cazul 38 (`quality-sea-5-6-English-02`, intrarea 38) — al doilea control pozitiv de calitate (operatorul, 2026-10-05).* Răspunsul
+criticului e identic cu cel al cazului 37, cu o singură diferență (verificată executând): T04 („Read-aloud rhythm…”, necritic) 9 → 8.
+Rezultat executat: pozitiv pe v2 și pe v1 (scor 8,9; media exactă 8,944), niciun motiv; confirmat; acord de verdict DA; acord de
+raționament YES. Layer 1 — ACCEPT pe ambele politici (v1: media ≈8,94 ≥ 8, T01/T07/T08 = 9 ≥ 7; v2: media ≥ 8, T01/T08 = 9 ≥ 8,
+minimul 8 ≥ 7, citatul există); Layer 2 — evaluatorul aplică exact condițiile declarate; Layer 3/4 — limitele din OBS-GS-18 (același
+citat pentru T01–T18; conținutul sintetic neverificat independent), fără a repeta observația. Cazul rămâne valid (diferență reală în
+inputul evaluat, spre deosebire de cazurile 21–24). Demonstrează îngust: **reducing one non-critical criterion, T04, from 9 to 8 does
+not change acceptance under either v1 or v2 for this otherwise identical assessment.** NU demonstrează: comportamentul exact la prag;
+robustețe generală; sensibilitate la note mici; age awareness; theme awareness; calitatea reală a textului; validitatea semantică a
+dovezii. **NU e test de prag:** T04 = 8 e peste minimul v2 (7), necritic, cu celelalte 17 criterii la 9 și media ≈8,94 — testează doar
+*a modest non-critical score reduction remains acceptable*, nu *what happens at the acceptance boundary?*.
+
+*Extensie OBS-GS-12 (operatorul, la cazul 38, 2026-10-05) — near-duplicate / correlated evidence.* Distincție: **exact duplicate ≠
+near-duplicate ≠ controlled variant ≠ independent stimulus.** Cazul 38: exact duplicate of case 37 — NU; input variation — DA (T04
+9→8); controlled single-variable variation — DA; boundary test — NU; independent content stimulus — NU; independent evidence pattern —
+NU; independent theme/age behavior demonstrated — NU. Clasificare: **controlled near-duplicate / correlated positive-control variant**
+— mai precis decât excluderea ca duplicat sau numărarea ca observație complet independentă. *Metadate (sondă executată, NU caz de
+aur):* cazul 38 cu `age=3-4, theme=dinosaurs` (metadatele cazului 37) → rezultat identic pe ambele politici (pozitiv, scor 8,9).
+Concluzie exactă: **the isolated quality-gate evaluation exercised by this Gold Case did not change when those metadata values were
+changed in the executed probe** (metadata diversity ≠ demonstrated behavioral coverage) — NU „WonderPages quality is not age-aware”.
+„sea 5–6” NU se folosește ca dovadă separată (ex. NU „quality validated across dinosaurs 3–4 and sea 5–6” = pseudo-coverage): conținutul
+sintetic e același, evaluarea aproape identică, iar evaluatorul executat nu își schimbă comportamentul după acele metadate. *Principiu
+de raportare:* se raportează separat **Gold case count** și, unde e relevant, **independent / correlated evidence structure** — două
+cazuri de aur valide nu înseamnă automat două observații independente (important pentru ce demonstrează cele 8 cazuri de calitate);
+schema nu se modifică acum. *Direcții pentru setul v2 (nu se creează acum):* exact la prag; cu 1 punct sub prag; criteriu critic vs
+necritic; aceeași medie prin distribuții foarte diferite; un singur criteriu foarte slab ascuns de multe note mari; dovadă validă vs
+irelevantă pentru aceeași notă.
