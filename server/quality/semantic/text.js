@@ -6,7 +6,9 @@
  */
 export const fold = s => String(s ?? '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
 export const lower = s => String(s ?? '').toLowerCase().normalize('NFC');
-export const sentencesOf = s => String(s ?? '').split(/(?<=[.!?…])\s+/).map(x => x.trim()).filter(Boolean);
+/* sentence split: never after a single-letter initial or a common abbreviation ("T. rex", "Mr. Bo", "Dr. Lia") */
+const ABBR = /(?:^|\s)(?:\p{L}|mr|mrs|ms|dr|st|sf|dl|dna|nr|etc|vs)\.$/iu;
+export const sentencesOf = s => { const parts = String(s ?? '').split(/(?<=[.!?…])\s+/), out = []; for (const p of parts) { if (out.length && ABBR.test(out[out.length - 1])) out[out.length - 1] += ' ' + p; else out.push(p); } return out.map(x => x.trim()).filter(Boolean); };
 export const wordsOf = s => String(s ?? '').match(/[\p{L}\p{N}]+(?:['’][\p{L}]+)*/gu) || [];
 
 /* ---------- language identification (coarse, per text) ---------- */

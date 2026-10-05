@@ -12,6 +12,7 @@
  */
 import { ageDimensions } from '../quality/semantic/age.js';
 import { fidelityFindings } from '../quality/semantic/fidelity.js';
+import { scienceFindings } from '../quality/semantic/science.js';
 const norm = s => String(s ?? '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
 const stripQuotes = s => String(s ?? '').replace(/[“"„«][^”"»]*[”"»]/g, ' ');
 const words = s => (String(s ?? '').match(/[\p{L}\p{N}'’-]+/gu) || []);
@@ -86,24 +87,8 @@ export function voice(pages, language = 'English') {
   if (past && pres) { const minor = past < pres ? 'past' : 'present'; findings.push({ code: 'TENSE_SWITCH', severity: 'minor', message: `Timpul narațiunii se schimbă pe pagina ${tagged.filter(p => p.d === minor).map(p => p.n).join(', ')}.` }); }
   return { findings };
 }
-const SCIENCE = [
-  { id: 'pterosaur-dinosaur', re: /(pterosaur\w*|pterodactyl\w*|pterozaur\w*|pterodactil\w*)[^.]{0,40}(dinosaur|dinozaur)|(flying dinosaur|dinozaur(ul|i)? zbur[aă]to)/i, fix: 'Pterozaurii nu sunt dinozauri: „reptilă zburătoare”, „pterozaur”.' },
-  { id: 'humans-dinosaurs', re: /((people|humans|cave ?(man|men)|oameni|omul preistoric)[^.]{0,40}(dinosaur|dinozaur))|((dinosaur|dinozaur)\w*[^.]{0,40}(people|humans|oameni))/i, fix: 'Oamenii și dinozaurii (non-aviari) nu au trăit în aceeași epocă — doar dacă lumea este declarată fantastică.' },
-  { id: 'bats-blind', re: /bats? (are|is) blind|lilieci[i]? (sunt|e) orbi/i, fix: 'Liliecii văd; folosesc și ecoul.' },
-  { id: 'night-rainbow', re: /(rainbow[^.]{0,30}(at night|moonless))|(curcubeu[^.]{0,30}noaptea)/i, fix: 'Curcubeul apare în lumina soarelui (curcubeul lunar este un fenomen rar, de explicat).' },
-  { id: 'sun-orbits', re: /sun (goes|moves|travels) (around|round) the earth|soarele se (învârte|invarte|rotește|roteste) (în|in) jurul p[aă]m[aâ]ntului/i, fix: 'Pământul se învârte în jurul Soarelui.' },
-  { id: 'moon-light', re: /moon (makes|has) its own light|luna (are|face) lumin[aă] proprie/i, fix: 'Luna reflectă lumina Soarelui.' }
-];
-const MAGIC = /(magic|magical|spell|enchant|wizard|magie|magic[aă]|vr[aă]j|fermecat)/i;
-export function science(pages, { world = 'natural' } = {}) {
-  const findings = [];
-  for (const p of pages || []) {
-    const t = `${p.text || ''} ${p.scene || ''}`;
-    for (const r of SCIENCE) { if (r.id === 'humans-dinosaurs' && world === 'fantasy') continue; const m = t.match(r.re); if (m) findings.push({ code: 'SCIENCE_CLAIM', severity: 'major', rule: r.id, page: p.n, quote: m[0], message: `Pagina ${p.n}: „${m[0]}” — ${r.fix}` }); }
-    if (world === 'natural') { const m = `${p.text || ''} ${p.effects || ''}`.match(MAGIC); if (m || /^fantasy/i.test(String(p.effects || ''))) findings.push({ code: 'T18_WORLD', severity: 'major', page: p.n, quote: m?.[0] || p.effects, message: `Pagina ${p.n}: un efect prezentat ca magie într-o lume fără magie (T18).` }); }
-  }
-  return { findings };
-}
+/* science (OBS-GS-15/16/17): entity, relation, polarity and stance — see server/quality/semantic/science.js */
+export function science(pages, { world = 'natural', canon = [] } = {}) { return scienceFindings(pages, { world, canon }); }
 
 /* ---------- localization: page-aligned native edition; no silent cutting ---------- */
 /* known calques with their morphological / syntactic variants (OBS-GS-13: variant robustness; unseen calques are NOT covered) */
@@ -146,7 +131,7 @@ export function storyContract({ bp, art, input = {}, v }) {
     causality: causality(src.story_bible ? src : { ...src, story_bible: art[`script_${v}`]?.content?.story_bible }, { bible: volBible, mainId, mainName: main?.name }),
     age: ageFit(src.pages, band, bp.age_profiles?.[band] || {}),
     voice: voice(src.pages, input.language || 'English'),
-    science: science(src.pages, { world }),
+    science: science(src.pages, { world, canon: chars.map(c => ({ name: c.name, species: c.species || c.kind || c.type || '' })).filter(c => c.name) }),
     cuts: art[`final_${v}`] && art[`script_${v}`] ? silentCuts(art[`script_${v}`].content, art[`final_${v}`].content) : { findings: [] },
     localization: art[`tr_${v}`] ? localization(src, art[`tr_${v}`].content, { names: chars.map(c => c.name).filter(Boolean), language: input.second_language || 'Romanian' }) : null
   };
