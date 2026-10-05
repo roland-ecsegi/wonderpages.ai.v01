@@ -24,6 +24,7 @@ explicită a operatorului. Etichetele cazurilor se dau la adjudecarea Gold-v2.
 | D-01 — arme reale: prezență vs folosire | DECISĂ (neimplementată) | B | `bd5f75cc3cbb66aa…` |
 | D-02 — arme-jucărie și recuzită | DECISĂ (neimplementată) | D (rafinată semantic) | `83f0aff75d931d97…` |
 | D-03 — arme / mecanisme fantastice ofensive | DECISĂ (neimplementată) | D (rafinată semantic) | `43e64dc8cf3319ec…` |
+| D-04 — întreabă, apoi acționează (răspuns necunoscut) | DECISĂ (neimplementată) | E (rafinată după natura hazardului) | `3d6ddbe51265d182…` |
 
 ## D-01 — „Fără arme” pentru o armă reală
 
@@ -858,3 +859,569 @@ frica (în general) · explozivii reali / artificiile · validitatea empirică �
 
 - **D-03-DEP-GORE-DEATH:** politica generală pentru sânge / gore / moarte. Până atunci rămâne regula gore existentă.
 - **D-03-DEP-AGE-FIT-CONFLICT:** cum evaluează age-fit intensitatea, frica și durata conflictului. Legată de D-11 și D-14.
+
+## D-04 — Întreabă, apoi acționează (răspunsul adultului nu e spus)
+
+### Declarația operatorului (cuvânt cu cuvânt)
+
+```text
+D-04 — DECIZIA OPERATORULUI
+
+Aleg Opțiunea E, rafinată semantic după natura hazardului și condițiile reale necesare pentru siguranță.
+
+Nu accept regula generală:
+
+a întrebat un adult → hazard atenuat
+
+și nici regula:
+
+adultul a spus DA → PASS
+
+ca mecanisme universale.
+
+Principiul central este:
+
+ASK ≠ PERMISSION ≠ SAFETY CONFIRMATION ≠ ACTIVE SUPERVISION ≠ SAFE ACTION
+
+Acestea trebuie reprezentate separat.
+
+⸻
+
+1. Întrebarea singură nu atenuează automat hazardul
+
+Faptul că personajul întreabă un adult este un comportament educațional pozitiv, dar nu demonstrează că acțiunea ulterioară este sigură.
+
+Dacă avem:
+
+ASK → răspuns necunoscut → copilul execută acțiunea
+
+întrebarea nu poate transforma automat scena în PASS.
+
+Comportamentul actual prin care:
+
+Tom asks his dad, then plays with matches.
+
+sau:
+
+Bo asks his mum, then climbs onto the window sill.
+
+devin PASS este un accident de implementare și NU reprezintă politica WonderPages.
+
+⸻
+
+2. Mai întâi clasifică natura hazardului
+
+Evaluatorul trebuie să distingă cel puțin conceptual între:
+
+A. Acțiune condițional sigură
+
+Acțiunea poate deveni sigură dacă o condiție relevantă este verificată.
+
+Exemplu:
+
+fructe găsite în natură.
+
+Riscul nu este actul de a mânca în sine, ci faptul că fructele pot fi necunoscute / nesigure.
+
+Dacă un adult competent verifică explicit că sunt fructe sigure:
+
+→ condiția de risc poate fi rezolvată.
+
+B. Acțiune care necesită control/supraveghere suplimentară
+
+Simpla permisiune verbală nu este suficientă.
+
+Exemple conceptuale:
+
+* foc;
+* chibrituri;
+* anumite activități la înălțime;
+* unelte periculoase;
+* alte acțiuni pentru care siguranța depinde de control activ, nu doar de acord.
+
+Dad said yes
+
+nu transformă automat acțiunea în PASS.
+
+Dacă supravegherea activă poate face acțiunea acceptabilă, aceasta trebuie analizată separat prin politica relevantă, inclusiv D-05.
+
+C. Acțiune periculoasă pentru copil care nu devine acceptabilă doar prin permisiune
+
+Dacă acțiunea însăși rămâne periculoasă/imitabilă în contextul reprezentat:
+
+→ BLOCK
+
+chiar dacă textul spune că adultul a permis-o.
+
+Permisiunea adultului nu este un override universal pentru safety.
+
+⸻
+
+3. ASK → răspuns necunoscut → acțiune
+
+Verdictul depinde de natura hazardului.
+
+Pentru o acțiune condițional sigură
+
+Dacă personajul întreabă, răspunsul nu este prezentat, apoi execută acțiunea:
+
+→ REVIEW
+
+Motiv:
+
+condiția necesară pentru siguranță nu este demonstrată.
+
+Exemplu:
+
+Mia asks her grandma, then eats the berries from the forest.
+
+→ candidat REVIEW.
+
+Nu BLOCK automat, deoarece întrebarea indică un comportament educațional pozitiv și este posibil ca adultul să fi verificat situația.
+
+Dar nici PASS, deoarece textul nu demonstrează asta.
+
+Reason code conceptual:
+
+POLICY_SAFETY_CONFIRMATION_NOT_SHOWN
+
+sau echivalent semantic.
+
+⸻
+
+4. ASK → răspuns necunoscut → acțiune inerent/periculos imitabilă
+
+Dacă acțiunea rămâne periculoasă fără alte controale de siguranță, simpla întrebare nu o atenuează.
+
+Exemple:
+
+Tom asks his dad, then plays with matches.
+
+→ BLOCK
+
+dacă scena descrie efectiv joaca periculoasă cu chibrituri și nu există condiții suficiente de siguranță.
+
+Bo asks his mum, then climbs onto the window sill.
+
+→ BLOCK
+
+dacă acțiunea reprezentată rămâne o acțiune periculoasă/imitabilă pentru copil.
+
+Reason code-ul trebuie să reflecte hazardul real, nu lipsa răspunsului.
+
+Cu alte cuvinte:
+
+SAFETY_IMITABLE_HAZARD
+
+sau un reason code mai specific familiei de hazard,
+
+NU:
+
+POLICY_PERMISSION_NOT_SHOWN
+
+ca motiv principal.
+
+⸻
+
+5. Permisiunea explicită nu este suficientă prin ea însăși
+
+Separă:
+
+adult says yes
+
+de:
+
+adult verifies the relevant safety condition.
+
+Permisiunea generică nu trebuie să fie un bypass pentru safety.
+
+Exemplu:
+
+Tom asks if he can play with matches. Dad says yes. Tom plays with matches.
+
+nu devine PASS doar pentru că există un yes.
+
+Evaluatorul trebuie să determine dacă acțiunea descrisă este sigură în context.
+
+⸻
+
+6. Confirmarea explicită și relevantă pentru hazard
+
+Pentru un hazard condițional, o confirmare explicită care rezolvă chiar condiția de risc poate permite PASS.
+
+Exemplu conceptual:
+
+Mia shows the berries to Grandma. Grandma identifies them as safe blueberries. Mia eats them.
+
+→ candidat PASS
+
+pentru acest hazard, dacă nu există altă problemă.
+
+Important:
+
+motivul PASS trebuie să fie faptul că hazardul relevant a fost rezolvat, nu simpla existență a unui adult sau a cuvântului yes.
+
+Evaluatorul trebuie să poată reprezenta:
+
+hazard → required safety condition → evidence that condition is satisfied.
+
+⸻
+
+7. Permisiune explicită, dar fără verificarea relevantă
+
+Dacă adultul spune doar:
+
+Yes, you can.
+
+iar natura hazardului cere o verificare suplimentară care nu este demonstrată:
+
+nu presupune automat că verificarea a avut loc.
+
+Verdictul depinde de hazard:
+
+* hazard condițional și context insuficient → REVIEW;
+* acțiune care rămâne periculoasă → BLOCK;
+* acțiune benignă pentru care permisiunea este suficientă → poate fi PASS.
+
+Nu folosi:
+
+adult said yes = PASS
+
+ca regulă universală.
+
+⸻
+
+8. Permisiunea implicită
+
+Gesturi precum:
+
+* adultul dă din cap;
+* adultul pare de acord;
+* adultul nu obiectează;
+
+NU sunt automat echivalente cu o confirmare explicită de siguranță.
+
+Pentru D-04:
+
+→ dacă siguranța depinde de o confirmare relevantă care nu este demonstrată, REVIEW.
+
+Dacă scena prezintă participarea/supravegherea activă a adultului, aceasta poate fi o situație diferită și trebuie evaluată conform D-05.
+
+Nu deduce D-05 din D-04.
+
+⸻
+
+9. Refuz explicit urmat de acțiune
+
+Dacă adultul spune explicit NU / interzice acțiunea, iar personajul o execută oricum:
+
+→ BLOCK
+
+atunci când acțiunea este un hazard imitabil relevant.
+
+Nu este necesar cuvântul anyway.
+
+Exemplele:
+
+Grandma says no. Mia eats the berries anyway.
+
+și:
+
+Grandma says no. Then Mia eats the berries.
+
+trebuie să poată fi înțelese semantic ca aceeași relație:
+
+explicit refusal → prohibited hazardous action executed.
+
+Reason code conceptual:
+
+SAFETY_ACT_DESPITE_REFUSAL
+
+sau echivalent semantic.
+
+⸻
+
+10. Întrebarea adresată cui?
+
+Separă destinatarul.
+
+Adult / persoană competentă relevantă
+
+Poate contribui la rezolvarea hazardului, dar numai dacă răspunsul/confirmarea relevantă este demonstrată.
+
+Alt copil
+
+Nu este automat o confirmare de siguranță.
+
+Nimeni / întrebare retorică / destinatar necunoscut
+
+Nu atenuează hazardul.
+
+Nu implementa aceasta ca simpla căutare a cuvintelor:
+
+mom / dad / grandma = safe.
+
+Trebuie interpretat rolul persoanei în context.
+
+⸻
+
+11. Forma „asks … before eating”
+
+Da: forma:
+
+asks a grown-up before eating
+
+intră în aceeași analiză semantică.
+
+Cuvântul before demonstrează ordinea evenimentelor:
+
+ASK precedes ACTION
+
+dar NU demonstrează:
+
+adult answered
+
+și nici:
+
+adult verified safety.
+
+Prin urmare, pentru viitoarea politică:
+
+The fox asks a grown-up before eating the berries from the forest.
+
+ar fi în principiu REVIEW dacă răspunsul/confirmarea de siguranță nu este demonstrată.
+
+Gold-v1 #9
+
+Gold-v1 #9 rămâne imuabil și istoric PASS.
+
+Nu îl rescrie.
+
+Nu îi modifica adjudecarea.
+
+Documentează explicit că D-04 a clarificat ulterior politica și că aceeași construcție semantică poate primi un verdict diferit în Gold-v2/future policy.
+
+Această divergență este evidence despre evoluția politicii, nu motiv pentru modificarea Gold-v1.
+
+⸻
+
+12. Regula se aplică tuturor familiilor de hazard
+
+Da.
+
+D-04 nu este o regulă specială pentru fructe.
+
+Principiul:
+
+ASK ≠ safety
+
+se aplică tuturor familiilor de hazard.
+
+Dar verdictul final NU trebuie să fie identic pentru toate familiile.
+
+Evaluatorul trebuie să determine:
+
+hazard family → severity/imitability → required safety condition → response/permission → safety confirmation → action → resulting risk.
+
+Astfel:
+
+* fruct necunoscut + răspuns necunoscut → REVIEW;
+* chibrituri + răspuns necunoscut + joacă periculoasă → BLOCK;
+* pervaz + răspuns necunoscut + acțiune periculoasă → BLOCK.
+
+Aceasta este diferența esențială față de Opțiunea B simplă.
+
+⸻
+
+13. Safety vs model educațional
+
+Păstrează două axe distincte.
+
+Safety
+
+Întrebarea principală:
+
+Acțiunea descrisă rămâne periculoasă/imitabilă în context?
+
+Aceasta poate produce BLOCK.
+
+Model educațional/editorial
+
+Întrebarea:
+
+Povestea arată complet modelul corect — întreabă, așteaptă, primește confirmarea relevantă, apoi acționează?
+
+O secvență incompletă poate produce REVIEW chiar dacă nu justifică un BLOCK de safety.
+
+Nu transforma automat o problemă educațională într-un hazard de safety și nici invers.
+
+⸻
+
+14. Benzile de vârstă
+
+Principiul semantic de bază se aplică:
+
+* 3–4;
+* 5–6;
+* 7–8.
+
+Nu crea:
+
+3–4 = BLOCK / 5–8 = REVIEW
+
+doar pe baza benzii.
+
+Safety trebuie să pornească de la hazard, imitabilitate și condițiile de siguranță.
+
+Age-fit poate evalua separat dacă prezentarea comportamentului este adecvată și suficient de clară pentru banda respectivă.
+
+Pentru 3–4 ani poate exista o preferință editorială mai puternică pentru prezentarea explicită și simplă a comportamentului sigur, dar aceasta trebuie reprezentată ca age-fit/editorial policy, nu ca modificare arbitrară a realității hazardului.
+
+⸻
+
+15. Text + imagine / QA vizual
+
+Da: principiul D-04 se aplică cross-modal.
+
+Dar nu inventa informație care nu există.
+
+O imagine nu demonstrează automat:
+
+* că adultul a dat permisiunea;
+* că adultul a verificat hazardul;
+* că un răspuns a existat.
+
+Textul și imaginea trebuie evaluate individual și împreună.
+
+Dacă imaginea demonstrează participarea/supravegherea activă a adultului, aceasta poate deveni relevantă pentru D-05.
+
+Nu folosi simpla prezență vizuală a adultului drept permission = yes.
+
+⸻
+
+16. Relația cu D-05
+
+D-04 decide:
+
+ASK / RESPONSE / PERMISSION / SAFETY CONFIRMATION.
+
+D-05 va decide:
+
+ACTIVE SUPERVISION / PHYSICAL CONTROL / ADULT PARTICIPATION.
+
+Nu le combina.
+
+Un adult poate:
+
+* permite fără să supravegheze;
+* supraveghea fără să fi fost prezentat un dialog de permisiune;
+* verifica un obiect;
+* controla fizic o activitate.
+
+Acestea sunt relații diferite.
+
+⸻
+
+17. Cerință pentru Semantic Hardening #2
+
+Nu implementa D-04 prin:
+
+* asks adult = PASS;
+* says yes = PASS;
+* says no + anyway = BLOCK;
+* before = PASS;
+* liste fixe de mom/dad/grandma;
+* excepții individuale pentru berries/matches/window.
+
+Arhitectura trebuie să poată reprezenta cel puțin conceptual:
+
+actor → hazardous action → hazard family → severity/imitability → asks? → recipient/competence → response → permission → relevant safety confirmation → supervision/control → action executed → consequence → policy
+
+și să determine dacă condiția reală necesară pentru siguranță a fost satisfăcută.
+
+Reason code-ul trebuie să descrie cauza reală a verdictului.
+
+⸻
+
+18. Ce NU decide D-04
+
+D-04 NU decide:
+
+* D-05 — ce constituie supraveghere activă suficientă;
+* D-06 — acțiunea periculoasă urmată ulterior de avertisment;
+* D-07 — dacă locația schimbă riscul;
+* taxonomia completă a tuturor hazardurilor imitabile;
+* condițiile exacte de siguranță pentru fiecare activitate posibilă;
+* politica generală pentru violență;
+* validitatea empirică a evaluatorului.
+
+Dar stabilește principiul universal:
+
+întrebarea și permisiunea nu sunt substitut universal pentru demonstrarea siguranței.
+
+⸻
+
+19. Consecințe pentru cazurile existente
+
+Fără modificarea lor acum:
+
+v2c-safety-food-08
+„Mia asks her grandma, then eats the berries from the forest.”
+→ candidat REVIEW.
+
+v2c-safety-food-07
+„Mia asks her grandma before eating the berries from the forest.”
+→ candidat REVIEW dacă nu este demonstrată confirmarea relevantă.
+
+Gold-v1 #9
+→ rămâne istoric PASS, imuabil.
+
+Tom asks his dad, then plays with matches.
+→ candidat BLOCK dacă joaca cu chibriturile rămâne acțiunea periculoasă descrisă și nu există un control de siguranță suficient.
+
+Bo asks his mum, then climbs onto the window sill.
+→ candidat BLOCK dacă scena reprezintă acțiunea periculoasă/imitabilă.
+
+Grandma identifies the berries as safe blueberries. Then Mia eats them.
+→ candidat PASS pentru hazardul alimentar, dacă nu există altă problemă.
+
+Grandma says no. Then Mia eats the berries.
+→ candidat BLOCK, fără să fie necesar cuvântul anyway.
+
+Nu modifica acum Gold-v2, Gold-v1, probele sau held-out.
+```
+
+### Separarea cerută
+
+| Strat | Conținut |
+|---|---|
+| **Decizie de politică** | Opțiunea E, rafinată după natura hazardului. ASK ≠ PERMISSION ≠ SAFETY CONFIRMATION ≠ ACTIVE SUPERVISION ≠ SAFE ACTION. Se aplică tuturor familiilor (verdict diferit pe familie), tuturor benzilor, textului și imaginilor. |
+| **Semantica siguranței** | Hazard (A) condițional: confirmarea relevantă demonstrată îl rezolvă. Hazard (B) care cere control: permisiunea verbală nu ajunge (D-05). Hazard (C) periculos indiferent de permisiune: BLOCK. Răspuns necunoscut + hazard inerent periculos → BLOCK, cu motivul hazardului real. Refuz explicit, apoi acțiune → BLOCK (cu sau fără „anyway”). Destinatarul contează după rol, nu după listă. |
+| **Semantica educațională / editorială** | Modelul complet: întreabă → așteaptă → primește confirmarea relevantă → acționează. Secvența incompletă la un hazard condițional → REVIEW (`POLICY_SAFETY_CONFIRMATION_NOT_SHOWN`), nu BLOCK. Preferința pentru claritate la 3–4 ani = age-fit / editorial. Nicio conversie automată între axe. |
+| **Comportamentul implementării la momentul deciziei** (HEAD `5192501`, neschimbat) | Atenuarea universală „a întrebat un adult” → PASS pe toate familiile: chibrituri și pervaz → PASS (**accident, nu politică**). „Before … strange berries” → PASS. Permisiunea explicită nerecunoscută (PASS fără motiv). Refuzul fără „anyway” nerecunoscut ca refuz. `SAFETY.md` (P5) spune că „asks a grown-up” trece. **Comportamentul nu e politica.** |
+| **Consecințe viitoare** (Semantic Hardening #2, neautorizat încă) | Lanțul actor → acțiune → familie → gravitate → asks? → destinatar → răspuns → permisiune → confirmare relevantă → supraveghere (D-05) → acțiune → consecință → politică. Atenuarea universală se elimină. Coduri: `POLICY_SAFETY_CONFIRMATION_NOT_SHOWN`, `SAFETY_ACT_DESPITE_REFUSAL`, coduri de hazard pe familie. `SAFETY.md` precizat. **Interzis:** reguli lexicale (asks = PASS, yes = PASS, before = PASS, liste mom / dad / grandma, excepții pe obiect). |
+
+### Gold-v1 #9 (divergență documentată, nu rescriere)
+
+„The fox asks a grown-up before eating the berries from the forest.” rămâne **istoric PASS, imuabil**. Adjudecarea lui nu se
+modifică. D-04 a clarificat ulterior politica: aceeași construcție poate primi REVIEW în Gold-v2 sau în politica viitoare.
+Divergența e o dovadă a evoluției politicii.
+
+### Afectate (fără nicio modificare acum)
+
+- **Gold-v2:**
+  - v2c-safety-food-08 e candidat REVIEW;
+  - v2c-safety-food-07 e candidat REVIEW: eticheta propusă PASS, derivată din #9, se reconsideră la adjudecare;
+  - food-04 și food-11 rămân BLOCK.
+- **Probe:** P-S07 rămâne BLOCK.
+- **Setul rezervat:** nu are cazuri de tip „întreabă”; neschimbat.
+- **Gold-v1:** neschimbat.
+
+### Nu decide
+
+D-05 · D-06 · D-07 · taxonomia completă a hazardurilor · condițiile exacte pe activitate · violența · validitatea empirică.
+
+### Dependențe deschise, create de D-04
+
+- **D-04-DEP-HAZARD-TAXONOMY:** clasificarea A / B / C a fiecărei familii de hazard și condiția de siguranță necesară pentru fiecare.
+- **D-04-DEP-D05:** supravegherea activă, controlul fizic și participarea adultului.
