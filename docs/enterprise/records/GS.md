@@ -361,3 +361,36 @@ relation; + causal/inferential relation; + information density — apoi combina�
 (o proprietate care justifică semnalarea la 3–4 poate fi acceptabilă la 7–8).
 *Raportare:* nici „AGE_COMPLEXITY not triggered” → „age appropriate”, nici „AGE_COMPLEXITY triggered” → „sistemul a identificat
 toate motivele”; raportul spune exact ce proprietate a detectat evaluatorul. Nicio observație nouă.
+
+**OBS-GS-12 (operatorul, la cazul 21, 2026-10-05) — integritatea setului de aur: duplicare și validitatea acoperirii.**
+Distinctă de OBS-GS-11: OBS-GS-11 privește ce măsoară evaluatorul de age-fit și cât de complet e raționamentul; OBS-GS-12
+privește dacă benchmarkul însuși e valid statistic și semantic pentru afirmațiile pe care vrem să le facem.
+Cazul 21 (`age-sea-3-4-English-03`, intrarea 21): **EXCLUDE** — duplicat exact al cazului 19 (`age-dinosaurs-3-4-English-01`) cu
+metadata de temă nepotrivită (sea); nu e observație independentă și ar umfla metricile agregate și pe teme. Excluderea NU e
+pentru dezacord cu evaluatorul (eticheta semantică „no AGE_COMPLEXITY signal” și rezultatul sistemului coincid), ci pentru
+invaliditatea observației (data integrity). Câmpul structurat `reasoning` nu a fost completat: schema nu definește acord de
+raționament pentru excluderi și nu s-a inventat o valoare. Observația validă pentru acest text rămâne cazul 19. gold-v1.json
+rămâne imuabil (sha256 `603fa00a…`), inclusiv cu defectele lui; excluderile se documentează în jurnalul de adjudecare.
+Constatări actuale: cele 6 cazuri de vârstă din calibrare = **2 texte distincte, fiecare repetat de trei ori** (19/21/23 și
+20/22/24); cazurile 21–24 au tema declarată (sea/forest) nesusținută de conținut, conform inventarului; raportarea pe teme
+poate fi artificială; numărul brut de cazuri supraestimează numărul de observații independente; verificarea actuală de
+contaminare/deduplicare (`contamination`) compară doar setul rezervat cu calibrarea și NU detectează duplicatele din interiorul
+calibrării; toate cele 7 cazuri de vârstă sunt pentru 3–4 ani și în engleză — nu există cazuri de vârstă pentru 5–6, 7–8 sau în
+română.
+Patru concepte de separat: **CASE COUNT** (numărul brut de cazuri); **UNIQUE TEXT COUNT** (texte/stimuli distincți);
+**INDEPENDENT TEST COUNT** (observații cu informație independentă pentru proprietatea testată); **COVERAGE** (combinațiile
+limbă × bandă de vârstă × proprietate × temă × verdict realmente acoperite). Un set poate avea multe cazuri, dar puține teste
+independente.
+Tema nu e metadata decorativă: dacă raportăm pe teme, tema trebuie susținută de conținut. Pentru setul v2: validator de
+consistență **case metadata ↔ actual stimulus/content ↔ claimed test property** (NU se implementează acum).
+Detecția duplicatelor la hardening: exact duplicates în calibrare; în setul rezervat; între calibrare și setul rezervat;
+duplicate normalizate; near-duplicates/parafraze unde e relevant; aceeași observație cu metadata diferită; aceeași familie de
+cazuri doar când variația e intenționată și documentată ca pereche minimală. **intentional minimal pair ≠ accidental duplicate.**
+Raportarea finală pentru gold-v1 arată separat: cazuri brute; confirmate; corectate; excluse; stimuli unici; duplicate cunoscute;
+goluri de acoperire; calibrare vs set rezervat; acord de raționament unde există; limitările setului. NU „N/N age cases correct”
+ca dovadă de acoperire; un eventual 100% pe gold-v1 NU se prezintă drept validare age-fit.
+Cerință pentru hardening (poarta de acceptare NU se modifică acum): acceptarea viitoare nu trebuie să trateze simplul fapt că
+toate cazurile rămase au fost adjudecate/corecte drept dovadă de acoperire suficientă dacă există excluderi, duplicate, benzi de
+vârstă lipsă, limbi lipsă sau proprietăți netestate — **accuracy ≠ coverage**; **all cases adjudicated ≠ benchmark sufficient**.
+Cazurile 22–24 NU se exclud anticipat: fiecare se verifică și se adjudecă individual (intenția declarată a operatorului: aceeași
+regulă de integritate dacă verificarea confirmă duplicat exact + metadata falsă + nicio variație intenționată).
