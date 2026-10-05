@@ -23,6 +23,7 @@ explicită a operatorului. Etichetele cazurilor se dau la adjudecarea Gold-v2.
 |---|---|---|---|
 | D-01 — arme reale: prezență vs folosire | DECISĂ (neimplementată) | B | `bd5f75cc3cbb66aa…` |
 | D-02 — arme-jucărie și recuzită | DECISĂ (neimplementată) | D (rafinată semantic) | `83f0aff75d931d97…` |
+| D-03 — arme / mecanisme fantastice ofensive | DECISĂ (neimplementată) | D (rafinată semantic) | `43e64dc8cf3319ec…` |
 
 ## D-01 — „Fără arme” pentru o armă reală
 
@@ -434,3 +435,426 @@ artificiile · validitatea empirică · pragurile age-fit · potrivirea editoria
 - **D-02-DEP-VIOLENCE-WITHOUT-OBJECT:** politica generală pentru violența fără obiect. D-02 a decis doar jucăria folosită pentru
   vătămare.
 - **D-02-DEP-AGE-DIFFERENTIATION:** o diferențiere pe benzi se discută doar dacă e demonstrată și decisă separat.
+
+## D-03 — Arme și mecanisme fantastice folosite ofensiv
+
+### Declarația operatorului (cuvânt cu cuvânt)
+
+```text
+D-03 — DECIZIA OPERATORULUI
+
+Aleg Opțiunea D, rafinată semantic, aceeași pentru benzile de vârstă 3–4, 5–6 și 7–8.
+
+Politica nu trebuie definită lexical ca:
+
+laser / blaster / ray gun = armă fantastică
+
+ci semantic, în funcție de:
+
+mecanism → actor → acțiune → intenție/context → țintă → ființe potențial afectate → consecință → intensitate → policy
+
+Fantasticul nu trebuie să fie nici:
+
+* bypass pentru agresiune;
+* motiv automat de BLOCK.
+
+⸻
+
+1. Prezență și utilizare neagresivă
+
+Simpla prezență a unui obiect sau mecanism fantastic este permisă:
+
+→ PASS
+
+Utilizarea lui ca unealtă, fără atac, amenințare sau vătămare:
+
+→ PASS
+
+Exemple:
+
+* un blaster fantastic stă pe o masă;
+* un laser este folosit pentru a tăia/deschide o ușă;
+* o rază este folosită pentru scanare;
+* o vrajă este folosită pentru iluminare;
+* focul unei creaturi este folosit pentru a aprinde controlat un foc, dacă scena nu introduce alt hazard relevant.
+
+Nu transforma simpla existență a unui mecanism fantastic într-o problemă de safety.
+
+⸻
+
+2. Atacul asupra unui obiect nu este automat conflict violent
+
+Un mecanism fantastic folosit asupra unui obiect neînsuflețit, fără ființe în pericol și fără context de luptă/agresiune:
+
+→ PASS
+
+Exemple conceptuale:
+
+* laser folosit pentru a sparge un obstacol;
+* rază folosită pentru a distruge o rocă;
+* vrajă folosită pentru a deschide o poartă.
+
+Dar acest principiu NU înseamnă:
+
+target = object → PASS
+
+în mod mecanic.
+
+Trebuie evaluat contextul acțiunii.
+
+⸻
+
+3. Conflict / combat asupra unui vehicul sau obiect
+
+Dacă obiectul este ținta unui conflict, atac sau combat, nu doar a unei acțiuni utilitare:
+
+→ minimum REVIEW
+
+Exemple:
+
+* două nave se atacă într-o bătălie cu lasere;
+* pirații spațiali trag asupra unei nave;
+* o navă atacă intenționat alta;
+* un personaj distruge agresiv vehiculul altui personaj.
+
+Motivul este că scena reprezintă conflict/agresiune chiar dacă textul nu descrie explicit o rană.
+
+Nu transforma o bătălie într-un PASS doar fiindcă ținta gramaticală este o navă.
+
+Reason code conceptual:
+
+POLICY_FANTASY_COMBAT
+
+sau un echivalent semantic.
+
+Nu implementa acum.
+
+⸻
+
+4. Vehicule cu echipaj
+
+Un vehicul despre care știm sau putem deduce rezonabil din context că are echipaj trebuie tratat ca având ființe potențial în pericol.
+
+Prin urmare:
+
+The aliens fired lasers at the rocket.
+
+nu devine automat PASS doar pentru că ținta gramaticală este rocket.
+
+Dacă existența echipajului este explicită sau rezonabil implicită:
+
+→ minimum REVIEW
+
+Dacă atacul produce explicit vătămarea ființelor din vehicul:
+
+→ BLOCK
+
+Dacă textul stabilește clar că vehiculul este gol / autonom / fără ființe în pericol, atunci verdictul se decide după natura acțiunii:
+
+* utilizare neagresivă asupra obiectului → PASS;
+* combat/distrugere agresivă → REVIEW;
+* alt hazard relevant → regula corespunzătoare.
+
+Nu deduce automat existența sau inexistența echipajului doar din cuvântul ship, rocket, car etc.; folosește contextul disponibil.
+
+⸻
+
+5. Amenințare / atac asupra unei ființe vii fără vătămare explicită
+
+Un mecanism fantastic folosit pentru a amenința sau ataca o ființă vie, fără ca textul să arate încă o vătămare:
+
+→ REVIEW
+
+Exemple conceptuale:
+
+* robotul îndreaptă laserul spre o fată;
+* monstrul îndreaptă blasterul spre un copil;
+* vrăjitorul aruncă o vrajă de atac spre un personaj;
+* dragonul suflă foc spre un personaj, fără rezultat de vătămare descris.
+
+Reason code conceptual:
+
+POLICY_FANTASY_ATTACK_OR_THREAT
+
+sau echivalent semantic.
+
+Nu implementa acum.
+
+⸻
+
+6. Atac fantastic care produce vătămare
+
+Dacă atacul fantastic produce explicit vătămare reală unei persoane, unui animal sau unei alte ființe relevante:
+
+→ BLOCK
+→ safety/content safety
+→ fără override editorial.
+
+Fantasticul nu poate transforma vătămarea explicită într-un PASS.
+
+Exemple:
+
+* personaj ars/rănit de o minge de foc;
+* laser care rănește un personaj;
+* vrajă folosită pentru a provoca suferință/vătămare;
+* focul dragonului rănește personajele;
+* atac asupra unei nave care rănește explicit echipajul.
+
+Reason code conceptual:
+
+SAFETY_FANTASY_ATTACK_HARM
+
+sau echivalent semantic.
+
+Această decizie nu stabilește separat politica pentru gore/sânge/moarte, care poate produce motive suplimentare și eventual un verdict cel puțin la fel de sever.
+
+⸻
+
+7. Efecte fantastice fără vătămare corporală
+
+Nu orice efect aplicat unei ființe este automat BLOCK.
+
+Exemple:
+
+* adormire;
+* înghețare magică temporară;
+* teleportare;
+* imobilizare;
+* transformare;
+* alte efecte fantastice reversibile.
+
+Acestea trebuie evaluate după:
+
+* intenție;
+* consimțământ/context;
+* caracter agresiv sau benign;
+* frică;
+* pierderea controlului/autonomiei;
+* consecință;
+* reversibilitate;
+* rolul în poveste.
+
+Ca regulă pentru D-03:
+
+* efect benign/consensual și fără agresiune → poate fi PASS;
+* efect aplicat agresiv unei ființe sau context ambiguu → REVIEW;
+* vătămare explicită → BLOCK.
+
+Nu crea o regulă lexicală precum:
+
+sleeping spell = PASS.
+
+⸻
+
+8. Atacurile fantastice fără obiect-armă INTRĂ în D-03
+
+Da.
+
+D-03 se aplică nu doar obiectelor precum:
+
+* laser;
+* blaster;
+* ray gun;
+
+ci și mecanismelor fantastice folosite ofensiv, inclusiv conceptual:
+
+* mingi de foc;
+* vrăji de atac;
+* raze/energie;
+* suflu de foc al unei creaturi;
+* puteri supranaturale folosite pentru atac;
+* alte mecanisme fantastice echivalente funcțional.
+
+Motivul este evitarea unei portițe semantice:
+
+laser at child → REVIEW
+
+dar
+
+fireball at child → PASS
+
+doar fiindcă al doilea nu se află în lexicon.
+
+Clasifică după funcția și relațiile scenei, nu după numele obiectului.
+
+⸻
+
+9. Fantastic ≠ armă reală
+
+Păstrează separarea față de D-01.
+
+O armă fantastică nu devine automat POLICY_REAL_WEAPON_PRESENT.
+
+La fel, o armă de tip real nu devine fantastică doar pentru că apare într-un univers SF/fantasy.
+
+Gold-v1 #17:
+
+The space pirates shot their guns at the ship.
+
+rămâne sub D-01 deoarece guns reprezintă arme de tip real într-un decor fantastic.
+
+Universul narativ nu schimbă natura obiectului.
+
+⸻
+
+10. Relația cu D-02
+
+O jucărie care imită un blaster/laser rămâne în D-02.
+
+Un blaster real în universul ficțional al poveștii intră în D-03.
+
+Evaluatorul trebuie să distingă:
+
+* toy/prop in story world;
+* real weapon in story world;
+* fictional/fantastical mechanism in story world.
+
+⸻
+
+11. Benzile de vârstă
+
+Această politică semantică de bază se aplică tuturor benzilor:
+
+* 3–4;
+* 5–6;
+* 7–8.
+
+Nu schimba automat verdictul safety/policy doar pe baza vârstei.
+
+Age-fit trebuie să evalueze separat:
+
+* intensitatea;
+* frica;
+* complexitatea;
+* durata conflictului;
+* caracterul potrivit pentru banda de vârstă.
+
+O scenă poate, de exemplu:
+
+* să fie REVIEW din perspectiva politicii de conflict;
+* și simultan să aibă probleme suplimentare de age-fit pentru 3–4.
+
+Păstrează aceste axe separate.
+
+⸻
+
+12. Text + imagine
+
+Da: D-03 se aplică textului și imaginilor / QA vizual.
+
+Ca la D-01 și D-02:
+
+* textul se evaluează pe propriul conținut;
+* imaginea se evaluează pe propriul conținut;
+* relația text–imagine se evaluează separat.
+
+Imaginea poate transforma o propoziție relativ neutră într-o scenă violentă sau amenințătoare și invers.
+
+Nu presupune că verdictul textului validează imaginea.
+
+⸻
+
+13. Consecințe pentru exemplele existente
+
+În baza acestei politici, ca viitoare consecință de policy, fără modificarea cazurilor acum:
+
+The aliens fired lasers at the rocket.
+→ candidat REVIEW, deoarece este un atac asupra unui vehicul, cu posibil echipaj/context de conflict.
+
+P-S18:
+The space pirates shot their lasers at the ship.
+→ candidat REVIEW.
+
+The robot used a laser to cut the metal door.
+→ PASS, dacă este utilizare neagresivă/utilitară și nu există alt hazard.
+
+The robot aimed its laser at the girl.
+→ REVIEW.
+
+The two spaceships fought a big laser battle among the stars.
+→ REVIEW, nu PASS doar pentru că nu este descrisă o rană.
+
+The witch hurled fireballs at the villagers and burned their houses.
+→ cel puțin REVIEW pentru atac/agresiune; dacă textul stabilește vătămarea ființelor, BLOCK. Alte politici pot produce motive suplimentare.
+
+The dragon breathed fire at the knight.
+→ REVIEW dacă reprezintă atac asupra ființei fără vătămare explicită.
+
+The wizard zapped the dragon with a sleeping spell, and it fell asleep.
+→ nu poate fi decis doar din cuvintele sleeping spell; trebuie analizate intenția/contextul/agresiunea/consecința. Dacă este atac neconsensual/agresiv fără vătămare → REVIEW; dacă există un context benign justificat, poate fi PASS.
+
+Nu modifica acum Gold-v2, probele sau held-out.
+
+⸻
+
+14. Ce NU decide D-03
+
+D-03 NU decide:
+
+* D-01 — arme reale;
+* D-02 — jucării și recuzită;
+* amenințarea implicită fără instrument/mecanism identificabil;
+* politica generală pentru violența fizică fără armă/mecanism fantastic;
+* politica generală pentru sânge/gore/moarte;
+* politica generală pentru frică;
+* explozivii reali/artificiile;
+* validitatea empirică a evaluatorului;
+* pragurile generale age-fit.
+
+D-03 include însă mecanisme fantastice ofensive fără obiect-armă, pentru a evita un bypass semantic.
+
+⸻
+
+15. Cerință pentru Semantic Hardening #2
+
+Nu implementa D-03 prin:
+
+* extinderea listei laser/blaster/ray gun;
+* laser + fire = REVIEW;
+* ship = PASS;
+* person = REVIEW;
+* fireball = BLOCK;
+
+ca reguli lexicale izolate.
+
+Arhitectura trebuie să poată reprezenta cel puțin conceptual:
+
+mechanism/type → actor → action → intent/context → target → target occupancy/life → consequence → reversibility → intensity → age context → policy
+
+și să emită motivul real al verdictului.
+
+Această cerință este pentru Semantic Hardening #2.
+
+Nu implementa acum.
+```
+
+### Separarea cerută
+
+| Strat | Conținut |
+|---|---|
+| **Decizie de politică** | Opțiunea D, rafinată semantic, aceeași pe toate benzile, pentru text și imagini. Include mecanismele fantastice fără obiect-armă (vrăji de atac, mingi de foc, suflu de foc, puteri supranaturale). |
+| **Semantica siguranței** | Vătămare explicită → BLOCK (siguranță, fără override). Atac / amenințare asupra unei ființe fără vătămare → REVIEW. Combat asupra vehiculelor / obiectelor → minimum REVIEW. Vehiculul cu echipaj explicit sau rezonabil implicit = ființe potențial în pericol. Prezență, folosire ca unealtă, acțiune neagresivă asupra obiectelor → PASS. Efectele reversibile se judecă după intenție, consimțământ, agresivitate și consecință. Armă reală ≠ jucărie ≠ mecanism fantastic, în lumea poveștii. Siguranța / politica ≠ age-fit. |
+| **Comportamentul implementării la momentul deciziei** (HEAD `2c7cdcd`, neschimbat) | Lista laser / blaster / ray gun / phaser + un verb de tragere → REVIEW `POLICY_FICTIONAL_WEAPON_UNDEFINED`, același cod pentru rachetă și pentru un copil țintit. „Laser battle” → PASS. Mingile de foc, vrăjile și focul dragonului → PASS, inclusiv „burned their houses”. RO „au tras cu lasere” → PASS (paritate ruptă). **Comportamentul nu e politica.** |
+| **Consecințe viitoare** (Semantic Hardening #2, neautorizat încă) | Lanțul mecanism → actor → acțiune → intenție / context → țintă → ocupare / viață → consecință → reversibilitate → intensitate → vârstă → politică. Coduri: `POLICY_FANTASY_COMBAT`, `POLICY_FANTASY_ATTACK_OR_THREAT`, `SAFETY_FANTASY_ATTACK_HARM` (sau echivalente). Paritate EN/RO. QA vizual aliniat. **Interzis:** liste lexicale sau reguli izolate. |
+
+### Afectate (fără nicio modificare acum)
+
+- **Gold-v2:**
+  - v2c-safety-weapon-04 e candidat REVIEW; eticheta se dă la adjudecare;
+  - v2c-safety-ctrl-01 („dragon killed the knight”) rămâne sub regula gore existentă.
+- **Probe:**
+  - P-S18 e candidat REVIEW;
+  - P-S19 nu e decis (amenințare fără instrument, D-01-DEP-IMPLICIT-THREAT);
+  - P-S21 rămâne sub D-01.
+- **Setul rezervat:** nu are cazuri fantastice; neschimbat.
+- **Gold-v1:** #17 rămâne sub D-01.
+
+### Nu decide
+
+D-01 · D-02 · amenințarea implicită fără instrument / mecanism · violența fizică fără armă / mecanism · sângele / gore / moartea ·
+frica (în general) · explozivii reali / artificiile · validitatea empirică · pragurile age-fit.
+
+### Dependențe deschise, create de D-03
+
+- **D-03-DEP-GORE-DEATH:** politica generală pentru sânge / gore / moarte. Până atunci rămâne regula gore existentă.
+- **D-03-DEP-AGE-FIT-CONFLICT:** cum evaluează age-fit intensitatea, frica și durata conflictului. Legată de D-11 și D-14.

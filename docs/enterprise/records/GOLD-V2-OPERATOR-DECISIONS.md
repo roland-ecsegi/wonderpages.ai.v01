@@ -9,7 +9,8 @@ fapte sau dintr-o regulă scrisă. Până la decizie:
 Comportamentul curent e calculat cu evaluatorul v2, politica de siguranță v2 și politica de calitate v2.
 
 **Starea deciziilor:** vezi `GOLD-V2-POLICY-DECISIONS.md` (sursa: `evaluation/gold-v2-policy/decisions.jsonl`). D-01: DECISĂ
-(opțiunea B), neimplementată. D-02: DECISĂ (opțiunea D, rafinată semantic), neimplementată. Tabelul de mai jos rămâne prezentarea inițială, nu se rescrie.
+(opțiunea B), neimplementată. D-02: DECISĂ (opțiunea D, rafinată semantic), neimplementată. D-03: DECISĂ (opțiunea D, rafinată
+semantic), neimplementată. Tabelul de mai jos rămâne prezentarea inițială, nu se rescrie.
 
 **Cum se înregistrează:**
 - **Pentru un caz:** `node scripts/enterprise/gold-adjudicate.mjs record --case=<id> --decision=correct --label=positive|negative
