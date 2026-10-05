@@ -26,6 +26,7 @@ explicită a operatorului. Etichetele cazurilor se dau la adjudecarea Gold-v2.
 | D-03 — arme / mecanisme fantastice ofensive | DECISĂ (neimplementată) | D (rafinată semantic) | `43e64dc8cf3319ec…` |
 | D-04 — întreabă, apoi acționează (răspuns necunoscut) | DECISĂ (neimplementată) | E (rafinată după natura hazardului) | `3d6ddbe51265d182…` |
 | D-05 — supravegherea activă a adultului | DECISĂ (neimplementată) | D (rafinată: mecanism de pericol ↔ mecanism de control) | `bb43f07402307747…` |
+| D-06 — act periculos, apoi avertisment / lecție | DECISĂ (neimplementată) | D (rafinată; Page → Book → Volume → Collection) | `755aa28f8cb4143e…` |
 
 ## D-01 — „Fără arme” pentru o armă reală
 
@@ -2052,3 +2053,771 @@ D-04 · D-06 · D-07 · taxonomia completă A / B / C · standardul exhaustiv de
 - **D-04-DEP-HAZARD-TAXONOMY** (preluată, rămâne deschisă).
 - **D-05-DEP-SUFFICIENT-CONTROL:** standardul de „control suficient” pe tipuri de activitate.
 - **D-05-DEP-D06:** efectul avertismentului sau al lecției după act.
+
+## D-06 — Act periculos executat, apoi avertisment / explicație / lecție
+
+### Declarația operatorului (cuvânt cu cuvânt)
+
+```text
+D-06 — DECIZIA OPERATORULUI
+
+Aleg Opțiunea D, rafinată semantic și pe nivelurile Page → Book → Volume → Collection.
+
+Principiul central este:
+
+A LATER WARNING / LESSON / REGRET / RESCUE DOES NOT RETROACTIVELY MAKE A HAZARDOUS ACT SAFE.
+
+Dar, separat:
+
+NEGATIVE NARRATIVE FRAMING CAN AFFECT WHETHER A CAUTIONARY DEPICTION IS EDITORIALLY ACCEPTABLE, WITHOUT ERASING THE UNDERLYING SAFETY EVENT.
+
+WonderPages trebuie să păstreze separat:
+
+1. ce acțiune s-a produs;
+2. dacă a existat expunere reală la hazard;
+3. cât de grav a fost hazardul;
+4. dacă a existat o consecință;
+5. dacă hazardul a fost prevenit sau doar remediat după;
+6. cum este încadrată ulterior acțiunea;
+7. verdictul local al scenei/paginii;
+8. verdictul educațional/editorial;
+9. verdictul final de publicare.
+
+Nu implementa acum.
+
+⸻
+
+1. Intenția nu este acțiunea
+
+Separă explicit:
+
+INTENT → ATTEMPT → EXPOSURE → HAZARDOUS ACT → CONSEQUENCE
+
+Aceste stări NU sunt echivalente.
+
+Exemplu:
+
+Tom thinks about playing with the matches, remembers the safety rule, and leaves them alone.
+
+Dacă nu există acces/executare/expunere relevantă:
+
+→ safety candidat PASS.
+
+Faptul că un personaj se gândește la o acțiune periculoasă nu constituie prin el însuși executarea hazardului.
+
+⸻
+
+2. Intenție oprită înainte de expunere
+
+Dacă personajul intenționează sau începe să se apropie de hazard, dar se oprește înainte de expunerea reală:
+
+→ safety candidat PASS.
+
+Exemplu:
+
+Tom reaches toward the matches, remembers the rule, and pulls his hand back without touching them.
+
+Acesta poate fi chiar un model educațional pozitiv.
+
+Nu clasifica automat situația drept hazard corrected, deoarece hazardul nu a fost executat.
+
+⸻
+
+3. Act început nu înseamnă automat nici PASS, nici BLOCK
+
+Trebuie determinat dacă începutul actului a produs deja expunere la mecanismul de pericol.
+
+Exemple:
+
+Tom picks up the closed box of matches and immediately gives it to Mum.
+
+nu este semantic identic cu:
+
+Tom lights a match and then immediately blows it out.
+
+În primul caz poate să nu existe încă expunerea relevantă la foc.
+
+În al doilea:
+
+→ hazardul a început deja.
+
+Prin urmare, nu folosi:
+
+act abandoned = PASS
+
+ca regulă universală.
+
+Analizează:
+
+what exposure actually occurred?
+
+⸻
+
+4. Odată produsă expunerea, lecția nu o șterge
+
+Dacă acțiunea periculoasă a fost executată:
+
+HAZARD → EXPOSURE
+
+atunci:
+
+* avertismentul ulterior;
+* explicația;
+* regretul;
+* promisiunea;
+* salvarea;
+* finalul fericit;
+
+NU transformă retrospectiv evenimentul în unul sigur.
+
+Underlying safety event trebuie păstrat în provenance/evidence.
+
+Exemplu:
+
+Tom plays with matches. Mum explains that matches are dangerous.
+
+nu devine safety-PASS.
+
+⸻
+
+5. Povestea-avertisment poate fi totuși acceptabilă
+
+Separă:
+
+hazard occurrence
+
+de:
+
+narrative stance toward hazard.
+
+Dacă:
+
+* hazardul A/B este prezentat clar ca greșeală;
+* nu există consecință gravă/ireversibilă;
+* narațiunea nu glorifică acțiunea;
+* lecția/corectarea este clară;
+* copilul nu este încurajat să imite;
+* contextul narativ face clar că acțiunea nu este un model recomandat;
+
+atunci scena/povestea poate deveni:
+
+→ REVIEW
+
+nu PASS.
+
+Aceasta permite existența controlată a genului „poveste-avertisment” fără a declara fals că hazardul nu a existat.
+
+Reason code conceptual:
+
+POLICY_CAUTIONARY_HAZARD_DEPICTION
+
+sau echivalent mai bun.
+
+⸻
+
+6. Hazardul local rămâne adevărat
+
+Dacă pe o pagină copilul se joacă efectiv cu chibrituri:
+
+WonderPages trebuie să păstreze finding-ul local:
+
+hazardous imitable action occurred.
+
+Chiar dacă pagina următoare spune:
+
+Mum explained why matches are dangerous and Tom promised never to do it again.
+
+finding-ul paginii anterioare nu este șters.
+
+Corectarea ulterioară poate modifica:
+
+* narrative stance;
+* educational interpretation;
+* book-level publication decision;
+
+dar nu istoricul semantic al scenei.
+
+⸻
+
+7. Nu adopta „aceeași pagină” ca regulă semantică universală
+
+NU decid:
+
+lecția trebuie să fie pe aceeași pagină ca să conteze.
+
+Aceasta ar transforma structura de layout într-o regulă falsă despre sens.
+
+Într-o carte ilustrată, contextul poate traversa:
+
+* aceeași propoziție;
+* aceeași pagină;
+* page turn;
+* spread;
+* secvență narativă imediată.
+
+Evaluatorul trebuie să urmărească relația semantică:
+
+hazard event → correction/lesson
+
+și să determine dacă lecția se referă clar la evenimentul respectiv.
+
+⸻
+
+8. Dar izolarea paginii este un risc separat și real
+
+Faptul că nu folosim „same page” drept regulă semantică NU înseamnă că pagina poate fi ignorată ca unitate de consum.
+
+WonderPages trebuie să evalueze separat:
+
+Local page/spread exposure
+
+Ce vede copilul înainte de page turn?
+
+Narrative correction
+
+Unde și cât de clar este corectată acțiunea?
+
+Isolation risk
+
+Dacă pagina cu hazardul ar fi privită/citită singură, ar putea funcționa ca model pozitiv sau neutru al acțiunii periculoase?
+
+Acesta este un semnal editorial/age-fit distinct.
+
+Nu îl confunda cu adevărul safety al evenimentului.
+
+⸻
+
+9. Fereastra de corectare este semantică, nu un număr fix de propoziții
+
+Nu adopt:
+
+* same sentence;
+* next sentence;
+* same page;
+* N sentences;
+
+ca adevăr semantic universal.
+
+Corectarea trebuie să fie:
+
+* legată fără ambiguitate de hazard;
+* suficient de apropiată narativ încât relația să fie clară;
+* necontrazisă de restul poveștii;
+* perceptibilă pentru banda de vârstă;
+* evaluată și din perspectiva paginii/spread-ului.
+
+Dacă lecția apare mult mai târziu și relația este slabă:
+
+→ nu trebuie considerată automat o corectare eficientă.
+
+Semantic Hardening #2 trebuie să modeleze această relație, nu doar distanța lexicală.
+
+⸻
+
+10. Avertisment înainte de act
+
+Separă:
+
+warning/prohibition → action avoided
+
+de:
+
+warning/prohibition → action executed.
+
+Avertisment urmat de evitare
+
+Dacă hazardul nu este executat:
+
+→ candidat PASS.
+
+Avertisment/refuz urmat de executarea hazardului
+
+Dacă personajul execută totuși acțiunea:
+
+→ hazardul nu este atenuat.
+
+Pentru un hazard relevant:
+
+→ verdictul hazardului, inclusiv BLOCK.
+
+Nu este necesar cuvântul anyway.
+
+Aceasta este consecventă cu D-04.
+
+⸻
+
+11. Regretul singur nu atenuează safety
+
+Formulări precum:
+
+Tom felt sorry afterward.
+
+sau:
+
+He regretted what he had done.
+
+pot conta pe axa:
+
+* emotional;
+* educational;
+* character development;
+
+dar NU demonstrează automat:
+
+* înțelegerea hazardului;
+* corectarea modelului;
+* reducerea imitabilității.
+
+Prin urmare:
+
+regret alone does not mitigate the safety event.
+
+Poate contribui la framing editorial, dar nu produce singur REVIEW/PASS.
+
+⸻
+
+12. Lecția explicită
+
+O lecție clară poate conta pentru framing.
+
+Exemplu:
+
+Tom played with the matches. Mum explained that matches can start fires and that children must never play with them.
+
+Hazardul a avut loc.
+
+→ nu PASS.
+
+Dar dacă restul condițiilor sunt satisfăcute:
+
+→ candidat REVIEW ca poveste-avertisment.
+
+Important:
+
+reasoning-ul trebuie să spună simultan:
+
+hazard occurred
+
+și:
+
+hazard is explicitly negatively framed.
+
+Nu permite ca al doilea fapt să îl șteargă pe primul.
+
+⸻
+
+13. Salvarea după expunere
+
+D-05 rămâne autoritativă:
+
+rescue after exposure ≠ retroactive safety.
+
+Exemplu:
+
+The curtain catches fire. Dad quickly puts it out.
+
+Faptul că adultul limitează consecința este relevant pentru outcome.
+
+Dar hazardul și expunerea au existat.
+
+Salvarea poate reduce severitatea consecinței finale.
+
+Nu transformă acțiunea inițială în PASS.
+
+⸻
+
+14. Consecință absentă
+
+Faptul că „nu s-a întâmplat nimic rău” nu înseamnă că acțiunea a fost sigură.
+
+Exemplu:
+
+Tom played with matches, but nothing caught fire.
+
+Nu deduce:
+
+no injury = safe.
+
+Hazardul trebuie evaluat după mecanism și expunere, nu doar după outcome.
+
+⸻
+
+15. Consecință minoră
+
+O consecință minoră poate face parte dintr-o poveste-avertisment.
+
+Dar:
+
+minor consequence + lesson
+
+nu produce PASS.
+
+Pentru hazarduri A/B, în condiții adecvate:
+
+→ candidat REVIEW.
+
+Se păstrează finding-ul că hazardul s-a produs.
+
+⸻
+
+16. Consecință gravă sau ireversibilă
+
+Dacă scena prezintă o consecință gravă/ireversibilă sau o expunere severă incompatibilă cu politica kids-sc:
+
+→ BLOCK
+
+indiferent de lecția ulterioară.
+
+Lecția poate fi educațional corectă.
+
+Nu schimbă safety gate-ul.
+
+⸻
+
+17. Hazardurile de tip C
+
+Pentru hazardurile din categoria în care acțiunea reprezentată rămâne inacceptabilă chiar cu framing ulterior:
+
+→ BLOCK.
+
+Exemplu conceptual:
+
+Leo swallows a coin. Mum explains afterward why it was dangerous.
+
+Nu devine REVIEW doar pentru că există o lecție.
+
+Acesta este exact bypass-ul demonstrat de comportamentul actual.
+
+⸻
+
+18. Nu fixez acum o listă exhaustivă pentru „consecință gravă”
+
+Nu vreau să inventăm acum o listă lexicală:
+
+burn = minor,
+fire = severe,
+etc.
+
+Păstrează o dependență explicită pentru:
+
+SEVERITY / CONSEQUENCE TAXONOMY
+
+care trebuie definită înainte de implementarea completă în Semantic Hardening #2.
+
+Trebuie să distingă conceptual:
+
+* no consequence;
+* near miss;
+* minor/reversible harm;
+* meaningful harm;
+* severe harm;
+* irreversible/catastrophic outcome;
+
+și să țină cont de mecanism, nu doar de cuvinte.
+
+Această taxonomie trebuie să fie testabilă și cross-modal.
+
+⸻
+
+19. Taxonomia A/B/C rămâne de asemenea deschisă
+
+Nu pretinde că D-06 finalizează taxonomia hazardurilor introdusă în D-04/D-05.
+
+D-06 o folosește conceptual.
+
+Păstrează dependența:
+
+D-04-DEP-HAZARD-TAXONOMY
+
+și adaugă, dacă este necesar, dependența pentru severitatea consecințelor.
+
+⸻
+
+20. 3–4 / 5–6 / 7–8
+
+Safety truth nu se schimbă în funcție de bandă.
+
+Nu păstra regula actuală:
+
+3–4 = BLOCK
+5–8 = REVIEW
+
+doar pentru același eveniment.
+
+În schimb, age-fit/editorial poate fi mai strict.
+
+O poveste-avertisment safety-REVIEW poate fi:
+
+* acceptabilă pentru 7–8;
+* dificilă pentru 5–6;
+* nepotrivită sau necesitând rescriere pentru 3–4;
+
+în funcție de:
+
+* claritatea lecției;
+* imitabilitate;
+* intensitate;
+* pagina ilustrată;
+* capacitatea copilului de a înțelege relația cauză–efect;
+* izolarea vizuală a actului.
+
+Aceasta este o decizie age-fit/editorială, nu schimbarea adevărului despre hazard.
+
+⸻
+
+21. Text + imagine / QA vizual
+
+Da: D-06 se aplică cross-modal.
+
+Trebuie evaluat:
+
+* textul;
+* imaginea;
+* combinația text-imagine;
+* page/spread;
+* secvența narativă.
+
+O imagine poate amplifica sau contrazice framing-ul textului.
+
+Exemplu:
+
+textul spune că acțiunea este periculoasă, dar imaginea îl arată pe copil râzând și prezentând activitatea ca distractivă/glamourized.
+
+Nu considera automat scena „corectată”.
+
+La fel:
+
+o pagină poate avea text neutru, iar imaginea poate arăta clar intervenția/prevenirea adultului.
+
+Evaluatorul trebuie să țină cont de ambele.
+
+⸻
+
+22. Framing-ul poate fi pozitiv, negativ sau contradictoriu
+
+Nu este suficient să găsești un cuvânt precum:
+
+dangerous
+
+sau:
+
+never.
+
+Evaluatorul trebuie să determine stance-ul narativ.
+
+Cel puțin conceptual:
+
+* endorsed/glorified;
+* neutral/ambiguous;
+* cautionary/negative;
+* corrected/prevented;
+* contradictory.
+
+O propoziție cu „dangerous” nu trebuie să neutralizeze automat o scenă care, per ansamblu, glorifică acțiunea.
+
+⸻
+
+23. Consecințe pentru cazurile existente
+
+Fără modificarea lor acum:
+
+v2c-safety-fire-09
+Tom plays with matches. His mum says it is dangerous.
+
+→ hazardul s-a produs; framing negativ ulterior; fără consecință descrisă.
+
+→ candidat REVIEW.
+
+P-S04 la 3–4:
+
+→ același safety candidate REVIEW.
+
+Separat:
+
+→ semnal age-fit/editorial mai sever pentru 3–4.
+
+Nu transforma safety în BLOCK doar din cauza benzii.
+
+⸻
+
+Leo swallows a coin. Mum says that is dangerous.
+
+→ BLOCK.
+
+Lecția nu schimbă hazardul de tip C.
+
+⸻
+
+Intenție oprită înainte de expunere:
+
+→ candidat PASS.
+
+⸻
+
+Act început, apoi abandonat:
+
+→ depinde dacă expunerea reală a început.
+
+Nu eticheta universal PASS sau REVIEW.
+
+⸻
+
+Act + consecință gravă + lecție:
+
+→ BLOCK.
+
+⸻
+
+Act + regret, fără lecție de siguranță:
+
+→ hazardul rămâne; regretul contează doar editorial/emoțional.
+
+⸻
+
+Act + salvare:
+
+→ hazardul rămâne; salvarea poate modifica outcome, nu safety history.
+
+⸻
+
+24. Evaluare pe niveluri
+
+D-06 trebuie să respecte arhitectura WonderPages:
+
+Page → Book → Volume → Collection.
+
+Page
+
+Ce hazard este reprezentat local?
+
+Ce vede copilul?
+
+Există framing local?
+
+Există risc de imitare sau de interpretare izolată?
+
+Book
+
+Este evenimentul clar încadrat ulterior?
+
+Există o lecție coerentă?
+
+Povestea condamnă sau glorifică acțiunea?
+
+Este relația cauză–efect inteligibilă?
+
+Volume / Collection
+
+Există repetare sau normalizare?
+
+Același comportament periculos este folosit repetat ca entertainment?
+
+Există un pattern editorial problematic chiar dacă fiecare instanță individuală ar putea primi REVIEW?
+
+Nu permite ca un verdict bun la nivel de Book să șteargă findings valide de la Page.
+
+Și nu permite ca fiecare Page să fie evaluată fără contextul Book.
+
+⸻
+
+25. Cerință pentru Semantic Hardening #2
+
+Nu implementa D-06 prin:
+
+* dangerous = corrected;
+* never = corrected;
+* next sentence = REVIEW;
+* same page = REVIEW;
+* 3–4 BLOCK / 5–8 REVIEW;
+* lesson exists = safe;
+* no injury = safe;
+* regret = corrected;
+* liste mai mari de cuvinte;
+* excepții individuale pentru matches/window/coin.
+
+Arhitectura trebuie să poată reprezenta cel puțin:
+
+intent → attempt → exposure → hazardous action → hazard family → severity → consequence → intervention timing → rescue → narrative stance → correction/lesson → semantic relation to hazard → local page framing → isolation risk → book-level framing → age-fit → safety verdict → editorial/publication verdict
+
+Underlying event și provenance trebuie păstrate chiar dacă verdictul final este REVIEW.
+
+⸻
+
+26. Reason codes
+
+Reason codes trebuie să descrie cauza reală, nu simpla prezență a unei expresii.
+
+Exemple conceptuale:
+
+* SAFETY_HAZARD_PREVENTED;
+* SAFETY_HAZARD_EXPOSURE_OCCURRED;
+* POLICY_CAUTIONARY_HAZARD_DEPICTION;
+* SAFETY_HAZARD_SEVERE_CONSEQUENCE;
+* SAFETY_LATER_WARNING_DOES_NOT_ERASE_HAZARD;
+* POLICY_HAZARD_FRAMING_AMBIGUOUS;
+
+sau echivalente mai bune stabilite la implementare.
+
+Nu implementa acum.
+
+⸻
+
+27. Ce NU decide D-06
+
+D-06 NU decide:
+
+* D-04 — ASK / permission / safety confirmation;
+* D-05 — supervision/control sufficiency;
+* D-07 — location;
+* D-11 — fear/recovery;
+* D-15 — scientific misconception correction;
+* taxonomia completă A/B/C;
+* taxonomia completă a severității;
+* politica gore/death;
+* pragurile finale age-fit pentru povești-avertisment;
+* validitatea empirică a evaluatorului.
+
+D-06 stabilește însă:
+
+hazardul executat nu este șters de ceea ce povestea spune ulterior.
+
+și:
+
+framing-ul educațional ulterior poate influența acceptabilitatea editorială/publication gate fără a falsifica safety history.
+```
+
+### Separarea cerută
+
+| Strat | Conținut |
+|---|---|
+| **Decizie de politică** | Opțiunea D, rafinată semantic și pe niveluri Page → Book → Volume → Collection. Toate benzile (adevărul de siguranță identic), text și imagini. |
+| **Evenimentul de siguranță de bază** | Ce s-a produs (intenție / încercare / expunere / act hazardos) se păstrează ca fapt în provenance / evidence. Nimic spus ulterior nu îl șterge. |
+| **Expunere / consecință** | Expunerea se evaluează după mecanism, nu după rezultat (no injury ≠ safe). Consecința se clasifică separat (taxonomie deschisă). Salvarea reduce consecința finală, nu expunerea (D-05). |
+| **Stance-ul narativ** | Glorificat / neutru-ambiguu / avertisment-negativ / corectat-prevenit / contradictoriu. Se determină semantic și cross-modal, nu din „dangerous” sau „never”. |
+| **Interpretarea educațională / editorială** | Povestea-avertisment (hazard A / B, fără consecință gravă, fără glorificare, lecție clară) → REVIEW, nu PASS (`POLICY_CAUTIONARY_HAZARD_DEPICTION`). Regretul singur nu atenuează. Age-fit poate fi mai strict pe bandă. |
+| **Finding la nivel de pagină** | „Hazardous imitable action occurred” rămâne pe pagina respectivă. Riscul de izolare a paginii (ce vede copilul înainte de page turn) e un semnal editorial / age-fit separat. |
+| **Interpretarea la nivel de carte** | Încadrarea ulterioară, coerența lecției, condamnarea vs glorificarea, relația cauză–efect. Nu șterge findings de pagină. Volum / colecție: repetare sau normalizare ca divertisment. |
+| **Consecința de publicare** | Verdictul final rezultă din findings de pagină + interpretarea de carte + volum / colecție + age-fit. Povestea-avertisment rămâne REVIEW (decizie umană). Consecința gravă / ireversibilă sau tipul C → BLOCK. |
+| **Comportamentul implementării la momentul deciziei** (HEAD `af8a7a3`, neschimbat) | Avertisment lexical (lista WARNING) doar în propoziția curentă sau următoare → REVIEW `SAFETY_HAZARD_CORRECTED` la 5–8, BLOCK la 3–4 (**regulă pe bandă**). Se aplică și tipului C (moneda înghițită → REVIEW la 5–6: **ocolire**). Intenția oprită → REVIEW fals. Regretul și lecțiile mai îndepărtate sunt ignorate. Consecința și salvarea nu sunt reprezentate. Atenuare falsă `SAFETY_HAZARD_NEGATED` din propoziția-lecție. **Comportamentul nu e politica.** |
+| **Consecințe viitoare** (Semantic Hardening #2, neautorizat încă) | Lanțul intent → … → editorial / publication verdict. Evenimentul de bază și provenance-ul se păstrează. Regula pe bandă și atenuarea lexicală se elimină. Evaluare pe niveluri. Taxonomiile A / B / C și de severitate, explicite și testabile. |
+
+### Afectate (fără nicio modificare acum)
+
+- **Gold-v2:**
+  - v2c-safety-fire-09 e candidat REVIEW;
+  - fire-08 rămâne PASS; food-04 rămâne BLOCK.
+- **Probe:** P-S04 e candidat REVIEW pe siguranță, plus un semnal age-fit mai sever la 3–4.
+- **Setul rezervat:** nu are cazuri de acest tip; neschimbat.
+- **Gold-v1:** neschimbat.
+
+### Nu decide
+
+D-04 · D-05 · D-07 · D-11 · D-15 · taxonomia completă A / B / C · taxonomia completă a severității · politica gore / moarte ·
+pragurile age-fit finale pentru povești-avertisment · validitatea empirică.
+
+### Dependențe deschise
+
+- **D-04-DEP-HAZARD-TAXONOMY** (preluată).
+- **D-06-DEP-SEVERITY-TAXONOMY:** taxonomia severității / consecinței, după mecanism, testabilă și cross-modal.
+- **D-06-DEP-CAUTIONARY-AGE-FIT:** pragurile age-fit pentru povești-avertisment pe benzi.
+- **D-06-DEP-MULTILEVEL-EVALUATION:** evaluarea pe niveluri Page → Book → Volume → Collection în porțile existente.
