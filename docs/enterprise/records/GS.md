@@ -569,3 +569,24 @@ Perechi minimale pentru setul v2 (direcții, fără etichete și fără rezultat
 englezesc într-un text românesc; token clar românesc; token comun ambelor limbi folosit cu sens românesc; token comun folosit cu sens
 englezesc; caz contextual ambiguu; token englezesc de conținut (nu doar cuvânt funcțional); propoziție complet localizată fără
 contaminare. Nimic nu se schimbă acum.
+
+*Cazul 30 (`localization-forest-5-6-Romanian-05`, intrarea 30) — al doilea control pozitiv independent de localizare (operatorul,
+2026-10-05).* „The fox is happy.” → „Vulpea este fericită.”; rezultat executat: pozitiv, niciun cod; confirmat; acord de verdict DA;
+acord de raționament INCOMPLETE (aceeași distincție ca la cazul 26). Evaluatorul a demonstrat **no currently implemented
+localization-rule violations detected**, NU **semantic fidelity verified**: lipsa paginii goale, a calcului din catalog, a tokenului
+englezesc din listă și a numelui pierdut nu dovedește că ținta păstrează sensul sursei. Terminologie: **Gold Set localization targets
+broader localization quality (fidelă, completă, naturală, compatibilă cu canonul), while the current evaluator implements only a subset
+of formal/lexical localization checks** — nu se spune că evaluatorul verifică fidelitatea, completitudinea sau naturalețea (OBS-GS-13).
+Nu e duplicat al cazului 26: cazul 26 = personaj numit + acțiune + obiect; cazul 30 = substantiv comun + stare + acord de gen în ținta
+română. Acordul de gen nu se supra-declară: **the target text has correct gender agreement, but the current evaluator does not
+demonstrate that it validates this property** (nu există un check executat de acord). Proprietăți prezente în stimul vs exersate de
+evaluator — NEexersate de cazul 30: păstrarea numelor (ținta nu conține numele declarate); ambiguitatea tokenurilor între limbi
+(OBS-GS-14; niciun token de tip „are”); detecția tokenurilor netraduse; detecția calcurilor; fidelitatea semantică (fidelă, dar
+neverificată de evaluator); acordul de gen (corect, dar neverificat de evaluator). Nicio observație nouă (OBS-GS-1…14 rămân).
+
+**Principiu de raportare (operatorul, la cazul 30, 2026-10-05) — taxonomia dovezilor.** Pentru raportul final și pentru hardening /
+setul v2 se separă: **STIMULUS PROPERTY** (ce proprietăți are efectiv textul) → **TESTED PROPERTY** (ce intenționează cazul să testeze)
+→ **IMPLEMENTED CHECK** (ce verifică efectiv evaluatorul) → **OBSERVED VERDICT** (ce a produs evaluatorul) → **SUPPORTED CLAIM** (ce se
+poate afirma legitim din dovezi). Previne afirmații de tipul „traducerea e fidelă, deci evaluatorul a validat fidelitatea”. NU se
+implementează acum nicio schemă nouă și structura gold-v1 nu se schimbă; principiul rămâne pentru hardening/setul v2. Contabilizarea
+raționamentului ține separat NO și INCOMPLETE (raportate uneori împreună ca „problematic reasoning”, fără a le contopi semantic).
