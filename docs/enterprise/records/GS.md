@@ -42,6 +42,14 @@ from the forest with a grown-up.” → PASS. Prezența unor cuvinte/expresii de
 periculoasă; evaluatorul trebuie să înțeleagă ordinea și relația dintre acțiuni: ASK → (răspuns/permisiune) → EAT nu este
 semantic echivalent cu ASK → EAT ANYWAY. Cazurile NU se creează acum; evaluatorul neschimbat.
 
+*Extensie OBS-GS-1 (operatorul, la cazul 10, 2026-10-05) — ambiguitatea retrospectivă a cazului 9.* „The fox asks a grown-up
+before eating the berries from the forest.” nu spune ce răspunde adultul, dacă identifică fructele, dacă confirmă că sunt
+sigure, nici dacă vulpea respectă răspunsul. „asks a grown-up” NU este semantic echivalent cu „the grown-up confirms they are
+safe”. Adjudecarea cazului 9 (PASS, intrarea 9) rămâne neschimbată și istoricul intact; ambiguitatea se păstrează ca limită
+a cazului. Evaluatorul viitor trebuie să distingă: ASK → adult verifies → SAFE → EAT; ASK → răspuns necunoscut → EAT;
+ASK → adult says NO → EAT ANYWAY; NO ASK / NO VERIFICATION → EAT UNKNOWN FOOD. Simpla apariție a „grown-up” sau „asks” nu
+trebuie să fie un token de siguranță care produce PASS.
+
 **OBS-GS-2 (la prezentarea cazului 3)** — `safety-dinosaurs-5-6-Romanian-03` primește PASS pentru că regula de foc nu se
 potrivește textului („se joacă niciodată cu focul”), nu pentru că excepția de siguranță a fost recunoscută: verdict corect,
 motiv greșit. Cazul nu testează deci excepția pe care pare să o testeze.
@@ -130,6 +138,18 @@ referințe la același personaj; sinonime/parafraze; diacritice și variante rom
 Soluția NU este enumerarea manuală (de ex. `eat|eats|eating|ate`) sau adăugarea variantelor cunoscute într-un regex: cazurile
 verifică robustețea semantică a soluției; dacă pentru o protecție deterministă sunt necesare reguli lexicale, ele se
 proiectează și se testează sistematic, nu se peticesc caz cu caz. Cazurile NU se creează acum; evaluatorul neschimbat.
+
+*Extensie OBS-GS-7 (operatorul, la cazul 10)* — dovadă clară (pereche minimală validă față de cazul 10): „The fox ate the
+strange berries from the forest.” → PASS, deși sensul relevant pentru siguranță este același; schimbarea eats → ate nu ar
+trebui să transforme BLOCK în PASS.
+
+**Candidați-limită pentru hardening (fără etichetă de aur stabilită; NU dovezi pentru OBS-GS-7):**
+- „The fox eats the shiny red berries from the forest.” → PASS acum. Operatorul: „shiny red” NU este semantic echivalent cu
+  „strange” — fructele roșii și lucioase pot fi cunoscute, sigure sau cultivate; informația nu ajunge pentru o etichetă
+  automată de pericol.
+- „The fox eats the strange berries from the bush.” → PASS acum. „strange” rămâne (semnal de necunoscut), dar schimbarea
+  forest → bush arată că riscul nu trebuie să depindă mecanic de locația lexicală „forest/woods”. Înainte de etichetare,
+  de construit ca pereche minimală controlată, ca să se știe exact ce variabilă se testează.
 
 ## Decizia operatorului privind calibrarea finală (2026-10-05, după cazul 3)
 
