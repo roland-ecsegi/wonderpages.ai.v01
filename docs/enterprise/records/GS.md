@@ -424,3 +424,24 @@ semantic unei teme fără tokenul explicit al temei; validatorul viitor evalueaz
 Progres: 23 adjudecări efectuate = 20 observații confirmate valide + 3 excluderi; populația validă curentă a întregului gold-v1 după
 excluderile cunoscute = 44 brute − 3 excluse = 41 candidați valizi (NU număr final până la adjudecarea tuturor celor 44).
 Nicio observație nouă.
+
+*Extensie OBS-GS-12 (operatorul, la cazul 24, 2026-10-05) — închiderea constatării pentru cazurile de vârstă din calibrare.*
+Cazul 24 (`age-forest-3-4-English-06`, intrarea 24): **EXCLUDE** — duplicat exact al cazului 20 (hash `9886c1ca31cb369a`); textul
+conține elemente de decor natural compatibile cu mai multe teme (leaf, winding path, windy afternoon, riverbank), dar „compatibil cu
+o pădure” ≠ stimul independent care testează tema „forest”; același text apare ca „dinosaurs” (20), „sea” (22) și „forest” (24).
+**identical stimulus + changed metadata ≠ independent evaluation observation.** AGE_COMPLEXITY=true rămâne justificat; sistemul e
+de acord; excludere pentru integritatea setului, NU dezacord. Câmpul `reasoning` lăsat gol. Observația validă: cazul 20.
+**Bilanț definitiv — cazurile de vârstă din calibrare: 6 cazuri brute = 2 stimuli unici validați + 4 duplicate excluse**
+(19 = stimul pozitiv unic păstrat; 20 = stimul negativ unic păstrat; 21 → dublura lui 19; 22 → dublura lui 20; 23 → dublura lui
+19; 24 → dublura lui 20 — toate patru EXCLUDE). NU „6 teste age-fit independente”.
+**Acoperirea reală** a acestui bloc după eliminarea pseudo-acoperirii: doar banda 3–4; doar engleză; doar 2 stimuli independenți
+(unul pozitiv, unul negativ); temele multiple din metadata nu reprezintă acoperire tematică reală. Chiar cu 2/2, rezultatul nu se
+extrapolează la 5–6, 7–8, română, complexitate conceptuală, complexitate sintactică independentă de lungime, dificultate lexicală
+reală sau alte teme. **high observed accuracy on a tiny independent sample ≠ validated capability.**
+Setul rezervat de vârstă (cazul 25) nu e încă adjudecat: în gold-v1 brut există 6 cazuri de vârstă în calibrare (2 stimuli unici +
+4 duplicate) și 1 caz de vârstă în setul rezervat, aparent distinct, încă neadjudecat.
+*Cerință de raportare (NU se modifică acum generatorul raportului):* orice procent are numitorul și populația clare; NU „Age
+calibration: 100% (6/6)”, ci, conceptual, „Age calibration — valid independent stimuli: 2/2 verdict agreement; 4/6 raw cases excluded
+as exact duplicates; coverage limited to English, age 3–4.”
+Progres: 24 adjudecări = 20 observații confirmate valide + 4 excluderi; candidați valizi curenți = 44 brute − 4 = 40 (nu final).
+Nicio observație nouă (OBS-GS-11 = limitele evaluatorului age-fit; OBS-GS-12 = integritatea, independența și acoperirea setului).
