@@ -48,5 +48,49 @@ Implementare: `server/quality/adjudication.js`, `server/quality/evaluation-servi
   adjudecărilor și al setului; o schimbare ulterioară o face învechită (pragurile revin la „propuse”).
 - **Adjudecarea completă nu este acceptare.** Acceptarea rămâne o acțiune separată a operatorului, făcută în aplicația
   Enterprise Local după instalare. Jurnalul este date de repository: intră în release, deci deciziile nu se repetă.
-- Setul activ al directorului este fișierul cu schema `wonderpages.gold-set/1` și versiunea cea mai mare (niciun nume
-  sau număr de cazuri fixat în cod); directorul poate fi schimbat cu `WP_GOLD_DIR`.
+- Setul activ al directorului este fișierul cu schema `wonderpages.gold-set/1` sau `/2` și versiunea cea mai mare (niciun
+  nume sau număr de cazuri fixat în cod); directorul poate fi schimbat cu `WP_GOLD_DIR`. Setul activ este acum `gold-v2`; `gold-v1`
+  rămâne înghețat (benchmarkul „Before”), cu jurnalul lui complet.
+- Un caz fără etichetă (`label: null`, politică nedecisă) nu poate fi confirmat (`LABEL_REQUIRED`): operatorul îi dă eticheta
+  prin `correct`.
+
+## Setul `gold-v2` (`wonderpages.gold-set/2`, hardening 2026-10-05)
+
+Proiectarea, acoperirea și limitările: `records/GOLD-V2-DESIGN.md`. Deciziile operatorului: `records/GOLD-V2-OPERATOR-DECISIONS.md`.
+
+- **Metadate pe caz:** `property`, `dimension`, `labelSource` (`fact` / `current_policy` / `operator_decision` /
+  `operator_principle` / `OPERATOR_DECISION_REQUIRED`), `roles`, `pairGroup` + `variable` (familii controlate), `obs`,
+  `regressionOf`, `provenance`. `expected` conține verdictul și motivele.
+- **Setul rezervat** e sigilat (`manifest.holdoutSeal`, `evaluation/gold-v2-src/holdout-seal.json`): un hash pe fiecare caz, fără
+  blocul de adjudecare, plus un hash total. Setul e construit determinist din surse (`scripts/enterprise/gold-v2-build.mjs`) și nu
+  se editează de mână.
+- **Integritatea** (`server/quality/gold-integrity.js`) e verificată la construcție și în validare:
+  - duplicatele intenționale vs accidentale;
+  - duplicatele doar de metadate;
+  - contaminarea între seturi;
+  - tema rezervată;
+  - consecvența etichetă ↔ sursa etichetei.
+- **Evaluatorul v2** (`EVALUATOR_VERSION = 2`) cere verdictul ȘI motivele pentru acordul exact. Cazurile fără etichetă se
+  raportează separat (`report.unlabeled`) și nu se punctează.
+- **Validarea** (`server/quality/validation.js`, `GET /api/evaluation/validation`) e calculată din
+  `manifest.validationRequirements`:
+  - adjudecare completă;
+  - niciun caz fără etichetă;
+  - sigiliul verificat;
+  - integritate curată;
+  - acoperire minimă;
+  - registrul de probe gold-v1 (`server/quality/regression.js`);
+  - rapoarte pe calibrare și pe setul rezervat, cu evaluatorul curent, pe setul adjudecat complet.
+
+  Un set fără cerințe (gold-v1) are starea `VALIDATION_NOT_DEFINED`.
+- **Garda (§21): adjudecare ≠ validare ≠ acceptare.**
+  - Acceptarea e refuzată fără validare completă (`VALIDATION_INCOMPLETE`) sau cu un raport pe alt evaluator
+    (`REPORT_STALE_EVALUATOR`).
+  - Acceptarea reține hash-ul validării și versiunea evaluatorului; o schimbare ulterioară o face învechită.
+  - `GET /api/evaluation/status` arată fazele separat: `adjudicationComplete`, `validationComplete`, `acceptancePerformed`,
+    `acceptanceStale`.
+- **Calitatea:**
+  - decizia folosește media exactă (`exactScore`); `score` e rotunjit doar pentru afișare;
+  - fiecare condiție de respingere activă are un cod (`reasonCodes`);
+  - validitatea dovezilor e raportată separat de verdict;
+  - formatul (numărul și secvența paginilor) e verificat determinist.
