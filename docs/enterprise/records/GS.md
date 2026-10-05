@@ -787,3 +787,47 @@ eticheta. Limite demonstrate păstrate: cazul 32 — fals pozitiv taxonomic/cont
 fals negativ de acoperire a entităților (OBS-GS-16); cazul 34 — fals pozitiv la demontare/stance + fals negativ la parafrază
 (OBS-GS-17); cazul 35 — două fals negative `moon-light` prin parafrazare (OBS-GS-7). **4/4 calibration Gold agreement ≠ science
 evaluator validated** — aceeași lecție metodologică ca la localizare.
+
+*Cazul 36 (`science-space-7-8-English-05`, intrarea 36) — singurul caz de știință din setul rezervat (operatorul, 2026-10-05).* „The sun
+goes around the earth every day, said the robot.”; rezultat executat: exact `sun-orbits`; confirmat; acord de verdict DA; acord de
+raționament INCOMPLETE (correct verdict on the Gold stimulus ≠ demonstrated semantic scientific reasoning). În context real-world și
+fără corectare în stimul, afirmația e falsă. Dovada motivului rămâne precisă: **the implemented rule detected the catalogued reversed
+Sun/Earth orbital relation** — NU „the evaluator verified both orbital direction and temporal period” („every day” e prezent în stimul,
+dar nu există dovadă că e analizat separat; properties present in stimulus ≠ properties actually evaluated). Control executat: „The sun
+rises in the east and sets in the west.” → niciun cod — se poate afirma doar *this particular conventional expression did not trigger
+a science rule*, NU *the evaluator understands apparent celestial motion*. Sondă românească: „Soarele se învârte în jurul Pământului, a
+spus robotul.” → `sun-orbits` — o singură probă pe un tipar catalogat, NU paritate EN↔RO, înțelegere semantică în ambele limbi sau
+generalizare între limbi. Fără OBS nouă (OBS-GS-1…17 rămân).
+
+*Extensie OBS-GS-17 (operatorul, la cazul 36, 2026-10-05) — replicare pe un al doilea concept.* Sondă (NU caz de aur): „People long ago
+thought the sun goes around the earth, but the earth goes around the sun.” → `sun-orbits` — **fals pozitiv demonstrat pentru explicit
+misconception correction/debunking**. Replicare conceptuală a cazului 34 („Many people think bats are blind, but bats can see.” →
+`bats-blind`) pe alt concept și altă regulă: **the narrative/epistemic-stance failure has now been reproduced on two distinct
+catalogued science concepts** (bats-blind, sun-orbits). NU se afirmă „all science rules have this defect” — celelalte reguli nu au fost
+testate pe această axă.
+
+*Extensie OBS-GS-7 (operatorul, la cazul 36, 2026-10-05) — parafrază științifică.* Sondă (NU caz de aur): „The sun circles the earth
+every day.” → niciun cod — **fals negativ demonstrat pentru semantic paraphrase robustness**; tiparul cunoscut „sun goes around the
+earth” e detectat, „sun circles the earth” nu. Principiu: **same scientific misconception ≠ same lexical surface form.** Eșecuri de
+parafrază executate acum pe mai multe concepte: bats-blind (cazul 34), moon-light (cazul 35), sun-orbits (cazul 36), plus exemplele
+anterioare din OBS-GS-7 — problema nu se repară prin completarea izolată a fiecărui regex (NU se adaugă „circles”). Setul v2 măsoară
+separat **canonical wording performance** și **semantic paraphrase robustness**.
+
+*Extensie OBS-GS-12 (operatorul, la cazul 36, 2026-10-05) — matricea reală de independență a setului rezervat de știință.* Cazul 36:
+stimulus independence — DA; theme independence — DA („space” lipsește din calibrarea de știință: dinosaurs, dinosaurs, forest, sea);
+specific rule independence from calibration — DA (`sun-orbits` nu e exersată în cazurile 32–35); evaluator/catalog independence — NU
+(regula exista deja explicit în evaluator); unseen-concept generalization — NU e demonstrată; unseen-paraphrase generalization — NU e
+demonstrată (sonda „circles” oferă chiar dovadă contrară). Metodologic mai bun decât cazul 31 pe axa regulii, dar descris exact: cazul
+36 demonstrează **a catalogued science rule not represented in calibration correctly fires on its canonical held-out formulation in a
+new theme** — mai puțin decât „the evaluator generalized scientifically to an unseen misconception” și mult mai puțin decât „the science
+evaluator generalized semantically”. Formulare de raport: **„Held-out science: 1/1 Gold agreement on one independent space-theme
+stimulus exercising a catalogued science rule not represented in calibration. This does not demonstrate unseen-concept or
+semantic-paraphrase generalization.”** — NU „science held-out generalization = 100%”. Schema setului nu se modifică acum.
+
+**Închiderea adjudecării categoriei de știință din gold-v1 (operatorul, la cazul 36, 2026-10-05).** 5/5 cazuri brute: calibrare 4/4,
+set rezervat 1/1, 0 excluse; toate cele cinci etichete în acord de verdict. Limite demonstrate prin probe executate: fals pozitiv
+taxonomic (OBS-GS-15); fals pozitiv relațional (OBS-GS-16); fals negativ de acoperire a entităților (OBS-GS-16); fals pozitive la
+demontarea concepțiilor greșite, pe două concepte (OBS-GS-17); fals negative la parafrază semantică (OBS-GS-7); controlul pozitiv trece
+prin absența tiparului, nu prin verificare factuală (cazul 35). **5/5 Gold agreement ≠ science evaluator validated.** Terminologie
+pentru raportul final: **science gold-v1 adjudication = complete**; **science evaluator validation = pending hardening / Gold Set v2**.
+Același principiu se aplică localizării (adjudecare completă ≠ validare).
