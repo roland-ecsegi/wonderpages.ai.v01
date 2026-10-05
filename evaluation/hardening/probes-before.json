@@ -1,0 +1,730 @@
+{
+ "schema": "wonderpages.hardening-probes-before/1",
+ "recordedAt": "2026-10-05T16:53:22.171Z",
+ "note": "Executed with the pre-hardening evaluators (evaluator version 1, safety policy 1, quality policies v1/v2). Never rewritten.",
+ "gitHead": "ref: refs/heads/claude/wonderpages-enterprise-architecture-8hy7w9",
+ "results": {
+  "P-S01": {
+   "result": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": []
+   },
+   "judgement": "fail"
+  },
+  "P-S02": {
+   "result": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": []
+   },
+   "judgement": "fail"
+  },
+  "P-S03": {
+   "result": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": []
+   },
+   "judgement": "fail"
+  },
+  "P-S04": {
+   "result": {
+    "verdict": "BLOCK",
+    "rules": [
+     "fire-play"
+    ],
+    "reasonCodes": []
+   },
+   "judgement": "untracked"
+  },
+  "P-S05": {
+   "result": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": []
+   },
+   "judgement": "fail"
+  },
+  "P-S06": {
+   "result": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": []
+   },
+   "judgement": "pass"
+  },
+  "P-S07": {
+   "result": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": []
+   },
+   "judgement": "fail"
+  },
+  "P-S08": {
+   "result": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": []
+   },
+   "judgement": "fail"
+  },
+  "P-S09": {
+   "result": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": []
+   },
+   "judgement": "fail"
+  },
+  "P-S10": {
+   "result": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": []
+   },
+   "judgement": "fail"
+  },
+  "P-S11": {
+   "result": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": []
+   },
+   "judgement": "untracked"
+  },
+  "P-S12": {
+   "result": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": []
+   },
+   "judgement": "untracked"
+  },
+  "P-S13": {
+   "result": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": []
+   },
+   "judgement": "untracked"
+  },
+  "P-S14": {
+   "result": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": []
+   },
+   "judgement": "untracked"
+  },
+  "P-S15": {
+   "result": {
+    "verdict": "BLOCK",
+    "rules": [
+     "weapons"
+    ],
+    "reasonCodes": []
+   },
+   "judgement": "untracked"
+  },
+  "P-S16": {
+   "result": {
+    "verdict": "BLOCK",
+    "rules": [
+     "weapons"
+    ],
+    "reasonCodes": []
+   },
+   "judgement": "untracked"
+  },
+  "P-S17": {
+   "result": {
+    "verdict": "BLOCK",
+    "rules": [
+     "weapons"
+    ],
+    "reasonCodes": []
+   },
+   "judgement": "untracked"
+  },
+  "P-S18": {
+   "result": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": []
+   },
+   "judgement": "untracked"
+  },
+  "P-S19": {
+   "result": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": []
+   },
+   "judgement": "untracked"
+  },
+  "P-S20": {
+   "result": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": []
+   },
+   "judgement": "pass"
+  },
+  "P-S21": {
+   "result": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": []
+   },
+   "judgement": "fail"
+  },
+  "P-S22": {
+   "result": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": []
+   },
+   "judgement": "fail"
+  },
+  "P-S23": {
+   "result": {
+    "verdict": "REVIEW",
+    "rules": [
+     "insult"
+    ],
+    "reasonCodes": []
+   },
+   "judgement": "pass"
+  },
+  "P-S24": {
+   "result": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": []
+   },
+   "judgement": "pass"
+  },
+  "P-S25": {
+   "result": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": []
+   },
+   "judgement": "untracked"
+  },
+  "P-S26": {
+   "result": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": []
+   },
+   "judgement": "untracked"
+  },
+  "P-S27": {
+   "result": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": []
+   },
+   "judgement": "fail"
+  },
+  "P-S28": {
+   "result": {
+    "verdict": "REVIEW",
+    "rules": [
+     "intense-fear"
+    ],
+    "reasonCodes": []
+   },
+   "judgement": "untracked"
+  },
+  "P-S29": {
+   "result": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": []
+   },
+   "judgement": "untracked"
+  },
+  "P-S30": {
+   "result": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": []
+   },
+   "judgement": "fail"
+  },
+  "P-S31": {
+   "result": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": []
+   },
+   "judgement": "fail"
+  },
+  "P-S32": {
+   "result": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": []
+   },
+   "judgement": "fail"
+  },
+  "P-S33": {
+   "result": {
+    "verdict": "BLOCK",
+    "rules": [
+     "heights-window"
+    ],
+    "reasonCodes": []
+   },
+   "judgement": "pass"
+  },
+  "P-S34": {
+   "result": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": []
+   },
+   "judgement": "pass"
+  },
+  "P-S35": {
+   "result": {
+    "verdict": "BLOCK",
+    "rules": [
+     "heights-window"
+    ],
+    "reasonCodes": []
+   },
+   "judgement": "pass"
+  },
+  "P-S36": {
+   "result": {
+    "verdict": "BLOCK",
+    "rules": [
+     "heights-window"
+    ],
+    "reasonCodes": []
+   },
+   "judgement": "pass"
+  },
+  "P-S37": {
+   "result": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": []
+   },
+   "judgement": "pass"
+  },
+  "P-S38": {
+   "result": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": []
+   },
+   "judgement": "pass"
+  },
+  "P-S39": {
+   "result": {
+    "verdict": "BLOCK",
+    "rules": [
+     "stereotype"
+    ],
+    "reasonCodes": []
+   },
+   "judgement": "pass"
+  },
+  "P-S40": {
+   "result": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": []
+   },
+   "judgement": "fail"
+  },
+  "P-S41": {
+   "result": {
+    "verdict": "BLOCK",
+    "rules": [
+     "stereotype"
+    ],
+    "reasonCodes": []
+   },
+   "judgement": "untracked"
+  },
+  "P-S42": {
+   "result": {
+    "verdict": "BLOCK",
+    "rules": [
+     "stereotype"
+    ],
+    "reasonCodes": []
+   },
+   "judgement": "fail"
+  },
+  "P-A01": {
+   "result": {
+    "codes": []
+   },
+   "judgement": "untracked"
+  },
+  "P-A02": {
+   "result": {
+    "codes": [
+     "AGE_COMPLEXITY"
+    ]
+   },
+   "judgement": "pass"
+  },
+  "P-A03": {
+   "result": {
+    "codes": []
+   },
+   "judgement": "untracked"
+  },
+  "P-L01": {
+   "result": {
+    "codes": []
+   },
+   "judgement": "fail"
+  },
+  "P-L02": {
+   "result": {
+    "codes": []
+   },
+   "judgement": "fail"
+  },
+  "P-L03": {
+   "result": {
+    "codes": [
+     "TR_UNTRANSLATED"
+    ]
+   },
+   "judgement": "fail"
+  },
+  "P-L04": {
+   "result": {
+    "codes": []
+   },
+   "judgement": "fail"
+  },
+  "P-L05": {
+   "result": {
+    "codes": []
+   },
+   "judgement": "fail"
+  },
+  "P-L06": {
+   "result": {
+    "codes": []
+   },
+   "judgement": "pass"
+  },
+  "P-C01": {
+   "result": {
+    "rules": [
+     "pterosaur-dinosaur"
+    ]
+   },
+   "judgement": "fail"
+  },
+  "P-C02": {
+   "result": {
+    "rules": []
+   },
+   "judgement": "pass"
+  },
+  "P-C03": {
+   "result": {
+    "rules": []
+   },
+   "judgement": "pass"
+  },
+  "P-C04": {
+   "result": {
+    "rules": [
+     "pterosaur-dinosaur"
+    ]
+   },
+   "judgement": "pass"
+  },
+  "P-C05": {
+   "result": {
+    "rules": [
+     "humans-dinosaurs"
+    ]
+   },
+   "judgement": "fail"
+  },
+  "P-C06": {
+   "result": {
+    "rules": []
+   },
+   "judgement": "fail"
+  },
+  "P-C07": {
+   "result": {
+    "rules": [
+     "humans-dinosaurs"
+    ]
+   },
+   "judgement": "pass"
+  },
+  "P-C08": {
+   "result": {
+    "rules": []
+   },
+   "judgement": "pass"
+  },
+  "P-C09": {
+   "result": {
+    "rules": [
+     "bats-blind"
+    ]
+   },
+   "judgement": "fail"
+  },
+  "P-C10": {
+   "result": {
+    "rules": [
+     "bats-blind"
+    ]
+   },
+   "judgement": "untracked"
+  },
+  "P-C11": {
+   "result": {
+    "rules": []
+   },
+   "judgement": "pass"
+  },
+  "P-C12": {
+   "result": {
+    "rules": []
+   },
+   "judgement": "fail"
+  },
+  "P-C13": {
+   "result": {
+    "rules": [
+     "bats-blind"
+    ]
+   },
+   "judgement": "pass"
+  },
+  "P-C14": {
+   "result": {
+    "rules": [
+     "moon-light"
+    ]
+   },
+   "judgement": "pass"
+  },
+  "P-C15": {
+   "result": {
+    "rules": []
+   },
+   "judgement": "fail"
+  },
+  "P-C16": {
+   "result": {
+    "rules": []
+   },
+   "judgement": "fail"
+  },
+  "P-C17": {
+   "result": {
+    "rules": []
+   },
+   "judgement": "pass"
+  },
+  "P-C18": {
+   "result": {
+    "rules": [
+     "sun-orbits"
+    ]
+   },
+   "judgement": "fail"
+  },
+  "P-C19": {
+   "result": {
+    "rules": []
+   },
+   "judgement": "fail"
+  },
+  "P-C20": {
+   "result": {
+    "rules": []
+   },
+   "judgement": "pass"
+  },
+  "P-C21": {
+   "result": {
+    "rules": [
+     "sun-orbits"
+    ]
+   },
+   "judgement": "pass"
+  },
+  "P-Q01": {
+   "result": {
+    "v1": {
+     "pass": true,
+     "score": 9,
+     "exactScore": null,
+     "codes": [],
+     "reasons": [],
+     "evidence": [
+      "QUALITY_EVIDENCE_NOT_FOUND"
+     ]
+    },
+    "v2": {
+     "pass": false,
+     "score": 9,
+     "exactScore": null,
+     "codes": [],
+     "reasons": [
+      "Dovezi care nu se găsesc în text: T01, T02, T03, T04, T05, T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18."
+     ],
+     "evidence": [
+      "QUALITY_EVIDENCE_NOT_FOUND"
+     ]
+    }
+   },
+   "judgement": "fail"
+  },
+  "P-Q02": {
+   "result": {
+    "v1": {
+     "pass": true,
+     "score": 9,
+     "exactScore": null,
+     "codes": [],
+     "reasons": [],
+     "evidence": []
+    },
+    "v2": {
+     "pass": true,
+     "score": 9,
+     "exactScore": null,
+     "codes": [],
+     "reasons": [],
+     "evidence": []
+    }
+   },
+   "judgement": "fail"
+  },
+  "P-Q03": {
+   "result": {
+    "v1": {
+     "pass": true,
+     "score": 8,
+     "exactScore": null,
+     "codes": [],
+     "reasons": [],
+     "evidence": []
+    },
+    "v2": {
+     "pass": true,
+     "score": 8,
+     "exactScore": null,
+     "codes": [],
+     "reasons": [],
+     "evidence": []
+    }
+   },
+   "judgement": "fail"
+  },
+  "P-Q04": {
+   "result": {
+    "v1": {
+     "pass": false,
+     "score": 7.9,
+     "exactScore": null,
+     "codes": [],
+     "reasons": [],
+     "evidence": []
+    },
+    "v2": {
+     "pass": false,
+     "score": 7.9,
+     "exactScore": null,
+     "codes": [],
+     "reasons": [],
+     "evidence": []
+    }
+   },
+   "judgement": "fail"
+  },
+  "P-Q05": {
+   "result": {
+    "v1": {
+     "pass": false,
+     "score": 8.9,
+     "exactScore": null,
+     "codes": [],
+     "reasons": [],
+     "evidence": []
+    },
+    "v2": {
+     "pass": false,
+     "score": 8.9,
+     "exactScore": null,
+     "codes": [],
+     "reasons": [
+      "Criterii sub 7: T08.",
+      "Criterii critice sub 8: T08."
+     ],
+     "evidence": []
+    }
+   },
+   "judgement": "fail"
+  },
+  "P-Q06": {
+   "result": {
+    "v1": {
+     "pass": false,
+     "score": 7,
+     "exactScore": null,
+     "codes": [],
+     "reasons": [],
+     "evidence": []
+    },
+    "v2": {
+     "pass": false,
+     "score": 7,
+     "exactScore": null,
+     "codes": [],
+     "reasons": [
+      "Criterii critice sub 8: T01, T08."
+     ],
+     "evidence": []
+    }
+   },
+   "judgement": "fail"
+  },
+  "P-Q07": {
+   "result": {
+    "v1": {
+     "pass": true,
+     "score": 8.9,
+     "exactScore": null,
+     "codes": [],
+     "reasons": [],
+     "evidence": []
+    },
+    "v2": {
+     "pass": true,
+     "score": 8.9,
+     "exactScore": null,
+     "codes": [],
+     "reasons": [],
+     "evidence": []
+    }
+   },
+   "judgement": "untracked"
+  }
+ }
+}

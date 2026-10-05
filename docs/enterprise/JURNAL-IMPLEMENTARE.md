@@ -96,6 +96,7 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 | P8-T07 | DONE | 6fb15d3 | TEST-P8-T07 6/6 (browser, 4 dimensiuni) | poarta UX/accesibilitate + registrul final de pregătire |
 | CU (a+b+c+d+e) | DONE (mecanic) | 30110bb | TEST-CU 18/18 local + PG; poarta PASS; RS0 386/386 local + 386/386 PG | fluxul Creative Upgrade Proposal (doar propunere, agenți permanenți), dosarul BEFORE DW reproductibil, criterii structurale automate, O3 remediat generic; Creative Upgrade-ul real DW = BLOCKED (furnizor neautentic aici) |
 | GS (adjudecare gold) | ADJUDECARE COMPLETĂ 44/44; validare și acceptare: WAITING_HUMAN | (acest commit) | TEST-GS 8/8; poarta PASS 394/394 local + 394/394 PG; la închiderea adjudecării: teste 87 9/9, 54 8/8, 73 5/5 | jurnal de adjudecare append-only (golul 1), acceptarea blocată până la adjudecare completă și rapoarte corespunzătoare (golul 2); 44/44 adjudecate de operator (40 confirmate, 0 corectate, 4 excluse); raport de închidere `records/GS-CLOSURE.md`; validarea NU e completă, acceptarea finală NU e făcută (în Enterprise Local, după hardening) |
+| HARDENING + GOLD-V2 (instrucțiunea operatorului „HARDENING & GOLD-V2 AUTONOMOUS EXECUTION”) | IN_PROGRESS | H0: registru de probe + rezultate „înainte” (36 eșuează / 24 trec / 19 neetichetate) + set rezervat Gold-v2 sigilat (69 cazuri, `afa194aa…`) înainte de orice modificare de evaluator | — | `records/HARDENING.md`; Gold-v1 înghețat (sha256 `603fa00a…`) |
 
 ## Rulări de teste
 
@@ -177,5 +178,5 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 ## Checkpoint
 
 - Ultimul task închis: adjudecarea gold-v1 (44/44; 40 confirmate, 0 corectate, 4 excluse; raport de închidere `records/GS-CLOSURE.md`) — adjudecare completă, NU validare, NU acceptare
-- Următorul task: **decizia operatorului asupra propunerii Gold v2 / hardening** (`records/GOLD-V2-HARDENING-PROPOSAL.md`, doar propunere, neaprobată; nimic implementat) — WAITING_HUMAN; apoi, numai cu aprobare: hardening, release, Enterprise Local (acceptarea acolo)
+- Următorul task: **hardening + construcția Gold-v2** (instrucțiunea operatorului 2026-10-05, execuție autonomă) până la punctul de oprire dinaintea adjudecării independente a Gold-v2; fără acceptare, fără release, fără Dinosaur World, fără P9
 - Cum se reia: `npm ci && npm run build && BROWSER_PATH=/opt/pw-browsers/chromium npm test`; citește tabelul de mai sus și `docs/enterprise/records/`.
