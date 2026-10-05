@@ -959,3 +959,61 @@ criteriile critice; eșec la minimul pe criteriu; eșec la existența dovezii; v
 pe ambele politici” NU înseamnă același motiv. Raționament: YES — politica relevantă respinge pentru motivul declarat și implementarea
 verifică efectiv acea condiție; INCOMPLETE — verdictul coincide, dar motivul Gold/politica nu e verificat integral; NO — coincidență
 sau mecanism care contrazice explicația. Dacă v1 și v2 dau verdicte diferite, se prezintă separat, fără o explicație comună vagă.
+
+*Cazul 40 (`quality-dinosaurs-5-6-English-04`, intrarea 40) — primul negativ de calitate (operatorul, 2026-10-05).* Răspunsul
+criticului = baseline-ul 37 cu o singură diferență: **T01 = 7,5** (T01 = „Age fit…”, criteriu critic). Confirmat negativ /
+neacceptabil; acordul structurat e calculat pe politica-țintă v2 (verdict DA, raționament YES). Rezultate executate, separat:
+
+| | v1 (activă) | v2 (politica-țintă) |
+|---|---|---|
+| Media exactă / afișată | 8,9167 / 8,9 — trece | 8,9167 / 8,9 — trece |
+| Criterii critice | T01/T07/T08 ≥ 7 → 7,5 trece | T01/T08 ≥ 8 → **7,5 eșuează** |
+| Minimul pe criteriu | — | 7,5 ≥ 7 — trece |
+| Existența dovezilor | doar consemnată | trece |
+| Rezultat | **ACCEPT** | **REJECT** |
+| Motive | `[]` | „Criterii critice sub 8: T01.” |
+| Gold agreement | **NU** | **DA** |
+| Implementation correctness | **DA** (conform propriei politici) | **DA** |
+
+Dezacordul v1 cu eticheta = **policy disagreement** (pragul critic T01: 7 vs 8), **NU implementation failure** / „v1 evaluator bug”.
+Rotunjirea (OBS-GS-19) nu schimbă verdictul aici. Layer 3/4 → OBS-GS-18 (dovada nu arată că T01 = 7,5 e corect pentru conținut).
+*Decizia editorială independentă a operatorului:* **T01 = 7,5 trebuie să blocheze** — NU pentru că „v2 requires T01 ≥ 8 → therefore
+Gold label is negative” (circular), ci pentru că Age Fit (vocabular, lungimea/profilul propozițiilor, intensitatea conflictului
+potrivite grupei exacte de vârstă) afectează direct dacă produsul e potrivit publicului; e un criteriu **non-compensator** (notele 9 la
+alte dimensiuni nu compensează o insuficiență pe Age Fit); pentru o dimensiune critică, acceptarea înseamnă „strongly acceptable /
+clearly suitable”, nu „close enough” — un 7,5 cere repair/re-evaluare înainte de acceptare. Pentru WonderPages: **T01 < 8 → quality
+gate BLOCK/REJECT**. Limită: **threshold accepted as current editorial policy ≠ threshold empirically optimized/validated** — gold-v1 nu
+demonstrează că 8,0 e pragul optim universal și nici comportamentul editorial pentru toate valorile din jurul pragului.
+*Clasificare (OBS-GS-12):* **controlled policy-discrimination variant of case 37** — același conținut sintetic, evaluare care diferă
+printr-o singură valoare, plasată intenționat între pragul v1 și pragul v2; valoare de discriminare mai mare decât 38/39 (*it
+exercises an actual policy disagreement boundary region*), dar NU dovadă independentă despre calitatea conținutului.
+*Ce se poate afirma:* **„Operator adjudication confirms the editorial decision that T01=7.5 is insufficient for automatic acceptance
+and supports the current v2 hard threshold T01≥8”**; **„v2 correctly implements that decision for case 40”**; **„v1 correctly implements
+its older threshold but disagrees with the operator-adjudicated Gold outcome”**. NU: „v2 thresholds are validated”; NU: „v2 is globally
+superior to v1”.
+
+**OBS-GS-20 (operatorul, la cazul 40, 2026-10-05) — Calibration circularity, policy independence & threshold justification.**
+Principiu: **a Gold label authored from a proposed policy cannot independently validate that same proposed policy.** În cazul 40:
+eticheta = negativ; v2 spune T01 < 8 → reject; stimulul conține intenționat T01 = 7,5. Când același autor a construit cazul, eticheta și
+politica v2 (manifestul gold-v1 o spune deja: „cazurile și regulile evaluatorilor au același autor”), iar `GOLD-SET.md` folosește
+asemenea cazuri ca „dovada pentru pragurile propuse v2”, **v2 agrees with Gold** e în mare parte **self-consistency**, nu dovadă
+independentă că pragul e editorial corect. Trei întrebări separate: **A. Implementation correctness** (codul implementează politica
+declarată? cazul 40: v1 DA, v2 DA); **B. Gold agreement** (politica produce eticheta? v1 NU, v2 DA); **C. Policy validity** (pragul e
+editorial potrivit? cere adjudecare independentă și dovezi suplimentare — pentru cazul 40, decizia operatorului „T01 7,5 = insufficient
+for automatic acceptance” dă o justificare editorială independentă de simpla self-consistency v2↔Gold). Decizia operatorului e mai
+independentă decât eticheta auto-scrisă, dar rămâne o **operator-adjudicated editorial threshold decision** — NU empirical proof,
+child-study validation, market validation sau statistically optimal threshold; validarea mai puternică cere ulterior setul adversarial
+v2, cazuri-limită controlate, dovezi reale de producție și, eventual, feedback uman relevant.
+*Aplicare la cazurile 41–44:* la fiecare negativ se întreabă explicit **„Does the Gold label independently represent an editorial
+truth, or merely encode the proposed v2 rule being evaluated?”** Dacă există aceeași circularitate: nu se exclude automat cazul; se
+adjudecă independent proprietatea editorială; Gold agreement rămâne separat de policy validity; etichetele nu se ajustează în favoarea
+v1 sau v2.
+*Direcții pentru setul v2 (nu se creează acum):* cazuri în jurul pragului T01, adjudecate independent — clearly unacceptable;
+borderline; just below threshold; exactly threshold; just above threshold; clearly acceptable — construite astfel încât **underlying
+evidence să justifice notele**, nu prin introducerea arbitrară de numere într-o evaluare (altfel se testează din nou doar aritmetica
+porții).
+*Legături (necombinate):* **OBS-GS-18** — critic score ≠ independently verified content property; **OBS-GS-20** — self-authored Gold
+threshold case ≠ independent validation of policy threshold; împreună: nu ajunge „T01 = 7,5 → negativ”; e nevoie de un text care
+demonstrează un defect de age fit, dovadă relevantă și o adjudecare independentă a severității. **OBS-GS-19** rămâne separată
+(precizie, rotunjire, exact vs afișat, explicabilitatea respingerii); OBS-GS-20 privește cine justifică pragul, independența etichetei,
+circularitatea calibrării și validitatea politicii.
