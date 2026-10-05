@@ -197,6 +197,36 @@ NORMALIZATION (normalizare care nu distruge informația semantică necesară) �
 același sens). Normalizarea trebuie să ajute detecția, nu să distrugă informația înainte ca sensul să fie stabilit.
 Nimic nu se schimbă acum (gold-v1, evaluatori, reguli, praguri, normalizare).
 
+*Extensie OBS-GS-9 (operatorul, la cazul 13, 2026-10-05) — dovadă validă de paritate EN↔RO.* „Ursulețul era îngrozit de
+atacul monstrului în întuneric.” → PASS, față de „The bear was terrified by the monster attack in the dark.” → REVIEW
+(cazul 13). Formularea RO păstrează sensul relevant: terrified ↔ îngrozit; monster attack ↔ atacul monstrului; dark ↔
+întuneric. REVIEW în EN și PASS în RO pentru o pereche semantic echivalentă = problemă reală de paritate între limbi.
+Legătură secundară OBS-GS-7: „îngrozit” arată și fragilitatea acoperirii lingvistice; dovada principală aparține OBS-GS-9.
+Evaluatorul neschimbat.
+
+**OBS-GS-10 (operatorul, la cazul 13, 2026-10-05) — intensitate emoțională și recuperare în funcție de vârstă.** Cazul 13
+(intrarea 13): REVIEW corect pentru 3–4 ani prin efect cumulativ (terrified + monster attack + dark + vârsta 3–4 + nicio
+liniștire în fragment); raționament INCOMPLETE — evaluatorul vede practic doar „terrified”. Frica nu devine automat BLOCK:
+poate exista legitim într-o poveste pentru copii. Evaluatorul viitor analizează cel puțin: (1) vârsta țintă; (2) intensitatea
+emoției; (3) cauza fricii; (4) dacă amenințarea e reală, imaginară sau ambiguă în universul poveștii; (5) durata/intensificarea
+scenei; (6) existența unei figuri de siguranță; (7) rezolvarea și viteza cu care apare; (8) starea emoțională finală a
+personajului; (9) dacă frica e doar în text sau amplificată și vizual; (10) efectul cumulativ al mai multor elemente
+(întuneric + atac + monstru + izolare etc.).
+Legătură conceptuală cu OBS-GS-3, dar separate: OBS-GS-3 = cum tratează narațiunea o afirmație problematică; OBS-GS-10 = cum
+se evaluează intensitatea emoțională și recuperarea în raport cu vârsta.
+Dovadă-limită (fără etichetă): „The bear was terrified, but Mum hugged him and turned on the light.” → REVIEW acum. NU este
+dovadă că REVIEW e greșit: rezolvarea imediată și figura de siguranță reduc intensitatea, dar nu rezultă automat PASS; se
+calibrează după vârstă și întreaga scenă.
+Candidat-limită (fără etichetă; NU fals negativ, NU dovadă împotriva evaluatorului): „The bear was very scared of the big
+shadow in the dark.” → PASS acum. Nu este echivalentă cu cazul 13: s-au schimbat intensitatea emoției, sursa fricii și
+natura amenințării.
+Perechi minimale controlate pentru hardening (de construit ulterior, câte o variabilă schimbată pe cât posibil): scared →
+very scared → terrified; shadow → imagined monster → threatening monster → monster attack; singur vs cu părinte; fără
+rezolvare vs liniștire imediată; întuneric singur vs întuneric + amenințare; aceeași scenă pentru 3–4, 5–6 și 7–8 ani.
+Principiu arhitectural: AGE BAND → EMOTIONAL INTENSITY → THREAT / CAUSE → CUMULATIVE CONTEXT → SAFETY FIGURE → RECOVERY /
+RESOLUTION → TEXT + VISUAL EFFECT → VERDICT + REASON CODE. Un singur keyword nu trebuie să determine singur verdictul.
+Nimic nu se schimbă acum.
+
 ## Decizia operatorului privind calibrarea finală (2026-10-05, după cazul 3)
 
 1. Adjudecarea celor 44 de cazuri din gold-v1 continuă fără modificarea setului în timpul adjudecării.
