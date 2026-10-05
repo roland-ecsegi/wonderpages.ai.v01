@@ -343,3 +343,21 @@ AGE-FIT VERDICT + REASON CODES. Nicio dimensiune nu se transformă într-un rege
 **Terminologie pentru raportarea finală:** NU „AGE_COMPLEXITY PASS = text age-appropriate”, ci „No sentence-length complexity
 signal detected.”; verdictul complet de potrivire cu vârsta va combina mai multe semnale. Evaluatorul, setul și pragurile
 neschimbate.
+
+*Extensie OBS-GS-11 (operatorul, la cazul 20, 2026-10-05).* Cazul 20 (`age-dinosaurs-3-4-English-02`, intrarea 20): „prea complex /
+semnalează” confirmat; acord de verdict DA; raționament INCOMPLETE. Semnalele măsurabile (≈32 cuvinte într-o propoziție; ≈19%
+cuvinte lungi) susțin verdictul, dar nu explică întreaga dificultate: subordonare înlănțuită; întrebare indirectă; acțiune
+trecută și nevăzută; inferență despre cine a produs-o; multe informații descriptive simultane; relație temporală; vocabular
+mai dificil; densitate informațională ridicată — dimensiuni pe care evaluatorul nu demonstrează că le analizează.
+Cazurile 19↔20 = **contrast pair, NU minimal pair** (prea multe variabile schimbate simultan): perechea arată că sistemul
+diferențiază cele două extreme, NU care proprietate produce diferența. Principii: **contrast pair ≠ controlled minimal pair**;
+**successful discrimination between two extremes ≠ identification of the causal complexity dimension**.
+*Limită separată — long word ≠ difficult word:* semnalul AGE_VOCABULARY (cuvinte lungi) e un proxy util, dar dificultatea
+vocabularului depinde și de familiaritate, frecvență, sens, context, morfologie, limba evaluată și banda de vârstă (un cuvânt
+lung, dar familiar, poate fi mai ușor decât unul scurt și abstract). De testat separat la hardening; niciun exemplu etichetat acum.
+*Pentru noul set:* contrastele mari (ca 19↔20) devin serii de perechi minimale controlate, pornind de la o bază simplă și
+modificând câte o dimensiune — BASE → + sentence length; + subordinate clause; + lexical difficulty; + abstraction; + temporal
+relation; + causal/inferential relation; + information density — apoi combinații controlate, pe benzile 3–4, 5–6 și 7–8
+(o proprietate care justifică semnalarea la 3–4 poate fi acceptabilă la 7–8).
+*Raportare:* nici „AGE_COMPLEXITY not triggered” → „age appropriate”, nici „AGE_COMPLEXITY triggered” → „sistemul a identificat
+toate motivele”; raportul spune exact ce proprietate a detectat evaluatorul. Nicio observație nouă.
