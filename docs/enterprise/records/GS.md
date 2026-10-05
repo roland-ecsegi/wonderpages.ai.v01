@@ -914,3 +914,48 @@ cazuri de aur valide nu înseamnă automat două observații independente (impor
 schema nu se modifică acum. *Direcții pentru setul v2 (nu se creează acum):* exact la prag; cu 1 punct sub prag; criteriu critic vs
 necritic; aceeași medie prin distribuții foarte diferite; un singur criteriu foarte slab ascuns de multe note mari; dovadă validă vs
 irelevantă pentru aceeași notă.
+
+*Cazul 39 (`quality-forest-7-8-English-03`, intrarea 39) — al treilea control pozitiv de calitate (operatorul, 2026-10-05).* Răspunsul
+criticului = cel al cazului 37 cu T05 („Illustratability…”) 9 → 8 și T12 („Repetition with variation…”) 9 → 8 (necritice; verificat
+executând). Rezultat executat: pozitiv pe v2 și pe v1 (media exactă 8,889; afișat 8,9), niciun motiv; confirmat; acord de verdict DA;
+acord de raționament YES (media ≥ 8; T01/T07/T08 = 9; minimul 8 ≥ 7; citatul există → ACCEPT pe ambele politici). Layer 3/4 → OBS-GS-18
+(ex.: T05 cere ca paginile consecutive să nu semene niciodată, nota e 8, iar paginile sintetice sunt aproape identice). NU e test de
+prag (media exactă ≈8,889, afișat 8,9, prag 8, minimul 8 față de 7 la v2) — confortabil în zona de acceptare. Defectul de rotunjire
+(OBS-GS-19) NU afectează verdictul cazului 39: 8,889 trece și cu prag exact, și cu prag după rotunjire.
+
+*Extensie OBS-GS-12 (operatorul, la cazul 39, 2026-10-05).* Cazul 39: exact duplicate — NU; assessment variation — DA; variables
+changed — 2 (T05, T12); boundary test — NU; independent content stimulus — NU; independent evidence structure — NU; independent age/theme
+behavior demonstrated — NU. Clasificare: **controlled correlated positive-control variant / near-duplicate of case 37.** Sondă
+executată: cazul 39 cu `age=3-4, theme=dinosaurs` → rezultat identic pe ambele politici — **the isolated quality-gate result for this
+assessment was invariant to the executed age/theme metadata change** (NU „WonderPages quality evaluation is globally age-insensitive”;
+dar nici „forest 7–8” ca dovadă independentă de acoperire). *Raportarea controalelor pozitive de calitate:* formal, 3/3 cazuri pozitive
+în acord pe ambele politici; structura dovezii: 37 = baseline high-score assessment; 38 = variantă corelată (T04 9→8); 39 = variantă
+corelată (T05, T12 9→8). Formulare: **„3/3 Gold positive-control cases agree, consisting of one baseline assessment and two closely
+correlated non-boundary variants”** — NU „3 independent positive quality stimuli validated”.
+
+**OBS-GS-19 (operatorul, la cazul 39, 2026-10-05) — Quality threshold precision, rounding semantics & rejection explainability.**
+Observație distinctă de OBS-GS-18 (critic trust / validitatea dovezii / poartă vs conținut): privește **Layer 2 — whether the gate
+implements its own declared numeric policy correctly and explains threshold rejection.** Mecanism (cod): `rubricEvaluation`
+(`server/contracts.js`) rotunjește media la o zecimală și compară valoarea rotunjită cu pragul — conceptual `round(mean, 1) >= 8`, nu
+`mean >= 8`. Dovezi executate (sonde, NU cazuri de aur; răspunsul cazului 39 cu toate notele 8 și T04 variat):
+- *Defect demonstrat — prag aplicat după rotunjire:* 17 criterii = 8, T04 = 7,2 → media exactă **7,9556…**, scor rotunjit **8,0** →
+  **v1 ACCEPT, v2 ACCEPT**. Dacă politica declarată e literal „average ≥ 8”, media exactă e sub 8: abatere demonstrată între **declared
+  threshold semantics** și **implemented threshold semantics** — defect / ambiguitate reală de contract, nu observație cosmetică.
+- *Frontiera confirmată:* 17 criterii = 8, T04 = 7 → media exactă **7,9444…**, afișat **7,9** → **v1 reject, v2 reject** — verdictul se
+  schimbă după valoarea rotunjită. (Cu note întregi pe 18 criterii rotunjirea nu poate schimba verdictul la pragul 8; cu note zecimale,
+  pe care contractul le admite, poate.)
+- *Al doilea defect demonstrat — respingere fără motiv:* la proba respinsă doar prin medie, verdict = reject, dar **`reasons = []`** pe
+  ambele politici. **decision correctness / threshold result** și **rejection explainability** sunt proprietăți diferite: un verdict
+  negativ fără motiv nu e o respingere explicabilă.
+*Nu se decide acum* (după 44/44, în hardening, se reconciliază contractul cu implementarea): **A** — politica intenționată e exact mean
+≥ 8 → decizia folosește media nerotunjită, rotunjirea rămâne doar pentru afișare; **B** — politica intenționată e rounded score ≥ 8 →
+contractul/documentația o spun explicit. Direcție arhitecturală: **exactMean → threshold comparison; displayScore → rounded
+representation**. Legătură conceptuală cu cerința enterprise ca blocajele să conducă spre acțiune: la o respingere doar prin medie,
+operatorul/Dali trebuie să poată explica media obținută, pragul necesar și condiția eșuată — `reasons: []` nu oferă asta (Dali și UI nu
+se modifică acum). Nimic nu se repară acum: rotunjirea, generarea motivelor, formularea politicii, evaluatorul, contractele, v1, v2 și
+garda de acceptare rămân neschimbate.
+*Regulă pentru cazurile negative 40–44:* înainte de adjudecare se raportează separat media exactă; media rotunjită/afișată; eșecuri la
+criteriile critice; eșec la minimul pe criteriu; eșec la existența dovezii; verdict v1 și motive v1; verdict v2 și motive v2. „Negativ
+pe ambele politici” NU înseamnă același motiv. Raționament: YES — politica relevantă respinge pentru motivul declarat și implementarea
+verifică efectiv acea condiție; INCOMPLETE — verdictul coincide, dar motivul Gold/politica nu e verificat integral; NO — coincidență
+sau mecanism care contrazice explicația. Dacă v1 și v2 dau verdicte diferite, se prezintă separat, fără o explicație comună vagă.
