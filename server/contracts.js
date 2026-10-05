@@ -31,9 +31,10 @@ export function rubricEvaluation(reply, bp, stage, threshold) {
   }
   for (const code of expected) if (!seen.has(code)) errors.push(`Lipsește criteriul ${code}.`);
   const scores = required.map(r => criteria[r.code]).filter(Number.isFinite);
-  const score = scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length * 10) / 10 : 0;
+  /* OBS-GS-19 (operator decision): the EXACT mean decides; the rounded value is for display only */
+  const exactScore = scores.length ? scores.reduce((a, b) => a + b, 0) / scores.length : 0, score = Math.round(exactScore * 10) / 10;
   const failedCritical = required.filter(r => r.critical && (criteria[r.code] === undefined || criteria[r.code] < (stage.critical_threshold ?? 7))).map(r => r.code);
-  return { valid: !errors.length, errors, score, criteria, failedCritical, pass: !errors.length && score >= threshold && !failedCritical.length };
+  return { valid: !errors.length, errors, score, exactScore, criteria, failedCritical, pass: !errors.length && exactScore >= threshold && !failedCritical.length };
 }
 export function visualVerdicts(reply, indexes) {
   const pages = reply?.pages;

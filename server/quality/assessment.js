@@ -30,26 +30,73 @@ export function quoteFound(evidence, content) {
   return bad.length ? { valid: false, reason: 'not_found', missing: bad } : { valid: true };
 }
 
+/**
+ * Deterministic format check (the measurable part of T08 — never left to the critic alone): page count and sequence
+ * against the product contract (bp.structure.pages). The editorial part of T08 (length vs the age guideline, justified
+ * variation) stays with the critic and is only reported here as guidance.
+ */
+export function formatCheck(content, bp) {
+  const P = Number(bp?.structure?.pages), pages = Array.isArray(content?.pages) ? content.pages : null, findings = [];
+  if (!P || !pages || !pages.length) return { checked: false, findings };
+  if (pages.length !== P) findings.push({ code: 'QUALITY_FORMAT_PAGE_COUNT', layer: 'deterministic', value: pages.length, expected: P, message: `Textul are ${pages.length} pagini de conținut; contractul produsului cere exact ${P}.`, repair: `Readu manuscrisul la ${P} pagini (nu se taie în tăcere).` });
+  else if (!pages.every((p, i) => Number(p?.n) === i + 1)) findings.push({ code: 'QUALITY_FORMAT_SEQUENCE', layer: 'deterministic', message: `Paginile nu sunt numerotate 1..${P}.`, repair: 'Renumerotează paginile în ordine.' });
+  return { checked: true, findings };
+}
+const evNorm = s => norm(s).replace(/^p(age|agina)? ?\d+ /, '');
+/**
+ * Evidence validity (OBS-GS-18) — a layer SEPARATE from the gate verdict: presence (the quote exists), reuse (the same
+ * quote offered for several unrelated criteria) and relevance (whether the quote supports the criterion: not verifiable
+ * deterministically → reported as `unverified`, never claimed). Under policies v1/v2 this layer does not change `pass`;
+ * whether it should gate acceptance is an operator decision (see records/HARDENING.md).
+ */
+export function evidenceValidity(reply, content, presence) {
+  const crit = Array.isArray(reply?.criteria) ? reply.criteria : [], groups = {};
+  for (const c of crit) { const k = evNorm(c?.evidence); if (k.length >= 4) (groups[k] = groups[k] || []).push(c.code); }
+  const reused = Object.values(groups).filter(g => g.length >= 3), codes = [];
+  const missing = Object.entries(presence).filter(([, v]) => !v.valid && v.reason === 'not_found').map(([c]) => c), thin = Object.entries(presence).filter(([, v]) => !v.valid && v.reason === 'insufficient').map(([c]) => c);
+  if (missing.length) codes.push('QUALITY_EVIDENCE_NOT_FOUND');
+  if (thin.length) codes.push('EVIDENCE_INSUFFICIENT');
+  if (reused.length) codes.push('EVIDENCE_REUSED_ACROSS_CRITERIA');
+  return { codes, missing, insufficient: thin, reused, relevance: 'unverified', status: codes.length ? 'weak' : 'present_unverified' };
+}
+
 /** Editorial assessment of one artifact version (script/final/native) from the critic's reply. */
 export function assessText({ reply, content, bp, stage, policy = policyFor(bp), level = 'script', subject = {}, model = null, threshold = null }) {
-  const ev = rubricEvaluation(reply, bp, stage, threshold ?? policy.threshold);
+  const thr = threshold ?? policy.threshold, ev = rubricEvaluation(reply, bp, stage, thr);
   const evidence = Object.fromEntries((Array.isArray(reply?.criteria) ? reply.criteria : []).map(c => [c?.code, quoteFound(c?.evidence, content)]));
   const issueQuotes = (reply?.issues || []).filter(i => i?.quote).map(i => ({ page: i.page ?? null, code: i.code || null, ...quoteFound(i.quote, content) }));
   const fabricated = [...Object.entries(evidence).filter(([, v]) => !v.valid && v.reason === 'not_found').map(([code]) => code), ...issueQuotes.filter(q => !q.valid && q.reason === 'not_found').map(q => `issue:${q.code || ''}@${q.page ?? ''}`)];
-  const reasons = [...ev.errors];
+  const reasons = [...ev.errors], reasonCodes = [], add = r => reasonCodes.push(r);
+  const rubric = ev.valid && !ev.legacy && Object.keys(ev.criteria).length > 0;
+  /* OBS-GS-19: every active failure condition gets its own code (failure → code → evidence → explanation → repair) */
+  if (!ev.valid) add({ code: 'QUALITY_COVERAGE_INVALID', layer: 'gate', errors: ev.errors, message: ev.errors.join(' '), repair: 'Cere o evaluare completă (toate criteriile, cu notă și dovadă).' });
+  const exact = ev.exactScore ?? ev.score;
+  if (ev.valid && exact < thr) { const m = `Media evaluării este ${Math.round(exact * 1000) / 1000} (afișat ${ev.score}); pragul este ${thr}.`; add({ code: 'QUALITY_MEAN_BELOW_THRESHOLD', layer: 'gate', value: exact, display: ev.score, threshold: thr, message: m, repair: 'Îmbunătățește criteriile cu notele cele mai mici; media globală trebuie să atingă pragul.' }); reasons.push(m); }
+  const crit = {};   // criterion → strictest failed floor (rubric floor for every policy; v2 adds its stricter floor)
+  for (const c of ev.failedCritical || []) crit[c] = { floor: stage?.critical_threshold ?? 7, source: 'rubric' };
   let pass = ev.pass;
-  if (policy.version === 2 && !ev.legacy && ev.valid && Object.keys(ev.criteria).length) {   // rubric-based replies only (the native critic has no rubric)
+  if (policy.version === 2 && rubric) {   // rubric-based replies only (the native critic has no rubric)
     const low = Object.entries(ev.criteria).filter(([, s]) => policy.minCriterion != null && s < policy.minCriterion).map(([c]) => c);
     const critical = (policy.criticalCodes || []).filter(c => c in ev.criteria && !(ev.criteria[c] >= policy.criticalFloor));
     if (low.length) reasons.push(`Criterii sub ${policy.minCriterion}: ${low.join(', ')}.`);
     if (critical.length) reasons.push(`Criterii critice sub ${policy.criticalFloor}: ${critical.join(', ')}.`);
     if (fabricated.length) reasons.push(`Dovezi care nu se găsesc în text: ${fabricated.join(', ')}.`);
+    for (const c of low) add({ code: 'QUALITY_CRITERION_BELOW_MINIMUM', layer: 'gate', criterion: c, value: ev.criteria[c], threshold: policy.minCriterion, validation: 'universal floor — operator-adjudicated only for T13=6.5; NOT validated for every criterion', message: `${c} = ${ev.criteria[c]}, sub minimul ${policy.minCriterion}.`, repair: `Repară criteriul ${c}.` });
+    for (const c of critical) crit[c] = { floor: policy.criticalFloor, source: 'policy-v2' };
+    if (fabricated.length) add({ code: 'QUALITY_EVIDENCE_NOT_FOUND', layer: 'evidence', criteria: fabricated, message: `Dovezi care nu se găsesc în text: ${fabricated.join(', ')}.`, repair: 'Cere criticului citate care apar literal în text.' });
     pass = pass && !low.length && !critical.length && !fabricated.length;
   }
+  const v1Critical = (ev.failedCritical || []).filter(c => crit[c]?.source === 'rubric');
+  if (v1Critical.length) reasons.push(`Criterii critice sub ${stage?.critical_threshold ?? 7}: ${v1Critical.join(', ')}.`);
+  for (const [c, f] of Object.entries(crit)) add({ code: 'QUALITY_CRITICAL_BELOW_FLOOR', layer: 'gate', criterion: c, value: ev.criteria?.[c] ?? null, threshold: f.floor, source: f.source, message: `Criteriul critic ${c} = ${ev.criteria?.[c] ?? '—'}, sub pragul ${f.floor}.`, repair: `Repară criteriul critic ${c}.` });
+  const format = level === 'script' || level === 'native' ? formatCheck(content, bp) : { checked: false, findings: [] };
+  for (const f of format.findings) { add(f); reasons.push(f.message); }
+  if (format.findings.length) pass = false;   // a contract violation is never compensated by scores
   const valid = ev.valid && !(policy.version === 2 && fabricated.length);   // v2: fabricated evidence makes the reply invalid (fail closed)
+  const ed = evidenceValidity(reply, content, evidence);
   return { schema: 'wonderpages.quality-assessment/1', level, subject: { ...subject, hash: subject.hash || canonicalHash(content ?? null) }, policy: { id: policy.id, version: policy.version, status: policy.status }, model,
     coverage: { valid: ev.valid, errors: ev.errors, legacy: !!ev.legacy, codes: Object.keys(ev.criteria).length },
-    criteria: ev.criteria, evidence: { checked: Object.keys(evidence).length + issueQuotes.length, fabricated }, score: ev.score, failedCritical: ev.failedCritical, valid, pass: valid && pass, reasons, at: Date.now() };
+    criteria: ev.criteria, evidence: { checked: Object.keys(evidence).length + issueQuotes.length, fabricated, codes: ed.codes, reused: ed.reused, relevance: ed.relevance, status: ed.status }, score: ev.score, exactScore: exact, threshold: thr, failedCritical: ev.failedCritical, format, valid, pass: valid && pass, reasons, reasonCodes, at: Date.now() };
 }
 
 /** Book assessment: text assessment + causal chain to a real ending + structure; safety stays separate (never averaged). */
