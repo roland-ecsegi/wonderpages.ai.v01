@@ -445,3 +445,34 @@ calibration: 100% (6/6)”, ci, conceptual, „Age calibration — valid indepen
 as exact duplicates; coverage limited to English, age 3–4.”
 Progres: 24 adjudecări = 20 observații confirmate valide + 4 excluderi; candidați valizi curenți = 44 brute − 4 = 40 (nu final).
 Nicio observație nouă (OBS-GS-11 = limitele evaluatorului age-fit; OBS-GS-12 = integritatea, independența și acoperirea setului).
+
+*Extensie OBS-GS-11 (operatorul, la cazul 25, 2026-10-05).* Cazul 25 (`age-space-3-4-English-07`, intrarea 25): „prea complex /
+semnalează” confirmat; acord de verdict DA; raționament INCOMPLETE. Sistemul detectează două proprietăți reale (≈23 cuvinte
+într-o propoziție, peste pragul pentru 3–4; proporție foarte mare de cuvinte lungi, 39%), dar nu demonstrează că modelează
+combinația care face textul dificil: structură cauzală („Because”); relație temporală („before”); mai multe evenimente/relații
+într-o singură propoziție; densitate informațională ridicată; modificatori multipli; o operație cognitivă relativ complexă
+(„calculated every complicated manoeuvre”); încărcare sintactică și conceptuală peste ce arată numărarea cuvintelor.
+Vocabular: NU se consemnează automat „long/technical word = age-inappropriate word”; „galaxy” și „asteroid” NU sunt declarate
+nepotrivite în sine pentru 3–4 ani (pot fi tematice, concrete, familiare din cărți/desene/conversații); „manoeuvre”, mai ales în
+„calculated every complicated manoeuvre”, aduce o dificultate diferită (lexicală + conceptuală + contextuală). Principii:
+**word length ≠ lexical difficulty**; **technical/domain-specific ≠ automatically age-inappropriate**; dificultatea lexicală se
+evaluează după familiaritate, concretețe, frecvență, rolul în înțelegerea propoziției, suportul vizual/contextual și banda de vârstă.
+
+*Extensie OBS-GS-12 (operatorul, la cazul 25) — închiderea categoriei de vârstă din gold-v1.* Cazul 25: stimul unic (hash
+`778402816caed11f`, niciun duplicat în set; contaminarea set rezervat ↔ calibrare: curată), set rezervat, tema „space” susținută
+semantic — păstrat, fără motiv de excludere. Ce demonstrează: **„system correctly detected the age-complexity signal on one
+independent held-out space stimulus.”** Ce NU demonstrează: „age-fit generalization to unseen themes validated” — cazul păstrează
+caracteristica pe care evaluatorul știe deja să o detecteze (propoziție lungă); nu există încă un test din setul rezervat care să
+separe tema nouă de lungime, sintaxă, vocabular, abstracție și densitate, și nu există un control pozitiv de vârstă în setul rezervat.
+**Bilanț final, categoria de vârstă din gold-v1: 7 cazuri brute = 3 stimuli independenți valizi (19, 20, 25) + 4 duplicate excluse
+(21, 22, 23, 24).** Dintre cei 3 stimuli valizi: toți în engleză; toți 3–4 ani; 19 = calibrare, pozitiv; 20 = calibrare, negativ;
+25 = set rezervat, negativ. Nu există 5–6, 7–8, română sau caz pozitiv de vârstă în setul rezervat. Acoperire mult mai îngustă
+decât sugerează numărul brut de 7.
+Raportare corectă (conceptual): **„Age — valid independent stimuli: 3/3 verdict agreement; 4/7 raw age cases excluded as exact
+duplicates. Coverage: English only, age 3–4 only; calibration 2 stimuli (1 positive, 1 negative), held-out 1 negative stimulus.”**
+NU „Age: 100% (7/7)” și NU simplul „Age: 100%”: numitorul și acoperirea rămân vizibile.
+Pentru setul v2 (fără a construi acum): matrice reală de acoperire — age band × language × positive/negative/boundary × complexity
+dimension × calibration/held-out — cu teme reprezentate de stimuli autentici (nu aceeași propoziție reetichetată); situații de
+testat: text scurt dar conceptual dificil; text mai lung dar concret și ușor; vocabular lung dar familiar; vocabular scurt dar
+abstract; sintaxă complexă cu vocabular simplu; vocabular complex cu sintaxă simplă; aceleași proprietăți controlate pe 3–4, 5–6
+și 7–8; echivalente semantice EN↔RO. Nicio observație nouă.
