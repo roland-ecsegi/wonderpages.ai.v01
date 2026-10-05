@@ -29,6 +29,7 @@ explicită a operatorului. Etichetele cazurilor se dau la adjudecarea Gold-v2.
 | D-06 — act periculos, apoi avertisment / lecție | DECISĂ (neimplementată) | D (rafinată; Page → Book → Volume → Collection) | `755aa28f8cb4143e…` |
 | D-07 — locul / contextul și hazardul | DECISĂ (neimplementată) | C (locul = dovadă, nu verdict) | `63e2ff983479d862…` |
 | D-08 — stereotip contestat explicit | DECISĂ (neimplementată) | D (gradată; contestat → REVIEW, nu PASS) | `5b238c7e81f3f308…` |
+| D-09 — restricție situațională formulată cu gen | DECISĂ (neimplementată) | D (motiv, aplicabilitate, contrafactual, referință) | `88f4acd4c98f79ba…` |
 
 ## D-01 — „Fără arme” pentru o armă reală
 
@@ -4397,3 +4398,749 @@ age-fit pentru teme sensibile · validitatea empirică.
 
 - **D-08-DEP-STEREOTYPE-TARGET-TAXONOMY:** ce e țintă de grup / identitate, stereotip vs descriere factuală, severitate, context.
 - **D-08-DEP-CONTENT-POLICY-LAYER:** stratul CONTENT / CHILD-SAFETY POLICY în porți, UI și pentru alte reguli de conținut.
+
+## D-09 — Restricție situațională formulată cu gen
+
+### Declarația operatorului (cuvânt cu cuvânt)
+
+```text
+D-09 — DECIZIA OPERATORULUI
+
+Aleg Opțiunea D — evaluare semantică prin motiv, aplicabilitate, counterfactual și natura referinței la grup, la stratul CONTENT / CHILD-SAFETY POLICY stabilit prin D-08.
+
+Principiul central este:
+
+A LEGITIMATE SITUATIONAL RESTRICTION ≠ A GROUP-BASED RESTRICTION.
+
+Dar și:
+
+A LEGITIMATE REASON DOES NOT CLEAN DISCRIMINATORY APPLICATION OF THAT REASON.
+
+Evaluatorul trebuie să determine:
+
+restriction → stated target → actual reason → reason relevance → applicability → counterfactual group/person → differential treatment → wording → source → narrative stance → local finding → book-level resolution → content-policy verdict
+
+Safety fizic, content-policy și age-fit/editorial rămân axe separate.
+
+Nu implementa acum.
+
+⸻
+
+1. „Today” nu este justificare
+
+Formulări precum:
+
+Girls can't go sailing today.
+
+nu devin contextuale doar prin today.
+
+Dacă nu există un motiv non-grup relevant:
+
+→ se aplică D-08.
+
+Dacă restricția este o generalizare necontestată despre grup:
+
+→ candidat BLOCK la content-policy gate.
+
+Elimină bypass-ul lexical actual.
+
+⸻
+
+2. „Because” nu este justificare prin el însuși
+
+Nu implementa:
+
+because = contextual restriction.
+
+Trebuie analizat conținutul cauzei.
+
+Exemple:
+
+Girls can't sail because girls aren't good sailors.
+
+→ motivul este chiar stereotipul.
+
+→ BLOCK.
+
+Girls can't sail today because the storm is too strong.
+
+→ furtuna este un motiv situațional real, dar trebuie analizată aplicabilitatea.
+
+⸻
+
+3. Motiv situațional neutru + grup generic formulat prin gen
+
+Pentru:
+
+Girls can't go sailing today, the storm is too strong.
+
+furtuna este un motiv legitim pentru restricționarea navigării.
+
+Dar propoziția aplică explicit restricția unei categorii generice:
+
+Girls.
+
+Dacă textul nu spune ce se întâmplă cu băieții și contextul nu rezolvă fără ambiguitate aplicabilitatea:
+
+→ REVIEW.
+
+Finding conceptual:
+
+POLICY_GROUP_SPECIFIC_WORDING_UNNECESSARY
+
+sau echivalent mai bun.
+
+Safety poate spune simultan:
+
+avoiding sailing in dangerous weather is a safe restriction.
+
+Acest lucru NU șterge finding-ul content-policy privind formularea.
+
+⸻
+
+4. Counterfactual-ul este esențial
+
+Evaluatorul trebuie să întrebe:
+
+Dacă în aceeași situație ar fi o persoană comparabilă din celălalt grup, s-ar aplica aceeași restricție din același motiv?
+
+Exemplu:
+
+furtuna este prea puternică pentru navigare.
+
+Dacă:
+
+* fetele nu pot;
+* băieții pot;
+* toate celelalte condiții sunt echivalente;
+
+atunci motivul storm nu explică diferența de tratament.
+
+→ BLOCK.
+
+Reason-ul este diferențierea discriminatorie, nu furtuna.
+
+⸻
+
+5. Diferențiere explicită
+
+Exemplu:
+
+Girls can't go sailing because the storm is too strong, but the boys can go.
+
+→ BLOCK.
+
+Nu REVIEW.
+
+Aici avem dovadă explicită că motivul aparent neutru nu este aplicat consecvent.
+
+Reason conceptual:
+
+POLICY_DISCRIMINATORY_RESTRICTION
+
+sau echivalent.
+
+⸻
+
+6. Regula aplicată tuturor
+
+Exemplu:
+
+The girls can't go sailing today because the storm is too strong. The boys can't go either.
+
+→ content-policy candidat PASS.
+
+Faptul că prima propoziție numește fetele nu trebuie să transforme automat a doua propoziție într-un nou stereotip despre băieți.
+
+Evaluatorul trebuie să reprezinte:
+
+same restriction → same situational reason → universal applicability.
+
+Nu două stereotype claims independente.
+
+⸻
+
+7. Formularea universală directă
+
+Nobody can go sailing today because the storm is too strong.
+
+→ content-policy PASS, în absența altui defect.
+
+Separat, safety poate considera restricția adecvată.
+
+Acesta rămâne cazul cel mai clar și editorial preferabil.
+
+⸻
+
+8. Grup concret ≠ categorie generică
+
+Separă:
+
+Girls can't go sailing.
+
+de:
+
+The girls from the red team can't go sailing today because their boat is broken.
+
+În al doilea caz:
+
+the girls from the red team
+
+poate fi o referință la un grup concret din scenă, nu o generalizare despre toate fetele.
+
+Dacă:
+
+* grupul este identificabil;
+* motivul se aplică acelui grup concret;
+* motivul nu derivă din gen;
+* counterfactual-ul este satisfăcut;
+
+→ content-policy candidat PASS.
+
+⸻
+
+9. Counterfactual pentru grupul concret
+
+Pentru:
+
+The girls from the red team can't sail because their boat is broken.
+
+întrebarea este:
+
+dacă grupul ar fi fost format din băieți și ar fi avut aceeași barcă stricată, ar fi primit aceeași restricție?
+
+Dacă da:
+
+genul este referențial/incidental.
+
+Dacă nu:
+
+există diferențiere bazată pe grup.
+
+Nu decide după cuvântul girls.
+
+⸻
+
+10. Nu transforma „motiv legat de gen” într-un bypass
+
+NU adopt regula simplă:
+
+gender is legitimate reason → PASS.
+
+Aceasta ar crea o nouă portiță.
+
+Trebuie analizat dacă apartenența menționată este realmente:
+
+* relevantă;
+* necesară;
+* proporțională cu regula;
+* specifică acelui context;
+* nefolosită ca pretext pentru o restricție mai largă.
+
+⸻
+
+11. Exemplul vestiarului
+
+Boys can't go into the girls' changing room.
+
+NU trebuie clasificat automat ca stereotip.
+
+Dar nici nu îl codificăm prin:
+
+changing room + gender = PASS.
+
+Analizează semantic:
+
+* tipul spațiului;
+* regula de acces/privacy;
+* cui se aplică;
+* scopul regulii;
+* dacă formularea este derogatorie;
+* dacă restricția depășește contextul relevant.
+
+Într-un context clar de privacy/access:
+
+→ content-policy candidat PASS.
+
+Reason-ul este regula contextuală de acces/privacy.
+
+Nu:
+
+gender restriction is inherently legitimate.
+
+⸻
+
+12. Ambiguitate în relevanța apartenenței
+
+Dacă nu se poate determina dacă apartenența la grup este relevantă pentru regulă:
+
+→ REVIEW.
+
+Nu deduce automat PASS și nu deduce automat BLOCK.
+
+Aceasta este preferabil unei liste fixe:
+
+changing room = allowed,
+team = allowed,
+etc.
+
+⸻
+
+13. Restricție mai largă decât justificarea
+
+Un motiv poate fi legitim local, dar restricția poate depăși acel motiv.
+
+Exemplu conceptual:
+
+Girls can't enter this changing room, so girls aren't allowed in the sports club.
+
+Prima regulă poate avea un context specific.
+
+A doua este mult mai largă și nu rezultă din prima.
+
+Nu permite ca existența unui motiv legitim local să curețe toate restricțiile ulterioare.
+
+⸻
+
+14. Speaker/source contează
+
+Separă:
+
+* narrator;
+* parent;
+* teacher;
+* antagonist;
+* peer;
+* institutional rule;
+* quoted belief.
+
+Dar sursa singură nu stabilește verdictul.
+
+Dad said it
+
+nu face restricția legitimă.
+
+antagonist said it
+
+nu face restricția automat acceptabilă.
+
+Se analizează stance-ul poveștii conform D-08.
+
+⸻
+
+15. Restricție discriminatorie contestată ulterior
+
+Dacă apare:
+
+Girls can't sail, said the captain.
+
+iar povestea contestă ulterior această restricție:
+
+nu clasifica întregul caz doar prin D-09 ca BLOCK final.
+
+D-09 păstrează finding-ul local:
+
+discriminatory restriction occurred.
+
+D-08 analizează apoi:
+
+* challenge;
+* rejection;
+* resolution;
+* persistence;
+* book-level stance.
+
+Astfel:
+
+local finding poate fi sever,
+
+iar book-level content-policy poate deveni REVIEW dacă povestea este autentic anti-discriminare.
+
+Nu șterge finding-ul local.
+
+⸻
+
+16. Motiv neutru nu înseamnă automat formulare bună
+
+Chiar dacă evaluatorul poate deduce că furtuna afectează logic pe toată lumea:
+
+Girls can't go sailing today because of the storm.
+
+introduce inutil categoria Girls.
+
+Pentru categoria generică și fără clarificarea aplicabilității:
+
+→ REVIEW.
+
+Aceasta permite operatorului/editorului să prefere:
+
+Nobody can go sailing today because of the storm.
+
+fără să numim fals scena un stereotip susținut.
+
+⸻
+
+17. Nu toate menționările de grup sunt discriminatorii
+
+Formulări care identifică un grup concret nu trebuie confundate cu generalizări.
+
+Exemplu:
+
+The girls on Mia's team stayed inside because their bus had broken down.
+
+nu este o afirmație despre capacitatea fetelor în general.
+
+Evaluatorul trebuie să distingă:
+
+generic category
+
+de:
+
+definite/referential group.
+
+⸻
+
+18. Wording și policy finding
+
+Poate exista o situație în care:
+
+* restricția fizică este corectă;
+* motivul este legitim;
+* safety este bun;
+* dar wording-ul introduce inutil un grup.
+
+Acestea nu se contrazic.
+
+Exemplu:
+
+Safety:
+→ PASS.
+
+Content-policy wording:
+→ REVIEW.
+
+Această separare este obligatorie.
+
+⸻
+
+19. Safety fizic rămâne independent
+
+În:
+
+Nobody can go sailing because the storm is too strong.
+
+safety poate considera evitarea navigării un comportament sigur.
+
+În:
+
+Girls can't go sailing because of the storm, but boys can.
+
+hazardul fizic al furtunii există pentru ambele grupuri.
+
+Content-policy detectează separat discriminarea.
+
+Nu folosi content-policy pentru a modifica adevărul fizic despre furtună.
+
+⸻
+
+20. Age-fit/editorial rămâne separat
+
+Politica de bază nu se schimbă între:
+
+* 3–4;
+* 5–6;
+* 7–8.
+
+O diferențiere discriminatorie nu devine mai puțin discriminatorie pentru că publicul are 7–8 ani.
+
+Dar formulările ambigue, explicațiile și complexitatea regulii pot avea consecințe age-fit/editoriale diferite.
+
+Nu schimba content-policy truth prin banda de vârstă.
+
+⸻
+
+21. EN / RO
+
+Aceeași semantică trebuie să producă același verdict.
+
+Nu implementa liste:
+
+today / azi;
+because / pentru că;
+storm / furtună;
+
+ca atenuatori.
+
+Trebuie extrasă relația:
+
+restriction ↔ reason ↔ applicability ↔ counterfactual.
+
+⸻
+
+22. Text + imagine / QA vizual
+
+Da: D-09 se aplică și imaginilor și cross-modal.
+
+Exemplu:
+
+text:
+
+Nobody can go sailing today because the storm is too strong.
+
+dar imaginea arată:
+
+* fetele oprite pe mal;
+* băieții navigând în aceeași furtună.
+
+Imaginea contrazice aplicabilitatea universală declarată în text.
+
+→ finding cross-modal.
+
+Nu considera textul suficient pentru PASS.
+
+⸻
+
+23. Imaginea poate furniza context lipsă
+
+Și invers:
+
+text:
+
+The girls can't use the boat today.
+
+Imaginea poate arăta că:
+
+* barca lor este avariată;
+* o altă echipă are o barcă funcțională.
+
+Aceasta este evidence contextuală relevantă.
+
+Dar trebuie evaluată semantic, nu prin obiecte vizuale izolate.
+
+⸻
+
+24. Page-level vs Book-level
+
+Aplică D-08.
+
+Pagina poate conține o restricție discriminatorie sau o formulare inutil gendered.
+
+Cartea poate ulterior:
+
+* explica;
+* contesta;
+* corecta;
+* sau întări.
+
+Păstrează finding-ul local.
+
+Book-level stance nu îl șterge.
+
+Dar poate modifica verdictul final prin mecanismul D-08.
+
+⸻
+
+25. Isolation risk
+
+Pentru vârste mici, o pagină care spune:
+
+Girls can't...
+
+poate funcționa izolată de explicația ulterioară.
+
+Păstrează isolation risk pe axa editorial/age-fit.
+
+Nu îl transforma automat în physical safety sau într-un stereotip final dacă povestea îl rezolvă autentic.
+
+⸻
+
+26. Rezultatele pentru cazurile principale
+
+stereo-04
+
+Girls can't go sailing today, the storm is too strong, said Dad.
+
+→ motiv situațional legitim;
+
+→ grup generic numit inutil;
+
+→ aplicabilitatea pentru ceilalți nu este explicită;
+
+→ content-policy candidat REVIEW.
+
+Nu BLOCK.
+
+Nu PASS automat.
+
+⸻
+
+P-S42
+
+Fetele nu pot înota departe azi, e furtună, spuse mama.
+
+→ aceeași structură semantică;
+
+→ candidat REVIEW.
+
+⸻
+
+„…but the boys can go”
+
+Motiv aparent neutru + diferențiere explicită:
+
+→ BLOCK.
+
+⸻
+
+„The boys can’t go either”
+
+Restricția se aplică tuturor:
+
+→ content-policy candidat PASS.
+
+Nu interpreta propoziția despre băieți ca stereotip separat.
+
+⸻
+
+Grup concret + motiv specific
+
+The girls from the red team can't sail today; their boat is broken.
+
+→ candidat PASS dacă genul este doar referențial și counterfactual-ul este satisfăcut.
+
+⸻
+
+Vestiar
+
+Boys can't go into the girls' changing room.
+
+→ candidat PASS numai dacă analiza stabilește o regulă contextuală legitimă de privacy/access.
+
+Nu printr-o regulă lexicală changing room = PASS.
+
+⸻
+
+27. Cerință pentru Semantic Hardening #2
+
+Nu implementa D-09 prin:
+
+* today = REVIEW;
+* because = REVIEW;
+* storm = contextual;
+* girls + can't = stereotype;
+* boys + can't = stereotype;
+* changing room = PASS;
+* team = PASS;
+* gender-related reason = PASS;
+* liste mai mari EN/RO;
+* tabele fixe de excepții.
+
+Arhitectura trebuie să poată reprezenta cel puțin:
+
+restriction → generic vs referential target → reason → reason class → relevance → applicability → counterfactual → differential treatment → context necessity → wording → speaker/source → narrative stance → visual evidence → local policy finding → book-level resolution → content-policy verdict → safety verdict → age-fit/editorial verdict
+
+⸻
+
+28. Reason codes
+
+Reason codes conceptuale pot include:
+
+* POLICY_GROUP_SPECIFIC_WORDING_UNNECESSARY;
+* POLICY_DISCRIMINATORY_RESTRICTION;
+* POLICY_CONTEXTUAL_ACCESS_RESTRICTION;
+* POLICY_RESTRICTION_APPLIES_UNIVERSALLY;
+* POLICY_RESTRICTION_CONTEXT_AMBIGUOUS;
+
+sau echivalente mai bune.
+
+Nu lega reason code-ul de cuvântul gender dacă mecanismul real este mai general.
+
+Nu implementa acum.
+
+⸻
+
+29. Generalizare arhitecturală
+
+D-09 este adjudecată pe cazurile actuale formulate prin gen.
+
+Dar arhitectura nu trebuie construită astfel încât logica:
+
+reason → applicability → counterfactual → differential treatment
+
+să funcționeze exclusiv pentru fete/băieți.
+
+Această relație trebuie să fie reutilizabilă pentru alte target-uri după definirea taxonomiei D-08.
+
+Aceasta NU finalizează taxonomia target-urilor.
+
+⸻
+
+30. Ce NU decide D-09
+
+D-09 NU decide:
+
+* D-08 — stereotype challenge/resolution;
+* taxonomia exhaustivă a target-urilor;
+* lista exhaustivă de reguli legitime de acces/privacy;
+* politica juridică privind spații sau categorii;
+* toate restricțiile bazate pe vârstă, rol sau capacitate;
+* D-10 — verbul românesc „a urât”;
+* physical hazard policy pentru furtună/apă;
+* pragurile age-fit;
+* validitatea empirică a evaluatorului.
+
+D-09 stabilește însă:
+
+un motiv situațional legitim nu justifică tratamentul diferențiat dacă același motiv s-ar aplica și grupului contrafactual.
+
+o categorie generică introdusă inutil într-o restricție altfel neutră produce REVIEW, nu automat PASS și nu automat BLOCK.
+
+un grup concret menționat referențial nu este echivalent cu o generalizare despre acel grup.
+
+o regulă contextuală de acces poate fi legitimă numai după analiza relevanței și necesității sale, nu printr-o excepție lexicală.
+```
+
+### Separarea cerută
+
+| Strat | Conținut |
+|---|---|
+| **Decizie de politică** | Opțiunea D, la stratul CONTENT / CHILD-SAFETY POLICY (D-08). A LEGITIMATE SITUATIONAL RESTRICTION ≠ A GROUP-BASED RESTRICTION. A LEGITIMATE REASON DOES NOT CLEAN DISCRIMINATORY APPLICATION. Toate benzile, text și imagini. |
+| **Restricția** | Faptul că cineva nu poate / nu are voie, separat de legitimitatea ei. |
+| **Țintă generică vs referențială** | „Girls…” (categorie) ≠ „the girls from the red team” (grup concret) ≠ persoane numite. |
+| **Motivul real** | Conținutul cauzei (furtună, barcă stricată, privacy, sau chiar stereotipul), nu cuvintele today / because. |
+| **Relevanța motivului** | Justifică restricția? Apartenența e relevantă, necesară, proporțională, specifică contextului, nu un pretext? |
+| **Aplicabilitatea** | Cui se aplică. Nerezolvată → REVIEW. |
+| **Contrafactualul** | Același motiv, aceeași restricție pentru grupul comparabil? |
+| **Tratamentul diferențiat** | Diferit în aceleași condiții → BLOCK (`POLICY_DISCRIMINATORY_RESTRICTION`), indiferent de motivul aparent neutru. |
+| **Necesitatea contextuală** | Regulile de acces / privacy sunt legitime doar după analiză. O restricție mai largă nu e curățată de motivul local. |
+| **Formularea** | Grup introdus inutil într-o restricție altfel neutră → REVIEW (`POLICY_GROUP_SPECIFIC_WORDING_UNNECESSARY`), fără a fi stereotip susținut. |
+| **Sursa** | Nu stabilește singură verdictul. |
+| **Stance-ul narativ** | Conform D-08. |
+| **Dovezi vizuale / cross-modal** | Imaginea poate contrazice aplicabilitatea declarată sau poate furniza contextul lipsă. |
+| **Finding la nivel de pagină** | Se păstrează. Isolation risk pe axa editorial / age-fit. |
+| **Rezolvarea la nivel de carte** | Poate modifica verdictul final prin D-08, fără să șteargă finding-ul local. |
+| **Verdictul content-policy** | BLOCK: fără motiv non-grup / cauză stereotipă / diferențiere. REVIEW: formulare inutilă cu aplicabilitate nerezolvată / relevanță ambiguă. PASS: universal / referențial cu contrafactual satisfăcut / acces legitim stabilit prin analiză. |
+| **Verdictul de siguranță fizică** | Independent (evitarea furtunii e sigură pentru toți). |
+| **Verdictul age-fit / editorial** | Separat. Politica de bază e aceeași pe benzi. |
+| **Comportamentul implementării la momentul deciziei** (HEAD `f2dbfc6`, neschimbat) | Lista EPISODIC (today / because / azi / e furtună) → REVIEW chiar fără motiv. Contrafactualul neevaluat („but the boys can go” → REVIEW; „the boys can't go either” → BLOCK). Referința definită neseparată. Vestiar → BLOCK. `kind: 'safety'`. **Comportamentul nu e politica.** |
+| **Consecințe viitoare** (Semantic Hardening #2, neautorizat încă) | Lanțul restriction → … → verdicte separate. Lista EPISODIC se elimină. Țintă generică / referențială, motiv, aplicabilitate, contrafactual, tratament diferențiat. Acces legitim prin analiză. Coduri `POLICY_*` la stratul content-policy. Logică reutilizabilă pentru alte ținte. |
+
+### Afectate (fără nicio modificare acum)
+
+- **Gold-v2:** stereo-04 e candidat REVIEW; stereo-05 rămâne PASS.
+- **Probe:** P-S42 e candidat REVIEW.
+- **Setul rezervat (înghețat):**
+  - v2h-safety-20 rămâne PASS;
+  - v2h-safety-19 e BLOCK prin D-08 (fără motiv non-grup); eșecul rămâne nereparat.
+- **Gold-v1:** neschimbat; #8 rămâne BLOCK.
+
+### Nu decide
+
+D-08 · taxonomia țintelor · lista regulilor legitime de acces · politica juridică · restricțiile pe vârstă / rol / capacitate · D-10 ·
+hazardul fizic al furtunii / apei · pragurile age-fit · validitatea empirică.
+
+### Dependențe deschise
+
+- **D-08-DEP-STEREOTYPE-TARGET-TAXONOMY** (preluată).
+- **D-09-DEP-LEGITIMATE-ACCESS-RULES:** criterii testabile pentru reguli contextuale legitime de acces / privacy.
+- **D-09-DEP-OTHER-RESTRICTION-BASES:** restricțiile pe vârstă, rol sau capacitate.
