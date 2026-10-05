@@ -241,3 +241,12 @@ Nimic nu se schimbă acum.
 
 Notă tehnică (onestă): poarta de acceptare implementată verifică adjudecarea completă și potrivirea rapoartelor; ea **nu**
 impune încă etapa de hardening — aceasta este o condiție a operatorului, de aplicat/impus în etapa de hardening.
+
+## Direcție pentru hardening (operatorul, la cazul 14, 2026-10-05) — clasificarea cazurilor după proprietatea testată
+
+Cazul 14 (`safety-dinosaurs-7-8-English-14`, intrarea 14) se păstrează ca **dovadă de regresie/control**: verifică exact că
+„begun” nu este confundat cu „gun” (substring match ≠ concept match) și că protecția de word boundary funcționează în cazul
+testat. NU este dovadă că evaluatorul înțelege semantic armele. Nicio observație nouă nu a fost creată pentru el.
+La hardening, cazurile setului se clasifică și după proprietatea testată — de ex. semantic safety; contextual reasoning;
+linguistic robustness; cross-language parity; age appropriateness; deterministic regression/control — astfel încât un scor
+general bun să nu ascundă că sistemul e foarte bun la verificări de regresie simple, dar slab la raționament semantic.
