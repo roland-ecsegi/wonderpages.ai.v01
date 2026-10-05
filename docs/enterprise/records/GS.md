@@ -317,3 +317,29 @@ semantic controlate ale aceleiași scene. Principii pentru raportarea finală: h
 18/18 confirmate (0 corecturi, 0 excluderi); acord de verdict 18/18; acord de raționament marcat pentru cazurile 6–18:
 NO la cazul 9, INCOMPLETE la cazurile 6, 11, 13, 17 (cazul 3, NO, consemnat în OBS-GS-2, fără câmp structurat — intrare
 anterioară câmpului). Observații deschise pentru hardening: OBS-GS-1…OBS-GS-10. Urmează cazurile de potrivire cu vârsta.
+
+**OBS-GS-11 (operatorul, la cazul 19, 2026-10-05) — potrivirea cu vârsta este multidimensională; lungimea este doar un proxy.**
+Cazul 19 (`age-dinosaurs-3-4-English-01`, intrarea 19): „potrivit / nu semnalează AGE_COMPLEXITY” confirmat; acord de verdict DA;
+raționament INCOMPLETE — evaluatorul demonstrează doar că propozițiile sunt foarte scurte (medie 2,5 cuvinte vs prag 12,5),
+nu și structura sintactică simplă, acțiunile concrete, vocabularul accesibil, încărcarea conceptuală redusă, ideile puține,
+progresia ușor de urmărit, onomatopeea potrivită, lipsa abstracțiilor și a relațiilor cauzale/temporale complexe.
+**correct verdict ≠ complete age-fit reasoning.** Metrica de lungime NU este greșită — este utilă; problema apare dacă
+„short sentences → age appropriate” devine concluzie generală.
+Probe (doar în memorie, fără etichete):
+- *Candidat-limită fără etichetă (NU dovadă de eroare):* „Milo sees a leaf that is shiny and he smiles.” → nu semnalează. Lungime
+  totală similară, dar mai multe relații într-o singură propoziție; poate fi perfect acceptabilă la 3–4 ani; utilă pentru a separa
+  lungimea propoziției de structura sintactică / numărul de subordonate.
+- *Dovadă de detecție pozitivă / control:* „Milo, who had been wandering through the enormous prehistoric forest since early
+  morning, finally noticed a remarkably shiny leaf.” → semnalează. Rezultat rezonabil, dar mecanismul rămâne metric (lungime),
+  NU dovadă că evaluatorul înțelege complexitatea sintactică.
+Perechi minimale controlate pentru hardening (de construit ulterior; nimic etichetat acum): lungimea propoziției; numărul de
+propoziții/subordonate; vocabularul; concret vs abstract; numărul de idei; relațiile temporale; relațiile cauzale; densitatea
+informațională; familiaritatea conceptelor; banda de vârstă. De testat categoria textelor scurte lexical, dar conceptual dificile
+(de ex. de tipul „Milo questions whether time is real.”, fără etichetă acum, cu echivalente controlate pe benzi), și opusul: o
+propoziție puțin mai lungă poate rămâne foarte ușor de înțeles dacă e concretă, repetitivă și bine structurată.
+Arhitectură conceptuală (direcție, nu cerință acum): AGE BAND → SENTENCE LENGTH → SYNTACTIC COMPLEXITY → VOCABULARY DIFFICULTY
+→ CONCEPTUAL ABSTRACTION → INFORMATION DENSITY → TEMPORAL / CAUSAL COMPLEXITY → WORKING-MEMORY LOAD → TEXT + VISUAL SUPPORT →
+AGE-FIT VERDICT + REASON CODES. Nicio dimensiune nu se transformă într-un regex sau un prag arbitrar.
+**Terminologie pentru raportarea finală:** NU „AGE_COMPLEXITY PASS = text age-appropriate”, ci „No sentence-length complexity
+signal detected.”; verdictul complet de potrivire cu vârsta va combina mai multe semnale. Evaluatorul, setul și pragurile
+neschimbate.
