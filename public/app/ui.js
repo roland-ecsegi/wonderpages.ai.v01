@@ -382,9 +382,15 @@ function storyHTML(r) {
 
 /* P5-T01: child safety — blockers and evidence first, never a score; an adult review may clear REVIEW/UNKNOWN, not BLOCK */
 const SAFE_ST = { BLOCK: ['BLOCHEAZĂ', 'var(--err)'], REVIEW: ['DE VERIFICAT', 'var(--warn)'], UNKNOWN: ['NECUNOSCUT', 'var(--warn)'], PASS: ['PASS', 'inherit'] };
+/* hardening (OBS-GS-8/5): why it failed — a risk for the child, an editorial rule, an age-fit question or a rule you still have to decide */
+const SAFE_KIND = { safety: 'Risc pentru copil', policy: 'Regulă editorială WonderPages (nu neapărat un pericol)' };
+function safetyFindingHTML(f) {
+  const kind = f.category === 'developmental_fit' ? 'Potrivire cu vârsta' : SAFE_KIND[f.kind] || '';
+  return `<div data-code="${esc(f.reasonCode || f.rule || '')}" title="${esc(f.reasonCode || f.rule || '')}"> — „${esc(f.quote)}”<div class="small muted">${kind ? esc(kind) + '. ' : ''}${esc(f.fix || '')}${f.operatorDecision ? ' Regula pentru acest caz nu e decisă încă: decizi tu la verificare.' : ''}</div></div>`;
+}
 function safetyHTML(it) {
   const s = it.safety; if (!s) return '';
-  const rows = s.subjects.map(x => `<li><span class="chip" style="color:${SAFE_ST[x.verdict]?.[1]}">${esc(SAFE_ST[x.verdict]?.[0] || x.verdict)}</span> ${esc(x.artifact || x.kind)}${x.page != null ? ' · pagina ' + esc(x.page) : ''}${x.findings?.[0] ? ` — „${esc(x.findings[0].quote)}” <div class="small muted">${esc(x.findings[0].fix || '')}</div>` : x.note ? ` — ${esc(x.note)}` : ''}${x.review ? `<div class="small muted">verificat de un adult: ${esc(x.review.reason)}</div>` : ''}${['REVIEW', 'UNKNOWN'].includes(x.verdict) && !S.lan?.remote ? `<div class="row" style="margin-top:4px"><button class="btn sm ghost" data-act="safety-review" data-v="${esc((it.v ?? 0) + 1)}" data-subject="${esc(x.id)}">Am verificat (adult)</button></div>` : ''}</li>`).join('');
+  const rows = s.subjects.map(x => `<li><span class="chip" style="color:${SAFE_ST[x.verdict]?.[1]}">${esc(SAFE_ST[x.verdict]?.[0] || x.verdict)}</span> ${esc(x.artifact || x.kind)}${x.page != null ? ' · pagina ' + esc(x.page) : ''}${x.findings?.length ? (x.findings || []).slice(0, 4).map(safetyFindingHTML).join('') : x.note ? ` — ${esc(x.note)}` : ''}${x.review ? `<div class="small muted">verificat de un adult: ${esc(x.review.reason)}</div>` : ''}${['REVIEW', 'UNKNOWN'].includes(x.verdict) && !S.lan?.remote ? `<div class="row" style="margin-top:4px"><button class="btn sm ghost" data-act="safety-review" data-v="${esc((it.v ?? 0) + 1)}" data-subject="${esc(x.id)}">Am verificat (adult)</button></div>` : ''}</li>`).join('');
   return `<div class="small" id="safety-check" data-verdict="${esc(s.verdict)}"><p>Siguranța se evaluează separat de scor: un BLOCK nu poate fi compensat de note mari și nu se aprobă; se corectează conținutul.</p>${rows ? `<ul class="log">${rows}</ul>` : '<p class="muted">Toate elementele sunt PASS.</p>'}</div>`;
 }
 
