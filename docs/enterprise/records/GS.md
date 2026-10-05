@@ -670,3 +670,39 @@ sau incapacitatea în alte domenii științifice — se testează ulterior.
 reptile; bird → dinosaur vs bird → pterosaur; specie explicită în propoziție; specie doar din canon; referent ambiguu; afirmație corectă
 dar simplificată; afirmație realmente falsă; formulare metaforică/colocvială, dacă produsul permite asemenea contexte.
 Nimic nu se implementează acum: arhitectura, regula, codul și schema rămân neschimbate.
+
+*Cazul 33 (`science-dinosaurs-7-8-English-02`, intrarea 33) — operatorul, 2026-10-05.* „Cavemen waved at the dinosaurs.”; rezultat
+executat: exact `humans-dinosaurs`; confirmat; acord de verdict DA; acord de raționament INCOMPLETE. Defect real: în lumea reală (nu
+fantasy; evaluatorul setului rulează cu `world=natural`), interacțiunea directă oameni ↔ dinozauri non-avieni implică o coexistență
+temporală falsă. Mecanismul demonstrat: human-token + dinosaur-token within lexical distance — nu stabilește relația. Nu NO (entitățile
+detectate sunt relevante și codul indică problema reală); nu YES (sistemul nu demonstrează relația care face afirmația falsă).
+
+**OBS-GS-16 (operatorul, la cazul 33, 2026-10-05) — Scientific relational claims, temporal coexistence & world context.** Principiu:
+**entity A + entity B appearing together ≠ a factual relation between A and B** (co-occurrence ≠ relationship; human + dinosaur
+mentioned ≠ human lived with dinosaur). Dovezi executate (în afară de cazul de aur, sondele NU sunt cazuri de aur):
+- *True positive (caz de aur):* „Cavemen waved at the dinosaurs.” → `humans-dinosaurs`; interacțiunea directă implică aceeași perioadă.
+- *RELATION FALSE POSITIVE (sondă):* „People study dinosaur fossils in museums.” → `humans-dinosaurs`; entitățile relevante sunt
+  prezente, dar relația este modern humans → study → fossils of extinct dinosaurs, nu humans → coexist/interact → dinosaurs.
+- *ENTITY-COVERAGE FALSE NEGATIVE (sondă):* „A boy rode a T. rex to school.” → niciun cod; relația problematică e explicită, dar „boy”
+  nu e recunoscut ca entitate umană de regula lexicală.
+- *World-context (sondă):* „Cavemen waved at the dinosaurs.” cu `world=fantasy` → niciun cod. Demonstrează doar că parametrul
+  `world=fantasy` dezactivează regula în acest caz — NU că sistemul înțelege semantic ficțiunea sau worldbuilding-ul.
+- *Paritate (sondă):* „Oamenii peșterilor le-au făcut cu mâna dinozaurilor.” → `humans-dinosaurs`.
+Cele două moduri de eșec rămân separate. Remedii simptomatice excluse pentru hardening: mărirea distanței dintre cuvinte, adăugarea lui
+„boy” într-o listă, enumerarea continuă de sinonime. Un text poate vorbi corect despre oameni și dinozauri în aceeași propoziție
+(cercetare, fosile, muzee, paleontologie, comparații temporale, extincție); problema apare doar când afirmă o relație factuală
+incompatibilă cu realitatea relevantă.
+*Legătura cu OBS-GS-15 (legate, necombinate):* OBS-GS-15 — WHO/WHAT IS THE ENTITY? (identitate, taxonomie, clasificare); OBS-GS-16 —
+WHAT FACTUAL RELATION IS ASSERTED BETWEEN ENTITIES? (acțiune, relație, timp, context de lume). Direcție conceptuală (NU se implementează):
+ENTITY RESOLUTION → CANON / TAXONOMIC IDENTITY → RELATION EXTRACTION → TEMPORAL CONTEXT → WORLD MODE → SCIENTIFIC KNOWLEDGE → FACTUAL
+CLAIM → VERDICT + REASON.
+*Reason code:* `humans-dinosaurs` nu se schimbă acum; pentru hardening, dovada motivului ar trebui să explice relația („Cavemen = human
+entity; waved at = direct contemporaneous interaction; dinosaurs = non-avian dinosaurs in real-world context → incompatible temporal
+coexistence”), nu doar „human word + dinosaur word detected”.
+*Limite ale dovezii:* se afirmă doar: cazul „Cavemen waved…” e detectat; „People study dinosaur fossils…” produce fals pozitiv; „A boy
+rode a T. rex…” produce fals negativ; `world=fantasy` evită codul pe proba executată; mecanismul depinde de tiparele lexicale descrise.
+NU se declară: că toate relațiile temporale sunt gestionate greșit; că toate sinonimele pentru oameni sunt ratate; că tratarea fantasy
+e completă; că sistemul nu poate verifica alte relații științifice.
+*Direcții pentru setul v2 (nu se creează acum):* stimuli controlați care separă două entități doar menționate; relație directă; relație
+indirectă prin fosile/urme/documente; aceeași perioadă vs perioade diferite; coexistență afirmată explicit; coexistență implicată prin
+acțiune; entitate umană exprimată prin termeni diferiți; real-world vs fantasy explicit; afirmație istorică corectă vs anacronică.
