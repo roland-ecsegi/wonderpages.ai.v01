@@ -172,10 +172,10 @@ Legendă: `DONE` (test+AC validate) · `PARTIAL` (software validat, dovadă real
 - Creative Upgrade real Dinosaur World: **BLOCKED / NOT_RUN** — se rulează în aplicația Enterprise Local a operatorului, cu furnizorul autentic (Claude Pro; ChatGPT dacă un agent e legat de GPT); propunerea rezultată se revizuiește de operator; aplicarea ei este o operație separată, cu aprobarea lui.
 - Producția Dinosaur World este **oprită**: nu a început pilotul V1, nu s-au generat imagini, nu s-a rulat Creative Upgrade-ul real.
 - Dinosaur World real (P8-T05/T06): porțile de revizuire, furnizorul verificat în aplicația operatorului și acceptarea pilotului V1 (WAITING_HUMAN).
-- Setul de aur gold-v1: adjudecarea în curs, caz cu caz, prin jurnalul `evaluation/gold/gold-v1.adjudications.jsonl` (3/44 la 2026-10-05; observații OBS-GS-1/2); după adjudecarea completă urmează, la decizia operatorului, o etapă separată de hardening/validare adversarială (set nou cu cazuri-limită) — 100% pe gold-v1 nu validează politica v2 și nu promovează maturitatea; acceptarea raportului de calibrare se face separat, de operator, în Enterprise Local (refuzată de aplicație până la adjudecarea completă). Până atunci pragurile v2 rămân „propuse” și afirmațiile de maturitate (P7) sunt blocate. (WAITING_HUMAN)
+- Setul de aur gold-v1: adjudecarea în curs, caz cu caz, prin jurnalul `evaluation/gold/gold-v1.adjudications.jsonl` (4/44 la 2026-10-05; observații OBS-GS-1/2/3); după adjudecarea completă urmează, la decizia operatorului, o etapă separată de hardening/validare adversarială (set nou cu cazuri-limită) — 100% pe gold-v1 nu validează politica v2 și nu promovează maturitatea; acceptarea raportului de calibrare se face separat, de operator, în Enterprise Local (refuzată de aplicație până la adjudecarea completă). Până atunci pragurile v2 rămân „propuse” și afirmațiile de maturitate (P7) sunt blocate. (WAITING_HUMAN)
 
 ## Checkpoint
 
 - Ultimul task închis: GS infrastructură (jurnal de adjudecare + blocarea acceptării premature); cazul 1 adjudecat
-- Următorul task: **adjudecarea cazului 4 din gold-v1** (decizia operatorului); apoi cazurile 5–44, etapa de hardening/validare adversarială, release-ul, Enterprise Local (acceptarea acolo)
+- Următorul task: **adjudecarea cazului 5 din gold-v1** (decizia operatorului); apoi cazurile 6–44, etapa de hardening/validare adversarială, release-ul, Enterprise Local (acceptarea acolo)
 - Cum se reia: `npm ci && npm run build && BROWSER_PATH=/opt/pw-browsers/chromium npm test`; citește tabelul de mai sus și `docs/enterprise/records/`.
