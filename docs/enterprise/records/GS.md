@@ -476,3 +476,35 @@ dimension × calibration/held-out — cu teme reprezentate de stimuli autentici 
 testat: text scurt dar conceptual dificil; text mai lung dar concret și ușor; vocabular lung dar familiar; vocabular scurt dar
 abstract; sintaxă complexă cu vocabular simplu; vocabular complex cu sintaxă simplă; aceleași proprietăți controlate pe 3–4, 5–6
 și 7–8; echivalente semantice EN↔RO. Nicio observație nouă.
+
+**OBS-GS-13 (operatorul, la cazul 26, 2026-10-05) — fidelitate semantică și completitudine în localizare.** Distinctă de OBS-GS-7
+(robustețe lingvistică/morfologică) și de OBS-GS-9 (paritatea semantică a verdictelor de siguranță între limbi): privește relația
+**SOURCE TEXT ↔ TARGET TEXT** — dacă ediția localizată păstrează efectiv informația și intenția sursei.
+Cazul 26 (`localization-dinosaurs-5-6-Romanian-01`, intrarea 26): „fără probleme / niciun cod” confirmat; acord de verdict DA;
+raționament INCOMPLETE — evaluatorul demonstrează doar absența unor defecte structurale/lexicale pe care știe să le detecteze
+(nume păstrate, calcuri dintr-o listă, cuvinte englezești rămase, pagini lipsă/goale), nu că traducerea păstrează semantic originalul.
+**no localization codes detected ≠ semantically faithful translation**; **formal localization checks passed ≠ localization quality
+validated.**
+*Defecte DEMONSTRATE (sonde doar în memorie, nu în set):* (1) schimbare semantică majoră nedetectată — „Milo finds a leaf.” →
+„Milo pierde o frunză.” → niciun cod; (2) adăugare neautorizată nedetectată — „Milo finds a leaf.” → „Milo găsește o frunză și o
+duce acasă la bunica.” → niciun cod.
+*Direcții de hardening încă NETESTATE (nu defecte demonstrate):* traducere fidelă; schimbare de sens; omisiune; adăugare/conținut
+inventat; inversarea unei relații; schimbarea actorului; schimbarea acțiunii; schimbarea obiectului; schimbarea ordinii/cauzalității
+când afectează sensul; schimbarea negației; schimbarea intensității relevante; schimbarea relației temporale; schimbarea relației
+dintre personaje; pierderea unui hook sau payoff de întoarcere de pagină important; traducere literal fidelă semantic, dar nenaturală;
+traducere naturală, dar semantic nefidelă.
+**fidelity ≠ literal translation**: o localizare bună poate schimba legitim ordinea cuvintelor, idiomurile, construcțiile gramaticale,
+formularea și uneori structura propoziției, dacă păstrează sensul, funcția narativă, tonul și informația relevantă —
+**surface similarity ≠ semantic fidelity**; **surface difference ≠ localization defect**. Hardening-ul NU împinge spre traducere
+cuvânt-cu-cuvânt.
+Dimensiuni conceptuale separate (cu reason codes separate; NU se implementează acum): COMPLETENESS (nimic relevant nu lipsește);
+SEMANTIC FIDELITY (evenimente, actori, relații, sens păstrate); NO UNAUTHORIZED ADDITIONS; NAMES / CANON; TARGET-LANGUAGE
+NATURALNESS (fără calc); REGISTER / AGE FIT; TONE / CHARACTER VOICE; NARRATIVE FUNCTION (hook, reveal, payoff, ritm, funcția paginii);
+SAFETY / POLICY PRESERVATION (traducerea nu introduce și nu elimină accidental un element relevant pentru siguranță/politică).
+Perechi minimale SOURCE↔TARGET pentru setul v2 (câte o proprietate modificată; NU se creează și NU se etichetează acum): traducere
+fidelă și naturală; o acțiune semantică schimbată; un detaliu relevant omis; un detaliu nesusținut adăugat; negație schimbată; actor
+schimbat; relație temporală schimbată; traducere fidelă, dar literală/nenaturală; traducere naturală, dar semantic incorectă; sens
+corect, dar registru/potrivire de vârstă degradate.
+*Raportare:* nu „translation/localization passed” în sens de validare completă, ci „No currently implemented localization-rule
+violations detected.” (sau echivalentul exact din terminologia aplicației); un rezultat fără coduri nu dovedește automat o traducere
+fidelă, completă, naturală și potrivită vârstei. Evaluatorul, regulile și pragurile neschimbate.
