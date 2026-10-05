@@ -831,3 +831,58 @@ demontarea concepțiilor greșite, pe două concepte (OBS-GS-17); fals negative 
 prin absența tiparului, nu prin verificare factuală (cazul 35). **5/5 Gold agreement ≠ science evaluator validated.** Terminologie
 pentru raportul final: **science gold-v1 adjudication = complete**; **science evaluator validation = pending hardening / Gold Set v2**.
 Același principiu se aplică localizării (adjudecare completă ≠ validare).
+
+*Cazul 37 (`quality-dinosaurs-3-4-English-01`, intrarea 37) — primul caz de calitate, control pozitiv (operatorul, 2026-10-05).*
+Stimulul nu e un text de poveste, ci evaluarea unui critic: T01–T18 prezente, toate cu nota 9, fiecare cu dovadă (aceeași frază „Milo
+and Tia find a gentle surprise”), nicio problemă raportată; conținutul la care se referă e sintetic și fix (12 pagini „Milo and Tia find
+a gentle surprise on page N.”). Rezultat executat: pozitiv pe politica v2 și pe v1 (scor 9, niciun motiv); confirmat; acord de verdict
+DA; acord de raționament **YES** (alegere intenționată, care stabilește modul de adjudecare a cazurilor 37–44). Proprietatea efectiv
+testată: **Does the quality acceptance gate correctly apply its declared policy to the supplied critic assessment?** — pentru cazul 37,
+DA. Explicația reală și completă a verdictului: scores satisfy thresholds + required criteria exist + evidence strings satisfy the
+implemented evidence-presence requirement → gate accepts. **CASE-LEVEL REASONING CORRECTNESS ≠ EVALUATOR-LEVEL CAPABILITY / COVERAGE /
+SUFFICIENCY** (ca la cazul 29): problema nu e că sistemul explică greșit acceptarea, ci că **gate acceptance itself is weaker than
+demonstrated story quality** — documentată separat (OBS-GS-18). Cazul NU se corectează la negativ pentru că evaluarea e artificială sau
+dovada e slabă semantic: gold-v1 a fost construit ca test al porții de calitate și se adjudecă ca atare (principiu valabil pentru 38–44).
+
+**Principiu de adjudecare pentru categoria de calitate (operatorul, la cazul 37, 2026-10-05) — patru niveluri, separate explicit la
+fiecare caz 37–44:** *Layer 1 — Gold Gate Verdict:* conform politicii declarate, evaluarea criticului ar trebui acceptată sau respinsă?
+*Layer 2 — Gate Implementation:* evaluatorul aplică politica corect? *Layer 3 — Evidence Validity:* dovada există, e relevantă și
+susține criteriul/nota? *Layer 4 — Underlying Content Quality:* textul are calitatea afirmată de evaluare? gold-v1 quality poate testa
+bine Layer 1/2 fără a valida complet Layer 3/4; nivelurile nu se amestecă în acordul de raționament. Regula pentru raționament: **YES**
+— mecanismul porții explică integral verdictul cerut de politica pe care cazul pretinde că o testează; **INCOMPLETE** — verdict corect,
+dar poarta nu verifică integral chiar condițiile declarate de acea politică/caz; **NO** — verdictul coincide accidental sau mecanismul
+demonstrat contrazice motivul Gold. Poarta nu e penalizată pentru o capacitate pe care cazul nu pretinde că o testează. Limită
+obligatorie: chiar cu acord pe toate cazurile, concluzia poate fi doar de forma **„Gold-v1 quality-gate policy adjudication: X/X valid
+cases agree with their Gold labels”** — NU „WonderPages content quality evaluation validated”, NU „critic scores are proven accurate”,
+NU „evidence is semantically validated”. Politicile v1 și v2 (praguri, criterii critice, validarea dovezilor, rubrica), evaluatorul și
+garda de acceptare rămân neschimbate pe durata adjudecării; hardening-ul decide ulterior, pe dovezi, dacă v2 trebuie extinsă.
+
+**OBS-GS-18 (operatorul, la cazul 37, 2026-10-05) — Quality evidence validity, critic trust & gate-vs-content distinction.** Separă:
+**A. Critic assessment** (ce afirmă criticul despre text); **B. Assessment validation** (dacă evaluarea e structural și probatoriu
+validă); **C. Acceptance gate** (dacă evaluarea satisface pragurile politicii); **D. Underlying content quality** (dacă textul merită
+notele). Conceptual: CONTENT → CRITIC EVALUATION → EVIDENCE → ASSESSMENT VALIDATION → QUALITY POLICY → ACCEPT / REJECT. Cazul 37 arată
+că poarta actuală operează în principal pe evaluarea furnizată și pe verificări structurale / de prezență a dovezilor; nu demonstrează
+independent adevărul evaluării. Dovezi executate (sondele NU sunt cazuri de aur; același răspuns de critic, alt conținut):
+- *Sonda A — existența dovezii (v1 vs v2):* conținut 12 pagini „The end.”; notele 9 și citatul „Milo and Tia find a gentle surprise”,
+  care nu există în text → **v1 pozitiv**, **v2 negativ** („Dovezi care nu se găsesc în text: T01…T18”). Îmbunătățire reală a v2:
+  *v1 does not validate evidence existence; v2 validates evidence existence* — dar doar existență/prezență, nu încă suport, relevanță
+  sau suficiență.
+- *Sonda B — limita validării dovezii:* citatul există pe pagina 1; celelalte 11 pagini au conținut evident problematic pentru 3–4 ani
+  („The monster ate the screaming children one by one in the dark.”); notele rămân 9, același citat pentru T01–T18 → **v1 pozitiv**,
+  **v2 pozitiv**. Formulare corectă: **the isolated quality gate accepts the supplied high-scoring critic assessment when the cited
+  evidence string exists, even when that evidence does not demonstrate the validity of all criterion scores.** NU „WonderPages accepts
+  unsafe content”: sonda izolează poarta de calitate; siguranța e o poartă independentă (nu se mediază cu nota), deci sonda NU dovedește
+  că pipeline-ul complet ar permite acel conținut.
+*Presence ≠ support (problema centrală):* evidence exists in source text ≠ evidence supports the criterion score; evidence supports
+some observation ≠ evidence justifies score 9; one valid quote ≠ the same quote is valid evidence for 18 different criteria — cazul 37
+arată limita direct (aceeași propoziție acceptată ca dovadă pentru T01–T18), fără un caz nou.
+*Critic trust (problemă distinctă de existența dovezii):* poarta presupune în mare măsură că notele criticului sunt valide. Ex.: T02
+(„every page moves the story forward”) primește 9, iar poarta verifică nota și cerințele formale, dar nu recalculează dacă cele 12
+pagini (aproape identice) demonstrează progres narativ: **critic score ≠ independently verified content property.**
+*v1 vs v2 — formulare:* NU „v2 evidence validation solved”; ci **„v2 closes the evidence-existence failure demonstrated in v1, while
+evidence relevance/support remains unverified and demonstrably insufficient in the executed probe.”**
+*Direcții pentru hardening (nu se implementează și nu se creează cazuri acum):* evidence absent; evidence present but irrelevant;
+evidence relevant but insufficient for score; evidence valid for one criterion but reused improperly for another; score contradicted
+by content; criterion supported locally but contradicted elsewhere in the book; fabricated quote; correct quote; partial quote /
+context distortion; critic score internally inconsistent with its own evidence; și separat: gate policy correctness vs critic
+correctness vs content quality correctness.
