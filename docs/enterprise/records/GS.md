@@ -408,3 +408,19 @@ vag asociat cu apa.
 *Populații distincte în raportare:* **raw set size = 44** (gold-v1.json nu se modifică) vs. **populația de evaluare adjudecată
 validă = cazuri brute minus excluderi**, conform stării jurnalului (la intrarea 22: 44 − 2 = 42 eligibile; 22 încă în așteptare).
 Nicio observație nouă.
+
+*Extensie OBS-GS-12 (operatorul, la cazul 23, 2026-10-05).* Cazul 23 (`age-forest-3-4-English-05`, intrarea 23): **EXCLUDE** — duplicat
+exact al cazului 19 (hash identic al textului `65f586043fb46e7f`), tip/vârstă/limbă/etichetă/rezultat așteptat/împărțire identice,
+nicio variație intenționată a stimulului; singura diferență: tema „forest”, nesusținută suficient semantic. Eticheta semantică
+AGE_COMPLEXITY=false rămâne corectă și sistemul e de acord — excludere pentru integritatea setului, NU dezacord. Câmpul `reasoning`
+lăsat gol. Observația validă pentru stimul rămâne cazul 19.
+A treia dovadă adjudecată: cazul 21 → duplicat al 19 (sea); cazul 22 → duplicat al 20 (sea); cazul 23 → duplicat al 19 (forest).
+Problema nu e doar metadata de temă greșită, ci și **pseudo-acoperirea**: același stimul reutilizat sub metadata diferită face
+benchmarkul să pară că testează mai multe domenii decât testează în realitate.
+Principii: **keyword presence ≠ semantic theme validity** („leaf” singur nu validează tema „forest”; aceeași frunză apare în cazul 19,
+„dinosaurs”); dar nici regula opusă, prea rigidă („forest requires words such as tree/woods/forest”) — o scenă poate aparține
+semantic unei teme fără tokenul explicit al temei; validatorul viitor evaluează dacă stimulul reprezintă realmente tema declarată.
+**metadata diversity ≠ stimulus diversity**; **theme count ≠ demonstrated theme coverage**.
+Progres: 23 adjudecări efectuate = 20 observații confirmate valide + 3 excluderi; populația validă curentă a întregului gold-v1 după
+excluderile cunoscute = 44 brute − 3 excluse = 41 candidați valizi (NU număr final până la adjudecarea tuturor celor 44).
+Nicio observație nouă.
