@@ -523,3 +523,18 @@ Pentru setul v2 — proprietăți distincte: KNOWN CALQUE DETECTION (expresia ex
 morfologice/sintactice ale aceluiași calc); UNSEEN CALQUE GENERALIZATION (calc real absent din catalog); TARGET-LANGUAGE NATURALNESS
 (formulare nenaturală care nu e neapărat un calc lexical cunoscut); SEMANTIC FIDELITY (sensul sursei păstrat). Cazul 27 testează în
 principal KNOWN CALQUE DETECTION și nu se prezintă drept validare generală a naturaleții limbii române. Nicio observație nouă.
+
+*Cazul 28 (`localization-sea-5-6-Romanian-03`, intrarea 28) — al doilea stimul independent pentru KNOWN CALQUE DETECTION (operatorul,
+2026-10-05).* Rezultat executat: un singur cod TR_CALQUE pe „au avut un timp bun” (sugestie „s-au distrat”). Confirmat; acord de
+verdict DA; acord de raționament YES (defect real → detecție relevantă → reason code corect).
+*Probă de control executată (NU caz de aur):* „Lula și crabul s-au distrat.” → niciun cod. Nu se adaugă în gold-v1, nu se adjudecă,
+nu se numără în acuratețe și nu e dovadă de generalizare: arată doar discriminarea locală a regulii pentru această pereche cunoscută
+— NU că evaluatorul „înțelege naturalețea limbii române”.
+*Distincție metodologică:* **duplicate stimulus ≠ different stimuli testing the same property ≠ different properties.** Cazurile 27
+(„face sens”) și 28 („au avut un timp bun”) sunt stimuli diferiți pentru **aceeași proprietate** (KNOWN CALQUE DETECTION): **2 independent
+stimuli for one tested property**, NU **2 independently validated localization capabilities**. Cazul 28 nu e duplicat (conținut și defect
+diferite; tema susținută de conținut) — niciun motiv de excludere.
+Limita rămâne (OBS-GS-13; secundar OBS-GS-7): known-calque detection ≠ general target-language naturalness understanding; successful
+catalog detection ≠ unseen-calque generalization. Comportament corect demonstrat pe cel puțin două expresii diferite din catalog;
+nedemonstrate: variante morfologice/sintactice nevăzute, calcuri absente din catalog, naturalețe generală, fidelitate semantică,
+completitudine, păstrarea tonului și a funcției narative. Nicio observație nouă.
