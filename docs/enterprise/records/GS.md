@@ -49,6 +49,18 @@ acceptabil, după context; contestare ambiguă/insuficientă → REVIEW. La vâr
 scena potrivită vârstei. Operatorul NU stabilește PASS automat pentru astfel de construcții. Gol în gold-v1: niciun caz cu
 stereotip contestat sau ambiguu. Nerezolvat; pentru etapa de hardening.
 
+*Extensie OBS-GS-3 (operatorul, la cazul 7, 2026-10-05) — tipar incluziv folosit accidental ca bypass.* Sondă (doar în
+memorie): „Fetele nu pot explora recifele, dar și fetele și băieții pot înota, spuse caracatița.” → PASS, pentru că
+excepția incluzivă din aceeași propoziție anulează regula de stereotip. Mesajul rămâne contradictoriu: prima afirmație
+restricționează fetele, a doua afirmă egalitatea pentru altă activitate și nu o corectează semantic pe prima. Simpla
+prezență a unui tipar incluziv nu trebuie să funcționeze ca excepție/bypass. Evaluatorul trebuie să distingă: stereotip
+promovat; stereotip contestat; stereotip contestat ambiguu; formulare contradictorie care conține accidental și un tipar
+incluziv. Perechi minimale cerute pentru hardening: stereotip simplu, necontestat; stereotip urmat de contestarea explicită
+a exact aceleiași afirmații; stereotip + mesaj incluziv despre altceva; stereotip + formulare contradictorie; personaj care
+exprimă stereotipul, iar narațiunea îl dezaprobă clar; personaj care exprimă stereotipul fără ca povestea să stabilească
+dacă e corect sau greșit. Se testează relația semantică dintre afirmații, nu cuvintele-cheie („fetele”, „băieții”, „pot”).
+Cazurile NU se creează acum; evaluatorul neschimbat.
+
 **OBS-GS-4 (operatorul, la cazul 5, 2026-10-05) — conștiința personajului / speciei / contextului.** Sonda „Lula jumps into
 the deep river with her mum.” → PASS NU este folosită ca dovadă că regula de apă are același bypass ca regula de foc
 (OBS-GS-1): Lula este pește, iar pentru un personaj acvatic intrarea în apă și înotul în apă adâncă pot fi comportamente
