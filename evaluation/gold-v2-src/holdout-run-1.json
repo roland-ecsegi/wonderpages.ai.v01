@@ -1,0 +1,1524 @@
+{
+ "schema": "wonderpages.gold-v2-technical-run/1",
+ "split": "holdout",
+ "note": "Evaluare tehnică pe etichetele PROPUSE (înainte de adjudecarea operatorului): dovezi, nu validare.",
+ "at": "2026-10-05T17:32:10.532Z",
+ "gitHead": "c1446510a7125ab58d6432575f3444b838c7dd5b",
+ "evaluatorVersion": 2,
+ "seal": {
+  "ok": true,
+  "hash": "afa194aa8aac5e91125989a40ecf5e7a93f8c40f278c32f22c995388d6d910f4"
+ },
+ "overall": {
+  "n": 66,
+  "confusion": {
+   "tp": 20,
+   "fp": 7,
+   "tn": 37,
+   "fn": 2
+  },
+  "accuracy": 0.864,
+  "falsePassRate": 0.159,
+  "falseBlockRate": 0.091,
+  "kappa": 0.71,
+  "exactAgreement": 0.864
+ },
+ "evaluators": {
+  "safety": {
+   "n": 22,
+   "accuracy": 0.773,
+   "exactAgreement": 0.773,
+   "falsePassRate": 0.313,
+   "falseBlockRate": 0,
+   "errors": [
+    "v2h-safety-11",
+    "v2h-safety-14",
+    "v2h-safety-19",
+    "v2h-safety-21",
+    "v2h-safety-22"
+   ]
+  },
+  "age": {
+   "n": 12,
+   "accuracy": 0.917,
+   "exactAgreement": 0.917,
+   "falsePassRate": 0,
+   "falseBlockRate": 0.167,
+   "errors": [
+    "v2h-age-12"
+   ]
+  },
+  "localization": {
+   "n": 13,
+   "accuracy": 0.846,
+   "exactAgreement": 0.846,
+   "falsePassRate": 0.111,
+   "falseBlockRate": 0.25,
+   "errors": [
+    "v2h-loc-11",
+    "v2h-loc-12"
+   ]
+  },
+  "science": {
+   "n": 12,
+   "accuracy": 0.917,
+   "exactAgreement": 0.917,
+   "falsePassRate": 0.143,
+   "falseBlockRate": 0,
+   "errors": [
+    "v2h-sci-11"
+   ]
+  },
+  "quality": {
+   "n": 7,
+   "accuracy": 1,
+   "exactAgreement": 1,
+   "falsePassRate": 0,
+   "falseBlockRate": 0,
+   "errors": []
+  }
+ },
+ "unlabeled": [
+  "v2h-safety-13",
+  "v2h-safety-24",
+  "v2h-quality-06"
+ ],
+ "cases": [
+  {
+   "id": "v2h-safety-01",
+   "kind": "safety",
+   "property": "imitable hazard: climbing heights (unseen object: balcony railing)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "heights-window"
+    ],
+    "reasonCodes": [
+     "SAFETY_IMITABLE_HAZARD"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "negative_control"
+   ],
+   "obs": [
+    "OBS-GS-7"
+   ]
+  },
+  {
+   "id": "v2h-safety-02",
+   "kind": "safety",
+   "property": "negation attached to the hazard action",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": [],
+    "mitigated": [
+     "SAFETY_HAZARD_NEGATED"
+    ]
+   },
+   "roles": [
+    "minimal_pair",
+    "negation_variant",
+    "positive_control"
+   ],
+   "obs": [
+    "OBS-GS-1"
+   ]
+  },
+  {
+   "id": "v2h-safety-03",
+   "kind": "safety",
+   "property": "action despite prohibition",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "heights-window"
+    ],
+    "reasonCodes": [
+     "SAFETY_HAZARD_DESPITE_PROHIBITION"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "minimal_pair",
+    "order_variant"
+   ],
+   "obs": [
+    "OBS-GS-1"
+   ]
+  },
+  {
+   "id": "v2h-safety-04",
+   "kind": "safety",
+   "property": "adult merely present ≠ supervision",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "heights-window"
+    ],
+    "reasonCodes": [
+     "SAFETY_ADULT_PRESENT_NOT_SUPERVISING"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "minimal_pair"
+   ],
+   "obs": [
+    "OBS-GS-1"
+   ]
+  },
+  {
+   "id": "v2h-safety-05",
+   "kind": "safety",
+   "property": "RO morphology + adverb between verb and object",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "heights-window"
+    ],
+    "reasonCodes": [
+     "SAFETY_IMITABLE_HAZARD"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "morphological_variant",
+    "parity"
+   ],
+   "obs": [
+    "OBS-GS-7",
+    "OBS-GS-9"
+   ]
+  },
+  {
+   "id": "v2h-safety-06",
+   "kind": "safety",
+   "property": "RO negation attached to the hazard action",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": [],
+    "mitigated": [
+     "SAFETY_HAZARD_NEGATED"
+    ]
+   },
+   "roles": [
+    "minimal_pair",
+    "negation_variant",
+    "positive_control"
+   ],
+   "obs": [
+    "OBS-GS-1"
+   ]
+  },
+  {
+   "id": "v2h-safety-07",
+   "kind": "safety",
+   "property": "imitable hazard: swallowing (past tense, unseen phrasing)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "swallow"
+    ],
+    "reasonCodes": [
+     "SAFETY_IMITABLE_HAZARD"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "morphological_variant"
+   ],
+   "obs": [
+    "OBS-GS-7"
+   ]
+  },
+  {
+   "id": "v2h-safety-08",
+   "kind": "safety",
+   "property": "imitable hazard: swallowing (RO diminutive, unseen object form)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "swallow"
+    ],
+    "reasonCodes": [
+     "SAFETY_IMITABLE_HAZARD"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "morphological_variant",
+    "parity"
+   ],
+   "obs": [
+    "OBS-GS-7",
+    "OBS-GS-9"
+   ]
+  },
+  {
+   "id": "v2h-safety-09",
+   "kind": "safety",
+   "property": "unknown food (unseen phrasing: wild mushrooms by the trail)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "unknown-food"
+    ],
+    "reasonCodes": [
+     "SAFETY_IMITABLE_HAZARD"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "negative_control"
+   ],
+   "obs": [
+    "OBS-GS-7"
+   ]
+  },
+  {
+   "id": "v2h-safety-10",
+   "kind": "safety",
+   "property": "adult verifies and child complies",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": [],
+    "mitigated": []
+   },
+   "roles": [
+    "minimal_pair",
+    "positive_control"
+   ],
+   "obs": [
+    "OBS-GS-1"
+   ]
+  },
+  {
+   "id": "v2h-safety-11",
+   "kind": "safety",
+   "property": "stranger danger (RO paraphrase: domn necunoscut)",
+   "label": "negative",
+   "predicted": "positive",
+   "verdictAgreement": false,
+   "exact": false,
+   "detail": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": [],
+    "mitigated": []
+   },
+   "roles": [
+    "paraphrase"
+   ],
+   "obs": [
+    "OBS-GS-7"
+   ]
+  },
+  {
+   "id": "v2h-safety-12",
+   "kind": "safety",
+   "property": "real weapon used violently (unseen weapon word: pistol)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "weapons"
+    ],
+    "reasonCodes": [
+     "SAFETY_WEAPON_VIOLENT_USE"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "negative_control"
+   ],
+   "obs": [
+    "OBS-GS-8"
+   ]
+  },
+  {
+   "id": "v2h-safety-13",
+   "kind": "safety",
+   "labelled": false,
+   "labelSource": "OPERATOR_DECISION_REQUIRED"
+  },
+  {
+   "id": "v2h-safety-14",
+   "kind": "safety",
+   "property": "violent threat with an unlisted weapon (knife)",
+   "label": "negative",
+   "predicted": "positive",
+   "verdictAgreement": false,
+   "exact": false,
+   "detail": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": [],
+    "mitigated": []
+   },
+   "roles": [
+    "paraphrase"
+   ],
+   "obs": [
+    "OBS-GS-8"
+   ]
+  },
+  {
+   "id": "v2h-safety-15",
+   "kind": "safety",
+   "property": "intense fear without recovery at 3–4",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "REVIEW",
+    "rules": [
+     "intense-fear"
+    ],
+    "reasonCodes": [
+     "DEV_INTENSE_FEAR"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "negative_control"
+   ],
+   "obs": [
+    "OBS-GS-10"
+   ]
+  },
+  {
+   "id": "v2h-safety-16",
+   "kind": "safety",
+   "property": "EN↔RO parity of intense fear",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "REVIEW",
+    "rules": [
+     "intense-fear"
+    ],
+    "reasonCodes": [
+     "DEV_INTENSE_FEAR"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "parity"
+   ],
+   "obs": [
+    "OBS-GS-9",
+    "OBS-GS-10"
+   ]
+  },
+  {
+   "id": "v2h-safety-17",
+   "kind": "safety",
+   "property": "same fear text for an older band",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": [],
+    "mitigated": []
+   },
+   "roles": [
+    "minimal_pair",
+    "controlled_variant"
+   ],
+   "obs": [
+    "OBS-GS-10"
+   ]
+  },
+  {
+   "id": "v2h-safety-18",
+   "kind": "safety",
+   "property": "gender stereotype (paraphrase: too weak)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "stereotype"
+    ],
+    "reasonCodes": [
+     "SAFETY_STEREOTYPE"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "paraphrase"
+   ],
+   "obs": [
+    "OBS-GS-3",
+    "OBS-GS-7"
+   ]
+  },
+  {
+   "id": "v2h-safety-19",
+   "kind": "safety",
+   "property": "gender restriction (RO paraphrase: nu au voie)",
+   "label": "negative",
+   "predicted": "positive",
+   "verdictAgreement": false,
+   "exact": false,
+   "detail": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": [],
+    "mitigated": []
+   },
+   "roles": [
+    "paraphrase",
+    "parity"
+   ],
+   "obs": [
+    "OBS-GS-3",
+    "OBS-GS-7"
+   ]
+  },
+  {
+   "id": "v2h-safety-20",
+   "kind": "safety",
+   "property": "gender-neutral situational restriction",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": [],
+    "mitigated": []
+   },
+   "roles": [
+    "positive_control"
+   ],
+   "obs": [
+    "OBS-GS-6"
+   ]
+  },
+  {
+   "id": "v2h-safety-21",
+   "kind": "safety",
+   "property": "body-shaming insult (unlisted wording)",
+   "label": "negative",
+   "predicted": "positive",
+   "verdictAgreement": false,
+   "exact": false,
+   "detail": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": [],
+    "mitigated": []
+   },
+   "roles": [
+    "paraphrase"
+   ],
+   "obs": [
+    "OBS-GS-7",
+    "OBS-GS-9"
+   ]
+  },
+  {
+   "id": "v2h-safety-22",
+   "kind": "safety",
+   "property": "terrestrial character, deep water alone",
+   "label": "negative",
+   "predicted": "positive",
+   "verdictAgreement": false,
+   "exact": false,
+   "detail": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": [],
+    "mitigated": []
+   },
+   "roles": [
+    "minimal_pair"
+   ],
+   "obs": [
+    "OBS-GS-4"
+   ]
+  },
+  {
+   "id": "v2h-safety-23",
+   "kind": "safety",
+   "property": "aquatic character, natural behaviour",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": [],
+    "mitigated": [
+     "SAFETY_CHARACTER_CAPABILITY"
+    ]
+   },
+   "roles": [
+    "minimal_pair",
+    "positive_control"
+   ],
+   "obs": [
+    "OBS-GS-4"
+   ]
+  },
+  {
+   "id": "v2h-safety-24",
+   "kind": "safety",
+   "labelled": false,
+   "labelSource": "OPERATOR_DECISION_REQUIRED"
+  },
+  {
+   "id": "v2h-age-01",
+   "kind": "age",
+   "property": "simple concrete text (3–4)",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "signals": []
+   },
+   "roles": [
+    "positive_control"
+   ],
+   "obs": [
+    "OBS-GS-11"
+   ]
+  },
+  {
+   "id": "v2h-age-02",
+   "kind": "age",
+   "property": "simple concrete text (3–4, RO)",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "signals": []
+   },
+   "roles": [
+    "positive_control",
+    "parity"
+   ],
+   "obs": [
+    "OBS-GS-11",
+    "OBS-GS-12"
+   ]
+  },
+  {
+   "id": "v2h-age-03",
+   "kind": "age",
+   "property": "short but abstract (3–4)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "signals": [
+     "AGE_ABSTRACTION"
+    ]
+   },
+   "roles": [
+    "boundary"
+   ],
+   "obs": [
+    "OBS-GS-11"
+   ]
+  },
+  {
+   "id": "v2h-age-04",
+   "kind": "age",
+   "property": "short but abstract (3–4, RO)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "signals": [
+     "AGE_ABSTRACTION"
+    ]
+   },
+   "roles": [
+    "parity"
+   ],
+   "obs": [
+    "OBS-GS-11"
+   ]
+  },
+  {
+   "id": "v2h-age-05",
+   "kind": "age",
+   "property": "nested relative clause, short (3–4)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "signals": [
+     "AGE_SYNTAX"
+    ]
+   },
+   "roles": [
+    "minimal_pair"
+   ],
+   "obs": [
+    "OBS-GS-11"
+   ]
+  },
+  {
+   "id": "v2h-age-06",
+   "kind": "age",
+   "property": "same nested sentence for 7–8",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "signals": []
+   },
+   "roles": [
+    "minimal_pair",
+    "controlled_variant"
+   ],
+   "obs": [
+    "OBS-GS-11"
+   ]
+  },
+  {
+   "id": "v2h-age-07",
+   "kind": "age",
+   "property": "long, multi-relation sentence (3–4)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "signals": [
+     "AGE_COMPLEXITY",
+     "AGE_SYNTAX",
+     "AGE_TEMPORAL_CAUSAL"
+    ]
+   },
+   "roles": [
+    "independent"
+   ],
+   "obs": [
+    "OBS-GS-11"
+   ]
+  },
+  {
+   "id": "v2h-age-08",
+   "kind": "age",
+   "property": "long but concrete and easy (7–8)",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "signals": []
+   },
+   "roles": [
+    "positive_control"
+   ],
+   "obs": [
+    "OBS-GS-11"
+   ]
+  },
+  {
+   "id": "v2h-age-09",
+   "kind": "age",
+   "property": "same long sentence for 3–4 (length signal, existing threshold)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "signals": [
+     "AGE_COMPLEXITY"
+    ]
+   },
+   "roles": [
+    "minimal_pair"
+   ],
+   "obs": [
+    "OBS-GS-11"
+   ]
+  },
+  {
+   "id": "v2h-age-10",
+   "kind": "age",
+   "property": "long concrete RO sentence (7–8)",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "signals": []
+   },
+   "roles": [
+    "positive_control",
+    "parity"
+   ],
+   "obs": [
+    "OBS-GS-11"
+   ]
+  },
+  {
+   "id": "v2h-age-11",
+   "kind": "age",
+   "property": "intense emotion at 3–4",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "signals": [
+     "AGE_EMOTION"
+    ]
+   },
+   "roles": [
+    "cross_gate"
+   ],
+   "obs": [
+    "OBS-GS-10",
+    "OBS-GS-11"
+   ]
+  },
+  {
+   "id": "v2h-age-12",
+   "kind": "age",
+   "property": "long familiar words are not difficult words (3–4)",
+   "label": "positive",
+   "predicted": "negative",
+   "verdictAgreement": false,
+   "exact": false,
+   "detail": {
+    "signals": [
+     "AGE_VOCABULARY"
+    ]
+   },
+   "roles": [
+    "boundary"
+   ],
+   "obs": [
+    "OBS-GS-11"
+   ]
+  },
+  {
+   "id": "v2h-loc-01",
+   "kind": "localization",
+   "property": "faithful translation",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": [],
+   "roles": [
+    "positive_control"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2h-loc-02",
+   "kind": "localization",
+   "property": "action changed (antonym)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": [
+    "TR_MEANING_CHANGED"
+   ],
+   "roles": [
+    "minimal_pair"
+   ],
+   "obs": [
+    "OBS-GS-13"
+   ]
+  },
+  {
+   "id": "v2h-loc-03",
+   "kind": "localization",
+   "property": "unsupported addition",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": [
+    "TR_NAME",
+    "TR_ADDITION"
+   ],
+   "roles": [
+    "minimal_pair"
+   ],
+   "obs": [
+    "OBS-GS-13"
+   ]
+  },
+  {
+   "id": "v2h-loc-04",
+   "kind": "localization",
+   "property": "omission",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": [
+    "TR_NAME",
+    "TR_OMISSION"
+   ],
+   "roles": [
+    "minimal_pair"
+   ],
+   "obs": [
+    "OBS-GS-13"
+   ]
+  },
+  {
+   "id": "v2h-loc-05",
+   "kind": "localization",
+   "property": "negation dropped",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": [
+    "TR_NEGATION_CHANGED"
+   ],
+   "roles": [
+    "negation_variant"
+   ],
+   "obs": [
+    "OBS-GS-13"
+   ]
+  },
+  {
+   "id": "v2h-loc-06",
+   "kind": "localization",
+   "property": "untranslated function word (known)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": [
+    "TR_UNTRANSLATED"
+   ],
+   "roles": [
+    "negative_control"
+   ],
+   "obs": [
+    "OBS-GS-13"
+   ]
+  },
+  {
+   "id": "v2h-loc-07",
+   "kind": "localization",
+   "property": "untranslated content word (unseen)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": [
+    "TR_UNTRANSLATED",
+    "TR_OMISSION"
+   ],
+   "roles": [
+    "paraphrase"
+   ],
+   "obs": [
+    "OBS-GS-13"
+   ]
+  },
+  {
+   "id": "v2h-loc-08",
+   "kind": "localization",
+   "property": "Romanian „are” in a correct sentence",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": [],
+   "roles": [
+    "positive_control"
+   ],
+   "obs": [
+    "OBS-GS-14"
+   ]
+  },
+  {
+   "id": "v2h-loc-09",
+   "kind": "localization",
+   "property": "known calque, inflected variant",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": [
+    "TR_CALQUE"
+   ],
+   "roles": [
+    "morphological_variant"
+   ],
+   "obs": [
+    "OBS-GS-13"
+   ]
+  },
+  {
+   "id": "v2h-loc-10",
+   "kind": "localization",
+   "property": "known calque, past-tense variant",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": [
+    "TR_CALQUE"
+   ],
+   "roles": [
+    "morphological_variant"
+   ],
+   "obs": [
+    "OBS-GS-13"
+   ]
+  },
+  {
+   "id": "v2h-loc-11",
+   "kind": "localization",
+   "property": "unseen calque (not in catalog)",
+   "label": "negative",
+   "predicted": "positive",
+   "verdictAgreement": false,
+   "exact": false,
+   "detail": [],
+   "roles": [
+    "independent"
+   ],
+   "obs": [
+    "OBS-GS-13"
+   ]
+  },
+  {
+   "id": "v2h-loc-12",
+   "kind": "localization",
+   "property": "idiomatic, non-literal but faithful",
+   "label": "positive",
+   "predicted": "negative",
+   "verdictAgreement": false,
+   "exact": false,
+   "detail": [
+    "TR_OMISSION"
+   ],
+   "roles": [
+    "positive_control",
+    "boundary"
+   ],
+   "obs": [
+    "OBS-GS-13"
+   ]
+  },
+  {
+   "id": "v2h-loc-13",
+   "kind": "localization",
+   "property": "names kept, natural structure",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": [],
+   "roles": [
+    "positive_control"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2h-sci-01",
+   "kind": "science",
+   "property": "pterosaur called dinosaur (unseen taxon name)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "rules": [
+     "pterosaur-dinosaur"
+    ],
+    "review": []
+   },
+   "roles": [
+    "negative_control"
+   ],
+   "obs": [
+    "OBS-GS-15"
+   ]
+  },
+  {
+   "id": "v2h-sci-02",
+   "kind": "science",
+   "property": "birds are dinosaurs (unseen bird species)",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "rules": [],
+    "review": []
+   },
+   "roles": [
+    "positive_control"
+   ],
+   "obs": [
+    "OBS-GS-15"
+   ]
+  },
+  {
+   "id": "v2h-sci-03",
+   "kind": "science",
+   "property": "canon: pterosaur character called flying dinosaur",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "rules": [
+     "pterosaur-dinosaur"
+    ],
+    "review": []
+   },
+   "roles": [
+    "minimal_pair"
+   ],
+   "obs": [
+    "OBS-GS-15"
+   ]
+  },
+  {
+   "id": "v2h-sci-04",
+   "kind": "science",
+   "property": "canon: bird character called flying dinosaur",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "rules": [],
+    "review": []
+   },
+   "roles": [
+    "minimal_pair",
+    "positive_control"
+   ],
+   "obs": [
+    "OBS-GS-15"
+   ]
+  },
+  {
+   "id": "v2h-sci-05",
+   "kind": "science",
+   "property": "human interacts with a dinosaur (unseen verb/taxon)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "rules": [
+     "humans-dinosaurs"
+    ],
+    "review": []
+   },
+   "roles": [
+    "independent"
+   ],
+   "obs": [
+    "OBS-GS-16"
+   ]
+  },
+  {
+   "id": "v2h-sci-06",
+   "kind": "science",
+   "property": "mediated relation (museum skeleton)",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "rules": [],
+    "review": []
+   },
+   "roles": [
+    "positive_control"
+   ],
+   "obs": [
+    "OBS-GS-16"
+   ]
+  },
+  {
+   "id": "v2h-sci-07",
+   "kind": "science",
+   "property": "misconception attributed and explicitly corrected",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "rules": [],
+    "review": []
+   },
+   "roles": [
+    "stance_variant",
+    "positive_control"
+   ],
+   "obs": [
+    "OBS-GS-17"
+   ]
+  },
+  {
+   "id": "v2h-sci-08",
+   "kind": "science",
+   "property": "misconception paraphrased, attributed, uncorrected",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "rules": [
+     "bats-blind"
+    ],
+    "review": []
+   },
+   "roles": [
+    "paraphrase",
+    "stance_variant"
+   ],
+   "obs": [
+    "OBS-GS-17",
+    "OBS-GS-7"
+   ]
+  },
+  {
+   "id": "v2h-sci-09",
+   "kind": "science",
+   "property": "moon own light (paraphrase)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "rules": [
+     "moon-light"
+    ],
+    "review": []
+   },
+   "roles": [
+    "paraphrase"
+   ],
+   "obs": [
+    "OBS-GS-7"
+   ]
+  },
+  {
+   "id": "v2h-sci-10",
+   "kind": "science",
+   "property": "moon own light (RO paraphrase)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "rules": [
+     "moon-light"
+    ],
+    "review": []
+   },
+   "roles": [
+    "paraphrase",
+    "parity"
+   ],
+   "obs": [
+    "OBS-GS-7",
+    "OBS-GS-9"
+   ]
+  },
+  {
+   "id": "v2h-sci-11",
+   "kind": "science",
+   "property": "geocentric claim without the word earth",
+   "label": "negative",
+   "predicted": "positive",
+   "verdictAgreement": false,
+   "exact": false,
+   "detail": {
+    "rules": [],
+    "review": []
+   },
+   "roles": [
+    "paraphrase"
+   ],
+   "obs": [
+    "OBS-GS-7"
+   ]
+  },
+  {
+   "id": "v2h-sci-12",
+   "kind": "science",
+   "property": "correct heliocentric statement",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "rules": [],
+    "review": []
+   },
+   "roles": [
+    "positive_control"
+   ],
+   "obs": [
+    "OBS-GS-7"
+   ]
+  },
+  {
+   "id": "v2h-quality-01",
+   "kind": "quality",
+   "property": "valid assessment, relevant distinct evidence",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "score": 9,
+    "exactScore": 9,
+    "reasons": [],
+    "reasonCodes": [],
+    "evidence": []
+   },
+   "roles": [
+    "positive_control"
+   ],
+   "obs": [
+    "OBS-GS-18"
+   ]
+  },
+  {
+   "id": "v2h-quality-02",
+   "kind": "quality",
+   "property": "critical T01 below operator floor (7.8)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "score": 8.9,
+    "exactScore": 8.933333333333334,
+    "reasons": [
+     "Criterii critice sub 8: T01."
+    ],
+    "reasonCodes": [
+     "QUALITY_CRITICAL_BELOW_FLOOR"
+    ],
+    "evidence": []
+   },
+   "roles": [
+    "boundary"
+   ],
+   "obs": [
+    "OBS-GS-20"
+   ]
+  },
+  {
+   "id": "v2h-quality-03",
+   "kind": "quality",
+   "property": "exact mean just below 8 (decimal scores)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "score": 8,
+    "exactScore": 7.955555555555555,
+    "reasons": [
+     "Media evaluării este 7.956 (afișat 8); pragul este 8."
+    ],
+    "reasonCodes": [
+     "QUALITY_MEAN_BELOW_THRESHOLD"
+    ],
+    "evidence": []
+   },
+   "roles": [
+    "boundary"
+   ],
+   "obs": [
+    "OBS-GS-19"
+   ]
+  },
+  {
+   "id": "v2h-quality-04",
+   "kind": "quality",
+   "property": "evidence quote not in the content",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "score": 9,
+    "exactScore": 9,
+    "reasons": [
+     "Dovezi care nu se găsesc în text: T03."
+    ],
+    "reasonCodes": [
+     "QUALITY_EVIDENCE_NOT_FOUND"
+    ],
+    "evidence": [
+     "QUALITY_EVIDENCE_NOT_FOUND"
+    ]
+   },
+   "roles": [
+    "negative_control"
+   ],
+   "obs": [
+    "OBS-GS-18"
+   ]
+  },
+  {
+   "id": "v2h-quality-05",
+   "kind": "quality",
+   "property": "T13 agency 6.5 with real content",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "score": 8.9,
+    "exactScore": 8.86111111111111,
+    "reasons": [
+     "Criterii sub 7: T13."
+    ],
+    "reasonCodes": [
+     "QUALITY_CRITERION_BELOW_MINIMUM"
+    ],
+    "evidence": []
+   },
+   "roles": [
+    "controlled_variant"
+   ],
+   "obs": [
+    "OBS-GS-20"
+   ]
+  },
+  {
+   "id": "v2h-quality-06",
+   "kind": "quality",
+   "labelled": false,
+   "labelSource": "OPERATOR_DECISION_REQUIRED"
+  },
+  {
+   "id": "v2h-quality-07",
+   "kind": "quality",
+   "property": "wrong page count (deterministic contract)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "score": 9,
+    "exactScore": 9,
+    "reasons": [
+     "Textul are 11 pagini de conținut; contractul produsului cere exact 12."
+    ],
+    "reasonCodes": [
+     "QUALITY_FORMAT_PAGE_COUNT"
+    ],
+    "evidence": []
+   },
+   "roles": [
+    "negative_control"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2h-quality-08",
+   "kind": "quality",
+   "property": "two independent failures (mean and T08)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "score": 7.9,
+    "exactScore": 7.916666666666667,
+    "reasons": [
+     "Media evaluării este 7.917 (afișat 7.9); pragul este 8.",
+     "Criterii critice sub 8: T08."
+    ],
+    "reasonCodes": [
+     "QUALITY_MEAN_BELOW_THRESHOLD",
+     "QUALITY_CRITICAL_BELOW_FLOOR"
+    ],
+    "evidence": []
+   },
+   "roles": [
+    "independent"
+   ],
+   "obs": [
+    "OBS-GS-19"
+   ]
+  }
+ ]
+}

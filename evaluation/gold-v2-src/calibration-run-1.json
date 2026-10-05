@@ -1,0 +1,3191 @@
+{
+ "schema": "wonderpages.gold-v2-technical-run/1",
+ "split": "calibration",
+ "note": "Evaluare tehnică pe etichetele PROPUSE (înainte de adjudecarea operatorului): dovezi, nu validare.",
+ "at": "2026-10-05T17:32:10.128Z",
+ "gitHead": "c1446510a7125ab58d6432575f3444b838c7dd5b",
+ "evaluatorVersion": 2,
+ "seal": {
+  "ok": true,
+  "hash": "afa194aa8aac5e91125989a40ecf5e7a93f8c40f278c32f22c995388d6d910f4"
+ },
+ "overall": {
+  "n": 140,
+  "confusion": {
+   "tp": 51,
+   "fp": 0,
+   "tn": 88,
+   "fn": 1
+  },
+  "accuracy": 0.993,
+  "falsePassRate": 0,
+  "falseBlockRate": 0.019,
+  "kappa": 0.985,
+  "exactAgreement": 0.993
+ },
+ "evaluators": {
+  "safety": {
+   "n": 64,
+   "accuracy": 1,
+   "exactAgreement": 1,
+   "falsePassRate": 0,
+   "falseBlockRate": 0,
+   "errors": []
+  },
+  "age": {
+   "n": 18,
+   "accuracy": 0.944,
+   "exactAgreement": 0.944,
+   "falsePassRate": 0,
+   "falseBlockRate": 0.1,
+   "errors": [
+    "v2c-age-voc-01"
+   ]
+  },
+  "localization": {
+   "n": 21,
+   "accuracy": 1,
+   "exactAgreement": 1,
+   "falsePassRate": 0,
+   "falseBlockRate": 0,
+   "errors": []
+  },
+  "science": {
+   "n": 23,
+   "accuracy": 1,
+   "exactAgreement": 1,
+   "falsePassRate": 0,
+   "falseBlockRate": 0,
+   "errors": []
+  },
+  "quality": {
+   "n": 14,
+   "accuracy": 1,
+   "exactAgreement": 1,
+   "falsePassRate": 0,
+   "falseBlockRate": 0,
+   "errors": []
+  }
+ },
+ "unlabeled": [
+  "v2c-safety-fire-09",
+  "v2c-safety-sill-05",
+  "v2c-safety-food-08",
+  "v2c-safety-food-09",
+  "v2c-safety-weapon-02",
+  "v2c-safety-weapon-03",
+  "v2c-safety-weapon-04",
+  "v2c-safety-stereo-02",
+  "v2c-safety-stereo-04",
+  "v2c-safety-insult-05",
+  "v2c-safety-fear-04",
+  "v2c-safety-fear-05",
+  "v2c-age-abs-04",
+  "v2c-age-syn-02",
+  "v2c-sci-bat-05",
+  "v2c-quality-09",
+  "v2c-quality-15"
+ ],
+ "cases": [
+  {
+   "id": "v2c-safety-fire-01",
+   "kind": "safety",
+   "property": "imitable hazard: fire play",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "fire-play"
+    ],
+    "reasonCodes": [
+     "SAFETY_IMITABLE_HAZARD"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "negative_control"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-safety-fire-02",
+   "kind": "safety",
+   "property": "negation attached to the hazard action",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": [],
+    "mitigated": [
+     "SAFETY_HAZARD_NEGATED"
+    ]
+   },
+   "roles": [
+    "minimal_pair",
+    "negation_variant",
+    "positive_control"
+   ],
+   "obs": [
+    "OBS-GS-1"
+   ]
+  },
+  {
+   "id": "v2c-safety-fire-03",
+   "kind": "safety",
+   "property": "negation of another verb (bypass)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "fire-play"
+    ],
+    "reasonCodes": [
+     "SAFETY_IMITABLE_HAZARD"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "minimal_pair",
+    "negation_variant",
+    "regression"
+   ],
+   "obs": [
+    "OBS-GS-1"
+   ]
+  },
+  {
+   "id": "v2c-safety-fire-04",
+   "kind": "safety",
+   "property": "negation in a following clause",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "fire-play"
+    ],
+    "reasonCodes": [
+     "SAFETY_IMITABLE_HAZARD"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "minimal_pair",
+    "regression"
+   ],
+   "obs": [
+    "OBS-GS-1"
+   ]
+  },
+  {
+   "id": "v2c-safety-fire-05",
+   "kind": "safety",
+   "property": "adult merely present",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "fire-play"
+    ],
+    "reasonCodes": [
+     "SAFETY_ADULT_PRESENT_NOT_SUPERVISING"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "minimal_pair",
+    "regression"
+   ],
+   "obs": [
+    "OBS-GS-1"
+   ]
+  },
+  {
+   "id": "v2c-safety-fire-06",
+   "kind": "safety",
+   "property": "prohibition ignored",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "fire-play"
+    ],
+    "reasonCodes": [
+     "SAFETY_HAZARD_DESPITE_PROHIBITION"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "minimal_pair",
+    "order_variant"
+   ],
+   "obs": [
+    "OBS-GS-1"
+   ]
+  },
+  {
+   "id": "v2c-safety-fire-07",
+   "kind": "safety",
+   "property": "progressive aspect",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "fire-play"
+    ],
+    "reasonCodes": [
+     "SAFETY_IMITABLE_HAZARD"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "minimal_pair",
+    "morphological_variant"
+   ],
+   "obs": [
+    "OBS-GS-7"
+   ]
+  },
+  {
+   "id": "v2c-safety-fire-08",
+   "kind": "safety",
+   "property": "generic warning statement (no act narrated)",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": [],
+    "mitigated": [
+     "SAFETY_WARNING_STATEMENT"
+    ]
+   },
+   "roles": [
+    "minimal_pair",
+    "stance_variant",
+    "positive_control"
+   ],
+   "obs": [
+    "OBS-GS-1"
+   ]
+  },
+  {
+   "id": "v2c-safety-fire-09",
+   "kind": "safety",
+   "labelled": false,
+   "labelSource": "OPERATOR_DECISION_REQUIRED"
+  },
+  {
+   "id": "v2c-safety-fire-10",
+   "kind": "safety",
+   "property": "RO fire play",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "fire-play"
+    ],
+    "reasonCodes": [
+     "SAFETY_IMITABLE_HAZARD"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "negative_control",
+    "parity"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-safety-fire-11",
+   "kind": "safety",
+   "property": "RO negation attached",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": [],
+    "mitigated": [
+     "SAFETY_HAZARD_NEGATED"
+    ]
+   },
+   "roles": [
+    "minimal_pair",
+    "negation_variant",
+    "positive_control"
+   ],
+   "obs": [
+    "OBS-GS-2"
+   ]
+  },
+  {
+   "id": "v2c-safety-fire-12",
+   "kind": "safety",
+   "property": "RO adverb between verb and object",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "fire-play"
+    ],
+    "reasonCodes": [
+     "SAFETY_IMITABLE_HAZARD"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "minimal_pair",
+    "morphological_variant",
+    "regression"
+   ],
+   "obs": [
+    "OBS-GS-7"
+   ]
+  },
+  {
+   "id": "v2c-safety-fire-13",
+   "kind": "safety",
+   "property": "regression: adult present (gold-v1 probe)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "fire-play"
+    ],
+    "reasonCodes": [
+     "SAFETY_ADULT_PRESENT_NOT_SUPERVISING"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "regression"
+   ],
+   "obs": [
+    "OBS-GS-1"
+   ]
+  },
+  {
+   "id": "v2c-safety-fire-14",
+   "kind": "safety",
+   "property": "regression: unrelated negation (gold-v1 probe)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "fire-play"
+    ],
+    "reasonCodes": [
+     "SAFETY_IMITABLE_HAZARD"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "regression"
+   ],
+   "obs": [
+    "OBS-GS-1"
+   ]
+  },
+  {
+   "id": "v2c-safety-sill-01",
+   "kind": "safety",
+   "property": "climbing heights (RO)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "heights-window"
+    ],
+    "reasonCodes": [
+     "SAFETY_IMITABLE_HAZARD"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "negative_control"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-safety-sill-02",
+   "kind": "safety",
+   "property": "RO negation + safe alternative",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": [],
+    "mitigated": [
+     "SAFETY_HAZARD_NEGATED"
+    ]
+   },
+   "roles": [
+    "minimal_pair",
+    "negation_variant",
+    "positive_control"
+   ],
+   "obs": [
+    "OBS-GS-1"
+   ]
+  },
+  {
+   "id": "v2c-safety-sill-03",
+   "kind": "safety",
+   "property": "RO adult merely present",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "heights-window"
+    ],
+    "reasonCodes": [
+     "SAFETY_ADULT_PRESENT_NOT_SUPERVISING"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "minimal_pair"
+   ],
+   "obs": [
+    "OBS-GS-1"
+   ]
+  },
+  {
+   "id": "v2c-safety-sill-04",
+   "kind": "safety",
+   "property": "EN parity of the climbing case",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "heights-window"
+    ],
+    "reasonCodes": [
+     "SAFETY_IMITABLE_HAZARD"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "parity"
+   ],
+   "obs": [
+    "OBS-GS-9"
+   ]
+  },
+  {
+   "id": "v2c-safety-sill-05",
+   "kind": "safety",
+   "labelled": false,
+   "labelSource": "OPERATOR_DECISION_REQUIRED"
+  },
+  {
+   "id": "v2c-safety-sill-06",
+   "kind": "safety",
+   "property": "past tense, other object (stove)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "heights-window"
+    ],
+    "reasonCodes": [
+     "SAFETY_IMITABLE_HAZARD"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "morphological_variant"
+   ],
+   "obs": [
+    "OBS-GS-7"
+   ]
+  },
+  {
+   "id": "v2c-safety-sill-07",
+   "kind": "safety",
+   "property": "regression: RO synonym (gold-v1 probe)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "heights-window"
+    ],
+    "reasonCodes": [
+     "SAFETY_IMITABLE_HAZARD"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "regression"
+   ],
+   "obs": [
+    "OBS-GS-7"
+   ]
+  },
+  {
+   "id": "v2c-safety-sill-08",
+   "kind": "safety",
+   "property": "regression: RO despite prohibition (gold-v1 probe)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "heights-window"
+    ],
+    "reasonCodes": [
+     "SAFETY_HAZARD_DESPITE_PROHIBITION"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "regression"
+   ],
+   "obs": [
+    "OBS-GS-1"
+   ]
+  },
+  {
+   "id": "v2c-safety-food-01",
+   "kind": "safety",
+   "property": "unknown food",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "unknown-food"
+    ],
+    "reasonCodes": [
+     "SAFETY_IMITABLE_HAZARD"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "negative_control"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-safety-food-02",
+   "kind": "safety",
+   "property": "past tense",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "unknown-food"
+    ],
+    "reasonCodes": [
+     "SAFETY_IMITABLE_HAZARD"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "minimal_pair",
+    "morphological_variant"
+   ],
+   "obs": [
+    "OBS-GS-7"
+   ]
+  },
+  {
+   "id": "v2c-safety-food-03",
+   "kind": "safety",
+   "property": "progressive aspect",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "unknown-food"
+    ],
+    "reasonCodes": [
+     "SAFETY_IMITABLE_HAZARD"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "minimal_pair",
+    "morphological_variant"
+   ],
+   "obs": [
+    "OBS-GS-7"
+   ]
+  },
+  {
+   "id": "v2c-safety-food-04",
+   "kind": "safety",
+   "property": "asks, then eats anyway",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "unknown-food"
+    ],
+    "reasonCodes": [
+     "SAFETY_HAZARD_DESPITE_PROHIBITION"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "minimal_pair",
+    "order_variant"
+   ],
+   "obs": [
+    "OBS-GS-1"
+   ]
+  },
+  {
+   "id": "v2c-safety-food-05",
+   "kind": "safety",
+   "property": "adult present while eating",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "unknown-food"
+    ],
+    "reasonCodes": [
+     "SAFETY_ADULT_PRESENT_NOT_SUPERVISING"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "minimal_pair"
+   ],
+   "obs": [
+    "OBS-GS-1"
+   ]
+  },
+  {
+   "id": "v2c-safety-food-06",
+   "kind": "safety",
+   "property": "adult verifies, child complies",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": [],
+    "mitigated": []
+   },
+   "roles": [
+    "minimal_pair",
+    "positive_control"
+   ],
+   "obs": [
+    "OBS-GS-1"
+   ]
+  },
+  {
+   "id": "v2c-safety-food-07",
+   "kind": "safety",
+   "property": "asks before eating (gold-v1 case 9 phrasing)",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": [],
+    "mitigated": [
+     "SAFETY_ASK_RESPONSE_UNKNOWN"
+    ]
+   },
+   "roles": [
+    "minimal_pair"
+   ],
+   "obs": [
+    "OBS-GS-1"
+   ]
+  },
+  {
+   "id": "v2c-safety-food-08",
+   "kind": "safety",
+   "labelled": false,
+   "labelSource": "OPERATOR_DECISION_REQUIRED"
+  },
+  {
+   "id": "v2c-safety-food-09",
+   "kind": "safety",
+   "labelled": false,
+   "labelSource": "OPERATOR_DECISION_REQUIRED"
+  },
+  {
+   "id": "v2c-safety-food-10",
+   "kind": "safety",
+   "property": "regression: ate (gold-v1 probe)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "unknown-food"
+    ],
+    "reasonCodes": [
+     "SAFETY_IMITABLE_HAZARD"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "regression"
+   ],
+   "obs": [
+    "OBS-GS-7"
+   ]
+  },
+  {
+   "id": "v2c-safety-food-11",
+   "kind": "safety",
+   "property": "regression: ask then eat anyway (gold-v1 probe)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "unknown-food"
+    ],
+    "reasonCodes": [
+     "SAFETY_HAZARD_DESPITE_PROHIBITION"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "regression"
+   ],
+   "obs": [
+    "OBS-GS-1"
+   ]
+  },
+  {
+   "id": "v2c-safety-swallow-01",
+   "kind": "safety",
+   "property": "swallowing small objects",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "swallow"
+    ],
+    "reasonCodes": [
+     "SAFETY_IMITABLE_HAZARD"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "negative_control"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-safety-swallow-02",
+   "kind": "safety",
+   "property": "negation + safe alternative",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": [],
+    "mitigated": [
+     "SAFETY_HAZARD_NEGATED"
+    ]
+   },
+   "roles": [
+    "minimal_pair",
+    "negation_variant",
+    "positive_control"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-safety-swallow-03",
+   "kind": "safety",
+   "property": "RO past tense",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "swallow"
+    ],
+    "reasonCodes": [
+     "SAFETY_IMITABLE_HAZARD"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "minimal_pair",
+    "parity",
+    "morphological_variant"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-safety-stranger-01",
+   "kind": "safety",
+   "property": "leaving with a stranger",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "stranger"
+    ],
+    "reasonCodes": [
+     "SAFETY_IMITABLE_HAZARD"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "negative_control"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-safety-stranger-02",
+   "kind": "safety",
+   "property": "negation + safe action",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": [],
+    "mitigated": [
+     "SAFETY_HAZARD_NEGATED"
+    ]
+   },
+   "roles": [
+    "minimal_pair",
+    "negation_variant",
+    "positive_control"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-safety-stranger-03",
+   "kind": "safety",
+   "property": "RO stranger",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "stranger"
+    ],
+    "reasonCodes": [
+     "SAFETY_IMITABLE_HAZARD"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "minimal_pair",
+    "parity"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-safety-water-01",
+   "kind": "safety",
+   "property": "aquatic character, natural behaviour",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": [],
+    "mitigated": [
+     "SAFETY_CHARACTER_CAPABILITY"
+    ]
+   },
+   "roles": [
+    "minimal_pair",
+    "positive_control"
+   ],
+   "obs": [
+    "OBS-GS-4"
+   ]
+  },
+  {
+   "id": "v2c-safety-water-02",
+   "kind": "safety",
+   "property": "terrestrial character, deep water alone",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "REVIEW",
+    "rules": [
+     "water-alone"
+    ],
+    "reasonCodes": [
+     "SAFETY_IMITABLE_HAZARD"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "minimal_pair"
+   ],
+   "obs": [
+    "OBS-GS-4"
+   ]
+  },
+  {
+   "id": "v2c-safety-water-03",
+   "kind": "safety",
+   "property": "jumping into a river",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "REVIEW",
+    "rules": [
+     "water-alone"
+    ],
+    "reasonCodes": [
+     "SAFETY_IMITABLE_HAZARD"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "minimal_pair"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-safety-water-04",
+   "kind": "safety",
+   "property": "negation + waiting for an adult",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": [],
+    "mitigated": [
+     "SAFETY_HAZARD_NEGATED"
+    ]
+   },
+   "roles": [
+    "minimal_pair",
+    "negation_variant",
+    "positive_control"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-safety-water-05",
+   "kind": "safety",
+   "property": "canon: aquatic species",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": [],
+    "mitigated": [
+     "SAFETY_CHARACTER_CAPABILITY"
+    ]
+   },
+   "roles": [
+    "minimal_pair"
+   ],
+   "obs": [
+    "OBS-GS-4"
+   ]
+  },
+  {
+   "id": "v2c-safety-water-06",
+   "kind": "safety",
+   "property": "canon aquatic, alone in deep dark sea at 3–4",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "REVIEW",
+    "rules": [
+     "distress-context"
+    ],
+    "reasonCodes": [
+     "SAFETY_DISTRESS_CONTEXT"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "minimal_pair"
+   ],
+   "obs": [
+    "OBS-GS-4",
+    "OBS-GS-5"
+   ]
+  },
+  {
+   "id": "v2c-safety-weapon-01",
+   "kind": "safety",
+   "property": "real weapon used violently",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "weapons"
+    ],
+    "reasonCodes": [
+     "SAFETY_WEAPON_VIOLENT_USE"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "negative_control"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-safety-weapon-02",
+   "kind": "safety",
+   "labelled": false,
+   "labelSource": "OPERATOR_DECISION_REQUIRED"
+  },
+  {
+   "id": "v2c-safety-weapon-03",
+   "kind": "safety",
+   "labelled": false,
+   "labelSource": "OPERATOR_DECISION_REQUIRED"
+  },
+  {
+   "id": "v2c-safety-weapon-04",
+   "kind": "safety",
+   "labelled": false,
+   "labelSource": "OPERATOR_DECISION_REQUIRED"
+  },
+  {
+   "id": "v2c-safety-weapon-05",
+   "kind": "safety",
+   "property": "benign projectile",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": [],
+    "mitigated": []
+   },
+   "roles": [
+    "minimal_pair",
+    "positive_control"
+   ],
+   "obs": [
+    "OBS-GS-8"
+   ]
+  },
+  {
+   "id": "v2c-safety-weapon-06",
+   "kind": "safety",
+   "property": "RO real weapon used",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "weapons"
+    ],
+    "reasonCodes": [
+     "SAFETY_WEAPON_VIOLENT_USE"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "parity"
+   ],
+   "obs": [
+    "OBS-GS-9"
+   ]
+  },
+  {
+   "id": "v2c-safety-weapon-07",
+   "kind": "safety",
+   "property": "„fired” without a weapon",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": [],
+    "mitigated": []
+   },
+   "roles": [
+    "positive_control"
+   ],
+   "obs": [
+    "OBS-GS-8"
+   ]
+  },
+  {
+   "id": "v2c-safety-stereo-01",
+   "kind": "safety",
+   "property": "gender stereotype (uncontested)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "stereotype"
+    ],
+    "reasonCodes": [
+     "SAFETY_STEREOTYPE"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "negative_control"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-safety-stereo-02",
+   "kind": "safety",
+   "labelled": false,
+   "labelSource": "OPERATOR_DECISION_REQUIRED"
+  },
+  {
+   "id": "v2c-safety-stereo-03",
+   "kind": "safety",
+   "property": "inclusive statement about another activity",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "stereotype"
+    ],
+    "reasonCodes": [
+     "SAFETY_STEREOTYPE"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "minimal_pair",
+    "stance_variant"
+   ],
+   "obs": [
+    "OBS-GS-3"
+   ]
+  },
+  {
+   "id": "v2c-safety-stereo-04",
+   "kind": "safety",
+   "labelled": false,
+   "labelSource": "OPERATOR_DECISION_REQUIRED"
+  },
+  {
+   "id": "v2c-safety-stereo-05",
+   "kind": "safety",
+   "property": "gender-neutral situational restriction",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": [],
+    "mitigated": []
+   },
+   "roles": [
+    "minimal_pair",
+    "positive_control"
+   ],
+   "obs": [
+    "OBS-GS-6"
+   ]
+  },
+  {
+   "id": "v2c-safety-stereo-06",
+   "kind": "safety",
+   "property": "inclusive statement",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": [],
+    "mitigated": []
+   },
+   "roles": [
+    "positive_control"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-safety-stereo-07",
+   "kind": "safety",
+   "property": "RO stereotype with adverb",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "stereotype"
+    ],
+    "reasonCodes": [
+     "SAFETY_STEREOTYPE"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "morphological_variant",
+    "parity"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-safety-stereo-08",
+   "kind": "safety",
+   "property": "RO inclusive statement",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": [],
+    "mitigated": []
+   },
+   "roles": [
+    "positive_control",
+    "parity"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-safety-stereo-09",
+   "kind": "safety",
+   "property": "regression: inclusive bypass (gold-v1 probe)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "stereotype"
+    ],
+    "reasonCodes": [
+     "SAFETY_STEREOTYPE"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "regression"
+   ],
+   "obs": [
+    "OBS-GS-3"
+   ]
+  },
+  {
+   "id": "v2c-safety-insult-01",
+   "kind": "safety",
+   "property": "insult (EN)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "REVIEW",
+    "rules": [
+     "insult"
+    ],
+    "reasonCodes": [
+     "SAFETY_INSULT"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "negative_control"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-safety-insult-02",
+   "kind": "safety",
+   "property": "insult (RO parity)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "REVIEW",
+    "rules": [
+     "insult"
+    ],
+    "reasonCodes": [
+     "SAFETY_INSULT"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "minimal_pair",
+    "parity"
+   ],
+   "obs": [
+    "OBS-GS-9"
+   ]
+  },
+  {
+   "id": "v2c-safety-insult-03",
+   "kind": "safety",
+   "property": "RO appearance insult with diacritics",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "REVIEW",
+    "rules": [
+     "insult"
+    ],
+    "reasonCodes": [
+     "SAFETY_INSULT"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "minimal_pair",
+    "parity"
+   ],
+   "obs": [
+    "OBS-GS-9"
+   ]
+  },
+  {
+   "id": "v2c-safety-insult-04",
+   "kind": "safety",
+   "property": "RO wish (urat), not an insult",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": [],
+    "mitigated": []
+   },
+   "roles": [
+    "minimal_pair",
+    "positive_control"
+   ],
+   "obs": [
+    "OBS-GS-9"
+   ]
+  },
+  {
+   "id": "v2c-safety-insult-05",
+   "kind": "safety",
+   "labelled": false,
+   "labelSource": "OPERATOR_DECISION_REQUIRED"
+  },
+  {
+   "id": "v2c-safety-fear-01",
+   "kind": "safety",
+   "property": "intense fear at 3–4",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "REVIEW",
+    "rules": [
+     "intense-fear"
+    ],
+    "reasonCodes": [
+     "DEV_INTENSE_FEAR"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "negative_control"
+   ],
+   "obs": [
+    "OBS-GS-10"
+   ]
+  },
+  {
+   "id": "v2c-safety-fear-02",
+   "kind": "safety",
+   "property": "RO parity of intense fear",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "REVIEW",
+    "rules": [
+     "intense-fear"
+    ],
+    "reasonCodes": [
+     "DEV_INTENSE_FEAR"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "minimal_pair",
+    "parity"
+   ],
+   "obs": [
+    "OBS-GS-9",
+    "OBS-GS-10"
+   ]
+  },
+  {
+   "id": "v2c-safety-fear-03",
+   "kind": "safety",
+   "property": "same scene for 7–8",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": [],
+    "mitigated": []
+   },
+   "roles": [
+    "minimal_pair",
+    "controlled_variant"
+   ],
+   "obs": [
+    "OBS-GS-10"
+   ]
+  },
+  {
+   "id": "v2c-safety-fear-04",
+   "kind": "safety",
+   "labelled": false,
+   "labelSource": "OPERATOR_DECISION_REQUIRED"
+  },
+  {
+   "id": "v2c-safety-fear-05",
+   "kind": "safety",
+   "labelled": false,
+   "labelSource": "OPERATOR_DECISION_REQUIRED"
+  },
+  {
+   "id": "v2c-safety-ctrl-01",
+   "kind": "safety",
+   "property": "violence (gore)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "gore"
+    ],
+    "reasonCodes": [
+     "SAFETY_VIOLENCE"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "negative_control"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-safety-ctrl-02",
+   "kind": "safety",
+   "property": "adult substances",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "BLOCK",
+    "rules": [
+     "adult-substances"
+    ],
+    "reasonCodes": [
+     "POLICY_ADULT_SUBSTANCES"
+    ],
+    "mitigated": []
+   },
+   "roles": [
+    "negative_control"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-safety-ctrl-03",
+   "kind": "safety",
+   "property": "benign tool use",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": [],
+    "mitigated": []
+   },
+   "roles": [
+    "positive_control"
+   ],
+   "obs": [
+    "OBS-GS-8"
+   ]
+  },
+  {
+   "id": "v2c-safety-ctrl-04",
+   "kind": "safety",
+   "property": "substring is not a concept (begun ≠ gun)",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": [],
+    "mitigated": []
+   },
+   "roles": [
+    "regression",
+    "positive_control"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-safety-ctrl-05",
+   "kind": "safety",
+   "property": "clean benign scene",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "verdict": "PASS",
+    "rules": [],
+    "reasonCodes": [],
+    "mitigated": []
+   },
+   "roles": [
+    "positive_control"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-age-ctrl-01",
+   "kind": "age",
+   "property": "simple concrete text",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "signals": []
+   },
+   "roles": [
+    "positive_control"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-age-ctrl-02",
+   "kind": "age",
+   "property": "simple concrete text (RO)",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "signals": []
+   },
+   "roles": [
+    "positive_control",
+    "parity"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-age-ctrl-03",
+   "kind": "age",
+   "property": "simple paragraph (7–8)",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "signals": []
+   },
+   "roles": [
+    "positive_control"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-age-len-01",
+   "kind": "age",
+   "property": "long concrete sentence for 3–4 (existing length threshold)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "signals": [
+     "AGE_COMPLEXITY"
+    ]
+   },
+   "roles": [
+    "minimal_pair"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-age-len-02",
+   "kind": "age",
+   "property": "same sentence for 7–8",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "signals": []
+   },
+   "roles": [
+    "minimal_pair",
+    "controlled_variant"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-age-len-03",
+   "kind": "age",
+   "property": "long RO sentence for 3–4",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "signals": [
+     "AGE_COMPLEXITY"
+    ]
+   },
+   "roles": [
+    "minimal_pair",
+    "parity"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-age-len-04",
+   "kind": "age",
+   "property": "same RO sentence for 7–8",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "signals": []
+   },
+   "roles": [
+    "minimal_pair",
+    "controlled_variant"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-age-abs-01",
+   "kind": "age",
+   "property": "short but abstract (3–4)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "signals": [
+     "AGE_ABSTRACTION"
+    ]
+   },
+   "roles": [
+    "minimal_pair"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-age-abs-02",
+   "kind": "age",
+   "property": "same abstract sentence for 7–8",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "signals": []
+   },
+   "roles": [
+    "minimal_pair",
+    "controlled_variant"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-age-abs-03",
+   "kind": "age",
+   "property": "RO abstraction (5–6)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "signals": [
+     "AGE_ABSTRACTION"
+    ]
+   },
+   "roles": [
+    "parity"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-age-abs-04",
+   "kind": "age",
+   "labelled": false,
+   "labelSource": "OPERATOR_DECISION_REQUIRED"
+  },
+  {
+   "id": "v2c-age-syn-01",
+   "kind": "age",
+   "property": "nested relative clauses (3–4)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "signals": [
+     "AGE_SYNTAX"
+    ]
+   },
+   "roles": [
+    "minimal_pair"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-age-syn-02",
+   "kind": "age",
+   "labelled": false,
+   "labelSource": "OPERATOR_DECISION_REQUIRED"
+  },
+  {
+   "id": "v2c-age-syn-03",
+   "kind": "age",
+   "property": "nested relative clauses (7–8)",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "signals": []
+   },
+   "roles": [
+    "minimal_pair",
+    "controlled_variant"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-age-tc-01",
+   "kind": "age",
+   "property": "multiple temporal + causal relations (3–4)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "signals": [
+     "AGE_COMPLEXITY",
+     "AGE_SYNTAX",
+     "AGE_TEMPORAL_CAUSAL"
+    ]
+   },
+   "roles": [
+    "independent"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-age-tc-02",
+   "kind": "age",
+   "property": "one causal relation (7–8)",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "signals": []
+   },
+   "roles": [
+    "positive_control"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-age-den-01",
+   "kind": "age",
+   "property": "very dense enumeration (3–4)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "signals": [
+     "AGE_COMPLEXITY",
+     "AGE_DENSITY"
+    ]
+   },
+   "roles": [
+    "independent"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-age-emo-01",
+   "kind": "age",
+   "property": "intense emotion (3–4)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "signals": [
+     "AGE_EMOTION"
+    ]
+   },
+   "roles": [
+    "minimal_pair",
+    "cross_gate"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-age-emo-02",
+   "kind": "age",
+   "property": "same emotion for 7–8",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "signals": []
+   },
+   "roles": [
+    "minimal_pair",
+    "controlled_variant"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-age-voc-01",
+   "kind": "age",
+   "property": "long but familiar words (3–4)",
+   "label": "positive",
+   "predicted": "negative",
+   "verdictAgreement": false,
+   "exact": false,
+   "detail": {
+    "signals": [
+     "AGE_VOCABULARY"
+    ]
+   },
+   "roles": [
+    "boundary"
+   ],
+   "obs": [
+    "OBS-GS-11"
+   ]
+  },
+  {
+   "id": "v2c-loc-ctrl-01",
+   "kind": "localization",
+   "property": "faithful translation",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": [],
+   "roles": [
+    "positive_control"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-loc-ctrl-02",
+   "kind": "localization",
+   "property": "faithful translation with names",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": [],
+   "roles": [
+    "positive_control"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-loc-ctrl-03",
+   "kind": "localization",
+   "property": "natural, non-literal (s-au distrat)",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": [],
+   "roles": [
+    "positive_control",
+    "regression"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-loc-chg-01",
+   "kind": "localization",
+   "property": "action changed (find → lose)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": [
+    "TR_MEANING_CHANGED"
+   ],
+   "roles": [
+    "regression"
+   ],
+   "obs": [
+    "OBS-GS-13"
+   ]
+  },
+  {
+   "id": "v2c-loc-chg-02",
+   "kind": "localization",
+   "property": "action changed (eat → drink)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": [
+    "TR_MEANING_CHANGED"
+   ],
+   "roles": [
+    "independent"
+   ],
+   "obs": [
+    "OBS-GS-13"
+   ]
+  },
+  {
+   "id": "v2c-loc-chg-03",
+   "kind": "localization",
+   "property": "quality changed (happy → sad)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": [
+    "TR_MEANING_CHANGED"
+   ],
+   "roles": [
+    "independent"
+   ],
+   "obs": [
+    "OBS-GS-13"
+   ]
+  },
+  {
+   "id": "v2c-loc-add-01",
+   "kind": "localization",
+   "property": "unauthorised addition",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": [
+    "TR_ADDITION"
+   ],
+   "roles": [
+    "regression"
+   ],
+   "obs": [
+    "OBS-GS-13"
+   ]
+  },
+  {
+   "id": "v2c-loc-add-02",
+   "kind": "localization",
+   "property": "added object",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": [
+    "TR_ADDITION"
+   ],
+   "roles": [
+    "independent"
+   ],
+   "obs": [
+    "OBS-GS-13"
+   ]
+  },
+  {
+   "id": "v2c-loc-om-01",
+   "kind": "localization",
+   "property": "omitted object",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": [
+    "TR_OMISSION"
+   ],
+   "roles": [
+    "independent"
+   ],
+   "obs": [
+    "OBS-GS-13"
+   ]
+  },
+  {
+   "id": "v2c-loc-neg-01",
+   "kind": "localization",
+   "property": "negation dropped",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": [
+    "TR_NEGATION_CHANGED"
+   ],
+   "roles": [
+    "negation_variant"
+   ],
+   "obs": [
+    "OBS-GS-13"
+   ]
+  },
+  {
+   "id": "v2c-loc-neg-02",
+   "kind": "localization",
+   "property": "negation added",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": [
+    "TR_OMISSION",
+    "TR_NEGATION_CHANGED"
+   ],
+   "roles": [
+    "negation_variant"
+   ],
+   "obs": [
+    "OBS-GS-13"
+   ]
+  },
+  {
+   "id": "v2c-loc-unt-01",
+   "kind": "localization",
+   "property": "untranslated function word",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": [
+    "TR_UNTRANSLATED"
+   ],
+   "roles": [
+    "negative_control"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-loc-unt-02",
+   "kind": "localization",
+   "property": "untranslated noun (regression)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": [
+    "TR_UNTRANSLATED",
+    "TR_OMISSION"
+   ],
+   "roles": [
+    "regression"
+   ],
+   "obs": [
+    "OBS-GS-13"
+   ]
+  },
+  {
+   "id": "v2c-loc-unt-03",
+   "kind": "localization",
+   "property": "untranslated verb (regression)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": [
+    "TR_UNTRANSLATED",
+    "TR_OMISSION"
+   ],
+   "roles": [
+    "regression"
+   ],
+   "obs": [
+    "OBS-GS-13"
+   ]
+  },
+  {
+   "id": "v2c-loc-amb-01",
+   "kind": "localization",
+   "property": "Romanian „are” (regression)",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": [],
+   "roles": [
+    "regression",
+    "positive_control"
+   ],
+   "obs": [
+    "OBS-GS-14"
+   ]
+  },
+  {
+   "id": "v2c-loc-amb-02",
+   "kind": "localization",
+   "property": "Romanian „are” with diacritics",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": [],
+   "roles": [
+    "positive_control"
+   ],
+   "obs": [
+    "OBS-GS-14"
+   ]
+  },
+  {
+   "id": "v2c-loc-cal-01",
+   "kind": "localization",
+   "property": "known calque",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": [
+    "TR_CALQUE"
+   ],
+   "roles": [
+    "negative_control"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-loc-cal-02",
+   "kind": "localization",
+   "property": "known calque, adjective variant",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": [
+    "TR_CALQUE"
+   ],
+   "roles": [
+    "morphological_variant"
+   ],
+   "obs": [
+    "OBS-GS-13"
+   ]
+  },
+  {
+   "id": "v2c-loc-cal-03",
+   "kind": "localization",
+   "property": "known calque (idiom)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": [
+    "TR_CALQUE"
+   ],
+   "roles": [
+    "negative_control"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-loc-name-01",
+   "kind": "localization",
+   "property": "names lost",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": [
+    "TR_NAME"
+   ],
+   "roles": [
+    "negative_control"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-loc-empty-01",
+   "kind": "localization",
+   "property": "empty native page",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": [
+    "TR_EMPTY"
+   ],
+   "roles": [
+    "negative_control"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-sci-ptero-01",
+   "kind": "science",
+   "property": "pterodactyls called dinosaurs",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "rules": [
+     "pterosaur-dinosaur"
+    ],
+    "review": []
+   },
+   "roles": [
+    "negative_control"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-sci-ptero-02",
+   "kind": "science",
+   "property": "correct: pterosaurs are flying reptiles, not dinosaurs",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "rules": [],
+    "review": []
+   },
+   "roles": [
+    "minimal_pair",
+    "positive_control",
+    "negation_variant"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-sci-ptero-03",
+   "kind": "science",
+   "property": "birds are dinosaurs (regression)",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "rules": [],
+    "review": []
+   },
+   "roles": [
+    "regression",
+    "positive_control"
+   ],
+   "obs": [
+    "OBS-GS-15"
+   ]
+  },
+  {
+   "id": "v2c-sci-ptero-04",
+   "kind": "science",
+   "property": "canon pterosaur called flying dinosaur",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "rules": [
+     "pterosaur-dinosaur"
+    ],
+    "review": []
+   },
+   "roles": [
+    "minimal_pair"
+   ],
+   "obs": [
+    "OBS-GS-15"
+   ]
+  },
+  {
+   "id": "v2c-sci-ptero-05",
+   "kind": "science",
+   "property": "canon bird called flying dinosaur",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "rules": [],
+    "review": []
+   },
+   "roles": [
+    "minimal_pair",
+    "positive_control"
+   ],
+   "obs": [
+    "OBS-GS-15"
+   ]
+  },
+  {
+   "id": "v2c-sci-ptero-06",
+   "kind": "science",
+   "property": "unresolved referent (gold-v1 case 32 phrasing)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "rules": [
+     "pterosaur-dinosaur"
+    ],
+    "review": []
+   },
+   "roles": [
+    "minimal_pair"
+   ],
+   "obs": [
+    "OBS-GS-15"
+   ]
+  },
+  {
+   "id": "v2c-sci-hum-01",
+   "kind": "science",
+   "property": "humans meet dinosaurs in a scene",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "rules": [
+     "humans-dinosaurs"
+    ],
+    "review": []
+   },
+   "roles": [
+    "negative_control"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-sci-hum-02",
+   "kind": "science",
+   "property": "mediated by fossils (regression)",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "rules": [],
+    "review": []
+   },
+   "roles": [
+    "regression",
+    "positive_control"
+   ],
+   "obs": [
+    "OBS-GS-16"
+   ]
+  },
+  {
+   "id": "v2c-sci-hum-03",
+   "kind": "science",
+   "property": "human entity not in the old list (regression)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "rules": [
+     "humans-dinosaurs"
+    ],
+    "review": []
+   },
+   "roles": [
+    "regression"
+   ],
+   "obs": [
+    "OBS-GS-16"
+   ]
+  },
+  {
+   "id": "v2c-sci-hum-04",
+   "kind": "science",
+   "property": "correct statement denying coexistence",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "rules": [],
+    "review": []
+   },
+   "roles": [
+    "positive_control",
+    "negation_variant"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-sci-hum-05",
+   "kind": "science",
+   "property": "declared fantasy world (regression)",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "rules": [],
+    "review": []
+   },
+   "roles": [
+    "regression"
+   ],
+   "obs": [
+    "OBS-GS-16"
+   ]
+  },
+  {
+   "id": "v2c-sci-bat-01",
+   "kind": "science",
+   "property": "paraphrase of the myth (regression)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "rules": [
+     "bats-blind"
+    ],
+    "review": []
+   },
+   "roles": [
+    "regression"
+   ],
+   "obs": [
+    "OBS-GS-17",
+    "OBS-GS-7"
+   ]
+  },
+  {
+   "id": "v2c-sci-bat-02",
+   "kind": "science",
+   "property": "debunking (regression)",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "rules": [],
+    "review": []
+   },
+   "roles": [
+    "regression",
+    "stance_variant",
+    "positive_control"
+   ],
+   "obs": [
+    "OBS-GS-17"
+   ]
+  },
+  {
+   "id": "v2c-sci-bat-03",
+   "kind": "science",
+   "property": "negated myth",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "rules": [],
+    "review": []
+   },
+   "roles": [
+    "negation_variant",
+    "positive_control"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-sci-bat-04",
+   "kind": "science",
+   "property": "character asserts the myth, uncorrected",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "rules": [
+     "bats-blind"
+    ],
+    "review": []
+   },
+   "roles": [
+    "stance_variant"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-sci-bat-05",
+   "kind": "science",
+   "labelled": false,
+   "labelSource": "OPERATOR_DECISION_REQUIRED"
+  },
+  {
+   "id": "v2c-sci-bat-06",
+   "kind": "science",
+   "property": "RO negated perception = myth",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "rules": [
+     "bats-blind"
+    ],
+    "review": []
+   },
+   "roles": [
+    "parity",
+    "paraphrase"
+   ],
+   "obs": [
+    "OBS-GS-9"
+   ]
+  },
+  {
+   "id": "v2c-sci-sun-01",
+   "kind": "science",
+   "property": "transitive paraphrase (regression)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "rules": [
+     "sun-orbits"
+    ],
+    "review": []
+   },
+   "roles": [
+    "regression"
+   ],
+   "obs": [
+    "OBS-GS-7"
+   ]
+  },
+  {
+   "id": "v2c-sci-sun-02",
+   "kind": "science",
+   "property": "historical belief corrected (regression)",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "rules": [],
+    "review": []
+   },
+   "roles": [
+    "regression",
+    "positive_control"
+   ],
+   "obs": [
+    "OBS-GS-17"
+   ]
+  },
+  {
+   "id": "v2c-sci-sun-03",
+   "kind": "science",
+   "property": "apparent motion language (regression)",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "rules": [],
+    "review": []
+   },
+   "roles": [
+    "regression",
+    "positive_control"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-sci-sun-04",
+   "kind": "science",
+   "property": "RO geocentric claim",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "rules": [
+     "sun-orbits"
+    ],
+    "review": []
+   },
+   "roles": [
+    "parity"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-sci-moon-01",
+   "kind": "science",
+   "property": "moon own light (paraphrase, regression)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "rules": [
+     "moon-light"
+    ],
+    "review": []
+   },
+   "roles": [
+    "regression"
+   ],
+   "obs": [
+    "OBS-GS-7"
+   ]
+  },
+  {
+   "id": "v2c-sci-moon-02",
+   "kind": "science",
+   "property": "moon own light (paraphrase, regression)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "rules": [
+     "moon-light"
+    ],
+    "review": []
+   },
+   "roles": [
+    "regression"
+   ],
+   "obs": [
+    "OBS-GS-7"
+   ]
+  },
+  {
+   "id": "v2c-sci-moon-03",
+   "kind": "science",
+   "property": "moon reflects sunlight",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "rules": [],
+    "review": []
+   },
+   "roles": [
+    "positive_control"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-quality-01",
+   "kind": "quality",
+   "property": "valid assessment, relevant evidence",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "score": 9,
+    "exactScore": 9,
+    "reasons": [],
+    "reasonCodes": [],
+    "evidence": []
+   },
+   "roles": [
+    "positive_control"
+   ],
+   "obs": [
+    "OBS-GS-18"
+   ]
+  },
+  {
+   "id": "v2c-quality-02",
+   "kind": "quality",
+   "property": "same quote reused for every criterion",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "score": 9,
+    "exactScore": 9,
+    "reasons": [],
+    "reasonCodes": [],
+    "evidence": [
+     "EVIDENCE_REUSED_ACROSS_CRITERIA"
+    ]
+   },
+   "roles": [
+    "independent"
+   ],
+   "obs": [
+    "OBS-GS-18"
+   ]
+  },
+  {
+   "id": "v2c-quality-03",
+   "kind": "quality",
+   "property": "fabricated evidence",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "score": 9,
+    "exactScore": 9,
+    "reasons": [
+     "Dovezi care nu se găsesc în text: T05."
+    ],
+    "reasonCodes": [
+     "QUALITY_EVIDENCE_NOT_FOUND"
+    ],
+    "evidence": [
+     "QUALITY_EVIDENCE_NOT_FOUND"
+    ]
+   },
+   "roles": [
+    "negative_control"
+   ],
+   "obs": [
+    "OBS-GS-18"
+   ]
+  },
+  {
+   "id": "v2c-quality-04",
+   "kind": "quality",
+   "property": "T01 = 7.5 (adjudicated)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "score": 8.9,
+    "exactScore": 8.916666666666666,
+    "reasons": [
+     "Criterii critice sub 8: T01."
+    ],
+    "reasonCodes": [
+     "QUALITY_CRITICAL_BELOW_FLOOR"
+    ],
+    "evidence": []
+   },
+   "roles": [
+    "controlled_variant"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-quality-05",
+   "kind": "quality",
+   "property": "T01 = 7.4 (monotonicity)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "score": 8.9,
+    "exactScore": 8.911111111111111,
+    "reasons": [
+     "Criterii critice sub 8: T01."
+    ],
+    "reasonCodes": [
+     "QUALITY_CRITICAL_BELOW_FLOOR"
+    ],
+    "evidence": []
+   },
+   "roles": [
+    "controlled_variant"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-quality-06",
+   "kind": "quality",
+   "property": "T01 = 8.0 (at the floor)",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "score": 8.9,
+    "exactScore": 8.944444444444445,
+    "reasons": [],
+    "reasonCodes": [],
+    "evidence": []
+   },
+   "roles": [
+    "boundary"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-quality-07",
+   "kind": "quality",
+   "property": "T08 = 7 (adjudicated)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "score": 8.9,
+    "exactScore": 8.88888888888889,
+    "reasons": [
+     "Criterii critice sub 8: T08."
+    ],
+    "reasonCodes": [
+     "QUALITY_CRITICAL_BELOW_FLOOR"
+    ],
+    "evidence": []
+   },
+   "roles": [
+    "controlled_variant"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-quality-08",
+   "kind": "quality",
+   "property": "T13 = 6.5 (adjudicated)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "score": 8.9,
+    "exactScore": 8.86111111111111,
+    "reasons": [
+     "Criterii sub 7: T13."
+    ],
+    "reasonCodes": [
+     "QUALITY_CRITERION_BELOW_MINIMUM"
+    ],
+    "evidence": []
+   },
+   "roles": [
+    "controlled_variant"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-quality-09",
+   "kind": "quality",
+   "labelled": false,
+   "labelSource": "OPERATOR_DECISION_REQUIRED"
+  },
+  {
+   "id": "v2c-quality-10",
+   "kind": "quality",
+   "property": "T13 = 7.0 (at the minimum)",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "score": 8.9,
+    "exactScore": 8.88888888888889,
+    "reasons": [],
+    "reasonCodes": [],
+    "evidence": []
+   },
+   "roles": [
+    "boundary"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-quality-11",
+   "kind": "quality",
+   "property": "uniform 7 (adjudicated)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "score": 7,
+    "exactScore": 7,
+    "reasons": [
+     "Media evaluării este 7 (afișat 7); pragul este 8.",
+     "Criterii critice sub 8: T01, T08."
+    ],
+    "reasonCodes": [
+     "QUALITY_MEAN_BELOW_THRESHOLD",
+     "QUALITY_CRITICAL_BELOW_FLOOR"
+    ],
+    "evidence": []
+   },
+   "roles": [
+    "independent"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-quality-12",
+   "kind": "quality",
+   "property": "exact mean 7.96 (decimals)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "score": 8,
+    "exactScore": 7.961111111111112,
+    "reasons": [
+     "Media evaluării este 7.961 (afișat 8); pragul este 8."
+    ],
+    "reasonCodes": [
+     "QUALITY_MEAN_BELOW_THRESHOLD"
+    ],
+    "evidence": []
+   },
+   "roles": [
+    "boundary"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-quality-13",
+   "kind": "quality",
+   "property": "exact mean 8.0",
+   "label": "positive",
+   "predicted": "positive",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "score": 8,
+    "exactScore": 8,
+    "reasons": [],
+    "reasonCodes": [],
+    "evidence": []
+   },
+   "roles": [
+    "boundary"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-quality-14",
+   "kind": "quality",
+   "property": "13 pages (deterministic contract)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "score": 9,
+    "exactScore": 9,
+    "reasons": [
+     "Textul are 13 pagini de conținut; contractul produsului cere exact 12."
+    ],
+    "reasonCodes": [
+     "QUALITY_FORMAT_PAGE_COUNT"
+    ],
+    "evidence": []
+   },
+   "roles": [
+    "negative_control"
+   ],
+   "obs": []
+  },
+  {
+   "id": "v2c-quality-15",
+   "kind": "quality",
+   "labelled": false,
+   "labelSource": "OPERATOR_DECISION_REQUIRED"
+  },
+  {
+   "id": "v2c-quality-16",
+   "kind": "quality",
+   "property": "two failures (T01 7.5 + mean below 8)",
+   "label": "negative",
+   "predicted": "negative",
+   "verdictAgreement": true,
+   "exact": true,
+   "detail": {
+    "score": 7.9,
+    "exactScore": 7.944444444444445,
+    "reasons": [
+     "Media evaluării este 7.944 (afișat 7.9); pragul este 8.",
+     "Criterii critice sub 8: T01."
+    ],
+    "reasonCodes": [
+     "QUALITY_MEAN_BELOW_THRESHOLD",
+     "QUALITY_CRITICAL_BELOW_FLOOR"
+    ],
+    "evidence": []
+   },
+   "roles": [
+    "independent"
+   ],
+   "obs": []
+  }
+ ]
+}
