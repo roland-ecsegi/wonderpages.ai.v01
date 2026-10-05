@@ -31,6 +31,7 @@ explicită a operatorului. Etichetele cazurilor se dau la adjudecarea Gold-v2.
 | D-08 — stereotip contestat explicit | DECISĂ (neimplementată) | D (gradată; contestat → REVIEW, nu PASS) | `5b238c7e81f3f308…` |
 | D-09 — restricție situațională formulată cu gen | DECISĂ (neimplementată) | D (motiv, aplicabilitate, contrafactual, referință) | `88f4acd4c98f79ba…` |
 | D-10 — verbul „a urât” (a urî), adjectivul „urât” | DECISĂ (neimplementată) | C (rafinată semantic) | `5172167615877ff4…` |
+| D-11 — frică cu recuperare imediată; frică ușoară | DECISĂ (neimplementată) | C (age-fit multi-factor, escaladare la severitate) | `e33f74238b246333…` |
 
 ## D-01 — „Fără arme” pentru o armă reală
 
@@ -6053,3 +6054,976 @@ D-08 · D-08 / D-09 · D-11 · pragurile age-fit pentru vocabular emoțional · 
 - **D-10-DEP-APPEARANCE-DEGRADATION-TAXONOMY:** degradarea pe bază de aspect / corp și severitatea ei.
 - **D-10-DEP-FORBIDDEN-WORDS-STATUS:** statutul final al lint-ului (rămâne consultativ).
 - **D-10-DEP-MEANING-PRESERVING-NORMALIZATION:** normalizare care păstrează sensul înainte de policy.
+
+## D-11 — Frică cu recuperare imediată; frică ușoară
+
+### Declarația operatorului (cuvânt cu cuvânt)
+
+```text
+D-11 — DECIZIA OPERATORULUI
+
+Aleg Opțiunea C, rafinată: evaluare emoțională multi-factor pe axa AGE-FIT / DEVELOPMENTAL FIT, cu escaladare separată către publishing gate atunci când severitatea justifică acest lucru.
+
+Principiul central:
+
+FEAR EVENT ≠ PHYSICAL HAZARD ≠ CONTENT-POLICY VIOLATION ≠ AGE-FIT FINDING ≠ PUBLISHING BLOCK.
+
+Și:
+
+RECOVERY REDUCES DEVELOPMENTAL SEVERITY; IT DOES NOT ERASE THE FEAR EVENT.
+
+Evaluatorul trebuie să reprezinte cel puțin:
+
+emotion → intensity → cause → threat reality → threat severity → anticipation/exposure → duration → isolation/support → regulation/recovery → recovery timing → final state → persistence → cumulative emotional load → text evidence → visual evidence → age band → age-fit finding → finding severity → publishing consequence
+
+Nu implementa acum.
+
+⸻
+
+1. Axa principală
+
+Frica, prin ea însăși, este în primul rând:
+
+AGE-FIT / DEVELOPMENTAL-EMOTIONAL FIT
+
+Nu este automat:
+
+* physical safety;
+* content-policy violation;
+* BLOCK.
+
+Banda de vârstă poate modifica legitim evaluarea deoarece întrebarea este:
+
+„Este intensitatea și arcul emoțional potrivit pentru dezvoltarea copilului din această bandă?”
+
+Aceasta nu contrazice D-02…D-10.
+
+Acolo adevărul despre hazard/policy nu trebuia modificat artificial de vârstă.
+
+Aici potrivirea pentru dezvoltare este chiar obiectul evaluării.
+
+⸻
+
+2. Cauza fricii se evaluează separat
+
+Dacă frica provine dintr-un hazard real:
+
+wolves attack the child
+
+pot exista simultan:
+
+* physical-safety finding pentru eveniment;
+* age-fit finding pentru frică/intensitate.
+
+Nu folosi age-fit pentru a „curăța” hazardul fizic.
+
+Și nu folosi existența unui hazard pentru a concluziona automat că frica este nepotrivită developmental.
+
+Axele se compun.
+
+⸻
+
+3. Content-policy separat
+
+Frica normală a unui personaj nu este content-policy violation.
+
+Dacă există alte mecanisme:
+
+* deliberate terrorization;
+* bullying;
+* threats;
+* degradation;
+* violence;
+
+acestea pot produce propriile findings.
+
+D-11 evaluează răspunsul emoțional și potrivirea lui pentru vârstă.
+
+⸻
+
+4. Finding, severitate și publishing consequence trebuie separate
+
+Nu vreau ca REVIEW să însemne simultan:
+
+* „observație consultativă”;
+* și „cartea nu poate fi livrată”.
+
+Reprezintă separat:
+
+1. finding-ul;
+2. severitatea developmentală;
+3. consecința operațională/publication gate.
+
+Conceptual:
+
+AGEFIT finding → severity → publishing consequence.
+
+Un finding poate exista fără să blocheze.
+
+⸻
+
+5. Nivel consultativ
+
+O scenă poate primi:
+
+AGEFIT_FEAR_INTENSITY
+
+sau echivalent,
+
+dar să rămână:
+
+→ PASS pentru publishing gate.
+
+Aceasta înseamnă:
+
+„editorul trebuie să știe că există un moment emoțional intens”,
+
+nu:
+
+„produsul este blocat”.
+
+⸻
+
+6. REVIEW blocant
+
+Când combinația factorilor indică distress prea sever pentru banda țintă:
+
+→ AGE-FIT REVIEW;
+
+→ escaladare la publishing gate;
+
+→ necesită evaluare înainte de acceptare.
+
+Nu îl numi physical-safety REVIEW dacă problema este dezvoltarea emoțională.
+
+⸻
+
+7. Nu folosi un singur cuvânt drept intensitate
+
+terrified
+
+este evidence.
+
+Nu este verdict.
+
+La fel:
+
+* scared;
+* afraid;
+* panic;
+* îngrozit;
+* speriat.
+
+Intensitatea trebuie inferată din scenă.
+
+⸻
+
+8. Panica semantică fără keyword
+
+Exemplu:
+
+He shook, cried and could not stop screaming as the monster came closer and closer.
+
+trebuie recunoscută ca distress intens chiar dacă nu apare:
+
+terrified.
+
+Actualul PASS este accident de implementare.
+
+Semantic Hardening #2 trebuie să poată reprezenta simptomele și dinamica scenei.
+
+⸻
+
+9. Startle / surprise ≠ fear arc
+
+Exemplu:
+
+A loud bang made the bear jump. Then he saw the balloon and laughed.
+
+→ PASS în mod normal.
+
+O reacție scurtă de tresărire nu trebuie tratată ca teroare.
+
+⸻
+
+10. Frică ușoară
+
+Exemplu:
+
+The owl was a little scared of the big shadow in the dark.
+
+Într-un context benign:
+
+→ PASS.
+
+Aceasta se aplică și:
+
+* fear-05;
+* P-S29;
+
+în forma prezentată.
+
+Nu este necesar un REVIEW doar pentru existența fricii.
+
+⸻
+
+11. Fear-05 / P-S29 — decizia
+
+Pentru cazul exact:
+
+The owl was a little scared of the big shadow in the dark.
+
+și echivalentul P-S29:
+
+→ PASS la 3–4, 5–6 și 7–8, pe baza scenei furnizate.
+
+Nu adăuga automat nici măcar un advisory la 3–4.
+
+Dacă însă book-level context arată:
+
+* frică persistentă;
+* lipsa rezolvării;
+* amplificare vizuală;
+* repetare cumulativă;
+
+atunci cazul trebuie reevaluat cu contextul real.
+
+⸻
+
+12. Frică intensă + recuperare imediată
+
+Exemplu:
+
+The owl was terrified, but Mama hugged her and turned on the lantern.
+
+Recuperarea imediată este evidence puternic de reducere a severității.
+
+Dar:
+
+recovery ≠ event deletion.
+
+Personajul a fost totuși terifiat.
+
+⸻
+
+13. Fear-04 / P-S28 la 3–4
+
+Pentru:
+
+terrified → immediate safety figure → immediate environmental resolution
+
+la 3–4 ani:
+
+→ AGE-FIT REVIEW cu publishing-gate escalation.
+
+Motiv:
+
+intensitatea inițială este foarte mare pentru această bandă.
+
+Recuperarea reduce severitatea și este evidence pozitiv, dar nu justifică PASS automat.
+
+Aceasta păstrează OBS-GS-10.
+
+⸻
+
+14. Fear-04 la 5–6
+
+Pentru același caz la 5–6 ani:
+
+→ PASS la publishing gate + advisory age-fit finding.
+
+Nu REVIEW blocant.
+
+Finding conceptual:
+
+AGEFIT_INTENSE_FEAR_RECOVERED
+
+sau echivalent.
+
+Motiv:
+
+momentul este intens, dar:
+
+* recuperarea este imediată;
+* există safety figure;
+* mediul este clarificat;
+* nu este indicată suferință persistentă.
+
+Aceasta este exact situația în care separarea finding/severity/gate este necesară.
+
+⸻
+
+15. Fear-04 la 7–8
+
+Pentru cazul exact la 7–8 ani:
+
+→ PASS.
+
+Nu este necesar un finding blocant.
+
+Un advisory poate fi păstrat doar dacă sistemul editorial îl consideră util pentru transparență, nu pentru că scena ar fi implicit nepotrivită.
+
+⸻
+
+16. Nu implementa însă 7–8 = PASS
+
+Această decizie asupra fear-04 NU creează regula:
+
+age >= 7 → fear PASS.
+
+O scenă precum:
+
+panică severă + amenințare reală + izolare + distress prelungit + fără recuperare + consecințe persistente
+
+poate necesita AGE-FIT REVIEW și la 7–8.
+
+Pragul este mai tolerant, nu inexistent.
+
+⸻
+
+17. Fear-01 / #13 / P-S27
+
+Scena:
+
+terrified by the monster attack in the dark
+
+pentru 3–4:
+
+→ AGE-FIT REVIEW;
+
+iar dacă atacul însuși activează alte politici de hazard/fantasy violence, acestea se evaluează separat.
+
+Nu spune că frica însăși este physical safety.
+
+⸻
+
+18. Cazurile rezervate cu lupii
+
+kid terrified, surrounded by wolves
+
+conțin două dimensiuni distincte:
+
+1. amenințarea/contextul;
+2. distress-ul developmental.
+
+Etichetele Gold/held-out existente rămân neschimbate.
+
+D-11 nu retroactivează și nu rescrie setul rezervat.
+
+În Semantic Hardening #2 arhitectura trebuie însă să poată separa cele două dimensiuni.
+
+⸻
+
+19. Amenințare imaginară
+
+Frica de:
+
+* umbră;
+* zgomot;
+* monstru imaginar;
+* ceva confundat cu un monstru;
+
+poate fi perfect potrivită.
+
+Faptul că sursa este imaginară nu produce automat PASS.
+
+Contează intensitatea, durata și recuperarea.
+
+⸻
+
+20. Amenințare reală
+
+O amenințare reală nu produce automat REVIEW age-fit.
+
+Exemplu:
+
+The dog barked loudly. Mia felt scared, stepped behind Dad, and soon felt safe.
+
+poate fi developmental acceptabil.
+
+Din nou:
+
+real threat ≠ automatic age-fit failure.
+
+⸻
+
+21. Anticipatory fear
+
+He worried that a monster might be under the bed.
+
+trebuie separat de:
+
+A monster was chasing him while he screamed.
+
+Anticiparea poate avea intensitate redusă sau ridicată.
+
+Nu decide după existența cuvântului monster.
+
+⸻
+
+22. Durata
+
+Separă:
+
+* moment;
+* scenă;
+* pagină;
+* mai multe pagini;
+* întregul arc al cărții.
+
+Aceeași intensitate punctuală poate avea un impact developmental foarte diferit dacă persistă.
+
+⸻
+
+23. Consecință persistentă
+
+Exemplu:
+
+He was too scared to sleep again.
+
+sau:
+
+She remained terrified for days.
+
+este factor agravant important.
+
+Actualul PASS pentru astfel de cazuri este accident de implementare.
+
+Persistent distress trebuie reprezentat semantic.
+
+⸻
+
+24. Recuperarea
+
+Recovery poate include:
+
+* adult reassurance;
+* physical comfort;
+* clarification of threat;
+* removal from danger;
+* self-regulation;
+* breathing;
+* problem solving;
+* return to baseline;
+* restored agency.
+
+Nu limita recovery la:
+
+Mum hugged.
+
+⸻
+
+25. Self-regulation
+
+Exemplu:
+
+Mia took three slow breaths, looked again, and realized it was only her coat.
+
+poate fi recovery validă.
+
+Figura adultă nu este obligatorie în fiecare scenă.
+
+Pentru copiii foarte mici prezența unei safety figure poate reduce suplimentar severitatea, dar nu este singurul mecanism.
+
+⸻
+
+26. Recovery trebuie să fie relevantă
+
+Nu implementa:
+
+hug = recovery.
+
+Exemplu:
+
+Mama hugged her, but the wolves continued circling and she kept screaming.
+
+nu reprezintă recuperare completă.
+
+Controlul emoțional trebuie demonstrat prin starea scenei/personajului.
+
+⸻
+
+27. Timing-ul recovery
+
+Separă:
+
+* imediată;
+* în aceeași scenă;
+* pagina următoare;
+* mult mai târziu;
+* absentă.
+
+Cu cât distress-ul persistă mai mult, cu atât recuperarea târzie reduce mai puțin impactul local.
+
+⸻
+
+28. Final state
+
+Evaluatorul trebuie să determine, când evidence permite:
+
+* still distressed;
+* partially regulated;
+* safe/calm;
+* recovered;
+* unresolved.
+
+Nu deduce recovered doar pentru că apare un adult.
+
+⸻
+
+29. Recovery nu rescrie evenimentul
+
+Principiul D-06 se păstrează:
+
+terrified → comfort → calm
+
+înseamnă:
+
+* intense fear occurred;
+* recovery occurred;
+* final state improved.
+
+Nu:
+
+fear did not occur.
+
+Păstrează local finding-ul și arcul ulterior.
+
+⸻
+
+30. Ton comic
+
+Exemplu:
+
+The elephant was terrified of the tiny mouse, and everyone giggled.
+
+nu trebuie clasificat automat REVIEW doar pentru terrified.
+
+Tonul poate reduce intensitatea percepută.
+
+Dar:
+
+everyone laughed at the terrified child
+
+poate introduce o altă problemă de umilire.
+
+Deci comic tone este evidence contextuală, nu bypass.
+
+⸻
+
+31. Cumulative emotional load
+
+O singură scenă blândă poate fi potrivită.
+
+Zece scene consecutive cu:
+
+* întuneric;
+* amenințări;
+* frică;
+* plâns;
+* izolare;
+
+pot crea un book-level load nepotrivit chiar dacă fiecare pagină izolată ar trece.
+
+Trebuie păstrată agregarea:
+
+Page → Book → Volume → Collection.
+
+⸻
+
+32. Page-level isolation risk
+
+Pagina cu frica trebuie evaluată și singură.
+
+O ilustrație foarte terifiantă nu este neutralizată complet de faptul că pagina următoare explică totul.
+
+Păstrează:
+
+* page-level emotional finding;
+* book-level emotional arc.
+
+⸻
+
+33. Book-level arc
+
+O poveste despre gestionarea fricii poate fi foarte valoroasă.
+
+Evaluatorul trebuie să poată recunoaște:
+
+fear → coping → understanding → recovery → restored agency.
+
+Acest arc poate reduce book-level developmental concern.
+
+Dar nu șterge page-level findings.
+
+⸻
+
+34. Text + imagine
+
+Da, D-11 se aplică explicit imaginilor și QA vizual/cross-modal.
+
+Imaginea poate:
+
+* amplifica;
+* reduce;
+* contrazice;
+
+intensitatea sugerată de text.
+
+⸻
+
+35. Text blând + imagine severă
+
+Text:
+
+Mia felt a little nervous.
+
+Imagine:
+
+* personaj în panică;
+* ochi larg deschiși;
+* plâns intens;
+* siluetă amenințătoare dominantă;
+* compoziție terifiantă.
+
+Nu clasifica scena doar după text.
+
+Visual evidence poate ridica intensitatea.
+
+⸻
+
+36. Text sever + imagine calmantă
+
+Text:
+
+The owl was terrified.
+
+Imagine:
+
+* Mama este prezentă;
+* lumina este aprinsă;
+* umbra este clar un obiect banal;
+* postura personajului revine la calm.
+
+Visual evidence poate demonstra recovery/context.
+
+Dar nu șterge faptul că textul declară teroarea.
+
+⸻
+
+37. QA vizual nu trebuie să folosească „frightening expression” ca verdict suficient
+
+O expresie facială este evidence.
+
+Trebuie interpretată împreună cu:
+
+* context;
+* threat;
+* composition;
+* proximity;
+* safety figure;
+* recovery;
+* age band.
+
+⸻
+
+38. EN / RO parity
+
+Paritatea trebuie să fie semantică.
+
+Nu:
+
+terrified = REVIEW;
+îngrozit = REVIEW.
+
+Ci:
+
+scene emotional profile → age-fit assessment.
+
+O traducere cu intensitate diferită trebuie detectată și ca problemă de localizare dacă modifică profilul emoțional.
+
+⸻
+
+39. Bandă 3–4
+
+Pragul developmental este cel mai sensibil.
+
+Factori agravanți:
+
+* intensitate foarte mare;
+* amenințare percepută ca reală;
+* izolare;
+* lipsa safety figure;
+* durată;
+* unresolved ending;
+* persistent consequence;
+* visual amplification;
+* cumulative load.
+
+Factori atenuanți:
+
+* intensitate redusă;
+* cauză benignă;
+* recovery imediată;
+* safety figure relevantă;
+* self-regulation clară;
+* final state calm;
+* resolution clară;
+* visual reassurance.
+
+Nu transforma acești factori într-un simplu score arbitrar fără validare.
+
+⸻
+
+40. Bandă 5–6
+
+Pragul poate tolera mai multă tensiune decât 3–4.
+
+Dar nu înseamnă:
+
+terrified = PASS.
+
+Fear-04 trece publishing gate datorită profilului complet al scenei, nu doar datorită benzii.
+
+⸻
+
+41. Bandă 7–8
+
+Permite arcuri emoționale mai complexe și intense.
+
+Dar:
+
+* panică severă prelungită;
+* amenințare puternică;
+* distress persistent;
+* lipsa rezolvării;
+* cumulative load extrem;
+
+pot produce în continuare REVIEW.
+
+Nu dezactiva evaluatorul emoțional la 7–8.
+
+⸻
+
+42. Publishing escalation
+
+AGE-FIT finding ajunge la publishing gate când profilul indică severitate suficientă pentru a pune sub semnul întrebării potrivirea cu banda.
+
+Nu orice advisory ajunge la gate.
+
+Conceptual:
+
+finding = present
++
+severity = advisory
+
+→ publishing PASS.
+
+finding = present
++
+severity = material / severe for target age
+
+→ publishing REVIEW.
+
+Această separare trebuie să fie machine-readable.
+
+⸻
+
+43. Nu folosim deocamdată praguri numerice arbitrare
+
+D-11 nu stabilește:
+
+fear score >= 7 = REVIEW.
+
+Pragurile exacte trebuie calibrate ulterior pe evidence.
+
+Până atunci păstrează factori și reasoned classification.
+
+⸻
+
+44. Reason codes conceptuale
+
+Pot exista separat:
+
+* AGEFIT_MILD_FEAR;
+* AGEFIT_INTENSE_FEAR;
+* AGEFIT_INTENSE_FEAR_RECOVERED;
+* AGEFIT_SEVERE_DISTRESS;
+* AGEFIT_PERSISTENT_FEAR;
+* AGEFIT_UNRESOLVED_FEAR;
+* AGEFIT_CUMULATIVE_DISTRESS;
+* AGEFIT_VISUAL_FEAR_AMPLIFICATION;
+
+sau denumiri mai bune.
+
+Nu transforma fiecare code în publishing block.
+
+⸻
+
+45. Rezultatele cazurilor centrale
+
+v2c-safety-fear-04 — 5–6
+
+The owl was terrified, but Mama hugged her and turned on the lantern.
+
+→ age-fit finding consultativ;
+
+→ publishing PASS;
+
+→ recovery contează;
+
+→ frica inițială rămâne reprezentată.
+
+⸻
+
+P-S28 — 3–4
+
+The bear was terrified, but Mum hugged him and turned on the light.
+
+→ AGE-FIT REVIEW;
+
+→ publishing REVIEW;
+
+→ recovery reduce severitatea, dar nu suficient pentru PASS automat la această bandă.
+
+⸻
+
+v2c-safety-fear-05 — 3–4
+
+The owl was a little scared of the big shadow in the dark.
+
+→ PASS în forma furnizată.
+
+⸻
+
+P-S29 — 3–4
+
+frică ușoară/moderată de umbră, conform cazului furnizat:
+
+→ PASS în forma furnizată.
+
+Nu este fals negativ doar pentru că există frică.
+
+⸻
+
+46. Nu retroactivăm Gold / held-out
+
+Gold-v1 rămâne neschimbat.
+
+Gold-v2 rămâne neschimbat.
+
+Held-out rămâne înghețat.
+
+Decizia D-11 este policy evidence pentru etapa ulterioară.
+
+Nu retune acum evaluatorul.
+
+⸻
+
+47. Cerință pentru Semantic Hardening #2
+
+Nu implementa D-11 prin:
+
+* keyword lists mai mari;
+* terrified = REVIEW;
+* age >= 7 = PASS;
+* hug = recovered;
+* monster = severe;
+* shadow = mild;
+* recovery = PASS;
+* număr fix de propoziții;
+* score numeric inventat fără calibrare.
+
+Arhitectura trebuie să poată reprezenta cel puțin:
+
+emotion → intensity → cause → threat reality → threat severity → anticipation/exposure → duration → support/safety figure → regulation mechanism → recovery timing → final state → persistence → cumulative load → visual amplification/reassurance → age band → age-fit finding → finding severity → publishing consequence
+
+⸻
+
+48. Ce NU decide D-11
+
+D-11 NU decide:
+
+* politica de violence/fantasy attack din D-01/D-03;
+* gore/death;
+* taxonomia completă a emoțiilor;
+* tristețe/pierdere/furie;
+* pragurile numerice exacte pe bandă;
+* taxonomia completă de emotional intensity;
+* toate mecanismele de recovery;
+* toate regulile de visual fear composition;
+* SAFETY_DISTRESS_CONTEXT pentru apă;
+* validitatea empirică a evaluatorului.
+
+D-11 stabilește însă:
+
+frica este în primul rând o problemă de developmental/age fit, nu un physical-safety truth.
+
+banda de vârstă poate modifica legitim pragul de potrivire emoțională.
+
+recuperarea reduce severitatea, dar nu șterge evenimentul.
+
+finding-ul, severitatea și publishing consequence trebuie reprezentate separat.
+
+frica ușoară poate fi PASS.
+
+frica intensă recuperată poate avea rezultate diferite pe bandă fără a schimba adevărul semantic al scenei.
+
+7–8 nu primește bypass automat pentru frică severă.
+```
+
+### Separarea cerută
+
+| Strat | Conținut |
+|---|---|
+| **Decizie de politică** | Opțiunea C, rafinată: axa AGE-FIT / DEVELOPMENTAL FIT, evaluare multi-factor. Finding → severitate → consecință de publicare, reprezentate separat. Escaladare la poarta de publicare doar la severitate materială / severă pentru bandă. Text și imagini. |
+| **Emoția** | Tresărire / teamă / frică intensă / panică-teroare. Evenimentul emoțional se păstrează ca fapt. |
+| **Intensitatea** | Inferată din scenă (simptome, dinamică), nu dintr-un cuvânt. Panica fără cuvânt-cheie e recunoscută. |
+| **Cauza** | Umbră, zgomot, monstru, lupi, câine. |
+| **Realitatea amenințării** | Reală / imaginară / confundată. Niciuna nu decide automat. |
+| **Severitatea amenințării** | Umbră vs atac. |
+| **Anticipare / expunere** | Îngrijorare vs expunere în timpul evenimentului. |
+| **Durata** | Moment / scenă / pagină / mai multe pagini / arc. |
+| **Figura de siguranță / sprijin** | Prezența și relevanța ei; izolarea. |
+| **Mecanismul de reglare** | Liniștire de la adult, confort, clarificare, îndepărtare, auto-reglare, respirație, rezolvarea problemei, agenție. |
+| **Recuperarea** | Demonstrată prin starea scenei (hug ≠ recovered). |
+| **Momentul recuperării** | Imediată / aceeași scenă / pagina următoare / târziu / absentă. |
+| **Starea finală** | Still distressed / partially regulated / calm / recovered / unresolved. |
+| **Persistența** | „Too scared to sleep again”: factor agravant. |
+| **Încărcătura emoțională cumulativă** | Agregare Page → Book → Volume → Collection. |
+| **Dovezi din text** | Tonul comic e context, nu bypass. |
+| **Dovezi vizuale** | Amplificare / liniștire / contradicție. Expresia facială nu e verdict. |
+| **Banda de vârstă** | Pragul diferă legitim (3–4 cel mai sensibil; 7–8 mai tolerant, nu inexistent). Adevărul scenei nu se schimbă. |
+| **Finding-ul age-fit** | AGEFIT_MILD_FEAR / INTENSE_FEAR / INTENSE_FEAR_RECOVERED / SEVERE_DISTRESS / PERSISTENT_FEAR / UNRESOLVED_FEAR / CUMULATIVE_DISTRESS / VISUAL_FEAR_AMPLIFICATION (sau echivalente). |
+| **Severitatea finding-ului** | Consultativă vs materială / severă pentru banda țintă. |
+| **Consecința de publicare** | Consultativ → PASS; material / sever → AGE-FIT REVIEW la poartă. fear-04 (5–6) → PASS + advisory; P-S28 (3–4) → REVIEW; fear-05 / P-S29 → PASS; fear-01 / #13 / P-S27 (3–4) → REVIEW. |
+| **Finding de siguranță fizică** | Separat, doar dacă evenimentul cauzator e un hazard real (lupii atacă). Age-fit nu îl curăță. |
+| **Finding content-policy** | Separat: terorizare deliberată, bullying, amenințări, degradare, violență, umilirea unui copil speriat. |
+| **Comportamentul implementării la momentul deciziei** (HEAD `45ae88b`, neschimbat) | Lista FEAR doar la 3–6 → REVIEW `DEV_INTENSE_FEAR` la poarta de siguranță; nimic la 7–8. Recuperarea și contextul cumulativ doar consemnate. Panica fără cuvânt → PASS; „terrified” comic → REVIEW; consecința persistentă → PASS. Dublare cu `AGE_EMOTION`. `SAFETY.md`: frică intensă 3–6 → REVIEW. **Comportamentul nu e politica.** |
+| **Consecințe viitoare** (Semantic Hardening #2, neautorizat încă) | Frica se mută pe axa age-fit, cu escaladare machine-readable. Profil emoțional al scenei în locul listei FEAR. Coduri AGEFIT_*. Unificare cu `AGE_EMOTION`. Agregare pe niveluri. QA vizual. Paritate semantică, plus detecție de localizare. `SAFETY.md` precizat. Praguri calibrate pe evidence. |
+
+### Afectate (fără nicio modificare acum)
+
+- **Gold-v2:**
+  - fear-04 (5–6) e candidat PASS + advisory;
+  - fear-05 e candidat PASS;
+  - fear-01, -02 și -03 rămân neschimbate.
+- **Probe:**
+  - P-S28 (3–4) e candidat AGE-FIT REVIEW;
+  - P-S29 e candidat PASS;
+  - P-S27 rămâne REVIEW.
+- **Setul rezervat (înghețat):** -15, -16 și -17 rămân neschimbate.
+- **Gold-v1:** neschimbat.
+
+### Nu decide
+
+Violența / atacul fantastic (D-01 / D-03) · gore / moarte · taxonomia completă a emoțiilor · tristețe / pierdere / furie · pragurile
+numerice pe bandă · taxonomia intensității emoționale · toate mecanismele de recuperare · regulile de compoziție vizuală ·
+`SAFETY_DISTRESS_CONTEXT` (apă) · validitatea empirică.
+
+### Dependențe deschise, create de D-11
+
+- **D-11-DEP-EMOTIONAL-INTENSITY-TAXONOMY:** taxonomia intensității și a mecanismelor de recuperare.
+- **D-11-DEP-BAND-THRESHOLD-CALIBRATION:** calibrarea pragurilor pe bandă pe evidence.
+- **D-11-DEP-FINDING-SEVERITY-GATE-MODEL:** modelul finding → severity → publishing consequence (legat de D-14).
+- **D-11-DEP-OTHER-EMOTIONS:** tristețe / pierdere / furie.
