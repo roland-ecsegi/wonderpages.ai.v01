@@ -751,3 +751,39 @@ falsă puternică. Direcție pentru v2: **evaluation scope and correction window
 *Ce demonstrează cazul 34:* **the evaluator correctly flags the represented explicit myth formulation „Bats are blind”.** NU: the
 evaluator understands the scientific misconception; NU: understands narrative attribution; NU: understands misconception correction;
 NU: detects paraphrases of the same misconception — pentru ultimele trei, probele executate oferă dovezi contrare.
+
+*Cazul 35 (`science-sea-7-8-English-04`, intrarea 35) — singurul control pozitiv de știință (operatorul, 2026-10-05).* „The moon shone
+over the sea, lit by the sun.”; rezultat executat: pozitiv, nicio regulă; confirmat; acord de verdict DA; acord de raționament
+INCOMPLETE (același standard ca la controalele pozitive 26 și 30). Clasificare: **positive science control**, NU **proof of
+factual-verification capability**. Separarea dovezilor (principiul de la cazul 30): *stimulus property* — afirmația e științific
+corectă (lumina Lunii e lumina Soarelui reflectată; textul nu afirmă lumină proprie); *gold tested expectation* — niciun defect
+științific; *implemented mechanism observed* — niciun tipar din catalog nu s-a potrivit; *observed verdict* — niciun cod / pozitiv;
+*supported claim* — evaluatorul nu produce fals pozitiv pe acest stimul concret; *unsupported claim* — evaluatorul a verificat semantic
+adevărul afirmației. Sondă românească (rezultat executat, nimic mai mult): „Luna strălucea deasupra mării, luminată de soare.” → niciun
+cod — NU dovadă de paritate științifică EN↔RO, de înțelegere factuală în română sau de generalizare între limbi (ar cere perechi
+controlate pozitive și negative în ambele limbi). Fără OBS nouă (OBS-GS-1…17 rămân).
+
+*Extensie OBS-GS-7 (operatorul, la cazul 35, 2026-10-05) — știință: parafrazarea unei concepții greșite.* Tipar cunoscut: „The moon makes
+its own light.” → `moon-light`. Aceeași concepție greșită, altă formulare (sonde, NU cazuri de aur): „The moon shone over the sea with
+its own bright light.” → niciun cod; „The moon glows by itself, like a little sun.” → niciun cod. Dovezi executate că detecția acestei
+concepții nu e robustă la parafrazare: **semantic equivalence ≠ lexical equivalence**; „niciun cod” nu discriminează, pe aceste probe,
+afirmația corectă a cazului 35 de două formulări ale mitului opus. NU se repară prin adăugarea manuală a „own bright light”, „glows by
+itself”, „like a little sun” sau a altor expresii (ar continua problema de acoperire a catalogului). Legătură secundară cu OBS-GS-17:
+înainte de a determina stance-ul unei afirmații, sistemul trebuie să identifice semantic afirmația — dar probele cazului 35 nu au
+vorbitor, corectare sau demontare, deci proprietarul principal rămâne OBS-GS-7.
+
+*Extensie OBS-GS-12 (operatorul, la cazul 35, 2026-10-05) — acoperirea categoriei de știință.* **presence of a rule in the evaluator ≠
+that rule being adequately exercised by the Gold Set.** Pentru `moon-light`, gold-v1 verifică doar că un text corect nu declanșează
+regula; nu verifică true positive-ul regulii, parafraze ale mitului, cazuri-limită, corectare/demontare explicită sau alte formulări
+corecte apropiate semantic — iar probele externe arată că lipsa contează. Distribuție: știința are 5 cazuri — calibrare 4 (3 negative:
+32 `pterosaur-dinosaur`, 33 `humans-dinosaurs`, 34 `bats-blind`; 1 pozitiv: 35), set rezervat 1 negativ (36 `sun-orbits`); un singur
+control pozitiv. Dezechilibrul nu invalidează automat cazurile, dar limitează concluziile despre specificitate, rezistența la fals
+pozitive, comportamentul pe afirmații adevărate și discriminarea la limită. Setul v2 are nevoie de **controlled positive/negative pairs**,
+nu doar de mai multe exemple negative. Direcție (nu se construiește acum), pe concept științific: TRUE CLAIM vs FALSE CLAIM; FALSE CLAIM
+— known wording vs semantic paraphrase; unde e relevant FALSE CLAIM asserted vs mentioned/debunked; plus formulare-limită,
+simplificare potrivită vârstei, echivalente EN/RO controlate — pentru `moon-light`, un test real al conceptului, nu doar al expresiei.
+*Raportarea științei după cazul 35:* 4/4 cazuri brute de calibrare adjudecate (3 negative, 1 pozitiv), toate în acord de verdict cu
+eticheta. Limite demonstrate păstrate: cazul 32 — fals pozitiv taxonomic/contextual (OBS-GS-15); cazul 33 — fals pozitiv relațional +
+fals negativ de acoperire a entităților (OBS-GS-16); cazul 34 — fals pozitiv la demontare/stance + fals negativ la parafrază
+(OBS-GS-17); cazul 35 — două fals negative `moon-light` prin parafrazare (OBS-GS-7). **4/4 calibration Gold agreement ≠ science
+evaluator validated** — aceeași lecție metodologică ca la localizare.
