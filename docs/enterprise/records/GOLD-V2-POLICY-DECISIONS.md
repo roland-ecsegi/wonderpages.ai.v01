@@ -25,6 +25,7 @@ explicită a operatorului. Etichetele cazurilor se dau la adjudecarea Gold-v2.
 | D-02 — arme-jucărie și recuzită | DECISĂ (neimplementată) | D (rafinată semantic) | `83f0aff75d931d97…` |
 | D-03 — arme / mecanisme fantastice ofensive | DECISĂ (neimplementată) | D (rafinată semantic) | `43e64dc8cf3319ec…` |
 | D-04 — întreabă, apoi acționează (răspuns necunoscut) | DECISĂ (neimplementată) | E (rafinată după natura hazardului) | `3d6ddbe51265d182…` |
+| D-05 — supravegherea activă a adultului | DECISĂ (neimplementată) | D (rafinată: mecanism de pericol ↔ mecanism de control) | `bb43f07402307747…` |
 
 ## D-01 — „Fără arme” pentru o armă reală
 
@@ -1425,3 +1426,629 @@ D-05 · D-06 · D-07 · taxonomia completă a hazardurilor · condițiile exacte
 
 - **D-04-DEP-HAZARD-TAXONOMY:** clasificarea A / B / C a fiecărei familii de hazard și condiția de siguranță necesară pentru fiecare.
 - **D-04-DEP-D05:** supravegherea activă, controlul fizic și participarea adultului.
+
+## D-05 — Supravegherea activă a adultului
+
+### Declarația operatorului (cuvânt cu cuvânt)
+
+```text
+D-05 — DECIZIA OPERATORULUI
+
+Aleg Opțiunea D, rafinată semantic, fără a adopta universal nici D1, nici D2.
+
+Principiul central este:
+
+ADULT PRESENT ≠ WATCHING ≠ ACTIVE SUPERVISION ≠ RELEVANT CONTROL ≠ SUFFICIENT CONTROL ≠ SAFE ACTION
+
+Supravegherea nu primește un verdict universal.
+
+Verdictul trebuie determinat prin relația dintre:
+
+hazard → mecanismul pericolului → acțiunea copilului → rolul adultului → mecanismul de control → relevanța controlului → suficiența controlului → expunerea rămasă → consecință
+
+Rezultatul poate fi:
+
+* controlul elimină efectiv hazardul → poate fi PASS;
+* controlul este relevant, dar suficiența rămâne incertă / riscul doar este redus → REVIEW;
+* controlul este irelevant sau insuficient și copilul execută hazardul → verdictul hazardului, inclusiv BLOCK.
+
+Nu implementa acum.
+
+⸻
+
+1. Simplă prezență a adultului
+
+Formulări precum:
+
+* with his dad;
+* cu tata;
+* adultul este în aceeași cameră;
+* adultul se află în apropiere;
+
+NU constituie prin ele însele supraveghere activă.
+
+Dacă copilul execută o acțiune periculoasă:
+
+→ simpla prezență NU atenuează hazardul.
+
+Exemplele existente precum:
+
+Tom plays with matches with his dad.
+
+sau:
+
+Mia eats the strange mushrooms with her grandma.
+
+nu devin PASS prin prezența adultului.
+
+Comportamentul vechi din SAFETY.md conform căruia simplul with an adult poate face scena să treacă trebuie clarificat în Semantic Hardening #2 conform acestei decizii.
+
+⸻
+
+2. Observarea pasivă
+
+Adultul prezent, dar ocupat cu altceva sau doar observând fără control relevant:
+
+→ nu neutralizează hazardul.
+
+Exemplu:
+
+Bo climbs onto the window sill while his mum reads on the sofa.
+
+Adultul există în scenă, dar mecanismul de risc nu este controlat.
+
+Verdictul rămâne verdictul hazardului.
+
+⸻
+
+3. Atenția activă nu este automat control suficient
+
+Formulări precum:
+
+* watches him closely;
+* keeps an eye on her;
+* stays beside him;
+
+arată atenție/supraveghere, dar nu demonstrează automat că mecanismul hazardului este controlat.
+
+Evaluatorul trebuie să întrebe:
+
+Ce anume face adultul pentru a preveni mecanismul concret al vătămării?
+
+Dacă răspunsul nu este demonstrat:
+
+→ nu produce automat PASS.
+
+Poate fi:
+
+* REVIEW, dacă supravegherea este relevantă dar suficiența este neclară;
+* verdictul hazardului, dacă supravegherea nu controlează mecanismul de risc.
+
+⸻
+
+4. Ghidarea verbală
+
+Formulări precum:
+
+Be careful.
+Hold tight.
+Watch what you're doing.
+
+nu constituie automat un control de siguranță suficient.
+
+Instrucțiunea verbală poate fi parte a unui model educațional bun, dar trebuie evaluat dacă ea controlează efectiv hazardul.
+
+Nu implementa:
+
+adult gives safety instruction = PASS.
+
+⸻
+
+5. Controlul activ trebuie să fie relevant pentru mecanismul hazardului
+
+Aceasta este regula esențială.
+
+Evaluatorul trebuie să determine:
+
+hazard mechanism ↔ adult control mechanism
+
+și nu doar să detecteze o expresie de supraveghere.
+
+Exemplu evident:
+
+Leo swallows a coin while his mum holds his hand.
+
+Ținutul de mână NU controlează mecanismul:
+
+small object → ingestion → choking/internal harm.
+
+Prin urmare:
+
+→ BLOCK
+
+dacă acțiunea periculoasă este executată.
+
+La fel:
+
+Mia eats strange mushrooms while Grandma holds her hand.
+
+Ținutul de mână nu rezolvă:
+
+unknown food → toxicity.
+
+Se aplică D-04: identificarea/verificarea relevantă a alimentului ar putea rezolva hazardul, nu simpla supraveghere.
+
+⸻
+
+6. Control relevant ȘI suficient
+
+Dacă adultul controlează efectiv mecanismul hazardului într-un mod demonstrat suficient, activitatea poate deveni:
+
+→ PASS
+
+dar numai dacă textul/imaginea oferă suficiente dovezi că hazardul este efectiv neutralizat în scena reprezentată.
+
+Exemplu conceptual:
+
+adultul execută partea periculoasă a unei activități, iar copilul rămâne într-o poziție sigură.
+
+Dad lights the campfire while Tom watches from a safe distance.
+
+→ candidat PASS.
+
+Motivul NU este:
+
+adult present.
+
+Motivul este:
+
+child is not performing/exposed to the hazardous action + adult controls hazardous component.
+
+⸻
+
+7. Control relevant, dar suficiență incertă
+
+Dacă mecanismul de control este relevant, dar textul nu demonstrează suficient că hazardul a fost neutralizat:
+
+→ REVIEW.
+
+Exemplu:
+
+Bo climbs onto the window sill while his mum holds him tight.
+
+Mama controlează fizic un mecanism relevant — căderea.
+
+Dar copilul este tot reprezentat executând o acțiune imitabilă periculoasă, iar formularea nu demonstrează în mod necesar că riscul a fost eliminat.
+
+Prin urmare:
+
+→ candidat REVIEW.
+
+Acesta este cazul corect pentru v2c-safety-sill-05.
+
+Reason code conceptual:
+
+POLICY_SUPERVISED_HAZARD_CONTROL_UNCERTAIN
+
+sau echivalent semantic.
+
+⸻
+
+8. Chibrituri / foc cu ghidare fizică
+
+Nu adopta o regulă:
+
+adult guides hand = PASS
+
+și nici:
+
+adult guides hand = BLOCK
+
+universal.
+
+Exemplu:
+
+Tom lights a match while Dad guides his hand.
+
+arată un control relevant, dar nu demonstrează automat că riscul de:
+
+* arsură;
+* aprindere accidentală;
+* imitare ulterioară;
+
+este suficient neutralizat.
+
+În această formă:
+
+→ candidat REVIEW.
+
+Dacă adultul execută el partea periculoasă și copilul observă de la distanță sigură:
+
+→ candidat PASS.
+
+Dacă copilul se joacă efectiv cu chibriturile, iar controlul adultului este insuficient/irelevant:
+
+→ BLOCK.
+
+Age-fit poate adăuga separat probleme, în special pentru 3–4 ani.
+
+⸻
+
+9. Supravegherea poate elimina, reduce sau să nu afecteze riscul
+
+WonderPages trebuie să poată reprezenta cel puțin trei rezultate semantice:
+
+Hazard neutralizat
+
+Controlul adultului elimină mecanismul relevant al riscului.
+
+→ poate fi PASS.
+
+Hazard redus, dar nu demonstrat eliminat
+
+Controlul este relevant, însă rămâne risc/ambiguitate.
+
+→ REVIEW.
+
+Hazard neatenuat
+
+Controlul este absent, pasiv, irelevant sau insuficient.
+
+→ verdictul hazardului, inclusiv BLOCK.
+
+Nu transforma aceste trei situații într-un boolean:
+
+supervised = true/false.
+
+⸻
+
+10. Participarea adultului
+
+Separă două situații.
+
+Adultul execută partea periculoasă, copilul nu este expus
+
+Exemplu:
+
+Dad lights the campfire while Tom watches from a safe distance.
+
+→ candidat PASS.
+
+Adultul și copilul execută împreună partea periculoasă
+
+Exemplu:
+
+Dad guides Tom's hand while Tom lights the match.
+
+→ nu este automat PASS.
+
+Trebuie analizată suficiența controlului.
+
+Poate fi REVIEW sau, dacă mecanismul rămâne periculos, verdictul hazardului.
+
+⸻
+
+11. Intervenția înainte ca hazardul să se producă
+
+Dacă adultul previne cu succes acțiunea periculoasă înainte ca copilul să fie expus efectiv:
+
+→ din perspectiva safety, poate fi PASS.
+
+Exemplu:
+
+Bo starts toward the window sill, but Mum stops him and guides him back to the floor before he climbs up.
+
+Aici povestea poate chiar modela comportamentul sigur.
+
+Nu penaliza automat faptul că intenția/începutul unei acțiuni periculoase este prezentat dacă intervenția previne hazardul.
+
+⸻
+
+12. Încercare parțială și intervenție
+
+Dacă personajul a început acțiunea și a existat deja o expunere relevantă la hazard înainte de intervenție:
+
+nu declara automat PASS.
+
+În funcție de cât din hazard s-a produs:
+
+→ REVIEW sau verdictul hazardului.
+
+Exemplu:
+
+Bo is already standing on the window sill when Mum grabs him and lifts him down.
+
+Copilul a fost deja expus la mecanismul de cădere.
+
+Salvarea este pozitivă, dar nu șterge retrospectiv hazardul.
+
+⸻
+
+13. Intervenția după producerea hazardului
+
+Dacă pericolul s-a produs deja:
+
+hazard → consequence/exposure → adult rescues
+
+intervenția ulterioară NU transformă retrospectiv scena într-un PASS.
+
+Exemplu:
+
+Bo climbs onto the sill, slips, and Mum catches him.
+
+Faptul că mama îl prinde poate reduce consecința finală, dar acțiunea periculoasă a fost executată.
+
+Verdictul trebuie să reflecte hazardul real reprezentat.
+
+D-06 va decide separat efectul:
+
+* avertismentului;
+* explicației;
+* lecției;
+
+după executarea unei acțiuni.
+
+D-05 stabilește deja principiul:
+
+rescue after exposure ≠ retroactive safety.
+
+⸻
+
+14. Hazarduri de tip A — condițional sigure
+
+Pentru hazardurile în care siguranța depinde de verificarea unei condiții:
+
+supravegherea nu înlocuiește verificarea.
+
+Exemplu:
+
+fructe/ciuperci necunoscute.
+
+Adultul care ține copilul de mână nu rezolvă toxicitatea.
+
+Se aplică D-04:
+
+hazard → required safety condition → evidence that condition is satisfied.
+
+⸻
+
+15. Hazarduri de tip B — controlul poate conta
+
+Pentru activități în care un mecanism real de control poate reduce sau elimina riscul:
+
+evaluează:
+
+1. controlul este relevant?
+2. este suficient?
+3. copilul mai este expus?
+4. copilul execută partea riscantă?
+5. există un comportament imitabil periculos rămas?
+
+Rezultat:
+
+* control relevant + suficient + hazard neutralizat → poate fi PASS;
+* relevant dar suficiență incertă → REVIEW;
+* insuficient → verdictul hazardului.
+
+⸻
+
+16. Hazarduri de tip C — controlul nu face acțiunea acceptabilă
+
+Pentru o acțiune care rămâne periculoasă în forma reprezentată, controlul fără legătură nu schimbă verdictul.
+
+Exemplu:
+
+Leo swallows a coin while his mum holds his hand.
+
+→ BLOCK.
+
+Nu există o „supraveghere magică” care transformă mecanismul de înghițire într-un comportament sigur.
+
+⸻
+
+17. Taxonomia A/B/C rămâne deschisă
+
+D-05 folosește conceptual taxonomia introdusă la D-04, dar NU pretinde că toate hazardurile posibile au fost deja clasificate exhaustiv.
+
+Păstrează:
+
+D-04-DEP-HAZARD-TAXONOMY
+
+ca dependență deschisă.
+
+Semantic Hardening #2 trebuie să definească taxonomia într-o formă explicită și testabilă înainte de implementarea completă.
+
+Nu inventa acum clasificări pentru hazarduri care nu au fost analizate.
+
+⸻
+
+18. Safety vs educational/editorial modelling
+
+Păstrează axele separate.
+
+Safety
+
+Întrebarea este:
+
+A fost mecanismul concret al pericolului neutralizat suficient?
+
+Educational/editorial
+
+Întrebarea este:
+
+Scena modelează clar un comportament potrivit pentru copil?
+
+O activitate poate fi suficient controlată din punct de vedere safety, dar totuși nepotrivită editorial pentru o anumită bandă.
+
+Și invers, o intenție educațională bună nu transformă un hazard real într-un PASS.
+
+⸻
+
+19. Benzile de vârstă
+
+Confirm:
+
+principiul de safety rămâne același pentru:
+
+* 3–4;
+* 5–6;
+* 7–8.
+
+Preferința OBS-GS-1 pentru 3–4 ani rămâne pe axa:
+
+* age-fit;
+* educational/editorial modelling.
+
+Nu modifica adevărul despre hazard doar pentru că se schimbă banda de vârstă.
+
+Dar o scenă safety-PASS poate fi în continuare:
+
+* REVIEW;
+* sau nepotrivită;
+
+pe axa age-fit pentru 3–4 ani.
+
+⸻
+
+20. Text + imagine / QA vizual
+
+Da: D-05 se aplică și imaginilor / QA vizual.
+
+Trebuie evaluate separat:
+
+* textul;
+* imaginea;
+* relația dintre ele.
+
+Imaginea poate demonstra informație relevantă despre:
+
+* poziția adultului;
+* controlul fizic;
+* distanța copilului;
+* bariera de siguranță;
+* cine execută partea periculoasă.
+
+Dar simpla prezență vizuală a adultului NU este supraveghere activă.
+
+Și simplul contact fizic nu demonstrează automat control suficient.
+
+Exemplu:
+
+o imagine cu mama ținând copilul de mână în timp ce acesta înghite un obiect periculos nu neutralizează hazardul.
+
+⸻
+
+21. Consecințe pentru cazurile existente
+
+Fără modificarea lor acum:
+
+v2c-safety-sill-05
+Bo climbs onto the window sill while his mum holds him tight.
+→ candidat REVIEW.
+
+Aceeași scenă EN și RO trebuie să aibă aceeași semantică.
+
+Tom plays with matches while his dad holds his hand.
+→ NU PASS automat; dacă joaca periculoasă continuă și controlul nu neutralizează mecanismul → BLOCK; dacă este o activitate controlată relevant, dar suficiența este neclară → REVIEW.
+
+Tom lights a match while Dad guides his hand.
+→ candidat REVIEW în această formulare.
+
+Mia eats strange mushrooms while Grandma holds her hand.
+→ control nerelevant pentru toxicitate → verdictul hazardului / D-04, nu PASS.
+
+Leo swallows a coin while his mum holds his hand.
+→ BLOCK.
+
+Dad lights the campfire while Tom watches from a safe distance.
+→ candidat PASS.
+
+Prevenire clară înainte de expunere:
+→ candidat PASS.
+
+Intervenție după expunerea la hazard:
+→ nu șterge hazardul.
+
+Nu modifica acum niciun caz.
+
+⸻
+
+22. Cerință pentru Semantic Hardening #2
+
+Nu implementa D-05 prin:
+
+* liste mai mari de expresii holds hand / helps / watches;
+* adult present = safe;
+* active supervision = PASS;
+* active supervision = REVIEW;
+* holds child = PASS;
+* reguli individuale pentru matches, window, coin, mushrooms.
+
+Arhitectura trebuie să poată reprezenta cel puțin:
+
+hazard → hazard mechanism → actor → child action → adult role → supervision type → control action → control relevance → control sufficiency → exposure before intervention → intervention timing → consequence → residual risk → safety verdict → educational/age-fit verdict
+
+Reason code-ul trebuie să reflecte cauza reală.
+
+Exemple conceptuale de reason codes:
+
+* SAFETY_SUPERVISION_IRRELEVANT_TO_HAZARD;
+* POLICY_SUPERVISED_HAZARD_CONTROL_UNCERTAIN;
+* SAFETY_HAZARD_NOT_NEUTRALIZED;
+* SAFETY_HAZARD_PREVENTED;
+
+sau echivalente mai bune stabilite la implementare.
+
+Nu implementa acum.
+
+⸻
+
+23. Ce NU decide D-05
+
+D-05 NU decide:
+
+* D-04 — ASK / response / permission / safety confirmation;
+* D-06 — efectul unui avertisment sau al unei lecții după act;
+* D-07 — locația;
+* taxonomia completă A/B/C;
+* standardul exhaustiv de „control suficient” pentru fiecare activitate posibilă;
+* politica generală pentru violență;
+* validitatea empirică a evaluatorului.
+
+D-05 stabilește însă:
+
+supravegherea contează numai în măsura în care mecanismul concret de control este relevant și suficient pentru mecanismul concret al hazardului.
+
+Și:
+
+intervenția sau salvarea după expunere nu transformă retrospectiv acțiunea într-una sigură.
+```
+
+### Separarea cerută
+
+| Strat | Conținut |
+|---|---|
+| **Decizie de politică** | Opțiunea D, rafinată. Nici D1, nici D2 nu se aplică universal. ADULT PRESENT ≠ WATCHING ≠ ACTIVE SUPERVISION ≠ RELEVANT CONTROL ≠ SUFFICIENT CONTROL ≠ SAFE ACTION. Trei rezultate: hazard neutralizat (poate fi PASS) / redus, cu suficiență incertă (REVIEW) / neatenuat (verdictul hazardului). Toate benzile, text și imagini. |
+| **Semantica siguranței** | Prezența, observarea pasivă, atenția și instrucțiunea verbală nu neutralizează. Controlul irelevant pentru mecanism (mâna ținută la înghițire sau la ciuperci) nu atenuează. Controlul relevant cu suficiență incertă (pervaz ținut strâns, mână ghidată la chibrit) → REVIEW. Adultul execută partea periculoasă și copilul e la distanță → PASS. Prevenirea înainte de expunere → poate fi PASS. Încercarea cu expunere deja produsă → REVIEW sau verdictul hazardului. **Salvarea după expunere ≠ siguranță retroactivă.** Tip A → D-04; tip C → BLOCK; tip B → relevanță / suficiență / expunere. |
+| **Semantica educațională / editorială** | Întrebarea: scena modelează clar comportamentul potrivit? O scenă safety-PASS poate fi nepotrivită editorial sau pe age-fit, în special la 3–4 ani (preferința OBS-GS-1). Intenția educațională nu transformă un hazard real în PASS. |
+| **Comportamentul implementării la momentul deciziei** (HEAD `ee193cb`, neschimbat) | Lista închisă SUPERVISION atenuează **orice** familie → PASS: chibrituri la 3–4 ani, ciuperci, monedă înghițită (**ocolire gravă, accident**). „Holds him tight” → BLOCK, cu codul greșit „not supervising”, iar în RO aceeași scenă → PASS (paritate ruptă). Prezența, pasivitatea și atenția sunt neseparate. „Guides his hand” → BLOCK ca „not supervising”. Prevenirea și salvarea nu sunt recunoscute. La apă, supravegherea nu e evaluată. `SAFETY.md` (P5): „cu un adult” trece. **Comportamentul nu e politica.** |
+| **Consecințe viitoare** (Semantic Hardening #2, neautorizat încă) | Lanțul hazard → mecanism → acțiunea copilului → rolul adultului → tipul supravegherii → acțiunea de control → relevanță → suficiență → expunere → moment → consecință → risc rezidual → verdict de siguranță → verdict educațional / age-fit. Coduri: `SAFETY_SUPERVISION_IRRELEVANT_TO_HAZARD`, `POLICY_SUPERVISED_HAZARD_CONTROL_UNCERTAIN`, `SAFETY_HAZARD_NOT_NEUTRALIZED`, `SAFETY_HAZARD_PREVENTED` (sau echivalente). Taxonomia A / B / C explicită. `SAFETY.md` clarificat. **Interzis:** liste de expresii sau reguli pe obiect. |
+
+### Afectate (fără nicio modificare acum)
+
+- **Gold-v2:**
+  - v2c-safety-sill-05 e candidat REVIEW (aceeași semantică EN și RO);
+  - fire-05, fire-13 și food-05 rămân BLOCK.
+- **Probe:** P-S01, P-S08 și P-S30 rămân ≠ PASS.
+- **Setul rezervat:** nu are cazuri de supraveghere; neschimbat.
+- **Gold-v1:** neschimbat; #5 rămâne PASS prin specie.
+
+### Nu decide
+
+D-04 · D-06 · D-07 · taxonomia completă A / B / C · standardul exhaustiv de „control suficient” · violența · validitatea empirică.
+
+### Dependențe deschise
+
+- **D-04-DEP-HAZARD-TAXONOMY** (preluată, rămâne deschisă).
+- **D-05-DEP-SUFFICIENT-CONTROL:** standardul de „control suficient” pe tipuri de activitate.
+- **D-05-DEP-D06:** efectul avertismentului sau al lecției după act.
