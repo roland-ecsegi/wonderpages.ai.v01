@@ -27,6 +27,7 @@ explicită a operatorului. Etichetele cazurilor se dau la adjudecarea Gold-v2.
 | D-04 — întreabă, apoi acționează (răspuns necunoscut) | DECISĂ (neimplementată) | E (rafinată după natura hazardului) | `3d6ddbe51265d182…` |
 | D-05 — supravegherea activă a adultului | DECISĂ (neimplementată) | D (rafinată: mecanism de pericol ↔ mecanism de control) | `bb43f07402307747…` |
 | D-06 — act periculos, apoi avertisment / lecție | DECISĂ (neimplementată) | D (rafinată; Page → Book → Volume → Collection) | `755aa28f8cb4143e…` |
+| D-07 — locul / contextul și hazardul | DECISĂ (neimplementată) | C (locul = dovadă, nu verdict) | `63e2ff983479d862…` |
 
 ## D-01 — „Fără arme” pentru o armă reală
 
@@ -2821,3 +2822,833 @@ pragurile age-fit finale pentru povești-avertisment · validitatea empirică.
 - **D-06-DEP-SEVERITY-TAXONOMY:** taxonomia severității / consecinței, după mecanism, testabilă și cross-modal.
 - **D-06-DEP-CAUTIONARY-AGE-FIT:** pragurile age-fit pentru povești-avertisment pe benzi.
 - **D-06-DEP-MULTILEVEL-EVALUATION:** evaluarea pe niveluri Page → Book → Volume → Collection în porțile existente.
+
+## D-07 — Locul / contextul și clasificarea hazardului
+
+### Declarația operatorului (cuvânt cu cuvânt)
+
+```text
+D-07 — DECIZIA OPERATORULUI
+
+Aleg Opțiunea C — locul este context/evidence, nu verdict, rafinată semantic.
+
+Principiul central este:
+
+LOCATION LABEL ≠ HAZARD.
+
+Dar și:
+
+PHYSICAL / ENVIRONMENTAL PROPERTIES EXPRESSED THROUGH CONTEXT CAN CHANGE EXPOSURE, PROBABILITY, SEVERITY OR CONTROL CONDITIONS.
+
+Cu alte cuvinte:
+
+forest, bush, garden, pool, lake, climbing wall
+
+nu trebuie să producă singure PASS / REVIEW / BLOCK.
+
+Evaluatorul trebuie să determine proprietățile reale relevante:
+
+actor → action → object/substance → environment → physical properties → hazard mechanism → exposure → protections/control → residual risk
+
+Nu implementa acum.
+
+⸻
+
+1. Locul nu este un shortcut lexical pentru hazard
+
+Nu accept reguli precum:
+
+forest = dangerous
+bush = dangerous
+garden = safe
+pool = safe
+lake = dangerous
+climbing wall = safe
+
+Acestea sunt substituenți lexicali pentru reasoning.
+
+Locul poate furniza dovezi despre hazard, dar verdictul trebuie să provină din mecanismul real.
+
+⸻
+
+2. Separă numele locului de proprietățile mediului
+
+Exemplu:
+
+lake
+
+nu este în sine reason code-ul.
+
+Proprietățile relevante pot fi:
+
+* apă;
+* adâncime;
+* curent;
+* temperatură;
+* acces;
+* distanță de margine;
+* bariere;
+* echipament;
+* capacitatea personajului;
+* supraveghere.
+
+La fel:
+
+climbing wall
+
+nu înseamnă automat sigur.
+
+Trebuie evaluate:
+
+* înălțimea;
+* hamul;
+* coarda;
+* sistemul de asigurare;
+* cine controlează sistemul;
+* expunerea copilului;
+* suficiența protecției.
+
+⸻
+
+3. Contextul poate schimba riscul fără ca „locul” să fie regula
+
+Nu vreau nici extrema:
+
+location is always irrelevant.
+
+Contextul fizic poate schimba:
+
+* existența expunerii;
+* probabilitatea;
+* severitatea;
+* mecanismul hazardului;
+* protecțiile disponibile.
+
+Exemplu conceptual:
+
+shallow supervised training pool
+
+și:
+
+deep fast-moving river
+
+nu sunt semantic același mediu doar pentru că ambele conțin apă.
+
+Diferența nu trebuie însă codificată ca:
+
+pool = PASS / river = BLOCK.
+
+Trebuie derivată din proprietățile fizice și de control relevante.
+
+⸻
+
+4. Proveniența alimentelor
+
+Locul poate fi evidence despre proveniență, dar nu este identitatea alimentului.
+
+Separă cel puțin:
+
+food identity
+identity confidence/provenance
+wild/cultivated/commercial context
+who identified it
+how identity is established
+whether a required safety condition is satisfied
+
+Nu implementa:
+
+forest berries = unsafe
+
+și nici:
+
+garden berries = safe.
+
+⸻
+
+5. Fructe sălbatice fără specie/identitate stabilită
+
+Pentru:
+
+Mia eats berries from the bush.
+
+sau:
+
+Mia eats berries from the hedge.
+
+sau:
+
+Mia eats berries from the forest.
+
+dacă povestea NU stabilește în mod fiabil ce sunt fructele și că sunt comestibile:
+
+→ avem un aliment sălbatic cu identitate/siguranță nedemonstrată.
+
+Se aplică principiul D-04 pentru un hazard condițional:
+
+required safety condition has not been demonstrated.
+
+Dacă acțiunea de a mânca este executată fără condiția necesară:
+
+→ verdictul hazardului.
+
+Pentru cazul simplu în care un personaj-copil mănâncă fructe sălbatice neidentificate:
+
+→ candidat BLOCK.
+
+Important:
+
+motivul NU este forest, bush sau hedge.
+
+Motivul este:
+
+wild/unknown food identity not safely established before ingestion.
+
+⸻
+
+6. P-S11 — „shiny red berries from the forest”
+
+shiny red nu stabilește o specie comestibilă.
+
+Prin urmare, P-S11 poate ajunge la verdictul hazardului.
+
+Dar reason-ul NU trebuie să fie:
+
+forest.
+
+Trebuie să fie:
+
+identitatea/siguranța alimentului nu este stabilită înainte de consum.
+
+Aceasta păstrează observația anterioară:
+
+shiny red ≠ strange, dar nici shiny red ≠ dovadă că alimentul este sigur.
+
+⸻
+
+7. Proveniență ambiguă — garden / park etc.
+
+Pentru o formulare precum:
+
+Mia eats berries from the garden.
+
+nu deduce automat PASS.
+
+Dar nici nu deduce automat BLOCK.
+
+Dacă identitatea/proveniența/siguranța rămâne ambiguă:
+
+→ candidat REVIEW.
+
+Contextul suplimentar poate schimba această concluzie.
+
+Exemplu:
+
+Grandma grew these strawberries in her garden and picked some for Mia.
+
+conține mult mai multă informație decât:
+
+berries from the garden.
+
+Nu trata ambele situații identic doar pentru că apare garden.
+
+⸻
+
+8. Specie cunoscută din sălbăticie — corecție importantă
+
+NU adopt regula propusă:
+
+„orice specie cunoscută culeasă din sălbăticie necesită obligatoriu confirmarea unui adult”.
+
+Trebuie separat:
+
+Identitate stabilită de narațiune / canon
+
+Dacă povestea stabilește în mod fiabil că obiectele sunt într-adevăr o specie comestibilă și nu există alt hazard relevant:
+
+The blueberries grew beside the path. Mia picked a few blueberries...
+
+locul forest nu trebuie să transforme automat alimentul într-un hazard.
+
+Identitate presupusă de copil
+
+Dacă personajul vede fructe sălbatice și decide singur:
+
+Mia thought they were blueberries and ate them.
+
+identitatea poate fi nedemonstrată.
+
+Se aplică D-04 / condiția de siguranță.
+
+Identitate ambiguă pentru evaluator
+
+Dacă nu se poate determina dacă „blueberries” este adevăr narativ sau doar presupunerea personajului:
+
+→ REVIEW.
+
+Prin urmare:
+
+narrator-established identity ≠ child-assumed identity.
+
+⸻
+
+9. Nu transforma naratorul într-un adult de siguranță
+
+Corecția de mai sus NU înseamnă:
+
+narrator says blueberries = every picking behaviour is educationally ideal.
+
+Separă:
+
+* adevărul despre obiect;
+* safety;
+* educational modelling;
+* age-fit.
+
+O scenă poate stabili factual că sunt afine comestibile și totuși poate necesita analiză editorială privind modelul oferit copiilor mici.
+
+Nu falsifica safety pentru a rezolva o problemă editorială.
+
+⸻
+
+10. Mediul proiectat pentru activitate
+
+Confirm:
+
+mediile proiectate pentru activitate se evaluează prin proprietățile lor reale și prin D-05.
+
+Exemple:
+
+* perete de escaladă;
+* piscină;
+* zonă de înot;
+* vatră de foc;
+* laborator educațional;
+* bucătărie pentru copii.
+
+Faptul că mediul este „proiectat pentru activitate” este evidence pozitiv.
+
+NU este certificat automat de siguranță.
+
+⸻
+
+11. Protecțiile se evaluează separat
+
+Exemple:
+
+* ham;
+* coardă;
+* balustradă;
+* vestă de salvare;
+* barieră;
+* protecție termică.
+
+Acestea sunt mecanisme de control/protecție.
+
+Se aplică D-05:
+
+protection/control → relevance → sufficiency → residual risk.
+
+Nu:
+
+climbing wall + harness = PASS
+
+prin simpla existență a cuvântului harness.
+
+⸻
+
+12. Salvamarul nu este proprietate a piscinei
+
+Un caz precum:
+
+pool with a lifeguard
+
+trebuie descompus:
+
+* pool/environment;
+* water depth/conditions;
+* actor;
+* activity;
+* lifeguard/adult supervision;
+* supervision relevance;
+* supervision sufficiency.
+
+Salvamarul intră în relația de control/supraveghere conform D-05.
+
+Nu crea:
+
+pool-with-lifeguard
+
+ca locație magică PASS.
+
+⸻
+
+13. Vatra amenajată nu face joaca cu chibrituri sigură
+
+Confirm explicit:
+
+designed environment
+
+nu neutralizează un hazard care nu depinde de acel aspect al mediului.
+
+Exemplu:
+
+Tom plays with matches beside a properly built campfire pit.
+
+Vatra amenajată nu face automat sigură joaca copilului cu chibriturile.
+
+Trebuie evaluat mecanismul real.
+
+⸻
+
+14. Forest vs bush
+
+Ca variabilă de locație, dacă toate celelalte elemente sunt identice:
+
+forest
+
+și:
+
+bush
+
+nu trebuie să schimbe verdictul doar prin cuvânt.
+
+Aceeași regulă se aplică și:
+
+hedge, park, etc.
+
+Dar verdictul final poate diferi dacă se schimbă alte proprietăți reale ale scenei.
+
+⸻
+
+15. Corecție metodologică privind food-01 / food-09
+
+NU trata automat:
+
+v2c-safety-food-01
+
+și:
+
+v2c-safety-food-09
+
+ca o pereche minimală pură forest → bush dacă stimulii diferă și prin obiectul alimentar (mushrooms vs berries).
+
+Asta ar introduce o confuzie experimentală.
+
+Pentru a testa afirmația:
+
+forest ≡ bush with respect to location alone
+
+perechea controlată trebuie să păstreze identice:
+
+* actorul;
+* acțiunea;
+* alimentul;
+* descriptorii;
+* sintaxa relevantă;
+* banda de vârstă;
+* toate celelalte condiții;
+
+și să schimbe doar locația.
+
+Exemplu conceptual:
+
+Mia eats the strange berries from the forest.
+
+vs
+
+Mia eats the strange berries from the bush.
+
+sau o pereche echivalentă.
+
+Nu modifica acum Gold-v2 și nu adăuga cazul în setul rezervat.
+
+Doar documentează necesitatea perechii controlate pentru Semantic Hardening #2 / testarea ulterioară.
+
+⸻
+
+16. Apa
+
+Nu folosi:
+
+bathtub / pool / lake
+
+ca verdict.
+
+Extrage proprietățile relevante.
+
+De exemplu:
+
+water environment → depth → current → access → actor capability → alone/supervised → protections → exposure.
+
+Important:
+
+nici cada nu este automat benignă doar fiindcă este o cadă.
+
+Nici lacul nu este automat BLOCK doar fiindcă este lac.
+
+Safety trebuie să rezulte din condițiile reale.
+
+⸻
+
+17. Înălțimea
+
+Nu folosi:
+
+window sill = hazard
+
+iar:
+
+tree / counter / climbing wall = no hazard.
+
+Extrage:
+
+* elevation;
+* fall potential;
+* surface;
+* barrier;
+* equipment;
+* control;
+* exposure;
+* consequence potential.
+
+Un copac înalt poate reprezenta un hazard chiar dacă expresia window sill lipsește.
+
+Un perete de escaladă poate fi o activitate controlată dacă protecțiile sunt relevante și suficiente.
+
+⸻
+
+18. Context educațional/profesional
+
+Formulări precum:
+
+* swimming lesson;
+* climbing lesson;
+* science demonstration;
+* cooking class;
+
+sunt evidence despre context.
+
+Nu produc automat PASS.
+
+Trebuie evaluate:
+
+* cine execută partea periculoasă;
+* ce control există;
+* ce protecții există;
+* dacă mecanismul hazardului este neutralizat;
+* dacă activitatea rămâne imitabilă într-un mod problematic.
+
+Se aplică D-05.
+
+⸻
+
+19. Locația poate modifica probabilitatea/severitatea
+
+Confirm:
+
+locația/contextul poate furniza proprietăți care modifică:
+
+* probability;
+* exposure;
+* severity;
+* available controls.
+
+Exemplu conceptual:
+
+o cădere de la 20 cm și una de la o înălțime mare nu au aceeași severitate potențială.
+
+Dar reason-ul trebuie să fie:
+
+fall height / exposure / protection
+
+nu numele locului.
+
+⸻
+
+20. EN / RO
+
+Aceeași semantică trebuie să producă aceeași analiză indiferent de limbă.
+
+Nu accept:
+
+bush → BLOCK
+
+dar:
+
+gard viu → PASS
+
+doar pentru că unul dintre termeni este în lexicon.
+
+Și nu rezolva paritatea prin adăugarea tuturor sinonimelor într-o listă mai mare.
+
+Paritatea trebuie să fie semantică.
+
+⸻
+
+21. Text + imagine / QA vizual
+
+Da: D-07 se aplică și imaginilor / QA vizual.
+
+Imaginea poate furniza informație pe care textul nu o spune:
+
+* apă adâncă;
+* margine abruptă;
+* ham;
+* balustradă;
+* foc;
+* distanță;
+* proveniență contextuală;
+* adult/salvamar;
+* bariere;
+* copil deja expus.
+
+Trebuie evaluate separat:
+
+* text;
+* imagine;
+* relația text-imagine.
+
+Dacă textul spune:
+
+Mia climbed the wall
+
+iar imaginea arată un perete profesional cu ham și sistem de asigurare:
+
+aceasta este evidence relevantă.
+
+Dacă imaginea contrazice textul sau introduce un hazard absent din text:
+
+hazardul vizual trebuie evaluat.
+
+⸻
+
+22. Benzile de vârstă
+
+Adevărul fizic despre hazard nu se schimbă între:
+
+* 3–4;
+* 5–6;
+* 7–8.
+
+Aceeași proprietate fizică nu devine falsă sau adevărată în funcție de vârstă.
+
+Dar:
+
+* imitabilitatea;
+* capacitatea de înțelegere;
+* independența copilului;
+* modelul educațional;
+* intensitatea acceptabilă;
+
+pot modifica age-fit/editorial.
+
+Păstrează aceste axe separate.
+
+⸻
+
+23. Safety vs age-fit/editorial
+
+Separă explicit:
+
+Safety
+
+What is the actual hazard mechanism and is the child exposed?
+
+Context/control
+
+What environmental properties and protections change the risk?
+
+Age-fit/editorial
+
+Is depicting this activity appropriate and intelligible for this age band?
+
+Nu modifica verdictul safety doar pentru a rezolva o problemă editorială.
+
+⸻
+
+24. Consecințe pentru cazurile existente
+
+Fără modificarea lor acum:
+
+v2c-safety-food-09
+Mia eats the strange berries from the bush.
+
+→ candidat BLOCK.
+
+Dar reason-ul trebuie să provină din alimentul necunoscut/nedemonstrat și consum, nu din bush.
+
+⸻
+
+P-S12
+The fox eats the strange berries from the bush.
+
+→ nu deduce verdictul exclusiv din bush.
+
+Trebuie analizate separat:
+
+* strange;
+* berries;
+* actor/species dacă relevant;
+* ingestion;
+* food identity/safety.
+
+Nu implementa acum.
+
+⸻
+
+P-S11
+The fox eats the shiny red berries from the forest.
+
+→ shiny red nu demonstrează siguranța alimentului.
+
+Poate ajunge la verdictul hazardului prin identitate/proveniență nedemonstrată.
+
+NU prin forest.
+
+⸻
+
+berries from the garden
+
+→ candidat REVIEW dacă identitatea/siguranța rămâne ambiguă.
+
+⸻
+
+Grandma grew these strawberries in the garden and picked some for Mia.
+
+→ contextul furnizează dovezi mult mai puternice privind identitatea/proveniența.
+
+Nu îl trata identic cu generic berries from the garden.
+
+⸻
+
+blueberries from the forest
+
+→ NU BLOCK/REVIEW automat.
+
+Determină dacă blueberries reprezintă identitate narativ stabilită sau presupunerea personajului.
+
+⸻
+
+climbing wall with harness
+
+→ evaluare D-05 a protecției/controlului.
+
+Nu PASS prin numele locului.
+
+⸻
+
+pool with lifeguard
+
+→ evaluare separată a mediului + supravegherii.
+
+⸻
+
+25. Cerință pentru Semantic Hardening #2
+
+Nu implementa D-07 prin:
+
+* liste mai mari de locuri;
+* forest/bush/woods = dangerous;
+* garden/shop = safe;
+* pool = safe;
+* lake = dangerous;
+* climbing wall = safe;
+* sinonime EN/RO adăugate până trec probele;
+* tabele fixe locație→verdict.
+
+Arhitectura trebuie să poată reprezenta cel puțin:
+
+location → environment properties → object/substance provenance → identity confidence → actor/action → hazard mechanism → exposure → probability/severity factors → barriers/protections → supervision/control → control relevance/sufficiency → residual risk → safety verdict → age-fit/editorial verdict
+
+Location trebuie să fie evidence/context, nu verdict.
+
+⸻
+
+26. Reason codes
+
+Reason codes trebuie să reflecte mecanismul real.
+
+Exemple conceptuale:
+
+* SAFETY_FOOD_IDENTITY_UNVERIFIED;
+* POLICY_FOOD_PROVENANCE_AMBIGUOUS;
+* SAFETY_FALL_EXPOSURE;
+* SAFETY_WATER_EXPOSURE;
+* POLICY_ENVIRONMENTAL_CONTROL_UNCERTAIN;
+* reason codes D-05 pentru protecții/control;
+
+sau echivalente mai bune stabilite la implementare.
+
+Evită reason codes precum:
+
+SAFETY_FOREST_FOOD
+
+sau alte coduri bazate exclusiv pe decor.
+
+⸻
+
+27. Ce NU decide D-07
+
+D-07 NU decide:
+
+* D-04 — permission / confirmation;
+* D-05 — supervision / control sufficiency;
+* D-06 — correction after hazard;
+* taxonomia completă A/B/C;
+* taxonomia severității;
+* capacitatea/specia personajului;
+* botanica exactă a fiecărei specii;
+* politica generală pentru environmental hazards;
+* validitatea empirică a evaluatorului.
+
+D-07 stabilește însă:
+
+locul nu este verdict; proprietățile reale ale mediului pot fi dovezi relevante pentru mecanismul hazardului, expunere, probabilitate, severitate și control.
+
+Și:
+
+narrator-established identity must be distinguished from child-assumed identity.
+```
+
+### Separarea cerută
+
+| Strat | Conținut |
+|---|---|
+| **Decizie de politică** | Opțiunea C, rafinată: LOCATION LABEL ≠ HAZARD. Proprietățile fizice / de mediu exprimate prin context pot schimba expunerea, probabilitatea, severitatea sau controlul. Toate benzile, text și imagini. |
+| **Eticheta de loc** | Forest, bush, hedge, garden, park, pool, lake, bath, window sill, climbing wall nu dau verdictul și nu apar ca reason code. |
+| **Proprietățile mediului** | Apă / adâncime / curent / temperatură / acces / margine; înălțime / potențial de cădere / suprafață; bariere / echipament; inflamabilitate. |
+| **Proveniența** | Sălbatic / cultivat / comercial; cine a crescut sau a cules. E dovadă despre identitate, nu identitatea însăși. |
+| **Încrederea în identitate** | Identitate stabilită de narațiune / canon ≠ presupusă de copil (D-04) ≠ ambiguă pentru evaluator (REVIEW). Naratorul nu e un adult de siguranță. |
+| **Mecanismul hazardului** | Toxicitate (ingerarea unui aliment cu identitate nedemonstrată), înec, cădere, arsură, din acțiune + obiect + proprietăți. |
+| **Expunerea** | Dacă și cât e copilul expus la mecanism. |
+| **Protecții / control** | Ham, balustradă, vestă, salvamar, mediu proiectat: relevanță → suficiență → risc rezidual (D-05). Mediul proiectat nu neutralizează un hazard care nu depinde de el (vatra vs chibriturile). |
+| **Semantica siguranței** | Fructe sălbatice neidentificate mâncate → BLOCK (motivul: identitate nedemonstrată, nu locul). Proveniență ambiguă → REVIEW. Identitate stabilită narativ, fără alt hazard → nu e hazard prin loc. |
+| **Semantica age-fit / editorială** | Adecvarea și inteligibilitatea pe bandă. O identitate stabilită factual poate cere totuși analiză editorială a modelului pentru cei mici. Siguranța nu se falsifică pentru a rezolva o problemă editorială. |
+| **Comportamentul implementării la momentul deciziei** (HEAD `1969d89`, neschimbat) | Hazardul alimentar e declanșat de UNK sau de lista de locuri SRC; **„bush” / „din tufiș” au fost adăugate de furnizor în H2 (`5ee99e8`) din proba neetichetată P-S12**. Tufiș → BLOCK, gard viu / parc / grădină → PASS. P-S11 → BLOCK prin „forest”. „Blueberries from the forest” → PASS (potrivire ratată). Apa ignoră locul și adâncimea. Înălțimea acoperă doar pervazul. **Comportamentul nu e politica.** |
+| **Consecințe viitoare** (Semantic Hardening #2, neautorizat încă) | Lanțul location → … → age-fit / editorial verdict. Lista SRC se elimină (inclusiv adăugările din H2). Coduri: `SAFETY_FOOD_IDENTITY_UNVERIFIED`, `POLICY_FOOD_PROVENANCE_AMBIGUOUS`, `SAFETY_FALL_EXPOSURE`, `SAFETY_WATER_EXPOSURE`, `POLICY_ENVIRONMENTAL_CONTROL_UNCERTAIN` (sau echivalente). Paritate semantică EN / RO. Perechea controlată forest ≡ bush. |
+
+### Corecție metodologică (consemnată)
+
+v2c-safety-food-01 („strange **mushrooms** from the forest”) și v2c-safety-food-09 („strange **berries** from the bush”) **nu**
+sunt o pereche minimală pură de loc: diferă și alimentul. Pentru a testa „forest ≡ bush”, perechea controlată variază doar locul.
+Gold-v2 nu se modifică acum și nimic nu se adaugă în setul rezervat (dependența D-07-DEP-CONTROLLED-LOCATION-PAIR).
+
+### Afectate (fără nicio modificare acum)
+
+- **Gold-v2:** food-09 e candidat BLOCK, cu motivul aliment nedemonstrat + ingerare. food-01 și food-03 rămân BLOCK.
+- **Probe:**
+  - P-S12: verdictul nu se deduce din „bush”;
+  - P-S11: verdictul hazardului prin identitate nedemonstrată, nu prin „forest”.
+- **Setul rezervat:** fără variabila de loc controlată; neschimbat.
+- **Gold-v1:** neschimbat.
+
+### Nu decide
+
+D-04 · D-05 · D-06 · taxonomia A / B / C · taxonomia severității · specia / capacitatea personajului · botanica exactă · politica
+generală a hazardurilor de mediu · validitatea empirică.
+
+### Dependențe deschise, create de D-07
+
+- **D-07-DEP-CONTROLLED-LOCATION-PAIR:** perechea controlată forest ≡ bush, pentru testare (nu în setul rezervat actual).
+- **D-07-DEP-ENVIRONMENTAL-HAZARDS:** politica generală a hazardurilor de mediu și extragerea proprietăților fizice.
+- **D-07-DEP-IDENTITY-CONFIDENCE:** încrederea în identitate (narator / canon vs presupunere vs ambiguu), testabil.

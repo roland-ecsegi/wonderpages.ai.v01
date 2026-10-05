@@ -12,7 +12,8 @@ Comportamentul curent e calculat cu evaluatorul v2, politica de siguranță v2 �
 (opțiunea B), neimplementată. D-02: DECISĂ (opțiunea D, rafinată semantic), neimplementată. D-03: DECISĂ (opțiunea D, rafinată
 semantic), neimplementată. D-04: DECISĂ (opțiunea E, rafinată după natura hazardului), neimplementată. D-05: DECISĂ (opțiunea D, rafinată:
 mecanism de pericol ↔ mecanism de control), neimplementată. D-06: DECISĂ (opțiunea D, rafinată; Page → Book →
-Volume → Collection), neimplementată. Tabelul de mai jos rămâne prezentarea inițială, nu se rescrie.
+Volume → Collection), neimplementată. D-07: DECISĂ (opțiunea C, locul = dovadă, nu verdict),
+neimplementată. Tabelul de mai jos rămâne prezentarea inițială, nu se rescrie.
 
 **Cum se înregistrează:**
 - **Pentru un caz:** `node scripts/enterprise/gold-adjudicate.mjs record --case=<id> --decision=correct --label=positive|negative
