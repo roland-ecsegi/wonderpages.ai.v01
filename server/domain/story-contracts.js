@@ -10,6 +10,8 @@
  *  - localization: page-aligned native edition (same pages, names kept, no untranslated function words, common
  *    English calques flagged in Romanian); no silent cutting between script → final → native edition.
  */
+import { ageDimensions } from '../quality/semantic/age.js';
+import { fidelityFindings } from '../quality/semantic/fidelity.js';
 const norm = s => String(s ?? '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
 const stripQuotes = s => String(s ?? '').replace(/[“"„«][^”"»]*[”"»]/g, ' ');
 const words = s => (String(s ?? '').match(/[\p{L}\p{N}'’-]+/gu) || []);
@@ -68,7 +70,10 @@ export function ageFit(pages, band, profile = {}) {
   const wb = profile.word_budget, [lo, hi] = Array.isArray(wb) ? wb : wb && typeof wb === 'object' ? [wb.min ?? wb.low ?? wb[0], wb.max ?? wb.high ?? wb[1]] : [];
   if (hi && m.totalWords > hi * 1.5) findings.push({ code: 'BUDGET_GUIDANCE', severity: 'minor', message: `${m.totalWords} cuvinte în volum față de ghidul orientativ ${lo}–${hi}; macheta reală decide (nu se taie automat).` });
   if (lo && m.totalWords < lo * 0.5 && m.wordless.length < 3) findings.push({ code: 'BUDGET_GUIDANCE', severity: 'minor', message: `${m.totalWords} cuvinte, mult sub ghidul orientativ ${lo}–${hi}.` });
-  return { metrics: m, findings };
+  /* OBS-GS-11: length is one proxy — the other dimensions are measured and reported separately (advisory signals) */
+  const dims = ageDimensions((pages || []).filter(p => !(p.page_type === 'wordless' || p.wordless === true)).map(p => p.text || '').join(' '), band);
+  findings.push(...dims.findings);
+  return { metrics: m, dimensions: dims.dimensions, findings };
 }
 const PAST = /(?<![\p{L}])(was|were|had|did|went|said|saw|came|found|ran|looked|smiled|whispered)(?![\p{L}])/giu, PRESENT = /(?<![\p{L}])(is|are|has|does|goes|says|sees|comes|finds|runs|looks|smiles|whispers)(?![\p{L}])/giu;
 const FIRST = { English: /(?<![\p{L}])(I|me|my|we|our|us)(?![\p{L}])/gu, Romanian: /(?<![\p{L}])(eu|noi|meu|mea|mei|nostru|noastră|noastra)(?![\p{L}])/giu };
@@ -101,8 +106,8 @@ export function science(pages, { world = 'natural' } = {}) {
 }
 
 /* ---------- localization: page-aligned native edition; no silent cutting ---------- */
-const CALQUES = [[/face sens/i, 'are sens'], [/[iî]n ordine s[aă]/i, 'ca să'], [/(au|a|am|ai|ați|ati) avut un timp bun/i, 's-au distrat'], [/la sf[aâ]r[sș]itul zilei/i, 'până la urmă'], [/este (tot|totul) despre/i, 'contează'], [/s[aă] fac[aă] o decizie/i, 'să ia o decizie'], [/(a lua|ia|iau|lu[aă]m) o plimbare/i, 'a se plimba'], [/bun diminea[tț]a/i, 'bună dimineața']];
-const EN_FUNCTION = /(?<![\p{L}])(the|and|with|of|is|are|you|this|that|was|were)(?![\p{L}])/iu;
+/* known calques with their morphological / syntactic variants (OBS-GS-13: variant robustness; unseen calques are NOT covered) */
+const CALQUES = [[/(?<![\p{L}])(face|facea|făcea|făcut|facut|fac|facem) sens/iu, 'are sens'], [/[iî]n ordine s[aă]/i, 'ca să'], [/(?<![\p{L}])avut (un|o) timp (bun|minunat|grozav|frumos|excelent)/iu, 's-au distrat'], [/la sf[aâ]r[sș]itul zilei/i, 'până la urmă'], [/este (tot|totul) despre/i, 'contează'], [/(?<![\p{L}])f[aă]c\p{L}* o decizie/iu, 'să ia o decizie'], [/(?<![\p{L}])(a lua|ia|iau|lu[aă]\p{L}*) o plimbare/iu, 'a se plimba'], [/bun diminea[tț]a/i, 'bună dimineața']];
 export function localization(src, tr, { names = [], language = 'Romanian' } = {}) {
   const findings = [], sp = src?.pages || [], tp = tr?.pages || [];
   if (sp.length !== tp.length) findings.push({ code: 'TR_MISALIGNED', severity: 'blocker', message: `Ediția nativă are ${tp.length} pagini; originalul are ${sp.length}.` });
@@ -114,8 +119,8 @@ export function localization(src, tr, { names = [], language = 'Romanian' } = {}
     for (const nm of names) if (a.includes(nm) && !b.includes(nm)) findings.push({ code: 'TR_NAME', severity: 'major', page: p.n, message: `Pagina ${p.n}: numele „${nm}” lipsește (numele nu se traduc).` });
     if (language === 'Romanian') {
       for (const [re, fix] of CALQUES) { const m = b.match(re); if (m) findings.push({ code: 'TR_CALQUE', severity: 'major', page: p.n, quote: m[0], message: `Pagina ${p.n}: „${m[0]}” sună tradus din engleză; natural: „${fix}”.` }); }
-      const nameless = names.reduce((s, nm) => s.split(nm).join(' '), stripQuotes(b)), m = nameless.match(EN_FUNCTION);
-      if (m) findings.push({ code: 'TR_UNTRANSLATED', severity: 'major', page: p.n, quote: m[0], message: `Pagina ${p.n}: cuvântul englezesc „${m[0]}” a rămas netradus.` });
+      /* OBS-GS-13/14: contextual language identification, copied source tokens, lexicon-bounded fidelity */
+      if (b.trim() && a.trim()) findings.push(...fidelityFindings(stripQuotes(a), stripQuotes(b), { names, page: p.n }).findings);
     }
   }
   return { findings };
