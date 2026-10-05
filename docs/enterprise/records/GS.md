@@ -508,3 +508,18 @@ corect, dar registru/potrivire de vârstă degradate.
 *Raportare:* nu „translation/localization passed” în sens de validare completă, ci „No currently implemented localization-rule
 violations detected.” (sau echivalentul exact din terminologia aplicației); un rezultat fără coduri nu dovedește automat o traducere
 fidelă, completă, naturală și potrivită vârstei. Evaluatorul, regulile și pragurile neschimbate.
+
+*Extensie OBS-GS-13 (operatorul, la cazul 27, 2026-10-05) — detecția calcurilor cunoscute vs naturalețea limbii țintă.* Cazul 27
+(`localization-dinosaurs-5-6-Romanian-02`, intrarea 27): rezultatul a fost **executat** înainte de înregistrare (nu dedus) — un singur
+cod, TR_CALQUE pe „face sens” (sugestie „are sens”), fără coduri suplimentare. Confirmat; acord de verdict DA; acord de raționament
+**YES**: pentru stimulul concret, defect prezent → regula relevantă îl identifică → reason code corect. Se separă **corectitudinea
+raționamentului la nivel de caz** de **acoperirea/generalizarea evaluatorului** (altfel aproape orice detecție pe reguli ar deveni
+INCOMPLETE doar pentru că regula nu acoperă toată limba).
+Limită consemnată separat, fără efect asupra acordului cazului 27 (OBS-GS-13 — TARGET-LANGUAGE NATURALNESS; secundar OBS-GS-7):
+**known-calque detection ≠ general target-language naturalness understanding**; **successful exact-list detection ≠ robust calque
+detection**. Formularea vagă „Asta are logică englezească…” NU este dovadă de fals negativ (nu e o pereche semantic controlată și poate
+avea alt sens); nu a fost documentată ca dovadă.
+Pentru setul v2 — proprietăți distincte: KNOWN CALQUE DETECTION (expresia exactă e în catalog); CALQUE VARIANT ROBUSTNESS (variații
+morfologice/sintactice ale aceluiași calc); UNSEEN CALQUE GENERALIZATION (calc real absent din catalog); TARGET-LANGUAGE NATURALNESS
+(formulare nenaturală care nu e neapărat un calc lexical cunoscut); SEMANTIC FIDELITY (sensul sursei păstrat). Cazul 27 testează în
+principal KNOWN CALQUE DETECTION și nu se prezintă drept validare generală a naturaleții limbii române. Nicio observație nouă.
