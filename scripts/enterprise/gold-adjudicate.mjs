@@ -6,6 +6,7 @@
  *   node scripts/enterprise/gold-adjudicate.mjs verify
  *   node scripts/enterprise/gold-adjudicate.mjs record --case=<id> --decision=confirm|correct|exclude
  *        [--label=positive|negative --expected='{"verdict":"REVIEW"}'] --note="…" --statement="the operator's words"
+ *        [--reasoning-agreement=yes|no|incomplete --system-reason="…" --operator-reason="…"]
  *        [--actor=operator] [--recorded-by="…"] [--channel="…"]
  * `record` writes ONE decision that the operator stated explicitly (their words go into the provenance); it never
  * rewrites the set file, never accepts a calibration and refuses to append to a log that fails verification.
@@ -33,7 +34,8 @@ export function adjudicate(cmd, opts = {}) {
     if (!String(opts.statement || '').trim()) throw { message: 'Lipsește declarația operatorului (--statement): o decizie nu se înregistrează fără cuvintele lui.' };
     const result = opts.decision === 'correct' ? { label: opts.label, expected: JSON.parse(opts.expected || 'null') } : undefined;
     const e = makeEntry({ gold, entries, caseId: opts.case, decision: opts.decision, result, note: opts.note || '', actor: opts.actor || 'operator',
-      provenance: { statement: opts.statement, recordedBy: opts.recordedBy || 'gold-adjudicate.mjs', channel: opts.channel || 'local' }, at: opts.at || Date.now() });
+      provenance: { statement: opts.statement, recordedBy: opts.recordedBy || 'gold-adjudicate.mjs', channel: opts.channel || 'local' }, at: opts.at || Date.now(),
+      reasoning: opts.reasoningAgreement ? { reasoningAgreement: opts.reasoningAgreement, systemReason: opts.systemReason, operatorReason: opts.operatorReason } : null });
     appendEntry(log, e);
     const st = adjudicationState(gold, readLog(log));
     return { recorded: e, state: { counts: st.counts, complete: st.complete, chain: st.chain, inconsistencies: st.inconsistencies.length } };
@@ -43,7 +45,7 @@ export function adjudicate(cmd, opts = {}) {
 
 if (import.meta.url === pathToFileURL(process.argv[1] || '').href) {
   try {
-    const out = adjudicate(process.argv[2] || 'status', { dir: arg('dir'), case: arg('case'), decision: arg('decision'), label: arg('label'), expected: arg('expected'), note: arg('note'), statement: arg('statement'), actor: arg('actor'), recordedBy: arg('recorded-by'), channel: arg('channel') });
+    const out = adjudicate(process.argv[2] || 'status', { dir: arg('dir'), case: arg('case'), decision: arg('decision'), label: arg('label'), expected: arg('expected'), note: arg('note'), statement: arg('statement'), actor: arg('actor'), recordedBy: arg('recorded-by'), channel: arg('channel'), reasoningAgreement: arg('reasoning-agreement'), systemReason: arg('system-reason'), operatorReason: arg('operator-reason') });
     console.log(JSON.stringify(out, null, 1));
     if (process.argv[2] === 'verify' && (!out.chain.ok || out.parseErrors.length)) process.exit(1);
   } catch (e) { console.error(JSON.stringify({ error: e.code || 'error', message: e.message, errors: e.errors }, null, 1)); process.exit(1); }

@@ -30,7 +30,9 @@ Implementare: `server/quality/adjudication.js`, `server/quality/evaluation-servi
   setul (id, versiune, hash de manifest, hash al întregului set); eticheta propusă inițial; verdictul sistemului în acel
   moment (evaluator, versiuni, detaliu); decizia operatorului — `confirm` / `correct` / `exclude`; eticheta rezultată;
   nota; actorul; momentul; proveniența (declarația operatorului, cine a înregistrat, canalul); intrarea înlocuită
-  (`supersedes`); `seq`, `prevHash`, `hash`. O readjudecare adaugă o intrare nouă; istoricul rămâne.
+  (`supersedes`); `seq`, `prevHash`, `hash`; opțional `reasoning` — acordul de verdict (calculat) și acordul de raționament
+  (yes / no / incomplete, al operatorului, cu motivul sistemului și justificarea operatorului). O readjudecare adaugă o
+  intrare nouă; istoricul rămâne.
 - **Verificare.** Secvență continuă, legătură cu intrarea anterioară, hash recalculat: o modificare, ștergere,
   reordonare sau linie invalidă este detectată, iar peste un jurnal alterat nu se mai adaugă nimic. Corectura cere o
   etichetă validă și diferită; corectura și excluderea cer notă; fără declarația operatorului nu se înregistrează nimic.

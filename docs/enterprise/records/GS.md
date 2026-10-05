@@ -61,6 +61,24 @@ OBS-GS-1 se aplică regulii de apă: perechi minimale cu o singură variabilă s
 acțiune — singur; cu mama; cu o regulă explicită de siguranță; într-un context controlat; într-un context realmente
 periculos. Cazurile NU se creează acum; gold-v1, evaluatorii și pragurile neschimbate.
 
+**OBS-GS-5 (operatorul, la cazul 6, 2026-10-05) — corectitudinea verdictului vs corectitudinea raționamentului.** Calibrarea
+distinge două lucruri: (1) *verdict correctness* — sistemul a ales corect PASS / REVIEW / BLOCK? (2) *reasoning correctness* —
+a ajuns la verdict din motivul semantic corect? Un evaluator nu este complet corect doar pentru că verdictul coincide cu
+setul, dacă justificarea este greșită, fragilă sau bazată pe o regulă nepotrivită contextului. Legată de OBS-GS-2 (cazul 3:
+PASS corect din motivul greșit).
+Cazul 6 `safety-sea-3-4-English-06`: eticheta REVIEW; verdictul sistemului REVIEW; acord de verdict DA; acord de raționament
+NU/INCOMPLET — regula tratează „swims alone” ca risc de apă fără conștiința personajului/speciei; justificarea operatorului:
+context narativ, separare de părinte, deplasare spre necunoscut, intensitate și adecvare pentru 3–4 ani, nu acțiunea
+naturală de înot a unui pește.
+Pentru hardening: nu se rezolvă prin mutarea cazului pe alt regex (de ex. „dark + alone”), ci prin perechi minimale
+evaluate semantic, de ex.: Lula înoată singură într-un golf familiar și luminos; Lula înoată cu mama în marea adâncă; Lula
+înoată singură în marea adâncă; Lula înoată singură în marea adâncă și întunecată; Lula se pierde/se sperie; Lula explorează
+independent într-un context explicit sigur și potrivit speciei. Scopul: evaluatorul înțelege DE CE o scenă cere REVIEW, nu
+doar reproduce eticheta. Cazurile NU se creează acum.
+Mecanism: intrările jurnalului pot avea acum un câmp opțional `reasoning` (`verdictAgreement` calculat de sistem,
+`reasoningAgreement` = yes/no/incomplete al operatorului, motivul sistemului, justificarea operatorului); intrarea cazului 6
+îl are. Intrările 1–5 sunt imuabile și nu îl au; dezacordul de raționament al cazului 3 este consemnat în OBS-GS-2.
+
 ## Decizia operatorului privind calibrarea finală (2026-10-05, după cazul 3)
 
 1. Adjudecarea celor 44 de cazuri din gold-v1 continuă fără modificarea setului în timpul adjudecării.

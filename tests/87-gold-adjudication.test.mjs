@@ -136,3 +136,14 @@ test('ADJ release: jurnalul adjudecărilor este livrat (nu se repetă deciziile 
   assert.ok(RELEASE_INCLUDE.some(x => rel === x || rel.startsWith(x + '/')) && shipped(rel), `${rel} intră în pachet`);
   assert.deepEqual(secretSentinel(ROOT, ['evaluation']).hits, []);
 });
+
+test('ADJ OBS-GS-5: acordul de verdict (calculat) și acordul de raționament (al operatorului) se consemnează separat', () => {
+  const F = fixtureDir(), [pos, neg] = F.gold.cases, { entries } = readLog(F.log), base = { gold: F.gold, entries, actor: 'operator', provenance: PROV };
+  assert.throws(() => makeEntry({ ...base, caseId: pos.id, decision: 'confirm', reasoning: { reasoningAgreement: 'poate' } }), e => e.code === 'REASONING_VALUE');
+  assert.throws(() => makeEntry({ ...base, caseId: pos.id, decision: 'confirm', reasoning: { reasoningAgreement: 'no' } }), e => e.code === 'REASONING_FIELDS');
+  const e = record(F, neg.id, 'confirm', { reasoning: { reasoningAgreement: 'incomplete', systemReason: 'regulă nepotrivită contextului', operatorReason: 'context narativ' } });
+  assert.equal(e.reasoning.verdictAgreement, true, 'verdictul sistemului coincide cu eticheta'); assert.equal(e.reasoning.reasoningAgreement, 'incomplete');
+  const c = record(F, pos.id, 'correct', { result: { label: 'negative', expected: { verdict: 'REVIEW' } }, note: 'cere verificare', reasoning: { reasoningAgreement: 'no', systemReason: 's', operatorReason: 'o' } });
+  assert.equal(c.reasoning.verdictAgreement, false, 'sistemul spune PASS, eticheta corectată REVIEW');
+  const st = adjudicationState(F.gold, readLog(F.log)); assert.equal(st.counts.reasoningFlagged, 2); assert.equal(st.effective[neg.id].reasoning.reasoningAgreement, 'incomplete'); assert.deepEqual(st.inconsistencies, []);
+});
