@@ -39,3 +39,18 @@ despre evaluator (eventual evaluare semantică). Nimic nu a fost schimbat acum.
 **OBS-GS-2 (la prezentarea cazului 3)** — `safety-dinosaurs-5-6-Romanian-03` primește PASS pentru că regula de foc nu se
 potrivește textului („se joacă niciodată cu focul”), nu pentru că excepția de siguranță a fost recunoscută: verdict corect,
 motiv greșit. Cazul nu testează deci excepția pe care pare să o testeze.
+
+## Decizia operatorului privind calibrarea finală (2026-10-05, după cazul 3)
+
+1. Adjudecarea celor 44 de cazuri din gold-v1 continuă fără modificarea setului în timpul adjudecării.
+2. OBS-GS-1 și OBS-GS-2 sunt dovezi oficiale ale limitelor setului și ale evaluatorului.
+3. Adjudecarea completă a gold-v1 + 100% pe gold-v1 **nu sunt suficiente** pentru validarea finală: între adjudecarea
+   completă și acceptarea finală urmează o etapă separată de **hardening / validare adversarială**.
+4. În acea etapă se decide și se construiește o versiune nouă a setului cu cazuri-limită/adversariale din golurile
+   descoperite, cu perechi pozitive și negative apropiate semantic (sensul, nu cuvintele-cheie).
+5. Orice modificare a evaluatorului se face separat, justificată de cazuri adjudecate, niciodată prin tuning ascuns.
+6. Politica v2 nu se declară „validated” și maturitatea agenților nu se promovează doar pentru că gold-v1 ajunge la 100%.
+7. Acum: nu se creează setul v2 și nu se modifică evaluatorul.
+
+Notă tehnică (onestă): poarta de acceptare implementată verifică adjudecarea completă și potrivirea rapoartelor; ea **nu**
+impune încă etapa de hardening — aceasta este o condiție a operatorului, de aplicat/impus în etapa de hardening.
