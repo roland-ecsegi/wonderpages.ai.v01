@@ -394,3 +394,17 @@ toate cazurile rămase au fost adjudecate/corecte drept dovadă de acoperire suf
 vârstă lipsă, limbi lipsă sau proprietăți netestate — **accuracy ≠ coverage**; **all cases adjudicated ≠ benchmark sufficient**.
 Cazurile 22–24 NU se exclud anticipat: fiecare se verifică și se adjudecă individual (intenția declarată a operatorului: aceeași
 regulă de integritate dacă verificarea confirmă duplicat exact + metadata falsă + nicio variație intenționată).
+
+*Extensie OBS-GS-12 (operatorul, la cazul 22, 2026-10-05).* Cazul 22 (`age-sea-3-4-English-04`, intrarea 22): **EXCLUDE** — duplicat
+exact al cazului 20 (`age-dinosaurs-3-4-English-02`; hash identic al textului `9886c1ca31cb369a`), tip/vârstă/limbă/etichetă/defect/
+rezultat așteptat/împărțire identice, nicio variație intenționată; singura diferență: tema „sea”, nesusținută de conținut.
+Eticheta semantică AGE_COMPLEXITY=true rămâne corectă și sistemul e de acord — excludere pentru integritatea setului, NU dezacord
+cu evaluatorul. Câmpul `reasoning` lăsat gol (nedefinit pentru excluderi). Observația validă pentru acest text rămâne cazul 20.
+A doua dovadă adjudecată de **duplicat + metadata nepotrivită + metrici pe teme umflate**: cazul 21 duplică exact cazul 19; cazul
+22 duplică exact cazul 20; în ambele, tema „sea” nu creează un test nou.
+*Pentru validatorul viitor metadata ↔ conținut:* „riverbank” NU este suficient pentru a transforma conținutul într-un caz „sea”;
+validatorul NU se construiește ca simplu keyword matcher — tema se verifică semantic, nu prin existența accidentală a unui cuvânt
+vag asociat cu apa.
+*Populații distincte în raportare:* **raw set size = 44** (gold-v1.json nu se modifică) vs. **populația de evaluare adjudecată
+validă = cazuri brute minus excluderi**, conform stării jurnalului (la intrarea 22: 44 − 2 = 42 eligibile; 22 încă în așteptare).
+Nicio observație nouă.
