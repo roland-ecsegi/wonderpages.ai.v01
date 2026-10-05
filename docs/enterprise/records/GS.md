@@ -634,3 +634,39 @@ acceptarea finală. Direcții conceptuale pentru setul v2 (nu se construiesc și
 după proprietatea a cărei generalizare se afirmă, fără contaminare relevantă pentru afirmație: calc cunoscut în calibrare; variantă
 gramaticală a unui calc cunoscut; calc nevăzut în setul rezervat; traducere naturală dar neliterală; mutație semantică; omisiune;
 adăugare nesusținută; token netradus cunoscut; token de conținut netradus nevăzut; token comun/ambiguu între limbi; controale pozitive curate.
+
+*Cazul 32 (`science-dinosaurs-7-8-English-01`, intrarea 32) — primul caz de știință (operatorul, 2026-10-05).* „Pip, the flying
+dinosaur, landed on a branch.”; rezultat executat: exact `pterosaur-dinosaur`, declanșat de ramura expresiei fixe „flying dinosaur”
+(stimulul nu numește specia lui Pip); confirmat; acord de verdict DA; acord de raționament INCOMPLETE. Confirmarea se sprijină pe
+premisa operatorului: Pip este pterozaurul stabilit de canon/context; pterozaurii sunt reptile zburătoare dintr-un grup distinct de
+Dinosauria. Nu NO (pentru Pip regula identifică o problemă reală și relevantă); nu YES (justificarea implicită „flying dinosaur is
+scientifically wrong” e prea generală, vezi proba de mai jos).
+
+**OBS-GS-15 (operatorul, la cazul 32, 2026-10-05) — Scientific taxonomy, entity identity & contextual classification.** Principiu:
+**lexical phrase match ≠ contextual taxonomic reasoning.** Dovezi executate: (1) cazul de aur — „Pip, the flying dinosaur, landed on a
+branch.” → `pterosaur-dinosaur`; defect real în contextul în care Pip e pterozaur; (2) sondă (NU caz de aur) — **fals pozitiv**:
+„Birds are flying dinosaurs.” → `pterosaur-dinosaur`, deși păsările sunt dinozauri avieni în clasificarea evolutivă modernă. Alte probe
+executate, consemnate fără a lărgi concluzia: „Pip, the flying reptile, landed on a branch.” → niciun cod; „Pip, the pterosaur, landed
+on a branch.” → niciun cod; „Pip, dinozaurul zburător, s-a așezat pe o creangă.” → `pterosaur-dinosaur`. Regula nu distinge ENTITY →
+TAXON → RELATIONSHIP → CLAIM.
+*Nu e o excepție lexicală:* o reparație viitoare de tip „if „birds” then allow „flying dinosaurs”” ar fi tot o corecție lexicală
+fragilă; problema e semantică. Distincții conceptuale minime: pterozaur → reptilă zburătoare → nu Dinosauria; dinozaur non-avian →
+Dinosauria → nu pasăre; pasăre → dinozaur avian → Dinosauria. Validitatea afirmației depinde de referent și de relația taxonomică, nu
+de prezența expresiei.
+*Factual vs simplificare (pentru hardening):* scientifically false ≠ scientifically simplified ≠ age-appropriate simplification ≠
+ambiguous wording ≠ technically precise wording. Nu orice simplificare pentru copii se blochează, dar o simplificare nu are voie să
+schimbe fals o categorie taxonomică esențială. Pip = pterozaur + „flying dinosaur” → clasificare greșită relevantă; „Birds are flying
+dinosaurs.” → situație taxonomică diferită.
+*Legătura cu canonul:* factualitatea poate depinde de identitatea canonică a personajului (ex.: Character Bible `Pip.species =
+pterosaur`); aceeași propoziție poate avea verdict diferit în funcție de referent. Conceptual: CANONICAL ENTITY → KNOWN ATTRIBUTES /
+SPECIES → CLAIM IN TEXT → SCIENTIFIC KNOWLEDGE → CONSISTENCY / FACTUALITY → VERDICT + REASON CODE.
+*Reason code:* `pterosaur-dinosaur` nu se schimbă acum; pentru hardening se evaluează dacă e suficient de precis — un cod științific ar
+trebui să explice relația factuală („entity Pip is canonically a pterosaur; pterosaurs are not dinosaurs”), nu doar tokenii care au
+declanșat regula („phrase flying dinosaur detected”).
+*Limite ale dovezii:* demonstrat doar (1) detecția cazului Pip și (2) fals pozitivul pe „Birds are flying dinosaurs.”. NU sunt
+declarate demonstrate: alte erori taxonomice, alte animale, alte relații evolutive, toate formele de verificare factuală, capacitatea
+sau incapacitatea în alte domenii științifice — se testează ulterior.
+*Direcții pentru setul v2 (nu se creează și nu se etichetează acum):* perechi controlate pterosaur → dinosaur vs pterosaur → flying
+reptile; bird → dinosaur vs bird → pterosaur; specie explicită în propoziție; specie doar din canon; referent ambiguu; afirmație corectă
+dar simplificată; afirmație realmente falsă; formulare metaforică/colocvială, dacă produsul permite asemenea contexte.
+Nimic nu se implementează acum: arhitectura, regula, codul și schema rămân neschimbate.
