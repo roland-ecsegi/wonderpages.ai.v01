@@ -39,7 +39,7 @@ export const CONCEPTS = [
   /* nature */
   C('leaf', 'object', 'leaf', 'frunza|frunze|frunzele|frunzuli*'), C('tree', 'object', 'tree', 'copac*|pom|pomul'), C('flower', 'object', 'flower', 'floare|floarea|flori'), C('sun', 'object', 'sun', 'soare|soarele'), C('moon', 'object', 'moon', 'luna|lunii'),
   C('star', 'object', 'star', 'stea|steaua|stele|stelele'), C('rain', 'object', 'rain', 'ploua|ploaie|ploaia'), C('snow', 'object', 'snow', 'zapada|ninge'), C('river', 'object', 'river', 'rau|raul'), C('sea', 'object', 'sea|ocean', 'mare|marea|ocean*'),
-  C('hill', 'object', 'hill', 'deal|dealul'), C('forest', 'object', 'forest|wood', 'padure|padurea'), C('park', 'object', 'park', 'parc|parcul'), C('rainbow', 'object', 'rainbow', 'curcubeu*'), C('stone', 'object', 'stone|pebble|rock', 'piatra|pietre|pietricica'),
+  C('hill', 'object', 'hill', 'deal|dealul'), C('forest', 'object', 'forest|wood', 'padure|padurea'), C('park', 'object', 'park', 'parc|parcul'), C('rainbow', 'object', 'rainbow', 'curcubeu*'), C('stone', 'object', 'stone|rock', 'piatra|pietre'),
   C('garden', 'object', 'garden', 'gradina|gradini'), C('sky', 'object', 'sky', 'cer|cerul'), C('pond', 'object', 'pond|lake', 'balta|iaz|lac|lacul'),
   /* body */
   C('hand', 'object', 'hand', 'mana|mainile|maini'),
