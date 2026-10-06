@@ -35,6 +35,7 @@ explicită a operatorului. Etichetele cazurilor se dau la adjudecarea Gold-v2.
 | D-12 — text scurt, dar abstract (3–4) | DECISĂ (neimplementată) | C (profil semantic de abstracție; escaladare doar la mismatch material) | `457abb2bcbb4a826…` |
 | D-13 — propoziții relative imbricate (5–6) | DECISĂ (neimplementată) | B (profil structural; consecința de publicare → D-14) | `017f76cb8488503f…` |
 | D-14 — semnalele consultative: finding, severitate, consecință | DECISĂ (neimplementată) | C (finding → confirmare → severitate → consecință; age-fit ≠ fidelity) | `9868b43824a361f1…` |
+| D-15 — fereastra de corectare a unei idei științifice greșite | DECISĂ (neimplementată) | D (corectare semantică + takeaway final + scope) | `dbc63cbc0e2a724d…` |
 
 ## D-01 — „Fără arme” pentru o armă reală
 
@@ -10351,3 +10352,1201 @@ taxonomia age-fit vizual · mecanismul final al parserului / evaluatorului · va
 - **D-14-DEP-SAFETY-DISTRESS-CONTEXT:** în afara D-14.
 - **D-14-DEP-EVALUATOR-MECHANISM:** mecanismul final și validitatea empirică.
 - **Rezolvate pentru aria D-14:** D-11-DEP-FINDING-SEVERITY-GATE-MODEL (taxonomiile rămân deschise); D-13-DEP-SYNTAX-PUBLISHING-CONSEQUENCE.
+
+## D-15 — Fereastra de corectare a unei idei științifice greșite
+
+### Declarația operatorului (cuvânt cu cuvânt)
+
+```text
+D-15 — DECIZIA OPERATORULUI
+
+Aleg Opțiunea D, rafinată: semantic correction resolution + final scientific takeaway + scope-aware evaluation.
+
+Principiile centrale sunt:
+
+FALSE CLAIM EXPOSURE ≠ PRODUCT ENDORSEMENT OF THE FALSE CLAIM.
+
+CHARACTER ERROR ≠ SCIENTIFIC DEFECT BY ITSELF.
+
+CORRECTION TOKEN ≠ SEMANTIC CORRECTION.
+
+CORRECTION DISTANCE ≠ CORRECTION QUALITY.
+
+LOCAL FALSE-CLAIM FINDING ≠ FINAL BOOK TAKEAWAY.
+
+A LATER CORRECTION DOES NOT DELETE THE LOCAL EXPOSURE.
+
+CONFIRMED FALSE SCIENTIFIC TAKEAWAY ≠ OPERATOR-WAIVABLE REVIEW.
+
+Și:
+
+SCIENTIFIC TRUTH DOES NOT CHANGE WITH AGE; CORRECTION PERCEPTIBILITY CAN.
+
+Nu implementa acum.
+
+⸻
+
+1. Axa D-15
+
+D-15 aparține axei:
+
+SCIENTIFIC ACCURACY / SCIENTIFIC FIDELITY OF THE PRODUCT.
+
+Trebuie separată de:
+
+* physical safety;
+* content-policy;
+* age-fit;
+* general quality;
+* localization fidelity.
+
+Age-fit poate influența dacă o corectare este suficient de perceptibilă pentru banda țintă.
+
+Nu schimbă însă adevărul științific al propoziției.
+
+⸻
+
+2. Un personaj are voie să greșească
+
+WonderPages poate conține:
+
+* concepții greșite;
+* mituri;
+* ipoteze greșite;
+* personaje care nu știu;
+* personaje care se corectează;
+* discovery arcs;
+* misconception → investigation → correction.
+
+Acestea pot fi chiar mecanisme educaționale valoroase.
+
+Prin urmare:
+
+character says false proposition
+
+nu înseamnă automat:
+
+scientific defect.
+
+⸻
+
+3. Trebuie separat speaker-ul de stance-ul produsului
+
+Evaluatorul trebuie să reprezinte cel puțin:
+
+scientific proposition → truth status → speaker/source → attribution → epistemic stance → narrative stance → correction → correction relation → correction correctness → salience → proximity → age-band perceptibility → later reinforcement/contradiction → local takeaway → book takeaway → higher-scope takeaway → consequence
+
+⸻
+
+4. Candidate finding
+
+Când este detectată o afirmație științific falsă, prima stare este:
+
+candidate scientific finding.
+
+Nu verdict final.
+
+Trebuie determinat:
+
+* cine a spus-o;
+* dacă este prezentată ca adevăr;
+* dacă este doar credința personajului;
+* dacă este contestată;
+* dacă este corectată;
+* dacă produsul o reafirmă;
+* ce rămâne drept concluzie.
+
+⸻
+
+CORECTAREA
+
+5. Corectarea trebuie să fie semantică
+
+O corectare validă trebuie să se refere fără ambiguitate la aceeași propoziție sau concepție greșită.
+
+Nu este suficient:
+
+* No;
+* Actually;
+* De fapt;
+* apariția unui cuvânt opus;
+* apariția cuvântului see;
+* proximitatea fizică.
+
+⸻
+
+6. Relația semantică trebuie demonstrată
+
+Pentru:
+
+Bats are blind.
+
+o corectare puternică este:
+
+No, we can see.
+
+deoarece propoziția ulterioară contrazice direct aceeași proprietate atribuită liliecilor.
+
+În schimb:
+
+No time to play. I can see the moon.
+
+NU corectează afirmația despre lilieci.
+
+P7 este deci accident de implementare.
+
+⸻
+
+7. Corectarea trebuie să fie ea însăși corectă
+
+Nu accept:
+
+false claim → different false claim
+
+ca rezolvare.
+
+Dacă mitul este „corectat” cu altă eroare:
+
+→ nu există scientific resolution valid;
+
+→ există în continuare defect sau incertitudine, după stance și scope.
+
+⸻
+
+8. Întărirea nu este corectare
+
+P6:
+
+Bats are blind.
+No, we cannot see.
+
+nu este corectare.
+
+Este:
+
+reinforcement / restatement of the misconception.
+
+Actualul SCIENCE_REVIEW este greșit.
+
+Dacă artifact-ul lasă aceasta drept concluzie:
+
+→ confirmed false scientific takeaway;
+
+→ REPAIR_REQUIRED.
+
+⸻
+
+9. Reafirmarea ulterioară contează
+
+P11:
+
+mit → corectare → mit reafirmat ulterior.
+
+Corectarea inițială nu garantează PASS.
+
+Trebuie evaluată traiectoria:
+
+claim → correction → later stance → final takeaway.
+
+Dacă produsul revine și validează eroarea:
+
+→ final scientific takeaway poate deveni fals;
+
+→ REPAIR_REQUIRED dacă este confirmat.
+
+⸻
+
+FEREASTRA DE CORECTARE
+
+10. Nu există o fereastră rigidă în număr de propoziții
+
+Respinge:
+
+* same sentence only;
+* next sentence only;
+* same page only;
+* next page only;
+* N propoziții;
+* N tokeni.
+
+Acestea pot fi evidence despre proximitate.
+
+Nu sunt politica.
+
+⸻
+
+11. Fereastra este semantică și narativă
+
+Corectarea poate traversa:
+
+* aceeași propoziție;
+* două replici de dialog;
+* aceeași pagină;
+* un page turn;
+* un spread;
+* o secvență narativă imediată.
+
+Dacă relația este clară și takeaway-ul rezultat este corect, corectarea poate fi validă.
+
+⸻
+
+12. Same sentence
+
+O corectare clară în aceeași propoziție poate fi:
+
+→ PASS.
+
+Exemplu:
+
+Many people think bats are blind, but bats can see.
+
+Aici mitul este prezentat explicit ca belief și imediat corectat.
+
+Nu există motiv să fie REVIEW doar pentru că propoziția conține mitul.
+
+⸻
+
+13. Same page
+
+O corectare clară în dialog pe aceeași pagină poate fi:
+
+→ PASS.
+
+Nu este necesar să fie în aceeași propoziție.
+
+⸻
+
+14. Page turn
+
+Corectarea pe pagina următoare NU este automat REVIEW.
+
+Dacă page-turn-ul este chiar mecanismul narativ:
+
+pagina A:
+Are bats really blind?
+
+sau un personaj afirmă mitul;
+
+pagina B imediat următoare:
+corectarea este explicită și neechivocă;
+
+atunci poate exista:
+
+→ PASS sau PASS_WITH_ADVISORY,
+
+în funcție de isolation risk și banda țintă.
+
+⸻
+
+15. Spread-ul poate fi unitate semantică
+
+Dacă două pagini formează în mod evident același spread / question-answer unit, evaluatorul trebuie să poată analiza această relație.
+
+Nu trata automat limita de pagină drept limită semantică.
+
+⸻
+
+16. Corectarea mult mai târziu
+
+O corectare la distanță mare:
+
+* nu este automat invalidă;
+* dar nici nu șterge expunerea anterioară.
+
+Trebuie evaluate:
+
+* durata expunerii;
+* repetarea mitului;
+* autoritatea speaker-ului;
+* câte pagini îl lasă necontestat;
+* isolation risk;
+* cât de puternică este corectarea;
+* dacă este legată explicit de mitul inițial;
+* final takeaway.
+
+O concepție greșită menținută multe pagini și corectată abia la final poate necesita:
+
+→ REVIEW_REQUIRED,
+
+chiar dacă finalul este corect.
+
+⸻
+
+BAT-05 / P-C10
+
+17. Verdictul exact
+
+Pentru:
+
+Bats are blind, said the owl. "No, we can see," laughed the bat.
+
+la 7–8:
+
+→ afirmație falsă locală atribuită bufniței;
+
+→ corectare explicită;
+
+→ aceeași propoziție/proprietate este contrazisă;
+
+→ corectarea vine chiar de la subiectul afirmației;
+
+→ corectarea este științific corectă;
+
+→ nu există reafirmare;
+
+→ takeaway-ul rezultat este clar;
+
+→ PASS.
+
+Deci:
+
+v2c-sci-bat-05 / P-C10 = PASS la 7–8.
+
+Actualul SCIENCE_REVIEW nu reprezintă politica finală.
+
+⸻
+
+18. Nu transforma „subiectul însuși corectează” în bypass
+
+Faptul că liliacul corectează afirmația este evidence puternică.
+
+Dar nu implementa:
+
+subject corrects → PASS.
+
+Orice speaker poate spune altă eroare.
+
+Conținutul corectării trebuie verificat semantic și științific.
+
+⸻
+
+CINE POATE CORECTA
+
+19. Corectarea nu depinde de o listă fixă de roluri
+
+Poate corecta:
+
+* personajul vizat;
+* alt personaj;
+* adultul;
+* ghidul;
+* profesorul;
+* expertul;
+* naratorul;
+* o sursă explicită din poveste.
+
+Rolul contribuie la epistemic authority.
+
+Nu decide singur verdictul.
+
+⸻
+
+20. Naratorul
+
+O corectare clară a naratorului poate fi suficientă.
+
+Exemplu conceptual:
+
+The owl was mistaken. Bats can see.
+
+→ correction valid candidate.
+
+Nu cer obligatoriu dialog.
+
+⸻
+
+21. „The owl was mistaken”
+
+O simplă marcare:
+
+The owl was wrong.
+
+poate respinge propoziția precedentă.
+
+Dar trebuie evaluat dacă este suficient de clar ce anume era greșit.
+
+Pentru o propoziție binară simplă poate fi suficient.
+
+Pentru o concepție complexă poate lăsa copilul fără modelul corect.
+
+Dacă resolution-ul rămâne ambiguu:
+
+→ REVIEW.
+
+⸻
+
+22. Afirmații concurente
+
+Dacă:
+
+* bufnița spune X;
+* cârtița spune Y;
+* povestea nu stabilește care este corect;
+
+atunci nu există automat corectare.
+
+→ REVIEW_REQUIRED dacă final takeaway-ul rămâne epistemic ambiguu.
+
+⸻
+
+FĂRĂ CORECTARE
+
+23. False narrator assertion
+
+Dacă naratorul afirmă drept fapt:
+
+Bats are blind.
+
+și produsul nu contestă afirmația:
+
+→ candidate scientific defect;
+
+→ după confirmarea factuală și contextuală:
+
+REPAIR_REQUIRED.
+
+⸻
+
+24. Character assertion fără corectare
+
+Aici NU aplicăm automat aceeași regulă.
+
+Trebuie analizat stance-ul.
+
+Character says false thing
+
+nu este suficient pentru:
+
+product teaches false thing.
+
+⸻
+
+25. Personaj + artifact endorsement
+
+Dacă personajul spune mitul, iar:
+
+* naratorul îl validează;
+* ceilalți îl confirmă;
+* acțiunea îl prezintă drept adevăr;
+* imaginea îl întărește;
+* finalul îl lasă ca takeaway;
+
+atunci:
+
+→ confirmed false scientific takeaway;
+
+→ REPAIR_REQUIRED.
+
+⸻
+
+26. Personaj greșit, dar stance-ul marchează clar eroarea
+
+Dacă povestea arată fără ambiguitate că personajul este greșit, chiar fără formula lexicală clasică de corectare, poate exista o rezolvare semantică.
+
+Dar trebuie să fie suficient de perceptibilă pentru banda țintă.
+
+Dacă nu este clar:
+
+→ REVIEW_REQUIRED.
+
+⸻
+
+27. Simplă atribuire fără stance
+
+"Bats are blind," said the owl.
+
+iar povestea nu oferă nimic altceva:
+
+nu este automat echivalent cu narrator endorsement.
+
+Dar pentru un produs educațional destinat copiilor, copilul poate rămâne cu afirmația falsă.
+
+Prin urmare:
+
+→ REVIEW_REQUIRED la stadiul candidate/stance unresolved;
+
+→ dacă analiza confirmă că artifact-ul o livrează efectiv drept takeaway factual:
+REPAIR_REQUIRED.
+
+Nu folosi simplul said the owl ca scut.
+
+⸻
+
+REVIEW VS REPAIR
+
+28. Modelul D-14 se aplică și aici
+
+Trebuie separat:
+
+candidate scientific problem
+de
+confirmed scientific defect.
+
+⸻
+
+29. REVIEW_REQUIRED
+
+Folosește REVIEW când trebuie stabilit:
+
+* dacă afirmația este într-adevăr falsă în context;
+* dacă speaker-ul este prezentat ca nesigur;
+* dacă există corectare semantică;
+* dacă acea corectare este suficientă;
+* dacă imaginea schimbă stance-ul;
+* dacă final takeaway-ul este ambiguu;
+* dacă simplificarea este acceptabilă pentru vârstă.
+
+Operatorul poate închide finding-ul dacă nu există defect.
+
+⸻
+
+30. REPAIR_REQUIRED
+
+Dacă după analiză este confirmat că produsul comunică drept adevăr o propoziție științific falsă relevantă:
+
+→ REPAIR_REQUIRED.
+
+Operatorul nu poate spune:
+
+„Da, copilului îi spunem ceva fals ca fapt, dar aprob.”
+
+Trebuie:
+
+repair → re-evaluate → validate.
+
+⸻
+
+31. REPAIR_REQUIRED nu este safety BLOCK
+
+Ca în D-14:
+
+REPAIR_REQUIRED
+
+nu este același lucru cu:
+
+BLOCKED_BY_POLICY.
+
+Este un defect factual confirmat al produsului.
+
+⸻
+
+AGE BAND
+
+32. Adevărul nu se schimbă cu banda
+
+Bats can see
+
+este adevărat indiferent dacă produsul este:
+
+* 3–4;
+* 5–6;
+* 7–8.
+
+Nu crea science truth pe bandă.
+
+⸻
+
+33. Perceptibilitatea corectării poate varia
+
+Banda poate modifica:
+
+* cât de explicită trebuie să fie corectarea;
+* câtă distanță narativă este tolerabilă;
+* câtă inferență poate fi cerută;
+* cât de riscantă este izolarea paginii;
+* cât de ușor poate copilul distinge speaker belief de narrator truth.
+
+Aceasta este interacțiune cu age-fit.
+
+Nu modificare a adevărului.
+
+⸻
+
+34. Pentru 3–4
+
+Corectarea trebuie să fie în general:
+
+* foarte clară;
+* apropiată;
+* concretă;
+* perceptibilă;
+* cu relație evidentă față de mit.
+
+Dar D-15 NU fixează acum un prag mecanic:
+
+3–4 = same page only.
+
+⸻
+
+35. Pentru 5–6
+
+Poate fi tolerată o structură puțin mai narativă dacă relația claim→correction rămâne clară.
+
+Nu fixa un număr de pagini.
+
+⸻
+
+36. Pentru 7–8
+
+Poate exista o demontare mai elaborată a concepției greșite.
+
+Dar:
+
+7–8 ≠ science bypass.
+
+Un mit necorectat sau reafirmat ca adevăr rămâne defect.
+
+⸻
+
+37. Nu inventăm Gold labels pentru benzile neacoperite
+
+Evidence-ul actual de science este EN 7–8.
+
+Înregistrează această limită.
+
+D-15 definește principiul semantic pentru toate benzile, dar nu pretinde că Gold-v2 a demonstrat empiric pragurile pentru 3–4 sau 5–6.
+
+Păstrează L-16.
+
+⸻
+
+VISUAL / CROSS-MODAL
+
+38. D-15 se aplică text + visual + cross-modal
+
+Da.
+
+Imaginea poate:
+
+* întări afirmația falsă;
+* contrazice afirmația;
+* susține corectarea;
+* crea ea însăși o afirmație factuală vizuală.
+
+⸻
+
+39. Imaginea poate susține o corectare
+
+Dacă textul spune:
+
+No, bats can see.
+
+iar imaginea arată liliacul folosindu-și vederea într-o manieră relevantă:
+
+→ cross-modal evidence poate întări corectarea.
+
+⸻
+
+40. Visual-only correction
+
+Nu stabilesc:
+
+visual correction = never valid.
+
+Dar o corectare exclusiv vizuală cere standard mai strict de interpretabilitate.
+
+Dacă imaginea demonstrează neechivoc contrariul mitului și relația este clară:
+
+→ poate contribui real la resolution.
+
+Dacă trebuie inferat prea mult:
+
+→ REVIEW_REQUIRED.
+
+⸻
+
+41. P17
+
+Pentru simplul:
+
+bat looks with big eyes
+
+nu rezultă automat semantic:
+
+bats can see.
+
+Ochii deschiși nu sunt o corectare științifică suficientă.
+
+Prin urmare P17:
+
+→ afirmația textuală rămâne nerezolvată prin acel indiciu vizual;
+
+→ nu considera imaginea corectare doar prin keyword/object presence.
+
+⸻
+
+42. Corectare prin acțiune
+
+P19:
+
+found the berries by looking
+
+poate constitui evidence semantic mai puternic decât simpla imagine a ochilor.
+
+Dar trebuie analizat dacă acțiunea implică într-adevăr vederea și dacă legătura cu mitul este perceptibilă.
+
+Nu implementa:
+
+action contradicts claim → automatic PASS.
+
+Poate fi:
+
+* valid correction;
+* supporting evidence;
+* sau REVIEW dacă relația este prea implicită.
+
+⸻
+
+43. Imaginea poate purta defectul
+
+Dacă textul este corect, dar imaginea comunică factual contrariul într-un mod relevant:
+
+→ există visual/cross-modal science finding.
+
+Textul corect nu șterge automat defectul vizual.
+
+⸻
+
+SCOPE
+
+44. Page → Book → Volume → Collection
+
+D-15 adoptă explicit:
+
+Page → Book → Volume → Collection.
+
+⸻
+
+45. Finding-ul local se păstrează
+
+Dacă pagina 2 conține mitul și pagina 3 îl corectează:
+
+finding-ul local al expunerii nu este șters.
+
+Dar artifact-level consequence poate fi PASS dacă resolution-ul este suficient.
+
+Aceasta este aceeași separare conceptuală:
+
+local event ≠ final artifact stance.
+
+⸻
+
+46. Page isolation risk
+
+O pagină care, privită singură, pare să predea mitul poate avea:
+
+page isolation risk.
+
+Acest lucru poate conta mai mult la 3–4 decât la 7–8.
+
+Dar:
+
+page isolation risk ≠ automatic science defect.
+
+Este evidence pentru age-fit/editorial review.
+
+⸻
+
+47. Book-level correction
+
+O carte poate avea ca scop:
+
+misconception → exploration → correction.
+
+Aceasta este permisă.
+
+Dacă final takeaway-ul este clar și corect, simpla existență a mitului anterior nu transformă cartea în defect științific.
+
+⸻
+
+48. Expunerea prelungită
+
+Dacă mitul:
+
+* este repetat;
+* rămâne necontestat multe pagini;
+* este întărit vizual;
+* vine de la surse autoritative;
+
+iar corectarea apare foarte târziu:
+
+→ poate exista REVIEW_REQUIRED chiar dacă finalul este corect.
+
+Motivul este perceptibilitatea și acumularea, nu o „fereastră de N pagini”.
+
+⸻
+
+49. Volume / Collection normalization
+
+Dacă aceeași concepție greșită este repetată în mai multe cărți sau volume, o singură corectare îndepărtată nu neutralizează automat întregul pattern.
+
+Trebuie evaluat:
+
+* frequency;
+* salience;
+* scope;
+* correction reach;
+* final takeaway pe fiecare artifact relevant.
+
+⸻
+
+SCIENTIFIC SIMPLIFICATION
+
+50. D-15 nu confundă falsitatea cu simplificarea
+
+Unele afirmații pentru copii sunt simplificate fără a fi falsități materiale.
+
+D-15 nu finalizează taxonomia:
+
+acceptable simplification vs misleading oversimplification vs false claim.
+
+Aceasta rămâne dependență.
+
+Nu transforma orice lipsă de precizie academică în REPAIR_REQUIRED.
+
+⸻
+
+PARITATE
+
+51. EN / RO semantic parity
+
+Da.
+
+Evaluatorul trebuie să recunoască aceeași relație:
+
+EN:
+Bats are blind.
+No, we can see.
+
+RO:
+Liliecii sunt orbi.
+Nu, noi vedem.
+
+Nu prin liste independente fragile.
+
+Prin:
+
+claim proposition → correction proposition → semantic contradiction/resolution.
+
+⸻
+
+52. P12 / P13
+
+Faptul că actualul evaluator nu recunoaște vedem este:
+
+implementation failure / parity failure.
+
+Nu policy.
+
+⸻
+
+CRITIC / QUALITY
+
+53. D-14 se păstrează
+
+Science findings pot fi oferite criticului drept evidence/context.
+
+Dar nu accept:
+
+SCIENCE_REVIEW exists → critic lowers score mysteriously.
+
+Orice impact asupra quality trebuie să fie trasabil.
+
+⸻
+
+54. Science consequence trebuie să fie deterministă prin propriul model
+
+Official science consequence trebuie să vină din:
+
+science finding → confirmation → artifact stance/takeaway → consequence.
+
+Nu din:
+
+science finding → critic prompt → unknown score change.
+
+⸻
+
+REZULTATELE PROBELOR
+
+55. P1
+
+Corectare clară și semantic legată:
+
+→ candidate PASS.
+
+⸻
+
+56. P2 — pagina următoare
+
+NU automat REVIEW.
+
+Dacă page-turn-ul este imediat și relația este clară:
+
+→ PASS sau PASS_WITH_ADVISORY.
+
+Dacă pagina precedentă funcționează independent ca afirmație autoritativă și corectarea este slab legată:
+
+→ REVIEW.
+
+⸻
+
+57. P3 / P4 / P18 — corectare îndepărtată
+
+Actualul CLAIM mecanic nu este politica.
+
+Trebuie evaluată semantic.
+
+Distanța mare este factor agravant.
+
+Poate rezulta:
+
+* REVIEW;
+* PASS după resolution foarte clar;
+* REPAIR dacă final takeaway-ul rămâne fals.
+
+⸻
+
+58. P5 — fără corectare
+
+Dacă afirmația rămâne final takeaway:
+
+→ confirmed defect
+→ REPAIR_REQUIRED.
+
+Dacă este doar character belief cu stance nerezolvat:
+
+→ REVIEW până la clarificare.
+
+⸻
+
+59. P6 — întărire
+
+Nu este corectare.
+
+Dacă final takeaway-ul este fals:
+
+→ REPAIR_REQUIRED.
+
+⸻
+
+60. P7 — „No” fără legătură
+
+Nu este corectare.
+
+Evaluatorul actual are fals pozitiv structural.
+
+⸻
+
+61. P8 — răspuns ambiguu
+
+Hmm, are we?
+
+nu corectează factual mitul.
+
+→ REVIEW_REQUIRED dacă stance-ul final rămâne ambiguu.
+
+⸻
+
+62. P9 / P10 — narator
+
+Naratorul poate corecta valid.
+
+Nu există motiv pentru REVIEW doar pentru că speaker-ul corectării este naratorul.
+
+Dacă correction relation este explicită, corectă și final takeaway clar:
+
+→ PASS.
+
+⸻
+
+63. P11 — corectat apoi reafirmat
+
+Trebuie analizată ultima stare semantică.
+
+Dacă reafirmarea ulterioară restabilește mitul drept adevăr:
+
+→ REPAIR_REQUIRED.
+
+⸻
+
+64. P12 / P13 — RO
+
+Aceeași politică precum EN.
+
+Actualul CLAIM este parity failure.
+
+⸻
+
+65. P14–P16 — adult / ghid
+
+Adultul sau ghidul pot corecta.
+
+Authority poate întări perceptibilitatea.
+
+Nu este însă bypass.
+
+Corectarea trebuie să fie corectă și legată semantic de claim.
+
+⸻
+
+66. P17 — indiciu vizual slab
+
+Nu este suficient singur în forma descrisă.
+
+→ nu considera automat corectat.
+
+⸻
+
+67. P19 — correction through action
+
+Poate conta semantic.
+
+Necesită interpretarea relației.
+
+Nu trebuie ratată doar pentru că nu conține No/Actually.
+
+⸻
+
+STĂRI CONCEPTUALE
+
+68. Pentru science, D-15 adoptă cel puțin
+
+PASS
+→ takeaway științific corect și clar.
+
+PASS_WITH_ADVISORY
+→ takeaway corect, dar există isolation/proximity/perceptibility concern non-material.
+
+REVIEW_REQUIRED
+→ truth/stance/correction/perceptibility/takeaway rămâne suficient de incert sau material editorial.
+
+REPAIR_REQUIRED
+→ produsul comunică confirmat o falsitate științifică materială drept adevăr.
+
+⸻
+
+69. Nu folosim BLOCK pentru defect factual
+
+REPAIR_REQUIRED
+
+este distinct de:
+
+BLOCKED_BY_POLICY.
+
+Același principiu arhitectural stabilit în D-14.
+
+⸻
+
+REASON CODES CONCEPTUALE
+
+Semantic Hardening #2 poate folosi coduri de tip:
+
+* SCIENCE_FALSE_CLAIM_EXPOSED
+* SCIENCE_CORRECTION_CLEAR
+* SCIENCE_CORRECTION_AMBIGUOUS
+* SCIENCE_CORRECTION_INCORRECT
+* SCIENCE_CORRECTION_TOO_IMPLICIT
+* SCIENCE_FALSE_CLAIM_REINFORCED
+* SCIENCE_FALSE_CLAIM_REASSERTED
+* SCIENCE_TAKEAWAY_AMBIGUOUS
+* SCIENCE_TAKEAWAY_FALSE
+* SCIENCE_VISUAL_CONTRADICTION
+* SCIENCE_PAGE_ISOLATION_RISK
+
+sau denumiri mai bune echivalente.
+
+Nu transforma aceste coduri într-un tabel rigid code → verdict.
+
+⸻
+
+CE DECIDE D-15
+
+D-15 stabilește definitiv că:
+
+* personajele pot exprima concepții greșite;
+* simpla prezență a unui mit nu înseamnă endorsement;
+* corectarea se evaluează semantic;
+* nu există fereastră fixă de propoziții/pagini;
+* same-page poate fi PASS;
+* next-page poate fi PASS;
+* distanța mare este factor, nu verdict;
+* corectarea trebuie să se refere la aceeași afirmație;
+* corectarea trebuie să fie ea însăși corectă;
+* No/Actually/De fapt nu sunt suficiente;
+* speaker authority este evidence, nu bypass;
+* final scientific takeaway contează;
+* finding-ul local nu este șters de corectarea ulterioară;
+* reafirmarea ulterioară poate anula resolution-ul;
+* adevărul științific nu se schimbă cu banda;
+* perceptibilitatea corectării poate varia cu banda;
+* visual și cross-modal evidence contează;
+* o corectare exclusiv vizuală poate conta numai dacă este semantic neechivocă;
+* confirmed false scientific takeaway → REPAIR_REQUIRED;
+* un character claim cu stance nerezolvat poate fi REVIEW, nu automat REPAIR;
+* operatorul poate respinge un false positive;
+* operatorul nu poate aproba neschimbat un confirmed material scientific falsehood.
+
+⸻
+
+CE NU DECIDE D-15
+
+D-15 NU decide:
+
+* taxonomia completă a concepțiilor greșite;
+* toate simplificările științifice acceptabile pentru copii;
+* praguri numerice de distanță;
+* un număr maxim de pagini;
+* toate pragurile de perceptibilitate 3–4 / 5–6 / 7–8;
+* toate regulile pentru lumi fantastice;
+* criteriul științific din quality rubric / D-17;
+* pragurile D-16;
+* evidence validity D-18;
+* Gold measurement D-19/D-20;
+* taxonomia completă de visual science;
+* validitatea empirică a evaluatorului.
+```
+
+### Separarea cerută
+
+| Strat | Conținut |
+|---|---|
+| **Decizie de politică** | Opțiunea D, rafinată: semantic correction resolution + final scientific takeaway + scope-aware evaluation. Axa: SCIENTIFIC ACCURACY / SCIENTIFIC FIDELITY OF THE PRODUCT, separată de siguranță, content-policy, age-fit, calitate și fidelitatea localizării. FALSE CLAIM EXPOSURE ≠ PRODUCT ENDORSEMENT. CHARACTER ERROR ≠ SCIENTIFIC DEFECT BY ITSELF. CORRECTION TOKEN ≠ SEMANTIC CORRECTION. CORRECTION DISTANCE ≠ CORRECTION QUALITY. SCIENTIFIC TRUTH DOES NOT CHANGE WITH AGE; CORRECTION PERCEPTIBILITY CAN. |
+| **Propoziția științifică / statutul de adevăr** | Propoziția extrasă semantic. Adevărul nu depinde de bandă. Simplificarea ≠ falsitate (taxonomia rămâne dependență). |
+| **Sursa / atribuirea / stance epistemic și narativ** | Cine o spune, cui îi e atribuită, dacă e prezentată ca fapt sau credință, dacă povestea o susține, o lasă necontestată sau o corectează. „said the owl” nu e scut. |
+| **Finding candidat / stare de confirmare** | Afirmația falsă detectată = candidat, nu verdict. Stări: candidate, confirmed, dismissed, repaired, revalidated (modelul D-14). |
+| **Corectarea: prezență, sursă, propoziție, relație, corectitudine, explicitare** | Corectarea se referă la aceeași propoziție și o contrazice semantic. Trebuie să fie corectă științific. „No” / „Actually” / „De fapt” / un cuvânt opus nu ajung. Sursa e evidence de autoritate, nu bypass (inclusiv subiectul însuși). Naratorul poate corecta. Corectarea prin acțiune poate conta. Corectarea doar vizuală cere un standard mai strict. |
+| **Proximitate / pagină / spread** | Fără fereastră rigidă (propoziție, pagină, N pagini, N tokeni). Aceeași propoziție sau pagină → PASS dacă e clară. **Pagina următoare NU e automat REVIEW** (PASS sau PASS_WITH_ADVISORY după isolation risk și bandă). Spread-ul poate fi unitate semantică. Distanța mare = factor agravant, nu verdict. |
+| **Perceptibilitate pe bandă** | Banda modifică explicitarea, distanța tolerabilă, inferența și riscul izolării, nu adevărul. 3–4: foarte clar și apropiat, fără „same page only”. 5–6: mai narativ, dacă relația rămâne clară. 7–8 ≠ science bypass. Pragurile 3–4 / 5–6 nu sunt demonstrate empiric (L-16). |
+| **Repetare / întărire / contrazicere / reafirmare** | Întărirea nu e corectare (P6). Reafirmarea ulterioară poate anula rezolvarea (P11): ultima stare semantică contează. |
+| **Takeaway local / izolarea paginii / takeaway de carte / pattern pe volum și colecție** | Finding-ul local al expunerii se păstrează. Izolarea paginii = evidence pentru age-fit / review editorial, nu defect automat. Arcul misconception → exploration → correction e permis. Expunerea prelungită poate da REVIEW chiar cu final corect. Un mit repetat în volume nu e neutralizat de o singură corectare îndepărtată. |
+| **Text / vizual / cross-modal** | Imaginea poate întări, contrazice, susține corectarea sau purta ea însăși o afirmație. P17 (ochi mari) nu e corectare. Textul corect nu șterge un defect vizual. |
+| **Severitate / consecință / reparație / revalidare** | PASS: takeaway corect și clar. PASS_WITH_ADVISORY: corect, cu o problemă non-materială de izolare / proximitate / perceptibilitate. REVIEW_REQUIRED: adevăr, stance, corectare sau takeaway incerte (operatorul poate închide un fals pozitiv). **REPAIR_REQUIRED: confirmed false scientific takeaway**, neaprobabil neschimbat; repair → re-evaluate → validate. Nu BLOCKED_BY_POLICY. |
+| **Narator vs personaj fără corectare** | Narator afirmă ca fapt, necontestat → candidat → confirmat → REPAIR. Personaj fără stance → REVIEW (nu automat REPAIR). Personaj + endorsement al artifactului (narator, alții, acțiune, imagine, final) → REPAIR. |
+| **Paritate EN / RO** | Aceeași relație claim → correction → contradiction / resolution. P12 / P13 = eșec de paritate al implementării. |
+| **Critic / calitate** | D-14 se păstrează. Consecința științifică oficială vine din propriul model (finding → confirmation → stance / takeaway → consequence), nu din promptul criticului. |
+| **Rezultatele explicite** | **v2c-sci-bat-05 / P-C10 (7–8) → PASS.** P6 → întărire, nu corectare. P7 → „No” / „see” fără legătură, nu corectare. P8 → corectare ambiguă → candidat REVIEW. P11 → corectare urmată de reafirmare; takeaway-ul final decide. P12 / P13 → eșec de paritate EN / RO. Corectarea pe pagina următoare → NU automat REVIEW. Takeaway științific fals confirmat → REPAIR_REQUIRED. |
+| **Comportamentul evaluatorului la momentul deciziei** (HEAD `d75f0d6`, neschimbat) | `science.js`: corectarea în aceeași propoziție = tipar de credință / „but” + tipar opus → atenuat. Propoziția următoare sau prima propoziție a paginii următoare cu tipar opus sau „no / actually / de fapt” + cuvânt-cheie → `SCIENCE_REVIEW` minor. Altfel `SCIENCE_CLAIM` major. Probe: bat-05 → REVIEW; P6 și P7 → REVIEW (accidente); P3 / P4 / P18 / P8 / P17 / P19 → CLAIM; P12 / P13 (RO) → CLAIM; „hooted” → vorbitor *narrator*. Fără bandă. **Nici CLAIM, nici REVIEW nu blochează readiness, evaluarea cărții sau release-ul.** Efectul trece doar prin `criticNotes` (fără canon). Rubrica nu are criteriu științific. La scorarea Gold, REVIEW e prezis *positive*. **Comportamentul nu e politica.** |
+| **Consecințe viitoare** (Semantic Hardening #2, neautorizat încă) | Propoziție, adevăr, vorbitor, stance. Corectarea ca propoziție cu relație semantică și verificare științifică. Întărire și reafirmare. Traiectoria până la takeaway pe niveluri. Perceptibilitate pe bandă ca evidence. Spread / page turn. Evidence vizual și cross-modal. Stări de confirmare și consecințe deterministe, trasabile, nu prin `criticNotes`. Paritate EN / RO. Coduri conceptuale fără tabel rigid. Cazuri 3–4 / 5–6 / RO pentru testare ulterioară. |
+
+### Afectate (fără nicio modificare acum)
+
+- **Gold-v2:** v2c-sci-bat-05 → PASS la 7–8 (eticheta se dă la adjudecare). v2c-sci-bat-04 rămâne neschimbat; în modelul D-15, stance nerezolvat → REVIEW, takeaway fals confirmat → REPAIR (reprezentarea → D-19 / D-20). bat-02 / sun-02 → PASS (coerent).
+- **Probe:** P-C10 → PASS la 7–8; registrul nu se schimbă acum.
+- **Setul rezervat (înghețat):** v2h-sci-07 / -08 neschimbate; niciun caz de corectare ulterioară.
+- **Gold-v1:** neschimbat.
+
+### Nu decide
+
+Taxonomia concepțiilor greșite · simplificările acceptabile · praguri numerice de distanță · număr maxim de pagini · pragurile de
+perceptibilitate pe benzi · lumile fantastice · criteriul științific din rubrică (D-17) · D-16 · D-18 · măsurarea (D-19 / D-20) ·
+taxonomia științei vizuale · validitatea empirică.
+
+### Dependențe deschise
+
+- **D-15-DEP-SIMPLIFICATION-TAXONOMY** (OBS-GS-15).
+- **D-15-DEP-MISCONCEPTION-TAXONOMY** (L-10).
+- **D-15-DEP-BAND-PERCEPTIBILITY-EVIDENCE** (L-16; D-20 / D-22).
+- **D-15-DEP-FANTASY-WORLD-SCIENCE**.
+- **D-15-DEP-VISUAL-SCIENCE-TAXONOMY**.
+- **D-15-DEP-RUBRIC-SCIENCE-CRITERION** → D-17.
+- **D-15-DEP-MEASUREMENT** → D-19 / D-20.
