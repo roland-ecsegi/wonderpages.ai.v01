@@ -10,8 +10,8 @@
   },
   {
    "path": ".github/workflows/ingress-claude.yml",
-   "sha256": "e35fe1c9d348e3bbc66f84d1d6ecfee866c46448ff078b0e45e1eb30809c536f",
-   "gitBlob": "288e1d84dd874eec9034ee32393a3d142d5e0b5e"
+   "sha256": "02afe802a64531376f8aa542ce7022cb6407db276dc11fa6485a8af9f27cfba0",
+   "gitBlob": "c1130c4d6768c77921f05c85c376a883bbb049e3"
   },
   {
    "path": ".github/workflows/verify.yml",
@@ -20,8 +20,8 @@
   },
   {
    "path": "CLAUDE-INGRESS.md",
-   "sha256": "7bbbb2e5b2195db2037acd034f91b1764910aaed1883ef25aa72a0dd1b42d326",
-   "gitBlob": "c7d4a3b93edb67bef5a5a21a304bb7474ae1ee45"
+   "sha256": "b339af9fefd2f5ba493f8d03d0e223d5b857db51a9c995123f64fa2d47985527",
+   "gitBlob": "3be4e1791299d206c7ce7c9929c40bfe368364d4"
   },
   {
    "path": "INGRESS.md",
@@ -65,8 +65,8 @@
   },
   {
    "path": "tools/test.mjs",
-   "sha256": "0a27ed4f12632921eebbe39ad65fba6446e7edf72a4eb8db8153ada7b71037d7",
-   "gitBlob": "ed529f84af97c88337e37c67e425671c30ffe5d1"
+   "sha256": "ce8cd46b64575730dd9e024ce44a6e9ae64b2231cc29b5826e1885203d9a843a",
+   "gitBlob": "a231dce6ad160cfe1182c4f72975d7b9756156e0"
   }
  ]
 }

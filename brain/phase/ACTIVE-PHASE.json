@@ -231,6 +231,7 @@
    "claudeRing1": "ingress-claude run 37509237799: doorbell seq 1 pushed, PR refused by the repository setting; no wake, no routine run"
   },
   "auditRound1": "C1-A01 and C1-A02 repaired in brain/tools/c1.mjs; C1-A03 and C1-A04 documented as limitations; ring rollback added to ingress-claude.yml",
+  "auditRound2": "MSG-20261006T182725Z-chatgpt-b017: A01/A02 RESOLVED, A03/A04 ACCEPTED_LIMITATION; C1-B01 repaired in Bridge control 9496069 (rollback only on confirmed PR absence)",
   "routinePrompt": "brain/ingress/CLAUDE-ROUTINE-PROMPT.txt",
   "bootstrapTool": "brain/tools/c1.mjs"
  }
