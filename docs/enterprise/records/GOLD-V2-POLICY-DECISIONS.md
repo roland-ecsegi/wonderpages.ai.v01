@@ -38,6 +38,7 @@ explicită a operatorului. Etichetele cazurilor se dau la adjudecarea Gold-v2.
 | D-15 — fereastra de corectare a unei idei științifice greșite | DECISĂ (neimplementată) | D (corectare semantică + takeaway final + scope) | `dbc63cbc0e2a724d…` |
 | D-16 — minimul pentru criteriile non-critice; semantica pragurilor | DECISĂ (neimplementată) | D (minim 7 pe criteriile aplicabile; egalitate exactă; fără waiver) | `bd4cab1527f23f18…` |
 | D-17 — T07 vs porțile de siguranță, content-policy și age-fit | DECISĂ (neimplementată) | D (jurisdicții separate; T07 ≥ 7; fără dublă adjudecare) | `e9bea3e83f8e552d…` |
+| D-18 — validitatea dovezilor criticului (v3) | DECISĂ (neimplementată) | D (validare separată, obligatorie, simetrică) | `f45729ed49e9a2c5…` |
 
 ## D-01 — „Fără arme” pentru o armă reală
 
@@ -13806,3 +13807,1507 @@ implementarea D-08 · calitatea criticului · validitatea empirică.
 
 - **D-17-DEP-VALUES-TAXONOMY** · **D-17-DEP-RUBRIC-T07-WORDING** · **D-17-DEP-VISUAL-EDITORIAL-VALUES** · **D-17-DEP-NATIVE-VALUES-PARITY** ·
   **D-17-DEP-EVIDENCE-VALIDITY** → D-18 · **D-17-DEP-MEASUREMENT** → D-19 / D-20.
+
+## D-18 — Validitatea dovezilor criticului (Assessment Validation, politica v3)
+
+### Declarația operatorului (cuvânt cu cuvânt)
+
+```text
+D-18 — DECIZIA OPERATORULUI
+
+Aleg Opțiunea D, rafinată: Assessment Validation Layer separat, obligatoriu și simetric.
+
+Principiile centrale sunt:
+
+EVIDENCE EXISTS ≠ EVIDENCE IS VALID.
+
+EVIDENCE IS PRESENT IN THE ARTIFACT ≠ EVIDENCE SUPPORTS THE CLAIM.
+
+EVIDENCE SUPPORTS A CLAIM ≠ EVIDENCE JUSTIFIES THE ASSIGNED SCORE.
+
+CRITIC SCORE ≠ INDEPENDENTLY VERIFIED CONTENT PROPERTY.
+
+INVALID ASSESSMENT ≠ BAD ARTIFACT.
+
+UNVERIFIED ASSESSMENT ≠ QUALITY PASS.
+
+UNVERIFIED ASSESSMENT ≠ QUALITY FAIL.
+
+RE-EVALUATING AN INVALID ASSESSMENT ≠ WAIVING A CONFIRMED QUALITY DEFECT.
+
+QUOTE REUSE ≠ AUTOMATIC INVALIDITY.
+
+SHORT EVIDENCE ≠ AUTOMATIC INSUFFICIENCY.
+
+VALIDATION MUST FOLLOW THE EXACT ARTIFACT, EDITION, LAYER, LOCATION, CRITERION AND HASH THAT WERE ACTUALLY ASSESSED.
+
+Nu implementa acum.
+
+⸻
+
+1. Cele patru straturi OBS-GS-18 devin contractuale
+
+Păstrăm explicit separarea:
+
+A. Critic Assessment
+
+Criticul produce:
+
+* criterion;
+* score;
+* rationale / claim;
+* evidence;
+* issues;
+* assessment provenance.
+
+B. Assessment Validation
+
+Un strat separat verifică dacă assessment-ul este suficient de valid pentru a fi folosit.
+
+C. Acceptance Gate
+
+Doar un assessment validat poate produce o consecință finală de quality PASS / FAIL conform D-16 și D-17.
+
+D. Underlying Content Quality
+
+Calitatea reală a artifactului nu este identică nici cu scorul criticului, nici cu starea validatorului.
+
+Aceste patru straturi NU trebuie colapsate.
+
+⸻
+
+2. Politica nouă este v3
+
+D-18 nu rescrie retrospectiv politica v2.
+
+v2c-quality-02 rămâne:
+
+→ pozitiv conform politicii v2 istorice.
+
+Gold-v1, Gold-v2 și held-out rămân înghețate.
+
+Politica D-18 trebuie versionată ca:
+
+quality assessment evidence policy v3
+
+sau echivalentul canonical ales de arhitectură.
+
+Rapoartele v3 vor trebui regenerate ulterior conform procedurii stabilite după închiderea deciziilor.
+
+Nu modifica acum seturile.
+
+⸻
+
+3. Stările Assessment Validation
+
+La nivelul fiecărui criteriu trebuie să existe cel puțin conceptual:
+
+* VALIDATED
+* UNVERIFIED
+* INVALID
+
+WEAK poate exista ca diagnostic / evidence-quality attribute, dar NU trebuie să fie o stare ambiguă de acceptance.
+
+Un assessment agregat poate fi VALIDATED numai dacă toate assessment-urile necesare pentru decizia lui sunt validate conform contractului aplicabil.
+
+⸻
+
+4. VALIDATED
+
+VALIDATED înseamnă că evidence-ul:
+
+* aparține artifactului corect;
+* aparține versiunii/hash-ului corect;
+* aparține ediției evaluate;
+* aparține layer-ului permis;
+* este localizat corect;
+* există realmente;
+* este atribuit criteriului corect;
+* susține semantic claim-ul;
+* nu contrazice claim-ul;
+* este suficient pentru direcția și severitatea/scorul assessment-ului;
+* se află în jurisdicția corectă conform D-17;
+* nu depinde de o afirmație falsă despre artifact;
+* are provenance verificabil.
+
+⸻
+
+5. UNVERIFIED
+
+UNVERIFIED înseamnă:
+
+nu avem încă evidence suficientă pentru a spune că assessment-ul este valid sau invalid.
+
+Important:
+
+UNVERIFIED NU este sinonim cu PASS.
+
+Și:
+
+UNVERIFIED NU este sinonim cu FAIL.
+
+În politica v3:
+
+→ un assessment UNVERIFIED nu poate produce QUALITY PASS final;
+
+→ nu poate produce QUALITY FAIL final;
+
+→ nu poate declanșa REPAIR_REQUIRED asupra artifactului.
+
+Produce:
+
+ASSESSMENT_VALIDATION_REQUIRED
+
+sau stare semantic echivalentă.
+
+⸻
+
+6. INVALID
+
+INVALID înseamnă că assessment-ul nu poate fi folosit ca bază pentru verdictul de calitate.
+
+Exemple:
+
+* evidence fabricată;
+* evidence din ediția greșită;
+* evidence din layer-ul greșit;
+* locație falsă;
+* evidence irelevantă;
+* evidence care contrazice claim-ul;
+* claim fals despre text;
+* rationale din jurisdicția greșită;
+* evidence insuficientă pentru verdictul/scorul atribuit;
+* assessment legat de artifact/hash greșit.
+
+Consecința:
+
+→ assessment invalidated;
+
+→ reevaluare.
+
+Nu:
+
+→ artifact quality FAIL.
+
+⸻
+
+7. Un assessment invalid nu este un defect al cărții
+
+Aceasta trebuie înregistrată explicit:
+
+ASSESSMENT_INVALID ≠ ARTIFACT_QUALITY_FAIL.
+
+Dacă criticul inventează un citat, defectul este în evaluare.
+
+Nu avem voie să deducem:
+
+critic fabricated evidence → book is bad.
+
+⸻
+
+8. Simetric pentru PASS și FAIL
+
+Aceeași validare se aplică unui assessment care ar produce PASS și unuia care ar produce FAIL.
+
+Nu accept:
+
+high score needs weak validation, low score triggers repair immediately.
+
+Și nici invers.
+
+Dacă:
+
+T13 = 6.5
+
+dar assessment-ul nu este validat,
+
+nu porni REPAIR_REQUIRED conform D-16.
+
+Mai întâi:
+
+→ assessment validation / reevaluation.
+
+Numai un T13 = 6.5 validat poate produce consecința D-16.
+
+⸻
+
+9. Relația exactă cu D-16
+
+D-16 rămâne neschimbată pentru scorurile valide.
+
+Exemplu:
+
+T13 = 6.5 + assessment VALIDATED
+
+→ quality FAIL
+→ REPAIR_REQUIRED.
+
+Dar:
+
+T13 = 6.5 + assessment INVALID
+
+→ assessment reevaluation.
+
+Nu este waiver.
+
+⸻
+
+10. Contestarea assessment-ului
+
+Păstrăm principiul:
+
+OVERRIDE INVALID EVALUATION ≠ WAIVE CONFIRMED DEFECT.
+
+Operatorul sau validatorul poate contesta:
+
+* scorul;
+* evidence-ul;
+* atribuirea;
+* jurisdicția;
+* localizarea;
+* validitatea assessment-ului.
+
+Aceasta nu este derogare de la politica de calitate.
+
+⸻
+
+DETERMINISTIC VALIDATION
+
+11. Verificările deterministe sunt obligatorii
+
+Pentru v3 trebuie verificat determinist, unde este posibil:
+
+* artifact identity;
+* artifact hash/version;
+* edition;
+* layer/source;
+* criterion ID;
+* quoted text presence;
+* declared location;
+* page/location mapping;
+* issue evidence;
+* stale assessment;
+* evidence provenance.
+
+⸻
+
+12. Elipsele legitime
+
+E9 nu trebuie clasificat automat drept evidence fabricată.
+
+Un citat prescurtat precum:
+
+Bo has a little … boat
+
+poate fi valid dacă:
+
+* segmentele apar în ordinea corectă;
+* apar în contextul permis;
+* elipsa nu schimbă sensul;
+* nu combină arbitrar pasaje fără legătură.
+
+Prin urmare:
+
+ELLIPSIS ≠ FABRICATION.
+
+Dar elipsa trebuie validată structural.
+
+⸻
+
+13. Comentariu fără citat
+
+E7:
+
+Good rhythm throughout.
+
+nu este „citat inventat”.
+
+Este:
+
+→ rationale/commentary fără evidence citabilă suficientă.
+
+Folosește un reason semantic precum:
+
+EVIDENCE_NOT_CITABLE
+
+sau echivalent.
+
+Nu EVIDENCE_FABRICATED.
+
+⸻
+
+14. Locația trebuie verificată
+
+E10:
+
+Page 1: Bo hugs Mum...
+
+când textul este pe pagina 12:
+
+→ evidence location INVALID.
+
+Faptul că string-ul apare undeva în artifact nu validează locația declarată.
+
+⸻
+
+15. Hash binding
+
+Assessment-ul trebuie legat de artifact hash.
+
+Dar nu este suficient ca numai assessment-ul agregat să cunoască hash-ul.
+
+Evidence provenance trebuie să poată fi urmărită până la:
+
+assessment → criterion → claim → evidence → location → edition/layer → artifact hash.
+
+⸻
+
+16. Issues sunt incluse
+
+E13 expune un gol real.
+
+Evidence din issues trebuie să intre în același validation contract.
+
+Nu accept:
+
+criterion evidence validated
+
+dar:
+
+issue evidence ignored.
+
+⸻
+
+CORPUS / EDITION / LAYER
+
+17. Evidence trebuie să provină din corpusul permis pentru criteriul evaluat
+
+Implicit, pentru actuala rubrică textuală:
+
+→ textul child-facing al ediției evaluate.
+
+Nu orice string concatenat disponibil evaluatorului.
+
+⸻
+
+18. Ediția EN nu poate fi justificată cu evidence RO
+
+E15:
+
+EN assessment
+
+* RO quote
+
+→ invalid source binding,
+
+dacă criteriul evaluat este assessment-ul EN.
+
+EN și RO trebuie să aibă provenance separat.
+
+⸻
+
+19. Scene description
+
+E14:
+
+citat din scene
+
+nu este automat evidence pentru un criteriu care evaluează textul citit copilului.
+
+Dacă criterion contract spune text-only:
+
+→ scene evidence este wrong-layer.
+
+Dacă un viitor criterion contract permite scene/visual/cross-modal evidence:
+
+→ layer-ul poate fi valid, dar trebuie declarat explicit.
+
+Nu extindem implicit corpusul.
+
+⸻
+
+20. Title / blurb / cover text
+
+Aceeași regulă.
+
+Pot fi evidence numai dacă criterion scope le include.
+
+Nu doar pentru că se află în corpusul tehnic concatenat.
+
+⸻
+
+SEMANTIC VALIDATION
+
+21. Prezența nu este suport
+
+E4:
+
+T04 rhythm
+← The sun turns orange.
+
+String-ul există.
+
+Dar prezența nu demonstrează ritmul.
+
+Prin urmare:
+
+→ semantic support absent / insufficient;
+
+→ assessment nu poate fi VALIDATED pe baza acelui evidence.
+
+⸻
+
+22. Contradicția
+
+E5:
+
+T07 = 9
+← Oh no! A big wave tips the boat.
+
+Nu decid aici că propoziția dovedește T07 mic.
+
+Dar simpla ei existență nu justifică automat T07=9.
+
+Validatorul trebuie să verifice relația:
+
+evidence → claim → score.
+
+Dacă evidence contrazice rationale-ul:
+
+→ assessment INVALID sau necesită reevaluare, în funcție de întregul evidence bundle.
+
+⸻
+
+23. Afirmație falsă despre text
+
+E8:
+
+The refrain "Splash, splash, splash!" repeats on every page.
+
+dacă apare o singură dată:
+
+→ claim factual false;
+
+→ assessment INVALID pentru acel rationale.
+
+Nu contează că citatul în sine există.
+
+⸻
+
+24. Evidence prea generală
+
+E6:
+
+the boat
+
+nu devine suficientă doar pentru că are mai mult de patru caractere.
+
+Suficiența nu se măsoară prin lungimea string-ului.
+
+⸻
+
+25. Evidence foarte scurtă
+
+În sens invers:
+
+un citat scurt poate fi perfect valid.
+
+Prin urmare eliminăm ca politică semantică:
+
+length < 4 → insufficient.
+
+Lungimea poate rămâne eventual heuristic diagnostic.
+
+Nu verdict.
+
+⸻
+
+26. Nota mică + evidence pozitivă
+
+E11:
+
+T13 = 6.5
+← Bo pulls the oars.
+
+Nu deduc automat:
+
+quote positive → score must be high.
+
+Poate exista evidence suplimentară care justifică agency slabă în ansamblu.
+
+Dar dacă acesta este singurul evidence/rationale folosit pentru T13=6.5 și nu explică nota mică:
+
+→ assessment-ul nu este suficient validat.
+
+Prin urmare:
+
+nu REPAIR încă.
+
+→ reevaluate assessment.
+
+⸻
+
+SCORE SUPPORT
+
+27. Evidence trebuie să susțină nu numai criterion topic, ci și assessment direction
+
+Nu este suficient:
+
+quote is about agency.
+
+Trebuie să susțină:
+
+de ce agency assessment este slab/bun.
+
+⸻
+
+28. Evidence trebuie să susțină și severitatea/scorul în măsura necesară
+
+Un quote care demonstrează:
+
+there is some agency
+
+nu demonstrează automat:
+
+T13 = 9.
+
+Și un quote care arată o slăbiciune nu demonstrează automat:
+
+T13 = 6.5.
+
+⸻
+
+29. Nu pretindem precizie epistemică falsă
+
+D-18 nu decide că un singur citat poate demonstra matematic diferența dintre:
+
+8.4 și 8.5.
+
+Dar dacă scorurile numerice sunt folosite în:
+
+* mean;
+* floor;
+* critical threshold;
+
+atunci assessment-ul trebuie să aibă rationale/evidence suficient pentru poziționarea sa față de pragurile relevante și pentru granularitatea de scor permisă de contract.
+
+Granularitatea exactă rămâne dependency D-16.
+
+⸻
+
+30. Assessment bundle, nu quote izolat
+
+Pentru criterii globale precum:
+
+* pacing;
+* coherence;
+* agency;
+* ending;
+* voice;
+
+un singur quote poate să nu fie suficient pentru scor.
+
+Validatorul poate avea nevoie de:
+
+* quote;
+* counterevidence search;
+* multiple locations;
+* criterion-specific rationale;
+* whole-artifact context.
+
+Prin urmare:
+
+ONE QUOTE REQUIRED BY PROMPT ≠ ONE QUOTE IS ALWAYS SUFFICIENT TO VALIDATE THE SCORE.
+
+⸻
+
+REUSE
+
+31. Refolosirea nu este defect în sine
+
+Nu aleg B.
+
+Un citat poate susține legitim mai multe criterii.
+
+Exemplu ipotetic:
+
+o singură replică poate fi relevantă atât pentru:
+
+* voice;
+* age-fit;
+* dialogue naturalness.
+
+⸻
+
+32. Eliminăm pragul semantic >=3
+
+Nu există justificare pentru:
+
+* reuse twice → okay;
+* reuse three times → bad.
+
+Acesta este accident de implementare.
+
+⸻
+
+33. Reuse devine signal
+
+EVIDENCE_REUSED_ACROSS_CRITERIA
+
+poate rămâne diagnostic.
+
+Dar trebuie urmat de întrebarea:
+
+Does this evidence independently support each criterion-specific claim?
+
+⸻
+
+34. Reuse valid
+
+Dacă același quote susține în mod real fiecare claim:
+
+→ poate fi VALIDATED pentru fiecare.
+
+⸻
+
+35. Reuse invalid
+
+Dacă același quote este copiat mecanic pentru criterii fără relație:
+
+→ assessment-urile respective sunt INVALID/UNVERIFIED după verificarea semantică.
+
+Nu pentru că quote-ul a fost folosit de trei ori.
+
+Ci pentru că nu susține claim-urile respective.
+
+⸻
+
+v2c-quality-02
+
+36. Verdict istoric
+
+v2c-quality-02
+
+rămâne:
+
+→ pozitiv conform v2.
+
+Nu modifica Gold-v2.
+
+Nu reinterpreta rezultatul istoric ca și cum v3 ar fi existat.
+
+⸻
+
+37. Sub v3
+
+Același assessment ar necesita validation criterion-by-criterion.
+
+Faptul că:
+
+Bo has a little blue boat.
+
+este folosit pentru toate cele 18 criterii:
+
+→ declanșează reuse diagnostic;
+
+→ semantic validation.
+
+Probabilitatea evidentă că un singur citat susține toate cele 18 criterii este mică, dar D-18 nu permite verdict lexical/mecanic.
+
+Validatorul trebuie să demonstreze care criterion claims sunt sau nu susținute.
+
+⸻
+
+GATE CONSEQUENCE
+
+38. V3 final acceptance cere assessment validat
+
+Aici modific recomandarea lui Claude.
+
+Nu accept regula:
+
+UNVERIFIED poate decide poarta ca azi.
+
+Aceasta ar păstra problema fundamentală.
+
+În v3:
+
+FINAL QUALITY PASS REQUIRES A VALIDATED ASSESSMENT.
+
+Și:
+
+FINAL QUALITY FAIL THAT TRIGGERS ARTIFACT REPAIR REQUIRES A VALIDATED ASSESSMENT.
+
+⸻
+
+39. UNVERIFIED poate permite procesarea intermediară
+
+Pentru a nu bloca inutil pipeline-ul intern:
+
+UNVERIFIED poate permite:
+
+* diagnostic;
+* critic iteration;
+* candidate scoring;
+* temporary internal ranking;
+* request for validation.
+
+Dar nu:
+
+* final acceptance;
+* final quality rejection;
+* REPAIR_REQUIRED al artifactului;
+* release eligibility.
+
+⸻
+
+40. Dacă validatorul semantic nu există încă
+
+Până când Semantic Hardening #2 implementează și validează acest strat:
+
+nu pretinde:
+
+v3 validated quality.
+
+Runtime-ul actual poate continua să fie descris conform politicii sale reale v2.
+
+D-18 definește target contract v3.
+
+Nu falsificăm readiness.
+
+⸻
+
+RETRY / FAILURE
+
+41. Prima evaluare invalidă
+
+→ reevaluate assessment.
+
+Nu modifica artifactul.
+
+⸻
+
+42. Reevaluarea produce assessment valid
+
+Atunci quality gate îl poate folosi.
+
+⸻
+
+43. Reevaluarea rămâne invalidă
+
+După numărul de încercări permis de workflow:
+
+→ ASSESSMENT_INVALID
+
+sau echivalent.
+
+Nu:
+
+ARTIFACT_QUALITY_FAIL.
+
+⸻
+
+44. Consecința operațională
+
+Artifactul nu poate fi final acceptat deoarece nu avem o evaluare validă.
+
+Dar motivul este:
+
+assessment failure
+
+nu:
+
+content quality failure.
+
+Acestea trebuie afișate separat operatorului.
+
+⸻
+
+45. Operatorul poate adjudeca assessment validity unde politica permite
+
+Dacă validatorul automat nu poate determina semantic suportul:
+
+→ operator REVIEW al assessment-ului.
+
+Operatorul poate confirma:
+
+* evidence validă;
+* evidence invalidă;
+* need reevaluation.
+
+Nu este quality waiver.
+
+⸻
+
+VALIDATION STRICTNESS
+
+46. Nu folosim două standarde epistemice complet diferite pentru PASS și FAIL
+
+Toate criteriile folosite în verdict trebuie validate.
+
+⸻
+
+47. Boundary scores necesită atenție suplimentară
+
+Dacă scorul este gate-determinative sau aproape de:
+
+* mean 8;
+* criterion floor 7;
+* critical threshold 8;
+
+validatorul trebuie să confirme explicit relația evidence/rationale cu pragul relevant.
+
+Nu stabilesc aici o distanță numerică de tip:
+
+within 0.2.
+
+Ar fi arbitrară fără evidence.
+
+⸻
+
+48. FAIL care declanșează REPAIR
+
+Orice assessment care ar trimite artifactul în REPAIR_REQUIRED trebuie validat înainte de repair.
+
+Aceasta este obligatorie.
+
+⸻
+
+49. PASS final
+
+Și assessment-ul care produce PASS final trebuie validat.
+
+Nu accept:
+
+we validate only failures.
+
+Altfel high hallucinated scores pot trece produsul.
+
+⸻
+
+D-17 JURISDICTION
+
+50. Validarea include jurisdicția
+
+Pentru T07, validatorul trebuie să verifice:
+
+Is this evidence actually evidence for T07's independent quality jurisdiction?
+
+Dacă evidence este exclusiv:
+
+* safety;
+* content-policy;
+* age-fit;
+* science;
+
+→ mis-scoped.
+
+⸻
+
+51. Mis-scoped T07
+
+Exemplu:
+
+T07 = 6.5
+
+doar pentru un safety finding deja trimis safety gate.
+
+→ assessment T07 nu este valid ca independent quality failure.
+
+→ reevaluate T07.
+
+Nu waiver.
+
+⸻
+
+52. Delegated finding rămâne
+
+Reevaluarea T07 nu șterge safety finding-ul.
+
+Fiecare rămâne în jurisdicția sa conform D-17.
+
+⸻
+
+PAGE → BOOK → VOLUME → COLLECTION
+
+53. Page
+
+Evidence locală trebuie legată de locația reală.
+
+Pagina declarată trebuie verificată.
+
+⸻
+
+54. Book / Volume
+
+Un criterion global poate necesita evidence distribuită.
+
+Validatorul nu trebuie să presupună că un quote local reprezintă întregul volum.
+
+⸻
+
+55. Collection
+
+Dacă se face o afirmație de collection-level:
+
+evidence trebuie să acopere suficient colecția.
+
+Nu accept:
+
+one page quote → collection-wide score
+
+fără aggregation rationale.
+
+⸻
+
+56. Scope trebuie înregistrat
+
+Evidence trebuie să știe dacă susține:
+
+* Page;
+* Book;
+* Volume;
+* Collection.
+
+Nu generaliza implicit.
+
+⸻
+
+EN / RO
+
+57. Evidence este edition-bound
+
+EN assessment:
+
+→ EN evidence.
+
+RO assessment:
+
+→ RO evidence.
+
+Cross-edition evidence este permis numai pentru un criterion explicit de:
+
+* fidelity;
+* localization comparison;
+* semantic parity;
+
+nu pentru o rubrică monolingvă.
+
+⸻
+
+58. Lipsa rubricii native rămâne dependency
+
+D-18 nu inventează acum o rubrică RO.
+
+Dar dacă va exista:
+
+aceeași politică de evidence validation trebuie aplicată.
+
+⸻
+
+TEXT / VISUAL / CROSS-MODAL
+
+59. Text assessment
+
+Evidence textuală din layer-ul permis.
+
+⸻
+
+60. Visual assessment
+
+D-18 nu declară actualul visual QA validat prin această politică.
+
+Visual evidence validation rămâne dependency.
+
+⸻
+
+61. Cross-modal
+
+Dacă un viitor criterion este cross-modal:
+
+evidence trebuie să indice explicit:
+
+* text evidence;
+* visual evidence;
+* relația dintre ele.
+
+Nu acceptăm un quote textual ca dovadă că imaginea are o anumită proprietate.
+
+⸻
+
+62. Scene description ≠ image evidence
+
+Descrierea scenei este text despre imaginea intenționată.
+
+Nu este dovadă că imaginea generată chiar conține acel lucru.
+
+Această distincție trebuie păstrată.
+
+⸻
+
+EVIDENCE CAUSES / REASON CODES
+
+63. Cauzele trebuie separate conceptual
+
+Cel puțin:
+
+* EVIDENCE_ABSENT
+* EVIDENCE_FABRICATED
+* EVIDENCE_NOT_CITABLE
+* EVIDENCE_LOCATION_MISMATCH
+* EVIDENCE_WRONG_EDITION
+* EVIDENCE_WRONG_LAYER
+* EVIDENCE_STALE_HASH
+* EVIDENCE_IRRELEVANT
+* EVIDENCE_CONTRADICTS_CLAIM
+* EVIDENCE_FALSE_ARTIFACT_CLAIM
+* EVIDENCE_INSUFFICIENT_FOR_CLAIM
+* EVIDENCE_INSUFFICIENT_FOR_SCORE
+* EVIDENCE_REUSED
+* EVIDENCE_REUSED_UNSUPPORTED
+* EVIDENCE_JURISDICTION_MISMATCH
+
+Numele finale pot fi ajustate arhitectural.
+
+Nu implementa lista acum.
+
+⸻
+
+64. Nu toate reason codes au aceeași consecință
+
+EVIDENCE_REUSED
+
+poate fi signal.
+
+EVIDENCE_FABRICATED
+
+→ assessment invalid.
+
+EVIDENCE_WRONG_EDITION
+
+→ assessment invalid.
+
+EVIDENCE_IRRELEVANT
+
+→ assessment invalid sau reevaluation required pentru criterion.
+
+Trebuie păstrată distincția.
+
+⸻
+
+BOUNDARY CASES
+
+65. E1 — baseline
+
+present_unverified
+
+sub v2 poate PASS conform politicii istorice.
+
+Sub v3:
+
+→ nu este încă VALIDATED doar pentru că evidence există.
+
+Necesită semantic validation.
+
+⸻
+
+66. E2b — same quote ×2
+
+Nu invalid automat.
+
+→ reuse signal opțional;
+
+→ validate criterion-specific support.
+
+⸻
+
+67. E2c — same quote ×3
+
+Exact aceeași regulă.
+
+Nu există prag semantic magic la 3.
+
+⸻
+
+68. E3 — fabricated quote
+
+→ assessment INVALID.
+
+→ reevaluate.
+
+Nu artifact FAIL.
+
+⸻
+
+69. E4 — real but irrelevant
+
+→ evidence semantic invalid pentru acel claim.
+
+→ criterion assessment invalid/unverified pending reevaluation.
+
+⸻
+
+70. E5 — evidence contradicts assigned assessment
+
+→ nu poate fi VALIDATED fără rationale suplimentar care rezolvă contradicția.
+
+⸻
+
+71. E6 — the boat
+
+Nu decide prin character count.
+
+→ semantic sufficiency required.
+
+⸻
+
+72. E6b — Bo
+
+Nu decide doar prin două caractere.
+
+Poate fi insuficient în cazul respectiv, dar motivul este semantic, nu lungimea.
+
+⸻
+
+73. E7 — commentary without quote
+
+→ NOT_CITABLE / evidence absent pentru contractul care cere citat.
+
+Nu fabricated.
+
+⸻
+
+74. E8 — quote real + false statement
+
+→ assessment INVALID dacă claim-ul factual pe care se bazează assessment-ul este fals.
+
+⸻
+
+75. E9 — legitimate ellipsis
+
+→ poate fi valid dacă mapping-ul este verificabil și sensul este păstrat.
+
+Nu fabricated automat.
+
+⸻
+
+76. E10 — wrong page
+
+→ location invalid.
+
+→ assessment nu poate fi VALIDATED până la corectare.
+
+⸻
+
+77. E11 — low score + positive quote
+
+→ nu REPAIR automat.
+
+→ verifică dacă întregul evidence/rationale susține scorul mic.
+
+Dacă nu:
+
+→ reevaluate assessment.
+
+⸻
+
+78. E12 — missing evidence
+
+→ assessment incomplete/invalid conform contractului.
+
+Nu artifact defect.
+
+⸻
+
+79. E13 — issue fabricated evidence
+
+→ trebuie prins de validator.
+
+Issues nu sunt exceptate.
+
+⸻
+
+80. E14 — scene quote for text criterion
+
+→ wrong layer.
+
+⸻
+
+81. E15 — RO quote for EN criterion
+
+→ wrong edition.
+
+⸻
+
+RELAȚIA CU D-01…D-17
+
+82. D-01–D-13
+
+D-18 nu schimbă politicile lor.
+
+Dacă quality critic citează evidence din acele domenii:
+
+D-17 jurisdiction se aplică.
+
+⸻
+
+83. D-14
+
+Candidate / confirmed / dismissed findings și trasabilitatea rămân.
+
+D-18 adaugă validation state pentru assessment evidence.
+
+⸻
+
+84. D-15
+
+Principiul este analog:
+
+correction token ≠ semantic correction
+
+și aici:
+
+quote token ≠ semantic support.
+
+⸻
+
+85. D-16
+
+Doar un assessment valid poate activa:
+
+* criterion floor;
+* critical threshold;
+* mean consequence;
+* REPAIR_REQUIRED.
+
+Invalid assessment → reevaluate.
+
+⸻
+
+86. D-17
+
+Assessment validation trebuie să verifice și authoritative jurisdiction.
+
+Un T07 score nu poate deveni valid doar pentru că evidence există dacă evidence aparține safety/content-policy/age-fit.
+
+⸻
+
+87. Mean
+
+Media de calitate nu trebuie considerată final validată dacă scorurile care o compun nu au assessment validation suficientă.
+
+Nu accept:
+
+invalid individual score → valid exact mean.
+
+⸻
+
+88. Version selection
+
+Regula D-16:
+
+gate-valid candidate înaintea scorului mai mare
+
+trebuie înțeleasă astfel:
+
+un candidate cu assessment nevalidat nu poate fi tratat drept gate-valid final.
+
+⸻
+
+CINE VALIDEAZĂ
+
+89. D-18 decide funcția, nu furnizorul
+
+Nu decid acum dacă validatorul semantic este:
+
+* același model într-o instanță independentă;
+* alt model;
+* alt permanent agent;
+* operator;
+* deterministic + model hybrid.
+
+Aceasta rămâne implementation / commissioning dependency.
+
+⸻
+
+90. Dar validatorul trebuie să fie separat logic
+
+Nu accept:
+
+critic says quote supports score → therefore quote supports score.
+
+Ar fi circular.
+
+Assessment Validation trebuie să fie logic distinct de Assessment.
+
+⸻
+
+91. Deterministic checks nu necesită model
+
+Prezență, hash, edition, page, layer etc.:
+
+→ deterministic unde posibil.
+
+⸻
+
+92. Semantic support
+
+Relevance, contradiction, sufficiency, claim-to-score relation:
+
+→ semantic validator / operator / mecanism ulterior demonstrabil.
+
+Nu inventa word-list shortcuts.
+
+⸻
+
+GOLD / MEASUREMENT
+
+93. Nu modifica Gold-v2 acum
+
+0/226 operator adjudication rămâne până la procedura stabilită.
+
+⸻
+
+94. D-19 / D-20 trebuie să reprezinte starea separată
+
+Important pentru investigația următoare:
+
+assessment invalid
+
+nu trebuie măsurată ca:
+
+content negative.
+
+Și:
+
+assessment unverified
+
+nu trebuie măsurată automat ca:
+
+content positive.
+
+Aceasta este dependency pentru D-19 / D-20.
+
+⸻
+
+95. Historical v2 evidence
+
+Rămâne evidence despre evaluatorul v2.
+
+Nu îl rescrie după politica v3.
+
+⸻
+
+FORMULĂRI OBLIGATORII
+
+Înregistrează explicit:
+
+Evidence presence is necessary where the criterion contract requires cited evidence, but presence alone is not evidence validity.
+
+A quality assessment may produce a final PASS or a content-driven FAIL only after the assessment evidence required by the applicable policy has been validated.
+
+An INVALID or UNVERIFIED assessment is a property of the assessment process, not proof of an artifact quality defect.
+
+An invalid assessment must be re-evaluated; re-evaluation is not a waiver of a confirmed quality defect.
+
+Evidence reuse is a diagnostic signal, not an automatic invalidation rule; reused evidence must independently support every criterion-specific claim for which it is used.
+
+Evidence length is not a semantic sufficiency test.
+
+Assessment validation must bind criterion, claim, evidence, artifact location, edition/layer and artifact hash.
+
+For T07, assessment validation also verifies authoritative jurisdiction under D-17.
+
+⸻
+
+CE NU DECIDE D-18
+
+D-18 NU decide:
+
+* modelul/furnizorul concret al semantic validatorului;
+* dacă validatorul va fi un nou agent sau o funcție a unui agent permanent;
+* costul mecanismului;
+* numărul final de retry-uri;
+* granularitatea numerică a scorurilor;
+* taxonomia completă per criterion pentru „sufficient evidence”;
+* schema Gold — D-19 / D-20;
+* metricile Gold — D-19 / D-20;
+* validation performance thresholds — D-21;
+* author independence — D-22;
+* rubrica nativă;
+* visual evidence validator;
+* cross-modal evidence validator;
+* empirical validity;
+* rubric redesign;
+* Product Contract changes.
+```
+
+### Formulări obligatorii (înregistrate ca atare)
+
+> Evidence presence is necessary where the criterion contract requires cited evidence, but presence alone is not evidence validity.
+>
+> A quality assessment may produce a final PASS or a content-driven FAIL only after the assessment evidence required by the applicable
+> policy has been validated.
+>
+> An INVALID or UNVERIFIED assessment is a property of the assessment process, not proof of an artifact quality defect.
+>
+> An invalid assessment must be re-evaluated; re-evaluation is not a waiver of a confirmed quality defect.
+>
+> Evidence reuse is a diagnostic signal, not an automatic invalidation rule; reused evidence must independently support every
+> criterion-specific claim for which it is used.
+>
+> Evidence length is not a semantic sufficiency test.
+>
+> Assessment validation must bind criterion, claim, evidence, artifact location, edition/layer and artifact hash.
+>
+> For T07, assessment validation also verifies authoritative jurisdiction under D-17.
+>
+> v2c-quality-02 remains historically positive under v2. D-18 defines a new versioned v3 assessment-validation policy and does not
+> mutate frozen historical labels or results.
+
+### Separarea cerută
+
+| Strat | Conținut |
+|---|---|
+| **Decizie de politică** | Opțiunea D, rafinată: strat de validare a evaluării, separat, obligatoriu și simetric. Straturile OBS-GS-18 (A critic · B validare · C poartă · D calitatea reală) devin contractuale. Politică nouă **v3**; v2 nu se rescrie. |
+| **Versiunea politicii / criteriu / scor / scor canonic / relația cu pragul** | v2 = runtime actual, istoric; v3 = target contract. Scorurile care decid poarta sau sunt apropiate de praguri cer confirmare explicită a relației cu pragul, fără distanță numerică fixă. |
+| **Claim / evidence / tip / locație declarată / locație verificată / nivel / ediție / layer / hash** | Lanțul assessment → criterion → claim → evidence → location → edition / layer → artifact hash. Corpusul implicit: textul citit de copil, din ediția evaluată. Scena, titlul, blurb-ul și coperta doar dacă scope-ul criteriului le include. EN ≠ RO. Pagina declarată se verifică. |
+| **Prezență / elipsă** | Prezența e necesară unde se cere citat, nu e suficientă. ELLIPSIS ≠ FABRICATION (validată structural). Comentariul fără citat = NOT_CITABLE. |
+| **Relevanță / contradicție / afirmații despre text / suficiență pentru claim și scor** | Semantic, printr-un validator logic separat de critic. Nu după lungime. Pentru criterii globale e nevoie de bundle (citat, contra-evidence, locații multiple, context). |
+| **Refolosire** | Doar diagnostic; pragul „≥ 3” eliminat. Refolosirea e validă dacă susține fiecare claim. |
+| **Jurisdicție / related findings** | T07: evidence exclusiv safety / content-policy / age-fit / science → mis-scoped → reevaluare (D-17); finding-ul delegat rămâne. |
+| **Starea de validare / motive / proveniența validatorului** | VALIDATED / UNVERIFIED / INVALID (WEAK doar diagnostic). Agregatul e VALIDATED doar dacă toate componentele necesare sunt validate. Coduri conceptuale cu consecințe diferite (REUSED = semnal; FABRICATED / WRONG_EDITION → invalid; IRRELEVANT → invalid sau reevaluare). Furnizorul validatorului nu e decis. |
+| **Retry / adjudecarea operatorului** | Invalid → reevaluare (artifactul nu se modifică). După încercările permise → ASSESSMENT_INVALID. Operatorul poate adjudeca validitatea evaluării; nu e waiver. |
+| **Consecințe: calitate / artifact / release** | **FINAL QUALITY PASS REQUIRES A VALIDATED ASSESSMENT. FINAL QUALITY FAIL THAT TRIGGERS ARTIFACT REPAIR REQUIRES A VALIDATED ASSESSMENT.** UNVERIFIED → ASSESSMENT_VALIDATION_REQUIRED (permite doar procesare intermediară). INVALID ≠ artifact FAIL. Release nu e eligibil fără evaluare validată; motivul (assessment failure) se afișează separat de content failure. Recomandarea furnizorului („UNVERIFIED decide poarta ca azi”) **nu a fost adoptată**. |
+| **Relația cu D-16** | Doar evaluarea validată activează floor, critical, media și REPAIR_REQUIRED. „invalid individual score → valid exact mean” respins. Un candidat nevalidat nu e gate-valid final. |
+| **Niveluri / ediții / vizual** | Scope-ul evidence-ului e înregistrat (Page / Book / Volume / Collection), fără generalizare. Evidence edition-bound; cross-edition doar pentru fidelity / parity. QA vizual nevalidat prin această politică. Scene description ≠ image evidence. |
+| **Comportamentul evaluatorului la momentul deciziei** (HEAD `8979277`, v2, neschimbat) | Prezență după normalizare pe un corpus concatenat. NOT_FOUND / INSUFFICIENT (< 4 caractere) / REUSED (≥ 3) raportate. Doar NOT_FOUND schimbă verdictul (confundat cu eșecul artifactului). Criticul e reîntrebat o dată, apoi eroare. Elipsa legitimă tratată ca inventată. Pagina ignorată. Issues lipsă din raport. **Comportamentul nu e politica.** |
+| **Consecințe viitoare** (Semantic Hardening #2, neautorizat încă) | Strat B separat; stări per criteriu și agregat; verificări deterministe și semantice; ASSESSMENT_VALIDATION_REQUIRED / ASSESSMENT_INVALID separate de content failure; politică v3 versionată, rapoarte regenerate; reprezentarea în Gold după D-19 / D-20. |
+
+### Rezultatele de graniță E1–E15
+
+E1 (prezent, neverificat) → sub v2 poate PASS (istoric); sub v3 nu e VALIDATED doar prin prezență · E2b / E2c (refolosire ×2 / ×3) →
+aceeași regulă, fără prag; validare per criteriu · E3 (inventat) → INVALID → reevaluare, nu artifact FAIL · E4 (irelevant) → invalid /
+unverified până la reevaluare · E5 (contrazice) → nu VALIDATED fără rationale care rezolvă contradicția · E6 / E6b („the boat” / „Bo”)
+→ suficiență semantică, nu după caractere · E7 (comentariu) → NOT_CITABLE, nu fabricat · E8 (afirmație falsă despre text) → INVALID ·
+E9 (elipsă legitimă) → poate fi valid · E10 (pagină greșită) → locație invalidă · E11 (notă mică + citat pozitiv) → nu REPAIR automat;
+reevaluare dacă rationale-ul nu susține nota · E12 (evidence lipsă) → assessment incomplet / invalid, nu defect al artifactului ·
+E13 (issue inventat) → prins de validator · E14 (scenă pentru criteriu text) → wrong layer · E15 (RO pentru EN) → wrong edition.
+
+### Afectate (fără nicio modificare acum)
+
+- **Gold-v2:** v2c-quality-02 rămâne pozitiv sub v2 (istoric). Sub v3: v2c-quality-03 → evaluare INVALID, nu artifact negativ; v2c-quality-01 nu e VALIDATED doar prin prezență. Reprezentarea → D-19 / D-20.
+- **Probe:** P-Q01 / P-Q02 rămân dovezi despre v2.
+- **Setul rezervat (înghețat, fără rerun):** v2h-quality-04 rămâne înregistrat sub v2.
+- **Gold-v1:** neschimbat.
+
+### Nu decide
+
+Furnizorul / agentul validatorului semantic · costul · numărul de retry-uri · granularitatea scorurilor · taxonomia suficienței per
+criteriu · schema și metricile Gold (D-19 / D-20) · D-21 · D-22 · rubrica nativă · validatorul vizual / cross-modal · validitatea
+empirică · rubrica · Product Contract.
+
+### Dependențe deschise
+
+- **D-18-DEP-SEMANTIC-VALIDATOR** · **D-18-DEP-RETRY-COUNT** · **D-18-DEP-SUFFICIENCY-TAXONOMY** · **D-18-DEP-MEASUREMENT** → D-19 / D-20 ·
+  **D-18-DEP-VISUAL-CROSSMODAL-EVIDENCE** · **D-18-DEP-V3-REPORT-REGENERATION** · legătura cu **D-16-DEP-SCORING-GRANULARITY**.

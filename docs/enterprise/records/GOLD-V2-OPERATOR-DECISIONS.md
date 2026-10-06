@@ -21,7 +21,8 @@ DECISĂ (opțiunea B, profil structural; consecința de publicare → D-14), nei
 finding → confirmare → severitate → consecință; age-fit material → REVIEW, fidelity confirmată → REPAIR), neimplementată. D-15: DECISĂ (opțiunea D,
 corectare semantică + takeaway științific final; bat-05 → PASS; takeaway fals confirmat → REPAIR), neimplementată. D-16: DECISĂ (opțiunea D,
 minim 7 pe criteriile aplicabile, politică de produs nevalidată empiric; egalitatea trece; fără waiver), neimplementată. D-17: DECISĂ (opțiunea D,
-jurisdicții separate; T07 critic cu prag 7; fără dublă adjudecare), neimplementată. Tabelul de mai jos rămâne prezentarea inițială, nu se rescrie.
+jurisdicții separate; T07 critic cu prag 7; fără dublă adjudecare), neimplementată. D-18: DECISĂ (opțiunea D,
+validarea evaluării separată și simetrică, politică v3; PASS / FAIL final doar pe evaluare validată), neimplementată. Tabelul de mai jos rămâne prezentarea inițială, nu se rescrie.
 
 **Cum se înregistrează:**
 - **Pentru un caz:** `node scripts/enterprise/gold-adjudicate.mjs record --case=<id> --decision=correct --label=positive|negative
