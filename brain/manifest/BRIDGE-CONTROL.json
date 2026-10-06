@@ -1,0 +1,39 @@
+{
+ "schema": "wonderpages.brain.bridge-control/1",
+ "bridgeRepo": "roland-ecsegi/wonderpages.agent-bridge",
+ "rule": "Canonical hashes of the Agent Bridge control files. Bridge CI (tools/bridge.mjs verify-control) and Claude (bridge-export.mjs verify) require the live control files to equal these and forbid unlisted control files. Updated only by Claude after a reviewed control change, then exported through the provenance-verified mirror.",
+ "files": [
+  {
+   "path": ".github/workflows/verify.yml",
+   "sha256": "4bb4de5331df7a8f899ae72d6dd55a0c9091e4ade9568e40d5ffef66972c5346"
+  },
+  {
+   "path": "PROTOCOL.md",
+   "sha256": "787fa7d28e9b2813a0a20d1c3b36e3afac4e83c29334fd17b0b4a30d69f34156"
+  },
+  {
+   "path": "README.md",
+   "sha256": "e9cc8482990ba12c31729dcdf8bc89f464ab576369e2c4b8deb3507cae47ca73"
+  },
+  {
+   "path": "audit/README.md",
+   "sha256": "4fd90ea3ae7083c47795a917b8f3e8ab1308b767c1bdd561cd10372be269ce03"
+  },
+  {
+   "path": "schemas/example-chatgpt-audit-result.json",
+   "sha256": "5f5e7ed1d123a5b27d65a0303a17143ee18d83719bc29895298a02f0513db8fe"
+  },
+  {
+   "path": "schemas/message.schema.json",
+   "sha256": "e45df8cc86759e2814513bcebb7dcf76cbbaba4e31e4e3bede89804e9cffdee7"
+  },
+  {
+   "path": "tools/bridge.mjs",
+   "sha256": "63dfb114c44f87ebe4e4d53cf21f01bec848efd999b3355a5dc0ec2ee69feefa"
+  },
+  {
+   "path": "tools/test.mjs",
+   "sha256": "504e071473015d6ff8705fc3f3a6879ccc16a0b808a304069cb470e4a6ac9794"
+  }
+ ]
+}

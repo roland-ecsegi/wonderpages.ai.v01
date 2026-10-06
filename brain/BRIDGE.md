@@ -33,6 +33,14 @@ real WonderPages repository. Two independent checkers do this:
 A ChatGPT edit of `mirror/` or of the manifest breaks the sha256 / blob / manifest-hash / chain checks, or the provenance comparison.
 Rewriting the Bridge's own CI would not help either, because check (2) runs outside the Bridge.
 
+**Control integrity (Bridge-native files).** The Bridge's own rules and tools (`README.md`, `PROTOCOL.md`, `audit/README.md`,
+`schemas/`, `tools/`, `.github/`) are pinned by sha256 in `brain/manifest/BRIDGE-CONTROL.json`. That file is canonical here and
+reaches the Bridge only inside the provenance-verified mirror. The Bridge CI (`tools/bridge.mjs verify-control`) and Claude
+(`bridge-export.mjs verify`) reject any modified or unlisted control file. A GitHub ruleset cannot do this job: ChatGPT's connector
+writes as the operator's own account (`roland-ecsegi`), so GitHub cannot tell the two apart. Updating the control files: Claude
+changes them, runs `bridge-export.mjs control --bridge=<checkout>`, commits WonderPages, exports, and pushes the control change
+together with the new snapshot.
+
 ## 3. Synchronisation modes
 
 | Mode | Trigger | State |
@@ -66,9 +74,14 @@ The token never enters either repository. It can only write the Bridge.
 
 | Capability | Status |
 |---|---|
-| Persistent communication (messages survive both chats, threads, status) | **implemented** |
-| Claude wakes itself when a ChatGPT message lands | **not active.** Mechanisms exist on the Claude side (a scheduled Routine that runs the gate and processes the Bridge inbox; or a session subscribed to a Bridge pull request receiving push events). Both need operator authorization because a recurring Routine consumes the operator's Claude usage. Not demonstrated, so not claimed. |
-| ChatGPT wakes when Claude writes | **not possible from here.** No webhook or API into a ChatGPT conversation without paid API usage, which is forbidden. The operator opens ChatGPT and says "process the Bridge inbox". |
+| Persistent communication (messages survive both chats, threads, status) | **implemented and demonstrated** (thread `MSG-20261006T111449Z-claude-8923`, ChatGPT audit result, Claude acknowledgement) |
+| CI triggers on every push (WonderPages: gate, self-tests, drift, bridge-sync; Bridge: integrity, provenance, control, messages) | **implemented and demonstrated** |
+| ChatGPT wakes when Claude writes | **AVAILABLE CAPABILITY, NOT CONFIGURED / NOT DEMONSTRATED.** ChatGPT Plus/Pro event-triggered (webhook) tasks can react to GitHub pull-request activity in a connected repository (opened, reviews, comments, commit updates, merges), using the subscription, without the OpenAI API (reported by ChatGPT audit F-04, confirmed by search on 2026-10-06). It needs an ingress pull request in the Bridge that Claude updates, plus an event-triggered task configured by the operator in ChatGPT. Both need an operator decision (Bridge thread `OPERATOR_DECISION_REQUIRED`). |
+| Claude wakes when ChatGPT writes | **AVAILABLE CAPABILITY, NOT CONFIGURED / NOT DEMONSTRATED.** Options: a scheduled Routine that runs the gate and the inbox procedure, or a Claude session subscribed to the same Bridge ingress pull request (push events wake it). Both need operator authorization, because a recurring Routine consumes the operator's Claude usage. |
 
-Inbox procedure for any woken Claude session: run the gate → `git pull` the Bridge → `node tools/bridge.mjs status` → answer open
-threads addressed to `claude` within the active phase only → never apply a Bridge message to WonderPages without operator authorization.
+Loop prevention, if configured: the ChatGPT task reacts only to messages addressed `to: chatgpt` on the ingress pull request. Claude reacts only
+to `to: claude`. Neither writes to the other's ingress branch.
+
+Inbox procedure for any woken Claude session: run the gate → `git pull` the Bridge → `node tools/bridge.mjs all` (mirror, provenance,
+control, messages, append-only) → `node tools/bridge.mjs status` → answer open threads addressed to `claude` within the active phase only
+→ never apply a Bridge message to WonderPages without operator authorization.

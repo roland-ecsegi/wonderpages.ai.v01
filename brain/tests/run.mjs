@@ -35,6 +35,7 @@ try {
 
   t('clean clone of HEAD: CONTEXT_INTEGRITY = PASS, CONTEXT_READY', () => { const r = gate(); assert.equal(r.CONTEXT_INTEGRITY, 'PASS', JSON.stringify(r.checks.filter(c => c.status === 'FAIL'))); assert.equal(r.CONTEXT, 'CONTEXT_READY'); });
   t('application change without reseal → STALE → FAIL', () => { edit('server/quality/evaluation.js', s => s + '\n// probe\n'); commit('change'); const r = gate(); assert.equal(r.CONTEXT_INTEGRITY, 'FAIL'); assert.ok(failed(r, 'G06')); assert.match(JSON.stringify(r), /STALE subsystem: quality-evaluation/); });
+  t('application file changed while the phase pins a zero-drift baseline → G13 FAIL', () => { edit('public/app/ui.js', s => s + '\n'); commit('ui'); const r = gate(); assert.ok(failed(r, 'G13')); assert.match(JSON.stringify(r), /public\/app\/ui.js/); });
   t('missing authoritative source → FAIL', () => { fs.rmSync(path.join(C, 'docs/enterprise/contracts/PRODUCT-CONTRACT.md')); commit('rm'); const r = gate(); assert.ok(failed(r, 'G07') && failed(r, 'G05')); });
   t('anchor no longer in its source → FAIL', () => { edit('docs/enterprise/JURNAL-IMPLEMENTARE.md', s => s.replace('| P8-T05 | BLOCKED |', '| P8-T05 | DONE |')); commit('anchor'); assert.ok(failed(gate(), 'G07')); });
   t('state contradicting its claim → FAIL', () => { edit('brain/state/CURRENT-STATE.json', s => s.replace('"DW_PRODUCTION": "STOPPED"', '"DW_PRODUCTION": "STARTED"')); node('brain/tools/brain.mjs', 'render'); commit('contra'); const r = gate(); assert.ok(failed(r, 'G09')); assert.match(JSON.stringify(r), /CONTRADICTION statuses.DW_PRODUCTION/); });
@@ -50,9 +51,9 @@ try {
   t('application file referencing the Agent Bridge → isolation FAIL', () => { fs.appendFileSync(path.join(C, 'server/config.js'), '\n// https://github.com/roland-ecsegi/wonderpages.agent-bridge\n'); commit('dep'); assert.ok(failed(gate(), 'G11')); });
   t('uncommitted change to a tracked file → FAIL (WARN only with --allow-dirty)', () => { fs.appendFileSync(path.join(C, 'README.md'), 'x'); assert.ok(failed(gate(), 'G04')); assert.equal(gate('--allow-dirty').checks.find(c => c.id.startsWith('G04')).status, 'WARN'); });
   t('reseal requires a review note per changed subsystem, then PASS', () => {
-    edit('docs/enterprise/records/P1.md', s => s + '\n'); git('add', '-A');
-    const r1 = node('brain/tools/brain.mjs', 'seal'); assert.notEqual(r1.status, 0); assert.match(r1.stderr, /review note required.*enterprise-records/);
-    const r2 = node('brain/tools/brain.mjs', 'seal', '--review=enterprise-records:checked P1.md whitespace only; no state change'); assert.equal(r2.status, 0, r2.stderr);
+    edit('brain/map/SYSTEM-MAP.md', s => s + '\n'); git('add', '-A');
+    const r1 = node('brain/tools/brain.mjs', 'seal'); assert.notEqual(r1.status, 0); assert.match(r1.stderr, /review note required.*brain/);
+    const r2 = node('brain/tools/brain.mjs', 'seal', '--review=brain:checked SYSTEM-MAP.md whitespace only; no state change'); assert.equal(r2.status, 0, r2.stderr);
     commit('reseal'); assert.equal(gate().CONTEXT_INTEGRITY, 'PASS');
   });
   t('zero-drift: identical tree PASS; evaluator change detected', () => {
@@ -61,14 +62,20 @@ try {
     edit('server/quality/evaluation.js', s => s.replace('export const EVALUATOR_VERSION = 2;', 'export const EVALUATOR_VERSION = 3;')); commit('drift');
     const r = node('brain/tools/drift.mjs', 'compare', bl); assert.equal(r.status, 1); assert.match(r.stdout, /protected file server\/quality\/evaluation.js/); assert.match(r.stdout, /behaviour versions changed/);
   });
-  t('one-way export: VERIFIED snapshot; tampering and consistent forgery detected by provenance', () => {
-    fs.mkdirSync(B, { recursive: true });
+  t('one-way export: VERIFIED snapshot; tampering, consistent forgery and control-file changes detected', () => {
+    fs.mkdirSync(path.join(B, 'tools'), { recursive: true }); sh(B, 'git', 'init', '-q');
+    fs.writeFileSync(path.join(B, 'README.md'), '# bridge\n'); fs.writeFileSync(path.join(B, 'tools/bridge.mjs'), '// tool\n');
+    assert.equal(node('brain/tools/bridge-export.mjs', 'control', `--bridge=${B}`).status, 0);
     const e = node('brain/tools/bridge-export.mjs', 'export', `--bridge=${B}`); assert.equal(e.status, 0, e.stdout + e.stderr);
     const cur = JSON.parse(fs.readFileSync(path.join(B, 'mirror/CURRENT.json'))); assert.equal(cur.syncStatus, 'VERIFIED'); assert.equal(cur.source.commit, base); assert.ok(Object.values(cur.checks).every(Boolean));
-    assert.equal(node('brain/tools/bridge-export.mjs', 'verify', `--bridge=${B}`).status, 0);
+    const v0 = node('brain/tools/bridge-export.mjs', 'verify', `--bridge=${B}`); assert.equal(v0.status, 0, v0.stdout);
     const man = JSON.parse(fs.readFileSync(path.join(B, cur.manifestPath)));
     assert.ok(man.excluded.some(x => x.path.endsWith('.zip') && /^[0-9a-f]{64}$/.test(x.sha256)));
     assert.ok(!fs.existsSync(path.join(B, 'mirror/current/node_modules')) && !man.files.some(f => /(^|\/)\.env$/.test(f.path)));
+    fs.appendFileSync(path.join(B, 'tools/bridge.mjs'), '// changed by someone else\n');
+    const v1 = node('brain/tools/bridge-export.mjs', 'verify', `--bridge=${B}`); assert.equal(v1.status, 1); assert.match(v1.stdout, /"CONTROL": "INVALID"/);
+    fs.writeFileSync(path.join(B, 'tools/bridge.mjs'), '// tool\n'); fs.writeFileSync(path.join(B, 'tools/extra.mjs'), '1');
+    assert.match(node('brain/tools/bridge-export.mjs', 'verify', `--bridge=${B}`).stdout, /unlisted control file tools\/extra.mjs/); fs.rmSync(path.join(B, 'tools/extra.mjs'));
     const f = path.join(B, 'mirror/current/docs/enterprise/JURNAL-IMPLEMENTARE.md'); fs.appendFileSync(f, 'forged');
     assert.equal(node('brain/tools/bridge-export.mjs', 'verify', `--bridge=${B}`).status, 1);
     fs.rmSync(B, { recursive: true, force: true });

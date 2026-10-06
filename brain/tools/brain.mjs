@@ -6,6 +6,8 @@
  *   node brain/tools/brain.mjs status                          which subsystems changed since the last seal
  *   node brain/tools/brain.mjs index                           regenerate the derived indexes (decisions, accidents, dependencies, agents)
  *   node brain/tools/brain.mjs render                          regenerate brain/state/CURRENT-STATE.md from the JSON state
+ *   node brain/tools/brain.mjs acceptance                      check that the active phase's completion evidence describes the tested
+ *                                                              candidate commit and that only evidence files changed after it
  *   node brain/tools/brain.mjs seal --review=<subsystem>:<note> [...] [--initial]
  *                                                              record that the brain was reviewed against every changed subsystem
  *
@@ -296,6 +298,18 @@ export function runGate(root = BRAIN_ROOT, { allowDirty = false, env = process.e
     add('G12-brain-references', bad.length ? 'FAIL' : 'PASS', bad.length ? 'brain navigation points at missing files or claims' : `${mdFiles.length} brain documents: every cited repository path and claim id resolves`, [...new Set(bad)]);
   } catch (e) { add('G12-brain-references', 'FAIL', String(e.message || e)); }
 
+  /* G13 phase zero-drift: while the active phase declares a baseline, every tracked file outside its write scope must keep the
+     exact blob id recorded in that baseline (checked at EVERY commit, so evidence never lags behind the tree it describes) */
+  try {
+    if (!phase.zeroDriftBaseline) add('G13-phase-zero-drift', 'PASS', 'active phase declares no zero-drift baseline (application changes governed by its write scope only)');
+    else {
+      const base = J(phase.zeroDriftBaseline), want = base.protectedTree.entries, bad = [];
+      const now = Object.fromEntries(indexEntries(root).filter(e => !phase.writeScope.some(g => globToRe(g).test(e.path))).map(e => [e.path, e.blob]));
+      for (const p of new Set([...Object.keys(want), ...Object.keys(now)])) if (want[p] !== now[p]) bad.push(`${p}: ${want[p] ? want[p].slice(0, 10) : 'absent'} → ${now[p] ? now[p].slice(0, 10) : 'absent'}`);
+      add('G13-phase-zero-drift', bad.length ? 'FAIL' : 'PASS', bad.length ? `application changed outside the write scope of ${phase.id} (baseline ${base.head.slice(0, 12)})` : `${Object.keys(want).length} files outside the write scope are byte-identical to ${phase.zeroDriftBaseline} (${base.head.slice(0, 12)}); behaviour fingerprint: node brain/tools/drift.mjs compare (CI)`, bad);
+    }
+  } catch (e) { add('G13-phase-zero-drift', 'FAIL', String(e.message || e)); }
+
   const fail = checks.some(c => c.status === 'FAIL');
   const head = (() => { try { return git(['rev-parse', 'HEAD'], { cwd: root }).trim(); } catch { return null; } })();
   return {
@@ -309,6 +323,26 @@ export function runGate(root = BRAIN_ROOT, { allowDirty = false, env = process.e
       'Whether the operator has authorized something new in a conversation that is not yet recorded under brain/phase/authorizations/.'
     ]
   };
+}
+
+/** Paths an evidence commit may touch after the tested candidate commit (nothing that a fresh session could have read differently). */
+export const EVIDENCE_ONLY = ['brain/evidence/SEAL.json', 'brain/evidence/SEAL-LOG.jsonl', 'brain/continuity/results/**', 'brain/evidence/*-ACCEPTANCE.json'];
+export function checkAcceptance(root = BRAIN_ROOT) {
+  const phase = readJSON(FILES.phase, root), problems = [];
+  if (!phase.completionEvidence || !exists(phase.completionEvidence, root)) return { ACCEPTANCE_EVIDENCE: 'INCONSISTENT', problems: ['no completion evidence declared'] };
+  const ev = readJSON(phase.completionEvidence, root), cand = ev.candidateCommit;
+  if (!cand) problems.push('evidence names no candidateCommit');
+  else {
+    if (git(['merge-base', '--is-ancestor', cand, 'HEAD'], { cwd: root, allowFail: true }) === null) problems.push(`candidate ${cand} is not an ancestor of HEAD`);
+    if (ev.freshSessionContinuity?.testedCommit !== cand) problems.push(`fresh session tested ${ev.freshSessionContinuity?.testedCommit}, not the candidate ${cand}`);
+    if (ev.applicationZeroDrift?.comparedAt !== cand) problems.push(`zero-drift recorded at ${ev.applicationZeroDrift?.comparedAt}, not at the candidate ${cand}`);
+    const after = (git(['diff', '--name-only', cand, 'HEAD'], { cwd: root, allowFail: true }) || '').split('\n').filter(Boolean);
+    const extra = after.filter(f => !EVIDENCE_ONLY.some(g => globToRe(g).test(f))); if (extra.length) problems.push(`changed after the tested candidate (not evidence): ${extra.join(', ')}`);
+  }
+  const rec = ev.freshSessionContinuity?.record; if (!rec || !exists(rec, root) || readJSON(rec, root).FRESH_SESSION_CONTINUITY !== 'PASS') problems.push('fresh-session record missing or not PASS');
+  if (ev.applicationZeroDrift?.result !== 'PASS') problems.push('zero-drift not PASS');
+  const g = runGate(root); if (g.CONTEXT_INTEGRITY !== 'PASS') problems.push('gate FAIL at HEAD: ' + g.checks.filter(c => c.status === 'FAIL').map(c => c.id).join(', '));
+  return { ACCEPTANCE_EVIDENCE: problems.length ? 'INCONSISTENT' : 'CONSISTENT', phase: phase.id, candidateCommit: cand, head: git(['rev-parse', 'HEAD'], { cwd: root }).trim(), gate: g.CONTEXT_INTEGRITY, problems, note: 'The closing check at HEAD itself is the gate (G13 zero-drift included) and the CI run on HEAD.' };
 }
 
 function printGate(r) {
@@ -336,9 +370,11 @@ if (import.meta.url === pathToFileURL(process.argv[1] || '').href) {
     console.log(`decisions ${d.decisions.count}, accidents ${d.accidents.count}, dependencies ${d.dependencies.counts.open} open / ${d.dependencies.counts.resolved} resolved, agents ${d.agents.count}`);
   } else if (cmd === 'render') {
     fs.writeFileSync(path.join(BRAIN_ROOT, FILES.stateMd), renderState()); console.log('rendered ' + FILES.stateMd);
+  } else if (cmd === 'acceptance') {
+    const r = checkAcceptance(); console.log(JSON.stringify(r, null, 1)); process.exit(r.ACCEPTANCE_EVIDENCE === 'CONSISTENT' ? 0 : 1);
   } else if (cmd === 'seal') {
     const reviews = Object.fromEntries(flags.filter(f => f.startsWith('--review=')).map(f => { const v = f.slice(9), i = v.indexOf(':'); return [v.slice(0, i), v.slice(i + 1)]; }));
     try { const r = seal(BRAIN_ROOT, { reviews, initial: has('--initial') }); console.log(`sealed #${r.seq}: ${r.changed.length} subsystem(s) reviewed (${r.changed.join(', ') || 'none'}); total ${r.total.slice(0, 16)}`); }
     catch (e) { console.error('seal refused: ' + e.message); process.exit(1); }
-  } else { console.error('usage: brain.mjs gate|status|index|render|seal'); process.exit(2); }
+  } else { console.error('usage: brain.mjs gate|status|index|render|acceptance|seal'); process.exit(2); }
 }

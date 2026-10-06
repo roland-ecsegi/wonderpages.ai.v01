@@ -25,6 +25,8 @@ critical claim to an exact anchor, and lets a tool prove that the pointers still
 | `brain/map/SUBSYSTEMS.json` | Every tracked file → exactly one subsystem (coverage + per-subsystem seal digests) | manifest |
 | `brain/map/AGENTS.json` | 11 permanent agents + default model bindings | **derived** (`brain.mjs index`) |
 | `brain/manifest/SOURCES.json` | Canonical Sources Manifest: claims → files → exact anchors; state values bound to claims | manifest |
+| `brain/manifest/MIRROR-POLICY.json` | What the one-way mirror exports or excludes; secret-scan patterns | manifest |
+| `brain/manifest/BRIDGE-CONTROL.json` | Canonical sha256 of the Agent Bridge control files (rules, schemas, tools, CI) | manifest |
 | `brain/ledger/DECISIONS.json` | D-01…D-22 index (ledger hash, closure topic/option, commit) | **derived** |
 | `brain/ledger/ACCIDENTS.json` | A-01…A-30 index (area, decisions) | **derived** |
 | `brain/ledger/DEPENDENCIES.json` | Open / resolved policy dependencies | **derived** |

@@ -7,7 +7,11 @@
  *        (it never commits or pushes; the caller does). Fail-closed: secret suspicion or failed verification ⇒ exit 1.
  *   node brain/tools/bridge-export.mjs verify --bridge=DIR
  *        verifies the Bridge mirror against THIS WonderPages repository (provenance: every file's git blob id must equal the blob
- *        at the recorded source commit) — the check a ChatGPT write cannot pass undetected.
+ *        at the recorded source commit) AND the Bridge control files against brain/manifest/BRIDGE-CONTROL.json — the checks a
+ *        ChatGPT write cannot pass undetected (they run outside the Bridge).
+ *   node brain/tools/bridge-export.mjs control --bridge=DIR
+ *        records the sha256 of every Bridge control file into brain/manifest/BRIDGE-CONTROL.json (run by Claude after a reviewed
+ *        change of Bridge control files; the manifest then reaches the Bridge only through the verified mirror).
  *
  * WonderPages never reads the Bridge at runtime or build time. This tool runs only when a person / CI invokes it.
  */
@@ -19,6 +23,21 @@ import { runGate } from './brain.mjs';
 
 export const PROTOCOL = 'wonderpages.bridge-protocol/1';
 const POLICY = 'brain/manifest/MIRROR-POLICY.json';
+export const CONTROL_FILE = 'brain/manifest/BRIDGE-CONTROL.json';
+export const BRIDGE_CONTROL = [/^tools\//, /^schemas\//, /^\.github\//, /^PROTOCOL\.md$/, /^README\.md$/, /^audit\/README\.md$/];
+const bridgeFiles = bridge => [...new Set([...git(['ls-files'], { cwd: bridge }).split('\n'), ...git(['ls-files', '--others', '--exclude-standard'], { cwd: bridge }).split('\n')])].filter(Boolean).sort();
+
+export function controlManifest(bridge, root = BRAIN_ROOT) {
+  const files = bridgeFiles(bridge).filter(f => BRIDGE_CONTROL.some(r => r.test(f)) && fs.existsSync(path.join(bridge, f))).map(f => ({ path: f, sha256: sha256(fs.readFileSync(path.join(bridge, f))) }));
+  return { schema: 'wonderpages.brain.bridge-control/1', bridgeRepo: readJSON(POLICY, root).bridgeRepo, rule: 'Canonical hashes of the Agent Bridge control files. Bridge CI (tools/bridge.mjs verify-control) and Claude (bridge-export.mjs verify) require the live control files to equal these and forbid unlisted control files. Updated only by Claude after a reviewed control change, then exported through the provenance-verified mirror.', files };
+}
+export function verifyControlFiles(bridge, root = BRAIN_ROOT) {
+  const errors = []; if (!fs.existsSync(path.join(root, CONTROL_FILE))) return { ok: false, errors: [`${CONTROL_FILE} missing`] };
+  const man = readJSON(CONTROL_FILE, root), listed = new Set(man.files.map(f => f.path));
+  for (const f of man.files) { const p = path.join(bridge, f.path); if (!fs.existsSync(p)) errors.push(`control: missing ${f.path}`); else if (sha256(fs.readFileSync(p)) !== f.sha256) errors.push(`control: ${f.path} differs from the WonderPages-canonical hash`); }
+  for (const f of bridgeFiles(bridge)) if (BRIDGE_CONTROL.some(r => r.test(f)) && !listed.has(f)) errors.push(`control: unlisted control file ${f}`);
+  return { ok: errors.length === 0, errors };
+}
 const arg = (k, d = null) => { const a = process.argv.find(x => x.startsWith(`--${k}=`)); return a ? a.slice(k.length + 3) : d; };
 const isText = b => !b.subarray(0, 8000).includes(0);
 
@@ -124,9 +143,12 @@ if (import.meta.url === pathToFileURL(process.argv[1] || '').href) {
       console.log(JSON.stringify(r.skipped ? r : { snapshotId: r.current.snapshotId, sourceCommit: r.current.source.commit, syncStatus: r.current.syncStatus, checks: r.current.checks, contextIntegrity: r.current.contextIntegrity, delta: r.delta }, null, 1));
       process.exit(r.skipped || r.current.syncStatus === 'VERIFIED' ? 0 : 1);
     } else if (cmd === 'verify') {
-      const r = verifyProvenance(path.resolve(bridge));
-      console.log(JSON.stringify({ PROVENANCE: r.ok ? 'VERIFIED' : 'INVALID', snapshot: r.current?.snapshotId, sourceCommit: r.manifest?.source.commit, errors: r.errors.slice(0, 50) }, null, 1));
-      process.exit(r.ok ? 0 : 1);
-    } else { console.error('usage: bridge-export.mjs export|verify --bridge=DIR'); process.exit(2); }
+      const r = verifyProvenance(path.resolve(bridge)), c = verifyControlFiles(path.resolve(bridge));
+      console.log(JSON.stringify({ PROVENANCE: r.ok ? 'VERIFIED' : 'INVALID', CONTROL: c.ok ? 'VERIFIED' : 'INVALID', snapshot: r.current?.snapshotId, sourceCommit: r.manifest?.source.commit, errors: [...r.errors, ...c.errors].slice(0, 50) }, null, 1));
+      process.exit(r.ok && c.ok ? 0 : 1);
+    } else if (cmd === 'control') {
+      const m = controlManifest(path.resolve(bridge)); writeJSON(path.join(BRAIN_ROOT, CONTROL_FILE), m);
+      console.log(`recorded ${m.files.length} Bridge control files in ${CONTROL_FILE}`);
+    } else { console.error('usage: bridge-export.mjs export|verify|control --bridge=DIR'); process.exit(2); }
   } catch (e) { console.error(e.message || e); process.exit(1); }
 }

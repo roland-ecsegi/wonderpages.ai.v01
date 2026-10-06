@@ -60,5 +60,21 @@
   ],
   "rule": "After CONTINUITY-1 is built and validated: STOP. These are introduced later only through the Active Phase Contract, after the continuity system passes audit."
  },
- "completionEvidence": "brain/evidence/CONTINUITY-1-ACCEPTANCE.json"
+ "completionEvidence": "brain/evidence/CONTINUITY-1-ACCEPTANCE.json",
+ "zeroDriftBaseline": "brain/evidence/BASELINE-866a441.json",
+ "repairRounds": [
+  {
+   "round": 1,
+   "trigger": "Agent Bridge MSG-20261006T113320Z-chatgpt-a1c4 (advisory AUDIT_RESULT, snapshot 000002-6b5ebf42983d)",
+   "processedBecause": "operator request 2026-10-06: verify the Agent Bridge and process the new messages addressed to Claude",
+   "findings": {
+    "F-01": "accepted — gate G13 enforces zero drift at every commit; evidence bound to the candidate commit",
+    "F-02": "accepted — second fresh session on the final candidate; evidence commit may touch only evidence paths (brain.mjs acceptance)",
+    "F-03": "accepted — Bridge control-file hashes canonical in brain/manifest/BRIDGE-CONTROL.json, enforced Bridge-side and Claude-side",
+    "F-04": "accepted (verified externally) — ChatGPT wake-up reclassified AVAILABLE, NOT CONFIGURED / NOT DEMONSTRATED; adapter + configuration need operator decision",
+    "F-05": "unchanged — operator setup of BRIDGE_SYNC_TOKEN"
+   },
+   "authority": "ChatGPT findings are advisory; each was verified against sources before acting; nothing outside the CONTINUITY-1 write scope changes"
+  }
+ ]
 }
