@@ -40,6 +40,7 @@ explicită a operatorului. Etichetele cazurilor se dau la adjudecarea Gold-v2.
 | D-17 — T07 vs porțile de siguranță, content-policy și age-fit | DECISĂ (neimplementată) | D (jurisdicții separate; T07 ≥ 7; fără dublă adjudecare) | `e9bea3e83f8e552d…` |
 | D-18 — validitatea dovezilor criticului (v3) | DECISĂ (neimplementată) | D (validare separată, obligatorie, simetrică) | `f45729ed49e9a2c5…` |
 | D-19 — pragurile de acoperire (+ reprezentarea, extins de operator) | DECISĂ (neimplementată) | 0-b; D peste C (matrice de acoperire, minim structural non-zero) | `405a85bf53371e24…` |
+| D-20 — setul rezervat actual și protocolul noului set de acceptare | DECISĂ (neimplementată) | (d) din (b): holdout retras; set nou ascuns, sigilat înainte de SH#2 | `e526e5533966a6dc…` |
 
 ## D-01 — „Fără arme” pentru o armă reală
 
@@ -16478,3 +16479,997 @@ implementarea · arhitectura evaluatorului · Semantic Hardening · Product Cont
 - **D-19-DEP-COVERAGE-MATRIX-DEFINITION** · **D-19-DEP-NEW-CASES** → D-20 / D-22 · **D-19-DEP-SAMPLE-SUFFICIENCY** → D-21 ·
   **D-19-DEP-PHYSICAL-SCHEMA**.
 - **Rezolvate conceptual:** D-14-DEP-MEASUREMENT-REPRESENTATION, D-18-DEP-MEASUREMENT (schema fizică rămâne deschisă).
+
+## D-20 — Statutul setului rezervat și protocolul noului set de acceptare
+
+### Declarația operatorului (cuvânt cu cuvânt)
+
+```text
+D-20 — DECIZIA OPERATORULUI
+
+Aleg:
+
+Opțiunea (d), derivată din (b), cu protocol strict de independență.
+
+Dar modific un punct important din recomandare:
+
+NU aleg două seturi de acceptare ca regulă implicită.
+
+Pentru măsurătoarea finală de generalizare aleg un singur protocol principal:
+
+un nou set independent, ascuns, adjudecat și sigilat înainte de Semantic Hardening #2; evaluatorul este apoi harden-uit exclusiv din evidence cunoscută, înghețat, iar setul ascuns este rulat o singură dată pentru acceptare.
+
+Principiile centrale:
+
+EXPOSED HOLDOUT ≠ INDEPENDENT ACCEPTANCE SET.
+
+IMMUTABLE ≠ INDEPENDENT.
+
+SEALED ≠ UNSEEN.
+
+HISTORICAL HOLDOUT EVIDENCE ≠ POST-HARDENING GENERALIZATION EVIDENCE.
+
+REGRESSION SUCCESS ≠ GENERALIZATION SUCCESS.
+
+ADJUDICATING AN EXPOSED SET DOES NOT RESTORE ITS HELD-OUT STATUS.
+
+ANY ACCEPTANCE-SET RESULT USED TO CHANGE THE EVALUATOR CONSUMES THAT SET FOR FUTURE ACCEPTANCE.
+
+⸻
+
+1. Statutul actualului held-out
+
+Actualul Gold-v2 held-out este retras definitiv din rolul de:
+
+final independent Enterprise acceptance set pentru evaluatorul post-SH#2.
+
+Nu este șters.
+
+Nu este rescris.
+
+Nu este reparat.
+
+Nu îi modificăm retroactiv istoria.
+
+Sigiliul rămâne intact.
+
+holdout-run-1.json rămâne intact.
+
+⸻
+
+2. Motivul retragerii
+
+Retragerea NU înseamnă că rularea istorică a fost falsă sau inutilă.
+
+Rularea a fost o măsurătoare legitimă a evaluatorului v2 la momentul respectiv.
+
+Problema este că, pentru o evaluare viitoare post-SH#2:
+
+* stimulii sunt cunoscuți;
+* eșecurile sunt cunoscute;
+* cauzele eșecurilor sunt cunoscute;
+* o parte dintre cazuri au intrat explicit în D-01…D-19;
+* familiile sunt cunoscute;
+* furnizorul de implementare a participat la construirea setului;
+* evaluatorul viitor va fi inevitabil informat de aceste observații.
+
+Prin urmare:
+
+actualul held-out nu mai poate măsura independent generalizarea evaluatorului care va rezulta după Semantic Hardening #2.
+
+⸻
+
+3. Sigiliul actual rămâne valoros
+
+Sigiliul dovedește:
+
+dataset immutability after sealing.
+
+Nu dovedește:
+
+author independence.
+
+Nu dovedește:
+
+implementer blindness.
+
+Nu dovedește:
+
+rule-family independence.
+
+Nu dovedește:
+
+post-SH#2 generalization validity.
+
+Aceste proprietăți trebuie raportate separat.
+
+⸻
+
+4. Cele trei roluri permise ale actualului held-out
+
+Actualul held-out rămâne permanent în trei roluri.
+
+Rolul A — Historical evidence
+
+Este dovada:
+
+pre-SH#2 held-out run of evaluator v2.
+
+Păstrează:
+
+* commit-ul;
+* evaluator version/hash;
+* dataset hash/seal;
+* etichetele folosite atunci;
+* metricile;
+* cele 9 eșecuri;
+* limitations.
+
+⸻
+
+Rolul B — Historical rescoring after operator adjudication
+
+După adjudecarea operatorului, poate exista un raport nou care recalculează istoric rezultatele față de ground truth-ul adjudecat.
+
+Acesta trebuie marcat explicit:
+
+historical rescoring on an already exposed dataset.
+
+Nu devine o nouă măsurătoare independentă.
+
+⸻
+
+Rolul C — Known regression / diagnostic suite
+
+După SH#2 poate fi rulat pentru a verifica:
+
+known failures repaired / known behaviours preserved.
+
+Dar rezultatul trebuie numit:
+
+regression evidence
+
+și NU:
+
+independent generalization evidence.
+
+⸻
+
+5. Cele 9 eșecuri rămân evidence
+
+Nu elimina cele 9 eșecuri.
+
+Nu le „repara” în set.
+
+Nu modifica stimulii ca să facă evaluatorul să treacă.
+
+Ele rămân dovada limitelor evaluatorului v2.
+
+⸻
+
+6. Opțiunea (c) este respinsă
+
+Repararea evaluatorului direct pe actualul held-out și apoi folosirea aceluiași held-out pentru a pretinde generalizare este interzisă.
+
+Odată ce un caz este folosit pentru:
+
+* diagnostic;
+* redesign;
+* prompt tuning;
+* rule tuning;
+* semantic hardening;
+* threshold tuning;
+* feature design;
+
+acel caz este development/regression evidence pentru versiunea următoare.
+
+Nu independent acceptance evidence.
+
+⸻
+
+7. Adjudecarea nu restaurează independența
+
+Operatorul poate adjudeca actualele etichete.
+
+Acest lucru îmbunătățește:
+
+ground-truth quality.
+
+Nu îmbunătățește:
+
+holdout independence.
+
+Prin urmare:
+
+BETTER LABELS ≠ RESTORED BLINDNESS.
+
+⸻
+
+8. Gold-v2 rămâne immutable
+
+Nu modifica Gold-v2 pentru a introduce remedierile.
+
+Dacă Semantic Hardening #2 necesită:
+
+* cazuri noi de parafrază;
+* obiecte nevăzute;
+* calcuri;
+* idiomuri;
+* semantic boundaries;
+* noi adversarial probes;
+
+acestea trebuie să intre într-un:
+
+nou development/calibration corpus versionat
+
+sau mecanism echivalent.
+
+Nu modifica retroactiv Gold-v2 înghețat.
+
+⸻
+
+9. Gold-v2 devine baseline istoric
+
+Gold-v2 rămâne reproductibil ca:
+
+historical pre-SH#2 evaluation baseline.
+
+Orice corpus nou folosit pentru SH#2 trebuie să aibă:
+
+* versiune proprie;
+* provenance;
+* author/source;
+* relation to known failure;
+* hashes;
+* creation time;
+* policy version.
+
+⸻
+
+NOUL INDEPENDENT ACCEPTANCE SET
+
+10. Este obligatoriu
+
+După D-19, un nou set independent nu mai este doar preferabil.
+
+Este necesar pentru final Enterprise acceptance deoarece actualul Gold-v2:
+
+* este expus;
+* nu este independent de autor;
+* nu satisface structural coverage D-19;
+* nu poate testa curat generalizarea post-SH#2.
+
+⸻
+
+11. Momentul creării
+
+Noul acceptance set trebuie:
+
+creat, ground-truth adjudicated și sigilat înainte de începerea Semantic Hardening #2.
+
+Ordinea canonical este:
+
+D-20 → D-21 → D-22 → independent hidden-set construction/adjudication → seal → SH#2 → evaluator freeze → blind run → acceptance decision.
+
+D-20 nu începe acum construcția setului.
+
+⸻
+
+12. De ce înainte de SH#2
+
+Dacă setul este creat după ce implementatorul finalizează SH#2, independența poate fi în continuare posibilă cu un autor separat.
+
+Dar varianta mai puternică pentru acest proiect este:
+
+acceptance target committed before evaluator hardening.
+
+Astfel putem demonstra:
+
+evaluatorul a fost harden-uit fără acces la cazurile concrete pe care urma să fie examinat.
+
+⸻
+
+13. Setul nu este disponibil furnizorului de implementare
+
+Conținutul concret al noului hidden set NU trebuie să fie accesibil:
+
+* lui Claude Code;
+* agentului care face SH#2;
+* repository-ului normal accesibil acelui agent;
+* contextului de dezvoltare al evaluatorului.
+
+⸻
+
+14. Repo-ul poate conține commitment, nu stimuli
+
+În repository pot exista, dacă protocolul D-22 o permite:
+
+* cryptographic hash / commitment;
+* seal metadata;
+* dataset version;
+* creation timestamp;
+* policy version;
+* coverage manifest suficient pentru audit;
+* author-independence metadata;
+* case count;
+* structural coverage summary.
+
+Dar NU:
+
+* stimulii;
+* răspunsurile;
+* expected findings;
+* expected verdicts individuale;
+* alte informații care permit reconstruirea cazurilor.
+
+⸻
+
+15. D-22 decide mecanismul concret
+
+D-20 decide proprietatea:
+
+independent from the implementation provider.
+
+D-20 NU decide încă:
+
+* cine este autorul concret;
+* dacă este om;
+* alt model;
+* alt agent;
+* combinație;
+* mecanismul exact de storage;
+* mecanismul exact de execution.
+
+Acestea aparțin D-22.
+
+⸻
+
+16. Ground truth-ul trebuie stabilit înainte de SH#2
+
+Setul ascuns nu trebuie doar scris înainte.
+
+Ground truth-ul necesar evaluării trebuie:
+
+* adjudecat;
+* versionat;
+* sigilat;
+
+înainte de SH#2.
+
+Altfel există riscul ca etichetele să fie ajustate după ce vedem ce a prezis evaluatorul.
+
+⸻
+
+17. D-19 este obligatoriu pentru setul nou
+
+Setul nou trebuie să satisfacă:
+
+D-19 policy-relevant structural coverage.
+
+Asta înseamnă non-zero independent validation coverage pentru fiecare required policy-relevant cell.
+
+Nu este suficient:
+
+„66 de cazuri”.
+
+Contează:
+
+ce ramuri ale politicii sunt reprezentate.
+
+⸻
+
+18. Nu inventăm acum numărul de cazuri
+
+D-20 nu stabilește dimensiunea statistică finală.
+
+D-19 definește structural coverage.
+
+D-21 definește performance acceptance.
+
+Design-ul statistic ulterior poate cere mai mult de un caz per celulă.
+
+⸻
+
+19. Nu crea cazurile acum
+
+În această fază:
+
+* nu scrie stimuli;
+* nu genera hidden cases;
+* nu le pune în repo;
+* nu simula hidden set-ul;
+* nu începe SH#2.
+
+Mai întâi închidem D-21 și D-22.
+
+⸻
+
+BLIND RUN
+
+20. Evaluatorul trebuie înghețat înainte de rulare
+
+Înainte de desigilarea operațională/rularea hidden set-ului:
+
+* evaluator code freeze;
+* prompt freeze;
+* policy implementation freeze;
+* threshold freeze;
+* model/provider configuration relevantă freeze;
+* dependency/config hashes;
+* commit SHA;
+* test status.
+
+Trebuie să putem identifica exact artifactul evaluat.
+
+⸻
+
+21. Rularea este blind
+
+Implementatorul nu primește cazurile înainte de run.
+
+Evaluatorul înghețat este rulat pe set.
+
+Rezultatul se compară cu ground truth-ul sigilat.
+
+⸻
+
+22. Prima rulare scorată este cea relevantă
+
+Nu permitem:
+
+run → inspect failures → patch → rerun same set → claim independent acceptance.
+
+Aceasta ar fi development on test.
+
+⸻
+
+23. Regula de consumare a setului
+
+Formulare obligatorie:
+
+ANY RESULT FROM THE INDEPENDENT ACCEPTANCE SET THAT IS USED TO CHANGE THE EVALUATOR CONSUMES THAT SET FOR FUTURE INDEPENDENT ACCEPTANCE.
+
+Aceasta include:
+
+* failure IDs;
+* stimuli;
+* detailed reasons;
+* failure families;
+* aggregate per-kind metrics;
+* aggregate overall metric;
+* simplul fapt că un anumit threshold a fost ratat,
+
+dacă informația este folosită pentru a modifica evaluatorul.
+
+⸻
+
+24. Metricile agregate nu păstrează magic independența
+
+Chiar dacă Claude primește doar:
+
+false-pass too high
+
+și modifică evaluatorul pe baza acestei informații,
+
+acceptance set-ul a devenit development feedback.
+
+Prin urmare:
+
+AGGREGATED FEEDBACK USED FOR TUNING ≠ UNSEEN TEST.
+
+⸻
+
+25. Dacă hidden set-ul trece
+
+Dacă evaluatorul înghețat satisface:
+
+* D-19 structural requirements;
+* D-21 performance requirements;
+* D-22 independence requirements;
+* integrity requirements;
+* celelalte gates aplicabile;
+
+rezultatul poate deveni:
+
+independent acceptance evidence.
+
+⸻
+
+26. Dacă hidden set-ul nu trece
+
+Dacă nu trece:
+
+Enterprise acceptance FAILS / remains incomplete.
+
+Nu schimbăm threshold-ul pentru a-l face să treacă.
+
+Nu schimbăm etichetele după predicții.
+
+Nu reparăm cazurile.
+
+⸻
+
+27. Dacă vrem să reparăm evaluatorul după failure
+
+Putem analiza rezultatele pentru debugging.
+
+Dar din momentul în care rezultatul este folosit pentru repair:
+
+setul respectiv este retras din rolul de independent acceptance pentru versiunea următoare.
+
+El devine:
+
+diagnostic/regression evidence.
+
+⸻
+
+28. O nouă încercare de acceptare după repair
+
+Necesită:
+
+un nou independent hidden acceptance set, cu același protocol de independență.
+
+Nu aceeași probă repetată.
+
+⸻
+
+29. Nu există „best of N hidden runs”
+
+Enterprise acceptance nu poate fi:
+
+„am încercat trei seturi și îl raportăm pe cel care a trecut”.
+
+Fiecare attempt trebuie păstrat în audit trail.
+
+⸻
+
+30. Failure history rămâne permanent
+
+Dacă Acceptance Set A eșuează și apoi este consumat pentru development:
+
+păstrăm permanent:
+
+* evaluator version;
+* set commitment;
+* run;
+* metrics;
+* acceptance failure;
+* data de retragere;
+* motivul retragerii.
+
+Apoi Acceptance Set B este un experiment nou.
+
+⸻
+
+TECHNICAL INVALID RUN
+
+31. Failure de produs ≠ failure tehnic
+
+Dacă run-ul nu poate fi evaluat din cauza unei probleme tehnice externe:
+
+* corupere de fișier;
+* runner failure;
+* incomplete execution;
+* integrity mismatch;
+
+nu trebuie confundat cu evaluator failure.
+
+⸻
+
+32. Rerun tehnic
+
+Un rerun al aceluiași hidden set poate fi permis numai dacă:
+
+* prima rulare este declarată formal INVALID_RUN;
+* motivul este documentat;
+* evaluatorul/prompturile/configurația nu au fost schimbate;
+* rezultatele incomplete nu sunt folosite pentru tuning;
+* integritatea poate fi demonstrată.
+
+Nu decide acum implementarea exactă a acestei proceduri.
+
+⸻
+
+CURRENT HOLDOUT AFTER SH#2
+
+33. Poate fi rulat
+
+Da.
+
+Dar rezultatul trebuie numit:
+
+known regression result.
+
+⸻
+
+34. Dacă toate cele 9 eșecuri sunt reparate
+
+Aceasta demonstrează:
+
+known failures fixed.
+
+Nu demonstrează:
+
+unknown failures generalized.
+
+⸻
+
+35. Dacă unul dintre cele 9 continuă să eșueze
+
+Aceasta este evidence negativă importantă.
+
+Evaluatorul nu a reparat nici măcar defectul cunoscut.
+
+Dar această constatare nu transformă setul în acceptance holdout.
+
+⸻
+
+ADJUDICATION OF CURRENT GOLD-V2
+
+36. Continuă
+
+Actualele cazuri Gold-v2 pot și trebuie adjudecate conform procedurii stabilite.
+
+Dar rezultatul adjudecării trebuie folosit cu provenance corect.
+
+⸻
+
+37. Rescoring
+
+După adjudecare se poate calcula:
+
+historical evaluator-v2 score against operator-adjudicated ground truth.
+
+Acesta este foarte valoros.
+
+Dar trebuie separat de:
+
+future post-SH#2 blind acceptance score.
+
+⸻
+
+38. Etichetele vechi nu sunt șterse
+
+Propunerile originale rămân auditabile.
+
+Adjudecarea operatorului se adaugă ca strat nou.
+
+⸻
+
+39. D-19 representation
+
+Rescoring-ul nou trebuie să respecte, unde este aplicabil:
+
+* expected finding;
+* severity;
+* assessment-validation;
+* policy consequence;
+* publishing consequence;
+
+fără a rescrie raportul istoric binar.
+
+⸻
+
+RELAȚIA CU D-19
+
+40. D-19 spune ce trebuie reprezentat
+
+Noul acceptance set trebuie proiectat pentru:
+
+policy-relevant structural coverage.
+
+⸻
+
+41. Actualul held-out nu satisface D-19
+
+Acest lucru este un motiv independent de expunere pentru care nu poate fi final acceptance set.
+
+⸻
+
+42. Missing coverage nu se completează prin inferență
+
+Nu spunem:
+
+„science 7–8 a mers, deci presupunem 3–4 și 5–6”.
+
+Celulele necesare trebuie evaluate.
+
+⸻
+
+43. Scope și modality
+
+Dacă Enterprise claim include:
+
+* visual;
+* cross-modal;
+* Book;
+* Volume;
+* Collection;
+
+iar D-19 le definește ca policy-relevant:
+
+noul validation design trebuie să le acopere.
+
+⸻
+
+RELAȚIA CU D-21
+
+44. D-20 nu stabilește pragurile
+
+Faptul că vechiul false-pass este 0,159 este:
+
+historical measurement.
+
+Nu este:
+
+acceptance threshold.
+
+⸻
+
+45. D-21 decide înainte de blind run
+
+Performance thresholds trebuie stabilite și înghețate înainte de rularea noului acceptance set.
+
+Nu pot fi alese după ce vedem rezultatul.
+
+⸻
+
+46. Nu mutăm bara după rezultat
+
+Formulare obligatorie:
+
+ACCEPTANCE THRESHOLDS MUST BE PRECOMMITTED BEFORE THE BLIND ACCEPTANCE RUN.
+
+⸻
+
+RELAȚIA CU D-22
+
+47. D-22 decide independența concretă
+
+D-22 trebuie să stabilească:
+
+* cine poate crea cazurile;
+* cine poate vedea cazurile;
+* cine poate adjudeca;
+* separarea față de implementator;
+* provenance;
+* contamination rules;
+* ce înseamnă „independent author”;
+* protocolul operațional al blind run-ului.
+
+⸻
+
+48. D-20 impune o constrângere D-22
+
+Oricare ar fi soluția:
+
+implementation provider must not have access to the hidden acceptance stimuli or expected answers before the scored run.
+
+⸻
+
+49. Claude nu își scrie examenul final
+
+Claude poate:
+
+* implementa evaluatorul;
+* analiza calibration;
+* analiza actualul exposed holdout;
+* repara known failures;
+* construi tooling-ul generic pentru validation.
+
+Claude NU poate:
+
+* vedea hidden acceptance cases;
+* scrie hidden acceptance cases care sunt apoi prezentate drept independent evidence pentru propria implementare;
+* vedea answers înainte de scored run.
+
+⸻
+
+MOMENTUL EXACT ÎN PROGRAM
+
+50. După D-22
+
+După închiderea D-21 și D-22:
+
+se construiește independent hidden acceptance set conform D-19/D-22.
+
+⸻
+
+51. Apoi se sigilează
+
+Înainte de orice SH#2:
+
+* content commitment;
+* expected-ground-truth commitment;
+* policy version;
+* coverage manifest;
+* provenance;
+* independence evidence.
+
+⸻
+
+52. Apoi Semantic Hardening #2
+
+Claude lucrează numai cu:
+
+* calibration/development evidence;
+* D-01…D-22;
+* actualul exposed diagnostic holdout;
+* adversarial development probes;
+* noile development cases permise;
+
+dar NU cu hidden acceptance set.
+
+⸻
+
+53. Apoi freeze
+
+După SH#2:
+
+evaluatorul este înghețat.
+
+⸻
+
+54. Apoi regression
+
+Putem rula:
+
+* development/calibration;
+* actualul exposed holdout ca regression;
+* known probes;
+
+pentru a confirma că sistemul este stabil.
+
+Acestea NU consumă hidden acceptance set.
+
+⸻
+
+55. Abia apoi blind acceptance
+
+Când evaluatorul este considerat final:
+
+se execută noul hidden set.
+
+⸻
+
+56. După run
+
+Se aplică D-21 fără modificarea pragurilor.
+
+PASS sau FAIL se înregistrează.
+
+⸻
+
+57. Nu facem post-hoc hardening și apoi pretindem același test
+
+Dacă FAIL conduce la hardening suplimentar:
+
+noua versiune necesită un nou independent acceptance set.
+
+⸻
+
+FORMULĂRI OBLIGATORII
+
+Înregistrează explicit:
+
+The current Gold-v2 held-out is permanently retired from the role of post-SH#2 independent Enterprise acceptance evidence; it remains immutable historical, adjudication/rescoring, diagnostic and regression evidence.
+
+The original holdout seal proves immutability after sealing; it does not prove author independence, implementer blindness, rule-family independence or post-SH#2 generalization validity.
+
+Operator adjudication can improve ground-truth quality but cannot restore the exposed set’s held-out independence.
+
+Known-regression success is not independent-generalization success.
+
+Gold-v2 remains immutable; new SH#2 development/calibration cases must be versioned separately rather than retroactively inserted into frozen Gold-v2.
+
+A new independent hidden acceptance set is required and must satisfy D-19 structural coverage.
+
+The new independent acceptance set and its adjudicated ground truth must be created and sealed before Semantic Hardening #2, while the implementation provider remains blind to its stimuli and expected answers.
+
+The evaluator, prompts, relevant configuration and acceptance thresholds must be frozen before the blind scored run.
+
+Any result from the independent acceptance set that is used to change the evaluator consumes that set for future independent acceptance, including aggregate feedback used for tuning.
+
+If a failed acceptance run leads to evaluator changes, a subsequent Enterprise acceptance attempt requires a new independent hidden set.
+
+Acceptance thresholds must be precommitted before the blind acceptance run.
+
+D-20 determines the status and lifecycle of held-out evidence; D-21 determines performance acceptance; D-22 determines the concrete independence and authorship protocol.
+
+⸻
+
+CE NU DECIDE D-20
+
+D-20 NU decide:
+
+* pragurile de performanță — D-21;
+* false-pass maximum;
+* false-block maximum;
+* accuracy minimum;
+* κ minimum;
+* confidence intervals;
+* sample-size sufficiency;
+* autorul concret al noului set — D-22;
+* mecanismul concret de storage — D-22;
+* cine execută concret blind run-ul — D-22;
+* numărul final de cazuri;
+* conținutul cazurilor noi;
+* etichetele concrete ale actualelor 226 cazuri;
+* schema fizică finală;
+* Semantic Hardening #2;
+* schimbări de evaluator;
+* Product Contract;
+* rubrici;
+* permanent agents;
+* Dinosaur World.
+```
+
+### Formulări obligatorii (înregistrate ca atare)
+
+> The current Gold-v2 held-out is permanently retired from the role of post-SH#2 independent Enterprise acceptance evidence; it remains
+> immutable historical, adjudication/rescoring, diagnostic and regression evidence.
+>
+> The original holdout seal proves immutability after sealing; it does not prove author independence, implementer blindness, rule-family
+> independence or post-SH#2 generalization validity.
+>
+> Operator adjudication can improve ground-truth quality but cannot restore the exposed set’s held-out independence.
+>
+> Known-regression success is not independent-generalization success.
+>
+> Gold-v2 remains immutable; new SH#2 development/calibration cases must be versioned separately rather than retroactively inserted into
+> frozen Gold-v2.
+>
+> A new independent hidden acceptance set is required and must satisfy D-19 structural coverage.
+>
+> The new independent acceptance set and its adjudicated ground truth must be created and sealed before Semantic Hardening #2, while the
+> implementation provider remains blind to its stimuli and expected answers.
+>
+> The evaluator, prompts, relevant configuration and acceptance thresholds must be frozen before the blind scored run.
+>
+> Any result from the independent acceptance set that is used to change the evaluator consumes that set for future independent
+> acceptance, including aggregate feedback used for tuning.
+>
+> If a failed acceptance run leads to evaluator changes, a subsequent Enterprise acceptance attempt requires a new independent hidden set.
+>
+> Acceptance thresholds must be precommitted before the blind acceptance run.
+>
+> D-20 determines the status and lifecycle of held-out evidence; D-21 determines performance acceptance; D-22 determines the concrete
+> independence and authorship protocol.
+
+### Separarea cerută
+
+| Strat | Conținut |
+|---|---|
+| **Decizie de politică** | Opțiunea (d), derivată din (b), cu protocol strict de independență. Un singur protocol principal de acceptare (set nou independent, ascuns, adjudecat și sigilat înainte de SH#2; rulat o dată pe evaluatorul înghețat). Recomandarea furnizorului (două seturi de acceptare ca regulă implicită) **nu a fost adoptată**. |
+| **Identitatea istorică a setului rezervat** | 69 de cazuri (`holdout.mjs` `041d3e8c…`), scrise la `e95716e` înaintea oricărei schimbări de evaluator; 66 etichetate (propuse) + 3 fără etichetă. |
+| **Sigiliul** | `holdout-seal.json` (`14f8071f…`), hash total `afa194aa…`. Dovedește doar imutabilitatea după sigilare. |
+| **Rularea originală** | `holdout-run-1.json` (`5928b666…`), rulare unică la `c144651`, evaluator v2, etichete propuse; evaluatorul nu s-a schimbat după. |
+| **Expunere / independența autorului / a familiilor de reguli** | Expus (stimuli, eșecuri și cauze publice; cazuri discutate în D-01…D-19). Autor neindependent (L-13). Familii de reguli 0/69 (L-7). |
+| **Eligibilitatea pentru acceptare** | Retras definitiv din rolul de acceptare independentă post-SH#2. |
+| **Rolurile permise** | A: dovadă istorică pre-SH#2. B: rescorare istorică după adjudecare, marcată „historical rescoring on an already exposed dataset”, în reprezentarea D-19. C: suită de regresie / diagnostic după SH#2 („regression evidence”). |
+| **Eșecurile cunoscute** | v2h-safety-11 / -14 / -19 / -21 / -22, v2h-sci-11, v2h-loc-11 (fals-pass); v2h-age-12, v2h-loc-12 (fals-block). Păstrate, nemodificate, nereparate în set. |
+| **Interdicția de tuning direct / imutabilitatea Gold-v2 / corpusul de dezvoltare** | Opțiunea (c) respinsă. Gold-v2 nemodificat (baseline istoric). Cazurile noi pentru SH#2 într-un corpus de dezvoltare versionat separat, cu provenance. |
+| **Setul nou de acceptare** | Obligatoriu. Creat, adjudecat, versionat și sigilat **înainte de SH#2**. Acoperire structurală D-19. Furnizorul de implementare nu vede stimulii sau răspunsurile; în repo doar commitment / metadate. Construcția nu începe acum. |
+| **Înghețare / praguri / rularea oarbă** | Cod, prompturi, politică, praguri, configurație, hash-uri, SHA, teste — înghețate înainte. Pragurile D-21 precommitted. Prima rulare scorată e cea relevantă. |
+| **Consumul setului / ciclul de viață al eșecului** | Orice rezultat folosit pentru a schimba evaluatorul consumă setul (inclusiv metrici agregate). Eșec → acceptare FAIL / incompletă; fără mutarea pragurilor sau a etichetelor; folosirea pentru repair retrage setul; o nouă încercare cere un set nou; fără best-of-N; istoria eșecurilor permanentă. |
+| **INVALID_RUN tehnic** | ≠ eșecul evaluatorului; rerun doar în condițiile enumerate; procedura concretă nedecisă. |
+| **Ordinea în program** | D-20 → D-21 → D-22 → construcția și adjudecarea setului ascuns → sigilare → SH#2 → înghețare → regresie (nu consumă setul ascuns) → blind run → decizia de acceptare. |
+| **Limita furnizorului** | Claude poate implementa, analiza calibrarea și setul expus, repara eșecuri cunoscute, construi tooling generic. Nu poate vedea cazurile ascunse, nu le poate scrie ca dovadă independentă pentru propria implementare și nu poate vedea răspunsurile înainte de rulare. |
+| **Relația cu D-19 / D-21 / D-22** | D-19: acoperirea structurală a setului nou (setul vechi n-o satisface — motiv independent). D-21: pragurile, precommitted; 0,159 = măsurătoare istorică. D-22: autorul, vizibilitatea, adjudecarea, storage-ul, execuția. |
+| **Comportamentul la momentul deciziei** (HEAD `696cf6e`, neschimbat) | Scripturile refuză a doua rulare și resigilarea; `validationState` presupune încă holdout-ul Gold-v2 ca set de acceptare (consecință de implementare ulterioară). |
+
+### Afectate (fără nicio modificare acum)
+
+- **Setul rezervat, sigiliul, `holdout-run-1.json`:** neschimbate (hash-uri înregistrate în context).
+- **Gold-v2 / Gold-v1 / `validationRequirements` / rapoarte:** neschimbate.
+
+### Nu decide
+
+D-21 (false-pass / false-block maxim, acuratețe, κ, intervale, suficiența eșantionului) · D-22 (autorul, storage-ul, cine execută rularea) ·
+numărul și conținutul cazurilor noi · etichetele celor 226 de cazuri · schema fizică · SH#2 · schimbări de evaluator · Product Contract ·
+rubrici · agenții permanenți · Dinosaur World.
+
+### Dependențe deschise
+
+- **D-20-DEP-PERFORMANCE-THRESHOLDS** → D-21 · **D-20-DEP-INDEPENDENCE-PROTOCOL** → D-22 · **D-20-DEP-DEVELOPMENT-CORPUS** ·
+  **D-20-DEP-INVALID-RUN-PROCEDURE** · **D-20-DEP-VALIDATION-STATE-ADAPTATION**.
