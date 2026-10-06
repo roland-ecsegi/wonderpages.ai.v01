@@ -1,0 +1,167 @@
+{
+ "schema": "wonderpages.brain.agents-index/1",
+ "derivedFrom": [
+  "agents/contracts/role-contracts.json",
+  "agents/*.md",
+  "docs/enterprise/contracts/AGENT-REGISTRY.md"
+ ],
+ "roleContractVersion": "1.0.0",
+ "rule": "Identity (RoleContract + persona) and ModelBinding are separate: changing the model never changes the identity. Default bindings come from the persona front-matter; the live binding is runtime state (AgentProfile).",
+ "count": 11,
+ "agents": [
+  {
+   "id": "asistent",
+   "name": "Dali, asistenta ta",
+   "mission": "Navigare, intake, explicarea dovezilor și propunerea de comenzi.",
+   "ownedSkills": [
+    "guided-intake"
+   ],
+   "defaultModelBinding": {
+    "model": "haiku",
+    "provider": "claude-code (Claude Pro)"
+   },
+   "personaFile": "agents/asistent.md"
+  },
+  {
+   "id": "producator",
+   "name": "Producător",
+   "mission": "Planul producției, resurse, integrarea notelor, retrospective, coordonarea release-ului.",
+   "ownedSkills": [
+    "production-triage"
+   ],
+   "defaultModelBinding": {
+    "model": "haiku",
+    "provider": "claude-code (Claude Pro)"
+   },
+   "personaFile": "agents/producator.md"
+  },
+  {
+   "id": "director-creativ",
+   "name": "Director creativ",
+   "mission": "Concept, diferențiere, promisiune și ton pe vârstă.",
+   "ownedSkills": [
+    "concept-differentiation"
+   ],
+   "defaultModelBinding": {
+    "model": "sonnet",
+    "provider": "claude-code (Claude Pro)"
+   },
+   "personaFile": "agents/director-creativ.md"
+  },
+  {
+   "id": "arhitect-serie",
+   "name": "Arhitectul seriei",
+   "mission": "Șase arcuri, cast, progresie, complementaritate.",
+   "ownedSkills": [
+    "reveal-sequencing",
+    "collection-arc"
+   ],
+   "defaultModelBinding": {
+    "model": "sonnet",
+    "provider": "claude-code (Claude Pro)"
+   },
+   "personaFile": "agents/arhitect-serie.md"
+  },
+  {
+   "id": "pastrator-continuitate",
+   "name": "Păstrătorul continuității",
+   "mission": "Canon, relații, apariții, posesie, coerență între artefacte.",
+   "ownedSkills": [
+    "continuity-ledger",
+    "reveal-sequencing"
+   ],
+   "defaultModelBinding": {
+    "model": "sonnet",
+    "provider": "claude-code (Claude Pro)"
+   },
+   "personaFile": "agents/pastrator-continuitate.md"
+  },
+  {
+   "id": "scriitor",
+   "name": "Scriitor",
+   "mission": "Voce, cauzalitate, read-aloud, page turns, revizii.",
+   "ownedSkills": [
+    "narrative-causality",
+    "age-dialogue"
+   ],
+   "defaultModelBinding": {
+    "model": "sonnet",
+    "provider": "claude-code (Claude Pro)"
+   },
+   "personaFile": "agents/scriitor.md"
+  },
+  {
+   "id": "editor-critic",
+   "name": "Editor critic",
+   "mission": "Critică independentă, siguranță semantică, evaluare carte/colecție.",
+   "ownedSkills": [
+    "rubric-critique",
+    "safety-semantic"
+   ],
+   "defaultModelBinding": {
+    "model": "sonnet",
+    "provider": "claude-code (Claude Pro)"
+   },
+   "personaFile": "agents/editor-critic.md"
+  },
+  {
+   "id": "corector",
+   "name": "Corector",
+   "mission": "Stil, gramatică, lectură orală, QA nativ și editorial.",
+   "ownedSkills": [
+    "native-read-aloud"
+   ],
+   "defaultModelBinding": {
+    "model": "sonnet",
+    "provider": "claude-code (Claude Pro)"
+   },
+   "personaFile": "agents/corector.md"
+  },
+  {
+   "id": "traducator",
+   "name": "Traducător",
+   "mission": "Adaptare literară EN/RO și alte limbi selectate.",
+   "ownedSkills": [
+    "native-read-aloud",
+    "literary-localization"
+   ],
+   "defaultModelBinding": {
+    "model": "sonnet",
+    "provider": "claude-code (Claude Pro)"
+   },
+   "personaFile": "agents/traducator.md"
+  },
+  {
+   "id": "director-artistic",
+   "name": "Director artistic",
+   "mission": "Identitate, atlas, storyboard, compoziție, prompt, QA vizual, colorabilitate.",
+   "ownedSkills": [
+    "animal-object-interaction",
+    "coloring-simplification",
+    "composition-planning"
+   ],
+   "defaultModelBinding": {
+    "model": "sonnet",
+    "provider": "claude-code (Claude Pro)"
+   },
+   "personaFile": "agents/director-artistic.md"
+  },
+  {
+   "id": "inginer",
+   "name": "Inginerul aplicației",
+   "mission": "Contracte, fiabilitate, validatori, RCA și atelier software.",
+   "ownedSkills": [
+    "adauga-etapa",
+    "blueprint-si-prompturi",
+    "ruleaza-teste",
+    "texte-pentru-editor",
+    "contract-migration"
+   ],
+   "defaultModelBinding": {
+    "model": "sonnet",
+    "provider": "claude-code (Claude Pro)"
+   },
+   "personaFile": "agents/inginer.md"
+  }
+ ]
+}

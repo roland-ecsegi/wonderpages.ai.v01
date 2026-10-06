@@ -1,0 +1,210 @@
+{
+ "schema": "wonderpages.brain.decisions-index/1",
+ "derivedFrom": [
+  "evaluation/gold-v2-policy/decisions.jsonl",
+  "docs/enterprise/records/GOLD-V2-POLICY-CLOSURE.md"
+ ],
+ "authority": "The verbatim operator statement in the ledger is authoritative; this is an index.",
+ "count": 22,
+ "head": "9854d40f4d891dd4f53b6f9d35c59a6c5db0e2b0fed8de034d01d1d3393d0874",
+ "decisions": [
+  {
+   "id": "D-01",
+   "outcome": "decided",
+   "entryHash": "bd5f75cc3cbb66aad752f791f227c37c76e18ad367f1c4849ff481d00335f219",
+   "topic": "Arme reale",
+   "option": "B",
+   "closureHash16": "bd5f75cc3cbb66aa",
+   "commit": "0e2c346"
+  },
+  {
+   "id": "D-02",
+   "outcome": "decided",
+   "entryHash": "83f0aff75d931d975a4c127a26d6a8acc81f0255d2d756ea118d4b85d1dc23da",
+   "topic": "Jucării / recuzită de tip armă",
+   "option": "D rafinată",
+   "closureHash16": "83f0aff75d931d97",
+   "commit": "2c7cdcd"
+  },
+  {
+   "id": "D-03",
+   "outcome": "decided",
+   "entryHash": "43e64dc8cf3319ecd7ccc44708efef98c89d26e1577a471000e7686429d275b4",
+   "topic": "Arme / mecanisme fantastice",
+   "option": "D rafinată",
+   "closureHash16": "43e64dc8cf3319ec",
+   "commit": "5192501"
+  },
+  {
+   "id": "D-04",
+   "outcome": "decided",
+   "entryHash": "3d6ddbe51265d182da0e98d0e11bf9f86d75df5c462daa4b597434a9c2cf3c4c",
+   "topic": "Întrebarea către adult, răspuns nespus",
+   "option": "E rafinată (natura hazardului)",
+   "closureHash16": "3d6ddbe51265d182",
+   "commit": "ee193cb"
+  },
+  {
+   "id": "D-05",
+   "outcome": "decided",
+   "entryHash": "bb43f074023077470e8db14cc125a6807c3489e4e9edb58b9333a9fdfd15eec5",
+   "topic": "Supravegherea activă",
+   "option": "D rafinată (mecanism ↔ control)",
+   "closureHash16": "bb43f07402307747",
+   "commit": "af8a7a3"
+  },
+  {
+   "id": "D-06",
+   "outcome": "decided",
+   "entryHash": "755aa28f8cb4143edb91c84298b3d96d33c1666f20a8fde735c62087652f408a",
+   "topic": "Avertisment / lecție după act",
+   "option": "D rafinată (Page → Collection)",
+   "closureHash16": "755aa28f8cb4143e",
+   "commit": "1969d89"
+  },
+  {
+   "id": "D-07",
+   "outcome": "decided",
+   "entryHash": "63e2ff983479d8626099e6a40067954a8e5b7b63cb33d0b085fcb4daa60454f8",
+   "topic": "Locul nu e verdict",
+   "option": "C (locul = dovadă)",
+   "closureHash16": "63e2ff983479d862",
+   "commit": "ba0e294"
+  },
+  {
+   "id": "D-08",
+   "outcome": "decided",
+   "entryHash": "5b238c7e81f3f30868fa04797528a8f322289a63ccef8ccb00f4296ceca7bd5b",
+   "topic": "Stereotip contestat",
+   "option": "D (gradat; contestat → REVIEW)",
+   "closureHash16": "5b238c7e81f3f308",
+   "commit": "f2dbfc6"
+  },
+  {
+   "id": "D-09",
+   "outcome": "decided",
+   "entryHash": "88f4acd4c98f79ba01e0517a38ec3d25f76c04d49cb16a65b02b6a44ac5fd8df",
+   "topic": "Restricție formulată prin gen",
+   "option": "D (motiv, aplicabilitate, contrafactual)",
+   "closureHash16": "88f4acd4c98f79ba",
+   "commit": "770e1d0"
+  },
+  {
+   "id": "D-10",
+   "outcome": "decided",
+   "entryHash": "5172167615877ff40c6e411d576e95e62a1981f293ea9a9fa28d1f8df1d2e465",
+   "topic": "„a urât” / emoție vs insultă",
+   "option": "C rafinată",
+   "closureHash16": "5172167615877ff4",
+   "commit": "45ae88b"
+  },
+  {
+   "id": "D-11",
+   "outcome": "decided",
+   "entryHash": "e33f74238b246333df559bbbc36de4461f02a534e2a4bb75fa9d1202960dae6e",
+   "topic": "Frica (intensă recuperată / ușoară)",
+   "option": "C rafinată (age-fit multi-factor)",
+   "closureHash16": "e33f74238b246333",
+   "commit": "dc08881"
+  },
+  {
+   "id": "D-12",
+   "outcome": "decided",
+   "entryHash": "457abb2bcbb4a82695c97c809a6e8074995a06cf2cd30669254e1a25bc2919cd",
+   "topic": "Text scurt, dar abstract",
+   "option": "C rafinată (profil de abstracție)",
+   "closureHash16": "457abb2bcbb4a826",
+   "commit": "7cc9248"
+  },
+  {
+   "id": "D-13",
+   "outcome": "decided",
+   "entryHash": "017f76cb8488503fd90550ce6e259ab440269a8f56ecb94f5dbfb4b19006c47b",
+   "topic": "Relative imbricate",
+   "option": "B rafinată (profil structural)",
+   "closureHash16": "017f76cb8488503f",
+   "commit": "a15ab46"
+  },
+  {
+   "id": "D-14",
+   "outcome": "decided",
+   "entryHash": "9868b43824a361f14856b6407962b5089e810273a296ebde77edfc608f11989d",
+   "topic": "Semnalele consultative: finding → severitate → consecință",
+   "option": "C rafinată",
+   "closureHash16": "9868b43824a361f1",
+   "commit": "d75f0d6"
+  },
+  {
+   "id": "D-15",
+   "outcome": "decided",
+   "entryHash": "dbc63cbc0e2a724d07ded16a13063242ad52fbcab43a19ee795a7dbed58de4b2",
+   "topic": "Fereastra de corectare științifică",
+   "option": "D rafinată",
+   "closureHash16": "dbc63cbc0e2a724d",
+   "commit": "b5b8f95"
+  },
+  {
+   "id": "D-16",
+   "outcome": "decided",
+   "entryHash": "bd4cab1527f23f18764f676544279deca1e48d030bbdce88b61a5c486f52aa36",
+   "topic": "Minimul criteriilor non-critice; semantica pragurilor",
+   "option": "D rafinată",
+   "closureHash16": "bd4cab1527f23f18",
+   "commit": "5a33668"
+  },
+  {
+   "id": "D-17",
+   "outcome": "decided",
+   "entryHash": "e9bea3e83f8e552dd4e3040f1d4c4a9e600dbc1b1fbb798dd000eeb2f7101f74",
+   "topic": "T07 vs porțile de siguranță / content-policy / age-fit",
+   "option": "D rafinată (jurisdicții)",
+   "closureHash16": "e9bea3e83f8e552d",
+   "commit": "8979277"
+  },
+  {
+   "id": "D-18",
+   "outcome": "decided",
+   "entryHash": "f45729ed49e9a2c5ce88029e51dd0def7c77472f9d8eb9b78ecfd811213b6ec3",
+   "topic": "Validitatea dovezilor criticului (v3)",
+   "option": "D rafinată (validare separată, simetrică)",
+   "closureHash16": "f45729ed49e9a2c5",
+   "commit": "e06d22a"
+  },
+  {
+   "id": "D-19",
+   "outcome": "decided",
+   "entryHash": "405a85bf53371e24dc451b1d725a7f2db6b2b784324825109866e0228e4f67b3",
+   "topic": "Acoperirea (+ reprezentarea, domeniu extins de operator)",
+   "option": "0-b; D peste C",
+   "closureHash16": "405a85bf53371e24",
+   "commit": "696cf6e"
+  },
+  {
+   "id": "D-20",
+   "outcome": "decided",
+   "entryHash": "e526e5533966a6dc836736c5f8f8148ca921947eefaf2c6c6004f1a04dd8c8d7",
+   "topic": "Setul rezervat actual; protocolul noului set",
+   "option": "(d) din (b)",
+   "closureHash16": "e526e5533966a6dc",
+   "commit": "d78bb44"
+  },
+  {
+   "id": "D-21",
+   "outcome": "decided",
+   "entryHash": "aef2e202b8d811a9b62c0add1b326a9ebbbaf98a1fc928ba2d32534f2b6c535a",
+   "topic": "Porțile de performanță (RC1)",
+   "option": "(d): P0–P9",
+   "closureHash16": "aef2e202b8d811a9",
+   "commit": "0e4dffd"
+  },
+  {
+   "id": "D-22",
+   "outcome": "decided",
+   "entryHash": "9854d40f4d891dd4f53b6f9d35c59a6c5db0e2b0fed8de034d01d1d3393d0874",
+   "topic": "Independența autorului (RC1)",
+   "option": "(b) hibrid",
+   "closureHash16": "9854d40f4d891dd4",
+   "commit": "168905b"
+  }
+ ]
+}

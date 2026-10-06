@@ -1,0 +1,50 @@
+{
+ "schema": "wonderpages.brain.active-phase/1",
+ "id": "CONTINUITY-1",
+ "title": "WonderPages Project Brain + Continuity System + Agent Bridge",
+ "status": "IN_PROGRESS",
+ "authorizedBy": {
+  "actor": "operator",
+  "date": "2026-10-06",
+  "instruction": "WONDERPAGES PROJECT BRAIN + CONTINUITY SYSTEM + AGENT BRIDGE",
+  "text": "brain/phase/authorizations/CONTINUITY-1.operator-instruction.txt",
+  "instructionSha256": "92f0d100d72ec6dc362e5cb1ce66c6e48d57ec52a106e735a306e97248af12fc",
+  "textNote": "Verbatim operator message (session transcript 2026-10-06T09:40:07Z); the chat is transient, this file is the canonical copy.",
+  "baseCheckpoint": "866a441",
+  "scopeQuote": "Sunt permise numai documentația/control-plane-ul de continuitate, tooling-ul de integritate/sincronizare aferent și repository-ul extern Agent Bridge."
+ },
+ "writeScope": [
+  "CLAUDE.md",
+  "brain/**",
+  ".github/workflows/brain-gate.yml",
+  ".github/workflows/bridge-sync.yml"
+ ],
+ "externalScope": [
+  "roland-ecsegi/wonderpages.agent-bridge (separate control-plane repository; WonderPages → Bridge only)"
+ ],
+ "allowed": [
+  "Project Brain documentation and machine state under brain/ and the root CLAUDE.md bootstrap",
+  "Integrity / freshness / coverage / drift / mirror tooling under brain/tools and its tests under brain/tests",
+  "CI workflows that only read WonderPages and write to the Agent Bridge",
+  "The external Agent Bridge repository (mirror, protocol, tools, CI)"
+ ],
+ "forbidden": [
+  "Any semantic or functional change to: runtime, evaluator, quality/safety/age/science/localization behaviour, Gold-v1, Gold-v2, old held-out, validation results, Dinosaur World, permanent agents (identities, contracts, experience), Product Contract, production workflow, policy decisions D-01…D-22, release semantics, UI/product behaviour",
+  "Semantic Hardening #2",
+  "Creating hidden acceptance cases",
+  "Drafting the sanitized final policy brief",
+  "Resolving open policy dependencies from the closure report",
+  "Dependency Closure, RC1 Scope Closure, evaluator implementation, Dinosaur World production",
+  "Any Agent Bridge → WonderPages automatic path; WonderPages importing, reading or depending on the Bridge at runtime/build",
+  "Committing secrets or credentials; paid APIs/services; PHASE 9; external publication"
+ ],
+ "exitCriteria": [
+  "PROJECT_BRAIN, CONTEXT_INTEGRITY_GATE, CLAUDE_CHATGPT_PROTOCOL, FRESH_SESSION_CONTINUITY and APPLICATION_ZERO_DRIFT reported with evidence",
+  "Final report delivered to the operator; then STOP"
+ ],
+ "nextAuthorizedStep": {
+  "id": "OPERATOR-REVIEW-CONTINUITY-1",
+  "actor": "operator",
+  "summary": "The operator reviews the continuity system (CONTINUITY-1) and either explicitly authorizes a next phase or asks for corrections. Until then no implementation work is authorized."
+ }
+}

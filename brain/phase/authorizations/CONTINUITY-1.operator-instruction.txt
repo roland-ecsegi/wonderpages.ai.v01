@@ -1,0 +1,428 @@
+Claude, schimbăm ordinea următoarei faze înainte de orice Semantic Hardening #2, hidden acceptance set sau policy brief final.
+
+Checkpoint-ul funcțional de referință rămâne:
+
+* branch-ul WonderPages curent;
+* D-22: 168905b;
+* Policy Closure: 866a441;
+* OPERATOR POLICY DECISION PHASE: COMPLETE;
+* SEMANTIC HARDENING #2: NOT AUTHORIZED / NOT STARTED.
+
+Ai acces la repository-ul original WonderPages și la noul repository separat creat pentru Agent Bridge.
+
+ChatGPT NU mai are acces la repository-ul WonderPages. ChatGPT are READ/WRITE numai în repository-ul Agent Bridge. Tu ai acces la ambele.
+
+NOUL TASK PRIORITAR
+
+Construiește și validează un:
+
+WONDERPAGES PROJECT BRAIN + CONTINUITY SYSTEM + AGENT BRIDGE
+
+Scopul este ca nicio informație critică despre proiect, starea proiectului, deciziile luate, scopul final, arhitectura, agenții, faza curentă sau următorul pas autorizat să nu mai depindă de istoricul conversației Claude sau ChatGPT.
+
+Principiu obligatoriu:
+
+CHAT IS TRANSIENT. REPOSITORY IS CANONICAL.
+
+O sesiune Claude complet nouă, fără istoricul conversației, trebuie să poată reconstrui corect starea relevantă completă a WonderPages exclusiv din repository.
+
+Nu interpreta „100% knowledge” ca un rezumat gigantic. Construiește un sistem verificabil prin care Claude poate identifica și încărca întregul adevăr canonic necesar din repository, poate demonstra ce a citit/verificat și se oprește dacă starea este incompletă, contradictorie sau stale.
+
+⸻
+
+1. PROTECȚIE ABSOLUTĂ A APLICAȚIEI
+
+Această fază NU trebuie să modifice comportamentul WonderPages.
+
+Nu modifica semantic sau funcțional:
+
+* runtime;
+* evaluator;
+* quality/safety/age/science/localization behavior;
+* Gold-v1;
+* Gold-v2;
+* old heldout;
+* validation results;
+* Dinosaur World;
+* permanent agents;
+* agent identities/contracts/experience;
+* Product Contract;
+* production workflow;
+* existing policy decisions D-01–D-22;
+* release semantics;
+* UI/product behavior.
+
+Nu începe Semantic Hardening #2.
+
+Nu crea hidden acceptance cases.
+
+Nu redacta încă sanitized final author brief.
+
+Nu rezolva încă open policy dependencies din closure.
+
+Sunt permise numai documentația/control-plane-ul de continuitate, tooling-ul de integritate/sincronizare aferent și repository-ul extern Agent Bridge.
+
+Înainte de lucru, capturează baseline-ul relevant de la 866a441 și la final demonstrează că această infrastructură nu a produs functional drift.
+
+⸻
+
+2. PROJECT BRAIN CANONIC ÎN WONDERPAGES
+
+Construiește Project Brain-ul CANONIC în repository-ul original WonderPages.
+
+Nu duplica inutil documentația existentă. Project Brain trebuie să fie în primul rând index + state model + provenance + navigation layer peste adevărul deja existent.
+
+Trebuie să permită reconstruirea cel puțin a:
+
+* scopului final WonderPages;
+* Product Contract;
+* P1–P9 și poziției actuale;
+* arhitecturii aplicației;
+* modulelor/subsistemelor importante;
+* celor 11 agenți permanenți și contractului lor de identitate;
+* provider/model bindings ca entități separate de agent;
+* quality/evaluation architecture;
+* Gold-v1 / Gold-v2 / old heldout și rolurile lor;
+* D-01–D-22 și registry/closure;
+* cele 30 de implementation accidents A-01…A-30;
+* open dependencies;
+* ce este DECIDED;
+* ce este IMPLEMENTED;
+* ce este NOT IMPLEMENTED;
+* ce este VALIDATED;
+* ce este NOT VALIDATED;
+* Dinosaur World și regulile lui;
+* current phase;
+* current authorization boundary;
+* blockers;
+* următorul pas autorizat;
+* authoritative source pentru fiecare afirmație critică.
+
+Propune structura cea mai robustă; nu te limita la numele de fișiere sugerate de noi.
+
+Vreau însă conceptele echivalente pentru:
+
+* Project Brain / canonical index;
+* Current State;
+* System/Architecture Map;
+* Canonical Sources Manifest;
+* Knowledge Coverage Manifest;
+* Active Phase Contract;
+* Bootstrap Protocol;
+* Continuity / Integrity Protocol.
+
+Knowledge Coverage trebuie să permită detectarea fișierelor/subsistemelor relevante care nu sunt reprezentate în Project Brain.
+
+Nu declara „100% known” doar pentru că există Project Brain.
+
+Trebuie să existe o condiție verificabilă de:
+
+CONTEXT_READY / CONTEXT_NOT_READY
+
+⸻
+
+3. CONTEXT INTEGRITY GATE PENTRU CLAUDE
+
+Construiește protocolul prin care orice sesiune Claude nouă trebuie, înainte de muncă materială, să facă echivalentul:
+
+BOOT
+→ verify repository identity
+→ verify branch/state
+→ load Project Brain
+→ load Current State
+→ load Active Phase Contract
+→ load authoritative decisions/contracts required by phase
+→ verify integrity/freshness
+→ identify contradictions/missing coverage
+→ produce context-readiness evidence
+→ only then WORK.
+
+Dacă există:
+
+* stale Project Brain;
+* missing canonical source;
+* hash/tree mismatch;
+* contradictory state;
+* unknown current phase;
+* multiple incompatible NEXT STEP states;
+* missing required decision;
+* incomplete knowledge coverage;
+
+rezultatul trebuie să fie fail-closed:
+
+CONTEXT_INTEGRITY = FAIL
+WORK NOT AUTHORIZED
+
+Claude nu ghicește și nu completează din memoria conversației.
+
+Proiectează și mecanismul prin care Project Brain este menținut actualizat după modificări materiale viitoare, astfel încât să nu devină documentație moartă.
+
+Prefer verificări deterministe/tree hashes/manifests acolo unde sunt potrivite, nu afirmații de tip „Claude spune că este actualizat”.
+
+⸻
+
+4. AGENT BRIDGE — REPOSITORY COMPLET SEPARAT
+
+Repository-ul nou este un control-plane extern.
+
+Reguli obligatorii:
+
+WonderPages → Agent Bridge este permis.
+
+Agent Bridge → WonderPages automat este INTERZIS.
+
+WonderPages nu trebuie să importe, citească sau să depindă runtime/build de Agent Bridge.
+
+ChatGPT poate modifica Agent Bridge, dar nu trebuie să existe nicio cale prin care un write ChatGPT în Bridge să poată modifica automat repository-ul WonderPages.
+
+Construiește Bridge-ul astfel încât să poată conține:
+
+* verified mirror/snapshot pentru ChatGPT;
+* source provenance;
+* source commit SHA;
+* manifests/hashes;
+* Project Brain replica;
+* Current State replica;
+* relevant source/docs/tests needed for independent audit;
+* delta față de snapshot-ul precedent;
+* Claude → ChatGPT requests;
+* ChatGPT → Claude responses;
+* audit records;
+* acknowledgements/status;
+* task correlation IDs;
+* timestamps/provenance;
+* protocol version.
+
+Poți îmbunătăți structura dacă găsești o variantă mai robustă.
+
+⸻
+
+5. ONE-WAY VERIFIED MIRROR
+
+ChatGPT nu mai poate citi repository-ul WonderPages.
+
+De aceea construiește o sincronizare AUTOMATĂ și VERIFICABILĂ:
+
+WonderPages → Agent Bridge
+
+Nu vreau un simplu rezumat manual făcut de Claude.
+
+ChatGPT trebuie să poată determina din Bridge exact din ce stare WonderPages provine snapshot-ul.
+
+Mirror-ul trebuie să transporte suficient material pentru audit real, nu doar concluziile lui Claude.
+
+Include toate fișierele tracked relevante pentru înțelegerea/auditarea aplicației, cu un manifest explicit pentru orice excludere.
+
+Nu copia secrete, credentials sau materiale care nu trebuie versionate.
+
+Definește o condiție echivalentă:
+
+* SOURCE COMMIT identified;
+* snapshot complete;
+* manifest valid;
+* integrity valid;
+* sync verified.
+
+Dacă nu poate fi demonstrat că snapshot-ul este current/valid:
+
+SYNC_STATUS = STALE / INVALID
+și ChatGPT trebuie instruit să NU pretindă audit al stării curente.
+
+Writes făcute de ChatGPT în Bridge nu trebuie să poată falsifica nedetectabil proveniența snapshot-urilor WonderPages.
+
+Folosește hashes/manifests/provenance și separare logică adecvată.
+
+Dacă automatizarea cross-repository necesită un GitHub secret/token/App/permission pe care numai operatorul îl poate crea, implementează tot ce poți fără secret și cere intervenția operatorului numai la pasul strict necesar. Nu introduce niciodată credentiale în repository.
+
+Nu introduce servicii/API-uri plătite suplimentar fără autorizare explicită.
+
+⸻
+
+6. CLAUDE ↔ CHATGPT COMMUNICATION PROTOCOL
+
+Construiește în Agent Bridge un protocol persistent, auditable și transport-neutral pentru comunicarea dintre Claude și ChatGPT.
+
+Trebuie să suporte cel puțin:
+
+* REQUEST;
+* RESPONSE;
+* AUDIT_REQUEST;
+* AUDIT_RESULT;
+* QUESTION;
+* ANSWER;
+* BLOCKER;
+* OPERATOR_DECISION_REQUIRED;
+* ACKNOWLEDGED;
+* SUPERSEDED/CLOSED.
+
+Fiecare exchange trebuie să aibă cel puțin:
+
+* unique ID;
+* from;
+* to;
+* creation time;
+* protocol version;
+* WonderPages source SHA/context snapshot;
+* task/phase;
+* question/instruction;
+* authoritative references;
+* expected response;
+* blocking/non-blocking;
+* status;
+* response linkage;
+* provenance.
+
+Mesajele importante nu trebuie să existe numai în chat.
+
+Nu permite ca un răspuns ChatGPT să devină automat politică sau modificare WonderPages.
+
+Claude îl tratează conform rolului său: analiză/audit/recomandare, iar orice operator decision rămâne explicit operator-controlled.
+
+⸻
+
+7. AUTONOMY / TRIGGER LAYER
+
+Separă clar două probleme:
+
+A. persistent communication — trebuie implementată acum în Bridge;
+
+B. autonomous wake-up/triggering Claude Code ↔ ChatGPT Work — trebuie investigată și implementată numai dacă mecanismele disponibile o permit sigur.
+
+Nu presupune că o conversație ChatGPT poate fi „trezită” doar pentru că există un fișier nou.
+
+Investighează capabilitățile reale disponibile în mediul/repository-urile la care ai acces.
+
+Ținta este:
+
+Claude creates request
+→ Bridge records it
+→ ChatGPT Work is triggered/notified if supported
+→ ChatGPT processes it
+→ response is persisted in Bridge
+→ Claude detects response
+→ Claude continues.
+
+Și invers unde este tehnic posibil.
+
+Prefer mecanisme existente din abonamente/integrări/GitHub înaintea unor API-uri suplimentare.
+
+Nu cumpăra și nu presupune OpenAI API / Anthropic API usage.
+
+Dacă full autonomous triggering nu poate fi demonstrat cu infrastructura disponibilă, NU îl simula și NU îl declara rezolvat.
+
+În schimb:
+
+1. construiește interfața Bridge transport-neutral;
+2. identifică exact ultimul missing trigger;
+3. explică exact ce capabilitate/permisiune este necesară;
+4. păstrează restul sistemului funcțional fără copy-paste.
+
+⸻
+
+8. FRESH-SESSION CONTINUITY TEST
+
+Acesta este acceptance test obligatoriu.
+
+După implementare, trebuie să existe un test/protocol prin care o sesiune Claude complet fresh, fără contextul conversației curente, primește doar instrucțiunea de bootstrap din repository.
+
+Acea sesiune trebuie să poată reconstrui și raporta corect, cu references/evidence:
+
+* ce este WonderPages;
+* obiectivul;
+* Product Contract;
+* arhitectura relevantă;
+* cei 11 agenți permanenți;
+* fazele;
+* current phase;
+* D-01–D-22;
+* closure state;
+* evaluator state;
+* Gold/holdout state;
+* known gaps;
+* Dinosaur World state;
+* ce este implementat vs doar decis;
+* ce este empirically validated vs not validated;
+* ce NU este autorizat;
+* exact next authorized step.
+
+Nu considera testul trecut doar pentru că sesiunea produce un rezumat plauzibil.
+
+Verifică-l față de canonical sources.
+
+⸻
+
+9. ZERO-DRIFT / ISOLATION ACCEPTANCE
+
+La final demonstrează:
+
+* runtime behavior unchanged;
+* evaluator behavior unchanged;
+* agents unchanged;
+* Product Contract unchanged;
+* Gold-v1 unchanged;
+* Gold-v2 unchanged;
+* old heldout unchanged;
+* Dinosaur World unchanged;
+* D-01–D-22 unchanged;
+* closure unchanged;
+* no Bridge runtime dependency introduced;
+* no automatic Bridge → WonderPages write path;
+* existing tests still pass;
+* only explicitly authorized continuity/control-plane additions exist în WonderPages;
+* Agent Bridge is isolated.
+
+Rulează testele relevante și verificările de integritate.
+
+⸻
+
+10. NU CONTINUA ÎNCĂ PLANUL POST-CLOSURE
+
+După ce această infrastructură este construită și validată, OPREȘTE-TE.
+
+Nu începe:
+
+* Dependency Closure;
+* RC1 Scope Closure;
+* sanitized final policy brief;
+* hidden acceptance set;
+* Semantic Hardening #2;
+* evaluator implementation;
+* Dinosaur World production work.
+
+Acestea vor fi introduse ulterior prin Active Phase Contract după ce Continuity System trece auditul.
+
+⸻
+
+OUTPUT FINAL CERUT
+
+La final raportează concis dar cu dovezi:
+
+1. ce ai construit în WonderPages;
+2. ce ai construit în Agent Bridge;
+3. commit-urile exacte în ambele repositories;
+4. arhitectura Project Brain;
+5. cum este verificată knowledge completeness/freshness;
+6. cum funcționează one-way mirror;
+7. cum funcționează Claude ↔ ChatGPT protocol;
+8. ce parte din autonomous triggering este REAL demonstrată și ce parte, dacă există, rămâne blocată;
+9. ce acțiune minimă trebuie să facă operatorul, dacă există;
+10. rezultatul Fresh-Session Continuity Test;
+11. rezultatul zero-drift/isolation verification;
+12. orice limitare sau risc rămas;
+13. status final explicit:
+
+* PROJECT_BRAIN: PASS/FAIL
+* CONTEXT_INTEGRITY_GATE: PASS/FAIL
+* BRIDGE_SYNC: PASS/FAIL/PENDING_OPERATOR_SETUP
+* CLAUDE_CHATGPT_PROTOCOL: PASS/FAIL
+* AUTONOMOUS_TRIGGERING: PASS/FAIL/PARTIAL
+* FRESH_SESSION_CONTINUITY: PASS/FAIL
+* APPLICATION_ZERO_DRIFT: PASS/FAIL
+
+Lucrează autonom.
+
+Nu cere aprobări intermediare decât dacă este necesară o acțiune pe care tehnic numai operatorul o poate executa (de exemplu un secret/permission extern).
+
+Dacă găsești o soluție mai robustă decât structura propusă aici, o poți folosi, dar trebuie să păstrezi toate invariants de securitate, izolare, provenance, fail-closed și zero functional drift.
+
+Începe prin a verifica starea reală a ambelor repositories și checkpoint-ul 866a441, apoi construiește sistemul.

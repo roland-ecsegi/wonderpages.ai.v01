@@ -1,0 +1,14 @@
+{
+ "schema": "wonderpages.brain.phase-registry/1",
+ "rule": "Exactly one phase is ACTIVE. A phase id that is not in this registry is UNKNOWN and fails the gate. A new phase becomes ACTIVE only through an operator authorization recorded under brain/phase/authorizations/.",
+ "phases": [
+  { "id": "P1-P8", "title": "Enterprise architecture phases 1–8", "state": "CLOSED", "claims": ["C-AUTHORIZATION-P1-P8", "C-P8-PARTIAL"] },
+  { "id": "CU", "title": "Creative Upgrade Proposal workflow (mechanical)", "state": "CLOSED", "claims": ["C-CU"] },
+  { "id": "GS", "title": "Gold-v1 adjudication", "state": "CLOSED", "claims": ["C-GS"] },
+  { "id": "HARDENING-1", "title": "Hardening #1 + Gold-v2 up to adjudication (H0–H6)", "state": "CLOSED", "claims": ["C-HARDENING"] },
+  { "id": "POLICY-DECISIONS", "title": "Gold-v2 operator policy decisions D-01…D-22 + closure report", "state": "CLOSED", "claims": ["C-POLICY-PHASE-COMPLETE"] },
+  { "id": "CONTINUITY-1", "title": "Project Brain + Continuity System + Agent Bridge", "state": "ACTIVE", "authorization": "brain/phase/authorizations/CONTINUITY-1.operator-instruction.txt", "claims": ["C-CONTINUITY-AUTH"] },
+  { "id": "POST-CLOSURE", "title": "Canonical post-closure order (sanitized brief → hidden set → … → SH#2 → acceptance)", "state": "NOT_AUTHORIZED", "claims": ["C-POST-CLOSURE-ORDER"] },
+  { "id": "P9", "title": "PHASE 9 — Final Expansion", "state": "NOT_AUTHORIZED", "claims": ["C-P9-NOT-AUTHORIZED"] }
+ ]
+}

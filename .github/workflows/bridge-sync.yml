@@ -1,0 +1,59 @@
+# One-way mirror WonderPages → Agent Bridge (roland-ecsegi/wonderpages.agent-bridge). Never reads the Bridge back.
+# Needs the Actions secret BRIDGE_SYNC_TOKEN (fine-grained PAT: only the Bridge repository, Contents read/write).
+# Without it the job reports PENDING_OPERATOR_SETUP and writes nothing. Setup: brain/BRIDGE.md §3.
+name: bridge-sync
+on:
+  push:
+    branches: [claude/wonderpages-enterprise-architecture-8hy7w9, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: bridge-sync
+  cancel-in-progress: false
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check operator setup
+        id: setup
+        env:
+          TOKEN: ${{ secrets.BRIDGE_SYNC_TOKEN }}
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "::warning::BRIDGE_SYNC=PENDING_OPERATOR_SETUP — Actions secret BRIDGE_SYNC_TOKEN is not configured (see brain/BRIDGE.md §3). Nothing was written."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/checkout@v4
+        if: steps.setup.outputs.ready == 'true'
+        with:
+          fetch-depth: 0
+          path: wonderpages
+      - uses: actions/checkout@v4
+        if: steps.setup.outputs.ready == 'true'
+        with:
+          repository: roland-ecsegi/wonderpages.agent-bridge
+          token: ${{ secrets.BRIDGE_SYNC_TOKEN }}
+          path: bridge
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        if: steps.setup.outputs.ready == 'true'
+        with:
+          node-version: '22'
+      - name: Export snapshot (gate result recorded; secret scan fail-closed; post-write provenance verification)
+        if: steps.setup.outputs.ready == 'true'
+        id: export
+        run: node wonderpages/brain/tools/bridge-export.mjs export --bridge=bridge --mode=ci | tee export.json
+      - name: Commit and push to the Bridge
+        if: steps.setup.outputs.ready == 'true'
+        run: |
+          cd bridge
+          if [ -z "$(git status --porcelain)" ]; then echo "already mirrored"; exit 0; fi
+          SNAP=$(node -e "console.log(require('./mirror/CURRENT.json').snapshotId)")
+          git config user.name "wonderpages-bridge-sync"
+          git config user.email "bridge-sync@users.noreply.github.com"
+          git add -A -f mirror
+          git commit -q -m "mirror: WonderPages snapshot ${SNAP} (ci)" -m "Bridge-Sync: ${SNAP}" -m "Source-Commit: ${GITHUB_SHA}"
+          git push origin HEAD:main

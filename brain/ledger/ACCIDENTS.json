@@ -1,0 +1,254 @@
+{
+ "schema": "wonderpages.brain.accidents-index/1",
+ "derivedFrom": [
+  "docs/enterprise/records/GOLD-V2-POLICY-CLOSURE.md §8"
+ ],
+ "count": 30,
+ "accidents": [
+  {
+   "id": "A-01",
+   "area": "Siguranță",
+   "decisions": [
+    "D-01"
+   ],
+   "label": "Săbii, tunuri și cuțitul ca armă nerecunoscute; accesul copilului la o armă reală clasificat ca politică"
+  },
+  {
+   "id": "A-02",
+   "area": "Siguranță",
+   "decisions": [
+    "D-02"
+   ],
+   "label": "Doar expresii fixe de jucării; RO „pistoale cu apă” → PASS (paritate); jucăria folosită pentru a lovi nedetect"
+  },
+  {
+   "id": "A-03",
+   "area": "Siguranță",
+   "decisions": [
+    "D-03"
+   ],
+   "label": "Același REVIEW pentru atacul asupra unei rachete și asupra unui copil; mingi de foc / vrăji nerecunoscute; RO "
+  },
+  {
+   "id": "A-04",
+   "area": "Siguranță",
+   "decisions": [
+    "D-04"
+   ],
+   "label": "ASK atenuează orice hazard (chibrituri, pervaz → PASS); refuzul nerecunoscut"
+  },
+  {
+   "id": "A-05",
+   "area": "Siguranță",
+   "decisions": [
+    "D-05"
+   ],
+   "label": "SUPERVISION atenuează orice hazard („holds his hand” + chibrituri / ciuperci / monedă → PASS); paritate RO rup"
+  },
+  {
+   "id": "A-06",
+   "area": "Siguranță",
+   "decisions": [
+    "D-06"
+   ],
+   "label": "Regulă de avertisment pe bandă (BLOCK la 3–4, REVIEW la 5–8); atenuare și pentru hazard de tip C; intenția opr"
+  },
+  {
+   "id": "A-07",
+   "area": "Siguranță",
+   "decisions": [
+    "D-07"
+   ],
+   "label": "Lista de locuri SRC, inclusiv „bush / din tufiș” adăugate de furnizor în H2 (`5ee99e8`) dintr-o probă neetiche"
+  },
+  {
+   "id": "A-08",
+   "area": "Siguranță",
+   "decisions": [
+    "D-08",
+    "D-17"
+   ],
+   "label": "Ținta stereotipului = doar gen; „That's not true” → BLOCK; stereotipul contestat → BLOCK în probă"
+  },
+  {
+   "id": "A-09",
+   "area": "Siguranță",
+   "decisions": [
+    "D-09"
+   ],
+   "label": "Lista EPISODIC („today”) transformă BLOCK în REVIEW fără motiv; contrafactualul ignorat"
+  },
+  {
+   "id": "A-10",
+   "area": "Siguranță",
+   "decisions": [
+    "D-10"
+   ],
+   "label": "Insulte după listă; „Te urăsc!” → PASS; degradarea corporală nedetectată; paritate EN / RO ruptă"
+  },
+  {
+   "id": "A-11",
+   "area": "Siguranță",
+   "decisions": [
+    "D-11"
+   ],
+   "label": "Frica = listă de cuvinte, trecută prin poarta de siguranță; panica fără cuvânt-cheie → PASS; „terrified” comic"
+  },
+  {
+   "id": "A-12",
+   "area": "Age-fit, localizare, știință",
+   "decisions": [
+    "D-12"
+   ],
+   "label": "Abstracția = verb cognitiv + cuvânt din listă; „thinks about tomorrow, when he will see Grandma” → fals poziti"
+  },
+  {
+   "id": "A-13",
+   "area": "Age-fit, localizare, știință",
+   "decisions": [
+    "D-13"
+   ],
+   "label": "Sintaxa = număr de relative; syn-02 fără semnal (gap); lanțul la dreapta → semnal; trei niveluri la 7–8 → nimi"
+  },
+  {
+   "id": "A-14",
+   "area": "Age-fit, localizare, știință",
+   "decisions": [
+    "D-14"
+   ],
+   "label": "AGE_COMPLEXITY major după lungime; AGE_VOCABULARY după lungimea cuvântului (v2h-age-12); age-fit doar pe ediți"
+  },
+  {
+   "id": "A-15",
+   "area": "Age-fit, localizare, știință",
+   "decisions": [
+    "D-14"
+   ],
+   "label": "TR_OMISSION fals pozitiv la idiom (v2h-loc-12); negarea / sensul schimbat doar minor / advisory"
+  },
+  {
+   "id": "A-16",
+   "area": "Age-fit, localizare, știință",
+   "decisions": [
+    "D-14",
+    "D-17"
+   ],
+   "label": "Calea ascunsă `criticNotes` → T01"
+  },
+  {
+   "id": "A-17",
+   "area": "Age-fit, localizare, știință",
+   "decisions": [
+    "D-15"
+   ],
+   "label": "Știința: întărirea („No, we cannot see”) și „No … see” fără legătură → tratate ca corectare; RO „vedem” nerecu"
+  },
+  {
+   "id": "A-18",
+   "area": "Age-fit, localizare, știință",
+   "decisions": [
+    "D-15"
+   ],
+   "label": "SCIENCE_CLAIM / REVIEW nu blochează readiness, carte sau release; criticNotes fără canon"
+  },
+  {
+   "id": "A-19",
+   "area": "Calitate",
+   "decisions": [
+    "D-16"
+   ],
+   "label": "Egalitatea pică din cauza virgulei mobile: 17 × 8.1 + 6.3 → 7.9999999999999964 → MEAN_BELOW_THRESHOLD"
+  },
+  {
+   "id": "A-20",
+   "area": "Calitate",
+   "decisions": [
+    "D-16",
+    "D-17"
+   ],
+   "label": "Două coduri pentru un singur defect critic (T01 / T07 / T08 < 7)"
+  },
+  {
+   "id": "A-21",
+   "area": "Calitate",
+   "decisions": [
+    "D-16"
+   ],
+   "label": "Selecția versiunii după media rotunjită, chiar dacă pică poarta (citire de cod)"
+  },
+  {
+   "id": "A-22",
+   "area": "Calitate",
+   "decisions": [
+    "D-17"
+   ],
+   "label": "Închiderea operatorului în poarta de siguranță poate fi anulată indirect de T07"
+  },
+  {
+   "id": "A-23",
+   "area": "Calitate",
+   "decisions": [
+    "D-17"
+   ],
+   "label": "Release-ul raportează doar prima poartă care pică"
+  },
+  {
+   "id": "A-24",
+   "area": "Calitate",
+   "decisions": [
+    "D-18"
+   ],
+   "label": "Elipsa legitimă tratată ca citat inventat; comentariul numit „fabricat”; pagina declarată ignorată; corpusul a"
+  },
+  {
+   "id": "A-25",
+   "area": "Calitate",
+   "decisions": [
+    "D-18"
+   ],
+   "label": "Evaluare invalidă = `pass=false` (confundată cu eșecul artifactului); etapa aruncă o eroare opacă"
+  },
+  {
+   "id": "A-26",
+   "area": "Măsurare",
+   "decisions": [
+    "D-19"
+   ],
+   "label": "Scorarea Gold binară: REVIEW = BLOCK; semnal = negativ (v2c-age-abs-03); SCIENCE_REVIEW = pozitiv; evaluare in"
+  },
+  {
+   "id": "A-27",
+   "area": "Măsurare",
+   "decisions": [
+    "D-19"
+   ],
+   "label": "COVERAGE_MINIMA trece cu celule goale (vârstă 5–6 EN = 0; știință doar 7–8; calitate doar 3–4 EN; calitate rez"
+  },
+  {
+   "id": "A-28",
+   "area": "Măsurare",
+   "decisions": [
+    "D-12",
+    "D-13",
+    "D-20"
+   ],
+   "label": "Același șablon structural în calibrare și setul rezervat (sintaxă, abstracție) — L-7"
+  },
+  {
+   "id": "A-29",
+   "area": "Măsurare",
+   "decisions": [
+    "D-20"
+   ],
+   "label": "`validationState` presupune holdout-ul Gold-v2 ca set de acceptare"
+  },
+  {
+   "id": "A-30",
+   "area": "Măsurare",
+   "decisions": [
+    "D-21"
+   ],
+   "label": "Metrici fără intervale de încredere; κ / acuratețea globală tratate ca rezumat"
+  }
+ ]
+}

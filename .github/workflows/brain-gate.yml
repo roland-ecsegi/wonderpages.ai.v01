@@ -1,0 +1,24 @@
+# Project Brain — Context Integrity Gate on every push (read-only; no secrets; no npm install needed).
+# A push that changes the application without a reviewed reseal of the brain turns this red (brain/CONTINUITY.md).
+name: brain-gate
+on:
+  push:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Context Integrity Gate
+        run: node brain/tools/brain.mjs gate
+      - name: Brain self-tests (negative cases included)
+        run: node brain/tests/run.mjs
+      - name: Zero-drift against the functional checkpoint 866a441
+        run: node brain/tools/drift.mjs compare brain/evidence/BASELINE-866a441.json

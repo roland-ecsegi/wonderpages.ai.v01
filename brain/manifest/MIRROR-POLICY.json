@@ -1,0 +1,15 @@
+{
+ "schema": "wonderpages.brain.mirror-policy/1",
+ "direction": "WonderPages → Agent Bridge only. Nothing is ever read back from the Bridge into WonderPages automatically.",
+ "sourceRepo": "roland-ecsegi/wonderpages.ai.v01",
+ "bridgeRepo": "roland-ecsegi/wonderpages.agent-bridge",
+ "include": "Every file tracked in the exported source commit, except the explicit exclusions below. Untracked and ignored files (node_modules, data/, .env, logs, out/) are never exported because only git objects of the commit are read.",
+ "exclude": [
+  { "glob": "**/*.zip", "reason": "Binary archives (Dinosaur World v04 reference project and Enterprise package): frozen reference data, not auditable as text, 11.7 MB. Path, size, sha256 and git blob id are recorded in the manifest so their identity stays verifiable." }
+ ],
+ "secretScan": {
+  "rule": "Every exported text file is scanned. A match that is not a documented benign fixture aborts the whole export (fail closed); nothing partial is written.",
+  "patterns": ["sk-ant-[A-Za-z0-9_-]{16,}", "sk-(proj-)?[A-Za-z0-9]{32,}", "-----BEGIN (RSA |OPENSSH |EC |DSA |)PRIVATE KEY-----", "gh[pousr]_[A-Za-z0-9]{30,}", "github_pat_[A-Za-z0-9_]{40,}", "xox[bpas]-[A-Za-z0-9-]{20,}", "AKIA[0-9A-Z]{16}", "AIza[0-9A-Za-z_-]{35}", "(ANTHROPIC|OPENAI|CANVA|GOOGLE|BRIDGE)_[A-Z_]*(KEY|SECRET|TOKEN)\\s*[=:]\\s*['\"]?[A-Za-z0-9_\\-]{16,}"],
+  "benign": "\\$\\{|example|placeholder|sk-test-must-be-stripped|SENTINEL-FIXTURE|secrets\\.BRIDGE_SYNC_TOKEN"
+ }
+}

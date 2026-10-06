@@ -1,0 +1,33 @@
+{
+ "schema": "wonderpages.brain.continuity-questions/1",
+ "instructions": "Answer from this repository only (no prior conversation). Follow /CLAUDE.md first. Return ONE JSON object {\"Q01\": …, …}. Use the exact type given in `format`. Strings: copy the canonical wording where the question says 'exact'.",
+ "questions": [
+  { "id": "Q01", "format": "object {name: string, version: string}", "question": "npm package name and version of the application (package.json)." },
+  { "id": "Q02", "format": "object {volumes: number, contentPagesPerBook: number, ageBands: string[]}", "question": "Product Contract: volumes per collection, content pages per book, and the age bands (e.g. \"3-4\")." },
+  { "id": "Q03", "format": "number", "question": "How many digital books does an EN+RO collection produce under the Product Contract?" },
+  { "id": "Q04", "format": "string[]", "question": "The ids of all permanent agents." },
+  { "id": "Q05", "format": "object {asistent: string, inginer: string, producator: string}", "question": "Default model binding (model name) of the agents asistent, inginer and producator." },
+  { "id": "Q06", "format": "object {entries: number, head16: string}", "question": "Gold-v2 policy decision ledger: number of entries and the first 16 hex chars of the head hash." },
+  { "id": "Q07", "format": "string (exact)", "question": "Option chosen by the operator for D-21, exactly as in the closure report's status table." },
+  { "id": "Q08", "format": "string (7-char commit)", "question": "Commit that recorded decision D-22." },
+  { "id": "Q09", "format": "string (exact)", "question": "Status of the OPERATOR POLICY DECISION PHASE." },
+  { "id": "Q10", "format": "string (exact)", "question": "Status of SEMANTIC HARDENING #2." },
+  { "id": "Q11", "format": "object {total: number, calibration: number, holdout: number}", "question": "Gold-v2 case counts." },
+  { "id": "Q12", "format": "number", "question": "How many Gold-v2 cases are adjudicated?" },
+  { "id": "Q13", "format": "number", "question": "How many lines does the Gold-v1 adjudication log have?" },
+  { "id": "Q14", "format": "boolean", "question": "May the old Gold-v2 held-out set be used for independent acceptance after SH#2?" },
+  { "id": "Q15", "format": "number", "question": "How many implementation accidents (A-xx) does the closure report list?" },
+  { "id": "Q16", "format": "boolean", "question": "Is the dependency D-22-DEP-SOURCE-B still open?" },
+  { "id": "Q17", "format": "string (exact)", "question": "Status of task P8-T05 in the implementation journal." },
+  { "id": "Q18", "format": "boolean", "question": "Has Dinosaur World production (V1 pilot, images, real Creative Upgrade) started?" },
+  { "id": "Q19", "format": "boolean", "question": "Is PHASE 9 authorized?" },
+  { "id": "Q20", "format": "string", "question": "Id of the currently active phase." },
+  { "id": "Q21", "format": "string", "question": "Id of the single next authorized step." },
+  { "id": "Q22", "format": "string", "question": "Step 3 of the canonical post-closure order." },
+  { "id": "Q23", "format": "number", "question": "D-21 gate P1: minimum number of relevant opportunities implied by the bound." },
+  { "id": "Q24", "format": "boolean", "question": "May anything flow automatically from the Agent Bridge into WonderPages?" },
+  { "id": "Q25", "format": "number", "question": "Current EVALUATOR_VERSION." },
+  { "id": "Q26", "format": "string[]", "question": "List the kinds of work that are explicitly NOT to be started in the active phase (short names)." },
+  { "id": "Q27", "format": "string", "question": "Result of the Context Integrity Gate you ran (CONTEXT_INTEGRITY value)." }
+ ]
+}

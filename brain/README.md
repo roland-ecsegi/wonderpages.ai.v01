@@ -1,0 +1,64 @@
+# WonderPages Project Brain — index
+
+The Project Brain is the canonical **index + state model + provenance + navigation layer** over the truth that already
+exists in this repository. It does not replace the journal, contracts, records or ledgers. It points at them, binds every
+critical claim to an exact anchor, and lets a tool prove that the pointers still hold.
+
+**CHAT IS TRANSIENT. REPOSITORY IS CANONICAL.** Start every session with `node brain/tools/brain.mjs gate` (see `/CLAUDE.md`).
+
+**NEXT_AUTHORIZED_STEP:** `OPERATOR-REVIEW-CONTINUITY-1` (canonical: `brain/phase/ACTIVE-PHASE.json`)
+
+## Layout
+
+| Path | What it is | Kind |
+|---|---|---|
+| `/CLAUDE.md` | Bootstrap rules that Claude Code auto-loads | hand-written |
+| `brain/BOOTSTRAP.md` | BOOT → verify → load → readiness evidence → WORK | hand-written |
+| `brain/CONTINUITY.md` | How the brain stays alive: staleness, review, reseal, phase transitions | hand-written |
+| `brain/BRIDGE.md` | Agent Bridge, the one-way mirror and the Claude ↔ ChatGPT protocol (WonderPages side) | hand-written |
+| `brain/state/CURRENT-STATE.json` | Machine state: goal, P1–P9, programmes, key statuses, blockers, next step | state |
+| `brain/state/CURRENT-STATE.md` | Human view of the state | **generated** (`brain.mjs render`) |
+| `brain/phase/ACTIVE-PHASE.json` | Active Phase Contract: allowed, forbidden, write scope, exit criteria, single next step | state |
+| `brain/phase/PHASES.json` | Phase registry: exactly one ACTIVE; unknown phase ⇒ gate FAIL | state |
+| `brain/phase/authorizations/` | Verbatim operator authorizations of phases (hash-bound from ACTIVE-PHASE) | evidence |
+| `brain/map/SYSTEM-MAP.md` | Architecture and subsystem navigation | hand-written |
+| `brain/map/SUBSYSTEMS.json` | Every tracked file → exactly one subsystem (coverage + per-subsystem seal digests) | manifest |
+| `brain/map/AGENTS.json` | 11 permanent agents + default model bindings | **derived** (`brain.mjs index`) |
+| `brain/manifest/SOURCES.json` | Canonical Sources Manifest: claims → files → exact anchors; state values bound to claims | manifest |
+| `brain/ledger/DECISIONS.json` | D-01…D-22 index (ledger hash, closure topic/option, commit) | **derived** |
+| `brain/ledger/ACCIDENTS.json` | A-01…A-30 index (area, decisions) | **derived** |
+| `brain/ledger/DEPENDENCIES.json` | Open / resolved policy dependencies | **derived** |
+| `brain/ledger/STATUS-MATRIX.md` | DECIDED / IMPLEMENTED / VALIDATED matrix with claim references | hand-written, claim-checked |
+| `brain/evidence/SEAL.json`, `SEAL-LOG.jsonl` | Freshness seal: per-subsystem digests; hash-chained review log | evidence |
+| `brain/evidence/BASELINE-866a441.json` | Zero-drift fingerprint of the functional checkpoint | evidence |
+| `brain/continuity/` | Fresh-session continuity questionnaire, grader and recorded results | test |
+| `brain/tools/` | `brain.mjs` (gate/seal/index/render), `drift.mjs`, `bridge-export.mjs` | tooling |
+| `brain/tests/run.mjs` | Self-tests, including negative tests that must make the gate fail | tests |
+
+## Reconstruct the project: where each answer lives
+
+| Question | Brain entry | Authoritative source (wins on conflict) |
+|---|---|---|
+| Final goal | `CURRENT-STATE.json` → `goal`; claim `C-GOAL` | `reference/architecture/WonderPages_Enterprise_Master_Architecture.md` OUTPUT-01 |
+| Product Contract | claim `C-PRODUCT-CONTRACT` | `docs/enterprise/contracts/PRODUCT-CONTRACT.md`, `server/domain/product-contract.js` |
+| P1–P9 and the current position | `CURRENT-STATE.json` → `phases`, `programmes`; `PHASES.json` | `docs/enterprise/JURNAL-IMPLEMENTARE.md` (task table, checkpoint), `docs/enterprise/records/P1.md`…`P8.md` |
+| Architecture and subsystems | `map/SYSTEM-MAP.md`, `map/SUBSYSTEMS.json` | master architecture; `docs/enterprise/contracts/*.md` |
+| 11 permanent agents (identity contracts) | `map/AGENTS.json`; claim `C-AGENTS` | `agents/contracts/role-contracts.json`, `agents/*.md`, `docs/enterprise/contracts/AGENT-REGISTRY.md` |
+| Provider / model bindings (separate from agents) | `map/AGENTS.json` → `defaultModelBinding`; claim `C-PROVIDERS` | `agents/*.md` front-matter, `server/providers/capabilities.js`, `PROVIDER-CAPABILITIES.md` |
+| Quality / evaluation architecture | `map/SYSTEM-MAP.md` § Quality; claims `C-EVALUATOR`, `C-TESTS` | `QUALITY-ASSESSMENT.md`, `SAFETY.md`, `GOLD-SET.md`, `records/HARDENING.md`, closure §7 |
+| Gold-v1 / Gold-v2 / old held-out | claims `C-GOLD-V1`, `C-GOLD-V2`, `C-OLD-HOLDOUT`, `C-HOLDOUT-RUN-1` | closure report §11–§14; `evaluation/gold/*` |
+| D-01…D-22, registry and closure | `ledger/DECISIONS.json`; claims `C-DECISIONS-STATE`, `C-DECISIONS-AUTHORITY` | `evaluation/gold-v2-policy/decisions.jsonl` (verbatim), `records/GOLD-V2-POLICY-DECISIONS.md`, `records/GOLD-V2-POLICY-CLOSURE.md` |
+| A-01…A-30 | `ledger/ACCIDENTS.json`; claim `C-ACCIDENTS` | closure §8 |
+| Open dependencies | `ledger/DEPENDENCIES.json`; claim `C-DEPENDENCIES` | closure §10 |
+| DECIDED / IMPLEMENTED / VALIDATED | `ledger/STATUS-MATRIX.md` | closure §7, §22; journal |
+| Dinosaur World and its rules | claims `C-DW-STOPPED`, `C-DW-DECISIONS`; `map/SYSTEM-MAP.md` § Dinosaur World | journal (human approvals), `dinosaur-world-enterprise/*`, `docs/enterprise/migration/DW-P8-STATUS.md` |
+| Current phase, authorization boundary | `phase/ACTIVE-PHASE.json`, `phase/PHASES.json` | `phase/authorizations/CONTINUITY-1.operator-instruction.txt` (verbatim) |
+| Blockers, next authorized step | `CURRENT-STATE.json` → `blockers`, `nextAuthorizedStep` | `ACTIVE-PHASE.json`; closure §20–§21 |
+| Post-closure order (not authorized yet) | claims `C-POST-CLOSURE-ORDER`, `C-PHASE-ORDER`, `C-SH2-PREREQS` | closure §20–§21 |
+
+## What "ready" means
+
+`CONTEXT_READY` means: the repository identity, branch and checkpoint hold; the working tree is clean; every tracked file is
+covered; the brain was sealed against exactly this tree; all claims' anchors exist; the decision ledger and its indexes agree;
+the state has no contradiction, an active phase that is registered and authorized, and one next step. It does **not** mean
+"100 % known". The gate lists what it cannot verify (`notVerified` in `--json` output).
