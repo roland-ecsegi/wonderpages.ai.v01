@@ -17,7 +17,8 @@ neimplementată. D-08: DECISĂ (opțiunea D, gradată; contestat → REVIEW), ne
 D-09: DECISĂ (opțiunea D; motiv, aplicabilitate, contrafactual, referință), neimplementată. D-10: DECISĂ (opțiunea C,
 rafinată semantic), neimplementată. D-11: DECISĂ (opțiunea C, age-fit multi-factor cu escaladare la severitate), neimplementată.
 D-12: DECISĂ (opțiunea C, profil semantic de abstracție; escaladare doar la mismatch material), neimplementată. D-13:
-DECISĂ (opțiunea B, profil structural; consecința de publicare → D-14), neimplementată. Tabelul de mai jos rămâne prezentarea inițială, nu se rescrie.
+DECISĂ (opțiunea B, profil structural; consecința de publicare → D-14), neimplementată. D-14: DECISĂ (opțiunea C,
+finding → confirmare → severitate → consecință; age-fit material → REVIEW, fidelity confirmată → REPAIR), neimplementată. Tabelul de mai jos rămâne prezentarea inițială, nu se rescrie.
 
 **Cum se înregistrează:**
 - **Pentru un caz:** `node scripts/enterprise/gold-adjudicate.mjs record --case=<id> --decision=correct --label=positive|negative

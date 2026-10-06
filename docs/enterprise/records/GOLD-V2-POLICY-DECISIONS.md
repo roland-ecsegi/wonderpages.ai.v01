@@ -34,6 +34,7 @@ explicită a operatorului. Etichetele cazurilor se dau la adjudecarea Gold-v2.
 | D-11 — frică cu recuperare imediată; frică ușoară | DECISĂ (neimplementată) | C (age-fit multi-factor, escaladare la severitate) | `e33f74238b246333…` |
 | D-12 — text scurt, dar abstract (3–4) | DECISĂ (neimplementată) | C (profil semantic de abstracție; escaladare doar la mismatch material) | `457abb2bcbb4a826…` |
 | D-13 — propoziții relative imbricate (5–6) | DECISĂ (neimplementată) | B (profil structural; consecința de publicare → D-14) | `017f76cb8488503f…` |
+| D-14 — semnalele consultative: finding, severitate, consecință | DECISĂ (neimplementată) | C (finding → confirmare → severitate → consecință; age-fit ≠ fidelity) | `9868b43824a361f1…` |
 
 ## D-01 — „Fără arme” pentru o armă reală
 
@@ -8934,3 +8935,1419 @@ ambiguității / referinței · validitatea empirică.
 - **D-13-DEP-REFERENCE-AMBIGUITY-TAXONOMY:** ambiguitatea și urmărirea referențială (inclusiv ca problemă de calitate).
 - **D-13-DEP-STRUCTURAL-FAMILY-DIVERSITY:** familii structurale diverse pentru testare (L-7; D-20 / D-22).
 - Legătura cu **D-12-DEP-ABSTRACTION-TAXONOMY** (compunerea în memoria de lucru).
+
+## D-14 — Semnalele consultative: finding, severitate, consecință de publicare
+
+### Declarația operatorului (cuvânt cu cuvânt)
+
+```text
+D-14 — DECIZIA OPERATORULUI
+
+Aleg Opțiunea C, rafinată: model semantic finding → confirmation/evidence → severity → publishing consequence, cu reguli distincte pentru AGE-FIT și LOCALIZATION FIDELITY.
+
+Principiile centrale:
+
+FINDING ≠ SEVERITY ≠ PUBLISHING CONSEQUENCE.
+
+DETECTOR OUTPUT ≠ CONFIRMED DEFECT.
+
+ADVISORY ≠ AUTOMATIC PASS FOREVER.
+
+MATERIAL ≠ AUTOMATIC BLOCK.
+
+CONFIRMED MATERIAL FIDELITY DEFECT ≠ OPERATOR-WAIVABLE REVIEW.
+
+COMPOSITION ≠ NUMERIC ADDITION.
+
+QUALITY GATE ≠ HIDDEN ESCALATION PATH.
+
+Nu implementa acum.
+
+⸻
+
+1. Modelul general
+
+Pentru semnalele din aria D-14, arhitectura trebuie să poată reprezenta cel puțin:
+
+artifact evidence → candidate finding → finding dimension → confidence/confirmation state → semantic impact → age/edition context → severity → scope → publishing consequence → resolution
+
+Pentru findings detectate automat trebuie păstrată și starea:
+
+* suspected/candidate;
+* confirmed;
+* dismissed false positive;
+* repaired;
+* revalidated.
+
+Un cod de detector nu reprezintă singur adevărul despre artifact.
+
+⸻
+
+AGE-FIT
+
+2. Regula generală age-fit
+
+Pentru age-fit:
+
+ADVISORY
+→ publishing PASS;
+
+MATERIAL FOR TARGET BAND
+→ publishing REVIEW;
+
+REVIEW este operator-deblockable, cu justificare și evidence.
+
+Nu introducem age-fit BLOCK doar pentru că un element este dificil pentru bandă.
+
+⸻
+
+3. Age-fit REVIEW nu înseamnă defect factual
+
+Un finding material de age-fit înseamnă:
+
+„Acest conținut poate fi incompatibil cu profilul editorial WonderPages pentru banda selectată și necesită judecată.”
+
+Nu:
+
+„Conținutul este factual greșit.”
+
+Prin urmare operatorul poate, cu evidence și justificare, să accepte cazul.
+
+⸻
+
+4. D-11 rămâne autoritară pentru frică
+
+D-14 NU suprascrie D-11.
+
+Rămân valabile:
+
+* mild fear poate fi PASS;
+* severe developmental distress poate escalada la REVIEW;
+* recovery reduce severitatea, nu șterge evenimentul;
+* banda modifică legitim pragul developmental;
+* 7–8 nu este bypass pentru distress sever.
+
+⸻
+
+5. D-12 rămâne autoritară pentru abstracție
+
+D-14 NU suprascrie D-12.
+
+Abstracția material incompatibilă cu banda poate ajunge la publishing REVIEW.
+
+Pentru cazul stabilit:
+
+Milo questions whether time is real.
+
+3–4:
+→ material
+→ REVIEW.
+
+5–6:
+→ advisory
+→ PASS.
+
+7–8:
+→ PASS pentru stimulul exact.
+
+⸻
+
+6. D-13 primește acum publishing consequence
+
+Pentru sintaxă aplic regula generală D-14.
+
+syn-01 — două niveluri center embedding, 3–4
+
+→ finding material
+→ publishing REVIEW.
+
+syn-02 — două niveluri center embedding, 5–6
+
+→ finding advisory
+→ publishing PASS + advisory.
+
+syn-03 — cazul exact, 7–8
+
+→ PASS.
+
+trei niveluri center embedding, cazul furnizat la 7–8
+
+→ finding material
+→ publishing REVIEW.
+
+Aceasta finalizează partea lăsată explicit deschisă în D-13.
+
+⸻
+
+7. AGE_TEMPORAL_CAUSAL
+
+Nu decide după existența unor cuvinte precum:
+
+* before;
+* after;
+* because;
+* yesterday;
+* tomorrow;
+* înainte;
+* după;
+* pentru că.
+
+Relațiile temporale și cauzale concrete pot fi perfect accesibile.
+
+Finding-ul trebuie să reprezinte dificultatea reală a relației.
+
+Advisory:
+→ PASS.
+
+Material pentru bandă:
+→ REVIEW.
+
+⸻
+
+8. AGE_DENSITY
+
+Densitatea nu este doar:
+
+number of facts / sentence.
+
+Trebuie să poată include:
+
+* număr de idei noi;
+* referenți;
+* relații;
+* inferențe;
+* schimbări temporale;
+* concepte;
+* informație vizuală necesară;
+* ritmul introducerii lor.
+
+Advisory:
+→ PASS.
+
+Material:
+→ REVIEW.
+
+Nu implementa un prag numeric arbitrar.
+
+⸻
+
+9. AGE_VOCABULARY
+
+Lungimea cuvântului nu este dificultatea vocabularului.
+
+Exemple precum:
+
+butterflies
+sau
+strawberries
+
+pot fi:
+
+* lungi;
+* familiare;
+* concrete;
+* ușor ilustrabile.
+
+Prin urmare v2h-age-12 rămâne fals pozitiv înghețat.
+
+În modelul D-14:
+
+candidate lexical finding + context familiar/concret
+→ advisory sau dismissed;
+→ PASS.
+
+Un vocabular realmente material pentru bandă poate ajunge la REVIEW, dar nu prin simplul număr de caractere/silabe.
+
+⸻
+
+10. AGE_COMPLEXITY
+
+Actualul major bazat predominant pe lungimea medie a propoziției nu devine automat material doar pentru că istoricul codului spune major.
+
+Severitatea veche trebuie considerată implementation metadata, nu policy truth.
+
+Semantic Hardening #2 va trebui să determine severitatea din profilul real.
+
+⸻
+
+11. AGE_EMOTION
+
+În afara cazurilor deja stabilite prin D-11, alte semnale emoționale urmează aceeași arhitectură generală:
+
+finding → severity → consequence.
+
+D-14 NU stabilește însă taxonomia completă pentru:
+
+* tristețe;
+* doliu;
+* furie;
+* separare;
+* anxietate;
+* rușine.
+
+Nu extrapola automat politica fricii la toate emoțiile.
+
+⸻
+
+LOCALIZATION FIDELITY
+
+12. Localizarea are o proprietate diferită de age-fit
+
+O traducere care modifică material sensul nu este doar „mai puțin potrivită”.
+
+Este potențial o ediție incorectă.
+
+Prin urmare localizarea necesită o stare suplimentară:
+
+CONFIRMATION STATE.
+
+⸻
+
+13. Pipeline pentru fidelity
+
+Conceptual:
+
+source meaning → target meaning → semantic relation → candidate fidelity finding → confirmation state → semantic impact → severity → publishing consequence
+
+Aceasta trebuie să fie separată de simplul:
+
+TR_CODE → severity.
+
+⸻
+
+14. Detector suspectează o inversare
+
+Exemplu:
+
+The cat does not sleep.
+
+→
+
+Pisica doarme.
+
+Dacă detectorul spune TR_NEGATION_CHANGED:
+
+→ candidate material fidelity finding;
+
+→ publishing REVIEW;
+
+→ necesită verificare.
+
+În acest moment operatorul poate determina:
+
+* detectorul are dreptate;
+* detectorul este fals pozitiv.
+
+⸻
+
+15. Dacă detectorul este fals pozitiv
+
+Exemplu:
+
+It's raining cats and dogs.
+
+→
+
+Plouă cu găleata.
+
+Dacă detectorul produce TR_OMISSION:
+
+→ operatorul verifică;
+
+→ traducerea este semantic fidelă;
+
+→ finding-ul este:
+
+DISMISSED / FALSE POSITIVE;
+
+→ publishing PASS.
+
+Nu se repară o traducere corectă pentru a mulțumi detectorul.
+
+⸻
+
+16. Dacă defectul material este confirmat
+
+Dacă:
+
+does not sleep
+
+a devenit într-adevăr:
+
+doarme
+
+atunci:
+
+→ finding confirmat;
+
+→ material fidelity defect;
+
+→ REPAIR REQUIRED;
+
+→ publishing gate FAIL până la corectare și revalidare.
+
+Nu este un REVIEW pe care operatorul îl poate debloca păstrând traducerea greșită.
+
+⸻
+
+17. REPAIR REQUIRED ≠ safety BLOCK
+
+Nu reutiliza neclar BLOCK.
+
+Separă consecințele.
+
+Conceptual pot exista:
+
+* PASS;
+* PASS_WITH_ADVISORY;
+* REVIEW_REQUIRED;
+* REPAIR_REQUIRED;
+* BLOCKED_BY_POLICY, acolo unde alte politici cer aceasta.
+
+Un fidelity defect confirmat poate fi REPAIR_REQUIRED fără să fie semantic același lucru cu un non-overridable child-safety BLOCK.
+
+⸻
+
+18. Operatorul poate decide adevărul finding-ului, nu poate aproba eroarea confirmată
+
+Operatorul poate spune:
+
+„Detectorul greșește; traducerea este fidelă.”
+
+Nu poate spune:
+
+„Da, traducerea inversează sensul, dar o aprobăm neschimbată.”
+
+După confirmarea defectului material:
+
+→ repair;
+
+→ re-evaluation;
+
+→ apoi release.
+
+⸻
+
+19. TR_MEANING_CHANGED
+
+Nu orice diferență de formulare este meaning change material.
+
+Trebuie evaluat dacă s-a schimbat semantic ceva relevant precum:
+
+* acțiunea;
+* actorul;
+* obiectul;
+* starea;
+* relația;
+* cauza;
+* consecința;
+* negarea;
+* cantitatea;
+* temporalitatea;
+* stance-ul;
+* informația de canon;
+* safety meaning;
+* educational/science meaning.
+
+Material confirmed change:
+→ REPAIR REQUIRED.
+
+⸻
+
+20. TR_NEGATION_CHANGED
+
+Negarea este high-value evidence deoarece poate inversa propoziția.
+
+Dar nu implementa:
+
+different negation token = defect.
+
+Trebuie comparat sensul.
+
+Dacă sensul este efectiv inversat:
+
+→ material confirmed fidelity defect;
+
+→ REPAIR REQUIRED.
+
+⸻
+
+21. TR_OMISSION
+
+O omisiune poate fi:
+
+* stilistică;
+* redundantă;
+* permisă de limbă;
+* idiomatică;
+* materială.
+
+Exemplul idiomatic v2h-loc-12 demonstrează de ce:
+
+OMISSION CODE ≠ MATERIAL OMISSION.
+
+Materialitatea trebuie stabilită semantic.
+
+⸻
+
+22. TR_ADDITION
+
+La fel, o adăugare poate fi:
+
+* clarificare legitimă;
+* necesară gramatical;
+* stilistică;
+* sau poate inventa informație.
+
+Dacă introduce material:
+
+* un fapt;
+* o acțiune;
+* o intenție;
+* o relație;
+* o concluzie;
+* un hazard;
+* un stance;
+
+care nu există în sursă:
+
+→ candidate material finding;
+
+→ REVIEW;
+
+→ dacă este confirmat defect de fidelity:
+→ REPAIR REQUIRED.
+
+⸻
+
+23. Diferențele minore
+
+Diferențele de formulare care:
+
+* păstrează sensul;
+* sunt idiomatice;
+* păstrează canonul;
+* păstrează stance-ul;
+* păstrează relațiile esențiale;
+
+pot rămâne:
+
+→ advisory sau no finding;
+
+→ publishing PASS.
+
+WonderPages nu trebuie să ceară traducere literală.
+
+⸻
+
+CRITIC / QUALITY
+
+24. Păstrăm findings în contextul criticului
+
+Nu închid calea către critic.
+
+Criticul are nevoie de context despre findings pentru o evaluare holistică.
+
+Dar:
+
+SEMANTIC ADVISORY ≠ INSTRUCTION TO LOWER T01.
+
+⸻
+
+25. Criticul trebuie să judece independent
+
+Criticul poate ajunge independent la:
+
+T01 < 8
+
+dacă artifact-ul, evaluat holistic, justifică acest lucru.
+
+Dar trebuie să furnizeze:
+
+* evidence;
+* reasoning;
+* scope;
+* criterion;
+* relation to findings, dacă există.
+
+Nu este suficient:
+
+AGE_* finding exists → lower score.
+
+⸻
+
+26. Trasabilitate obligatorie
+
+Dacă un quality failure este influențat de un semantic finding, quality evidence trebuie să citeze explicit finding-ul relevant.
+
+Conceptual:
+
+quality assessment → evidence → related finding IDs
+
+Nu accept:
+
+critic saw advisory → score changed → book blocked
+
+fără provenance.
+
+⸻
+
+27. Două porți pot exista independent
+
+Semantic gate și quality gate nu trebuie contopite.
+
+Exemplu:
+
+un finding age-fit advisory:
+
+→ semantic publishing PASS.
+
+Dar criticul poate observa independent că întreaga carte este mult prea complexă pentru bandă:
+
+→ T01 quality failure.
+
+Acest lucru este legitim dacă există evidence independent și trasabil.
+
+⸻
+
+28. Fără double counting
+
+Dacă exact aceeași problemă este:
+
+* semantic finding;
+* și quality evidence;
+
+sistemul trebuie să lege cele două.
+
+Nu trebuie să producă artificial:
+
+one defect → two independent severity penalties.
+
+Păstrează provenance și relationship.
+
+⸻
+
+29. Quality gate nu trebuie slăbită
+
+D-14 NU modifică pragurile T01/T08 sau quality-v2.
+
+Nu reduce quality gate pentru a evita calea ascunsă.
+
+Problema este lipsa trasabilității, nu existența criticului.
+
+⸻
+
+COMPOSITION
+
+30. Mai multe advisories se pot combina
+
+Da.
+
+Mai multe findings individual advisory pot produce împreună un material age-fit concern.
+
+Exemplu:
+
+* sintaxă moderat dificilă;
+* vocabular moderat dificil;
+* mai mulți referenți;
+* densitate ridicată;
+* relație temporală implicită;
+
+pot crea împreună o încărcare materială pentru 3–4.
+
+⸻
+
+31. Fără sumă numerică
+
+Nu implementa:
+
+5 advisories = material.
+
+Sau:
+
+minor=1, major=2, total>=4 → REVIEW.
+
+Materialitatea compusă trebuie justificată prin efectul semantic/developmental combinat.
+
+⸻
+
+32. Finding compus
+
+Poate exista un finding separat, de exemplu:
+
+AGEFIT_CUMULATIVE_LOAD
+
+sau echivalent.
+
+Acesta trebuie să explice:
+
+* ce findings contribuie;
+* cum interacționează;
+* ce efect combinat produc;
+* la ce nivel;
+* pentru ce bandă.
+
+⸻
+
+33. Findings individuale rămân
+
+Compunerea nu șterge:
+
+* syntax finding;
+* vocabulary finding;
+* density finding.
+
+Dar cumulative finding nu trebuie să le „pedepsească” din nou numeric.
+
+Principiu:
+
+COMPOSITION ≠ DOUBLE COUNTING.
+
+⸻
+
+EN / RO ȘI EDIȚIILE
+
+34. Age-fit se evaluează pe fiecare ediție lingvistică
+
+Da.
+
+Nu este suficient să evaluăm doar sursa EN.
+
+Ediția RO este un produs livrat copilului.
+
+Prin urmare trebuie evaluată și ea pentru:
+
+* syntax;
+* vocabulary;
+* abstraction;
+* density;
+* temporal/causal complexity;
+* emotional age-fit;
+* alte dimensiuni relevante.
+
+⸻
+
+35. Fidelity și target-language age-fit sunt axe diferite
+
+O traducere poate fi:
+
+fidelă, dar prea complexă pentru banda țintă.
+
+Sau:
+
+age-appropriate, dar infidelă.
+
+Trebuie evaluate separat.
+
+⸻
+
+36. Traducerea poate necesita adaptare
+
+Fidelity nu înseamnă structură identică cu sursa.
+
+Dacă EN folosește o construcție care tradusă literal devine greoaie în RO, traducerea poate restructura propoziția pentru target age dacă păstrează:
+
+* sensul;
+* canonul;
+* relațiile;
+* stance-ul;
+* informația relevantă.
+
+Acesta este unul dintre motivele pentru care fidelity semantică este preferată traducerii literale.
+
+⸻
+
+37. Paritate semantică, nu metrică
+
+Nu cer:
+
+EN sentence length = RO sentence length
+
+sau:
+
+EN syntax score = RO syntax score.
+
+Cer:
+
+* aceeași bandă țintă;
+* fiecare ediție să satisfacă profilul;
+* fidelity între sensuri.
+
+⸻
+
+NIVELURI
+
+38. Page → Book → Volume → Collection
+
+Da.
+
+D-14 adoptă explicit agregarea:
+
+Page → Book → Volume → Collection.
+
+Finding-ul local trebuie păstrat.
+
+⸻
+
+39. Page-level
+
+Un advisory pe o singură pagină poate rămâne advisory.
+
+Nu îl șterge doar pentru că restul cărții este simplu.
+
+⸻
+
+40. Book-level
+
+Repetarea unei dificultăți pe multe pagini poate produce un book-level material finding.
+
+Exemplu:
+
+fiecare pagină 3–4 este doar puțin prea densă.
+
+Izolat:
+→ advisory.
+
+Ca întreg:
+→ poate deveni material.
+
+⸻
+
+41. Volume-level
+
+Dacă aceeași problemă apare sistematic în Story Book-ul unui volum:
+
+→ păstrează findings locale;
+
+→ poate exista volume-level cumulative finding.
+
+⸻
+
+42. Collection-level
+
+Dacă toate cele șase volume 3–4 folosesc sistematic limbaj peste profil:
+
+→ collection-level age-fit drift.
+
+Nu accept ca fiecare pagină să treacă izolată în timp ce produsul, ca sistem, ratează profilul selectat.
+
+⸻
+
+43. Scope-ul reparației trebuie să urmeze finding-ul
+
+Page finding:
+→ repară pagina dacă este necesar.
+
+Book pattern:
+→ poate necesita editare la nivel de carte.
+
+Collection drift:
+→ poate necesita corecție sistemică.
+
+Nu regenera automat întregul produs.
+
+⸻
+
+VISUAL / CROSS-MODAL
+
+44. D-14 se aplică și age-fit-ului vizual
+
+Da.
+
+Proprietăți precum:
+
+* scene complexity;
+* clutter;
+* număr de elemente relevante;
+* detalii foarte mici;
+* relații vizuale;
+* visual hierarchy;
+* line/detail density;
+* profile line_hint;
+* informație necesară pentru înțelegere;
+
+pot produce age-fit findings.
+
+⸻
+
+45. Nu transforma profilul vizual în checklist rigid
+
+scene_complexity
+
+sau line_hint sunt evidence/product guidance.
+
+Nu:
+
+too many objects = REVIEW.
+
+Trebuie evaluat impactul asupra copilului și asupra înțelegerii scenei.
+
+⸻
+
+46. Visual advisory
+
+O imagine puțin mai complexă decât idealul:
+
+→ advisory;
+
+→ PASS.
+
+O imagine material incompatibilă cu banda:
+
+→ age-fit REVIEW.
+
+Aceeași arhitectură finding → severity → consequence.
+
+⸻
+
+47. Cross-modal load
+
+Textul și imaginea pot fi individual simple, dar împreună să solicite prea multe relații.
+
+Sau imaginea poate reduce încărcarea textului.
+
+Prin urmare:
+
+text finding
++
+visual evidence
++
+cross-modal relation
+
+trebuie păstrate separat înainte de evaluarea efectului combinat.
+
+⸻
+
+48. Localization + visual
+
+Fidelity vizuală intră în D-14 numai unde imaginea sau textul integrat în imagine poartă sens relevant pentru ediție.
+
+De exemplu:
+
+* text tradus în imagine;
+* semn/etichetă relevantă;
+* imagine care contrazice traducerea;
+* traducere care schimbă relația text–imagine.
+
+Nu inventa o regulă generală că fiecare diferență vizuală este localization defect.
+
+⸻
+
+STĂRILE DE PUBLICARE
+
+49. Taxonomia conceptuală
+
+D-14 stabilește conceptual cel puțin:
+
+PASS
+→ fără problemă relevantă.
+
+PASS_WITH_ADVISORY
+→ finding real, dar non-material.
+
+REVIEW_REQUIRED
+→ materialitate sau incertitudine suficientă pentru judecată umană.
+
+REPAIR_REQUIRED
+→ defect material confirmat care trebuie corectat înainte de release.
+
+BLOCKED_BY_POLICY
+→ rezervat politicilor unde deciziile existente cer non-overridable block.
+
+Denumirile tehnice finale pot fi rafinate ulterior.
+
+Semantica trebuie păstrată.
+
+⸻
+
+50. REVIEW și REPAIR REQUIRED nu sunt același lucru
+
+Age-fit material:
+
+→ REVIEW_REQUIRED.
+
+Operatorul poate accepta justificat.
+
+Candidate localization material:
+
+→ REVIEW_REQUIRED.
+
+Operatorul verifică dacă detectorul are dreptate.
+
+Confirmed localization material defect:
+
+→ REPAIR_REQUIRED.
+
+Operatorul nu poate aproba eroarea neschimbată.
+
+⸻
+
+51. Fals pozitiv
+
+Un REVIEW rezultat dintr-un detector imperfect nu înseamnă că produsul este defect.
+
+După verificare:
+
+candidate finding
+→ dismissed false positive
+→ PASS.
+
+Păstrează această decizie și evidence pentru audit/calibrare.
+
+⸻
+
+MĂSURARE / GOLD
+
+52. Modelul conceptual trebuie să distingă finding, severity și consequence
+
+Da.
+
+Pentru evaluarea viitoare trebuie să putem spune separat:
+
+* a existat finding-ul?
+* a fost detectorul corect?
+* care este severitatea corectă?
+* care este consecința corectă?
+* a fost fals pozitiv?
+* a fost reparat?
+
+⸻
+
+53. Dar D-14 nu rescrie acum schema Gold
+
+Nu modifica acum:
+
+* Gold-v1;
+* Gold-v2;
+* held-out;
+* labels;
+* scoring.
+
+D-19/D-20 vor decide reprezentarea exactă pentru adjudecare și măsurare.
+
+D-14 stabilește doar cerința semantică:
+
+measurement must not conflate finding presence with gate failure.
+
+⸻
+
+54. Un „negative” nu este suficient
+
+În viitor trebuie evitată confuzia:
+
+finding detected = artifact rejected.
+
+Un caz poate fi:
+
+finding present
++
+advisory
++
+publishing PASS.
+
+Aceasta este o stare legitimă.
+
+⸻
+
+CAZURILE CENTRALE
+
+55. v2c-loc-neg-01
+
+The cat does not sleep.
+→ Pisica doarme.
+
+Detector:
+→ candidate material fidelity finding.
+
+Publishing:
+→ REVIEW_REQUIRED.
+
+Dacă inversarea este confirmată:
+→ REPAIR_REQUIRED.
+
+Nu poate fi aprobată neschimbată.
+
+⸻
+
+56. v2c-loc-chg-01
+
+Milo finds a leaf.
+→ Milo pierde o frunză.
+
+Aceeași logică:
+
+candidate material meaning change
+→ REVIEW.
+
+Confirmed:
+→ REPAIR REQUIRED.
+
+⸻
+
+57. v2c-loc-om-01
+
+The seal has a ball and a hat.
+→ Foca are o minge.
+
+Trebuie determinat dacă omisiunea hat este materială în context.
+
+Nu decide doar după token.
+
+Dacă pălăria este relevantă pentru:
+
+* continuitate;
+* acțiune;
+* imagine;
+* canon;
+* plot;
+
+materialitatea crește.
+
+Candidate material:
+→ REVIEW.
+
+Confirmed material:
+→ REPAIR REQUIRED.
+
+⸻
+
+58. v2h-loc-12
+
+It's raining cats and dogs.
+→ Plouă cu găleata.
+
+Este cazul emblematic pentru:
+
+lexical omission ≠ semantic omission.
+
+Setul rămâne înghețat.
+
+În politica D-14, dacă verificarea confirmă echivalența idiomatică:
+
+→ false positive/dismissed;
+
+→ PASS.
+
+⸻
+
+59. v2h-age-12
+
+The butterflies dance. The strawberries are sweet.
+
+Cuvintele lungi familiare nu justifică singure material age-fit finding.
+
+În contextul furnizat:
+
+→ detector finding fals sau cel mult advisory;
+
+→ publishing PASS.
+
+Held-out rămâne neschimbat.
+
+⸻
+
+60. D-13 finalizat prin D-14
+
+Confirm explicit:
+
+syn-01 — 3–4
+→ material
+→ REVIEW.
+
+syn-02 — 5–6
+→ advisory
+→ PASS + advisory.
+
+3-level center embedding — 7–8, exemplul D-13
+→ material
+→ REVIEW.
+
+Nu transforma aceste exemple în praguri numerice.
+
+⸻
+
+SEVERITATE
+
+61. Nu păstrăm severitatea istorică doar pentru compatibilitate
+
+Actualul:
+
+TR_NEGATION_CHANGED = minor
+
+sau:
+
+AGE_COMPLEXITY = major
+
+nu este policy truth.
+
+Semantic Hardening #2 trebuie să reclasifice după impact semantic.
+
+⸻
+
+62. Severity trebuie explicabilă
+
+Pentru fiecare finding material trebuie să existe reasoned evidence despre:
+
+* ce proprietate a fost găsită;
+* unde;
+* pentru ce bandă/ediție;
+* ce impact are;
+* de ce este materială;
+* ce consequence rezultă.
+
+Nu accept:
+
+severity = material because rule says so.
+
+⸻
+
+63. Fără scor arbitrar
+
+Nu implementa:
+
+minor = 1
+major = 2
+critical = 3.
+
+Și nici:
+
+sum >= N → REVIEW.
+
+Severitatea este clasificare semantică bazată pe evidence.
+
+⸻
+
+RELAȚIA CU QUALITY
+
+64. Criticul primește findings
+
+Da.
+
+Păstrăm această informație.
+
+Dar trebuie marcată clar ca:
+
+* advisory;
+* material;
+* candidate;
+* confirmed;
+* dismissed;
+
+unde este cazul.
+
+⸻
+
+65. Advisory nu comandă nota
+
+Criticul nu trebuie promptat implicit:
+
+AGE_SYNTAX exists → T01 should be lower.
+
+Finding-ul este evidence/context.
+
+Criticul evaluează artifact-ul.
+
+⸻
+
+66. Quality failure trebuie explicat independent
+
+Dacă T01 ajunge sub 8:
+
+→ criticul trebuie să explice de ce artifact-ul, holistic, nu satisface criteriul.
+
+Dacă motivul este același finding:
+
+→ citează finding ID/evidence.
+
+Dacă există alte motive:
+
+→ citează-le separat.
+
+⸻
+
+67. Official semantic escalation
+
+Escaladarea oficială a finding-urilor D-14 trebuie să treacă prin:
+
+finding → severity → consequence.
+
+Nu prin efectul accidental:
+
+finding injected into critic prompt → unexplained lower score → blocked.
+
+Această cale netrasabilă trebuie eliminată în Semantic Hardening #2.
+
+⸻
+
+DECIZIILE CELOR ȘASE ÎNTREBĂRI
+
+68. Nivelurile de consecință
+
+Age-fit
+
+* advisory → PASS_WITH_ADVISORY;
+* material → REVIEW_REQUIRED;
+* fără age-fit BLOCK automat.
+
+Localization fidelity
+
+* non-material → PASS / advisory;
+* suspected material → REVIEW_REQUIRED;
+* confirmed material defect → REPAIR_REQUIRED;
+* dismissed false positive → PASS.
+
+⸻
+
+69. Compunerea
+
+Da.
+
+Mai multe advisories pot forma un material finding dacă efectul combinat este demonstrat semantic.
+
+Nu prin sumă numerică.
+
+⸻
+
+70. Calea prin critic
+
+O păstrăm ca input informațional, dar o facem complet trasabilă.
+
+Criticul rămâne independent.
+
+Advisory-ul nu produce mecanic quality failure.
+
+Quality failure bazat pe aceeași problemă trebuie să citeze evidence/finding-ul.
+
+⸻
+
+71. Paritatea ediției române
+
+Da.
+
+Ediția RO trebuie evaluată independent pentru age-fit.
+
+Fidelity EN↔RO rămâne o axă separată.
+
+⸻
+
+72. Page → Book → Volume → Collection
+
+Da.
+
+Se aplică.
+
+Păstrează findings locale și permite cumulative/systemic findings la nivel superior.
+
+Nu face simplă numărare.
+
+⸻
+
+73. Măsurarea
+
+D-14 stabilește că finding/severity/consequence/confirmation trebuie conceptual separate.
+
+D-19/D-20 decid exact:
+
+* schema Gold;
+* adjudecarea;
+* metricile;
+* scoring-ul.
+
+Nu modifica seturile acum.
+
+⸻
+
+CE NU DECIDE D-14
+
+D-14 NU decide:
+
+* taxonomia completă a fiecărei dimensiuni age-fit;
+* praguri numerice;
+* toate tipurile de localization defect;
+* TR_EMPTY / TR_MISALIGNED, care rămân în afara acestei decizii;
+* SAFETY_DISTRESS_CONTEXT;
+* D-18 evidence validity;
+* D-19/D-20 measurement implementation;
+* pragurile quality D-16/D-17;
+* taxonomia completă visual age-fit;
+* mecanismul final al parserului/evaluatorului;
+* validitatea empirică a evaluatorului.
+
+D-14 stabilește însă definitiv pentru aria sa:
+
+finding presence nu este gate failure.
+
+severity trebuie determinată semantic.
+
+age-fit advisory trece; age-fit material cere REVIEW.
+
+age-fit nu produce automat BLOCK.
+
+candidate material localization defect cere REVIEW.
+
+confirmed material localization defect trebuie reparat și nu poate fi aprobat neschimbat.
+
+false positive poate fi închis de operator.
+
+semantic gate și quality gate rămân independente și trasabile.
+
+advisories se pot compune fără numeric summation sau double counting.
+
+toate edițiile lingvistice sunt evaluate pentru age-fit.
+
+Page → Book → Volume → Collection se aplică.
+
+visual/cross-modal age-fit intră în același model atunci când este relevant.
+```
+
+### Separarea cerută
+
+| Strat | Conținut |
+|---|---|
+| **Decizie de politică** | Opțiunea C, rafinată: finding → confirmation / evidence → severity → publishing consequence. Reguli distincte pentru age-fit și localization fidelity. FINDING ≠ SEVERITY ≠ PUBLISHING CONSEQUENCE. DETECTOR OUTPUT ≠ CONFIRMED DEFECT. ADVISORY ≠ AUTOMATIC PASS FOREVER. MATERIAL ≠ AUTOMATIC BLOCK. CONFIRMED MATERIAL FIDELITY DEFECT ≠ OPERATOR-WAIVABLE REVIEW. COMPOSITION ≠ NUMERIC ADDITION. QUALITY GATE ≠ HIDDEN ESCALATION PATH. |
+| **Finding ID / dimensiune / artifact / ediție** | Fiecare finding are identitate citabilă, o dimensiune (age-fit: sintaxă, abstracție, temporal / cauzal, densitate, vocabular, complexitate, emoție, vizual; fidelity: sens, negare, omisiune, adăugare) și ediția în care apare. |
+| **Evidence / detector output / stare de confirmare** | Codul detectorului e candidat, nu adevăr. Stări: candidate, confirmed, dismissed false positive, repaired, revalidated. |
+| **Impact semantic / bandă / severitate** | Severitatea se stabilește semantic, cu evidence motivat (proprietate, loc, bandă / ediție, impact, de ce e materială). Severitățile istorice (`TR_NEGATION_CHANGED` = minor, `AGE_COMPLEXITY` = major) sunt metadata de implementare. Fără scor numeric. |
+| **Consecința de publicare** | Stări conceptuale: PASS · PASS_WITH_ADVISORY · REVIEW_REQUIRED · REPAIR_REQUIRED · BLOCKED_BY_POLICY. REPAIR_REQUIRED ≠ safety BLOCK. |
+| **Age-fit** | Advisory → PASS_WITH_ADVISORY. Material pentru bandă → REVIEW_REQUIRED, deblocabil de operator cu justificare și evidence. Fără age-fit BLOCK automat. REVIEW înseamnă judecată editorială, nu defect factual. D-11 (frică) și D-12 (abstracție) rămân autoritare. |
+| **Consecința D-13 (finalizată aici)** | syn-01 (3–4) material → **REVIEW**. syn-02 (5–6) advisory → **PASS + advisory**. syn-03 (7–8, cazul exact) → **PASS**. Trei niveluri de center embedding la 7–8 (exemplul D-13) material → **REVIEW**. Nu devin praguri numerice. |
+| **Temporal / cauzal · densitate · vocabular · complexitate · emoție** | Temporal / cauzal: dificultatea reală a relației, nu cuvintele. Densitate: idei, referenți, relații, inferențe, schimbări temporale, concepte, informație vizuală, ritm; fără prag numeric. Vocabular: lungimea ≠ dificultate (v2h-age-12 rămâne fals pozitiv înghețat). Complexitate: „major” istoric ≠ politică. Emoții în afara fricii: aceeași arhitectură, taxonomia nedecisă, fără extrapolarea politicii fricii. |
+| **Localization fidelity** | Non-material → PASS / advisory. Candidat material → REVIEW_REQUIRED. Defect material confirmat → **REPAIR_REQUIRED** (poarta pică până la corectare și revalidare). Fals pozitiv respins → PASS. Operatorul decide adevărul finding-ului, nu poate aproba eroarea confirmată. Nu se repară o traducere corectă ca să mulțumească detectorul. |
+| **Coduri de fidelity** | `TR_MEANING_CHANGED`: doar schimbare semantică relevantă. `TR_NEGATION_CHANGED`: se compară sensul, nu tokenul. `TR_OMISSION`: codul ≠ omisiune materială. `TR_ADDITION`: clarificare legitimă vs informație inventată. Diferențele care păstrează sensul, canonul, stance-ul și relațiile → advisory sau nimic. Fără cerință de traducere literală. |
+| **Rezoluția operatorului / reparația / revalidarea** | Age-fit REVIEW: acceptare justificată. Fidelity: confirmare sau respingere. Defect confirmat: repair → re-evaluation → release. Scope-ul reparației urmează finding-ul; fără regenerarea automată a produsului. |
+| **Quality evidence / critic** | Calea către critic se păstrează, ca input informațional marcat (advisory / material / candidate / confirmed / dismissed). Criticul judecă independent. T01 < 8 cere evidence, reasoning, scope, criteriu și related finding IDs, dacă failure-ul vine din același finding. Porțile semantică și de calitate rămân separate. Fără double counting. Pragurile T01 / T08 și quality-v2 nu se schimbă. Calea netrasabilă e de eliminat în Semantic Hardening #2. |
+| **Compunere** | Mai multe advisories pot forma un finding material (`AGEFIT_CUMULATIVE_LOAD` sau echivalent) dacă efectul combinat e demonstrat semantic: contributori, interacțiune, efect, nivel, bandă. Fără sumă numerică. Findings individuale rămân, fără double counting. |
+| **Niveluri** | Page → Book → Volume → Collection. Finding-ul local se păstrează. Pot apărea finding-uri cumulative la nivel de carte sau volum și age-fit drift la nivel de colecție. Nu simplă numărare. |
+| **Text / vizual / cross-modal** | Age-fit vizual în același model. `scene_complexity` / `line_hint` sunt evidence, nu checklist. Text, imagine și relația lor se păstrează separat înainte de efectul combinat. Fidelity vizuală doar unde imaginea sau textul din imagine poartă sens pentru ediție. |
+| **Ediția EN / RO** | Age-fit pe fiecare ediție (RO evaluată independent). Fidelity ≠ age-fit în limba țintă. Restructurarea pentru bandă e permisă dacă sensul se păstrează. Paritate semantică, nu metrică. |
+| **Măsurare** | Finding / severity / consequence / confirmation separate conceptual. „measurement must not conflate finding presence with gate failure”. Finding prezent + advisory + PASS = stare legitimă. Schema și metricile → D-19 / D-20. Seturile nu se modifică. |
+| **Comportamentul implementării la momentul deciziei** (HEAD `a15ab46`, neschimbat) | `fidelity.js`: `TR_NEGATION_CHANGED`, `TR_MEANING_CHANGED`, `TR_OMISSION` (inclusiv idiomul v2h-loc-12), `TR_ADDITION` = minor / advisory. `TR_UNTRANSLATED` = major. `story-contracts.js`: `TR_CALQUE` / `TR_NAME` major, `TR_MISALIGNED` / `TR_EMPTY` blocker. `age.js`: semnalele noi = minor / advisory. `AGE_COMPLEXITY` = major după lungimea medie a propoziției. `AGE_VOCABULARY` = după lungimea cuvântului. Readiness = `blockers === 0`. Age-fit doar pe ediția sursă. Fără stare de confirmare. `criticNotes` în promptul criticului (`server/engine.js`), fără trasabilitate. Fără niveluri cumulative. **Comportamentul nu e politica.** |
+| **Consecințe viitoare** (Semantic Hardening #2, neautorizat încă) | Modelul finding → confirmation → severity → scope → consequence → resolution. Stări de publicare distincte. Confirmare și rezoluție pentru fidelity. Reclasificare semantică a severităților. Age-fit pe ediția RO. Finding-uri cumulative fără sumă. Agregare pe niveluri. `criticNotes` marcate și trasabile. Age-fit vizual / cross-modal. Reprezentarea în Gold după D-19 / D-20. |
+
+### Afectate (fără nicio modificare acum)
+
+- **Gold-v2:**
+  - v2c-loc-neg-01, v2c-loc-chg-01, v2c-loc-om-01: candidat material → REVIEW; confirmat → REPAIR_REQUIRED (pentru om-01, materialitatea omisiunii „hat” în context);
+  - v2c-age-syn-01 → REVIEW; syn-02 → PASS + advisory; syn-03 → PASS.
+- **Setul rezervat (înghețat, nu se rulează din nou):**
+  - v2h-loc-12: echivalență idiomatică confirmată → dismissed → PASS;
+  - v2h-age-12: fals sau cel mult advisory → PASS.
+- **Gold-v1 și registrul de probe:** neschimbate.
+
+### Nu decide
+
+Taxonomia completă a fiecărei dimensiuni age-fit · praguri numerice · toate tipurile de localization defect · `TR_EMPTY` /
+`TR_MISALIGNED` · `SAFETY_DISTRESS_CONTEXT` · D-18 · implementarea măsurării (D-19 / D-20) · pragurile de calitate (D-16 / D-17) ·
+taxonomia age-fit vizual · mecanismul final al parserului / evaluatorului · validitatea empirică · taxonomia emoțiilor în afara fricii.
+
+### Dependențe deschise
+
+- **D-14-DEP-AGEFIT-DIMENSION-TAXONOMIES:** temporal / cauzal, densitate, vocabular, complexitate, emoții în afara fricii.
+- **D-14-DEP-LOCALIZATION-DEFECT-TAXONOMY:** toate tipurile de defect; `TR_EMPTY` / `TR_MISALIGNED` în afara D-14.
+- **D-14-DEP-MEASUREMENT-REPRESENTATION** → D-19 / D-20.
+- **D-14-DEP-QUALITY-THRESHOLDS** → D-16 / D-17.
+- **D-14-DEP-EVIDENCE-VALIDITY** → D-18.
+- **D-14-DEP-VISUAL-AGEFIT-TAXONOMY:** taxonomia age-fit vizual și criterii testabile.
+- **D-14-DEP-SAFETY-DISTRESS-CONTEXT:** în afara D-14.
+- **D-14-DEP-EVALUATOR-MECHANISM:** mecanismul final și validitatea empirică.
+- **Rezolvate pentru aria D-14:** D-11-DEP-FINDING-SEVERITY-GATE-MODEL (taxonomiile rămân deschise); D-13-DEP-SYNTAX-PUBLISHING-CONSEQUENCE.
