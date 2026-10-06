@@ -524,3 +524,57 @@ Recorded: the operator configured the ChatGPT Work event task (configuration as 
 > No implementation of Decision C is authorized by this message.
 
 Recorded: Decision C0 authorizes investigation and design only — no implementation of Decision C, no C0 live test, nothing post-CONTINUITY-1. Report: `brain/evidence/DECISION-C0-FEASIBILITY.md`.
+
+
+## 2026-10-06 — #9 (B-06 quarantine repair; C0 routine daily limits)
+
+> Operator authorization: repair B-06 only, then stop before the C0 live test.
+>
+> I authorize the proposed B-06 quarantine repair, with the following mandatory constraints:
+>
+> 1. Preserve the invalid historical message and its Git history. Do not delete or rewrite it.
+> 2. Quarantine must be an exact allowlist, never wildcard/pattern based.
+> 3. The quarantine entry for B-06 must bind at minimum:
+>     * exact message id/path;
+>     * exact existing Git blob SHA;
+>     * reason for quarantine;
+>     * originating commit;
+>     * B-06 reference.
+> 4. Treat the quarantine mechanism/ledger as Bridge control-plane material and protect/verify it through the existing canonical control-integrity mechanism.
+> 5. A quarantined item must be excluded from threads, pending queues, ingress planning and resolving logic, but remain visible as a warning/audit record.
+> 6. A structurally valid protocol message must not be silently suppressible through quarantine.
+> 7. Unknown future invalid messages must remain fail-closed. Do not turn validation into “ignore malformed messages”.
+> 8. Add regression tests proving:
+>     * B-06 is quarantined;
+>     * Bridge validation returns PASS with an explicit quarantine warning;
+>     * Decision B ingress works again;
+>     * the durable queue remains correct;
+>     * an unknown malformed message still fails closed;
+>     * a valid pending message cannot be hidden using the quarantine mechanism;
+>     * control-file tampering fails closed.
+> 9. Re-run all Bridge/control/ingress tests and publish exact evidence.
+>
+> Also update the Decision C0 feasibility record with the current official Claude Code Routines daily included-run limits:
+>
+> * Pro: 5 routines/day;
+> * Max: 15 routines/day;
+> * Team/Enterprise: 25 routines/day.
+>
+> Because this project is subscription-only, exceeding the included routine allowance must be treated as WAIT_FOR_ALLOWANCE / WAIT_FOR_RESET. No extra usage, usage credits, API key, PAYG, or other paid fallback is authorized.
+>
+> Batching all pending Claude work into a single valid wake should therefore be treated as a required architectural property for future Decision C.
+>
+> Do NOT run the C0 live test yet.
+> Do NOT implement Decision C/C1.
+> Do NOT begin post-CONTINUITY-1 work.
+>
+> After the repair, report:
+>
+> * B-06 repair commit(s);
+> * exact quarantine/control design;
+> * tests and CI;
+> * confirmation that Decision B ingress is operational again;
+> * updated C0 evidence;
+> * the remaining operator prerequisites P1/P2 for the C0 live test.
+
+Recorded: repair B-06 with an exact, control-pinned quarantine allowlist under the constraints above; update the C0 record with the routine daily included-run limits (verified on the official Anthropic announcement) and make batching a required property of a future Decision C. The C0 live test is not run, Decision C/C1 is not implemented, nothing post-CONTINUITY-1 is started.

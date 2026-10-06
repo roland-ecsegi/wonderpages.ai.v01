@@ -20,18 +20,23 @@
   },
   {
    "path": "PROTOCOL.md",
-   "sha256": "3292054d6c8c0ea74a40ea5609c25b464a8b8d67aaaa6108c0e3ddec749bf422",
-   "gitBlob": "523045410975baa653014a92c5222705e6c5caed"
+   "sha256": "03489777e7c134dba61147d4a9b52efdfc9fec54a2859b3af0af2273019eb402",
+   "gitBlob": "a0e736cfa981884614915022fc7e78612e55dd20"
   },
   {
    "path": "README.md",
-   "sha256": "8c0782551ee95ed0a63872918e53aada8a86f5d2b2497b561682502e6615bf91",
-   "gitBlob": "30d9e7a4445ddbaff15717aec137ff3173778f80"
+   "sha256": "d5bdf33a30dafda871da23e5fa5853aa548fcfdaf6414cfaf3a16de82dcb23fb",
+   "gitBlob": "d263d7f95318adc2f3b1702f0c1307cc0f7573b3"
   },
   {
    "path": "audit/README.md",
    "sha256": "4fd90ea3ae7083c47795a917b8f3e8ab1308b767c1bdd561cd10372be269ce03",
    "gitBlob": "9754ce8b9d27ffa0f3118e279a700e254e09d3bb"
+  },
+  {
+   "path": "exchange/QUARANTINE.json",
+   "sha256": "bf8f1fd2e5c5476cf8db70b5c19dd2eb1034add681b3d6f127fe25df6cf22862",
+   "gitBlob": "f594e3f7ce37ab88011e7f1d9cebdf447601881b"
   },
   {
    "path": "schemas/example-chatgpt-audit-result.json",
@@ -45,13 +50,13 @@
   },
   {
    "path": "tools/bridge.mjs",
-   "sha256": "9c116018678bbb1c61c95a47359eed8faa5283a606497734ef17f98fa02f7e6b",
-   "gitBlob": "d43445f6c264180aa6346c1caa4f3181217141e9"
+   "sha256": "9dbc77110365f18582e01ae3f096eb9185bbb507603836943470fadf2a0ecdf2",
+   "gitBlob": "46a40ad6a4ddd96ea7e3b1218b0d2c1f7e5f9889"
   },
   {
    "path": "tools/test.mjs",
-   "sha256": "16b3f3f16d406ff5d365565c0c0a88e1d8e8ba107aa5b35afc11655137e45265",
-   "gitBlob": "47bf7642e0367e7641f0366ed7e6151df7adbf0c"
+   "sha256": "110caf706d5f130d3057ec37e7459151139809ea8e2e5afc785c882f2902ae6a",
+   "gitBlob": "f07283624cd0f7b126dca5edc20f6f3ddeb13078"
   }
  ]
 }

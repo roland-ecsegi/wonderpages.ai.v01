@@ -4,6 +4,8 @@
   only. Decision C is **not implemented**. The C0 live test is **not run**. Nothing post-CONTINUITY-1 is started.
 - **Sources:** official Anthropic documentation, read on 2026-10-06 (quoted below with URLs). Environment facts are observed in this
   cloud session (Claude Code 2.1.291).
+- **Updated:** 2026-10-06 (operator follow-up #9): routine daily included-run limits (§7a), batching made a required property,
+  B-06 repaired (§8.6).
 - **Verdict: FEASIBLE_WITH_LIMITATIONS.** No contradiction with the subscription-first invariant was found, provided that **usage
   credits stay turned off** on the operator's Claude account (precondition P1). That precondition is an account setting the operator
   controls, not an API dependency.
@@ -144,8 +146,34 @@
 | Authentication expires | R2: one-year token, then `401` / "OAuth token has expired". R1: the routine uses the operator's claude.ai account; a missing or expired *GitHub* connection makes the routine skip runs "for up to 72 hours", then it "turns off". | Pending stays durable. Operator action: new token (R2) or reconnect GitHub and re-enable the routine (R1). Surfaced as a STALLED warning. |
 | Event arrives while Claude is unavailable / over caps | GitHub events "beyond the limit are dropped" | Covered by re-ring + STALLED + revive (B design) |
 | Subscription paused | "routines are put on hold" | Same as above |
+| Daily included routine runs used up | Official announcement (§7a): Pro 5, Max 15, Team/Enterprise 25 routines per day; "You can run extra routines beyond these limits with extra usage." | Extra usage is not authorized (P1): **WAIT_FOR_ALLOWANCE / WAIT_FOR_RESET**, item stays pending, Bridge re-rings later |
 
 No quota probing and no usage monitor are needed or used.
+
+## 7a. Daily routine allowance and batching (required property)
+
+- **Source.** Anthropic, *Introducing routines in Claude Code* (<https://claude.com/blog/introducing-routines-in-claude-code>,
+  2026-04-14): "Pro users can run up to 5 routines per day, Max users can run up to 15 routines per day, and Team and Enterprise
+  users can run up to 25 routines per day." and "You can run extra routines beyond these limits with extra usage."
+  - The routines documentation page (<https://code.claude.com/docs/en/routines>, read 2026-10-06) does not state these daily
+    numbers. It documents only the hourly start limits and that "Routines draw down subscription usage the same way interactive
+    sessions do".
+  - The numbers are recorded as stated by the operator and confirmed on the official announcement. "Research preview: limits may
+    change."
+- **Subscription-only consequence.** Runs beyond the included daily number would need extra usage. That is not authorized.
+  - Exceeding the daily allowance is therefore WAIT_FOR_ALLOWANCE / WAIT_FOR_RESET, exactly like an exhausted 5-hour or weekly
+    window.
+  - Pending work stays durable in the Bridge queue and is rung again later. Nothing is bought, and nothing falls back to an API.
+- **Required architectural property for a future Decision C: batching.**
+  - Every Claude wake must process **all** pending Claude work in one run, as B already does for ChatGPT.
+  - The Claude doorbell must **coalesce** rings: one ring carries the whole pending set, and new messages arriving while a ring is
+    outstanding join the next ring instead of starting another run.
+  - The ring schedule must respect a **daily ring budget below the plan's included runs**. Routines are counted per account, so
+    room must remain for the operator's other routines.
+  - Example: B's retry schedule (+0, 3, 9, 21 h, …) spends at most four rings in the first 24 h for one batch. That fits Pro (5/day)
+    only if new messages are coalesced rather than each starting its own run.
+- **Open.** Whether GitHub-triggered runs, scheduled runs and API fires all count toward the same daily number, and whether "per
+  day" is a calendar day or a rolling window. To be observed. The design must assume they all count.
 
 ## 8. Security
 
@@ -178,11 +206,12 @@ No quota probing and no usage monitor are needed or used.
 6. **Liveness lesson, finding B-06 (observed today).**
    - ChatGPT wrote `MSG-20261006T145200Z-chatgpt-bpass` (Bridge `fae311b`): its id does not match the 4-hex format, and it is an
      AUDIT_RESULT without `inReplyTo`.
-   - `validate` is therefore INVALID, so `ingress-plan` refuses to ring (fail-closed), and append-only forbids removal.
-   - **B currently cannot ring until this is resolved.**
-   - C must not inherit a permanent block caused by one malformed message. Proposed repair (not applied, needs authorization because
-     it changes protocol semantics): a Claude-owned, control-pinned quarantine ledger that `validate` reports as warnings and excludes
-     from threads and pending.
+   - `validate` was therefore INVALID, so `ingress-plan` refused to ring (fail-closed), and append-only forbids removal.
+   - **Repaired (operator follow-up #9):** an exact, control-pinned quarantine allowlist (Bridge `exchange/QUARANTINE.json`). The
+     entry binds the path, the git blob, the origin commit, the exact errors, the reason and B-06. Evidence:
+     `brain/evidence/DECISION-B-INGRESS.json` (b06).
+   - Unknown invalid messages stay fatal, and a valid message can never be quarantined.
+   - C must inherit the same rule: a malformed message must neither be silently ignored nor block the queue forever.
 
 ## 9. GitHub permissions (minimum)
 
@@ -248,14 +277,15 @@ The recommended route R1 needs **no credential at all**. No token, key or PAT is
 - Documented automatic model fallback on flagged content: observable, not preventable.
 - Consumer-terms "ordinary, individual usage" expectation: keep volume low.
 - Commits are under the operator's identity.
-- B-06 currently blocks B's ingress (§8.6).
+- Daily included routine runs (Pro 5 / Max 15 / Team-Enterprise 25), research-preview limits that may change; batching and ring
+  coalescing are required (§7a).
 - Routine fire payloads are untrusted by design, so all authority must come from the stored prompt plus the repository canon.
 
 ## 13. Recommendation on authorizing Decision C
 
 **Do not authorize the implementation of Decision C yet.** Recommended order (recommendations, not decisions):
 
-1. Authorize the **B-06 repair**: B is blocked now.
+1. ~~Authorize the B-06 repair~~: done (follow-up #9).
 2. The operator confirms **P1 and P2**.
 3. Authorize the **C0 live test** (§10) on route R1.
 4. Only after C0 PASS, decide the C1 scope. That needs an explicit operator decision on the standing rule *Bridge → WonderPages

@@ -45,7 +45,7 @@
  "nextAuthorizedStep": {
   "id": "OPERATOR-REVIEW-CONTINUITY-1",
   "actor": "operator",
-  "summary": "Decision B live E2E PASS; Decision C0 feasibility report delivered (FEASIBLE_WITH_LIMITATIONS). Open for the operator: B-06 repair (B ingress currently fail-closed by an invalid ChatGPT message), preconditions P1/P2, authorization of the C0 live test, review of CONTINUITY-1. No implementation outside CONTINUITY-1 is authorized."
+  "summary": "Decision B live E2E PASS; B-06 repaired (B ingress operational again); Decision C0 feasibility report delivered (FEASIBLE_WITH_LIMITATIONS, routine daily limits recorded). Open for the operator: preconditions P1 (usage credits OFF) / P2 (Claude GitHub App on the Bridge), authorization of the C0 live test, review of CONTINUITY-1. No implementation outside CONTINUITY-1 is authorized."
  },
  "doNotStart": {
   "source": "brain/phase/authorizations/CONTINUITY-1.operator-instruction.txt §10 (verbatim item names)",
@@ -118,6 +118,15 @@
     "B-05": "accepted — task step 7 now re-reads the item's thread on current Bridge main (data only) just before each write and re-applies the durable-queue rule; CLOSED / SUPERSEDED after the wake, an existing resolving reply, hand-off or receipt → skip silently; reference implementation writeCheck + CLI write-check; tests close-before-wake, supersede-before-wake, existing-resolution-before-wake (42/42)"
    },
    "authority": "advisory finding verified on sources; no change outside the CONTINUITY-1 write scope"
+  },
+  {
+   "round": 6,
+   "trigger": "B-06 found by Claude while starting C0: invalid ChatGPT message MSG-20261006T145200Z-chatgpt-bpass (Bridge fae311b) made the Bridge INVALID and blocked decision-B ingress",
+   "processedBecause": "operator follow-up #9",
+   "findings": {
+    "B-06": "repaired — Bridge control file exchange/QUARANTINE.json (exact allowlist; entry binds path, git blob 15918724ff72f394a67416f34987ae45cc25e33a, origin commit fae311b9b7bc34ba08e54c15b497a6fc9efe9685, exact errors, reason, B-06); validate excludes it from threads/pending/ingress/resolution with a QUARANTINED warning only when everything matches; valid messages cannot be quarantined; unlisted invalid files stay fatal; ledger pinned in BRIDGE-CONTROL.json (11 control files); 15 regression tests (57/57)"
+   },
+   "authority": "operator-authorized repair inside the CONTINUITY-1 write scope; the invalid file and its history are preserved"
   }
  ],
  "operatorFollowups": "brain/phase/authorizations/CONTINUITY-1.operator-followups.md",
@@ -155,16 +164,21 @@
    "P2: Claude GitHub App installed on the Bridge repository"
   ],
   "openOperatorDecisions": [
-   "authorize the B-06 repair",
    "authorize the C0 live test (route R1)",
    "before C1: scope of autonomous writes vs the standing rule 'Bridge → WonderPages automatic is forbidden', and an operator-written delegation table for ChatGPT"
+  ],
+  "routineDailyLimits": "Pro 5 / Max 15 / Team-Enterprise 25 routines per day (official announcement 2026-04-14; docs page silent); beyond them only extra usage, which is not authorized → WAIT_FOR_ALLOWANCE / WAIT_FOR_RESET",
+  "requiredProperties": [
+   "batching: one wake processes all pending Claude work",
+   "ring coalescing and a daily ring budget below the plan's included routine runs",
+   "no extra usage / usage credits / API / paid fallback"
   ]
  },
  "openFindings": [
   {
    "id": "B-06",
    "found": "2026-10-06 by Claude while starting C0",
-   "status": "OPEN — not repaired (changes protocol semantics; needs operator authorization)",
+   "status": "REPAIRED (operator follow-up #9) — exact control-pinned quarantine allowlist; evidence brain/evidence/DECISION-B-INGRESS.json b06",
    "finding": "ChatGPT message MSG-20261006T145200Z-chatgpt-bpass (Bridge fae311b) is invalid: id suffix not 4-hex, AUDIT_RESULT without inReplyTo. validate INVALID → ingress-plan refuses (fail-closed) and append-only forbids removal, so decision B cannot ring until resolved.",
    "proposedRepair": "Claude-owned, control-pinned quarantine ledger in the Bridge: listed ids reported as warnings and excluded from threads/pending; content of bpass (advisory PASS of B live E2E) preserved as data"
   }

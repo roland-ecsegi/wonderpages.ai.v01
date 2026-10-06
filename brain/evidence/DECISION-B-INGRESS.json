@@ -1,8 +1,8 @@
 {
- "schema": "wonderpages.brain.decision-evidence/5",
+ "schema": "wonderpages.brain.decision-evidence/6",
  "decision": "B — option 1 (event-driven ChatGPT wake-up through a dedicated Agent Bridge ingress PR)",
  "authorizedBy": "brain/phase/authorizations/CONTINUITY-1.operator-followups.md #3 (verbatim, 2026-10-06)",
- "status": "BUILT WITH DURABLE DELIVERY; B-01…B-05 REPAIRED (advisory re-audit MSG-20261006T135204Z-chatgpt-c7a2: PASS); CHATGPT WORK TASK CONFIGURED BY THE OPERATOR; LIVE END-TO-END WAKE TEST PASS (2026-10-06)",
+ "status": "BUILT WITH DURABLE DELIVERY; B-01…B-06 REPAIRED (advisory re-audit MSG-20261006T135204Z-chatgpt-c7a2: PASS); CHATGPT WORK TASK CONFIGURED BY THE OPERATOR; LIVE END-TO-END WAKE TEST PASS (2026-10-06)",
  "bridge": {
   "controlCommit": "425fda2 (ingress workflow, ingress plan/guard, INGRESS.md, README/PROTOCOL, 28 self-tests)",
   "publication": "2c3ede7 — mirror 000007-d8013443e53d published together with the control files (control-consistent at every commit)",
@@ -146,5 +146,16 @@
  "verifiedLive": [
   "ChatGPT Work wakes on commit updates pushed by GITHUB_TOKEN (bridge-ingress[bot]) on PR #1 — liveE2E",
   "The ChatGPT connector reports git blob SHAs at an explicit commit ref (INGRESS.md step 4) — liveE2E controlIntegrity"
- ]
+ ],
+ "b06": {
+  "finding": "found by Claude: ChatGPT message MSG-20261006T145200Z-chatgpt-bpass (Bridge fae311b9b7bc34ba08e54c15b497a6fc9efe9685) has errors [id format; AUDIT_RESULT must reply to a message (inReplyTo)]; validate INVALID → ingress-plan refused to ring (fail-closed) and append-only forbids removal (permanent block)",
+  "repair": "operator follow-up #9: control file exchange/QUARANTINE.json, exact allowlist (schema wonderpages.bridge.quarantine/1; entry fields id, path, gitBlob, originCommit, expectedErrors, reason, finding, authorizedBy, recordedAt; ids must be literal, no patterns). validateMessages accepts an entry only if the file's git blob, the commit that added it and its exact validation errors match; the file is then excluded from messages/threads/pending/ingress/resolution and reported as a QUARANTINED warning. A structurally valid message can never be quarantined; an unlisted invalid file, a stale entry, an entry for a missing file, duplicates, unknown fields and replies to a quarantined message are errors. The ledger is a control file (CONTROL regex in tools/bridge.mjs and BRIDGE_CONTROL in brain/tools/bridge-export.mjs), pinned in brain/manifest/BRIDGE-CONTROL.json (11 files), needs the Bridge-Control trailer. INGRESS.md unchanged (blob 10edb1434c56ba69ca41489f5792268772045ba3) so the ChatGPT Work task text stays valid.",
+  "quarantineEntry": {
+   "id": "MSG-20261006T145200Z-chatgpt-bpass",
+   "gitBlob": "15918724ff72f394a67416f34987ae45cc25e33a",
+   "originCommit": "fae311b9b7bc34ba08e54c15b497a6fc9efe9685"
+  },
+  "tests": "Bridge tools/test.mjs 57/57 incl. 15 B-06 tests: unknown malformed fails closed; exact entry → PASS + QUARANTINED warning; excluded from threads/pending/resolution; ingress rings a new valid request alone; durable queue correct; valid pending message cannot be hidden; second unknown malformed still fails; blob / origin commit / exact-error binding; wildcard and pattern entries rejected; missing-file, duplicate and unknown-field entries rejected; reply to quarantined rejected; ledger change without Bridge-Control trailer flagged; tampered / unlisted ledger fails verify-control",
+  "live": "NOT YET RECORDED at this commit: publication (Bridge control commit d6d8177 + snapshot) and CI results are recorded by the following WonderPages commit"
+ }
 }
