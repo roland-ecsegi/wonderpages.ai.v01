@@ -1,0 +1,37 @@
+{
+ "schema": "wonderpages.brain.decision-evidence/1",
+ "decision": "B — option 1 (event-driven ChatGPT wake-up through a dedicated Agent Bridge ingress PR)",
+ "authorizedBy": "brain/phase/authorizations/CONTINUITY-1.operator-followups.md #3 (verbatim, 2026-10-06)",
+ "status": "BUILT AND VERIFIED ON THE GITHUB SIDE — END-TO-END TEST PENDING THE OPERATOR'S CHATGPT WORK CONFIGURATION",
+ "bridge": {
+  "controlCommit": "425fda2 (ingress workflow, ingress plan/guard, INGRESS.md, README/PROTOCOL, 28 self-tests)",
+  "publication": "2c3ede7 — mirror 000007-d8013443e53d published together with the control files (control-consistent at every commit)",
+  "ingressBranch": "inbox/chatgpt (init d4bcd5c, no ring)",
+  "ingressPullRequest": "roland-ecsegi/wonderpages.agent-bridge#1 — \"[ingress] ChatGPT inbox — do not merge\"",
+  "controlManifest": "brain/manifest/BRIDGE-CONTROL.json pins 10 control files incl. INGRESS.md and .github/workflows/ingress-chatgpt.yml"
+ },
+ "liveChecks": [
+  { "case": "CLOSED message to chatgpt must NOT ring", "message": "MSG-20261006T123042Z-claude-22ba (Bridge 2f6482c)", "run": "ingress-chatgpt 37463774703: verify PASS, plan ring=false, ring step skipped; inbox/chatgpt unchanged at d4bcd5c", "result": "PASS" },
+  { "case": "AUDIT_REQUEST to chatgpt must ring exactly once", "message": "MSG-20261006T123205Z-claude-fe9f (Bridge d0bd3a7)", "run": "doorbell commit 7ed53a1 by bridge-ingress[bot] with trailer Bridge-Ingress: chatgpt; PR #1 shows it as a new commit (commit-update activity); ingress-guard PASS", "result": "PASS" },
+  { "case": "ingress guard on push and pull_request events of inbox/chatgpt", "run": "bridge-verify 37463723165 (push) and 37463747170 (pull_request): success", "result": "PASS" }
+ ],
+ "selfTests": "Bridge tools/test.mjs 28/28 (8 ingress cases: ring once, no double ring, no self-trigger by replies, ACK/CLOSED silent, ANSWER rings, operator messages silent, guard pass/fail)",
+ "independence": {
+  "static": "gate G11 PASS (no application file references the Bridge); no application file imports brain/ (brain self-test); WonderPages paths changed since 866a441 outside brain/: only CLAUDE.md and the two CI workflows; package.json/package-lock.json identical to 866a441",
+  "dynamic": "worktree of d801344 with brain/, CLAUDE.md, brain-gate.yml and bridge-sync.yml DELETED (38 paths) and no Bridge checkout: `node scripts/build.mjs` PASS (218 files) and `node tests/run.mjs` 428/428 — WonderPages builds and runs unchanged without the Bridge or the brain",
+  "zeroDrift": "gate G13 + drift.mjs: 382 application files byte-identical to 866a441, behaviour fingerprint identical"
+ },
+ "noPaidApi": {
+  "result": "PASS",
+  "checks": [
+   "no api.openai.com / api.anthropic.com / OPENAI_API_KEY / ANTHROPIC_API_KEY / OpenAI or Anthropic SDK / fetch() in any file added by CONTINUITY-1 (WonderPages) or in the Bridge outside mirror/",
+   "workflows use only actions/checkout@v4 and actions/setup-node@v4; secrets: BRIDGE_SYNC_TOKEN (GitHub fine-grained PAT, Bridge only) and the built-in GITHUB_TOKEN",
+   "the Bridge has no package.json / npm dependencies; WonderPages dependencies unchanged",
+   "ChatGPT side: ChatGPT Work event-triggered task on the operator's ChatGPT subscription; no API key configured anywhere; no API fallback"
+  ]
+ },
+ "notYetVerified": [
+  "That ChatGPT Work receives commit updates pushed by GITHUB_TOKEN on PR #1 and wakes (the end-to-end test needs the operator's task configuration)",
+  "Whether the event-triggered task can be pinned to GPT-6 Astra / reasoning Medium on the operator's plan (operator observes the picker)"
+ ]
+}

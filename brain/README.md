@@ -33,6 +33,7 @@ critical claim to an exact anchor, and lets a tool prove that the pointers still
 | `brain/ledger/STATUS-MATRIX.md` | DECIDED / IMPLEMENTED / VALIDATED matrix with claim references | hand-written, claim-checked |
 | `brain/evidence/SEAL.json`, `SEAL-LOG.jsonl` | Freshness seal: per-subsystem digests; hash-chained review log | evidence |
 | `brain/evidence/BASELINE-866a441.json` | Zero-drift fingerprint of the functional checkpoint | evidence |
+| `brain/evidence/DECISION-B-INGRESS.json` | Evidence for operator decision B (ChatGPT ingress): live ring / no-ring checks, independence, no paid API | evidence |
 | `brain/evidence/CONTINUITY-1-ACCEPTANCE.json` | Exit evidence of CONTINUITY-1: zero drift, 428/428, self-tests, CI, fresh-session 27/27, Bridge | evidence |
 | `brain/continuity/` | Fresh-session continuity questionnaire, grader and recorded results | test |
 | `brain/tools/` | `brain.mjs` (gate/seal/index/render), `drift.mjs`, `bridge-export.mjs` | tooling |
