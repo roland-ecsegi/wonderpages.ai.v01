@@ -87,3 +87,13 @@ Recorded decisions: **B = option 1 authorized**. Event-driven ChatGPT wake-up us
 > Nu începe nimic post-CONTINUITY-1.
 
 Recorded: decision B extended with durable delivery (pending until a valid reply, at-least-once wake, idempotent processing, bounded retry/backoff, batching, WAIT_FOR_ALLOWANCE, no usage monitor, no paid fallback) and repair B-01 (fixed task text is the bootstrap authority). **Decision C remains NOT implemented**. Requirements recorded for later: full-duplex (ChatGPT → Bridge → Claude) with the same guarantees; investigate after B is accepted whether ChatGPT can wake Claude Code event-driven on the existing subscription with Claude Opus 5.5 / High and no separately billed API; report the limitation and alternatives before any implementation.
+
+## 2026-10-06 — #5 (final decision-B hardening)
+
+> Verifică Agent Bridge și procesează toate mesajele noi adresate ție.
+>
+> Aplică ultimele constatări ale re-auditului ChatGPT pentru Decision B, strict în CONTINUITY-1. După reparații, rulează toate verificările, publică snapshot VERIFIED și cere re-audit final.
+>
+> Nu configura și nu implementa Decision C și nu începe nimic post-CONTINUITY-1.
+
+Recorded: apply the findings of the latest ChatGPT re-audit (B-02, B-03) within CONTINUITY-1 and request the final re-audit. B-04, a timestamp issue observed while processing it, is handled in the same round. Decision C is not configured or implemented. Nothing post-CONTINUITY-1 is started.

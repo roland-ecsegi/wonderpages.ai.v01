@@ -1,8 +1,8 @@
 {
- "schema": "wonderpages.brain.decision-evidence/2",
+ "schema": "wonderpages.brain.decision-evidence/3",
  "decision": "B — option 1 (event-driven ChatGPT wake-up through a dedicated Agent Bridge ingress PR)",
  "authorizedBy": "brain/phase/authorizations/CONTINUITY-1.operator-followups.md #3 (verbatim, 2026-10-06)",
- "status": "BUILT WITH DURABLE DELIVERY AND B-01 REPAIRED; VERIFIED ON THE GITHUB SIDE — END-TO-END TEST PENDING THE OPERATOR'S CHATGPT WORK CONFIGURATION",
+ "status": "BUILT WITH DURABLE DELIVERY; B-01…B-04 REPAIRED; VERIFIED ON THE GITHUB SIDE — FINAL RE-AUDIT REQUESTED; END-TO-END TEST PENDING THE OPERATOR'S CHATGPT WORK CONFIGURATION",
  "bridge": {
   "controlCommit": "425fda2 (ingress workflow, ingress plan/guard, INGRESS.md, README/PROTOCOL, 28 self-tests)",
   "publication": "2c3ede7 — mirror 000007-d8013443e53d published together with the control files (control-consistent at every commit)",
@@ -53,19 +53,19 @@
  "notYetVerified": [
   "That ChatGPT Work receives commit updates pushed by GITHUB_TOKEN on PR #1 and wakes (needs the operator task configuration)",
   "Whether the event-triggered task can be pinned to GPT-6 Astra / reasoning Medium on the operator plan",
-  "Behaviour of a real ChatGPT usage-limit / approval interruption (covered by design and tests; observed only during the end-to-end period)",
-  "A live scheduled retry (first due 2026-10-06T16:21Z if the re-audit request is still unanswered)"
+  "Behaviour under a real ChatGPT usage-limit / approval interruption (covered by design and tests; observable only during the end-to-end period)",
+  "That the ChatGPT connector reports git blob SHAs at an explicit commit ref as INGRESS.md step 4 requires (to be observed in the end-to-end run; if not, the task fails closed with a BLOCKER)"
  ],
  "extendedBy": "brain/phase/authorizations/CONTINUITY-1.operator-followups.md #4 (verbatim)",
  "durableDelivery": {
   "model": "pending = actionable message to chatgpt without a resolving reply (derived from the messages, never from the doorbell; ACK does not resolve a request); doorbell v2 records delivery attempts per message",
-  "atLeastOnce": "re-ring when the bounded backoff is due: 3h, 6h, 12h, 24h, cap 24h; max 8 attempts → STALLED (kept, visible), revived by any new message to chatgpt or workflow_dispatch revive",
+  "atLeastOnce": "re-ring when the bounded backoff is due: 3h, 6h, 12h, 24h, 48h, cap 48h; max 9 attempts at +0,3,9,21,45,93,141,189,237h (≈9.9 days > 7-day weekly allowance window; two attempts after 168h) → STALLED (kept, visible, workflow warning), revived by any new message to chatgpt or workflow_dispatch revive",
   "batching": "every ring carries all non-stalled pending messages",
   "idempotency": "ChatGPT skips messages it already resolved; first resolving reply canonical, duplicates ignored and reported as validate warnings",
   "limits": "no usage monitor, no reset-time guess: an exhausted allowance or unavailable recipient yields no reply and the backoff waits (WAIT_FOR_ALLOWANCE / WAIT_FOR_RESET); no paid fallback; task writes nothing partial",
   "schedule": "cron 17 */3 * * * — writes nothing unless a retry is due (no aggressive polling)",
-  "bridgeCommit": "12115d0",
-  "tests": "Bridge tools/test.mjs 35/35 (15 ingress cases: ring, not-before-backoff, retry growth, STALLED after 8 + revive, new message revives and batches, batching, ACK does not resolve, paired reply / hand-off / CLOSED resolve, duplicates ignored, ANSWER resolved by ACK, ACK/CLOSED/operator silent, v1 migration, guard pass/fail)"
+  "bridgeCommit": "12115d0 (durable delivery), aedc0c5 (B-02/B-03/B-04)",
+  "tests": "Bridge tools/test.mjs 37/37 (incl. B-03 horizon > 168h and sparse; B-04 monotonic reply time)"
  },
  "b01": {
   "finding": "MSG-20261006T124900Z-chatgpt-d84a (advisory): task prompt trusted live control docs before re-establishing integrity (TOCTOU)",
@@ -79,5 +79,17 @@
  "decisionC": {
   "status": "NOT AUTHORIZED / NOT IMPLEMENTED",
   "requirements": "full-duplex ChatGPT → Bridge → Claude with the same guarantees (durable queue, at-least-once wake, idempotency, batching, bounded retry/backoff, anti-loop, fail-closed); Claude Opus 5.5 / High on the existing subscription, no separately billed API; investigate and demonstrate event-driven wake of Claude Code after B is accepted, report limitations and alternatives first"
+ },
+ "b02": {
+  "finding": "MSG-20261006T133500Z-chatgpt-f62b: bootstrap read CURRENT, manifest and control files from moving main (residual TOCTOU)",
+  "repair": "INGRESS.md task text: R = doorbell.mainCommit (verified by the workflow before ringing); steps 2-6 read only at R; blob-verified contents are the run instructions, never re-fetched; pending recomputed at R (doorbell pending = hint); idempotency checked on current main as data"
+ },
+ "b03": {
+  "finding": "MSG-20261006T133500Z-chatgpt-f62b: STALLED after ~117h, before a weekly allowance window is guaranteed to reset",
+  "repair": "RETRY backoffHours [3,6,12,24,48], maxAttempts 9, weeklyWindowHours 168; last automatic attempt at +237h; STALLED → ::warning:: in the ingress workflow"
+ },
+ "b04": {
+  "finding": "found by Claude: MSG-20261006T133500Z-chatgpt-f62b createdAt 13:35:00Z while its GitHub commit is 13:27:56Z (7 min in the future) — would block replies (reply must be later than parent) and skew ordering",
+  "repair": "tools/bridge.mjs new: createdAt >= parent + 1s with provenance note; validate: clock-skew warning (> 5 min after the adding commit); task text: real current UTC time, never rounded/future/before parent"
  }
 }
