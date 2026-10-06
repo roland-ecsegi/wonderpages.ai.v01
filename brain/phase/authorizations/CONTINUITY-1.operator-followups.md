@@ -883,3 +883,45 @@ Recorded: preconditions P1 (Pro, usage credits OFF) and P2 (Claude GitHub App on
 > Do not implement Decision C/C1.
 
 Recorded: the C0 one-shot probe is adapted to `Pull request: Opened` on a new LIVE branch, `inbox/claude-c0-live`. The nonce commit is pushed before any PR exists. The PR number is not guessed: the routine binds it as the unique N with `refs/pull/N/head` equal to the fixed EXPECTED_R. PR #2 is kept, inert. This does not approve `opened` as the Decision C/C1 wake architecture.
+
+
+## 2026-10-06 — #12 (C0 routine active; open the single LIVE PR)
+
+> Routine is active.
+> Confirmed:
+>
+> * Model shown: Opus 5.5
+> * Trigger: GitHub → Pull request: Opened
+> * Head branch filter: `inbox/claude-c0-live`
+> * Base branch filter: `main`
+> * Environment: `wonderpages-c0`
+> * Routine runs so far: 0
+> * Usage credits remain OFF
+> * No Run now was used
+>
+> Proceed with the already-authorized C0 one-shot live test.
+> Open exactly ONE PR:
+> `inbox/claude-c0-live` → `main`
+> Do not modify the LIVE branch first.
+> Do not create another commit.
+> Do not retry.
+> Do not manually invoke the Routine.
+> Do not enable extra usage or any paid fallback.
+> After opening the PR, only observe.
+> Wait for the Routine to react naturally, then validate:
+>
+> * exactly one Routine run;
+> * immutable R = `6723b29f893dd4c94e30df8f2fc365bc7ea9a58d`;
+> * nonce = `136281ab91a9232afc8dcc2f2be66285`;
+> * result appears only on `claude/c0-result`;
+> * no self-loop / second run;
+> * model/effort/runtime facts from the result;
+> * no API credentials / paid fallback;
+> * no WonderPages runtime/application changes.
+>
+> If the Routine does not start, fails, or allowance blocks it:
+> STOP.
+> Do not retry and do not use Run now.
+> Decision C / C1 remains NOT IMPLEMENTED.
+
+Recorded: the operator created the routine (Opus 5.5; Pull request: Opened; head `inbox/claude-c0-live`; base `main`; environment `wonderpages-c0`; 0 runs; usage credits OFF; no Run now). Claude opened exactly one PR (Bridge #3) and then only observed. Result: `brain/evidence/DECISION-C0-LIVE.md` §8.

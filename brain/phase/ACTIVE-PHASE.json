@@ -45,7 +45,7 @@
  "nextAuthorizedStep": {
   "id": "OPERATOR-REVIEW-CONTINUITY-1",
   "actor": "operator",
-  "summary": "Decision C0 live test PREPARED (revision 2, one-shot pull_request.opened): operator creates the C0 routine per brain/evidence/DECISION-C0-LIVE.md and confirms 0 runs; then Claude opens exactly one PR from inbox/claude-c0-live and validates the result. Decision C / C1 not authorized. No implementation outside CONTINUITY-1 is authorized."
+  "summary": "Decision B live E2E PASS; B-06 repaired; Decision C0 feasibility FEASIBLE_WITH_LIMITATIONS and C0 live test PASS_WITH_LIMITATIONS (brain/evidence/DECISION-C0-LIVE.md §8). Decision C / C1 NOT IMPLEMENTED and not authorized. Next: operator review of CONTINUITY-1. No implementation outside CONTINUITY-1 is authorized."
  },
  "doNotStart": {
   "source": "brain/phase/authorizations/CONTINUITY-1.operator-instruction.txt §10 (verbatim item names)",
@@ -164,8 +164,8 @@
    "P2: Claude GitHub App installed on the Bridge repository"
   ],
   "openOperatorDecisions": [
-   "create the C0 routine exactly as specified in brain/evidence/DECISION-C0-LIVE.md and confirm it is active",
-   "before C1: scope of autonomous writes vs the standing rule 'Bridge → WonderPages automatic is forbidden', and an operator-written delegation table for ChatGPT"
+   "optional: disable or delete the C0 routine and close PR #2 / PR #3 (Claude does not do it on its own)",
+   "Decision C / C1 needs a separate authorization: wake event that can repeat (opened is one-shot), scope of autonomous writes vs the standing rule 'Bridge → WonderPages automatic is forbidden', operator-written delegation table, daily/weekly allowance budget"
   ],
   "routineDailyLimits": "Pro 5 / Max 15 / Team-Enterprise 25 routines per day (official announcement 2026-04-14; docs page silent); beyond them only extra usage, which is not authorized → WAIT_FOR_ALLOWANCE / WAIT_FOR_RESET",
   "requiredProperties": [
@@ -175,13 +175,25 @@
   ],
   "liveTest": {
    "authorizedBy": "operatorFollowups #10, adapted by #11 (verbatim)",
-   "status": "PREPARED (revision 2: one-shot pull_request.opened) — LIVE branch pushed without a PR; awaiting the operator's routine creation and 0-runs confirmation; the only wake will be opening one PR",
+   "status": "DONE — C0 LIVE: PASS_WITH_LIMITATIONS (one PR opened = one wake = one routine run; result 43e75bc on claude/c0-result validated; limitations: model confirmed only via platform record, effort via CLAUDE_EFFORT, sender not exposed, opened-event not approved for C/C1, weekly allowance near limit)",
    "preconditions": "P1 Pro + usage credits OFF, P2 Claude GitHub App on the Bridge (operator-confirmed)",
    "pullRequest": "none yet for the LIVE branch inbox/claude-c0-live (R 6723b29f893dd4c94e30df8f2fc365bc7ea9a58d, nonce 136281ab91a9232afc8dcc2f2be66285); revision-1 artifact PR #2 kept inert",
    "routinePrompt": "brain/evidence/C0-ROUTINE-PROMPT.txt (revision 2, sha256 e936bef253322d6c0078d605b23eaa857c2ce7e23a04865a6998fbc6104ff44a)",
    "evidence": "brain/evidence/DECISION-C0-LIVE.md",
    "rules": "one wake (opening one PR), no retry, no Run now, no loop, result only on branch claude/c0-result; opened is not approved as the C/C1 wake architecture",
-   "prBinding": "PR number not guessed: unique N with refs/pull/N/head == EXPECTED_R"
+   "prBinding": "PR number not guessed: unique N with refs/pull/N/head == EXPECTED_R",
+   "run": {
+    "routine": "trig_01N4poWHyZgAL7kZrwwVagb6",
+    "pullRequest": "roland-ecsegi/wonderpages.agent-bridge#3",
+    "session": "session_01RLgUX9zQLHnEV467qUyAKG",
+    "firedAt": "2026-10-06T17:13:36Z",
+    "finishedAt": "2026-10-06T17:15:10Z",
+    "status": "ROUTINE_RUN_STATUS_SUCCEEDED",
+    "resultCommit": "43e75bcf2d5614619d085dee4c5752ed7269ad83",
+    "model": "claude-opus-5-5 (configured, session, last served)",
+    "effort": "CLAUDE_EFFORT=high, CLAUDE_CODE_EFFORT_LEVEL=high",
+    "overage": "isUsingOverage false"
+   }
   }
  },
  "openFindings": [

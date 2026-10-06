@@ -6,6 +6,8 @@
   cloud session (Claude Code 2.1.291).
 - **Updated:** 2026-10-06 (operator follow-up #9): routine daily included-run limits (§7a), batching made a required property,
   B-06 repaired (§8.6).
+- **Live check:** C0 one-shot live test PASS_WITH_LIMITATIONS (`brain/evidence/DECISION-C0-LIVE.md` §8). GitHub event → routine →
+  subscription run (Opus 5.5, no overage) → nonce at immutable R → result in the Bridge, demonstrated once.
 - **Verdict: FEASIBLE_WITH_LIMITATIONS.** No contradiction with the subscription-first invariant was found, provided that **usage
   credits stay turned off** on the operator's Claude account (precondition P1). That precondition is an account setting the operator
   controls, not an API dependency.
