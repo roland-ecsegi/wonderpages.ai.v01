@@ -26,7 +26,8 @@ validarea evaluării separată și simetrică, politică v3; PASS / FAIL final d
 de operator la reprezentare; D peste C: ground truth multidimensional, matrice de acoperire relevantă politicii, minim structural
 non-zero; 8 / 6 / 3 / 3 rămân istorice), neimplementată. D-20: DECISĂ (opțiunea (d) din (b): setul rezervat actual
 retras din rolul de acceptare, păstrat ca istoric / rescorare / regresie; set nou independent, ascuns, sigilat înainte de SH#2),
-neimplementată. Tabelul de mai jos rămâne prezentarea inițială, nu se rescrie.
+neimplementată. D-21: DECISĂ (opțiunea (d): porți de performanță precommitted, calculate automat, pe costul erorii — P1 zero
+evadări critice + limită unilaterală 95 % ≤ 5 %, P2 zero downgrade-uri, P3 escaladare falsă ≤ 10 % pe ≥ 30 de cazuri), neimplementată. Tabelul de mai jos rămâne prezentarea inițială, nu se rescrie.
 
 **Cum se înregistrează:**
 - **Pentru un caz:** `node scripts/enterprise/gold-adjudicate.mjs record --case=<id> --decision=correct --label=positive|negative

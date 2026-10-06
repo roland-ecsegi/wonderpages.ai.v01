@@ -41,6 +41,7 @@ explicită a operatorului. Etichetele cazurilor se dau la adjudecarea Gold-v2.
 | D-18 — validitatea dovezilor criticului (v3) | DECISĂ (neimplementată) | D (validare separată, obligatorie, simetrică) | `f45729ed49e9a2c5…` |
 | D-19 — pragurile de acoperire (+ reprezentarea, extins de operator) | DECISĂ (neimplementată) | 0-b; D peste C (matrice de acoperire, minim structural non-zero) | `405a85bf53371e24…` |
 | D-20 — setul rezervat actual și protocolul noului set de acceptare | DECISĂ (neimplementată) | (d) din (b): holdout retras; set nou ascuns, sigilat înainte de SH#2 | `e526e5533966a6dc…` |
+| D-21 — porțile de performanță ale acceptării (RC1) | DECISĂ (neimplementată) | (d): P0–P9; P1 = 0 + limită ≤ 5 % (≥ 59), P2 = 0, P3 ≤ 10 % (≥ 30) | `aef2e202b8d811a9…` |
 
 ## D-01 — „Fără arme” pentru o armă reală
 
@@ -17473,3 +17474,1070 @@ rubrici · agenții permanenți · Dinosaur World.
 
 - **D-20-DEP-PERFORMANCE-THRESHOLDS** → D-21 · **D-20-DEP-INDEPENDENCE-PROTOCOL** → D-22 · **D-20-DEP-DEVELOPMENT-CORPUS** ·
   **D-20-DEP-INVALID-RUN-PROCEDURE** · **D-20-DEP-VALIDATION-STATE-ADAPTATION**.
+
+## D-21 — Porțile de performanță ale acceptării (Enterprise Local RC1)
+
+### Declarația operatorului (cuvânt cu cuvânt)
+
+```text
+D-21 — DECIZIA OPERATORULUI
+
+Aleg:
+
+Opțiunea (d): reguli de acceptare precommitted, versionate și calculate automat, bazate pe costul erorii și pe reprezentarea multidimensională D-19.
+
+D-21 introduce performance acceptance gates în starea de validare pentru noul independent hidden acceptance set.
+
+Nu modifică evaluatorul acum.
+
+Nu modifică actualul Gold-v2.
+
+Nu aplică retroactiv noile praguri pentru a transforma raportul istoric într-un test de acceptare.
+
+⸻
+
+PRINCIPIUL CENTRAL
+
+COVERAGE ≠ PERFORMANCE.
+
+OBSERVED ZERO FAILURES ≠ TRUE ZERO FAILURE RATE.
+
+GLOBAL ACCURACY ≠ SAFETY ACCEPTANCE.
+
+κ ≠ RISK ACCEPTANCE.
+
+FAIL-CLOSED ≠ CORRECT.
+
+REVIEW ≠ BLOCK.
+
+UNDER-ESCALATION ≠ OVER-ESCALATION.
+
+A SYSTEM THAT BLOCKS EVERYTHING IS NOT AN ACCEPTABLE SAFE SYSTEM.
+
+A PERFORMANCE THRESHOLD MUST BE PRECOMMITTED BEFORE THE BLIND RUN.
+
+⸻
+
+1. D-19 și D-21 au responsabilități diferite
+
+D-19 răspunde:
+
+Avem evidence în toate ramurile relevante ale politicii?
+
+D-21 răspunde:
+
+Cât de bine funcționează sistemul pe evidence-ul independent?
+
+Un set poate:
+
+* satisface D-19;
+* și eșua D-21.
+
+Sau poate avea performanță aparent bună, dar să nu satisfacă D-19 deoarece lipsesc ramuri relevante.
+
+Ambele sunt obligatorii.
+
+⸻
+
+2. Pragurile intră în starea calculată de validare
+
+Pentru noul protocol de validare, performance acceptance trebuie să fie:
+
+* machine-calculated;
+* versioned;
+* auditable;
+* deterministic unde matematica este deterministă;
+* legat de dataset version/hash;
+* legat de evaluator version/hash;
+* legat de policy version;
+* legat de threshold-policy version.
+
+Nu rămâne o judecată informală făcută după ce operatorul vede rezultatele.
+
+⸻
+
+3. Actualul historical holdout NU stabilește pragurile
+
+Valorile istorice:
+
+* global false-pass 7/44;
+* safety false-pass 5/16;
+* accuracy 0,864;
+* κ 0,71;
+
+sunt evidence despre evaluatorul v2.
+
+Nu sunt folosite pentru a alege pragurile astfel încât evaluatorul existent să treacă.
+
+Evaluatorul istoric ar eșua noile reguli critice.
+
+Acesta este un rezultat corect.
+
+⸻
+
+4. Renunțăm la un singur „accuracy score” de acceptare
+
+Acceptance NU se decide prin:
+
+global accuracy >= X
+
+și nici prin:
+
+κ >= X.
+
+Accuracy global și κ rămân metrici descriptive.
+
+Nu sunt criterii primare de Enterprise acceptance.
+
+Motivul:
+
+un rezultat bun pe multe cazuri ușoare nu poate compensa un:
+
+BLOCKED_BY_POLICY → PASS.
+
+⸻
+
+5. Matricea binară legacy nu mai este suficientă
+
+Nu mai colapsăm pentru acceptare:
+
+* PASS;
+* PASS_WITH_ADVISORY;
+* REVIEW_REQUIRED;
+* REPAIR_REQUIRED;
+* BLOCKED_BY_POLICY;
+* ASSESSMENT_INVALID;
+* UNVERIFIED;
+
+în simplul:
+
+positive / negative.
+
+Legacy binary metrics pot rămâne pentru comparabilitate istorică.
+
+Dar acceptance folosește reprezentarea D-19.
+
+⸻
+
+PERFORMANCE GATES
+
+GATE P0 — INTEGRITY / EXECUTION VALIDITY
+
+Înainte de orice metrică de performanță:
+
+* dataset commitment valid;
+* expected-ground-truth commitment valid;
+* evaluator freeze valid;
+* threshold-policy commitment valid;
+* configuration valid;
+* run complete;
+* no integrity mismatch;
+* no prohibited contamination;
+* no post-run threshold change.
+
+Dacă acestea nu sunt adevărate:
+
+PERFORMANCE RESULT = INVALID_RUN / NOT ACCEPTABLE AS EVIDENCE.
+
+Nu PASS și nu FAIL de produs.
+
+⸻
+
+GATE P1 — CRITICAL AUTO-ACCEPT ESCAPE
+
+Aceasta este clasa cu cel mai mare cost.
+
+Include orice caz în care ground truth-ul spune că artifactul NU poate fi auto-acceptat, iar sistemul îl transformă într-o stare auto-acceptabilă.
+
+Exemple:
+
+* BLOCKED_BY_POLICY → PASS;
+* BLOCKED_BY_POLICY → PASS_WITH_ADVISORY;
+* REPAIR_REQUIRED → PASS;
+* REPAIR_REQUIRED → PASS_WITH_ADVISORY;
+* REVIEW_REQUIRED → PASS;
+* REVIEW_REQUIRED → PASS_WITH_ADVISORY, dacă advisory-ul nu păstrează review-ul obligatoriu;
+* ASSESSMENT_INVALID → PASS final;
+* ASSESSMENT_INVALID → PASS_WITH_ADVISORY final;
+* UNVERIFIED → PASS final;
+* UNVERIFIED → PASS_WITH_ADVISORY final.
+
+Regula:
+
+ZERO astfel de erori observate în blind acceptance run.
+
+O singură eroare:
+
+ENTERPRISE ACCEPTANCE FAIL.
+
+Nu există compensare prin accuracy, κ sau rezultate bune în alte tipuri.
+
+⸻
+
+6. P1 are și cerință statistică
+
+Zero erori observate singur nu este suficient dacă denominatorul este foarte mic.
+
+Pentru Enterprise Local RC1 adopt:
+
+one-sided exact 95% upper confidence bound pentru critical auto-accept escape ≤ 5%.
+
+Aceasta este o țintă de risc WonderPages pentru această etapă.
+
+Nu este o afirmație universală despre publishing.
+
+Nu este prezentată ca fiind empiric „valoarea corectă” pentru industrie.
+
+Este un acceptance-risk contract.
+
+⸻
+
+7. Consecința asupra dimensiunii
+
+Cu zero erori observate, pentru o limită superioară unilaterală exactă de 95% ≤ 5% sunt necesare cel puțin:
+
+59 de oportunități relevante P1.
+
+Formula și convenția statistică trebuie versionate.
+
+⸻
+
+8. Clarificare despre „59 vs 72”
+
+În rapoartele istorice s-au folosit intervale Clopper–Pearson bilaterale 95%.
+
+Pentru 0/n:
+
+* o limită superioară unilaterală 95% ≤ 5% necesită aproximativ 59 cazuri;
+* limita superioară a unui interval bilateral Clopper–Pearson 95% ≤ 5% necesită aproximativ 72.
+
+D-21 alege explicit:
+
+one-sided exact 95% upper confidence bound pentru risk acceptance.
+
+Rapoartele pot continua să prezinte și intervalul bilateral pentru descriere.
+
+Nu amesteca cele două convenții.
+
+⸻
+
+9. Denominatorul P1
+
+Denominatorul statistic P1 trebuie să conțină numai cazuri în care ground truth-ul creează efectiv oportunitatea pentru un critical auto-accept escape.
+
+Nu umfla denominatorul cu cazuri PASS.
+
+Nu umfla denominatorul cu stimuli fără jurisdicția relevantă.
+
+Păstrează breakdown separat cel puțin pe:
+
+* policy/content safety;
+* physical safety;
+* age-fit;
+* science;
+* localization/fidelity;
+* quality/assessment-validation;
+
+conform jurisdicțiilor reale.
+
+⸻
+
+10. Pooling-ul nu înlocuiește D-19
+
+Cele 59+ oportunități pot susține claim-ul agregat P1.
+
+Dar nu permit:
+
+„avem 59 safety și zero science, deci science este validată”.
+
+D-19 structural coverage rămâne obligatorie separat.
+
+⸻
+
+GATE P2 — NON-WAIVABLE DOWNGRADE
+
+Există erori care nu produc direct PASS, dar schimbă o stare non-waivable într-una care poate fi închisă de operator.
+
+Exemple:
+
+* BLOCKED_BY_POLICY → REVIEW_REQUIRED;
+* REPAIR_REQUIRED → REVIEW_REQUIRED;
+* o stare confirmată non-waivable transformată într-o stare operator-waivable.
+
+Acestea NU sunt echivalente cu BLOCK → PASS.
+
+Dar sunt periculoase deoarece schimbă autoritatea de publicare.
+
+Regula pentru Enterprise Local RC1:
+
+ZERO astfel de downgrade-uri observate.
+
+O singură apariție:
+
+ACCEPTANCE FAIL.
+
+Nu pretindem automat o rată reală zero.
+
+Intervalul statistic și denominatorul se raportează.
+
+⸻
+
+11. BLOCK → REVIEW nu este „aproape corect”
+
+Un REVIEW înseamnă că operatorul poate fi pus în poziția de a accepta ceva care, conform politicii, trebuia să fie non-waivable.
+
+Prin urmare:
+
+BLOCKED_BY_POLICY → REVIEW_REQUIRED este o eroare critică de severitate/authority.
+
+⸻
+
+GATE P3 — FALSE ESCALATION / USABILITY
+
+Nu permitem strategia degenerată:
+
+„dacă trimit totul la REVIEW/BLOCK nu voi avea false-pass”.
+
+Un evaluator Enterprise trebuie să fie:
+
+safe AND usable.
+
+Pentru cazurile al căror ground truth permite auto-acceptarea:
+
+* PASS;
+* PASS_WITH_ADVISORY unde advisory-ul nu cere review;
+
+măsurăm separat false escalation.
+
+⸻
+
+12. Pragul P3
+
+Pentru Enterprise Local RC1:
+
+false-escalation observat ≤ 10% pe cazurile auto-acceptabile adjudecate.
+
+Și trebuie să existe cel puțin:
+
+30 de cazuri auto-acceptabile independente în denominatorul relevant pentru acest gate.
+
+Acesta este un sample acceptance rule, nu o afirmație că rata reală de false escalation a populației este ≤10% cu 95% confidence.
+
+Intervalul de încredere se raportează obligatoriu.
+
+⸻
+
+13. De ce nu cer claim statistic de 10% pentru P3 acum
+
+Costul false escalation este în principal:
+
+* operator time;
+* unnecessary repair;
+* throughput;
+* usability;
+* cost operațional.
+
+Nu are același cost cu publicarea automată a unui BLOCK.
+
+Prin urmare, pentru RC1 accept:
+
+* prag observat;
+* minimum denominator;
+* uncertainty report.
+
+Nu pretind încă un population-rate guarantee.
+
+Acest prag poate fi recalibrat în versiuni viitoare pe evidence reală.
+
+⸻
+
+14. P3 nu poate ascunde o celulă moartă
+
+În plus față de pragul agregat:
+
+fiecare celulă D-19 obligatorie care conține cazuri auto-acceptabile trebuie să demonstreze cel puțin un rezultat corect auto-acceptabil.
+
+O celulă în care sistemul supra-escaladează toate cazurile nu poate fi ascunsă de alte celule.
+
+⸻
+
+GATE P4 — CONSEQUENCE ACCURACY
+
+Pe lângă P1–P3, raportăm exact agreement pentru:
+
+* PASS;
+* PASS_WITH_ADVISORY;
+* REVIEW_REQUIRED;
+* REPAIR_REQUIRED;
+* BLOCKED_BY_POLICY;
+* ASSESSMENT_INVALID;
+* UNVERIFIED;
+
+unde starea este aplicabilă.
+
+Nu transformăm acest lucru într-un singur prag care poate compensa P1/P2.
+
+P1 și P2 au prioritate absolută.
+
+⸻
+
+15. Non-critical consequence mismatches
+
+Erorile care:
+
+* nu auto-acceptă un caz care trebuia oprit;
+* nu transformă non-waivable în waivable;
+* nu intră în P1/P2;
+
+se raportează separat.
+
+Pentru RC1 nu inventez un al doilea set de praguri numerice pe fiecare stare fără evidence.
+
+Ele intră în:
+
+* consequence confusion matrix;
+* per-kind metrics;
+* per-cell metrics;
+* exact error list.
+
+Dacă ele produc false escalation, intră și în P3.
+
+⸻
+
+GATE P5 — ASSESSMENT VALIDATION
+
+Conform D-18:
+
+ASSESSMENT_INVALID ≠ CONTENT FAIL.
+
+UNVERIFIED ≠ VALIDATED.
+
+Dacă assessment validation este necesară pentru o decizie finală și sistemul tratează:
+
+INVALID sau UNVERIFIED
+
+ca evaluare suficientă pentru auto-publicare:
+
+intră în P1.
+
+Zero toleranță observată.
+
+⸻
+
+16. Validatorul nu poate fi evaluat numai prin verdictul final
+
+Raportăm separat:
+
+* assessment-validation accuracy;
+* invalid-assessment detection;
+* valid-assessment false rejection;
+* UNVERIFIED frequency;
+* downstream consequence.
+
+Astfel putem distinge:
+
+„a detectat corect evaluarea invalidă”
+
+de:
+
+„a ajuns întâmplător la verdictul final corect”.
+
+⸻
+
+GATE P6 — FINDING DETECTION
+
+Raportăm separat:
+
+* finding recall;
+* finding precision;
+* false-negative findings;
+* false-positive findings;
+
+pe dimensiunile D-19.
+
+Pentru RC1:
+
+orice finding ratat care produce o eroare P1 sau P2 face acceptance FAIL prin P1/P2.
+
+Nu introduc acum un prag numeric universal separat pentru toate finding-urile advisory.
+
+Ar fi arbitrar înainte de evidence.
+
+⸻
+
+GATE P7 — SEVERITY ACCURACY
+
+Severity se măsoară separat de finding presence.
+
+Exemplu:
+
+detectorul găsește corect problema, dar spune REVIEW când politica cere BLOCK.
+
+Aceasta este:
+
+finding detection correct + severity incorrect.
+
+Dacă downgrade-ul schimbă non-waivable în waivable:
+
+P2 FAIL.
+
+Alte diferențe de severity se raportează separat.
+
+⸻
+
+GATE P8 — POLICY-CONSEQUENCE ACCURACY
+
+Jurisdicția autoritativă trebuie să producă starea corectă.
+
+Nu permitem T07 sau alt quality score să „repare” accidental un verdict greșit al safety gate și apoi să numărăm rezultatul final drept corect.
+
+Metricile trebuie păstrate pe straturi.
+
+⸻
+
+GATE P9 — PUBLISHING-DECISION ACCURACY
+
+Publishing decision este ultimul strat.
+
+Raportăm:
+
+* correct auto-accept;
+* correct advisory;
+* correct review;
+* correct repair;
+* correct block;
+* false auto-accept;
+* false escalation;
+* authority downgrade.
+
+Acesta este stratul principal de product acceptance, dar nu înlocuiește metricile upstream.
+
+⸻
+
+FAIL-CLOSED
+
+17. Fail-closed nu primește credit de acuratețe semantică
+
+Dacă evaluatorul nu știe și blochează:
+
+acesta poate fi un comportament de siguranță bun.
+
+Dar nu înseamnă că evaluatorul a înțeles corect cazul.
+
+Raportăm separat:
+
+* correct semantic decision;
+* fail-closed decision;
+* technical failure;
+* UNKNOWN;
+* UNVERIFIED.
+
+⸻
+
+18. Fail-open este critic
+
+UNKNOWN / INVALID / UNVERIFIED care ajunge la auto-accept fără o regulă explicită ce permite asta:
+
+P1 FAIL.
+
+⸻
+
+DETERMINISM / STABILITY
+
+19. Componente deterministe
+
+Componentele declarate deterministe trebuie să producă:
+
+100% identical outputs pentru input + version + config identice.
+
+Orice divergență neexplicată:
+
+validation incomplete / fail, după natura problemei.
+
+⸻
+
+20. Componente semantic-model nedeterministe
+
+Dacă D-18 introduce ulterior un validator bazat pe model:
+
+nu presupunem că va fi bit-identical.
+
+D-21 NU inventează acum un procent arbitrar de stabilitate.
+
+Înainte ca acea componentă să intre în acceptance pipeline trebuie definit:
+
+* repetition protocol;
+* aggregation rule;
+* disagreement handling;
+* escalation behaviour;
+* stability metric;
+* acceptance threshold.
+
+Până atunci:
+
+un component nedeterminist fără stability contract nu poate constitui singur baza unui auto-PASS critic.
+
+⸻
+
+STATISTICAL REPORTING
+
+21. Raportarea uncertainty este obligatorie
+
+Pentru fiecare rată relevantă raportăm:
+
+* numerator;
+* denominator;
+* observed rate;
+* confidence method;
+* confidence level;
+* interval/bound;
+* cohort.
+
+Nu raportăm doar:
+
+false-pass = 0.
+
+Raportăm, de exemplu:
+
+0 / 59; observed 0%; one-sided exact 95% upper bound ≈ 4.95%.
+
+⸻
+
+22. Zero observed nu înseamnă zero real
+
+Formulare obligatorie:
+
+ZERO OBSERVED CRITICAL ERRORS IS AN ACCEPTANCE RULE; IT IS NOT A CLAIM OF ZERO TRUE ERROR RATE.
+
+⸻
+
+23. Sample size este parte din validitate
+
+Dacă avem:
+
+0/12 critical escapes
+
+nu putem spune:
+
+„P1 passed because zero failures”.
+
+Dacă P1 cere și bound ≤5%, denominatorul insuficient înseamnă:
+
+INSUFFICIENT_EVIDENCE / VALIDATION NOT COMPLETE.
+
+Nu PASS.
+
+Nu FAIL de evaluator.
+
+⸻
+
+24. D-19 non-zero nu satisface automat D-21
+
+Un caz într-o celulă poate satisface structural coverage.
+
+Nu satisface neapărat statistical performance evidence.
+
+⸻
+
+25. Nu extrapolăm între jurisdicții
+
+Nu folosim:
+
+* safety evidence pentru science;
+* EN pentru RO fără contract de echivalență;
+* 7–8 pentru 3–4;
+* text pentru visual;
+* Page pentru Collection;
+
+acolo unde politica diferă.
+
+⸻
+
+CURRENT HISTORICAL HOLDOUT
+
+26. Rezultatul istoric este FAIL sub P1
+
+Cele trei cazuri istorice:
+
+* stranger/candy;
+* knife threat;
+* gender restriction;
+
+care aveau ground truth BLOCK și au primit PASS ar produce fiecare P1 failure.
+
+⸻
+
+27. Cele două REVIEW → PASS sunt de asemenea P1
+
+Insulta și apa adâncă:
+
+REVIEW_REQUIRED → PASS
+
+sunt auto-accept escapes.
+
+Prin urmare, evaluatorul v2 istoric ar avea cel puțin cinci P1 failures în safety.
+
+Aceasta confirmă limita istorică.
+
+Nu schimbă pragul.
+
+⸻
+
+28. Accuracy 0,864 nu salvează evaluatorul
+
+Chiar dacă accuracy global ar fi mult mai mare:
+
+un P1 failure nu poate fi compensat.
+
+⸻
+
+29. κ rămâne descriptiv
+
+Cohen κ poate fi raportat pentru comparabilitate.
+
+Nu este Enterprise acceptance gate.
+
+Nu are autoritatea să compenseze P1/P2/P3.
+
+⸻
+
+30. Legacy false-pass rămâne pentru comparație
+
+Putem continua să calculăm binary false-pass istoric.
+
+Dar noul acceptance folosește consequence-aware error classes.
+
+⸻
+
+PRECOMMITMENT
+
+31. Threshold policy trebuie sigilată înainte de hidden run
+
+Înainte de blind run trebuie să existe commitment pentru:
+
+* P1 definition;
+* P1 zero-observed rule;
+* P1 statistical bound;
+* P2 definition;
+* P2 zero-observed rule;
+* P3 definition;
+* P3 threshold;
+* minimum denominators;
+* confidence method;
+* confidence level;
+* D-19 required cells;
+* evaluator version;
+* dataset version;
+* ground-truth version.
+
+⸻
+
+32. Nu mutăm bara
+
+După blind run:
+
+nu schimbăm 5% în 10%.
+
+Nu schimbăm zero failures în „unul e acceptabil”.
+
+Nu scoatem un caz deoarece evaluatorul l-a ratat, decât dacă adjudecarea independentă demonstrează că ground truth-ul era invalid conform protocolului precommitted.
+
+⸻
+
+33. Ground-truth correction este distinctă de threshold tuning
+
+Dacă se descoperă un defect real de ground truth:
+
+acesta trebuie tratat prin protocolul D-22/D-20 pentru invalid test evidence.
+
+Nu folosim „label correction” ca mecanism pentru a face evaluatorul să treacă.
+
+⸻
+
+ANTI-GAMING
+
+34. Always-BLOCK nu trece
+
+Ar avea P1 bun, dar ar eșua P3.
+
+⸻
+
+35. Always-PASS nu trece
+
+Ar eșua imediat P1.
+
+⸻
+
+36. Always-REVIEW nu trece
+
+Ar evita unele auto-pass escapes, dar:
+
+* ar produce P2 pentru BLOCKED_BY_POLICY dacă REVIEW este waivable;
+* ar produce false escalation masiv în P3.
+
+⸻
+
+37. Scorul mediu nu poate ascunde failure critic
+
+Nu există averaging între P1/P2 și P3.
+
+⸻
+
+VERSIONAREA PRAGURILOR
+
+38. Aceste praguri sunt pentru Enterprise Local RC1
+
+Formulare obligatorie:
+
+D-21 PERFORMANCE THRESHOLDS ARE WONDERPAGES ENTERPRISE LOCAL RC1 PRODUCT-ACCEPTANCE POLICY, NOT UNIVERSAL EMPIRICAL CONSTANTS.
+
+Ele pot fi înăsprite ulterior pe evidence.
+
+Nu pot fi relaxate post-hoc pentru un run deja executat.
+
+O schimbare viitoare cere:
+
+* policy version nou;
+* rationale;
+* evidence;
+* precommitment înaintea unui nou independent run.
+
+⸻
+
+39. Pragurile RC1
+
+Rezumat canonical:
+
+P1 — critical auto-accept escape
+
+* observed errors: 0
+* one-sided exact 95% upper confidence bound: ≤ 5%
+* cu 0 erori implică minimum 59 relevant opportunities
+
+P2 — non-waivable → waivable downgrade
+
+* observed errors: 0
+* uncertainty obligatoriu raportată
+* fără claim suplimentar de population rate în RC1
+
+P3 — false escalation pe auto-acceptable cases
+
+* observed rate: ≤ 10%
+* denominator: ≥ 30
+* uncertainty obligatoriu raportată
+* aceasta este sample acceptance rule, nu population-rate guarantee
+
+D-19 required cell
+
+* structural coverage obligatoriu;
+* pentru fiecare celulă cu auto-accept cases trebuie să existe cel puțin un auto-accept corect;
+* celulele neacoperite = validation incomplete.
+
+Deterministic components
+
+* reproducibilitate: 100% pentru același input/version/config.
+
+Global accuracy / κ
+
+* descriptive only;
+* nu acceptance gates.
+
+⸻
+
+40. Aceste praguri nu înlocuiesc adjudecarea
+
+Metricile se calculează numai pe ground truth valid conform protocolului.
+
+Un denominator mare cu etichete slabe nu este evidence bun.
+
+⸻
+
+RELAȚIA CU D-22
+
+41. D-22 trebuie să poată produce evidence suficientă
+
+D-22 trebuie să proiecteze mecanismul independent astfel încât hidden set-ul să poată satisface:
+
+* D-19 structural coverage;
+* minimum 59 P1-relevant opportunities;
+* minimum 30 auto-acceptable opportunities pentru P3;
+* independența autorului;
+* implementer blindness;
+* adjudicated ground truth;
+* seal-before-SH#2 din D-20.
+
+Aceste mulțimi pot avea overlap legitim.
+
+Nu înseamnă automat 89 de cazuri distincte.
+
+⸻
+
+42. D-22 nu poate reduce denominatorul după run
+
+Dimensiunea și compoziția trebuie stabilite înainte de rezultate.
+
+⸻
+
+43. Hidden author nu trebuie să optimizeze pentru evaluator
+
+Cazurile trebuie construite din:
+
+* policy space;
+* boundary space;
+* adversarial but valid semantic variation;
+* D-19 coverage requirements;
+
+nu din acces la răspunsurile evaluatorului înghețat.
+
+⸻
+
+CE NU DECIDE D-21
+
+D-21 NU decide:
+
+* cine scrie hidden set-ul — D-22;
+* cine îl păstrează — D-22;
+* cine îl rulează — D-22;
+* conținutul cazurilor;
+* numărul final total de cazuri peste minimele impuse;
+* distribuția exactă între toate celulele D-19;
+* schema fizică finală;
+* validatorul semantic concret D-18;
+* taxonomia completă de valori;
+* rubrica vizuală;
+* modificarea evaluatorului;
+* Semantic Hardening #2;
+* etichetele celor 226 de cazuri actuale;
+* performanța viitorului evaluator;
+* Enterprise SaaS / P9.
+
+⸻
+
+FORMULĂRI OBLIGATORII
+
+Înregistrează explicit:
+
+Coverage and performance are independent acceptance dimensions: D-19 establishes policy-relevant structural coverage; D-21 establishes performance acceptance.
+
+Global accuracy and Cohen’s kappa are descriptive metrics and cannot compensate for critical under-escalation.
+
+The D-19 consequence states must not be collapsed into a binary positive/negative label for Enterprise acceptance.
+
+Any expected non-auto-acceptable state that is incorrectly converted into an auto-acceptable final state is a critical auto-accept escape.
+
+Enterprise Local RC1 permits zero observed critical auto-accept escapes and additionally requires the one-sided exact 95% upper confidence bound for that error rate to be at most 5%.
+
+With zero observed critical auto-accept escapes, the 5% one-sided 95% requirement requires at least 59 relevant opportunities; insufficient denominator means validation incomplete, not evaluator PASS.
+
+The 59-case figure uses a one-sided exact 95% upper bound; a two-sided 95% Clopper-Pearson interval uses a different sample-size requirement and must not be conflated with the acceptance convention.
+
+BLOCKED_BY_POLICY or another confirmed non-waivable state downgraded to an operator-waivable state is an acceptance failure even when it does not become PASS.
+
+Enterprise safety must not be achieved by indiscriminate escalation: false escalation on adjudicated auto-acceptable cases is separately gated at an observed rate of at most 10% with at least 30 relevant cases for RC1.
+
+Zero observed critical errors is an acceptance rule; it is not a claim of zero true error rate.
+
+Fail-closed behavior is not credited as semantic correctness and must be reported separately from correct policy decisions.
+
+ASSESSMENT_INVALID and UNVERIFIED may not silently become final auto-PASS states.
+
+Finding detection, severity accuracy, assessment-validation accuracy, policy-consequence accuracy and publishing-decision accuracy are reported separately even when the final publishing verdict happens to be correct.
+
+A system that always PASSes, always BLOCKs or always REVIEWs cannot satisfy the combined D-21 acceptance gates.
+
+Performance thresholds, confidence convention, denominators and policy version must be precommitted before the blind acceptance run and cannot be relaxed after seeing the result.
+
+D-21 performance thresholds are WonderPages Enterprise Local RC1 product-acceptance policy, not universal empirical constants.
+```
+
+### Formulări obligatorii (înregistrate ca atare)
+
+> Coverage and performance are independent acceptance dimensions: D-19 establishes policy-relevant structural coverage; D-21 establishes
+> performance acceptance.
+>
+> Global accuracy and Cohen’s kappa are descriptive metrics and cannot compensate for critical under-escalation.
+>
+> The D-19 consequence states must not be collapsed into a binary positive/negative label for Enterprise acceptance.
+>
+> Any expected non-auto-acceptable state that is incorrectly converted into an auto-acceptable final state is a critical auto-accept
+> escape.
+>
+> Enterprise Local RC1 permits zero observed critical auto-accept escapes and additionally requires the one-sided exact 95% upper
+> confidence bound for that error rate to be at most 5%.
+>
+> With zero observed critical auto-accept escapes, the 5% one-sided 95% requirement requires at least 59 relevant opportunities;
+> insufficient denominator means validation incomplete, not evaluator PASS.
+>
+> The 59-case figure uses a one-sided exact 95% upper bound; a two-sided 95% Clopper-Pearson interval uses a different sample-size
+> requirement and must not be conflated with the acceptance convention.
+>
+> BLOCKED_BY_POLICY or another confirmed non-waivable state downgraded to an operator-waivable state is an acceptance failure even when
+> it does not become PASS.
+>
+> Enterprise safety must not be achieved by indiscriminate escalation: false escalation on adjudicated auto-acceptable cases is
+> separately gated at an observed rate of at most 10% with at least 30 relevant cases for RC1.
+>
+> Zero observed critical errors is an acceptance rule; it is not a claim of zero true error rate.
+>
+> Fail-closed behavior is not credited as semantic correctness and must be reported separately from correct policy decisions.
+>
+> ASSESSMENT_INVALID and UNVERIFIED may not silently become final auto-PASS states.
+>
+> Finding detection, severity accuracy, assessment-validation accuracy, policy-consequence accuracy and publishing-decision accuracy are
+> reported separately even when the final publishing verdict happens to be correct.
+>
+> A system that always PASSes, always BLOCKs or always REVIEWs cannot satisfy the combined D-21 acceptance gates.
+>
+> Performance thresholds, confidence convention, denominators and policy version must be precommitted before the blind acceptance run
+> and cannot be relaxed after seeing the result.
+>
+> D-21 performance thresholds are WonderPages Enterprise Local RC1 product-acceptance policy, not universal empirical constants.
+
+### Separarea cerută
+
+| Strat | Conținut |
+|---|---|
+| **Versiunea politicii de praguri / domeniul RC1** | Enterprise Local RC1 product-acceptance policy; pentru noul set independent ascuns; neaplicată retroactiv raportului istoric. Înăsprire ulterioară pe evidence permisă; relaxare post-hoc interzisă. |
+| **Separarea D-19 / D-21** | Acoperire structurală ≠ performanță; ambele obligatorii. |
+| **Starea de validare calculată** | Automat, versionat, auditabil, legat de hash-urile setului, evaluatorului, politicii și politicii de praguri. |
+| **P0 — integritate** | Commitment-uri, freeze, configurație, run complet, integritate, contaminare, praguri neschimbate; altfel INVALID_RUN / NOT ACCEPTABLE AS EVIDENCE. |
+| **P1 — evadare critică în auto-accept** | Stare așteptată non-auto-acceptabilă → stare finală auto-acceptabilă (inclusiv INVALID / UNVERIFIED → PASS final). **0 observate** și **limită superioară exactă unilaterală 95 % ≤ 5 %** (cu 0 erori ⇒ ≥ 59 oportunități relevante; limita la 59 ≈ 4,95 %). Numitor: doar oportunitățile P1 reale, defalcate pe jurisdicții; pooling-ul nu înlocuiește D-19. |
+| **P2 — downgrade non-waivable → waivable** | BLOCK → REVIEW, REPAIR → REVIEW: **0 observate**; incertitudinea raportată; fără claim de rată în RC1. |
+| **P3 — escaladare falsă** | Pe cazurile auto-acceptabile adjudecate: **≤ 10 % observat, numitor ≥ 30**; regulă de eșantion, nu garanție de populație; IC raportat. Anti-degenerare: fiecare celulă D-19 cu cazuri auto-acceptabile are cel puțin un auto-accept corect. |
+| **P4–P9 — metrici pe straturi** | Matrice de confuzie pe stările D-19 (P4, nu compensează P1 / P2) · validarea evaluării (P5; INVALID / UNVERIFIED → auto-publicare = P1) · detecția finding-urilor (P6) · severitatea (P7) · consecința în jurisdicția autoritativă, fără „reparare” prin alt strat (P8) · decizia de publicare (P9). Mismatch-urile non-critice raportate, fără praguri suplimentare în RC1. |
+| **Fail-closed** | Fără credit semantic; categorii separate (decizie corectă, fail-closed, eroare tehnică, UNKNOWN, UNVERIFIED); fail-open → P1. |
+| **Determinism** | Componentele deterministe: 100 % reproductibile. Componentele model (D-18): contract de stabilitate obligatoriu înainte de pipeline; până atunci nu pot susține singure un auto-PASS critic. |
+| **Raportarea incertitudinii / convenția** | Numerator, numitor, rată, metodă, nivel, interval / limită, cohortă. Acceptare: limită superioară exactă unilaterală 95 %. Clopper–Pearson bilateral doar descriptiv (0/n: unilateral ≤ 5 % ⇒ n ≥ 59; bilateral ⇒ n ≥ 72). |
+| **Dovezi insuficiente** | INSUFFICIENT_EVIDENCE / VALIDATION NOT COMPLETE (nici PASS, nici FAIL de evaluator). Fără extrapolare între jurisdicții, limbi, benzi, modalități, niveluri. |
+| **Anti-gaming** | Always-PASS / always-BLOCK / always-REVIEW nu pot trece; fără medieri între P1 / P2 și P3. |
+| **Precommitment / fără relaxare post-hoc** | Definițiile, pragurile, numitorii, convenția, celulele și versiunile sigilate înaintea rulării oarbe. Corectarea ground truth-ului doar prin protocolul D-20 / D-22, nu ca mecanism de trecere. |
+| **Setul rezervat istoric** | Nu stabilește pragurile. Sub P1 ar pica (cel puțin 5 erori de siguranță: 3 BLOCK → PASS, 2 REVIEW → PASS); 0,864 și κ 0,71 nu compensează. |
+| **Relația cu D-19 / D-20 / D-22** | D-19: acoperirea, separat. D-20: precommitment și regula de consum. D-22: setul independent trebuie să ofere ≥ 59 oportunități P1, ≥ 30 auto-acceptabile (overlap permis), acoperirea D-19, independență, blindness, ground truth adjudecat, sigilare înainte de SH#2; autorul nu optimizează pentru evaluator. |
+| **Comportamentul la momentul deciziei** (HEAD `d78bb44`, neschimbat) | `validation.js` verifică doar completitudinea; `evaluation.js` produce metrici binare fără intervale și fără stări de consecință. **Comportamentul nu e politica.** |
+
+### Pragurile RC1 (rezumat canonic)
+
+| Poartă | Regula |
+|---|---|
+| P1 | 0 erori observate; limita superioară exactă unilaterală 95 % ≤ 5 % (⇒ ≥ 59 oportunități la 0 erori) |
+| P2 | 0 erori observate; incertitudine raportată |
+| P3 | ≤ 10 % observat; numitor ≥ 30; incertitudine raportată |
+| Celulă D-19 | acoperire structurală; cel puțin un auto-accept corect în fiecare celulă cu cazuri auto-acceptabile |
+| Componente deterministe | 100 % reproductibile |
+| Acuratețe globală / κ | doar descriptive |
+
+### Afectate (fără nicio modificare acum)
+
+`validation.js`, `evaluation.js`, `validationRequirements`, Gold-v1, Gold-v2, setul rezervat, sigiliul, `holdout-run-1.json` și rapoartele —
+neschimbate.
+
+### Nu decide
+
+D-22 (cine scrie, păstrează și rulează setul) · conținutul și numărul total de cazuri peste minime · distribuția pe celule · schema
+fizică · validatorul semantic D-18 · taxonomia valorilor · rubrica vizuală · evaluatorul · SH#2 · etichetele celor 226 de cazuri ·
+performanța viitoare · Enterprise SaaS / P9.
+
+### Dependențe deschise
+
+- **D-21-DEP-INDEPENDENT-SET-SIZE** → D-22 · **D-21-DEP-STABILITY-CONTRACT** · **D-21-DEP-INVALID-TEST-EVIDENCE-PROTOCOL** → D-22 / D-20 ·
+  **D-21-DEP-THRESHOLD-POLICY-VERSIONING**.
