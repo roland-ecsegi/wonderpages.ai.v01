@@ -45,7 +45,7 @@
  "nextAuthorizedStep": {
   "id": "OPERATOR-REVIEW-CONTINUITY-1",
   "actor": "operator",
-  "summary": "The operator configures the ChatGPT Work event-triggered task for the ingress PR (Agent Bridge INGRESS.md), then Claude runs the decision-B end-to-end test; after that the operator reviews CONTINUITY-1 and either explicitly authorizes a next phase or asks for corrections. No implementation outside CONTINUITY-1 is authorized."
+  "summary": "Decision B live end-to-end test PASSED (operator follow-up #7, evidence brain/evidence/DECISION-B-INGRESS.json liveE2E). The operator reviews CONTINUITY-1 and either explicitly authorizes a next phase (including any Decision C investigation) or asks for corrections. No implementation outside CONTINUITY-1 is authorized."
  },
  "doNotStart": {
   "source": "brain/phase/authorizations/CONTINUITY-1.operator-instruction.txt §10 (verbatim item names)",
@@ -123,7 +123,7 @@
  "operatorFollowups": "brain/phase/authorizations/CONTINUITY-1.operator-followups.md",
  "operatorDecisions": {
   "A": "DONE — BRIDGE_SYNC_TOKEN configured; automatic sync demonstrated (F-05 closed by ChatGPT, MSG-20261006T121530Z-chatgpt-c3f1)",
-  "B": "AUTHORIZED option 1 (operatorFollowups #3, extended by #4) — ChatGPT ingress PR + ChatGPT Work event-triggered task (target GPT-6 Astra, reasoning Medium, subscription only, no API fallback); durable delivery: pending until a valid resolving reply, at-least-once wake with bounded backoff (3h/6h/12h/24h/48h, cap 48h, max 9 attempts ≈ 9.9 days, beyond a 7-day weekly allowance window → STALLED until revived, surfaced as a workflow warning), batching, idempotent processing, WAIT_FOR_ALLOWANCE without usage monitor; fixed task text is the bootstrap authority (B-01), anchored per wake to the immutable doorbell mainCommit (B-02); honest monotonic timestamps (B-04); still-pending re-check on current main before every write, skip if closed / superseded / resolved since the wake (B-05). End-to-end test pending the operator's ChatGPT Work configuration",
+  "B": "AUTHORIZED option 1 (operatorFollowups #3, extended by #4) — ChatGPT ingress PR + ChatGPT Work event-triggered task (target GPT-6 Astra, reasoning Medium, subscription only, no API fallback); durable delivery: pending until a valid resolving reply, at-least-once wake with bounded backoff (3h/6h/12h/24h/48h, cap 48h, max 9 attempts ≈ 9.9 days, beyond a 7-day weekly allowance window → STALLED until revived, surfaced as a workflow warning), batching, idempotent processing, WAIT_FOR_ALLOWANCE without usage monitor; fixed task text is the bootstrap authority (B-01), anchored per wake to the immutable doorbell mainCommit (B-02); honest monotonic timestamps (B-04); still-pending re-check on current main before every write, skip if closed / superseded / resolved since the wake (B-05). Live end-to-end test PASS 2026-10-06 (operator follow-up #7; ChatGPT Work task configured by the operator)",
   "C": "NOT AUTHORIZED / NOT IMPLEMENTED — requirements (operatorFollowups #3, #4): full-duplex ChatGPT → Bridge → Claude with the same guarantees as B (durable queue, at-least-once wake, idempotency, batching, bounded retry/backoff, anti-loop, fail-closed); target Claude Opus 5.5 / High on the existing Claude subscription, no separately billed API; after B is accepted, first investigate and demonstrate an event-driven wake of Claude Code — never assume it exists; report limitation and alternatives before any implementation"
  },
  "bridgeConstraints": [
@@ -133,9 +133,16 @@
  ],
  "decisionBLiveE2E": {
   "authorizedBy": "brain/phase/authorizations/CONTINUITY-1.operator-followups.md #7 (verbatim, 2026-10-06)",
-  "status": "IN_PROGRESS",
+  "status": "PASS",
   "preconditions": "ChatGPT advisory re-audit MSG-20261006T135204Z-chatgpt-c7a2: PASS for B-01…B-05; operator configured ChatGPT Work task 6ac5063e875081919246521097c4b900 on PR #1 (commit updates only; model/reasoning not pinned at task level); bootstrap prompt = INGRESS.md git blob 10edb1434c56ba69ca41489f5792268772045ba3 = BRIDGE-CONTROL.json gitBlob",
   "rules": "one new diagnostic request; exactly one initial ring through the ingress workflow; no forced re-wake; no simulated or manual response; LIVE PASS only on an autonomous ChatGPT-written response validated from the Bridge; otherwise the request stays PENDING under the existing backoff",
-  "evidence": "brain/evidence/DECISION-B-INGRESS.json (liveE2E)"
+  "evidence": "brain/evidence/DECISION-B-INGRESS.json (liveE2E)",
+  "result": {
+   "request": "Bridge MSG-20261006T144339Z-claude-d7b5 (REQUEST, diagnostic, nonce) — commit a2f0ee6",
+   "ring": "single doorbell e126e49 by bridge-ingress[bot], seq 5, reason new, mainCommit a2f0ee6, 2026-10-06T14:44:03Z",
+   "response": "MSG-20261006T144624Z-chatgpt-8e42 (RESPONSE, written on Bridge main in 43baaa5 at 14:46:25Z, ≈2 min 22 s after the ring; self-reported trigger pull_request synchronize on PR #1)",
+   "validatedBy": "Claude from the Bridge; closed by MSG-20261006T144923Z-claude-69b3 (Bridge b6e539a)",
+   "residual": "attribution: the response commit carries the operator's GitHub identity (ChatGPT connector), so the Bridge cannot cryptographically tell a Work run from an interactive ChatGPT session — the Work task run history in ChatGPT is the record of autonomy; model/reasoning not pinned (reported unknown); usage-limit behaviour not observed"
+  }
  }
 }

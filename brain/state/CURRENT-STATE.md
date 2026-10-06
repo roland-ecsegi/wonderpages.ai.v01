@@ -5,7 +5,7 @@ As of 2026-10-06 · functional checkpoint `866a441` · last decision commit `168
 Repository `roland-ecsegi/wonderpages.ai.v01` · branch `claude/wonderpages-enterprise-architecture-8hy7w9` · public
 
 **ACTIVE PHASE:** `CONTINUITY-1` — WonderPages Project Brain + Continuity System + Agent Bridge (IN_PROGRESS)
-**NEXT_AUTHORIZED_STEP:** OPERATOR-REVIEW-CONTINUITY-1 — The operator configures the ChatGPT Work event-triggered task for the ingress PR (Agent Bridge INGRESS.md), then Claude runs the decision-B end-to-end test; after that the operator reviews CONTINUITY-1 and either explicitly authorizes a next phase or asks for corrections. No implementation outside CONTINUITY-1 is authorized.
+**NEXT_AUTHORIZED_STEP:** OPERATOR-REVIEW-CONTINUITY-1 — Decision B live end-to-end test PASSED (operator follow-up #7, evidence brain/evidence/DECISION-B-INGRESS.json liveE2E). The operator reviews CONTINUITY-1 and either explicitly authorizes a next phase (including any Decision C investigation) or asks for corrections. No implementation outside CONTINUITY-1 is authorized.
 
 > Run `node brain/tools/brain.mjs gate` before relying on anything below. Every row names its authoritative source; if this view
 > and the source differ, the source wins and the gate must fail.
@@ -53,7 +53,7 @@ Sources: C-GOAL → `reference/architecture/WonderPages_Enterprise_Master_Archit
 - **B-GOLD-V2-ADJUDICATION** — Gold-v2 adjudication 0/226; validation NOT_COMPLETE. (C-GOLD-V2)
 
 ## Awaiting the operator
-- Configure the ChatGPT Work event-triggered task on the Agent Bridge ingress PR (Bridge INGRESS.md), then the decision-B end-to-end test
+- Decision B: ChatGPT Work task configured and live end-to-end wake test PASS (2026-10-06); operator acceptance of decision B is part of the CONTINUITY-1 review
 - Review / acceptance of CONTINUITY-1 and explicit authorization of the next phase
 - Decision C (Claude wake-up) — not authorized; requirement recorded, investigation first
 - Gold-v1 validation/acceptance; Gold-v2 adjudication

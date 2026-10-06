@@ -82,7 +82,7 @@
   }
  ],
  "awaitingOperator": [
-  "Configure the ChatGPT Work event-triggered task on the Agent Bridge ingress PR (Bridge INGRESS.md), then the decision-B end-to-end test",
+  "Decision B: ChatGPT Work task configured and live end-to-end wake test PASS (2026-10-06); operator acceptance of decision B is part of the CONTINUITY-1 review",
   "Review / acceptance of CONTINUITY-1 and explicit authorization of the next phase",
   "Decision C (Claude wake-up) — not authorized; requirement recorded, investigation first",
   "Gold-v1 validation/acceptance; Gold-v2 adjudication",

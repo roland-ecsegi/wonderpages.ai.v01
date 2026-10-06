@@ -1,8 +1,8 @@
 {
- "schema": "wonderpages.brain.decision-evidence/4",
+ "schema": "wonderpages.brain.decision-evidence/5",
  "decision": "B — option 1 (event-driven ChatGPT wake-up through a dedicated Agent Bridge ingress PR)",
  "authorizedBy": "brain/phase/authorizations/CONTINUITY-1.operator-followups.md #3 (verbatim, 2026-10-06)",
- "status": "BUILT WITH DURABLE DELIVERY; B-01…B-05 REPAIRED; VERIFIED ON THE GITHUB SIDE — LAST RE-AUDIT REQUESTED; END-TO-END TEST PENDING THE OPERATOR'S CHATGPT WORK CONFIGURATION",
+ "status": "BUILT WITH DURABLE DELIVERY; B-01…B-05 REPAIRED (advisory re-audit MSG-20261006T135204Z-chatgpt-c7a2: PASS); CHATGPT WORK TASK CONFIGURED BY THE OPERATOR; LIVE END-TO-END WAKE TEST PASS (2026-10-06)",
  "bridge": {
   "controlCommit": "425fda2 (ingress workflow, ingress plan/guard, INGRESS.md, README/PROTOCOL, 28 self-tests)",
   "publication": "2c3ede7 — mirror 000007-d8013443e53d published together with the control files (control-consistent at every commit)",
@@ -51,10 +51,9 @@
   ]
  },
  "notYetVerified": [
-  "That ChatGPT Work receives commit updates pushed by GITHUB_TOKEN on PR #1 and wakes (needs the operator task configuration)",
-  "Whether the event-triggered task can be pinned to GPT-6 Astra / reasoning Medium on the operator plan",
-  "Behaviour under a real ChatGPT usage-limit / approval interruption (covered by design and tests; observable only during the end-to-end period)",
-  "That the ChatGPT connector reports git blob SHAs at an explicit commit ref as INGRESS.md step 4 requires (to be observed in the end-to-end run; if not, the task fails closed with a BLOCKER)"
+  "Whether the event-triggered task can be pinned to GPT-6 Astra / reasoning Medium on the operator plan (not pinned; run reports unknown)",
+  "Behaviour under a real ChatGPT usage-limit / approval interruption (covered by design and tests; not observed live)",
+  "A live retry ring (backoff path) answered by Work — not needed in the E2E run"
  ],
  "extendedBy": "brain/phase/authorizations/CONTINUITY-1.operator-followups.md #4 (verbatim)",
  "durableDelivery": {
@@ -96,5 +95,56 @@
   "finding": "MSG-20261006T134107Z-chatgpt-e91c (advisory final re-audit; B-02, B-03, B-04 PASS): step 5 computes pending at R, but step 7 only checked on main whether ChatGPT had already replied — a thread CLOSED or SUPERSEDED after the doorbell and before the wake could still get a late answer",
   "repair": "INGRESS.md task step 7: immediately before writing, re-read the thread on current main as data and re-apply the step-5 rule (CLOSED / SUPERSEDED by anyone, resolving reply or hand-off from ChatGPT, receipt of an ANSWER/RESPONSE, non-ACK reply to a BLOCKER) → skip silently; reference implementation tools/bridge.mjs writeCheck + CLI write-check (live: write-check on MSG-20261006T133529Z-claude-75b7 → SKIP ALREADY_RESOLVED by e91c)",
   "observation": "e91c's long report is audit/MSG-20261006T134024Z-chatgpt-e91c.md, not audit/<message id>.md as PROTOCOL.md asks; it is referenced explicitly from the message, so nothing is lost; recorded, not repaired (outside B-05)"
- }
+ },
+ "liveE2E": {
+  "authorizedBy": "brain/phase/authorizations/CONTINUITY-1.operator-followups.md #7 (verbatim, 2026-10-06)",
+  "operatorConfiguration": "ChatGPT Work task 6ac5063e875081919246521097c4b900 on roland-ecsegi/wonderpages.agent-bridge PR #1; commit updates on, comments/reviews off, only_on_merge off; bootstrap prompt = INGRESS.md git blob 10edb1434c56ba69ca41489f5792268772045ba3 (= BRIDGE-CONTROL.json gitBlob, checked by Claude); model/reasoning not pinned at task level (as reported by the operator)",
+  "timeline": [
+   {
+    "at": "2026-10-06T14:43:51Z",
+    "event": "Claude pushes request MSG-20261006T144339Z-claude-d7b5 (REQUEST, diagnostic, nonce 526ee46d7a7f2bde) to Bridge main",
+    "commit": "a2f0ee6a452fce940c3a331d4b41d80cff8fc1b6",
+    "ci": "bridge-verify 37481417814 success; ingress-chatgpt 37481418519 success"
+   },
+   {
+    "at": "2026-10-06T14:44:03Z",
+    "event": "ingress workflow rings once: doorbell e126e49 by bridge-ingress[bot] (GITHUB_TOKEN), seq 5, reason new, mainCommit a2f0ee6, ring [d7b5], attempt 1, nextDueAt 17:44:03Z; ingress-guard PASS",
+    "commit": "e126e49084dd47d9ac7472a49e4c57033d72f788"
+   },
+   {
+    "at": "2026-10-06T14:46:25Z",
+    "event": "ChatGPT writes MSG-20261006T144624Z-chatgpt-8e42 (RESPONSE) on Bridge main — ≈2 min 22 s after the ring, no other action by Claude in between",
+    "commit": "43baaa510337faea9048eb0be14b7bc15df52921",
+    "ci": "bridge-verify 37481775536 success; ingress-chatgpt 37481775511 success, no ring"
+   },
+   {
+    "at": "2026-10-06T14:49:23Z",
+    "event": "Claude validates from the Bridge and closes the thread (MSG-20261006T144923Z-claude-69b3, Bridge b6e539a)"
+   }
+  ],
+  "validation": {
+   "correlation": "PASS — inReplyTo = correlationId = MSG-20261006T144339Z-claude-d7b5; type RESPONSE pairs REQUEST; from chatgpt, to claude, authority advisory; validate VALID",
+   "writtenOnMain": "PASS — 43baaa5 on main adds exactly one file (the response); nothing on inbox/chatgpt, nothing on PR #1 (0 comments, 0 reviews, head still e126e49)",
+   "immutableR": "PASS — reported R a2f0ee6 / seq 5 = doorbell e126e49; nonce 526ee46d7a7f2bde reproduced (request read at R); response source = snapshot 000012-5a482e04032e, the snapshot named in CURRENT at R",
+   "controlIntegrity": "PASS — reported CURRENT@R (000012-5a482e04032e, 5a482e0, VERIFIED, PASS, 5/5, manifestSha256 4598b05…) and the four reported blob SHAs (README 30d9e7a, PROTOCOL 5230454, INGRESS 10edb14, schema 59fc2ad) equal git rev-parse at R and gitBlob in the manifest at R, recomputed by Claude",
+   "queueResolution": "PASS — pendingFor: none; write-check d7b5 → SKIP ALREADY_RESOLVED by 8e42; ingress-plan on the new main → ring false, nothing pending",
+   "noDuplicate": "PASS — one resolving reply; duplicateReplies: none",
+   "noLoop": "PASS — the response push ran ingress-chatgpt without ringing; inbox/chatgpt unchanged at e126e49; the CLOSED messages never ring",
+   "noUnauthorizedChanges": "PASS — bridge.mjs all: SYNC VERIFIED, provenance VERIFIED, CONTROL VERIFIED, MESSAGES VALID, APPEND_ONLY PASS over a2f0ee6..43baaa5",
+   "wonderpagesUntouched": "PASS — no commit on WonderPages by ChatGPT; gate G13 + drift.mjs: 382 application files byte-identical to 866a441, behaviour fingerprint unchanged",
+   "timestamps": "PASS — createdAt 14:46:24.863Z vs commit 14:46:25Z (no skew); after the parent (14:43:39Z)",
+   "noPaidApi": "PASS — ChatGPT subscription (Work task) + GITHUB_TOKEN only; no API key anywhere"
+  },
+  "verdict": "DECISION B LIVE PASS — autonomous wake on the ingress PR commit update and a valid ChatGPT-written response, validated from the Bridge",
+  "residual": [
+   "Attribution: the response commit is authored with the operator's GitHub identity (the ChatGPT connector), so the Bridge cannot cryptographically distinguish a Work run from an interactive ChatGPT session; autonomy is corroborated by the ≈2 min 22 s latency after the bot ring, the self-reported trigger (pull_request synchronize on PR #1) and the nonce read at R; the definitive record is the Work task run history in ChatGPT",
+   "Model / reasoning: not pinned at task level; the response reports unknown",
+   "Usage-limit / approval interruption: not observed live (covered by design and tests)",
+   "Retry path (backoff re-ring) not exercised live: the first ring was answered"
+  ]
+ },
+ "verifiedLive": [
+  "ChatGPT Work wakes on commit updates pushed by GITHUB_TOKEN (bridge-ingress[bot]) on PR #1 — liveE2E",
+  "The ChatGPT connector reports git blob SHAs at an explicit commit ref (INGRESS.md step 4) — liveE2E controlIntegrity"
+ ]
 }
