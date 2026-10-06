@@ -30,7 +30,7 @@ const SEAL_EXCLUDED = new Set([FILES.seal, FILES.sealLog]);
 const BRIDGE_NAME = 'wonderpages.agent-bridge';
 const ISOLATION_ALLOWED = ['CLAUDE.md', 'brain/**', '.github/workflows/bridge-sync.yml'];
 /** Paths cited in brain documents that are NOT in this repository by design: Agent Bridge paths and ignored local directories. */
-const EXTERNAL_PREFIXES = ['mirror/', 'exchange/', 'audit/', 'schemas/', 'tools/bridge.mjs', 'data/', 'node_modules'];
+const EXTERNAL_PREFIXES = ['mirror/', 'exchange/', 'audit/', 'schemas/', 'ingress/', 'tools/bridge.mjs', 'data/', 'node_modules'];
 
 /* ------------------------------------------------------------------ derived indexes (from canonical sources) */
 
