@@ -9,24 +9,34 @@
    "gitBlob": "a64b7726f4e9aa38f392f17e924cdbafe0242560"
   },
   {
+   "path": ".github/workflows/ingress-claude.yml",
+   "sha256": "b1de6a9383a5278f0ec7fb6780b30e8d33efe909743778df8d3e41d9715c2ea5",
+   "gitBlob": "628484e6ed4a0c556ae76d0acbdbc01ef16fca7f"
+  },
+  {
    "path": ".github/workflows/verify.yml",
-   "sha256": "3ba61fef7922a951ed618f06d5dd750ede71c8fbd86047f8d81781405198187d",
-   "gitBlob": "f8a71a6a4a05927ceed5e426ab41ac3104a6644e"
+   "sha256": "5da89c0c3c344e87e9fc37da675d8fb601fed577060e85f642f4db737eda07f8",
+   "gitBlob": "442f13523cbc69ec089dad15315b15d2baef7356"
+  },
+  {
+   "path": "CLAUDE-INGRESS.md",
+   "sha256": "a9a2b5724d1d60dfb947be7bcf0e22fda7cf146e5dd5e025f009cc400a3a71b5",
+   "gitBlob": "e27a51d9a9b7718c37c5f457691c9d50810b0f27"
   },
   {
    "path": "INGRESS.md",
-   "sha256": "d352114af50c64b34e780f0303c8448cee4d78def2fada7c8d3027d589c17fef",
-   "gitBlob": "10edb1434c56ba69ca41489f5792268772045ba3"
+   "sha256": "790a412580b5f47046550f6d4bce2502513ac88483f6d94b315c69a5a2fd6454",
+   "gitBlob": "5d391c5a9287d07a7a701ea5aff7a26ce3a805ab"
   },
   {
    "path": "PROTOCOL.md",
-   "sha256": "03489777e7c134dba61147d4a9b52efdfc9fec54a2859b3af0af2273019eb402",
-   "gitBlob": "a0e736cfa981884614915022fc7e78612e55dd20"
+   "sha256": "684a892488bc68aa3bb6f42240eaa5d8289a76df68823a884f71665bac4f715c",
+   "gitBlob": "37e7cba9b0c87116208badab01f7a3b7e3237a64"
   },
   {
    "path": "README.md",
-   "sha256": "d5bdf33a30dafda871da23e5fa5853aa548fcfdaf6414cfaf3a16de82dcb23fb",
-   "gitBlob": "d263d7f95318adc2f3b1702f0c1307cc0f7573b3"
+   "sha256": "5d0ba7d1da55d384b917c0d509740e7fa6130e439447c8303b7fdf7934e50c3e",
+   "gitBlob": "baa271fd77c8db218aa265318ac0d6fea7b62431"
   },
   {
    "path": "audit/README.md",
@@ -50,13 +60,13 @@
   },
   {
    "path": "tools/bridge.mjs",
-   "sha256": "9dbc77110365f18582e01ae3f096eb9185bbb507603836943470fadf2a0ecdf2",
-   "gitBlob": "46a40ad6a4ddd96ea7e3b1218b0d2c1f7e5f9889"
+   "sha256": "e1ade853516eabff92150ae1660cd0745d46fdadee090835702e79c0051d4186",
+   "gitBlob": "37c6fc478ad98edfd3099299ae392bc2960405cb"
   },
   {
    "path": "tools/test.mjs",
-   "sha256": "110caf706d5f130d3057ec37e7459151139809ea8e2e5afc785c882f2902ae6a",
-   "gitBlob": "f07283624cd0f7b126dca5edc20f6f3ddeb13078"
+   "sha256": "40035d724e984a57d26009880d370fabf3641bdbe26eee0ed054ccc5ab58bd2f",
+   "gitBlob": "6cf1f744857352e30b0f4ce372e295561eb0c9ae"
   }
  ]
 }

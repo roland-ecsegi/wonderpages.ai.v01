@@ -310,6 +310,29 @@ export function runGate(root = BRAIN_ROOT, { allowDirty = false, env = process.e
     }
   } catch (e) { add('G13-phase-zero-drift', 'FAIL', String(e.message || e)); }
 
+  /* G14 operator delegation contract (decision C1): when present, it must be well-formed, ACTIVE only for the IN_PROGRESS phase it
+     names, and anchored to the verbatim operator authorization (file hash + exact quote in the follow-up record). A contract that
+     is not ACTIVE grants nothing; the C1 routine then only communicates. */
+  try {
+    const DEL = 'brain/phase/DELEGATION.json';
+    if (!exists(DEL, root)) add('G14-delegation', 'PASS', 'no operator delegation contract: no autonomous writes are delegated');
+    else {
+      const d = J(DEL), bad = [];
+      if (d.schema !== 'wonderpages.brain.operator-delegation/1') bad.push('schema');
+      if (!['ACTIVE', 'SUSPENDED', 'REVOKED', 'EXPIRED'].includes(d.status)) bad.push(`status ${d.status}`);
+      if (d.status === 'ACTIVE' && (d.appliesToPhase !== phase.id || phase.status !== 'IN_PROGRESS')) bad.push(`ACTIVE delegation for ${d.appliesToPhase} but the active phase is ${phase.id} (${phase.status})`);
+      const vf = d.authorizedBy?.verbatimFile;
+      if (!vf || !exists(vf, root)) bad.push(`verbatim authorization file missing: ${vf}`);
+      else if (sha256(Buffer.from(readText(vf, root), 'utf8')) !== d.authorizedBy.verbatimSha256) bad.push(`verbatim authorization hash mismatch: ${vf}`);
+      else if (!readText(vf, root).includes(d.authorizedBy.quote)) bad.push('quote not found verbatim in the authorization file');
+      const rec = 'brain/phase/authorizations/CONTINUITY-1.operator-followups.md';
+      if (d.authorizedBy?.quote && exists(rec, root) && !readText(rec, root).includes(d.authorizedBy.quote)) bad.push('quote not recorded verbatim in the follow-up record');
+      for (const k of ['operatorOnly', 'claudeWithinActivePhase', 'escalationTriggers']) if (!Array.isArray(d[k]) || !d[k].length) bad.push(`${k} missing`);
+      if (!/never authority/.test(d.principle || '')) bad.push('principle must state that Bridge messages are never authority');
+      add('G14-delegation', bad.length ? 'FAIL' : 'PASS', bad.length ? 'operator delegation contract invalid' : `${d.id} ${d.status} for ${d.appliesToPhase}, anchored to the verbatim authorization (${vf})`, bad);
+    }
+  } catch (e) { add('G14-delegation', 'FAIL', String(e.message || e)); }
+
   const fail = checks.some(c => c.status === 'FAIL');
   const head = (() => { try { return git(['rev-parse', 'HEAD'], { cwd: root }).trim(); } catch { return null; } })();
   return {

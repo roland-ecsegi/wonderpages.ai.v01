@@ -6,7 +6,7 @@ critical claim to an exact anchor, and lets a tool prove that the pointers still
 
 **CHAT IS TRANSIENT. REPOSITORY IS CANONICAL.** Start every session with `node brain/tools/brain.mjs gate` (see `/CLAUDE.md`).
 
-**NEXT_AUTHORIZED_STEP:** `OPERATOR-REVIEW-CONTINUITY-1` (canonical: `brain/phase/ACTIVE-PHASE.json`)
+**NEXT_AUTHORIZED_STEP:** `C1-BUILD-LIVE-TEST-COLD-RESTART-CLOSURE` (canonical: `brain/phase/ACTIVE-PHASE.json`)
 
 ## Layout
 
@@ -36,6 +36,11 @@ critical claim to an exact anchor, and lets a tool prove that the pointers still
 | `brain/evidence/DECISION-B-INGRESS.json` | Evidence for operator decision B (ChatGPT ingress): live ring / no-ring checks, independence, no paid API | evidence |
 | `brain/evidence/DECISION-C0-FEASIBILITY.md` | Decision C0 feasibility report: subscription-only Claude wake-up from GitHub (routines vs GitHub Actions), model/effort, limits, security, minimal live-test design | evidence |
 | `brain/evidence/DECISION-C0-LIVE.md` | Decision C0 live test: isolated Bridge ingress PR, exact routine configuration, dry run, evidence and verdict rules | evidence |
+| `brain/evidence/DECISION-C1.md` | Decision C1: durable ChatGPT → Claude channel (one new ingress PR per wake → Claude Code routine), guarantees, tests, live evidence | evidence |
+| `brain/phase/DELEGATION.json` | Operator Delegation Contract (operator / Claude / ChatGPT authority; what a C1 routine may do), checked by gate G14 | canonical |
+| `brain/phase/authorizations/CONTINUITY-1.operator-authorization-C1.txt` | Verbatim operator authorization #13 (C1, cold restart, CONTINUITY-1 closure) | canonical |
+| `brain/ingress/CLAUDE-ROUTINE-PROMPT.txt` | Fixed bootstrap instruction of the C1 routine "WonderPages Claude ingress" (entered verbatim in the routine UI) | canonical |
+| `brain/tools/c1.mjs` | C1 bootstrap / recheck / scope / authority tool run by the routine from the WonderPages canon | tool |
 | `brain/evidence/C0-ROUTINE-PROMPT.txt` | Fixed bootstrap instruction entered verbatim into the C0 routine (hash recorded in DECISION-C0-LIVE.md) | evidence |
 | `brain/evidence/CONTINUITY-1-ACCEPTANCE.json` | Exit evidence of CONTINUITY-1: zero drift, 428/428, self-tests, CI, fresh-session 27/27, Bridge | evidence |
 | `brain/continuity/` | Fresh-session continuity questionnaire, grader and recorded results | test |

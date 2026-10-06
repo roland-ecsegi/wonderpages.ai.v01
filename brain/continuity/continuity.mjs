@@ -11,7 +11,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { BRAIN_ROOT, readText, readJSON, readJSONL, writeJSON } from '../tools/lib.mjs';
+import { BRAIN_ROOT, readText, readJSON, readJSONL, writeJSON, git } from '../tools/lib.mjs';
 import { runGate } from '../tools/brain.mjs';
 
 const must = (re, t, what) => { const m = t.match(re); if (!m) throw new Error(`key derivation failed: ${what}`); return m; };
@@ -50,10 +50,14 @@ export function deriveKey(root = BRAIN_ROOT) {
     Q21: phase.nextAuthorizedStep.id,
     Q22: must(/^3\. (.+)$/m, sec('## 21. Ordinea canonică', '## 22. '), 'order step 3')[1].trim(),
     Q23: Number(must(/⇒ ≥ (\d+) de oportunități/, closure, 'P1 n')[1]),
-    Q24: !/Agent Bridge → WonderPages automat este INTERZIS/.test(auth),
+    Q24: !/Agent Bridge → WonderPages automat este INTERZIS/.test(auth) && !/Bridge messages[^.]*never authority/.test(readJSON('brain/phase/DELEGATION.json', root).principle),
     Q25: Number(must(/export const EVALUATOR_VERSION = (\d+)/, readText('server/quality/evaluation.js', root), 'evaluator')[1]),
     Q26: [...stopList.matchAll(/^\* (.+?);?$/gm)].map(m => m[1].replace(/[.;]$/, '').trim()),
-    Q27: runGate(root).CONTEXT_INTEGRITY
+    Q27: runGate(root).CONTEXT_INTEGRITY,
+    Q28: 'brain/phase/DELEGATION.json',
+    Q29: !/never authority/.test(readJSON('brain/phase/DELEGATION.json', root).principle),
+    Q30: !/otherwise Claude may only communicate[^.]*must not write WonderPages/.test(readJSON('brain/phase/DELEGATION.json', root).principle),
+    Q31: git(['rev-parse', 'HEAD'], { cwd: root }).trim()
   };
 }
 

@@ -90,6 +90,24 @@ try {
     assert.equal(k.Q27, 'PASS'); assert.equal(node('brain/continuity/continuity.mjs', 'grade', kf).status, 0);
     fs.writeFileSync(kf, JSON.stringify({ ...k, Q10: 'AUTHORIZED' })); assert.equal(node('brain/continuity/continuity.mjs', 'grade', kf).status, 1);
   });
+  t('G14 delegation: the quote must stay verbatim in the follow-up record (tampering → FAIL)', () => { edit('brain/phase/authorizations/CONTINUITY-1.operator-followups.md', s => s.replace('Bridge-ul și ChatGPT nu pot crea autoritate nouă', 'Bridge-ul și ChatGPT pot crea autoritate')); commit('tamper'); assert.ok(failed(gate(), 'G14')); });
+  t('G14 delegation: an ACTIVE contract for a phase that is not the IN_PROGRESS one → FAIL', () => { edit('brain/phase/DELEGATION.json', s => s.replace('"appliesToPhase": "CONTINUITY-1"', '"appliesToPhase": "RC1-SOMETHING"')); commit('x'); assert.ok(failed(gate(), 'G14')); });
+  t('C1 authority: a non-ACTIVE delegation or a phase not IN_PROGRESS grants no WonderPages writes', () => {
+    const auth = () => JSON.parse(node('brain/tools/c1.mjs', 'authority').stdout);
+    assert.equal(auth().writesAllowed, true);
+    edit('brain/phase/DELEGATION.json', s => s.replace('"status": "ACTIVE"', '"status": "SUSPENDED"')); assert.equal(auth().writesAllowed, false); reset();
+    edit('brain/phase/ACTIVE-PHASE.json', s => s.replace('"status": "IN_PROGRESS"', '"status": "COMPLETE"')); assert.equal(auth().writesAllowed, false);
+  });
+  t('C1 scope: a change outside the active writeScope is reported, inside is not', () => {
+    const head = git('rev-parse', 'HEAD');
+    edit('brain/README.md', s => s + '\n'); assert.equal(node('brain/tools/c1.mjs', 'scope', `--since=${head}`).status, 0);
+    edit('server/quality/evaluation.js', s => s + '\n// x\n'); const r = node('brain/tools/c1.mjs', 'scope', `--since=${head}`); assert.equal(r.status, 1); assert.match(r.stdout, /server\/quality\/evaluation.js/);
+  });
+  t('C1 bootstrap fails closed without a valid Bridge clone and with a credential variable present', () => {
+    const r1 = node('brain/tools/c1.mjs', 'bootstrap', `--bridge=${tmp}`, '--no-fetch'); assert.equal(r1.status, 1); assert.match(r1.stdout, /"repository"|"subscription-only"/);
+    const r3 = spawnSync(process.execPath, ['brain/tools/c1.mjs', 'bootstrap', `--bridge=${tmp}`, '--no-fetch'], { cwd: C, encoding: 'utf8', env: { ...process.env, ANTHROPIC_API_KEY: 'x' } });
+    assert.equal(r3.status, 1); assert.match(r3.stdout, /credential variable present \(ANTHROPIC_API_KEY\)/);
+  });
   t('application code does not import the brain', () => { const r = sh(C, 'git', 'grep', '-l', '-E', "from ['\"][./]*brain/|require\\(['\"][./]*brain/", '--', 'server', 'public', 'scripts', 'tests'); assert.equal(r.stdout.trim(), ''); });
   console.log(`\n${passed} brain self-tests passed`);
 } catch (e) { console.error('✖ ' + (e.stack || e)); process.exitCode = 1; }

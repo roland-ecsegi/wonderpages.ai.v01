@@ -32,6 +32,21 @@ node brain/tests/run.mjs                     # brain self-tests, including the n
 A review note is a statement of responsibility ("checked: journal row P8-T05 unchanged, state unchanged"), not a formality.
 Never reseal to silence a contradiction. Fix the state or the claim, or report the contradiction to the operator.
 
+## 2a. Paired publication of Bridge control changes (also for the C1 routine)
+
+Bridge control files (`tools/`, `schemas/`, `.github/`, `README.md`, `PROTOCOL.md`, `INGRESS.md`, `CLAUDE-INGRESS.md`,
+`audit/README.md`, `exchange/QUARANTINE.json`) are pinned by `brain/manifest/BRIDGE-CONTROL.json`. Every Bridge commit must stay
+control-consistent, so a change is published in this order:
+
+1. Change the Bridge control files in a local Bridge commit with the trailer `Bridge-Control: claude`, and run `node tools/test.mjs`.
+   Do not push.
+2. In WonderPages, run `node brain/tools/bridge-export.mjs control --bridge=<Bridge clone>` to regenerate the manifest, update the
+   evidence, reseal, run the gate (PASS), commit with `[skip ci]` in the subject, and push.
+3. Run `node brain/tools/bridge-export.mjs export --bridge=<Bridge clone> --commit=<that WonderPages commit> --mode=manual`. Commit
+   `mirror/` with the trailers `Bridge-Sync: <snapshot>` and `Source-Commit: <full sha>`. Run `node tools/bridge.mjs all` (all
+   VERIFIED / VALID / PASS), then push the control commit and the snapshot commit to Bridge `main` together, in one push.
+4. Dispatch `brain-gate` for the `[skip ci]` WonderPages commit, and check `bridge-verify` on Bridge `main`.
+
 ## 3. Phase transitions (only the operator can open a phase)
 
 1. The operator authorizes a phase explicitly. Store the instruction **verbatim** as

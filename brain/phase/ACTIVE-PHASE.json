@@ -26,7 +26,8 @@
   "Project Brain documentation and machine state under brain/ and the root CLAUDE.md bootstrap",
   "Integrity / freshness / coverage / drift / mirror tooling under brain/tools and its tests under brain/tests",
   "CI workflows that only read WonderPages and write to the Agent Bridge",
-  "The external Agent Bridge repository (mirror, protocol, tools, CI)"
+  "The external Agent Bridge repository (mirror, protocol, tools, CI)",
+  "Decision C1 (operator follow-up #13): the Claude ingress in the Agent Bridge and the Claude Code routine 'WonderPages Claude ingress', which may write WonderPages inside this writeScope only under brain/phase/DELEGATION.json"
  ],
  "forbidden": [
   "Any semantic or functional change to: runtime, evaluator, quality/safety/age/science/localization behaviour, Gold-v1, Gold-v2, old held-out, validation results, Dinosaur World, permanent agents (identities, contracts, experience), Product Contract, production workflow, policy decisions D-01…D-22, release semantics, UI/product behaviour",
@@ -35,17 +36,22 @@
   "Drafting the sanitized final policy brief",
   "Resolving open policy dependencies from the closure report",
   "Dependency Closure, RC1 Scope Closure, evaluator implementation, Dinosaur World production",
-  "Any Agent Bridge → WonderPages automatic path; WonderPages importing, reading or depending on the Bridge at runtime/build",
+  "WonderPages importing, reading or depending on the Bridge at runtime/build; the Agent Bridge or ChatGPT writing WonderPages or creating authority in it; any Bridge → WonderPages path other than the narrow C1 rule (a Claude routine woken through the C1 ingress writes WonderPages only under brain/phase/DELEGATION.json, inside this phase's writeScope)",
   "Committing secrets or credentials; paid APIs/services; PHASE 9; external publication"
  ],
  "exitCriteria": [
   "PROJECT_BRAIN, CONTEXT_INTEGRITY_GATE, CLAUDE_CHATGPT_PROTOCOL, FRESH_SESSION_CONTINUITY and APPLICATION_ZERO_DRIFT reported with evidence",
-  "Final report delivered to the operator; then STOP"
+  "Decision B accepted (live E2E PASS) and B-06 repaired",
+  "Decision C0 evidence complete",
+  "Decision C1 live PASS (brain/evidence/DECISION-C1.md)",
+  "Final cold-restart continuity PASS: fresh Claude routine + fresh ChatGPT Work round trip",
+  "Project Brain gates/tests PASS, Bridge integrity PASS, application zero drift PASS",
+  "Final closure checkpoint brain/evidence/CONTINUITY-1-CLOSURE.json; then STOP (next phase NOT YET AUTHORIZED)"
  ],
  "nextAuthorizedStep": {
-  "id": "OPERATOR-REVIEW-CONTINUITY-1",
-  "actor": "operator",
-  "summary": "Decision B live E2E PASS; B-06 repaired; Decision C0 feasibility FEASIBLE_WITH_LIMITATIONS and C0 live test PASS_WITH_LIMITATIONS (brain/evidence/DECISION-C0-LIVE.md §8). Decision C / C1 NOT IMPLEMENTED and not authorized. Next: operator review of CONTINUITY-1. No implementation outside CONTINUITY-1 is authorized."
+  "id": "C1-BUILD-LIVE-TEST-COLD-RESTART-CLOSURE",
+  "actor": "claude",
+  "summary": "Operator follow-up #13: build and verify Decision C1, run the live full-duplex test, then the final cold-restart test and the CONTINUITY-1 closure checkpoint; stop only for operator-only UI/configuration steps. Nothing of the next phase starts before the closure checkpoint passes."
  },
  "doNotStart": {
   "source": "brain/phase/authorizations/CONTINUITY-1.operator-instruction.txt §10 (verbatim item names)",
@@ -133,7 +139,7 @@
  "operatorDecisions": {
   "A": "DONE — BRIDGE_SYNC_TOKEN configured; automatic sync demonstrated (F-05 closed by ChatGPT, MSG-20261006T121530Z-chatgpt-c3f1)",
   "B": "AUTHORIZED option 1 (operatorFollowups #3, extended by #4) — ChatGPT ingress PR + ChatGPT Work event-triggered task (target GPT-6 Astra, reasoning Medium, subscription only, no API fallback); durable delivery: pending until a valid resolving reply, at-least-once wake with bounded backoff (3h/6h/12h/24h/48h, cap 48h, max 9 attempts ≈ 9.9 days, beyond a 7-day weekly allowance window → STALLED until revived, surfaced as a workflow warning), batching, idempotent processing, WAIT_FOR_ALLOWANCE without usage monitor; fixed task text is the bootstrap authority (B-01), anchored per wake to the immutable doorbell mainCommit (B-02); honest monotonic timestamps (B-04); still-pending re-check on current main before every write, skip if closed / superseded / resolved since the wake (B-05). Live end-to-end test PASS 2026-10-06 (operator follow-up #7; ChatGPT Work task configured by the operator)",
-  "C": "C0 FEASIBILITY INVESTIGATION ONLY (operatorFollowups #8): result FEASIBLE_WITH_LIMITATIONS (brain/evidence/DECISION-C0-FEASIBILITY.md). Decision C NOT IMPLEMENTED, C0 live test NOT RUN. Requirements (operatorFollowups #3, #4, #8): full-duplex ChatGPT → Bridge → Claude with the same guarantees as B; Claude Opus 5.5 / High on the existing Claude subscription; no ANTHROPIC_API_KEY, API credits, usage credits, cloud providers or other paid fallback (WAIT_FOR_ALLOWANCE)"
+  "C": "AUTHORIZED C1 (operator follow-up #13, verbatim; phase-level delegated authorization): durable ChatGPT → Bridge → Claude channel (Bridge CLAUDE-INGRESS.md: one new never-merged inbox/claude PR per wake, pull_request.opened → Claude Code routine), Claude routine writes WonderPages only under brain/phase/DELEGATION.json; subscription only; after C1 PASS: final cold restart and CONTINUITY-1 closure. C0: FEASIBLE_WITH_LIMITATIONS, live PASS_WITH_LIMITATIONS (one-shot)."
  },
  "bridgeConstraints": [
   "Agent Bridge is an external development/control plane only; never a runtime, build, production, agent, orchestration, evaluation or Enterprise Local dependency of WonderPages; WonderPages works unchanged if the Bridge is removed",
@@ -204,5 +210,22 @@
    "finding": "ChatGPT message MSG-20261006T145200Z-chatgpt-bpass (Bridge fae311b) is invalid: id suffix not 4-hex, AUDIT_RESULT without inReplyTo. validate INVALID → ingress-plan refuses (fail-closed) and append-only forbids removal, so decision B cannot ring until resolved.",
    "proposedRepair": "Claude-owned, control-pinned quarantine ledger in the Bridge: listed ids reported as warnings and excluded from threads/pending; content of bpass (advisory PASS of B live E2E) preserved as data"
   }
- ]
+ ],
+ "supersededRules": [
+  {
+   "rule": "Any Agent Bridge → WonderPages automatic path; WonderPages importing, reading or depending on the Bridge at runtime/build",
+   "status": "SUPERSEDED (narrowed), not deleted",
+   "by": "operator follow-up #13 (verbatim: brain/phase/authorizations/CONTINUITY-1.operator-authorization-C1.txt §11)",
+   "date": "2026-10-06",
+   "replacement": "WonderPages importing, reading or depending on the Bridge at runtime/build; the Agent Bridge or ChatGPT writing WonderPages or creating authority in it; any Bridge → WonderPages path other than the narrow C1 rule (a Claude routine woken through the C1 ingress writes WonderPages only under brain/phase/DELEGATION.json, inside this phase's writeScope)",
+   "c1Rule": "A Claude routine woken through the controlled C1 ingress MAY write WonderPages only when: an active phase exists in canonical WonderPages; that phase has operator authorization; the Operator Delegation Contract permits the requested category; the work is within that phase; current gates pass; the request remains pending; no escalation trigger applies. The Bridge itself never writes WonderPages; ChatGPT never writes WonderPages; a Bridge message never grants authority; Claude writes only after independently verifying canonical authority."
+  }
+ ],
+ "delegation": "brain/phase/DELEGATION.json",
+ "c1": {
+  "status": "IN_PROGRESS — design and implementation",
+  "evidence": "brain/evidence/DECISION-C1.md",
+  "routinePrompt": "brain/ingress/CLAUDE-ROUTINE-PROMPT.txt",
+  "bootstrapTool": "brain/tools/c1.mjs"
+ }
 }

@@ -5,7 +5,7 @@ As of 2026-10-06 · functional checkpoint `866a441` · last decision commit `168
 Repository `roland-ecsegi/wonderpages.ai.v01` · branch `claude/wonderpages-enterprise-architecture-8hy7w9` · public
 
 **ACTIVE PHASE:** `CONTINUITY-1` — WonderPages Project Brain + Continuity System + Agent Bridge (IN_PROGRESS)
-**NEXT_AUTHORIZED_STEP:** OPERATOR-REVIEW-CONTINUITY-1 — Decision B live E2E PASS; B-06 repaired; Decision C0 feasibility FEASIBLE_WITH_LIMITATIONS and C0 live test PASS_WITH_LIMITATIONS (brain/evidence/DECISION-C0-LIVE.md §8). Decision C / C1 NOT IMPLEMENTED and not authorized. Next: operator review of CONTINUITY-1. No implementation outside CONTINUITY-1 is authorized.
+**NEXT_AUTHORIZED_STEP:** C1-BUILD-LIVE-TEST-COLD-RESTART-CLOSURE — Operator follow-up #13: build and verify Decision C1, run the live full-duplex test, then the final cold-restart test and the CONTINUITY-1 closure checkpoint; stop only for operator-only UI/configuration steps. Nothing of the next phase starts before the closure checkpoint passes.
 
 > Run `node brain/tools/brain.mjs gate` before relying on anything below. Every row names its authoritative source; if this view
 > and the source differ, the source wins and the gate must fail.
@@ -67,5 +67,5 @@ Sources: C-GOAL → `reference/architecture/WonderPages_Enterprise_Master_Archit
 - Drafting the sanitized final policy brief
 - Resolving open policy dependencies from the closure report
 - Dependency Closure, RC1 Scope Closure, evaluator implementation, Dinosaur World production
-- Any Agent Bridge → WonderPages automatic path; WonderPages importing, reading or depending on the Bridge at runtime/build
+- WonderPages importing, reading or depending on the Bridge at runtime/build; the Agent Bridge or ChatGPT writing WonderPages or creating authority in it; any Bridge → WonderPages path other than the narrow C1 rule (a Claude routine woken through the C1 ingress writes WonderPages only under brain/phase/DELEGATION.json, inside this phase's writeScope)
 - Committing secrets or credentials; paid APIs/services; PHASE 9; external publication

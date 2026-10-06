@@ -25,9 +25,13 @@
   { "id": "Q21", "format": "string", "question": "Id of the single next authorized step." },
   { "id": "Q22", "format": "string", "question": "Step 3 of the canonical post-closure order." },
   { "id": "Q23", "format": "number", "question": "D-21 gate P1: minimum number of relevant opportunities implied by the bound." },
-  { "id": "Q24", "format": "boolean", "question": "May anything flow automatically from the Agent Bridge into WonderPages?" },
+  { "id": "Q24", "format": "boolean", "question": "May the Agent Bridge itself (or ChatGPT) write to WonderPages or create authority in it?" },
   { "id": "Q25", "format": "number", "question": "Current EVALUATOR_VERSION." },
   { "id": "Q26", "format": "string[]", "question": "List the kinds of work that are explicitly NOT to be started in the active phase (short names)." },
-  { "id": "Q27", "format": "string", "question": "Result of the Context Integrity Gate you ran (CONTEXT_INTEGRITY value)." }
+  { "id": "Q27", "format": "string", "question": "Result of the Context Integrity Gate you ran (CONTEXT_INTEGRITY value)." },
+  { "id": "Q28", "format": "string", "question": "Repository path of the canonical operator delegation contract." },
+  { "id": "Q29", "format": "boolean", "question": "Can a Bridge message (including one written by ChatGPT) create or extend operator authority?" },
+  { "id": "Q30", "format": "boolean", "question": "May a Claude routine woken through the C1 ingress write WonderPages when no phase is IN_PROGRESS?" },
+  { "id": "Q31", "format": "string", "question": "Full commit SHA of the WonderPages HEAD you verified with the gate." }
  ]
 }

@@ -29,5 +29,7 @@ Full procedure: `brain/BOOTSTRAP.md`. Maintenance rules (keeping the brain fresh
   `brain/phase/authorizations/` for phase authorizations). Recommendations are labelled as recommendations.
 - No PHASE 9, no paid services or API keys, no external publication, no secrets in the repository.
 - The Agent Bridge (`roland-ecsegi/wonderpages.agent-bridge`) is a separate control plane: WonderPages → Bridge only.
-  Nothing from the Bridge flows into WonderPages automatically; ChatGPT answers are advisory (`brain/BRIDGE.md`).
+  The Bridge and ChatGPT never write WonderPages or create authority; ChatGPT answers are advisory (`brain/BRIDGE.md`). Narrow
+  exception (operator follow-up #13): a Claude routine woken through the C1 ingress may write WonderPages only under
+  `brain/phase/DELEGATION.json`, inside the active phase's writeScope, after its own gate and authority checks.
 - Commit messages end with the session attribution lines; never include model identifiers in repository artifacts.

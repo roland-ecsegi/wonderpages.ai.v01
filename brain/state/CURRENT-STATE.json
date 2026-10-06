@@ -22,7 +22,7 @@
   ]
  },
  "activePhase": "CONTINUITY-1",
- "nextAuthorizedStep": "OPERATOR-REVIEW-CONTINUITY-1",
+ "nextAuthorizedStep": "C1-BUILD-LIVE-TEST-COLD-RESTART-CLOSURE",
  "phases": {
   "P1": "DONE",
   "P2": "DONE",

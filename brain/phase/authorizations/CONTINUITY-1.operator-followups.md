@@ -925,3 +925,20 @@ Recorded: the C0 one-shot probe is adapted to `Pull request: Opened` on a new LI
 > Decision C / C1 remains NOT IMPLEMENTED.
 
 Recorded: the operator created the routine (Opus 5.5; Pull request: Opened; head `inbox/claude-c0-live`; base `main`; environment `wonderpages-c0`; 0 runs; usage credits OFF; no Run now). Claude opened exactly one PR (Bridge #3) and then only observed. Result: `brain/evidence/DECISION-C0-LIVE.md` §8.
+
+## 2026-10-06 — #13 (Decision C1 + final cold restart + CONTINUITY-1 closure; phase-level delegated authorization)
+
+The complete operator message is stored verbatim in `brain/phase/authorizations/CONTINUITY-1.operator-authorization-C1.txt`
+(sha256 `b15a39af1fdbcce06cff55f47b10f5b4457d97b11f2eb46e55b34790452575c6`). The authorization it requires to be recorded verbatim:
+
+> Autorizez C1 și permit Claude Routine să scrie în WonderPages numai în limitele fazei active și ale autorității operatorului deja consemnate în Project Brain. Bridge-ul și ChatGPT nu pot crea autoritate nouă. Subscription-only, fără API/usage credits/paid fallback. După C1 PASS autorizez cold-restart final și închiderea CONTINUITY-1; nimic din faza următoare nu începe până la checkpoint-ul de închidere.
+
+Recorded:
+- **Authorized:** C1 design, implementation, live full-duplex testing and the repairs and retests it needs. After C1 PASS, also the
+  final cold-restart test and the CONTINUITY-1 closure checkpoint.
+- **Delegation contract:** `brain/phase/DELEGATION.json` (the operator / Claude / ChatGPT authority model of the message, §4).
+- **Superseded rule:** the CONTINUITY-1 prohibition of any automatic Agent Bridge → WonderPages path is replaced by the narrow C1
+  rule. The replacement is recorded in `ACTIVE-PHASE.supersededRules`, not silently deleted.
+- **Stop points:** only operator-only UI or configuration, credentials, paid services, decisions outside this authority,
+  destructive or high-impact actions, or unresolved normative ambiguity.
+- **Not started:** nothing of the next phase begins before the closure checkpoint exists and passes.
