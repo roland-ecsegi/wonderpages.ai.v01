@@ -1,0 +1,59 @@
+{
+ "schema": "wonderpages.c1.run-record/1",
+ "event": {
+  "repository": "roland-ecsegi/wonderpages.agent-bridge",
+  "event": "pull_request",
+  "action": "opened",
+  "pullRequest": 5,
+  "headBranch": "inbox/claude",
+  "baseBranch": "main",
+  "headSha": "ab216e8be3aa2872a5189d8be03d393678b4d839"
+ },
+ "order": {
+  "verdict": "PROCEED",
+  "at": "2026-10-06T20:29:00.547Z",
+  "H": "ab216e8be3aa2872a5189d8be03d393678b4d839",
+  "R": "f8311fbc0a2d3d981785c1e1e3af80b8d1abdb00",
+  "doorbellSeq": 3,
+  "doorbellReason": "new",
+  "pending": [
+   "MSG-20261006T202816Z-chatgpt-cd23"
+  ],
+  "mirrorSnapshot": "000023-2fce3a6661c0",
+  "wonderpagesHead": "22f339f1ce74c001f1565092425a782c8422b566",
+  "writesAllowed": true
+ },
+ "messages": [
+  {
+   "id": "MSG-20261006T202816Z-chatgpt-cd23",
+   "type": "RESPONSE",
+   "thread": "MSG-20261006T202603Z-claude-6432",
+   "class": "COMMUNICATE",
+   "recheck": {
+    "at": "2026-10-06T20:29:46.792Z",
+    "write": true
+   },
+   "result": "CLOSED — advisory cold-restart RESPONSE (ChatGPT Work, fresh session) received; all nine requested lines present in order and verified against the Bridge at its R 8faa395d01e8 (seq 9, snapshot 000023-2fce3a6661c0, control blobs MATCH, state, closed thread 7014, nonce 620b009b63a08cbe); STEP7/RUN/WRITES are ChatGPT self-reports kept as data; thread closed; no operator decision claimed",
+   "reply": "MSG-20261006T202953Z-claude-d342",
+   "commits": {
+    "bridge": [
+     "9534b6a"
+    ],
+    "wonderpages": []
+   }
+  }
+ ],
+ "runtime": {
+  "sessionUrl": "https://claude.ai/code/session_019NabkhQwNCzohv89P1EcDK",
+  "CLAUDE_EFFORT": "high",
+  "CLAUDE_CODE_EFFORT_LEVEL": "high",
+  "model": "UNKNOWN",
+  "credentialsPresent": {
+   "ANTHROPIC_API_KEY": false,
+   "ANTHROPIC_AUTH_TOKEN": false,
+   "CLAUDE_CODE_OAUTH_TOKEN": false
+  },
+  "utc": "2026-10-06T20:30:31Z"
+ },
+ "notes": "C1 routine woken automatically through the Claude ingress (doorbell PR #5 opened → routine) for the CONTINUITY-1 cold-restart ChatGPT response. Only the run record is written in WonderPages; the C1-BUILD-LIVE-TEST-COLD-RESTART-CLOSURE step itself is not closed by this run."
+}
