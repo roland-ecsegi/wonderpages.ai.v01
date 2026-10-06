@@ -3,6 +3,8 @@
 Faza: **GOLD-V2 OPERATOR POLICY DECISIONS**. Nu e Semantic Hardening #2, nu e adjudecarea Gold-v2, nu e validare, nu e acceptare.
 Lista deciziilor și dovezile inițiale sunt în `GOLD-V2-OPERATOR-DECISIONS.md`.
 
+**Faza e închisă:** toate cele 22 de decizii sunt înregistrate. Raportul de închidere: `GOLD-V2-POLICY-CLOSURE.md`.
+
 **Sursa de adevăr:** `evaluation/gold-v2-policy/decisions.jsonl`.
 - Fișierul e append-only: o linie pe decizie, înlănțuită prin hash.
 - `hash` = `canonicalHash` (`server/domain/canonical.js`) pe intrarea fără câmpul `hash`; `prevHash` = hash-ul intrării anterioare.
