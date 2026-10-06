@@ -1,8 +1,8 @@
 {
- "schema": "wonderpages.brain.decision-evidence/1",
+ "schema": "wonderpages.brain.decision-evidence/2",
  "decision": "B — option 1 (event-driven ChatGPT wake-up through a dedicated Agent Bridge ingress PR)",
  "authorizedBy": "brain/phase/authorizations/CONTINUITY-1.operator-followups.md #3 (verbatim, 2026-10-06)",
- "status": "BUILT AND VERIFIED ON THE GITHUB SIDE — END-TO-END TEST PENDING THE OPERATOR'S CHATGPT WORK CONFIGURATION",
+ "status": "BUILT WITH DURABLE DELIVERY AND B-01 REPAIRED; VERIFIED ON THE GITHUB SIDE — END-TO-END TEST PENDING THE OPERATOR'S CHATGPT WORK CONFIGURATION",
  "bridge": {
   "controlCommit": "425fda2 (ingress workflow, ingress plan/guard, INGRESS.md, README/PROTOCOL, 28 self-tests)",
   "publication": "2c3ede7 — mirror 000007-d8013443e53d published together with the control files (control-consistent at every commit)",
@@ -11,9 +11,29 @@
   "controlManifest": "brain/manifest/BRIDGE-CONTROL.json pins 10 control files incl. INGRESS.md and .github/workflows/ingress-chatgpt.yml"
  },
  "liveChecks": [
-  { "case": "CLOSED message to chatgpt must NOT ring", "message": "MSG-20261006T123042Z-claude-22ba (Bridge 2f6482c)", "run": "ingress-chatgpt 37463774703: verify PASS, plan ring=false, ring step skipped; inbox/chatgpt unchanged at d4bcd5c", "result": "PASS" },
-  { "case": "AUDIT_REQUEST to chatgpt must ring exactly once", "message": "MSG-20261006T123205Z-claude-fe9f (Bridge d0bd3a7)", "run": "doorbell commit 7ed53a1 by bridge-ingress[bot] with trailer Bridge-Ingress: chatgpt; PR #1 shows it as a new commit (commit-update activity); ingress-guard PASS", "result": "PASS" },
-  { "case": "ingress guard on push and pull_request events of inbox/chatgpt", "run": "bridge-verify 37463723165 (push) and 37463747170 (pull_request): success", "result": "PASS" }
+  {
+   "case": "CLOSED message to chatgpt must NOT ring",
+   "message": "MSG-20261006T123042Z-claude-22ba (Bridge 2f6482c)",
+   "run": "ingress-chatgpt 37463774703: verify PASS, plan ring=false, ring step skipped; inbox/chatgpt unchanged at d4bcd5c",
+   "result": "PASS"
+  },
+  {
+   "case": "AUDIT_REQUEST to chatgpt must ring exactly once",
+   "message": "MSG-20261006T123205Z-claude-fe9f (Bridge d0bd3a7)",
+   "run": "doorbell commit 7ed53a1 by bridge-ingress[bot] with trailer Bridge-Ingress: chatgpt; PR #1 shows it as a new commit (commit-update activity); ingress-guard PASS",
+   "result": "PASS"
+  },
+  {
+   "case": "ingress guard on push and pull_request events of inbox/chatgpt",
+   "run": "bridge-verify 37463723165 (push) and 37463747170 (pull_request): success",
+   "result": "PASS"
+  },
+  {
+   "case": "v2 doorbell, live (v1 migrated, resolved entry dropped)",
+   "message": "MSG-20261006T132133Z-claude-eed4 (re-audit request, Bridge 937a67b)",
+   "run": "ingress-chatgpt 37470173338 → commit 23e7697 by bridge-ingress[bot]: schema ingress-doorbell/2, seq 2, reason new, attempt 1, nextDueAt +3h; ingress-guard PASS",
+   "result": "PASS"
+  }
  ],
  "selfTests": "Bridge tools/test.mjs 28/28 (8 ingress cases: ring once, no double ring, no self-trigger by replies, ACK/CLOSED silent, ANSWER rings, operator messages silent, guard pass/fail)",
  "independence": {
@@ -31,7 +51,33 @@
   ]
  },
  "notYetVerified": [
-  "That ChatGPT Work receives commit updates pushed by GITHUB_TOKEN on PR #1 and wakes (the end-to-end test needs the operator's task configuration)",
-  "Whether the event-triggered task can be pinned to GPT-6 Astra / reasoning Medium on the operator's plan (operator observes the picker)"
- ]
+  "That ChatGPT Work receives commit updates pushed by GITHUB_TOKEN on PR #1 and wakes (needs the operator task configuration)",
+  "Whether the event-triggered task can be pinned to GPT-6 Astra / reasoning Medium on the operator plan",
+  "Behaviour of a real ChatGPT usage-limit / approval interruption (covered by design and tests; observed only during the end-to-end period)",
+  "A live scheduled retry (first due 2026-10-06T16:21Z if the re-audit request is still unanswered)"
+ ],
+ "extendedBy": "brain/phase/authorizations/CONTINUITY-1.operator-followups.md #4 (verbatim)",
+ "durableDelivery": {
+  "model": "pending = actionable message to chatgpt without a resolving reply (derived from the messages, never from the doorbell; ACK does not resolve a request); doorbell v2 records delivery attempts per message",
+  "atLeastOnce": "re-ring when the bounded backoff is due: 3h, 6h, 12h, 24h, cap 24h; max 8 attempts → STALLED (kept, visible), revived by any new message to chatgpt or workflow_dispatch revive",
+  "batching": "every ring carries all non-stalled pending messages",
+  "idempotency": "ChatGPT skips messages it already resolved; first resolving reply canonical, duplicates ignored and reported as validate warnings",
+  "limits": "no usage monitor, no reset-time guess: an exhausted allowance or unavailable recipient yields no reply and the backoff waits (WAIT_FOR_ALLOWANCE / WAIT_FOR_RESET); no paid fallback; task writes nothing partial",
+  "schedule": "cron 17 */3 * * * — writes nothing unless a retry is due (no aggressive polling)",
+  "bridgeCommit": "12115d0",
+  "tests": "Bridge tools/test.mjs 35/35 (15 ingress cases: ring, not-before-backoff, retry growth, STALLED after 8 + revive, new message revives and batches, batching, ACK does not resolve, paired reply / hand-off / CLOSED resolve, duplicates ignored, ANSWER resolved by ACK, ACK/CLOSED/operator silent, v1 migration, guard pass/fail)"
+ },
+ "b01": {
+  "finding": "MSG-20261006T124900Z-chatgpt-d84a (advisory): task prompt trusted live control docs before re-establishing integrity (TOCTOU)",
+  "repair": "INGRESS.md fixed task text = bootstrap authority: mirror VERIFIED + 5/5 → canonical mirror/current/brain/manifest/BRIDGE-CONTROL.json → git blob ids of README.md, PROTOCOL.md, INGRESS.md, schemas/message.schema.json, before any document; FAIL → exactly one BLOCKER per check+seq, nothing processed",
+  "manifest": "BRIDGE-CONTROL.json now sha256 + gitBlob for 10 control files (WonderPages 809a13f); Bridge verifyControl and Claude-side verify compare both"
+ },
+ "ci": {
+  "wonderpages": "brain-gate 37470117980 (dispatch) success on 809a13f",
+  "bridge": "bridge-verify 37470102523 (dfdf73c) and 37470173036 (937a67b) success; ingress-chatgpt 37470173338 success"
+ },
+ "decisionC": {
+  "status": "NOT AUTHORIZED / NOT IMPLEMENTED",
+  "requirements": "full-duplex ChatGPT → Bridge → Claude with the same guarantees (durable queue, at-least-once wake, idempotency, batching, bounded retry/backoff, anti-loop, fail-closed); Claude Opus 5.5 / High on the existing subscription, no separately billed API; investigate and demonstrate event-driven wake of Claude Code after B is accepted, report limitations and alternatives first"
+ }
 }
