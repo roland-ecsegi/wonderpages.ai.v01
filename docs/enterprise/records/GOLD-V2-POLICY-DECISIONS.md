@@ -33,6 +33,7 @@ explicită a operatorului. Etichetele cazurilor se dau la adjudecarea Gold-v2.
 | D-10 — verbul „a urât” (a urî), adjectivul „urât” | DECISĂ (neimplementată) | C (rafinată semantic) | `5172167615877ff4…` |
 | D-11 — frică cu recuperare imediată; frică ușoară | DECISĂ (neimplementată) | C (age-fit multi-factor, escaladare la severitate) | `e33f74238b246333…` |
 | D-12 — text scurt, dar abstract (3–4) | DECISĂ (neimplementată) | C (profil semantic de abstracție; escaladare doar la mismatch material) | `457abb2bcbb4a826…` |
+| D-13 — propoziții relative imbricate (5–6) | DECISĂ (neimplementată) | B (profil structural; consecința de publicare → D-14) | `017f76cb8488503f…` |
 
 ## D-01 — „Fără arme” pentru o armă reală
 
@@ -8016,3 +8017,920 @@ idiomurilor · reguli exhaustive de grounding vizual · toate formele de memorie
 - **D-12-DEP-VISUAL-GROUNDING-CRITERIA:** criterii testabile pentru grounding și abstracție vizuală.
 - **D-11-DEP-FINDING-SEVERITY-GATE-MODEL** (preluată, legată de D-14).
 - **D-12-DEP-ABSTRACTION-TEMPLATE-CONTAMINATION:** șablonul comun calibrare / set rezervat; setul adversarial independent viitor (D-20 / D-22).
+
+## D-13 — Propoziții relative imbricate la 5–6 ani
+
+### Declarația operatorului (cuvânt cu cuvânt)
+
+```text
+D-13 — DECIZIA OPERATORULUI
+
+Aleg Opțiunea B, rafinată: profil structural semantic al sintaxei, cu finding și severitate dependente de bandă, dar fără stabilirea acum a publishing consequence generale pentru sintaxă.
+
+Principiile centrale:
+
+SHORT SENTENCE ≠ SIMPLE SYNTAX.
+
+CLAUSE COUNT ≠ STRUCTURAL COMPLEXITY.
+
+CENTER EMBEDDING ≠ RIGHT-BRANCHING.
+
+VISUAL REFERENCE SUPPORT ≠ SYNTACTIC SIMPLIFICATION.
+
+Și:
+
+SYNTACTIC FINDING ≠ AUTOMATIC PUBLISHING REVIEW.
+
+D-13 stabilește proprietatea și severitatea. D-14 rămâne responsabilă pentru regula generală de escaladare a semnalelor age-fit consultative.
+
+Nu implementa acum.
+
+⸻
+
+1. Axa
+
+Complexitatea sintactică aparține în primul rând:
+
+AGE-FIT / DEVELOPMENTAL-LANGUAGE FIT.
+
+Trebuie separată de:
+
+* conceptual abstraction — D-12;
+* vocabulary difficulty;
+* semantic density;
+* referential ambiguity;
+* general prose quality;
+* localization fidelity.
+
+Aceste dimensiuni pot interacționa, dar nu trebuie confundate.
+
+⸻
+
+2. Numărul de cuvinte nu este suficient
+
+The crab that the fish who lives here likes is hiding.
+
+este relativ scurtă.
+
+Dar ascultătorul trebuie să păstreze deschisă relația:
+
+The crab ... is hiding
+
+în timp ce procesează:
+
+that the fish ... likes
+
+și în interiorul acesteia:
+
+who lives here.
+
+Dificultatea este structurală, nu lexicală.
+
+⸻
+
+3. Numărul de subordonate nu este suficient
+
+Două propoziții relative pot avea dificultăți foarte diferite în funcție de structură.
+
+Evaluatorul trebuie să reprezinte cel puțin:
+
+* clause type;
+* attachment;
+* nesting;
+* center embedding;
+* right branching;
+* dependency distance;
+* number of simultaneously open dependencies;
+* referent tracking;
+* pronoun/reference clarity;
+* coordination;
+* subordination;
+* interruption of main clause;
+* sentence boundary support;
+* repetition/scaffolding;
+* age band.
+
+Nu implementa prin simpla numărare who / that / which / care.
+
+⸻
+
+4. Center embedding
+
+Center embedding-ul întrerupe o structură înainte ca aceasta să fie închisă.
+
+Conceptual:
+
+MAIN [RELATIVE [RELATIVE] ... ] MAIN-CONTINUATION
+
+Acest lucru poate crește working-memory load chiar când toate substantivele și acțiunile sunt concrete.
+
+⸻
+
+5. Right branching
+
+Right branching/cumulative structure poate fi mai ușor de urmărit deoarece relațiile sunt închise mai progresiv.
+
+Dar NU stabilesc regula:
+
+RIGHT-BRANCHING = PASS.
+
+Un lanț poate deveni dificil prin:
+
+* lungime;
+* prea multe verigi;
+* referenți similari;
+* pronume;
+* schimbări de agent;
+* dependențe semantice;
+* cumulative working-memory load.
+
+Prin urmare:
+
+RIGHT-BRANCHING IS A STRUCTURAL FACTOR, NOT A BYPASS.
+
+⸻
+
+6. Structurile cumulative familiare
+
+Forme repetitive de tip:
+
+This is the X that...
+that...
+that...
+
+pot beneficia de:
+
+* predictibilitate;
+* ritm;
+* repetiție;
+* closure incremental;
+* suport vizual.
+
+Aceste proprietăți pot reduce severitatea.
+
+Nu înseamnă că orice lanț cumulativ este automat potrivit pentru orice bandă.
+
+⸻
+
+7. Coordonarea
+
+Exemplu:
+
+The crab digs, the fish swims, and the gull flies.
+
+nu trebuie echivalat cu trei niveluri de subordonare doar pentru că există mai multe predicate.
+
+Coordonarea poate avea un working-memory profile mult mai simplu.
+
+⸻
+
+8. Dependency distance
+
+Evaluatorul trebuie să poată reprezenta distanța dintre elementele care trebuie conectate.
+
+Exemplu:
+
+The crab, after the long sunny morning near the rocks where all the little fish were playing, finally hid.
+
+poate fi dificil fără multe relative imbricate.
+
+Prin urmare:
+
+number of relative markers ≠ dependency load.
+
+⸻
+
+9. Simultaneously open dependencies
+
+Mai important decât simplul număr de clauze este câte relații trebuie păstrate simultan înainte de rezolvare.
+
+Aceasta este una dintre proprietățile care diferențiază center embedding de unele structuri cumulative.
+
+Nu fixa acum un prag numeric.
+
+⸻
+
+10. syn-02 la 5–6
+
+Pentru cazul exact:
+
+The crab that the fish who lives here likes is hiding.
+
+la 5–6 ani:
+
+→ finding AGEFIT_CENTER_EMBEDDING sau echivalent;
+
+→ severitate ADVISORY / CONSULTATIVĂ;
+
+→ publishing consequence NU este decisă în D-13;
+
+→ se decide conform D-14.
+
+Lipsa actuală a semnalului este:
+
+coverage gap / implementation limitation, nu dovadă că structura este potrivită fără observații.
+
+⸻
+
+11. De ce nu este material la 5–6 în D-13
+
+În cazul exact:
+
+* propoziția este scurtă;
+* vocabularul este simplu;
+* conținutul este concret;
+* referenții sunt puțini;
+* nu există abstracție conceptuală semnificativă.
+
+Complexitatea structurală este reală, dar nu există suficiente dovezi pentru a declara acum un material mismatch WonderPages la 5–6.
+
+Prin urmare:
+
+→ advisory.
+
+Aceasta este o politică editorială WonderPages, nu o afirmație universală despre capacitatea lingvistică a tuturor copiilor de 5–6 ani.
+
+⸻
+
+12. syn-01 la 3–4
+
+Aceeași structură cu două niveluri de center embedding la 3–4:
+
+→ AGEFIT_CENTER_EMBEDDING;
+
+→ severitate MATERIALĂ.
+
+Eticheta/finding-ul existent rămâne coerent.
+
+Publishing consequence generală pentru sintaxă rămâne totuși D-14.
+
+Nu modifica Gold acum.
+
+⸻
+
+13. syn-03 la 7–8
+
+Aceeași structură cu două niveluri:
+
+→ PASS pe D-13 în forma furnizată.
+
+Aceasta nu creează:
+
+two embeddings at 7–8 = always PASS.
+
+Contează profilul complet.
+
+⸻
+
+14. Trei niveluri de center embedding la 7–8
+
+Exemplul furnizat cu trei niveluri:
+
+→ finding AGEFIT_CENTER_EMBEDDING;
+
+→ severitate MATERIALĂ în forma furnizată.
+
+Motivul este încărcarea structurală foarte ridicată și multiplele dependențe simultan deschise.
+
+Publishing consequence rămâne D-14.
+
+Nu implementa:
+
+age 7–8 = syntax bypass.
+
+⸻
+
+15. Center embedding pe un singur nivel
+
+Exemplu:
+
+The crab that the fish likes is hiding.
+
+Decizia:
+
+3–4
+→ finding consultativ;
+
+→ nu material doar prin existența unei singure relative.
+
+5–6
+→ PASS pe D-13 în forma furnizată.
+
+7–8
+→ PASS.
+
+Dacă propoziția adaugă:
+
+* dependență foarte lungă;
+* referenți multipli;
+* pronume ambigue;
+* abstracție;
+* vocabular dificil;
+
+profilul trebuie reevaluat.
+
+⸻
+
+16. Nu transforma adâncimea într-un tabel rigid
+
+Deciziile de mai sus NU înseamnă:
+
+1 level = advisory
+2 levels = material
+3 levels = material
+
+independent de context.
+
+Depth este un factor.
+
+Nu verdictul.
+
+Trebuie analizate și:
+
+* dependency distance;
+* open dependencies;
+* referent load;
+* lexical load;
+* semantic load;
+* scaffolding;
+* age band.
+
+⸻
+
+17. Ambiguitatea pronumelor este separată
+
+Exemplu:
+
+The crab told the fish that he was hungry.
+
+nu trebuie clasificat pur și simplu:
+
+AGEFIT_CENTER_EMBEDDING.
+
+Aici problema principală poate fi:
+
+REFERENTIAL AMBIGUITY / REFERENCE RESOLUTION.
+
+Păstrează o dimensiune separată.
+
+⸻
+
+18. Două efecte diferite ale referinței
+
+Separă conceptual:
+
+A. Referential ambiguity
+→ textul nu stabilește clar cine este referentul.
+
+B. Referential tracking load
+→ referentul este determinabil, dar copilul trebuie să urmărească multe entități/relații.
+
+Acestea nu sunt același defect.
+
+⸻
+
+19. Ambiguitatea reală poate depăși age-fit
+
+Dacă nici un cititor competent nu poate determina rezonabil cine este he, poate exista și o problemă generală de clarity/quality, nu doar age-fit.
+
+D-13 nu stabilește taxonomia generală de quality pentru această situație.
+
+Păstreaz-o ca dependență, fără a o forța în AGE_SYNTAX.
+
+⸻
+
+20. Visual support
+
+Da, D-13 trebuie să permită suport vizual/cross-modal.
+
+Dar cu o distincție importantă:
+
+IMAGE CAN SUPPORT REFERENT RESOLUTION.
+
+Nu:
+
+IMAGE REMOVES SYNTACTIC COMPLEXITY.
+
+⸻
+
+21. Exemplu visual support
+
+Text:
+
+The crab that the fish who lives here likes is hiding.
+
+Imaginea poate arăta foarte clar:
+
+* crabul;
+* peștele;
+* locul;
+* relația dintre ei.
+
+Aceasta poate reduce:
+
+* referent-tracking load;
+* ambiguity;
+* inferential load.
+
+Dar propoziția rămâne center-embedded.
+
+Finding-ul structural nu dispare automat.
+
+⸻
+
+22. Imaginea poate și complica
+
+Dacă textul are doi referenți, dar imaginea introduce:
+
+* trei pești similari;
+* două personaje cu aceeași poziție;
+* relații contradictorii;
+
+cross-modal load poate crește.
+
+Deci imaginea este evidence, nu atenuare automată.
+
+⸻
+
+23. Visual-only
+
+O imagine nu are „relative clauses” în sens sintactic.
+
+Prin urmare, D-13 nu trebuie să inventeze:
+
+visual center embedding.
+
+Dar imaginea poate avea:
+
+* referential ambiguity;
+* sequencing complexity;
+* visual relation load.
+
+Acestea pot interacționa cu textul prin cross-modal evaluation.
+
+⸻
+
+24. Repetiția
+
+Repetiția poate reduce dificultatea dacă oferă structură predictibilă.
+
+Exemplu:
+
+This is the crab...
+This is the fish...
+
+Dar repetarea unei propoziții greu center-embedded nu o simplifică automat.
+
+Separă:
+
+repetition/scaffolding
+
+de:
+
+structural complexity.
+
+⸻
+
+25. Sentence splitting
+
+Rescrierea:
+
+The fish lives here.
+It likes the crab.
+The crab is hiding.
+
+reduce semnificativ center embedding-ul.
+
+Aceasta este o reparație editorială validă.
+
+Dar D-13 nu obligă automat la această rescriere pentru orice finding consultativ.
+
+⸻
+
+26. EN / RO parity
+
+Paritatea trebuie să fie structurală și semantică.
+
+Nu compara mecanic:
+
+* word count;
+* număr de that;
+* număr de who;
+* număr de care;
+* număr de clitice.
+
+Româna și engleza pot exprima aceeași relație prin structuri diferite.
+
+Evaluatorul trebuie să compare:
+
+* dependency structure;
+* embedding;
+* referent tracking;
+* ambiguity;
+* working-memory demand.
+
+⸻
+
+27. Cliticele românești
+
+Construcții precum:
+
+pe care ... îl
+
+nu trebuie penalizate ca două relații doar pentru că există două marcaje de suprafață.
+
+Trebuie interpretată structura reală.
+
+⸻
+
+28. D-12 + D-13
+
+Abstracția și sintaxa își păstrează finding-urile proprii.
+
+Exemplu:
+
+* AGEFIT_CONCEPTUAL_ABSTRACTION;
+* AGEFIT_CENTER_EMBEDDING.
+
+Nu le contopi într-un singur defect.
+
+⸻
+
+29. Working-memory load agregat
+
+Dacă aceeași pagină conține:
+
+* abstracție conceptuală;
+* center embedding;
+* referenți multipli;
+* dependency distance mare;
+
+poate exista suplimentar:
+
+AGEFIT_WORKING_MEMORY_LOAD
+
+sau echivalent.
+
+Dar acesta trebuie să reprezinte efectul combinat.
+
+Nu trebuie să penalizeze din nou fiecare finding individual.
+
+Principiu:
+
+COMPOSITION ≠ DOUBLE COUNTING.
+
+⸻
+
+30. Nu calcula simplu suma finding-urilor
+
+Nu implementa:
+
+abstraction = 1
+syntax = 1
+reference = 1
+total >= 2 → REVIEW.
+
+Fără calibrare, aceasta ar fi doar un alt prag arbitrar.
+
+Trebuie păstrată relația dintre factori și evidence.
+
+⸻
+
+31. D-12 nu trebuie duplicată
+
+Dacă propoziția este dificilă numai pentru că exprimă o idee filozofică, D-13 nu trebuie să inventeze și finding sintactic.
+
+Dacă este:
+
+* abstractă;
+* și structural complexă;
+
+ambele findings sunt legitime.
+
+⸻
+
+32. Contractul „short sentences”
+
+short sentences din profilul 5–6 este evidence relevant.
+
+Dar „short” nu definește singur sintaxa.
+
+D-13 extinde interpretarea editorială:
+
+o propoziție poate respecta lungimea și totuși avea structură dificilă.
+
+Nu modifica acum contractul.
+
+⸻
+
+33. Right-branching — corecție față de recomandarea primită
+
+Nu aprob formularea:
+
+lanț cumulativ la dreapta → PASS pe toate benzile.
+
+Aprob:
+
+right-branching / cumulative structure is generally less structurally demanding than equivalent center embedding, all else equal.
+
+Verdictul rămâne dependent de profilul complet.
+
+⸻
+
+34. Exemplu cumulativ rezonabil
+
+Un lanț:
+
+* scurt;
+* repetitiv;
+* cu referenți concreți;
+* ilustrat;
+* cu closure incremental;
+
+poate fi PASS chiar la o bandă mică.
+
+Aceasta explică de ce actuala simplă numărare poate produce fals pozitive.
+
+⸻
+
+35. Exemplu cumulativ excesiv
+
+Un lanț foarte lung cu:
+
+* multe personaje;
+* pronume;
+* relații schimbătoare;
+* dependențe semantice;
+
+poate produce finding age-fit chiar dacă nu este center-embedded.
+
+Reason code-ul nu trebuie să fie neapărat CENTER_EMBEDDING.
+
+Poate exista:
+
+AGEFIT_LONG_DEPENDENCY
+sau
+AGEFIT_REFERENCE_TRACKING_LOAD.
+
+⸻
+
+36. Finding → severity
+
+D-13 adoptă aceeași separare arhitecturală:
+
+syntactic property → age-fit finding → severity
+
+dar se oprește înainte de regula generală:
+
+severity → publishing consequence.
+
+Acea relație pentru sintaxă rămâne D-14.
+
+⸻
+
+37. Rezultatele centrale
+
+v2c-age-syn-02 — 5–6
+
+→ finding AGEFIT_CENTER_EMBEDDING;
+
+→ severity ADVISORY;
+
+→ publishing consequence: DEFER TO D-14.
+
+⸻
+
+v2c-age-syn-01 — 3–4
+
+→ finding;
+
+→ severity MATERIAL;
+
+→ publishing consequence: DEFER TO D-14.
+
+⸻
+
+v2c-age-syn-03 — 7–8
+
+→ PASS pe D-13 pentru stimulul exact.
+
+⸻
+
+Center embedding 3 levels — 7–8
+
+→ finding;
+
+→ severity MATERIAL în exemplul furnizat;
+
+→ publishing consequence: DEFER TO D-14.
+
+⸻
+
+Center embedding 1 level
+
+3–4:
+→ advisory.
+
+5–6:
+→ PASS în cazul simplu furnizat.
+
+7–8:
+→ PASS.
+
+⸻
+
+38. Actualul evaluator
+
+Absența semnalului pentru syn-02 la 5–6 este:
+
+coverage gap, nu policy evidence.
+
+Actuala numărare de relative/subordonate:
+
+* nu reprezintă center embedding;
+* nu reprezintă dependency distance;
+* nu reprezintă open dependencies;
+* nu reprezintă referent tracking;
+* nu reprezintă ambiguity.
+
+Nu interpreta no signal ca validare.
+
+⸻
+
+39. Contaminarea de șablon
+
+Calibrarea și held-out folosesc aceeași familie structurală.
+
+Prin urmare, rezultatul held-out nu demonstrează generalizare suficientă pe sintaxă.
+
+Păstrează explicit limita L-7.
+
+Semantic Hardening #2 va avea nevoie ulterior de familii structurale mai diverse, fără a modifica acum setul înghețat.
+
+⸻
+
+40. Nu implementa prin parser superficial + threshold
+
+Semantic Hardening #2 nu trebuie să devină doar:
+
+count(relative_clauses)
+
+sau:
+
+nesting_depth >= N.
+
+Acestea pot fi evidence/features.
+
+Nu verdict.
+
+⸻
+
+41. Reparația trebuie să urmărească cauza
+
+Dacă problema este center embedding:
+
+→ split/restructure.
+
+Dacă problema este pronoun ambiguity:
+
+→ explicit referent.
+
+Dacă problema este long dependency:
+
+→ shorten/reorder.
+
+Dacă problema este cumulative reference load:
+
+→ reduce/repeat/scaffold.
+
+Nu folosi aceeași reparație pentru toate.
+
+⸻
+
+42. D-13 și QA vizual
+
+Da, D-13 se aplică cross-modal, dar nu în sensul că imaginea are sintaxă lingvistică.
+
+Textul produce finding-ul structural.
+
+Imaginea poate:
+
+* reduce reference load;
+* clarifica relațiile;
+* susține secvența;
+* sau crește ambiguitatea.
+
+Prin urmare, păstrează separat:
+
+text syntactic structure
+
+și
+
+visual/cross-modal referential support.
+
+⸻
+
+43. Nu schimbăm seturile
+
+Gold-v1 rămâne neschimbat.
+
+Gold-v2 rămâne neschimbat.
+
+Held-out rămâne înghețat.
+
+Nu adjudeca automat alte cazuri din această decizie.
+
+Nu retune evaluatorul.
+
+⸻
+
+44. Ce decide D-13
+
+D-13 stabilește că:
+
+complexitatea sintactică este independentă de simpla lungime.
+
+center embedding și right branching trebuie diferențiate.
+
+clause count nu este suficient.
+
+dependency distance și simultaneously open dependencies contează.
+
+reference tracking și referential ambiguity trebuie reprezentate separat.
+
+syn-02 la 5–6 are finding real, dar advisory.
+
+două niveluri la 3–4 sunt material age-fit finding.
+
+două niveluri în stimulul exact la 7–8 sunt PASS.
+
+trei niveluri pot fi material finding chiar la 7–8.
+
+visual support poate reduce referential load, dar nu șterge structura sintactică.
+
+right branching nu este bypass.
+
+abstracția și sintaxa se compun fără double counting.
+
+⸻
+
+45. Ce NU decide D-13
+
+D-13 NU decide:
+
+* publishing consequence generală pentru sintaxă;
+* D-14;
+* regula generală pentru advisories;
+* AGE_VOCABULARY;
+* temporal/causal age-fit;
+* semantic density;
+* taxonomia completă de prose quality;
+* praguri numerice;
+* un parser final;
+* toate structurile sintactice EN/RO;
+* taxonomia completă a ambiguity/reference;
+* validitatea empirică a evaluatorului.
+```
+
+### Separarea cerută
+
+| Strat | Conținut |
+|---|---|
+| **Decizie de politică** | Opțiunea B, rafinată: profil structural semantic. Finding și severitate pe bandă. **Consecința de publicare pentru sintaxă e amânată la D-14.** SHORT SENTENCE ≠ SIMPLE SYNTAX. CLAUSE COUNT ≠ STRUCTURAL COMPLEXITY. CENTER EMBEDDING ≠ RIGHT-BRANCHING. VISUAL REFERENCE SUPPORT ≠ SYNTACTIC SIMPLIFICATION. SYNTACTIC FINDING ≠ AUTOMATIC PUBLISHING REVIEW. |
+| **Lungimea propoziției / numărul de clauze / tipul clauzei** | Nu definesc sintaxa. Contează atașamentul și structura. |
+| **Coordonare / subordonare** | Coordonarea are un profil mai simplu. Subordonarea se evaluează după structură. |
+| **Center embedding / right branching / adâncimea** | Center embedding = factor major de încărcare. Right branching = factor, nu bypass (corecție: lanțul cumulativ nu e PASS automat pe toate benzile). Adâncimea = factor, nu tabel rigid. |
+| **Distanța de dependență / dependențe simultan deschise** | Pot fi mari fără multe relative. Fără prag numeric. |
+| **Număr de referenți / încărcare de urmărire / ambiguitatea pronumelor** | Urmărirea (referent determinabil, multe entități) ≠ ambiguitatea (referent nestabilit). Ambiguitatea e dimensiune separată și poate fi problemă de calitate (dependență). |
+| **Conținut semantic concret** | Nu anulează complexitatea structurală. |
+| **Finding de abstracție separat** | D-12 rămâne separat. Fără dublare: dacă dificultatea e doar filozofică, nu se inventează un finding sintactic. |
+| **Repetiție / scaffolding / granițe de propoziție** | Pot reduce dificultatea. Împărțirea în propoziții e o reparație validă, nu obligatorie. |
+| **Structura sintactică a textului / suport referențial vizual / relație cross-modal** | Textul produce finding-ul. Imaginea poate reduce încărcarea referențială sau o poate complica, dar nu șterge structura. Nu există „center embedding vizual”. |
+| **Memoria de lucru** | `AGEFIT_WORKING_MEMORY_LOAD` = efect combinat, reprezentat o singură dată (composition ≠ double counting; nu sumă cu prag). |
+| **Banda / finding / severitate** | syn-02 (5–6) advisory; syn-01 (3–4) material; syn-03 (7–8) PASS; trei niveluri la 7–8 material; un nivel: 3–4 advisory, 5–6 / 7–8 PASS. |
+| **Consecința de publicare** | **deferred to D-14** |
+| **Paritate structurală EN / RO** | Dependențe, imbricare, referenți, ambiguitate, memorie de lucru. Nu numărare de cuvinte sau marcaje („pe care … îl” nu e două relații). |
+| **Comportamentul implementării la momentul deciziei** (HEAD `7cc9248`, neschimbat) | `AGE_SYNTAX` = numărul de relative / subordonate, cu prag pe bandă. syn-02 la 5–6 = 2 < 3 → niciun semnal (**coverage gap**). Lanțul cumulativ → semnal. Trei niveluri la 7–8 → nimic. Dependențele, ambiguitatea și referenții nereprezentați. RO numărat ca EN. **Același șablon în calibrare și în setul rezervat (L-7).** **Comportamentul nu e politica; „no signal” nu e validare.** |
+| **Consecințe viitoare** (Semantic Hardening #2, neautorizat încă) | Profil structural ca features, nu verdict prin prag. Severitate semantică pe bandă. Ambiguitatea separată. Memoria de lucru combinată fără dublă numărare. Reparații după cauză. Paritate structurală. Familii structurale diverse. Consecința de publicare după D-14. |
+
+### Afectate (fără nicio modificare acum)
+
+- **Gold-v2:**
+  - syn-02 (5–6) e candidat finding advisory; consecința de publicare după D-14;
+  - syn-01 (3–4) e finding material (eticheta e coerentă);
+  - syn-03 (7–8) rămâne PASS.
+- **Setul rezervat (înghețat):** v2h-age-05 / -06 rămân neschimbate; trecerea lor nu arată generalizare (L-7).
+- **Gold-v1:** neschimbat.
+
+### Nu decide
+
+Consecința de publicare pentru sintaxă · D-14 · regula generală pentru advisories · `AGE_VOCABULARY` · age-fit temporal / cauzal ·
+densitatea semantică · taxonomia calității prozei · praguri numerice · un parser final · toate structurile EN / RO · taxonomia
+ambiguității / referinței · validitatea empirică.
+
+### Dependențe deschise
+
+- **D-13-DEP-SYNTAX-PUBLISHING-CONSEQUENCE** → D-14.
+- **D-13-DEP-REFERENCE-AMBIGUITY-TAXONOMY:** ambiguitatea și urmărirea referențială (inclusiv ca problemă de calitate).
+- **D-13-DEP-STRUCTURAL-FAMILY-DIVERSITY:** familii structurale diverse pentru testare (L-7; D-20 / D-22).
+- Legătura cu **D-12-DEP-ABSTRACTION-TAXONOMY** (compunerea în memoria de lucru).
