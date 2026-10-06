@@ -1,0 +1,339 @@
+{
+ "schema": "wonderpages.brain.continuity-result/1",
+ "FRESH_SESSION_CONTINUITY": "PASS",
+ "correct": 27,
+ "total": 27,
+ "rows": [
+  {
+   "q": "Q01",
+   "ok": true,
+   "expected": {
+    "name": "wonderpages-ai",
+    "version": "19.4.0"
+   },
+   "answered": {
+    "name": "wonderpages-ai",
+    "version": "19.4.0"
+   }
+  },
+  {
+   "q": "Q02",
+   "ok": true,
+   "expected": {
+    "volumes": 6,
+    "contentPagesPerBook": 12,
+    "ageBands": [
+     "3-4",
+     "5-6",
+     "7-8"
+    ]
+   },
+   "answered": {
+    "volumes": 6,
+    "contentPagesPerBook": 12,
+    "ageBands": [
+     "3-4",
+     "5-6",
+     "7-8"
+    ]
+   }
+  },
+  {
+   "q": "Q03",
+   "ok": true,
+   "expected": 18,
+   "answered": 18
+  },
+  {
+   "q": "Q04",
+   "ok": true,
+   "expected": [
+    "asistent",
+    "producator",
+    "director-creativ",
+    "arhitect-serie",
+    "pastrator-continuitate",
+    "scriitor",
+    "editor-critic",
+    "corector",
+    "traducator",
+    "director-artistic",
+    "inginer"
+   ],
+   "answered": [
+    "asistent",
+    "producator",
+    "director-creativ",
+    "arhitect-serie",
+    "pastrator-continuitate",
+    "scriitor",
+    "editor-critic",
+    "corector",
+    "traducator",
+    "director-artistic",
+    "inginer"
+   ]
+  },
+  {
+   "q": "Q05",
+   "ok": true,
+   "expected": {
+    "asistent": "haiku",
+    "inginer": "sonnet",
+    "producator": "haiku"
+   },
+   "answered": {
+    "asistent": "haiku",
+    "inginer": "sonnet",
+    "producator": "haiku"
+   }
+  },
+  {
+   "q": "Q06",
+   "ok": true,
+   "expected": {
+    "entries": 22,
+    "head16": "9854d40f4d891dd4"
+   },
+   "answered": {
+    "entries": 22,
+    "head16": "9854d40f4d891dd4"
+   }
+  },
+  {
+   "q": "Q07",
+   "ok": true,
+   "expected": "(d): P0–P9",
+   "answered": "(d): P0–P9"
+  },
+  {
+   "q": "Q08",
+   "ok": true,
+   "expected": "168905b",
+   "answered": "168905b"
+  },
+  {
+   "q": "Q09",
+   "ok": true,
+   "expected": "COMPLETE",
+   "answered": "COMPLETE"
+  },
+  {
+   "q": "Q10",
+   "ok": true,
+   "expected": "NOT AUTHORIZED / NOT STARTED",
+   "answered": "NOT AUTHORIZED / NOT STARTED"
+  },
+  {
+   "q": "Q11",
+   "ok": true,
+   "expected": {
+    "total": 226,
+    "calibration": 157,
+    "holdout": 69
+   },
+   "answered": {
+    "total": 226,
+    "calibration": 157,
+    "holdout": 69
+   }
+  },
+  {
+   "q": "Q12",
+   "ok": true,
+   "expected": 0,
+   "answered": 0
+  },
+  {
+   "q": "Q13",
+   "ok": true,
+   "expected": 44,
+   "answered": 44
+  },
+  {
+   "q": "Q14",
+   "ok": true,
+   "expected": false,
+   "answered": false
+  },
+  {
+   "q": "Q15",
+   "ok": true,
+   "expected": 30,
+   "answered": 30
+  },
+  {
+   "q": "Q16",
+   "ok": true,
+   "expected": true,
+   "answered": true
+  },
+  {
+   "q": "Q17",
+   "ok": true,
+   "expected": "BLOCKED",
+   "answered": "BLOCKED"
+  },
+  {
+   "q": "Q18",
+   "ok": true,
+   "expected": false,
+   "answered": false
+  },
+  {
+   "q": "Q19",
+   "ok": true,
+   "expected": false,
+   "answered": false
+  },
+  {
+   "q": "Q20",
+   "ok": true,
+   "expected": "CONTINUITY-1",
+   "answered": "CONTINUITY-1"
+  },
+  {
+   "q": "Q21",
+   "ok": true,
+   "expected": "OPERATOR-REVIEW-CONTINUITY-1",
+   "answered": "OPERATOR-REVIEW-CONTINUITY-1"
+  },
+  {
+   "q": "Q22",
+   "ok": true,
+   "expected": "Construirea și aprobarea sanitized normative policy brief.",
+   "answered": "Construirea și aprobarea sanitized normative policy brief."
+  },
+  {
+   "q": "Q23",
+   "ok": true,
+   "expected": 59,
+   "answered": 59
+  },
+  {
+   "q": "Q24",
+   "ok": true,
+   "expected": false,
+   "answered": false
+  },
+  {
+   "q": "Q25",
+   "ok": true,
+   "expected": 2,
+   "answered": 2
+  },
+  {
+   "q": "Q26",
+   "ok": true,
+   "expected": [
+    "Dependency Closure",
+    "RC1 Scope Closure",
+    "sanitized final policy brief",
+    "hidden acceptance set",
+    "Semantic Hardening #2",
+    "evaluator implementation",
+    "Dinosaur World production work"
+   ],
+   "answered": [
+    "Semantic Hardening #2",
+    "hidden acceptance cases",
+    "sanitized final policy brief",
+    "resolving open policy dependencies",
+    "Dependency Closure",
+    "RC1 Scope Closure",
+    "evaluator implementation",
+    "Dinosaur World production",
+    "semantic/functional changes to runtime, evaluator, Gold sets, agents, Product Contract, D-01…D-22, release, UI",
+    "Bridge → WonderPages automatic path",
+    "secrets",
+    "paid APIs/services",
+    "PHASE 9",
+    "external publication"
+   ]
+  },
+  {
+   "q": "Q27",
+   "ok": true,
+   "expected": "PASS",
+   "answered": "PASS"
+  }
+ ],
+ "answers": {
+  "Q01": {
+   "name": "wonderpages-ai",
+   "version": "19.4.0"
+  },
+  "Q02": {
+   "volumes": 6,
+   "contentPagesPerBook": 12,
+   "ageBands": [
+    "3-4",
+    "5-6",
+    "7-8"
+   ]
+  },
+  "Q03": 18,
+  "Q04": [
+   "asistent",
+   "producator",
+   "director-creativ",
+   "arhitect-serie",
+   "pastrator-continuitate",
+   "scriitor",
+   "editor-critic",
+   "corector",
+   "traducator",
+   "director-artistic",
+   "inginer"
+  ],
+  "Q05": {
+   "asistent": "haiku",
+   "inginer": "sonnet",
+   "producator": "haiku"
+  },
+  "Q06": {
+   "entries": 22,
+   "head16": "9854d40f4d891dd4"
+  },
+  "Q07": "(d): P0–P9",
+  "Q08": "168905b",
+  "Q09": "COMPLETE",
+  "Q10": "NOT AUTHORIZED / NOT STARTED",
+  "Q11": {
+   "total": 226,
+   "calibration": 157,
+   "holdout": 69
+  },
+  "Q12": 0,
+  "Q13": 44,
+  "Q14": false,
+  "Q15": 30,
+  "Q16": true,
+  "Q17": "BLOCKED",
+  "Q18": false,
+  "Q19": false,
+  "Q20": "CONTINUITY-1",
+  "Q21": "OPERATOR-REVIEW-CONTINUITY-1",
+  "Q22": "Construirea și aprobarea sanitized normative policy brief.",
+  "Q23": 59,
+  "Q24": false,
+  "Q25": 2,
+  "Q26": [
+   "Semantic Hardening #2",
+   "hidden acceptance cases",
+   "sanitized final policy brief",
+   "resolving open policy dependencies",
+   "Dependency Closure",
+   "RC1 Scope Closure",
+   "evaluator implementation",
+   "Dinosaur World production",
+   "semantic/functional changes to runtime, evaluator, Gold sets, agents, Product Contract, D-01…D-22, release, UI",
+   "Bridge → WonderPages automatic path",
+   "secrets",
+   "paid APIs/services",
+   "PHASE 9",
+   "external publication"
+  ],
+  "Q27": "PASS"
+ }
+}

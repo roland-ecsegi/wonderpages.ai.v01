@@ -1,0 +1,57 @@
+{
+ "schema": "wonderpages.brain.phase-acceptance/1",
+ "phase": "CONTINUITY-1",
+ "recordedAt": "2026-10-06T11:29:07.622Z",
+ "note": "Evidence of the CONTINUITY-1 exit criteria. Acceptance of the phase itself is the operator's decision (NEXT_AUTHORIZED_STEP OPERATOR-REVIEW-CONTINUITY-1).",
+ "applicationZeroDrift": {
+  "result": "PASS",
+  "baseline": "866a441",
+  "comparedAt": "2bc5d018e90cea1aa9c0deb95b50b013e1ddbd61",
+  "releaseSourceDigest": {
+   "files": 368,
+   "sha256": "1f7a651a469f0702421c63f7ff734739386a5287196880c2ce47946dd63d3c0a"
+  },
+  "protectedFiles": 382,
+  "behaviourDigest": "6ccf9b86e5231d21c76fa157a083d79fd83fd1c178a865222b0e9889571c28db",
+  "diffs": [],
+  "changedPathsSince866a441": "only CLAUDE.md, brain/**, .github/workflows/brain-gate.yml, .github/workflows/bridge-sync.yml"
+ },
+ "applicationTestSuite": {
+  "commit": "7f0e473",
+  "command": "BROWSER_PATH=/opt/pw-browsers/chromium node tests/run.mjs",
+  "tests": 428,
+  "pass": 428,
+  "fail": 0,
+  "baselineAt866a441": "428/428",
+  "note": "Later commits change only brain/ (proved by the drift comparison above)."
+ },
+ "brainSelfTests": {
+  "result": "22/22 PASS (local and in CI brain-gate run 2 on Node 24)",
+  "command": "node brain/tests/run.mjs"
+ },
+ "ci": {
+  "wonderpages": {
+   "brain-gate": "run 37455281663 success (7f0e473)",
+   "bridge-sync": "runs succeed and report PENDING_OPERATOR_SETUP (secret absent); write steps skipped"
+  },
+  "bridge": {
+   "bridge-verify": "run 37455161761 success (ebc351e): 16 tool self-tests, mirror integrity + provenance from GitHub, messages valid, append-only"
+  }
+ },
+ "freshSessionContinuity": {
+  "result": "PASS",
+  "score": "27/27",
+  "session": "session_01DBiyEsxg8keTN8vRnzpAVH (new cloud session, branch checkout at 7f0e473, no conversation history)",
+  "record": "brain/continuity/results/2026-10-06-fresh-session-01DBiyEsxg8keTN8vRnzpAVH.json",
+  "audit": "8 read-only tool calls; did not read or run the grader, results or brain tests; tree left clean",
+  "findingsApplied": "commit 2bc5d01"
+ },
+ "bridge": {
+  "repo": "roland-ecsegi/wonderpages.agent-bridge",
+  "firstSnapshot": "000001-8bee54600859",
+  "syncStatus": "VERIFIED (5/5)",
+  "provenance": "VERIFIED from both sides",
+  "syncMode": "manual; ci = PENDING_OPERATOR_SETUP (BRIDGE_SYNC_TOKEN)",
+  "firstThread": "MSG-20261006T111449Z-claude-8923 (AUDIT_REQUEST to chatgpt, OPEN)"
+ }
+}
