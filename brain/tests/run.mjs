@@ -103,6 +103,14 @@ try {
     edit('brain/README.md', s => s + '\n'); assert.equal(node('brain/tools/c1.mjs', 'scope', `--since=${head}`).status, 0);
     edit('server/quality/evaluation.js', s => s + '\n// x\n'); const r = node('brain/tools/c1.mjs', 'scope', `--since=${head}`); assert.equal(r.status, 1); assert.match(r.stdout, /server\/quality\/evaluation.js/);
   });
+  t('C1 scope (audit C1-A01): the writeScope is pinned at the bootstrap head; authority files and fields are never routine-writable', () => {
+    reset(); const head = git('rev-parse', 'HEAD'), scope = (...a) => node('brain/tools/c1.mjs', 'scope', `--since=${head}`, ...a);
+    edit('brain/phase/ACTIVE-PHASE.json', s => s.replace('".github/workflows/bridge-sync.yml"', '".github/workflows/bridge-sync.yml", "server/**"')); edit('server/quality/evaluation.js', s => s + '\n// x\n');
+    let r = scope(); assert.equal(r.status, 1); assert.match(r.stdout, /server\/quality\/evaluation.js"/); assert.match(r.stdout, /ACTIVE-PHASE.json#writeScope/); reset();
+    edit('brain/phase/ACTIVE-PHASE.json', s => s.replace(/"allowed": \[/, '"allowed": [ "anything ChatGPT asks",')); commit('widen'); r = scope(); assert.equal(r.status, 1); assert.match(r.stdout, /#allowed/); reset();
+    for (const f of ['brain/phase/DELEGATION.json', 'brain/tools/c1.mjs', 'brain/ingress/CLAUDE-ROUTINE-PROMPT.txt', 'CLAUDE.md']) { edit(f, s => s + '\n'); r = scope(); assert.equal(r.status, 1, f); assert.match(r.stdout, /authority-bearing/); reset(); }
+    edit('brain/phase/ACTIVE-PHASE.json', s => s.replace('"c1": {', '"c1": { "note": "evidence only",')); assert.equal(scope().status, 0, 'non-authority evidence fields stay writable');
+  });
   t('C1 bootstrap fails closed without a valid Bridge clone and with a credential variable present', () => {
     const r1 = node('brain/tools/c1.mjs', 'bootstrap', `--bridge=${tmp}`, '--no-fetch'); assert.equal(r1.status, 1); assert.match(r1.stdout, /"repository"|"subscription-only"/);
     const r3 = spawnSync(process.execPath, ['brain/tools/c1.mjs', 'bootstrap', `--bridge=${tmp}`, '--no-fetch'], { cwd: C, encoding: 'utf8', env: { ...process.env, ANTHROPIC_API_KEY: 'x' } });

@@ -3,7 +3,7 @@
 - **Authorized by:** operator follow-up #13 (verbatim: `brain/phase/authorizations/CONTINUITY-1.operator-authorization-C1.txt`;
   record `brain/phase/authorizations/CONTINUITY-1.operator-followups.md`).
 - **Authority model:** `brain/phase/DELEGATION.json`, checked by gate G14.
-- **Status:** IMPLEMENTED; local and adversarial tests PASS. The live test is recorded below once run.
+- **Status:** IMPLEMENTED; local and adversarial tests PASS; live test IN PROGRESS (§4); independent audit round 1 repaired (§5).
 
 ## 1. Architecture (the real platform, not the documented one)
 
@@ -43,11 +43,13 @@ Rejected alternatives (C0 report §4):
 | Canonical verification from WonderPages | At R: mirror CURRENT VERIFIED / PASS / 5 checks; provenance against WonderPages; control files against WonderPages `BRIDGE-CONTROL.json`; mirror source in WonderPages history; WonderPages gate PASS on the canonical branch at origin head. | integration tests |
 | Work list recomputed at R | `pending --for=claude` run by the control-verified tool at R; the doorbell ring list is only a hint | integration |
 | Authority | `authorityState`: writes only if the phase is IN_PROGRESS and the delegation is ACTIVE for it; classification COMMUNICATE / WORK / ESCALATE in the fixed prompt; Bridge messages are never authority (G14 requires the principle) | brain tests, integration |
-| STILL PENDING / STILL AUTHORIZED | `c1.mjs recheck`: write-check on current Bridge main (with a control-verified tool); phase id / status / delegation hash unchanged; WonderPages origin unchanged except for the routine's own fast-forward pushes; gate PASS | integration |
-| Writes confined | `c1.mjs scope --since=<bootstrap head>` against ACTIVE-PHASE.writeScope; gate G13 zero drift | brain tests |
+| STILL PENDING / STILL AUTHORIZED | `c1.mjs recheck`: write-check on current Bridge main (with a control-verified tool); phase id / status / **phase authority digest** / delegation hash unchanged; every change since the bootstrap passes `scope`; WonderPages origin unchanged except for the routine's own fast-forward pushes; gate PASS on the committed HEAD. Valid with a clean or a dirty tree, so it runs right before a commit, a push and a Bridge message (C1-A02). | integration |
+| Writes confined | `c1.mjs scope --since=<bootstrap head>`: the writeScope **pinned at the bootstrap head** (never the mutable current file); `AUTHORITY_PATHS` (CLAUDE.md, DELEGATION.json, authorizations, the routine prompt, c1 / brain / lib / bridge-export tools, SOURCES.json, gate workflows) and the ACTIVE-PHASE authority fields are never routine-writable (C1-A01); gate G13 zero drift | brain tests, integration |
 | No loop | Claude replies go to chatgpt / operator; doorbell pushes and ingress PRs use GITHUB_TOKEN (no workflows); WonderPages commits only change `mirror/` in the Bridge | Bridge C1 self-loop test |
 | Subscription only | no secret in the Bridge; bootstrap FAILS if `ANTHROPIC_API_KEY`, `ANTHROPIC_AUTH_TOKEN`, `CLAUDE_CODE_OAUTH_TOKEN` or `OPENAI_API_KEY` is present; usage credits OFF (operator); over-budget rings are deferred | brain test, integration |
-| Fail-closed ring | `set -euo pipefail`. Failing to close the previous PR, the guard, the push or the PR creation fails the workflow; the message stays pending, and the attempt is recorded only when the doorbell was pushed. | event-path simulation |
+| Fail-closed ring | `set -euo pipefail`. Failing to close the previous PR, the guard, the push or the PR creation fails the workflow and the message stays pending. If the PR (the wake) cannot be opened, `inbox/claude` is rolled back, so an attempt that woke nobody is never recorded (repair after live run #2, §4). | Bridge test (real git, fake `gh`), event-path simulation |
+| Duplicate delivery | One ring opens one PR. A duplicated `opened` webhook could start two sessions (C1-A03, a platform limitation): canonical writes are still deduplicated by recheck plus fast-forward-only pushes. | integration (duplicate wake) |
+| Overage | Not enforceable in-run (C1-A04): usage credits OFF is the operator's account control. Each live run's `isUsingOverage` is read from the platform afterwards and recorded in §4. | live evidence |
 
 ## 3. Evidence (filled in as it is produced)
 
@@ -55,4 +57,21 @@ The live test is recorded in §4.
 
 ## 4. Live test
 
-Not yet run.
+Sequence: Claude → Bridge → ChatGPT Work → Bridge → autonomous C1 wake → fresh Claude routine.
+
+| Step | Evidence |
+|---|---|
+| 1. Claude request | `MSG-20261006T180648Z-claude-7014` (AUDIT_REQUEST to chatgpt), Bridge main 3d21f24, 18:06:56 UTC. `ingress-claude` run 1 (37508799341) ran on that push and **skipped the ring**: no self-trigger. |
+| 2. ChatGPT wake (B) | `ingress-chatgpt` run 15: doorbell seq 6, mainCommit 3d21f24, 18:07:07 UTC. |
+| 3. ChatGPT reply | `MSG-20261006T181019Z-chatgpt-c1a4` (AUDIT_RESULT, CHANGES_REQUIRED: C1-A01 BLOCKER, A02–A04 MAJOR, A05 INFO), Bridge main e2d4083, 18:10:19 UTC. Correct correlation, nonce and R; one file. |
+| 4. Claude ring, attempt 1 | `ingress-claude` run 2 (37509237799): Bridge verified, plan `new`, guard PASS, doorbell seq 1 pushed to `inbox/claude` (7455478, parent e2d4083), then **PR creation refused**: "GitHub Actions is not permitted to create or approve pull requests". No PR, so no wake and no routine run (fail-closed). Defect found: the attempt stayed recorded on `inbox/claude` although nobody woke; repaired (rollback, §2). Root cause is the repository setting, an operator-only action. |
+
+## 5. Independent audit, round 1 (ChatGPT, advisory) and disposition
+
+| Finding | Disposition |
+|---|---|
+| C1-A01 BLOCKER: scope and recheck trust the mutable ACTIVE-PHASE.writeScope | Repaired: writeScope pinned at the bootstrap head; phase authority digest in the work order and in every recheck; authority files and fields never routine-writable. Tests: brain `C1 scope (audit C1-A01)`, integration `recheck (audit C1-A01)`. |
+| C1-A02 MAJOR: "clean tree" recheck before a commit is ambiguous | Repaired in the tool: recheck validates the committed HEAD with the gate and any uncommitted diff with the pinned scope, so it is valid right before the commit, the push and the Bridge message. The saved routine prompt is unchanged (changing it is an operator UI action). Test: integration `recheck (audit C1-A02)`. |
+| C1-A03 MAJOR: duplicate `opened` delivery could start two sessions | Documented as a platform limitation (CLAUDE-INGRESS.md); canonical writes stay deduplicated. Observed live: see §4. |
+| C1-A04 MAJOR: no code-enforced non-overage assertion | Documented: account-level control held by the operator; per-run platform evidence (`isUsingOverage`) recorded in §4. |
+| C1-A05 INFO | No action. |

@@ -9,9 +9,13 @@
  *        at R (VERIFIED + provenance + control, from WonderPages' tools), the WonderPages gate, the active phase and the delegation
  *        contract; recompute ALL pending Claude work at R. Exit 0 with verdict PROCEED or NOTHING_PENDING, exit 1 with FAIL.
  *   node brain/tools/c1.mjs recheck --bridge=DIR --order=ORDER.json --id=MSG [--no-fetch]
- *        STILL PENDING (current Bridge main, control-verified tool) and STILL AUTHORIZED (phase id / status / delegation hash /
- *        WonderPages origin head unchanged since the bootstrap, gate PASS). Exit 0 with write true, exit 1 otherwise.
- *   node brain/tools/c1.mjs scope --since=SHA           every path changed since SHA (commits + working tree) is in the writeScope
+ *        STILL PENDING (current Bridge main, control-verified tool) and STILL AUTHORIZED (phase id / status / authority digest /
+ *        delegation hash / WonderPages origin head unchanged since the bootstrap; every change since the bootstrap, committed or
+ *        not, passes `scope`; the committed HEAD passes the gate). Valid with a clean or a dirty working tree, so it can run right
+ *        before a commit, a push and a Bridge message alike (audit C1-A02). Exit 0 with write true, exit 1 otherwise.
+ *   node brain/tools/c1.mjs scope --since=SHA           every path changed since SHA (commits + working tree) is inside the
+ *        writeScope AS PINNED AT SHA (the bootstrap head, never the mutable current file), touches no AUTHORITY_PATHS and leaves
+ *        the ACTIVE-PHASE authority fields unchanged (audit C1-A01)
  *   node brain/tools/c1.mjs authority                    the delegation state the routine must respect
  */
 import fs from 'node:fs';
@@ -28,22 +32,42 @@ export const DOORBELL = 'ingress/claude/DOORBELL.json';
 export const TRAILER = /^Bridge-Ingress: claude$/m;
 export const PAID_VARS = ['ANTHROPIC_API_KEY', 'ANTHROPIC_AUTH_TOKEN', 'CLAUDE_CODE_OAUTH_TOKEN', 'OPENAI_API_KEY'];
 const DELEGATION = 'brain/phase/DELEGATION.json', PHASE = 'brain/phase/ACTIVE-PHASE.json', STATE = 'brain/state/CURRENT-STATE.json';
+/** ACTIVE-PHASE fields that carry operator authority; a C1 routine never changes them (audit C1-A01). */
+export const PHASE_AUTHORITY_FIELDS = ['id', 'title', 'status', 'authorizedBy', 'writeScope', 'externalScope', 'allowed', 'forbidden', 'doNotStart', 'exitCriteria',
+  'nextAuthorizedStep', 'delegation', 'supersededRules', 'operatorDecisions', 'operatorFollowups', 'bridgeConstraints'];
+/** Files that record or enforce authority: changed only in operator-attended work, never by a C1 routine (audit C1-A01). */
+export const AUTHORITY_PATHS = ['CLAUDE.md', DELEGATION, 'brain/phase/authorizations/**', 'brain/ingress/CLAUDE-ROUTINE-PROMPT.txt', 'brain/tools/c1.mjs',
+  'brain/tools/brain.mjs', 'brain/tools/lib.mjs', 'brain/tools/bridge-export.mjs', 'brain/manifest/SOURCES.json', '.github/workflows/brain-gate.yml', '.github/workflows/bridge-sync.yml'];
+export const phaseAuthoritySha256 = phase => sha256(JSON.stringify(PHASE_AUTHORITY_FIELDS.map(k => [k, phase[k] ?? null])));
 
 /** The authority the routine must respect, from the canon only. writesAllowed needs an IN_PROGRESS phase named by an ACTIVE
  *  delegation contract; otherwise Claude may only communicate. */
 export function authorityState(wpRoot = BRAIN_ROOT) {
   const phase = readJSON(PHASE, wpRoot), raw = fs.readFileSync(path.join(wpRoot, DELEGATION));
   const del = JSON.parse(raw), state = readJSON(STATE, wpRoot);
-  return { phaseId: phase.id, phaseStatus: phase.status, nextAuthorizedStep: phase.nextAuthorizedStep?.id, writeScope: phase.writeScope,
+  return { phaseId: phase.id, phaseStatus: phase.status, nextAuthorizedStep: phase.nextAuthorizedStep?.id, writeScope: phase.writeScope, phaseAuthoritySha256: phaseAuthoritySha256(phase),
     canonicalBranch: state.repository?.branch || null, delegationId: del.id, delegationStatus: del.status, delegationAppliesTo: del.appliesToPhase, delegationSha256: sha256(raw),
     writesAllowed: phase.status === 'IN_PROGRESS' && del.status === 'ACTIVE' && del.appliesToPhase === phase.id };
 }
 
-/** Paths changed since `since` (committed and uncommitted) that fall outside the active phase writeScope. */
+/** Changes since `since` (committed and uncommitted) that a C1 routine may not make: paths outside the writeScope pinned AT `since`
+ *  (a routine cannot widen its own boundary by editing ACTIVE-PHASE.json), authority-bearing files, and ACTIVE-PHASE authority fields. */
 export function scopeViolations(since, wpRoot = BRAIN_ROOT) {
-  const scope = readJSON(PHASE, wpRoot).writeScope.map(globToRe);
-  const changed = new Set([...(git(['diff', '--name-only', since, 'HEAD'], { cwd: wpRoot }) || '').split('\n'), ...(git(['status', '--porcelain', '--untracked-files=all'], { cwd: wpRoot }) || '').split('\n').map(l => l.slice(3))].filter(Boolean));
-  return [...changed].filter(f => !scope.some(re => re.test(f)));
+  const pinned = JSON.parse(git(['show', `${since}:${PHASE}`], { cwd: wpRoot })), scope = pinned.writeScope.map(globToRe), guarded = AUTHORITY_PATHS.map(globToRe);
+  const status = (git(['status', '--porcelain', '--untracked-files=all'], { cwd: wpRoot }) || '').split('\n').filter(Boolean).flatMap(l => l.slice(3).split(' -> '));
+  const changed = new Set([...(git(['diff', '--name-only', since, 'HEAD'], { cwd: wpRoot }) || '').split('\n'), ...status].filter(Boolean));
+  const v = [...changed].filter(f => !scope.some(re => re.test(f)));
+  for (const f of changed) if (guarded.some(re => re.test(f))) v.push(`${f} (authority-bearing: operator-attended change only)`);
+  if (changed.has(PHASE)) { const cur = fs.existsSync(path.join(wpRoot, PHASE)) ? readJSON(PHASE, wpRoot) : {}; for (const k of PHASE_AUTHORITY_FIELDS) if (JSON.stringify(cur[k] ?? null) !== JSON.stringify(pinned[k] ?? null)) v.push(`${PHASE}#${k} (authority field changed)`); }
+  return v;
+}
+
+/** The gate on the committed HEAD: on the checkout when it is clean, else on a temporary detached worktree of HEAD (audit C1-A02). */
+function gateOnHead(wpRoot) {
+  if (!(git(['status', '--porcelain', '--untracked-files=all'], { cwd: wpRoot }) || '').trim()) return runGate(wpRoot);
+  const wt = fs.mkdtempSync(path.join(os.tmpdir(), 'c1-wp-')); fs.rmSync(wt, { recursive: true });
+  git(['worktree', 'add', '-q', '--detach', wt, 'HEAD'], { cwd: wpRoot });
+  try { return runGate(wt); } finally { git(['worktree', 'remove', '--force', wt], { cwd: wpRoot, allowFail: true }); }
 }
 
 const credentialsPresent = (env = process.env) => Object.fromEntries(PAID_VARS.map(v => [v, Object.prototype.hasOwnProperty.call(env, v)]));
@@ -140,11 +164,12 @@ export function recheck({ bridge, order, id, wpRoot = BRAIN_ROOT, fetch = true }
     const auth = authorityState(wpRoot), was = order.authority;
     if (fetch && auth.canonicalBranch) git(['fetch', '-q', 'origin', auth.canonicalBranch], { cwd: wpRoot, allowFail: true });
     const originHead = auth.canonicalBranch ? (git(['rev-parse', `refs/remotes/origin/${auth.canonicalBranch}`], { cwd: wpRoot, allowFail: true }) || '').trim() || null : null;
-    for (const k of ['phaseId', 'phaseStatus', 'delegationId', 'delegationStatus', 'delegationAppliesTo', 'delegationSha256', 'writesAllowed']) if (auth[k] !== was[k]) res.reasons.push(`authority changed since the bootstrap: ${k} ${was[k]} → ${auth[k]}`);
+    for (const k of ['phaseId', 'phaseStatus', 'phaseAuthoritySha256', 'delegationId', 'delegationStatus', 'delegationAppliesTo', 'delegationSha256', 'writesAllowed']) if (auth[k] !== was[k]) res.reasons.push(`authority changed since the bootstrap: ${k} ${was[k]} → ${auth[k]}`);
+    const sv = scopeViolations(order.wonderpages.head, wpRoot); if (sv.length) res.reasons.push('changes since the bootstrap leave the pinned scope or touch authority: ' + sv.join(', '));
     const localHead = git(['rev-parse', 'HEAD'], { cwd: wpRoot }).trim();
     if (originHead && order.wonderpages.originHead && originHead !== order.wonderpages.originHead && originHead !== localHead) res.reasons.push(`WonderPages origin/${auth.canonicalBranch} moved since the bootstrap (${order.wonderpages.originHead.slice(0, 12)} → ${originHead.slice(0, 12)}): re-bootstrap (only the routine's own fast-forward pushes are accepted)`);
-    const g = runGate(wpRoot); if (g.CONTEXT_INTEGRITY !== 'PASS') res.reasons.push('WonderPages gate: ' + g.checks.filter(c => c.status === 'FAIL').map(c => c.id).join(', '));
-    res.authority = { writesAllowed: auth.writesAllowed, phaseId: auth.phaseId, phaseStatus: auth.phaseStatus, delegationSha256: auth.delegationSha256 };
+    const g = gateOnHead(wpRoot); if (g.CONTEXT_INTEGRITY !== 'PASS') res.reasons.push('WonderPages gate (committed HEAD): ' + g.checks.filter(c => c.status === 'FAIL').map(c => c.id).join(', '));
+    res.authority = { writesAllowed: auth.writesAllowed, phaseId: auth.phaseId, phaseStatus: auth.phaseStatus, phaseAuthoritySha256: auth.phaseAuthoritySha256, delegationSha256: auth.delegationSha256 };
     if (res.reasons.length) return res;
     res.stillAuthorized = true; res.write = true; return res;
   } catch (e) { res.reasons.push(String(e.message || e)); return res; }
@@ -156,7 +181,7 @@ if (import.meta.url === pathToFileURL(process.argv[1] || '').href) {
   const cmd = process.argv[2], fetch = !process.argv.includes('--no-fetch'), bridge = arg('bridge') && path.resolve(arg('bridge'));
   if (cmd === 'bootstrap') { const o = bootstrap({ bridge, head: arg('head'), pr: arg('pr'), fetch }); out(o, o.verdict !== 'FAIL'); }
   else if (cmd === 'recheck') { const r = recheck({ bridge, order: JSON.parse(fs.readFileSync(arg('order'), 'utf8')), id: arg('id'), fetch }); out(r, r.write); }
-  else if (cmd === 'scope') { const v = scopeViolations(arg('since')); out({ SCOPE: v.length ? 'VIOLATION' : 'PASS', outsideWriteScope: v }, !v.length); }
+  else if (cmd === 'scope') { const v = scopeViolations(arg('since')); out({ SCOPE: v.length ? 'VIOLATION' : 'PASS', since: arg('since'), violations: v }, !v.length); }
   else if (cmd === 'authority') out(authorityState(), true);
   else { console.error('usage: c1.mjs bootstrap|recheck|scope|authority (see header)'); process.exit(2); }
 }

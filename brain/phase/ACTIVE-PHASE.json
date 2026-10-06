@@ -223,8 +223,14 @@
  ],
  "delegation": "brain/phase/DELEGATION.json",
  "c1": {
-  "status": "IN_PROGRESS — design and implementation",
+  "status": "IN_PROGRESS — live test: ChatGPT leg done; Claude wake blocked by the repository setting that lets GitHub Actions open pull requests (operator-only); audit round 1 repaired",
   "evidence": "brain/evidence/DECISION-C1.md",
+  "liveTest": {
+   "request": "MSG-20261006T180648Z-claude-7014 (Bridge 3d21f24)",
+   "chatgptReply": "MSG-20261006T181019Z-chatgpt-c1a4 (Bridge e2d4083, CHANGES_REQUIRED)",
+   "claudeRing1": "ingress-claude run 37509237799: doorbell seq 1 pushed, PR refused by the repository setting; no wake, no routine run"
+  },
+  "auditRound1": "C1-A01 and C1-A02 repaired in brain/tools/c1.mjs; C1-A03 and C1-A04 documented as limitations; ring rollback added to ingress-claude.yml",
   "routinePrompt": "brain/ingress/CLAUDE-ROUTINE-PROMPT.txt",
   "bootstrapTool": "brain/tools/c1.mjs"
  }

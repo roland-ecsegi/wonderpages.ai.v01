@@ -26,6 +26,10 @@ try {
   run(tmp, 'git', 'clone', '-q', '--no-local', BR, B); gb('remote', 'set-url', 'origin', 'https://github.com/roland-ecsegi/wonderpages.agent-bridge.git');
   gb('checkout', '-q', '-B', 'main', run(BR, 'git', 'rev-parse', 'HEAD')); gb('update-ref', 'refs/remotes/origin/main', 'HEAD');
   const bm = await import(pathToFileURL(path.join(B, 'tools/bridge.mjs')).href), c1 = await import(pathToFileURL(path.join(C, 'brain/tools/c1.mjs')).href);
+  // every scenario starts from an empty Claude queue: live pending work at the Bridge head is acknowledged in the TEMPORARY clone only
+  const live = bm.pendingFor(bm.validateMessages(B).messages, 'claude');
+  for (const p of live) bm.newMessage({ root: B, from: 'claude', to: 'chatgpt', type: 'ACKNOWLEDGED', body: 'test base only', replyTo: p.messageId, now: new Date('2026-10-07T08:00:00Z') });
+  if (live.length) { gb('add', '-A'); gb('commit', '-q', '-m', 'test base: acknowledge the live Claude queue'); gb('update-ref', 'refs/remotes/origin/main', 'HEAD'); }
   const base = gb('rev-parse', 'HEAD'), wpBase = gw('rev-parse', 'HEAD');
   const reset = () => { gb('checkout', '-q', '-f', 'main'); gb('reset', '-q', '--hard', base); gb('clean', '-qfd'); gb('update-ref', 'refs/remotes/origin/main', base); spawnSync('git', ['branch', '-D', 'inbox/claude'], { cwd: B }); spawnSync('git', ['update-ref', '-d', 'refs/remotes/origin/inbox/claude'], { cwd: B }); gw('reset', '-q', '--hard', wpBase); gw('update-ref', `refs/remotes/origin/${branch}`, wpBase); };
   let clock = Date.parse('2026-10-07T09:00:00Z'); const tick = () => new Date(clock += 60e3);
@@ -83,6 +87,20 @@ try {
     reset(); const { a } = audit(); pushMain('m'); const { H } = ring(); const o = boot({ head: H });
     const p = path.join(C, 'brain/phase/ACTIVE-PHASE.json'); fs.writeFileSync(p, fs.readFileSync(p, 'utf8').replace('"status": "IN_PROGRESS"', '"status": "COMPLETE"')); gw('add', '-A'); gw('commit', '-q', '-m', 'phase');
     const r = c1.recheck({ bridge: B, wpRoot: C, order: o, id: a.id, fetch: false }); assert.equal(r.write, false); assert.match(r.reasons.join(), /phaseStatus IN_PROGRESS → COMPLETE/);
+  });
+  await t('recheck (audit C1-A02): valid with an uncommitted in-scope edit (right before the commit) and after the sealed commit', async () => {
+    reset(); const { a } = audit(); pushMain('m'); const { H } = ring(); const o = boot({ head: H });
+    fs.mkdirSync(path.join(C, 'brain/ingress/runs'), { recursive: true }); fs.writeFileSync(path.join(C, 'brain/ingress/runs/test.json'), '{}\n');
+    const r1 = c1.recheck({ bridge: B, wpRoot: C, order: o, id: a.id, fetch: false }); assert.equal(r1.write, true, r1.reasons.join('; '));
+    gw('add', '-A'); gw('commit', '-q', '-m', 'run record'); run(C, process.execPath, 'brain/tools/brain.mjs', 'seal', '--review=brain:test'); gw('add', '-A'); gw('commit', '-q', '--amend', '--no-edit');
+    const r2 = c1.recheck({ bridge: B, wpRoot: C, order: o, id: a.id, fetch: false }); assert.equal(r2.write, true, r2.reasons.join('; '));
+  });
+  await t('recheck (audit C1-A01): a routine that widens writeScope / allowed, or edits an authority file, can no longer write', async () => {
+    reset(); const { a } = audit(); pushMain('m'); const { H } = ring(); const o = boot({ head: H });
+    const p = path.join(C, 'brain/phase/ACTIVE-PHASE.json'); fs.writeFileSync(p, fs.readFileSync(p, 'utf8').replace('".github/workflows/bridge-sync.yml"', '".github/workflows/bridge-sync.yml", "server/**"'));
+    let r = c1.recheck({ bridge: B, wpRoot: C, order: o, id: a.id, fetch: false }); assert.equal(r.write, false); assert.match(r.reasons.join(), /phaseAuthoritySha256/); assert.match(r.reasons.join(), /#writeScope/);
+    gw('checkout', '-q', '--', '.'); fs.appendFileSync(path.join(C, 'brain/tools/c1.mjs'), '\n'); gw('add', '-A'); gw('commit', '-q', '-m', 'weaken');
+    r = c1.recheck({ bridge: B, wpRoot: C, order: o, id: a.id, fetch: false }); assert.equal(r.write, false); assert.match(r.reasons.join(), /brain\/tools\/c1.mjs \(authority-bearing/);
   });
   await t('recheck: someone else pushed WonderPages after the wake → no write; the routine\'s own fast-forward push is accepted', async () => {
     reset(); const { a } = audit(); pushMain('m'); const { H } = ring(); const o = boot({ head: H });
