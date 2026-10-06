@@ -45,7 +45,7 @@
  "nextAuthorizedStep": {
   "id": "OPERATOR-REVIEW-CONTINUITY-1",
   "actor": "operator",
-  "summary": "Decision C0 live test PREPARED (Bridge PR #2 inert). Waiting for the operator to create the C0 routine and confirm; then Claude publishes exactly one LIVE probe commit and validates the result. Decision C / C1 not authorized. No implementation outside CONTINUITY-1 is authorized."
+  "summary": "Decision C0 live test PREPARED (revision 2, one-shot pull_request.opened): operator creates the C0 routine per brain/evidence/DECISION-C0-LIVE.md and confirms 0 runs; then Claude opens exactly one PR from inbox/claude-c0-live and validates the result. Decision C / C1 not authorized. No implementation outside CONTINUITY-1 is authorized."
  },
  "doNotStart": {
   "source": "brain/phase/authorizations/CONTINUITY-1.operator-instruction.txt §10 (verbatim item names)",
@@ -174,13 +174,14 @@
    "no extra usage / usage credits / API / paid fallback"
   ],
   "liveTest": {
-   "authorizedBy": "operatorFollowups #10 (verbatim)",
-   "status": "PREPARED — awaiting the operator's routine creation; LIVE commit not published",
+   "authorizedBy": "operatorFollowups #10, adapted by #11 (verbatim)",
+   "status": "PREPARED (revision 2: one-shot pull_request.opened) — LIVE branch pushed without a PR; awaiting the operator's routine creation and 0-runs confirmation; the only wake will be opening one PR",
    "preconditions": "P1 Pro + usage credits OFF, P2 Claude GitHub App on the Bridge (operator-confirmed)",
-   "pullRequest": "roland-ecsegi/wonderpages.agent-bridge#2 (head inbox/claude-c0, inert commit b3a2727)",
-   "routinePrompt": "brain/evidence/C0-ROUTINE-PROMPT.txt (sha256 fff1f9153a5d41f91e29eea50c63613c6c58943c627284d6a9df6aae1db85877)",
+   "pullRequest": "none yet for the LIVE branch inbox/claude-c0-live (R 6723b29f893dd4c94e30df8f2fc365bc7ea9a58d, nonce 136281ab91a9232afc8dcc2f2be66285); revision-1 artifact PR #2 kept inert",
+   "routinePrompt": "brain/evidence/C0-ROUTINE-PROMPT.txt (revision 2, sha256 e936bef253322d6c0078d605b23eaa857c2ce7e23a04865a6998fbc6104ff44a)",
    "evidence": "brain/evidence/DECISION-C0-LIVE.md",
-   "rules": "one wake, no retry, no loop, result only on branch claude/c0-result"
+   "rules": "one wake (opening one PR), no retry, no Run now, no loop, result only on branch claude/c0-result; opened is not approved as the C/C1 wake architecture",
+   "prBinding": "PR number not guessed: unique N with refs/pull/N/head == EXPECTED_R"
   }
  },
  "openFindings": [

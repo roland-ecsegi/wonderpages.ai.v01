@@ -842,3 +842,44 @@ Recorded: repair B-06 with an exact, control-pinned quarantine allowlist under t
 > Do not ask the operator to invent any settings.
 
 Recorded: preconditions P1 (Pro, usage credits OFF) and P2 (Claude GitHub App on the Bridge) confirmed by the operator. One controlled C0 live test on route R1 is authorized, with one intentional wake, no retry, no loop and a result on a separate branch. Decision C / C1 is not authorized. Nothing post-CONTINUITY-1 is started. Preparation and evidence: `brain/evidence/DECISION-C0-LIVE.md`.
+
+
+## 2026-10-06 — #11 (C0 adapted to the available UI: one-shot pull_request.opened)
+
+> C0 UI observation from the operator:
+> The actual Claude Routines UI on this Pro account does NOT expose `pull_request.synchronized` / `synchronize` in the event-action list.
+> The UI does expose `Pull request: Opened`, and it supports the exact filters:
+>
+> * Head branch equals ...
+> * Base branch equals main
+>
+> Do NOT assume `synchronized` is available just because the documentation lists it.
+> Adapt ONLY the one-shot C0 live feasibility test to the available UI.
+> Requirements:
+>
+> 1. Do not use existing PR #2 as the live trigger because it is already open.
+> 2. Do not create the Routine yet.
+> 3. Preserve PR #2 and its evidence as the inert preparation artifact unless closing it is necessary; do not merge it.
+> 4. Prepare a new dedicated one-shot C0 LIVE branch and future PR specifically for the `pull_request.opened` event.
+> 5. The nonce-bearing LIVE probe must be committed to that branch BEFORE the future PR is opened.
+> 6. While no Routine exists, preparing/pushing that branch must not consume a Routine run.
+> 7. Stop before opening the new PR.
+> 8. Give the operator the revised exact Routine configuration:
+>    * event = Pull request: Opened
+>    * exact head-branch filter = the new dedicated LIVE branch
+>    * base branch = main
+>    * repository = `roland-ecsegi/wonderpages.agent-bridge`
+>    * model = Opus 5.5
+>    * environment = wonderpages-c0
+>    * High effort configuration as already prepared
+>    * no connectors
+> 9. Update the fixed Routine prompt so its constants use the new branch and the expected future PR number only if that number can be known safely before opening. If the PR number cannot be known before creation, redesign the bootstrap so the event-observed PR number is validated by other immutable facts instead of guessing it.
+> 10. After the operator creates the Routine and confirms 0 runs, the ONLY intentional wake action will be opening the prepared LIVE PR once.
+> 11. No Run now, no retries, no extra usage, no API, no usage credits.
+> 12. After one run, validate nonce/R/result/no-loop exactly as planned.
+>
+> This adaptation authorizes only the C0 one-shot feasibility probe. It does NOT approve `pull_request.opened` as the future Decision C/C1 wake architecture.
+> If the one-shot opened-event design cannot be made fail-closed without guessing the future PR number, STOP and report the safest alternative.
+> Do not implement Decision C/C1.
+
+Recorded: the C0 one-shot probe is adapted to `Pull request: Opened` on a new LIVE branch, `inbox/claude-c0-live`. The nonce commit is pushed before any PR exists. The PR number is not guessed: the routine binds it as the unique N with `refs/pull/N/head` equal to the fixed EXPECTED_R. PR #2 is kept, inert. This does not approve `opened` as the Decision C/C1 wake architecture.
