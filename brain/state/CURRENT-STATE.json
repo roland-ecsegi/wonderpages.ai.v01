@@ -1,12 +1,36 @@
 {
  "schema": "wonderpages.brain.current-state/1",
- "asOf": { "date": "2026-10-06", "checkpointCommit": "866a441", "lastDecisionCommit": "168905b", "note": "Functional checkpoint = policy closure 866a441. CONTINUITY-1 adds only brain/, CLAUDE.md and two CI workflows on top of it." },
- "repository": { "name": "roland-ecsegi/wonderpages.ai.v01", "branch": "claude/wonderpages-enterprise-architecture-8hy7w9", "visibility": "public", "lineageCommit": "9a8b248", "lineageNote": "9a8b248 = v04 source imported byte-identical (138 files); every later commit descends from it" },
- "goal": { "summary": "AI editorial studio for children's book collections (one collection → 6 volumes → Story + Coloring book per volume → 12 content pages per book), with a permanent organisation of 11 specialist agents, resumable production, verifiable canon, human editorial control and governed learning, run locally on the operator's subscriptions only.", "claims": ["C-GOAL", "C-PRODUCT-CONTRACT", "C-SUBSCRIPTIONS-ONLY"] },
+ "asOf": {
+  "date": "2026-10-06",
+  "checkpointCommit": "866a441",
+  "lastDecisionCommit": "168905b",
+  "note": "Functional checkpoint = policy closure 866a441. CONTINUITY-1 adds only brain/, CLAUDE.md and two CI workflows on top of it."
+ },
+ "repository": {
+  "name": "roland-ecsegi/wonderpages.ai.v01",
+  "branch": "claude/wonderpages-enterprise-architecture-8hy7w9",
+  "visibility": "public",
+  "lineageCommit": "9a8b248",
+  "lineageNote": "9a8b248 = v04 source imported byte-identical (138 files); every later commit descends from it"
+ },
+ "goal": {
+  "summary": "AI editorial studio for children's book collections (one collection → 6 volumes → Story + Coloring book per volume → 12 content pages per book), with a permanent organisation of 11 specialist agents, resumable production, verifiable canon, human editorial control and governed learning, run locally on the operator's subscriptions only.",
+  "claims": [
+   "C-GOAL",
+   "C-PRODUCT-CONTRACT",
+   "C-SUBSCRIPTIONS-ONLY"
+  ]
+ },
  "activePhase": "CONTINUITY-1",
  "nextAuthorizedStep": "OPERATOR-REVIEW-CONTINUITY-1",
  "phases": {
-  "P1": "DONE", "P2": "DONE", "P3": "DONE", "P4": "DONE", "P5": "DONE", "P6": "DONE", "P7": "DONE",
+  "P1": "DONE",
+  "P2": "DONE",
+  "P3": "DONE",
+  "P4": "DONE",
+  "P5": "DONE",
+  "P6": "DONE",
+  "P7": "DONE",
   "P8": "SOFTWARE DONE; P8-T05 BLOCKED; P8-T06 PARTIAL",
   "P9": "NOT_AUTHORIZED"
  },
@@ -26,14 +50,40 @@
   "ENTERPRISE_ACCEPTANCE": "NOT CLAIMED"
  },
  "blockers": [
-  { "id": "B-OPERATOR-AUTH", "what": "Every post-closure step (sanitized brief, hidden set, SH#2, …) needs explicit operator authorization through the Active Phase Contract.", "claims": ["C-POST-CLOSURE-ORDER", "C-CONTINUITY-AUTH"] },
-  { "id": "B-P8-T05", "what": "Real Dinosaur World upgrade needs the authentic provider in the operator's Enterprise Local install and operator review gates.", "claims": ["C-P8-PARTIAL", "C-DW-STOPPED"] },
-  { "id": "B-OPEN-DEPENDENCIES", "what": "Open policy dependencies of closure §10 (OPERATOR_DECISION_REQUIRED / undecided taxonomies).", "claims": ["C-DEPENDENCIES"] },
-  { "id": "B-GOLD-V2-ADJUDICATION", "what": "Gold-v2 adjudication 0/226; validation NOT_COMPLETE.", "claims": ["C-GOLD-V2"] }
+  {
+   "id": "B-OPERATOR-AUTH",
+   "what": "Every post-closure step (sanitized brief, hidden set, SH#2, …) needs explicit operator authorization through the Active Phase Contract.",
+   "claims": [
+    "C-POST-CLOSURE-ORDER",
+    "C-CONTINUITY-AUTH"
+   ]
+  },
+  {
+   "id": "B-P8-T05",
+   "what": "Real Dinosaur World upgrade needs the authentic provider in the operator's Enterprise Local install and operator review gates.",
+   "claims": [
+    "C-P8-PARTIAL",
+    "C-DW-STOPPED"
+   ]
+  },
+  {
+   "id": "B-OPEN-DEPENDENCIES",
+   "what": "Open policy dependencies of closure §10 (OPERATOR_DECISION_REQUIRED / undecided taxonomies).",
+   "claims": [
+    "C-DEPENDENCIES"
+   ]
+  },
+  {
+   "id": "B-GOLD-V2-ADJUDICATION",
+   "what": "Gold-v2 adjudication 0/226; validation NOT_COMPLETE.",
+   "claims": [
+    "C-GOLD-V2"
+   ]
+  }
  ],
  "awaitingOperator": [
-  "Review / audit of CONTINUITY-1 and explicit authorization of the next phase",
-  "BRIDGE_SYNC_TOKEN secret for automatic one-way mirror (see brain/BRIDGE.md)",
+  "Review / acceptance of CONTINUITY-1 and explicit authorization of the next phase",
+  "Decisions B and C on automatic wake-up of ChatGPT / Claude (Bridge thread MSG-20261006T114753Z-claude-1ec6)",
   "Gold-v1 validation/acceptance; Gold-v2 adjudication",
   "Dinosaur World observations O1/O2; real Creative Upgrade; V1 pilot",
   "Open policy dependencies (closure §10)"

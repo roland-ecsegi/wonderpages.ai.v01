@@ -46,9 +46,10 @@ together with the new snapshot.
 | Mode | Trigger | State |
 |---|---|---|
 | `manual` | Claude runs `export`, commits with trailers `Bridge-Sync:` / `Source-Commit:`, then pushes to the Bridge | **working** (used for every snapshot so far) |
-| `ci` | `.github/workflows/bridge-sync.yml` on every push to the WonderPages branch / `main` | **PENDING_OPERATOR_SETUP**: needs the Actions secret `BRIDGE_SYNC_TOKEN` |
+| `ci` | `.github/workflows/bridge-sync.yml` on every push to the WonderPages branch / `main` | **configured**: the operator set the Actions secret `BRIDGE_SYNC_TOKEN` on 2026-10-06. The result of the end-to-end demonstration is recorded in `brain/evidence/CONTINUITY-1-ACCEPTANCE.json` → `bridgeSync`. |
 
-Without the secret, the workflow reports `PENDING_OPERATOR_SETUP` and succeeds without writing anything.
+Without the secret, the workflow reports `PENDING_OPERATOR_SETUP` and succeeds without writing anything. With the secret, every push exports a snapshot, verifies it after writing (five checks, provenance), and pushes it to the Bridge with the
+`Bridge-Sync:` trailer. The Bridge CI then re-verifies it independently. An export that is not VERIFIED fails the job and nothing is pushed.
 
 **Operator setup (once, about 3 minutes):**
 1. GitHub → Settings → Developer settings → Fine-grained personal access tokens → *Generate new token*: resource owner

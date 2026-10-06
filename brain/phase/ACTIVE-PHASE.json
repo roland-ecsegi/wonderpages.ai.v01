@@ -75,6 +75,20 @@
     "F-05": "unchanged — operator setup of BRIDGE_SYNC_TOKEN"
    },
    "authority": "ChatGPT findings are advisory; each was verified against sources before acting; nothing outside the CONTINUITY-1 write scope changes"
+  },
+  {
+   "round": 2,
+   "trigger": "Agent Bridge MSG-20261006T115035Z-chatgpt-b72e (advisory re-audit, snapshot 000004-9c5fb9a4f4ab)",
+   "processedBecause": "operator follow-up #2 (verbatim in operatorFollowups)",
+   "findings": {
+    "F-01": "CLOSED by re-audit",
+    "F-02": "CLOSED by re-audit",
+    "F-03": "CLOSED by re-audit",
+    "F-04": "correction CLOSED; activation pending operator decision B/C",
+    "F-05": "operator configured BRIDGE_SYNC_TOKEN; end-to-end automatic sync demonstration recorded in completionEvidence (bridgeSync)"
+   },
+   "authority": "advisory findings verified on sources; no change outside the CONTINUITY-1 write scope"
   }
- ]
+ ],
+ "operatorFollowups": "brain/phase/authorizations/CONTINUITY-1.operator-followups.md"
 }

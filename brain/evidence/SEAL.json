@@ -1,12 +1,12 @@
 {
  "schema": "wonderpages.brain.seal/1",
- "sealedAt": "2026-10-06T11:47:04.150Z",
- "baseCommit": "99fd72c967de4b527c3d7cae21883384bd14fcec",
+ "sealedAt": "2026-10-06T12:08:27.321Z",
+ "baseCommit": "9c5fb9a4f4abe36d563e5a777fd38e4a455a3779",
  "note": "Digests are over the git index (path, mode, blob id) of every tracked file except the two seal files. Seal = the brain was reviewed against this exact tree.",
  "subsystems": {
   "brain": {
-   "files": 32,
-   "digest": "91a24b0e05101ff78c4e330c57e3888a6adf0d452ef6fa0a618bbad24cdfe038"
+   "files": 33,
+   "digest": "cf38df858298e460f368b4b0d707a4767e3e6c2ee920c925e9d34a3c97ef1536"
   },
   "ci": {
    "files": 3,
@@ -93,5 +93,5 @@
    "digest": "f7ef6ab8e6c6610c20ae7dd62cb93d4fc52be96b6666324608ce6dc92025ee70"
   }
  },
- "total": "35fbc78aace04484cd729de6eccb0f9501ed3ac83d5b15b4177ea2f6cf8a087b"
+ "total": "358b722149d3b8e5737ae1024db336a0ef41eb980ced2a1c9e2dde7f0390dfc4"
 }

@@ -53,8 +53,8 @@ Sources: C-GOAL → `reference/architecture/WonderPages_Enterprise_Master_Archit
 - **B-GOLD-V2-ADJUDICATION** — Gold-v2 adjudication 0/226; validation NOT_COMPLETE. (C-GOLD-V2)
 
 ## Awaiting the operator
-- Review / audit of CONTINUITY-1 and explicit authorization of the next phase
-- BRIDGE_SYNC_TOKEN secret for automatic one-way mirror (see brain/BRIDGE.md)
+- Review / acceptance of CONTINUITY-1 and explicit authorization of the next phase
+- Decisions B and C on automatic wake-up of ChatGPT / Claude (Bridge thread MSG-20261006T114753Z-claude-1ec6)
 - Gold-v1 validation/acceptance; Gold-v2 adjudication
 - Dinosaur World observations O1/O2; real Creative Upgrade; V1 pilot
 - Open policy dependencies (closure §10)
