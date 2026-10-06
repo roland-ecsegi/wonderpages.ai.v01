@@ -36,6 +36,7 @@ explicită a operatorului. Etichetele cazurilor se dau la adjudecarea Gold-v2.
 | D-13 — propoziții relative imbricate (5–6) | DECISĂ (neimplementată) | B (profil structural; consecința de publicare → D-14) | `017f76cb8488503f…` |
 | D-14 — semnalele consultative: finding, severitate, consecință | DECISĂ (neimplementată) | C (finding → confirmare → severitate → consecință; age-fit ≠ fidelity) | `9868b43824a361f1…` |
 | D-15 — fereastra de corectare a unei idei științifice greșite | DECISĂ (neimplementată) | D (corectare semantică + takeaway final + scope) | `dbc63cbc0e2a724d…` |
+| D-16 — minimul pentru criteriile non-critice; semantica pragurilor | DECISĂ (neimplementată) | D (minim 7 pe criteriile aplicabile; egalitate exactă; fără waiver) | `bd4cab1527f23f18…` |
 
 ## D-01 — „Fără arme” pentru o armă reală
 
@@ -11550,3 +11551,1117 @@ taxonomia științei vizuale · validitatea empirică.
 - **D-15-DEP-VISUAL-SCIENCE-TAXONOMY**.
 - **D-15-DEP-RUBRIC-SCIENCE-CRITERION** → D-17.
 - **D-15-DEP-MEASUREMENT** → D-19 / D-20.
+
+## D-16 — Minimul pentru criteriile non-critice; semantica pragurilor
+
+### Declarația operatorului (cuvânt cu cuvânt)
+
+```text
+D-16 — DECIZIA OPERATORULUI
+
+Aleg Opțiunea D, rafinată: universal applicable floor + applicability + exact threshold semantics + no quality waiver of a confirmed defect.
+
+Principiile centrale sunt:
+
+OVERALL QUALITY CANNOT COMPENSATE FOR A CONFIRMED SUBSTANDARD DIMENSION.
+
+A QUALITY FLOOR APPLIES ONLY TO AN APPLICABLE CRITERION.
+
+CRITIC SCORE ≠ GROUND TRUTH.
+
+CHALLENGING A SCORE ≠ WAIVING THE QUALITY STANDARD.
+
+DISPLAY ROUNDING ≠ DECISION VALUE.
+
+MATHEMATICAL EQUALITY AT A THRESHOLD MUST PASS.
+
+PASSING THE QUALITY GATE OUTRANKS A HIGHER AVERAGE THAT FAILS THE GATE.
+
+Nu implementa acum.
+
+⸻
+
+1. Politica D-16
+
+Pentru kids-sc, WonderPages adoptă formal:
+
+* overall mean ≥ 8;
+* T01 ≥ 8;
+* T08 ≥ 8;
+* pentru fiecare alt criteriu aplicabil, minimum ≥ 7, cu statutul special al T07 păstrat pentru D-17;
+* un criteriu declarat legitim NOT_APPLICABLE nu este comparat cu minimum-ul și nu intră în media criteriilor aplicabile.
+
+Astfel, D-16 validează acum explicit minimum-ul 7 ca politică editorială WonderPages pentru criteriile aplicabile.
+
+Înregistrarea trebuie să spună însă clar:
+
+policy decision ≠ empirically validated threshold.
+
+Valoarea 7 este standardul de produs decis de operator.
+
+Validitatea empirică a pragului rămâne o chestiune separată.
+
+⸻
+
+2. Clarificarea deciziei anterioare despre T13
+
+Decizia anterioară:
+
+T13 = 6.5 is insufficient for automatic acceptance
+
+a fost specifică T13 și NU valida atunci:
+
+minCriterion = 7 for every rubric criterion.
+
+D-16 este decizia care rezolvă acum explicit acea întrebare.
+
+De acum înainte, pentru kids-sc:
+
+orice criteriu aplicabil < 7 nu poate fi compensat de medie.
+
+⸻
+
+3. v2c-quality-09 — T04 = 6.5
+
+T04 = 6.5, restul 9:
+
+→ overall foarte mare;
+
+→ T04 este sub minimum;
+
+→ QUALITY GATE FAIL;
+
+→ repair/re-evaluation required.
+
+Deci:
+
+v2c-quality-09 = negative / not acceptable as-is.
+
+Media 8.861 nu compensează T04 = 6.5.
+
+⸻
+
+4. v2h-quality-06 — T14 = 6.5
+
+Dacă T14 este aplicabil:
+
+T14 = 6.5:
+
+→ sub minimum;
+
+→ QUALITY GATE FAIL;
+
+→ repair/re-evaluation required.
+
+Deci cazul trebuie adjudecat conform:
+
+v2h-quality-06 = negative / not acceptable as-is.
+
+Nu rula din nou setul rezervat.
+
+Înregistrează decizia fără rerun.
+
+⸻
+
+5. T13 = 6.5
+
+Rămâne:
+
+→ sub minimum;
+
+→ repair/re-evaluation required.
+
+Decizia existentă nu se schimbă.
+
+⸻
+
+6. T13 = 7.0
+
+Rămâne:
+
+→ minimum satisfăcut;
+
+→ poate PASS dacă toate celelalte condiții sunt satisfăcute.
+
+⸻
+
+THRESHOLD SEMANTICS
+
+7. Egalitatea trece
+
+Pentru toate pragurile numerice din aria D-16:
+
+score >= threshold
+
+înseamnă matematic exact acest lucru.
+
+Prin urmare:
+
+* overall = 8.0 → PASS pentru condiția overall;
+* T01 = 8.0 → PASS pentru condiția T01;
+* T08 = 8.0 → PASS pentru condiția T08;
+* criterion minimum = 7.0 → PASS pentru condiția minimum.
+
+Nu:
+
+score > threshold.
+
+⸻
+
+8. 6.99 nu este 7
+
+Dacă valoarea canonică validă este:
+
+6.99
+
+atunci:
+
+6.99 < 7
+
+→ FAIL.
+
+Nu o rotunji la 7 înainte de comparație.
+
+⸻
+
+9. 7.0 este 7
+
+7.0 >= 7
+
+→ PASS.
+
+⸻
+
+10. Media matematic exact 8 trebuie să treacă
+
+Cazul:
+
+17 × 8.1 + 6.3
+
+are media matematică:
+
+8.
+
+Prin urmare:
+
+→ condiția mean >= 8 este satisfăcută.
+
+Actualul rezultat:
+
+7.9999999999999964 < 8
+
+este:
+
+FLOATING-POINT IMPLEMENTATION DEFECT.
+
+Nu este policy.
+
+⸻
+
+11. Fără binary floating-point la deciziile de prag
+
+Semantic Hardening #2 trebuie să implementeze comparațiile astfel încât valorile zecimale canonice să nu depindă de aproximarea IEEE binary floating point.
+
+Poate fi folosită ulterior implementarea tehnică adecvată:
+
+* decimal arithmetic;
+* scaled integer;
+* rational arithmetic;
+* sau echivalent determinist.
+
+D-16 decide comportamentul matematic.
+
+Nu biblioteca.
+
+⸻
+
+12. Display rounding este strict prezentare
+
+Exemplu:
+
+mean exact = 7.9556
+
+display = 8.0.
+
+Verdict:
+
+→ FAIL pentru pragul mean ≥ 8.
+
+UI trebuie să poată afișa 8.0 dacă acesta este formatul ales, dar trebuie să arate clar motivul:
+
+exact/canonical mean below 8.
+
+Nu permite UI-ului să sugereze că valoarea afișată 8.0 a fost valoarea comparată.
+
+Ideal, în evidence/audit se păstrează valoarea canonică ne-rotunjită folosită la decizie.
+
+⸻
+
+13. OBS-GS-19 este formalizat
+
+Confirm formal principiul:
+
+threshold comparison uses the canonical unrounded decision value; rounding is display-only.
+
+Dar actualul floating-point bug arată că „unrounded” nu este suficient dacă reprezentarea însăși este aproximativă.
+
+De aceea contractul final este:
+
+canonical mathematically faithful value → threshold comparison → verdict → display rounding.
+
+Nu:
+
+binary approximation → threshold
+
+și nici:
+
+rounded display value → threshold.
+
+⸻
+
+GRANULARITATE
+
+14. D-16 NU inventează acum o granulație numerică
+
+Nu există în evidence-ul actual un contract suficient care să demonstreze că notele trebuie să fie:
+
+* numai întregi;
+* multipli de 0.5;
+* multipli de 0.1;
+* sau orice număr de zecimale.
+
+Prin urmare nu introduc arbitrar:
+
+only 0.5 increments
+
+sau:
+
+only one decimal.
+
+Granularitatea rămâne o dependență de contract/scoring calibration.
+
+⸻
+
+15. Până la definirea granulației
+
+Orice valoare validă produsă conform contractului de scoring trebuie comparată în forma sa canonică.
+
+Prin urmare, dacă 6.99 este o valoare validă conform contractului viitor:
+
+→ FAIL.
+
+Dacă viitorul contract nu permite 6.99, aceasta trebuie respinsă/normalizată la nivel de validare a scorului, nu rotunjită în secret de quality gate.
+
+⸻
+
+APPLICABILITY
+
+16. Introducem explicit starea NOT_APPLICABLE
+
+Un criteriu poate avea:
+
+* SCORED;
+* NOT_APPLICABLE.
+
+Dar NOT_APPLICABLE nu este o notă.
+
+Nu este:
+
+0.
+
+Nu este:
+
+10.
+
+Nu este un shortcut pentru evitarea minimum-ului.
+
+⸻
+
+17. N/A trebuie justificat
+
+Un criteriu poate fi NOT_APPLICABLE numai dacă există evidence citabilă că cerința acelui criteriu nu se aplică artifact-ului evaluat.
+
+Exemplul menționat în investigație:
+
+T09 într-un context în care cerința sa nu este relevantă.
+
+D-16 nu decide acum că T09 este automat N/A în volumul 1.
+
+Decide mecanismul:
+
+applicability must be established from criterion semantics + artifact context + evidence.
+
+⸻
+
+18. Default = applicable
+
+În absența unei justificări valide:
+
+→ criteriul este tratat ca aplicabil.
+
+Nu permite criticului:
+
+I don't like evaluating this → N/A.
+
+⸻
+
+19. N/A trebuie să fie auditat
+
+Pentru fiecare N/A păstrează:
+
+* criterion id;
+* criterion definition/version;
+* applicability rule;
+* artifact context;
+* evidence;
+* reason;
+* evaluator/actor;
+* timestamp/version provenance.
+
+⸻
+
+20. N/A și media
+
+Un criteriu legitim N/A:
+
+→ este exclus din denominator-ul mediei.
+
+Media se calculează numai peste criteriile aplicabile și evaluate valid.
+
+Nu introduce artificial:
+
+* zero;
+* zece;
+* score implicit.
+
+⸻
+
+21. Anti-gaming
+
+Dacă un criteriu important este declarat N/A doar pentru a ridica media:
+
+→ evidence invalid;
+
+→ quality evaluation invalid;
+
+→ nu PASS.
+
+⸻
+
+CRITIC SCORE VS QUALITY STANDARD
+
+22. Nota criticului nu este adevăr absolut
+
+OBS-GS-18 rămâne valabil.
+
+Un critic poate:
+
+* interpreta greșit;
+* rata context;
+* cita evidence greșită;
+* produce o notă inconsistentă.
+
+Prin urmare:
+
+critic says T04=6.5
+
+nu înseamnă automat că adevărul obiectiv este:
+
+T04 really is 6.5.
+
+⸻
+
+23. Dar asta NU creează quality waiver
+
+Nu adopt recomandarea:
+
+confirmed score < 7 → operator may accept anyway with justification.
+
+Dacă un criteriu aplicabil este confirmat sub minimum:
+
+→ artifact-ul nu satisface standardul WonderPages.
+
+Operatorul nu poate transforma:
+
+6.5
+
+în:
+
+quality-compliant
+
+printr-un waiver.
+
+⸻
+
+24. Operatorul poate contesta finding-ul / scorul
+
+Operatorul poate spune:
+
+această evaluare 6.5 este greșită.
+
+Atunci trebuie:
+
+→ re-evaluation / evidence validation;
+
+→ eventual independent assessment;
+
+→ score/finding resolution;
+
+→ audit trail.
+
+Dacă evaluarea este invalidată și scorul corect este ≥7:
+
+→ artifact-ul poate PASS.
+
+Aceasta este:
+
+score/finding override based on evidence,
+
+nu:
+
+quality-standard waiver.
+
+⸻
+
+25. Distincția obligatorie
+
+Trebuie păstrată arhitectural:
+
+OVERRIDE INVALID EVALUATION
+
+versus
+
+WAIVE CONFIRMED QUALITY DEFECT.
+
+Prima este permisă cu evidence.
+
+A doua NU este permisă pentru acceptance conform D-16.
+
+⸻
+
+CONSEQUENCE
+
+26. Criteriu aplicabil < 7
+
+Prima consecință:
+
+→ REPAIR_REQUIRED;
+
+→ re-evaluate.
+
+Nu release.
+
+⸻
+
+27. După repair
+
+Dacă după repair scorul este încă <7:
+
+nu trece automat la:
+
+operator can accept anyway.
+
+Trebuie stabilit dacă:
+
+A. artifact-ul este încă realmente sub standard;
+
+sau
+
+B. evaluarea/scorul este greșit.
+
+Dacă A:
+
+→ continuă să fie REPAIR_REQUIRED / NOT QUALITY-PASSING.
+
+Dacă B:
+
+→ finding-ul/scorul poate fi invalidat prin procesul de evidence validation.
+
+⸻
+
+28. Fără waiver ascuns
+
+Nu permite:
+
+* manual PASS flag;
+* operator approved despite 6.5;
+* score ignored;
+* release override care ascunde criteriul.
+
+Dacă va exista vreodată o procedură excepțională de release neconform, ea trebuie să fie o politică separată, explicită, auditată și NU trebuie să fie numită quality PASS.
+
+D-16 nu creează o astfel de procedură.
+
+⸻
+
+CRITICAL CRITERIA
+
+29. T01 și T08
+
+Rămân:
+
+T01 ≥ 8
+T08 ≥ 8.
+
+Minimum-ul universal 7 nu le reduce pragul.
+
+Pragul mai strict domină.
+
+⸻
+
+30. Un singur defect logic, un singur motiv principal
+
+Dacă:
+
+T01 = 6.5,
+
+nu vreau două defecte independente:
+
+* below universal minimum;
+* critical below threshold.
+
+Este aceeași valoare care încalcă pragul aplicabil.
+
+Reason-ul principal trebuie să fie cel mai specific/strict:
+
+QUALITY_CRITICAL_BELOW_THRESHOLD:T01
+
+sau echivalent.
+
+Metadata poate consemna și faptul că este sub 7.
+
+Nu dubla defectul.
+
+⸻
+
+31. T07
+
+D-16 NU redefinește T07.
+
+Contractul existent al rubricii rămâne înregistrat.
+
+Relația:
+
+T07 rubric critical criterion
+
+versus
+
+safety gate
+
+este D-17.
+
+Nu deduce politica D-17 din minimum-ul universal D-16.
+
+⸻
+
+VERSION SELECTION AFTER REPAIR
+
+32. Accidentul actual este neacceptabil
+
+Nu selecta versiunea câștigătoare doar după media afișată/rotunjită.
+
+Exemplu:
+
+Version A:
+mean 8.9,
+T04 = 6.5,
+quality gate FAIL.
+
+Version B:
+mean 8.6,
+toate criteriile satisfac pragurile,
+quality gate PASS.
+
+Versiunea B este superioară din punctul de vedere al eligibilității pentru release.
+
+⸻
+
+33. Ordinea de selecție
+
+Conceptual:
+
+gate validity first → then quality comparison among gate-valid candidates.
+
+Adică:
+
+1. validity/evidence prerequisites;
+2. mandatory gate satisfaction;
+3. threshold satisfaction;
+4. abia apoi comparative quality score / tie-breaking.
+
+Nu:
+
+highest mean wins even if it fails a mandatory criterion.
+
+⸻
+
+34. O versiune FAIL nu poate înlocui automat o versiune PASS
+
+Aceasta devine consecință obligatorie de implementare pentru Semantic Hardening #2.
+
+Algoritmul exact de ranking între două versiuni PASS poate fi definit separat.
+
+⸻
+
+MULTIPLE MODERATE WEAKNESSES
+
+35. Nu introducem un scor aditiv arbitrar
+
+Patru criterii la 7.0:
+
+→ fiecare satisface minimum-ul.
+
+Nu inventăm:
+
+4 × score 7 = automatic fail.
+
+⸻
+
+36. Dar pattern-ul poate fi relevant
+
+Dacă mai multe slăbiciuni moderate produc împreună un defect material al experienței:
+
+→ poate exista un composite quality finding.
+
+Trebuie justificat semantic și prin evidence.
+
+Nu prin:
+
+* număr fix de criterii;
+* sumă arbitrară;
+* penalizare dublă.
+
+⸻
+
+37. Media rămâne mecanismul general de compunere
+
+În prezent:
+
+* floor-ul protejează împotriva unei dimensiuni foarte slabe;
+* overall mean protejează împotriva degradării generale.
+
+Aceasta este compunerea numerică principală.
+
+Nu adăugăm încă o a treia formulă numerică fără evidence.
+
+⸻
+
+COLLECTION LEVEL
+
+38. Volume-level PASS nu garantează automat lipsa unui pattern de colecție
+
+Dacă toate cele șase volume au aceeași slăbiciune sistemică aproape de minimum:
+
+aceasta poate fi relevantă pentru Collection QA.
+
+⸻
+
+39. Dar D-16 nu inventează un threshold de colecție
+
+Nu introduc:
+
+if 4 volumes have T04=7 → collection FAIL.
+
+Nu există evidence pentru acest număr.
+
+⸻
+
+40. Introducem conceptual systemic-quality finding
+
+La nivel:
+
+Book/Volume → Collection
+
+poate exista:
+
+QUALITY_SYSTEMIC_PATTERN
+
+sau echivalent,
+
+când aceeași slăbiciune se repetă și efectul cumulativ este material.
+
+Severitatea și threshold-urile exacte se calibrează ulterior.
+
+Nu dubla fiecare finding individual.
+
+⸻
+
+41. Page → Book → Volume → Collection
+
+D-16 păstrează:
+
+* Page: evidence poate proveni de la pagini;
+* Book/Volume: rubric scoring + gate;
+* Collection: detectarea pattern-urilor sistemice.
+
+Nu inventăm note per pagină dacă rubrica nu le are.
+
+⸻
+
+NATIVE / RO
+
+42. D-16 nu inventează retroactiv rubrică T01–T18 pentru ediția nativă
+
+Investigația arată că ediția nativă nu are în prezent aceeași rubrică.
+
+D-16 nu schimbă acest lucru pe ascuns.
+
+Dar această asimetrie trebuie păstrată ca dependency / architecture gap.
+
+Nu pretinde că minimum-ul T01–T18 este deja executat pentru RO dacă acele criterii nu sunt produse acolo.
+
+⸻
+
+43. Nu confundăm aceasta cu D-14
+
+D-14 cere age-fit și fidelity și pe ediția RO unde se aplică.
+
+D-16 decide quality criterion floors pentru rubrica T01–T18.
+
+Sunt straturi diferite.
+
+⸻
+
+REZULTATELE EXACTE D-16
+
+44. v2c-quality-09
+
+T04 = 6.5:
+
+→ FAIL quality gate
+→ REPAIR_REQUIRED.
+
+⸻
+
+45. v2h-quality-06
+
+T14 = 6.5:
+
+→ FAIL quality gate
+→ REPAIR_REQUIRED.
+
+Nu rerula holdout-ul.
+
+⸻
+
+46. v2c-quality-08 / v2h-quality-05
+
+T13 = 6.5:
+
+→ FAIL
+→ REPAIR_REQUIRED.
+
+Neschimbat.
+
+⸻
+
+47. v2c-quality-10
+
+T13 = 7.0:
+
+→ floor PASS.
+
+Dacă restul condițiilor trec:
+
+→ overall PASS.
+
+⸻
+
+48. T04 = 6.99
+
+Dacă 6.99 este o valoare validă conform scoring contract:
+
+→ FAIL.
+
+⸻
+
+49. T04 = 7.0
+
+→ floor PASS.
+
+⸻
+
+50. T04 = 0, restul 9
+
+→ FAIL.
+
+Media nu poate compensa.
+
+Actualul v1 PASS arată exact motivul pentru care WonderPages kids-sc folosește politica D-16.
+
+D-16 nu schimbă retroactiv alte Product Types.
+
+⸻
+
+51. Patru criterii la 7.0, restul 9
+
+→ PASS dacă:
+
+* toate sunt aplicabile;
+* mean ≥8;
+* critical thresholds trec;
+* nu există alt gate failure.
+
+Nu inventa cumulative fail numeric.
+
+⸻
+
+52. T04 = 6.9 și T14 = 6.9
+
+→ două criterii distincte sub minimum;
+
+→ FAIL;
+
+→ fiecare finding păstrat separat.
+
+⸻
+
+53. T07 = 6.9
+
+→ FAIL conform contractului existent.
+
+Dar reason taxonomy și relația sa cu safety sunt D-17.
+
+Nu dubla automat două defecte.
+
+⸻
+
+54. T01 = 6.5 / T08 = 6.9
+
+→ FAIL pe threshold-ul critic specific.
+
+Nu este necesar un al doilea reason principal pentru universal floor.
+
+⸻
+
+55. T07 = 7.5
+
+D-16 nu decide problema D-17.
+
+Păstrează cazul pentru D-17.
+
+⸻
+
+56. Toate = 8
+
+→ PASS.
+
+Equality passes.
+
+⸻
+
+57. Toate 8, T04 = 7.2
+
+Mean matematic ≈ 7.9556:
+
+→ FAIL overall mean.
+
+Display 8.0 nu schimbă verdictul.
+
+⸻
+
+58. 17 × 8.1 + T04 = 6.3
+
+Mean matematic exact = 8.
+
+Condiția mean:
+
+→ PASS.
+
+Dar T04 = 6.3:
+
+→ floor FAIL.
+
+Prin urmare artifact-ul final:
+
+→ FAIL din cauza T04,
+
+NU din cauza mediei.
+
+Actualul QUALITY_MEAN_BELOW_THRESHOLD este bug.
+
+Acesta este un boundary case important pentru Semantic Hardening #2.
+
+⸻
+
+59. Toate 7.95
+
+Dacă aceste valori sunt valide conform scoring contract:
+
+mean = 7.95:
+
+→ FAIL overall.
+
+Display 8.0 nu schimbă verdictul.
+
+Criteriile individuale sunt ≥7.
+
+Reason principal:
+
+QUALITY_MEAN_BELOW_THRESHOLD.
+
+⸻
+
+REASON MODEL
+
+60. Reasons trebuie să reflecte mecanismul real
+
+Conceptual:
+
+* QUALITY_MEAN_BELOW_THRESHOLD
+* QUALITY_CRITICAL_BELOW_THRESHOLD
+* QUALITY_CRITERION_BELOW_MINIMUM
+* QUALITY_APPLICABILITY_INVALID
+* QUALITY_EVIDENCE_INVALID
+* QUALITY_SYSTEMIC_PATTERN
+
+sau denumiri mai bune echivalente.
+
+Nu genera două motive principale pentru aceeași încălcare numerică.
+
+⸻
+
+RELAȚIA CU D-18
+
+61. Standardul și validitatea evaluării sunt separate
+
+D-16:
+
+what score is acceptable?
+
+D-18:
+
+when is that score/evidence trustworthy enough to use?
+
+Nu rezolva problema unui critic nesigur prin slăbirea standardului D-16.
+
+⸻
+
+62. Dacă evidence-ul notei este invalid
+
+Nu spune:
+
+criterion 6.5 accepted.
+
+Spune:
+
+6.5 assessment not validated / invalidated.
+
+Apoi:
+
+→ re-evaluate.
+
+Această distincție trebuie păstrată în modelul de date.
+
+⸻
+
+STATUSUL POLITICII
+
+63. Ce este acum decis
+
+Pentru kids-sc:
+
+overall ≥ 8
+
+T01 ≥ 8
+
+T08 ≥ 8
+
+applicable criterion floor ≥ 7
+
+cu T07 păstrat pentru analiza D-17.
+
+Equality passes.
+
+No pre-comparison rounding.
+
+No floating-point boundary error.
+
+N/A requires evidence.
+
+No confirmed-quality-defect waiver.
+
+⸻
+
+64. Ce NU pretindem
+
+Nu spune:
+
+universal 7 is empirically proven optimal.
+
+Spune:
+
+universal applicable floor 7 is an operator-approved WonderPages product policy, pending empirical validation/calibration.
+
+Această formulare este obligatorie.
+
+⸻
+
+CE NU DECIDE D-16
+
+D-16 NU decide:
+
+* T07 rubric vs safety gate — D-17;
+* evidence validity — D-18;
+* schema Gold / measurement — D-19 / D-20;
+* validation performance thresholds — D-21;
+* author independence — D-22;
+* exact scoring granularity;
+* empirical optimality of 7;
+* taxonomy completă de N/A pentru T01–T18;
+* toate regulile de collection-level systemic quality;
+* visual rubric V01–V04;
+* science criterion / D-17 dacă acesta este implicat acolo;
+* native-edition rubric redesign;
+* learning.js adaptive threshold policy;
+* critic model quality;
+* empirical evaluator validity.
+```
+
+### Separarea cerută
+
+| Strat | Conținut |
+|---|---|
+| **Decizie de politică** | Opțiunea D, rafinată: universal applicable floor + applicability + exact threshold semantics + no quality waiver of a confirmed defect. Pentru `kids-sc`: medie ≥ 8; T01 ≥ 8; T08 ≥ 8; fiecare alt criteriu aplicabil ≥ 7 (T07 → D-17); NOT_APPLICABLE legitim exclus din comparație și din medie. |
+| **Statutul politicii** | **universal applicable floor 7 is an operator-approved WonderPages product policy, pending empirical validation/calibration.** Decizia de politică ≠ prag validat empiric. Decizia T13 (cazul 41) era specifică; D-16 rezolvă acum întrebarea universală. |
+| **Criteriu / aplicabilitate / evidence de aplicabilitate** | SCORED sau NOT_APPLICABLE. N/A nu e notă (nici 0, nici 10). Implicit: aplicabil. N/A doar cu evidence citabilă (semantica criteriului + contextul artifactului), auditat: id, definiție / versiune, regulă, context, evidence, motiv, actor, proveniență. N/A folosit pentru a ridica media → evaluare invalidă → nu PASS. T09 nu e declarat automat N/A în volumul 1. |
+| **Scor canonic / scor afișat** | Decide valoarea canonică, fidelă matematic. Afișarea e doar prezentare; UI-ul arată că valoarea canonică e sub prag; valoarea canonică rămâne în audit. Granularitatea nu e decisă: o valoare nepermisă se respinge la validarea scorului, nu se rotunjește în secret de poartă. |
+| **Prag / tip de prag / egalitate / rezultatul comparației** | `score >= threshold`, exact. Egalitatea trece (8.0, 7.0). 6.99 → FAIL (dacă e valid). Fără rotunjire înainte de comparație. Fără virgulă mobilă binară la prag (decimal, întregi scalate, raționale sau echivalent; biblioteca nu e decisă). OBS-GS-19 formalizat: valoare canonică fidelă → comparație → verdict → rotunjire de afișare. |
+| **Media canonică / media afișată / pragul mediei** | Media doar peste criteriile aplicabile evaluate valid. 7.9556 afișat 8.0 → FAIL. 17 × 8.1 + 6.3 = exact 8 → **condiția mediei trece**; artifactul pică din cauza T04 = 6.3 < 7, nu din cauza mediei. |
+| **Stare critică / minim universal** | T01 / T08 ≥ 8 rămân; pragul mai strict domină. T07: contractul existent, relația cu siguranța → D-17. |
+| **Motiv principal / motive legate** | Un singur motiv principal per încălcare numerică (cel mai specific / strict, ex. `QUALITY_CRITICAL_BELOW_THRESHOLD:T01`). „Și sub 7” rămâne metadata. Coduri conceptuale: MEAN_BELOW_THRESHOLD, CRITICAL_BELOW_THRESHOLD, CRITERION_BELOW_MINIMUM, APPLICABILITY_INVALID, EVIDENCE_INVALID, SYSTEMIC_PATTERN (sau echivalente). |
+| **Validitatea evidence-ului / confirmarea scorului** | Nota criticului nu e adevăr (OBS-GS-18). Evidence invalid → „6.5 assessment not validated / invalidated” → re-evaluate, nu „accepted”. D-18 decide când e de încredere. |
+| **Reparație / reevaluare** | Criteriu aplicabil confirmat < prag → **REPAIR_REQUIRED** → re-evaluate; nu release. După reparație, încă sub prag: (A) realmente sub standard → rămâne REPAIR_REQUIRED; (B) evaluarea e greșită → invalidare prin evidence validation. |
+| **Contestare de către operator / waiver** | **OVERRIDE INVALID EVALUATION** (permis cu evidence: re-evaluation, eventual evaluare independentă, rezoluție, audit) ≠ **WAIVE CONFIRMED QUALITY DEFECT** (nepermis). Fără manual PASS, fără „approved despite 6.5”, fără release override care ascunde criteriul. O eventuală procedură excepțională de release neconform = altă politică, explicită, auditată, niciodată numită quality PASS; D-16 nu o creează. Recomandarea furnizorului (REVIEW acceptabil după reparație) **nu a fost adoptată**. |
+| **Poarta versiunii / selecția versiunii** | Întâi validitatea și poarta, abia apoi scorul. O versiune care pică nu poate înlocui automat una care trece. Ranking-ul între două versiuni care trec se definește separat. |
+| **Slăbiciuni moderate** | Fără regulă aditivă (patru criterii la 7.0 → PASS dacă restul trece). Un finding compus e posibil doar justificat semantic și prin evidence. Minimul + media rămân compunerea numerică. |
+| **Volum / colecție** | Book / Volume: rubrică + poartă. Collection: `QUALITY_SYSTEMIC_PATTERN` conceptual, fără prag de colecție inventat, fără dublarea finding-urilor. Fără note per pagină. |
+| **Ediția nativă** | Nu i se inventează rubrica T01–T18; asimetria rămâne gap de arhitectură; minimul nu e pretins pentru RO. Distinct de D-14. |
+| **Comportamentul evaluatorului la momentul deciziei** (HEAD `b5b8f95`, neschimbat) | v2: minim 7 pe toate criteriile, fără aplicabilitate. Egalitatea trece. Media exactă decide (H1), dar e calculată în virgulă mobilă: 17 × 8.1 + 6.3 → 7.9999999999999964 → `QUALITY_MEAN_BELOW_THRESHOLD` (**bug**, și pe v1). T01 / T07 / T08 sub 7 → două coduri. v1 fără minim. Criticul nativ fără rubrică. `critique_revise` păstrează versiunea cu media rotunjită mai mare chiar dacă pică (citire de cod). Fără cale de acceptare. Fără agregare pe colecție. **Comportamentul nu e politica.** |
+| **Consecințe viitoare** (Semantic Hardening #2, neautorizat încă) | Comparații fidele matematic; egalitatea trece; rotunjirea doar la afișare; NOT_APPLICABLE auditat; un motiv principal; contestare ≠ waiver; REPAIR_REQUIRED + re-evaluate; selecția după poartă; pattern sistemic conceptual; granularitate în contractul de scoring; reprezentarea în Gold după D-19 / D-20. |
+
+### Rezultate explicite
+
+v2c-quality-09 (T04 = 6.5) → FAIL / REPAIR_REQUIRED · v2h-quality-06 (T14 = 6.5) → FAIL / REPAIR_REQUIRED, **fără rerun** ·
+T13 = 6.5 → FAIL / REPAIR_REQUIRED · T13 = 7.0 → floor PASS · criteriu = 7.0 → PASS · criteriu = 6.99 → FAIL (dacă e valid) ·
+media exact 8 → PASS · 17 × 8.1 + 6.3 → media trece, minimul pică (6.3 < 7) · 7.9556 afișat 8.0 → media pică · criteriu aplicabil
+confirmat < 7 → nu poate fi transformat în PASS prin waiver · scor invalid → contestat / invalidat / reevaluat (nu e waiver) · N/A →
+doar cu evidence, exclus din numitor · selecția versiunii → candidatul care trece poarta înaintea celui care pică, indiferent de medie.
+
+### Afectate (fără nicio modificare acum)
+
+- **Gold-v2:** v2c-quality-09 → negativ la adjudecare; v2c-quality-08 / -10 neschimbate; v2c-quality-15 → D-17.
+- **Setul rezervat (înghețat, nu se rulează din nou):** v2h-quality-06 → FAIL / REPAIR_REQUIRED; v2h-quality-05 neschimbat.
+- **Gold-v1:** neschimbat (cazul 41).
+
+### Nu decide
+
+D-17 · D-18 · D-19 / D-20 · D-21 · D-22 · granularitatea scorurilor · optimalitatea empirică a lui 7 · taxonomia N/A · regulile
+sistemice de colecție · rubrica vizuală V01–V04 · criteriul științific (D-17, dacă e implicat) · rubrica ediției native · pragurile
+adaptive din `learning.js` · calitatea criticului · validitatea empirică.
+
+### Dependențe deschise
+
+- **D-16-DEP-SCORING-GRANULARITY** · **D-16-DEP-NA-TAXONOMY** · **D-16-DEP-COLLECTION-SYSTEMIC-QUALITY** ·
+  **D-16-DEP-EMPIRICAL-FLOOR-VALIDATION** (D-19 / D-20 / D-21) · **D-16-DEP-NATIVE-EDITION-RUBRIC** · **D-16-DEP-PASS-VERSION-RANKING** ·
+  **D-16-DEP-T07** → D-17 · **D-16-DEP-EVIDENCE-VALIDITY** → D-18.
