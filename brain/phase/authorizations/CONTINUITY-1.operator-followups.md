@@ -240,3 +240,287 @@ Recorded: apply B-05 (audit MSG-20261006T134107Z-chatgpt-e91c: before each write
 > Otherwise proceed autonomously within this authorized E2E test.
 
 Recorded: the operator configured the ChatGPT Work event task (configuration as observed by the operator above; model and reasoning not pinned at task level). ChatGPT's last advisory re-audit MSG-20261006T135204Z-chatgpt-c7a2 returned PASS for B-01…B-05. One controlled live end-to-end wake test of decision B is authorized: one new diagnostic request, one ring through the existing ingress mechanism, no forced re-wake, no manual or simulated response; LIVE PASS only on an autonomous ChatGPT-written response validated from the Bridge. Decision C is not implemented. Nothing post-CONTINUITY-1 is started.
+
+
+## 2026-10-06 — #8 (Decision C0: feasibility investigation only)
+
+> Operator authorization: DECISION C0 — FEASIBILITY INVESTIGATION ONLY.
+>
+> Decision B has independently reached LIVE E2E PASS.
+>
+> The next objective is to determine whether the reverse autonomous path can be implemented safely:
+>
+> ChatGPT
+> → Agent Bridge
+> → GitHub event
+> → Claude Code
+> → Agent Bridge / WonderPages
+> → ChatGPT Work
+>
+> without requiring the operator to copy/paste messages between ChatGPT and Claude.
+>
+> This authorization is INVESTIGATION / DESIGN ONLY.
+>
+> Do NOT implement Decision C yet.
+> Do NOT begin post-CONTINUITY-1 work.
+> Do NOT begin RC1, Semantic Hardening #2, Gold work, Dinosaur World work, installation, or agent commissioning.
+>
+> TARGET
+>
+> Determine whether Claude can be awakened automatically from GitHub using the operator’s existing Claude subscription allowance, preferably:
+>
+> * Claude Opus 5.5
+> * High effort
+> * Claude subscription OAuth
+> * NO Anthropic API pay-per-token billing
+> * NO API fallback
+> * NO additional mandatory paid service
+>
+> The desired eventual path is:
+>
+> ChatGPT
+> → Bridge durable queue for Claude
+> → Claude ingress / doorbell
+> → GitHub event
+> → Claude Code execution
+> → verified bootstrap from repository
+> → process authorized pending work
+> → write result
+> → Bridge
+> → Decision B wakes ChatGPT when review is required.
+>
+> CURRENT EXTERNAL FINDINGS TO VERIFY INDEPENDENTLY
+>
+> Do not trust these as implementation facts until you verify them against current official Anthropic documentation and the actual repository/environment.
+>
+> Current investigation indicates:
+>
+> 1. Official anthropics/claude-code-action supports CLAUDE_CODE_OAUTH_TOKEN.
+> 2. Claude Pro/Max users may be able to generate the subscription OAuth credential using:
+>
+> claude setup-token
+>
+> 3. Current Anthropic documentation indicates that Claude Agent SDK / claude -p subscription authentication currently consumes Claude subscription allowance.
+> 4. ANTHROPIC_API_KEY must NOT be used for this architecture because it may cause PAYG/API billing.
+> 5. Claude Code currently appears to support Claude Opus 5.5 and configurable effort including High.
+>
+> Verify all of these independently.
+>
+> SUBSCRIPTION-FIRST HARD INVARIANT
+>
+> Decision C must NOT require or silently introduce:
+>
+> * ANTHROPIC_API_KEY
+> * Anthropic Console PAYG
+> * API credits
+> * usage credits purchased automatically
+> * pay-per-token fallback
+> * Bedrock
+> * Vertex AI
+> * third-party metered inference
+> * automatic paid reset
+> * another mandatory paid service
+>
+> If subscription allowance is exhausted:
+>
+> WAIT_FOR_ALLOWANCE / WAIT_FOR_RESET.
+>
+> Pending work must remain durable.
+>
+> No automatic transition to paid API usage is allowed.
+>
+> SECURITY
+>
+> Never ask the operator to paste an OAuth token, API key, PAT, secret, or credential into chat, Bridge, Project Brain, documentation, commits, logs, or source files.
+>
+> If claude setup-token is required, determine the exact official procedure.
+>
+> The operator may perform the interactive authentication locally and place the resulting credential directly into GitHub Actions Secrets.
+>
+> Claude must never receive the secret value in conversation.
+>
+> Determine the appropriate secret name and repository in which it should live.
+>
+> C0 INVESTIGATION
+>
+> Perform a deep feasibility investigation covering at minimum:
+>
+> A. Authentication
+>
+> Determine:
+>
+> * whether CLAUDE_CODE_OAUTH_TOKEN is officially supported;
+> * whether it works with Claude Code GitHub Actions;
+> * whether it uses Claude subscription allowance rather than Anthropic API billing;
+> * applicable Pro/Max restrictions;
+> * token lifecycle / expiration / refresh implications;
+> * whether unattended GitHub Actions execution is actually supported with this credential;
+> * whether there are Terms-of-Service or product restrictions relevant to this use.
+>
+> B. Event-driven wake
+>
+> Determine the smallest reliable GitHub mechanism capable of:
+>
+> Bridge event
+> → GitHub Actions
+> → Claude Code Action / Claude Code
+> → autonomous execution.
+>
+> Determine whether this can be triggered by:
+>
+> * push;
+> * workflow_dispatch;
+> * repository_dispatch;
+> * pull-request synchronization;
+> * another safer GitHub event.
+>
+> Prefer a mechanism analogous to Decision B but do not copy B mechanically if a safer design exists.
+>
+> C. Model
+>
+> Determine whether the execution can explicitly pin:
+>
+> Claude Opus 5.5.
+>
+> Do not accept aliases whose target may silently change unless unavoidable and documented.
+>
+> D. Effort
+>
+> Determine whether High effort can be explicitly configured for unattended execution.
+>
+> Distinguish:
+>
+> * model selection;
+> * effort;
+> * extended thinking;
+> * token budget;
+>
+> and do not treat them as equivalent unless Anthropic documentation explicitly does.
+>
+> E. Usage limits
+>
+> Investigate what happens when:
+>
+> * 5-hour allowance is exhausted;
+> * weekly allowance is exhausted;
+> * authentication expires;
+> * GitHub Action starts while Claude is unavailable.
+>
+> We do NOT need programmatic knowledge of remaining quota.
+>
+> The architecture only needs to detect unsuccessful execution, preserve pending work, and retry later using bounded backoff.
+>
+> No aggressive polling.
+>
+> F. Repository permissions
+>
+> Determine the minimum GitHub permissions required.
+>
+> Target architecture:
+>
+> Claude may read/write:
+>
+> * original WonderPages repository;
+> * Agent Bridge where required.
+>
+> ChatGPT continues to have access only to Agent Bridge.
+>
+> Do not weaken this separation.
+>
+> G. Security boundary
+>
+> Determine whether an untrusted Bridge message could inject arbitrary instructions into Claude Code.
+>
+> Design the future C bootstrap so that:
+>
+> * repository canon remains authoritative;
+> * immutable anchor is used;
+> * only supported message types are accepted;
+> * delegated authority is checked;
+> * current active phase is checked;
+> * control hashes are verified;
+> * stale/superseded/already-resolved messages are ignored;
+> * Claude cannot obtain new operator authority from a Bridge message authored by ChatGPT.
+>
+> ChatGPT may exercise only authority already delegated by the operator in the canonical WonderPages phase contract.
+>
+> H. C0 proof-of-feasibility design
+>
+> Design the smallest harmless live test.
+>
+> It should prove only:
+>
+> GitHub event
+> → Claude subscription OAuth
+> → Claude Code
+> → expected model/effort if observable
+> → read a unique nonce from an immutable Bridge commit
+> → write a diagnostic result to Bridge.
+>
+> The C0 live test must NOT modify WonderPages application/runtime files.
+>
+> Do not run this test yet.
+>
+> IMPORTANT ARCHITECTURAL REQUIREMENTS FOR FUTURE C
+>
+> If feasibility is confirmed, the future Decision C architecture should eventually provide the reverse equivalents of Decision B:
+>
+> * durable queue for Claude;
+> * at-least-once delivery;
+> * idempotency;
+> * immutable anchor;
+> * STILL PENDING check immediately before consequential work;
+> * CLOSED / SUPERSEDED handling;
+> * duplicate protection;
+> * bounded retry/backoff;
+> * 7-day retry horizon;
+> * allowance exhaustion survival;
+> * fail-closed context bootstrap;
+> * Project Brain verification;
+> * phase/delegated-authority verification;
+> * no self-trigger loop;
+> * no hidden API fallback.
+>
+> But DO NOT implement these in C0.
+>
+> OPERATOR INTERVENTION
+>
+> Identify every step that genuinely requires the operator.
+>
+> Ideally there should be only one initial credential setup step.
+>
+> If claude setup-token is required:
+>
+> STOP before requiring the credential.
+>
+> Give the operator exact instructions for generating and storing it securely.
+>
+> Do not continue to a live test until the operator explicitly confirms setup.
+>
+> REQUIRED OUTPUT
+>
+> Produce a Decision C0 feasibility report with:
+>
+> 1. FEASIBLE / FEASIBLE_WITH_LIMITATIONS / NOT_FEASIBLE.
+> 2. Official evidence for authentication.
+> 3. Subscription-vs-API billing determination.
+> 4. Event/wake mechanism.
+> 5. Model pinning determination.
+> 6. High-effort determination.
+> 7. Usage-limit behavior.
+> 8. Security implications.
+> 9. GitHub permissions.
+> 10. Proposed minimal C0 live test.
+> 11. Exact operator action required, if any.
+> 12. Risks/open unknowns.
+> 13. Explicit statement whether implementation of Decision C should be authorized.
+>
+> Record the investigation and resulting state in the canonical WonderPages continuity documentation according to the existing Project Brain rules, but do not change runtime/application behavior.
+>
+> If investigation reveals a contradiction with the subscription-first invariant, STOP FAIL-CLOSED.
+>
+> Do not solve it by introducing an API.
+>
+> No implementation of Decision C is authorized by this message.
+
+Recorded: Decision C0 authorizes investigation and design only — no implementation of Decision C, no C0 live test, nothing post-CONTINUITY-1. Report: `brain/evidence/DECISION-C0-FEASIBILITY.md`.

@@ -84,7 +84,7 @@
  "awaitingOperator": [
   "Decision B: ChatGPT Work task configured and live end-to-end wake test PASS (2026-10-06); operator acceptance of decision B is part of the CONTINUITY-1 review",
   "Review / acceptance of CONTINUITY-1 and explicit authorization of the next phase",
-  "Decision C (Claude wake-up) — not authorized; requirement recorded, investigation first",
+  "Decision C (Claude wake-up) — C0 feasibility: FEASIBLE_WITH_LIMITATIONS (brain/evidence/DECISION-C0-FEASIBILITY.md); not implemented; operator to confirm P1 usage credits OFF / P2 Claude GitHub App on the Bridge and to authorize the C0 live test; B-06 repair (B ingress blocked by an invalid ChatGPT message) awaits authorization",
   "Gold-v1 validation/acceptance; Gold-v2 adjudication",
   "Dinosaur World observations O1/O2; real Creative Upgrade; V1 pilot",
   "Open policy dependencies (closure §10)"

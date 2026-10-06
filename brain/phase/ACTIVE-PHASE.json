@@ -45,7 +45,7 @@
  "nextAuthorizedStep": {
   "id": "OPERATOR-REVIEW-CONTINUITY-1",
   "actor": "operator",
-  "summary": "Decision B live end-to-end test PASSED (operator follow-up #7, evidence brain/evidence/DECISION-B-INGRESS.json liveE2E). The operator reviews CONTINUITY-1 and either explicitly authorizes a next phase (including any Decision C investigation) or asks for corrections. No implementation outside CONTINUITY-1 is authorized."
+  "summary": "Decision B live E2E PASS; Decision C0 feasibility report delivered (FEASIBLE_WITH_LIMITATIONS). Open for the operator: B-06 repair (B ingress currently fail-closed by an invalid ChatGPT message), preconditions P1/P2, authorization of the C0 live test, review of CONTINUITY-1. No implementation outside CONTINUITY-1 is authorized."
  },
  "doNotStart": {
   "source": "brain/phase/authorizations/CONTINUITY-1.operator-instruction.txt §10 (verbatim item names)",
@@ -124,7 +124,7 @@
  "operatorDecisions": {
   "A": "DONE — BRIDGE_SYNC_TOKEN configured; automatic sync demonstrated (F-05 closed by ChatGPT, MSG-20261006T121530Z-chatgpt-c3f1)",
   "B": "AUTHORIZED option 1 (operatorFollowups #3, extended by #4) — ChatGPT ingress PR + ChatGPT Work event-triggered task (target GPT-6 Astra, reasoning Medium, subscription only, no API fallback); durable delivery: pending until a valid resolving reply, at-least-once wake with bounded backoff (3h/6h/12h/24h/48h, cap 48h, max 9 attempts ≈ 9.9 days, beyond a 7-day weekly allowance window → STALLED until revived, surfaced as a workflow warning), batching, idempotent processing, WAIT_FOR_ALLOWANCE without usage monitor; fixed task text is the bootstrap authority (B-01), anchored per wake to the immutable doorbell mainCommit (B-02); honest monotonic timestamps (B-04); still-pending re-check on current main before every write, skip if closed / superseded / resolved since the wake (B-05). Live end-to-end test PASS 2026-10-06 (operator follow-up #7; ChatGPT Work task configured by the operator)",
-  "C": "NOT AUTHORIZED / NOT IMPLEMENTED — requirements (operatorFollowups #3, #4): full-duplex ChatGPT → Bridge → Claude with the same guarantees as B (durable queue, at-least-once wake, idempotency, batching, bounded retry/backoff, anti-loop, fail-closed); target Claude Opus 5.5 / High on the existing Claude subscription, no separately billed API; after B is accepted, first investigate and demonstrate an event-driven wake of Claude Code — never assume it exists; report limitation and alternatives before any implementation"
+  "C": "C0 FEASIBILITY INVESTIGATION ONLY (operatorFollowups #8): result FEASIBLE_WITH_LIMITATIONS (brain/evidence/DECISION-C0-FEASIBILITY.md). Decision C NOT IMPLEMENTED, C0 live test NOT RUN. Requirements (operatorFollowups #3, #4, #8): full-duplex ChatGPT → Bridge → Claude with the same guarantees as B; Claude Opus 5.5 / High on the existing Claude subscription; no ANTHROPIC_API_KEY, API credits, usage credits, cloud providers or other paid fallback (WAIT_FOR_ALLOWANCE)"
  },
  "bridgeConstraints": [
   "Agent Bridge is an external development/control plane only; never a runtime, build, production, agent, orchestration, evaluation or Enterprise Local dependency of WonderPages; WonderPages works unchanged if the Bridge is removed",
@@ -144,5 +144,29 @@
    "validatedBy": "Claude from the Bridge; closed by MSG-20261006T144923Z-claude-69b3 (Bridge b6e539a)",
    "residual": "attribution: the response commit carries the operator's GitHub identity (ChatGPT connector), so the Bridge cannot cryptographically tell a Work run from an interactive ChatGPT session — the Work task run history in ChatGPT is the record of autonomy; model/reasoning not pinned (reported unknown); usage-limit behaviour not observed"
   }
- }
+ },
+ "decisionC0": {
+  "authorizedBy": "brain/phase/authorizations/CONTINUITY-1.operator-followups.md #8 (verbatim, 2026-10-06)",
+  "status": "INVESTIGATION COMPLETE — FEASIBLE_WITH_LIMITATIONS; nothing implemented; live test not run",
+  "report": "brain/evidence/DECISION-C0-FEASIBILITY.md",
+  "recommendedRoute": "R1 — Claude Code routine with a GitHub trigger (pull_request.synchronize on a never-merged Bridge ingress PR), subscription only, no credential stored in GitHub; R2 (claude-code-action + CLAUDE_CODE_OAUTH_TOKEN in WonderPages) as fallback",
+  "operatorPreconditions": [
+   "P1: usage credits OFF on the operator's Claude account (else C must not be built)",
+   "P2: Claude GitHub App installed on the Bridge repository"
+  ],
+  "openOperatorDecisions": [
+   "authorize the B-06 repair",
+   "authorize the C0 live test (route R1)",
+   "before C1: scope of autonomous writes vs the standing rule 'Bridge → WonderPages automatic is forbidden', and an operator-written delegation table for ChatGPT"
+  ]
+ },
+ "openFindings": [
+  {
+   "id": "B-06",
+   "found": "2026-10-06 by Claude while starting C0",
+   "status": "OPEN — not repaired (changes protocol semantics; needs operator authorization)",
+   "finding": "ChatGPT message MSG-20261006T145200Z-chatgpt-bpass (Bridge fae311b) is invalid: id suffix not 4-hex, AUDIT_RESULT without inReplyTo. validate INVALID → ingress-plan refuses (fail-closed) and append-only forbids removal, so decision B cannot ring until resolved.",
+   "proposedRepair": "Claude-owned, control-pinned quarantine ledger in the Bridge: listed ids reported as warnings and excluded from threads/pending; content of bpass (advisory PASS of B live E2E) preserved as data"
+  }
+ ]
 }
