@@ -45,7 +45,7 @@
  "nextAuthorizedStep": {
   "id": "OPERATOR-REVIEW-CONTINUITY-1",
   "actor": "operator",
-  "summary": "Decision B live E2E PASS; B-06 repaired (B ingress operational again); Decision C0 feasibility report delivered (FEASIBLE_WITH_LIMITATIONS, routine daily limits recorded). Open for the operator: preconditions P1 (usage credits OFF) / P2 (Claude GitHub App on the Bridge), authorization of the C0 live test, review of CONTINUITY-1. No implementation outside CONTINUITY-1 is authorized."
+  "summary": "Decision C0 live test PREPARED (Bridge PR #2 inert). Waiting for the operator to create the C0 routine and confirm; then Claude publishes exactly one LIVE probe commit and validates the result. Decision C / C1 not authorized. No implementation outside CONTINUITY-1 is authorized."
  },
  "doNotStart": {
   "source": "brain/phase/authorizations/CONTINUITY-1.operator-instruction.txt §10 (verbatim item names)",
@@ -164,7 +164,7 @@
    "P2: Claude GitHub App installed on the Bridge repository"
   ],
   "openOperatorDecisions": [
-   "authorize the C0 live test (route R1)",
+   "create the C0 routine exactly as specified in brain/evidence/DECISION-C0-LIVE.md and confirm it is active",
    "before C1: scope of autonomous writes vs the standing rule 'Bridge → WonderPages automatic is forbidden', and an operator-written delegation table for ChatGPT"
   ],
   "routineDailyLimits": "Pro 5 / Max 15 / Team-Enterprise 25 routines per day (official announcement 2026-04-14; docs page silent); beyond them only extra usage, which is not authorized → WAIT_FOR_ALLOWANCE / WAIT_FOR_RESET",
@@ -172,7 +172,16 @@
    "batching: one wake processes all pending Claude work",
    "ring coalescing and a daily ring budget below the plan's included routine runs",
    "no extra usage / usage credits / API / paid fallback"
-  ]
+  ],
+  "liveTest": {
+   "authorizedBy": "operatorFollowups #10 (verbatim)",
+   "status": "PREPARED — awaiting the operator's routine creation; LIVE commit not published",
+   "preconditions": "P1 Pro + usage credits OFF, P2 Claude GitHub App on the Bridge (operator-confirmed)",
+   "pullRequest": "roland-ecsegi/wonderpages.agent-bridge#2 (head inbox/claude-c0, inert commit b3a2727)",
+   "routinePrompt": "brain/evidence/C0-ROUTINE-PROMPT.txt (sha256 fff1f9153a5d41f91e29eea50c63613c6c58943c627284d6a9df6aae1db85877)",
+   "evidence": "brain/evidence/DECISION-C0-LIVE.md",
+   "rules": "one wake, no retry, no loop, result only on branch claude/c0-result"
+  }
  },
  "openFindings": [
   {

@@ -5,7 +5,7 @@ As of 2026-10-06 · functional checkpoint `866a441` · last decision commit `168
 Repository `roland-ecsegi/wonderpages.ai.v01` · branch `claude/wonderpages-enterprise-architecture-8hy7w9` · public
 
 **ACTIVE PHASE:** `CONTINUITY-1` — WonderPages Project Brain + Continuity System + Agent Bridge (IN_PROGRESS)
-**NEXT_AUTHORIZED_STEP:** OPERATOR-REVIEW-CONTINUITY-1 — Decision B live E2E PASS; B-06 repaired (B ingress operational again); Decision C0 feasibility report delivered (FEASIBLE_WITH_LIMITATIONS, routine daily limits recorded). Open for the operator: preconditions P1 (usage credits OFF) / P2 (Claude GitHub App on the Bridge), authorization of the C0 live test, review of CONTINUITY-1. No implementation outside CONTINUITY-1 is authorized.
+**NEXT_AUTHORIZED_STEP:** OPERATOR-REVIEW-CONTINUITY-1 — Decision C0 live test PREPARED (Bridge PR #2 inert). Waiting for the operator to create the C0 routine and confirm; then Claude publishes exactly one LIVE probe commit and validates the result. Decision C / C1 not authorized. No implementation outside CONTINUITY-1 is authorized.
 
 > Run `node brain/tools/brain.mjs gate` before relying on anything below. Every row names its authoritative source; if this view
 > and the source differ, the source wins and the gate must fail.
@@ -55,7 +55,7 @@ Sources: C-GOAL → `reference/architecture/WonderPages_Enterprise_Master_Archit
 ## Awaiting the operator
 - Decision B: ChatGPT Work task configured and live end-to-end wake test PASS (2026-10-06); operator acceptance of decision B is part of the CONTINUITY-1 review
 - Review / acceptance of CONTINUITY-1 and explicit authorization of the next phase
-- Decision C (Claude wake-up) — C0 feasibility: FEASIBLE_WITH_LIMITATIONS (brain/evidence/DECISION-C0-FEASIBILITY.md); not implemented; operator to confirm P1 usage credits OFF / P2 Claude GitHub App on the Bridge and to authorize the C0 live test; B-06 repaired (quarantine), B ingress operational; routine daily limits Pro 5 / Max 15 / Team-Enterprise 25 recorded, batching required
+- Decision C (Claude wake-up) — C0 live test PREPARED (Bridge PR #2 inert): operator to create the C0 routine per brain/evidence/DECISION-C0-LIVE.md; C0 feasibility: FEASIBLE_WITH_LIMITATIONS (brain/evidence/DECISION-C0-FEASIBILITY.md); not implemented; operator to confirm P1 usage credits OFF / P2 Claude GitHub App on the Bridge and to authorize the C0 live test; B-06 repaired (quarantine), B ingress operational; routine daily limits Pro 5 / Max 15 / Team-Enterprise 25 recorded, batching required
 - Gold-v1 validation/acceptance; Gold-v2 adjudication
 - Dinosaur World observations O1/O2; real Creative Upgrade; V1 pilot
 - Open policy dependencies (closure §10)

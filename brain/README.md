@@ -35,6 +35,8 @@ critical claim to an exact anchor, and lets a tool prove that the pointers still
 | `brain/evidence/BASELINE-866a441.json` | Zero-drift fingerprint of the functional checkpoint | evidence |
 | `brain/evidence/DECISION-B-INGRESS.json` | Evidence for operator decision B (ChatGPT ingress): live ring / no-ring checks, independence, no paid API | evidence |
 | `brain/evidence/DECISION-C0-FEASIBILITY.md` | Decision C0 feasibility report: subscription-only Claude wake-up from GitHub (routines vs GitHub Actions), model/effort, limits, security, minimal live-test design | evidence |
+| `brain/evidence/DECISION-C0-LIVE.md` | Decision C0 live test: isolated Bridge ingress PR, exact routine configuration, dry run, evidence and verdict rules | evidence |
+| `brain/evidence/C0-ROUTINE-PROMPT.txt` | Fixed bootstrap instruction entered verbatim into the C0 routine (hash recorded in DECISION-C0-LIVE.md) | evidence |
 | `brain/evidence/CONTINUITY-1-ACCEPTANCE.json` | Exit evidence of CONTINUITY-1: zero drift, 428/428, self-tests, CI, fresh-session 27/27, Bridge | evidence |
 | `brain/continuity/` | Fresh-session continuity questionnaire, grader and recorded results | test |
 | `brain/tools/` | `brain.mjs` (gate/seal/index/render), `drift.mjs`, `bridge-export.mjs` | tooling |
