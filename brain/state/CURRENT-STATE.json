@@ -12,8 +12,8 @@
  },
  "programmes": {
   "CU": "DONE (mechanical); real Creative Upgrade BLOCKED / NOT_RUN",
-  "GS": "ADJUDICATION 44/44 COMPLETE; validation and acceptance WAITING_HUMAN",
-  "HARDENING": "PRE-ADJUDICATION COMPLETE; Gold-v2 adjudication, validation and acceptance WAITING_HUMAN"
+  "GS": "Gold-v1 adjudication 44/44 COMPLETE (Gold-v1 only; Gold-v2 is 0/226); validation and acceptance WAITING_HUMAN",
+  "HARDENING": "Hardening #1 (H0–H6) PRE-ADJUDICATION COMPLETE; Gold-v2 adjudication, validation and acceptance WAITING_HUMAN; superseded in direction by the policy closure (old held-out retired, SH#2 not authorized)"
  },
  "statuses": {
   "OPERATOR_POLICY_DECISION_PHASE": "COMPLETE",

@@ -46,5 +46,18 @@
   "id": "OPERATOR-REVIEW-CONTINUITY-1",
   "actor": "operator",
   "summary": "The operator reviews the continuity system (CONTINUITY-1) and either explicitly authorizes a next phase or asks for corrections. Until then no implementation work is authorized."
+ },
+ "doNotStart": {
+  "source": "brain/phase/authorizations/CONTINUITY-1.operator-instruction.txt §10 (verbatim item names)",
+  "items": [
+   "Dependency Closure",
+   "RC1 Scope Closure",
+   "sanitized final policy brief",
+   "hidden acceptance set",
+   "Semantic Hardening #2",
+   "evaluator implementation",
+   "Dinosaur World production work"
+  ],
+  "rule": "After CONTINUITY-1 is built and validated: STOP. These are introduced later only through the Active Phase Contract, after the continuity system passes audit."
  }
 }

@@ -31,8 +31,8 @@ Sources: C-GOAL → `reference/architecture/WonderPages_Enterprise_Master_Archit
 | Programme | Status | Source |
 |---|---|---|
 | CU | DONE (mechanical); real Creative Upgrade BLOCKED / NOT_RUN | C-CU → `docs/enterprise/JURNAL-IMPLEMENTARE.md` |
-| GS | ADJUDICATION 44/44 COMPLETE; validation and acceptance WAITING_HUMAN | C-GS → `docs/enterprise/JURNAL-IMPLEMENTARE.md`, `docs/enterprise/records/GOLD-V2-POLICY-CLOSURE.md` |
-| HARDENING | PRE-ADJUDICATION COMPLETE; Gold-v2 adjudication, validation and acceptance WAITING_HUMAN | C-HARDENING → `docs/enterprise/JURNAL-IMPLEMENTARE.md` |
+| GS | Gold-v1 adjudication 44/44 COMPLETE (Gold-v1 only; Gold-v2 is 0/226); validation and acceptance WAITING_HUMAN | C-GS → `docs/enterprise/JURNAL-IMPLEMENTARE.md`, `docs/enterprise/records/GOLD-V2-POLICY-CLOSURE.md` |
+| HARDENING | Hardening #1 (H0–H6) PRE-ADJUDICATION COMPLETE; Gold-v2 adjudication, validation and acceptance WAITING_HUMAN; superseded in direction by the policy closure (old held-out retired, SH#2 not authorized) | C-HARDENING → `docs/enterprise/JURNAL-IMPLEMENTARE.md`, `docs/enterprise/records/GOLD-V2-POLICY-CLOSURE.md` |
 
 ## Key statuses
 | Item | Status | Source |
