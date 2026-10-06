@@ -39,6 +39,7 @@ explicită a operatorului. Etichetele cazurilor se dau la adjudecarea Gold-v2.
 | D-16 — minimul pentru criteriile non-critice; semantica pragurilor | DECISĂ (neimplementată) | D (minim 7 pe criteriile aplicabile; egalitate exactă; fără waiver) | `bd4cab1527f23f18…` |
 | D-17 — T07 vs porțile de siguranță, content-policy și age-fit | DECISĂ (neimplementată) | D (jurisdicții separate; T07 ≥ 7; fără dublă adjudecare) | `e9bea3e83f8e552d…` |
 | D-18 — validitatea dovezilor criticului (v3) | DECISĂ (neimplementată) | D (validare separată, obligatorie, simetrică) | `f45729ed49e9a2c5…` |
+| D-19 — pragurile de acoperire (+ reprezentarea, extins de operator) | DECISĂ (neimplementată) | 0-b; D peste C (matrice de acoperire, minim structural non-zero) | `405a85bf53371e24…` |
 
 ## D-01 — „Fără arme” pentru o armă reală
 
@@ -15311,3 +15312,1169 @@ empirică · rubrica · Product Contract.
 
 - **D-18-DEP-SEMANTIC-VALIDATOR** · **D-18-DEP-RETRY-COUNT** · **D-18-DEP-SUFFICIENCY-TAXONOMY** · **D-18-DEP-MEASUREMENT** → D-19 / D-20 ·
   **D-18-DEP-VISUAL-CROSSMODAL-EVIDENCE** · **D-18-DEP-V3-REPORT-REGENERATION** · legătura cu **D-16-DEP-SCORING-GRANULARITY**.
+
+## D-19 — Pragurile de acoperire (extins explicit: reprezentarea ground truth)
+
+**Domeniu.** Rândul D-19 din registru (pragurile minime din `validationRequirements`) rămâne neschimbat ca dovadă istorică. Operatorul a
+extins explicit decizia la reprezentarea necesară pentru o măsurare corectă a acoperirii (subîntrebarea 0, varianta 0-b). Formularea
+anterioară „D-19 / D-20 = reprezentarea în Gold” provenea din prezentările furnizorului, nu din registru.
+
+### Declarația operatorului (cuvânt cu cuvânt)
+
+```text
+D-19 — DECIZIA OPERATORULUI
+
+Aleg:
+
+Subîntrebarea 0: (0-b) — extindere explicită a domeniului D-19 pentru reprezentare + pragurile de acoperire.
+
+Pentru praguri aleg:
+
+Opțiunea D peste C, rafinată.
+
+Motivul fundamental:
+
+NU putem defini corect „minimum coverage” peste o reprezentare despre care D-11…D-18 au demonstrat deja că pierde distincțiile pe care politica le consideră normative.
+
+Principiile centrale sunt:
+
+FINDING ≠ SEVERITY ≠ POLICY CONSEQUENCE ≠ PUBLISHING CONSEQUENCE.
+
+FINDING PRESENT ≠ CONTENT NEGATIVE.
+
+NO FINDING ≠ AUTOMATIC CONTENT POSITIVE.
+
+REVIEW ≠ BLOCK.
+
+PASS_WITH_ADVISORY ≠ FALSE PASS.
+
+ASSESSMENT_INVALID ≠ CONTENT NEGATIVE.
+
+UNVERIFIED ≠ CONTENT POSITIVE.
+
+DETECTION ACCURACY ≠ POLICY-DECISION ACCURACY ≠ PUBLISHING-DECISION ACCURACY.
+
+TOTAL CASE COUNT ≠ POLICY COVERAGE.
+
+A COVERAGE CELL WITH ZERO CASES IS UNCOVERED, EVEN IF THE KIND-LEVEL TOTAL PASSES.
+
+COVERAGE ≠ PERFORMANCE.
+
+Nu implementa acum.
+
+⸻
+
+1. Extinderea domeniului D-19
+
+Registrul istoric D-19 rămâne neschimbat.
+
+Nu rescrie rândul original.
+
+Înregistrează explicit:
+
+Operatorul extinde D-19 deoarece pragurile de acoperire din registrul original sunt definite peste positive / negative / null, iar D-11…D-18 au demonstrat că această proiecție binară nu poate reprezenta fără pierdere politica necesară pentru măsurarea corectă a acoperirii.
+
+Aceasta este o extindere explicită a deciziei, nu o corectare retroactivă a registrului.
+
+⸻
+
+2. Schema binară nu mai este reprezentarea canonică
+
+label ∈ {positive, negative, null} poate rămâne:
+
+* pentru compatibilitate;
+* pentru reproducerea rapoartelor istorice;
+* pentru comparația cu Gold-v1 / Gold-v2 v2;
+* ca proiecție derivată unde este bine definită.
+
+Dar NU mai este ground truth-ul canonic pentru politica nouă.
+
+⸻
+
+3. Reprezentarea canonică minimă
+
+Pentru un caz evaluabil, ground truth-ul trebuie să poată reprezenta separat cel puțin:
+
+A. Expected finding
+
+* present / absent;
+* finding family;
+* expected code/dimension unde este aplicabil;
+* authoritative jurisdiction.
+
+B. Expected severity
+
+Unde politica folosește severitate:
+
+* advisory;
+* material;
+* severe;
+* sau taxonomia canonical specifică axei.
+
+Nu forța severitate pe un tip unde conceptul nu se aplică.
+
+C. Expected assessment-validation state
+
+Unde cazul e despre assessment/evidence, conform D-18:
+
+* VALIDATED;
+* UNVERIFIED;
+* INVALID;
+* sau starea canonical finală.
+
+D. Expected policy consequence
+
+Consecința în jurisdicția autoritativă.
+
+E. Expected publishing consequence
+
+Cel puțin conceptual:
+
+* PASS;
+* PASS_WITH_ADVISORY;
+* REVIEW_REQUIRED;
+* REPAIR_REQUIRED;
+* BLOCKED_BY_POLICY;
+* ASSESSMENT_INVALID;
+* ASSESSMENT_VALIDATION_REQUIRED / echivalent pentru UNVERIFIED.
+
+Nu toate tipurile trebuie să poată produce toate stările.
+
+F. Scope
+
+* Page;
+* Book;
+* Volume;
+* Collection.
+
+G. Edition / language
+
+Ediția realmente evaluată.
+
+H. Modality
+
+* text;
+* visual;
+* cross-modal;
+
+numai acolo unde jurisdicția respectivă există.
+
+⸻
+
+4. Nu crea un produs cartezian artificial
+
+Nu cer:
+
+every kind × every age × every language × every modality × every consequence
+
+dacă politica nu depinde de acea dimensiune.
+
+O celulă devine obligatorie numai dacă dimensiunea poate schimba legitim:
+
+* finding-ul;
+* severitatea;
+* interpretarea;
+* policy consequence;
+* publishing consequence;
+
+sau dacă sistemul pretinde că operează acea dimensiune.
+
+Aceasta trebuie numită:
+
+policy-relevant coverage matrix
+
+sau echivalent.
+
+⸻
+
+5. Exemplu: safety
+
+Pentru o politică unde verdictul poate fi:
+
+* PASS;
+* REVIEW;
+* BLOCK;
+
+coverage trebuie să distingă aceste ramuri.
+
+Nu accept:
+
+REVIEW + BLOCK = negative coverage.
+
+Trebuie să putem răspunde separat:
+
+* detectorul a identificat finding-ul?
+* a atribuit corect verdictul?
+* a produs consecința corectă?
+
+⸻
+
+6. Exemplu: age-fit
+
+Un finding poate exista și artifactul poate rămâne publicabil.
+
+Prin urmare:
+
+AGE finding present
+
+nu poate fi definit automat ca:
+
+negative.
+
+Exemplu canonical din D-12/D-14:
+
+5–6 + abstraction advisory
+
+poate fi:
+
+* finding present;
+* severity advisory;
+* publishing PASS_WITH_ADVISORY.
+
+Un evaluator care detectează corect finding-ul nu trebuie măsurat ca false block doar fiindcă schema binară a confundat finding presence cu publishing failure.
+
+⸻
+
+7. v2c-age-abs-03
+
+Cazul trebuie marcat pentru adjudecare conform noii politici.
+
+Nu modifica acum eticheta înghețată.
+
+În reprezentarea nouă trebuie să poată exista:
+
+* abstraction finding present;
+* advisory;
+* publishing PASS / PASS_WITH_ADVISORY conform D-12/D-14;
+* fără a pierde faptul că vechea schemă îl numea negative.
+
+Istoricul și politica nouă trebuie păstrate separat.
+
+⸻
+
+8. v2c-age-syn-02
+
+D-13/D-14 cer posibilitatea:
+
+* syntactic finding present;
+* advisory;
+* publishing PASS.
+
+Schema binară actuală nu poate reprezenta corect simultan ambele proprietăți.
+
+Noua reprezentare trebuie să poată.
+
+⸻
+
+9. Localizare
+
+Trebuie separate:
+
+* candidate finding;
+* confirmed defect;
+* dismissed false positive;
+* REVIEW_REQUIRED;
+* REPAIR_REQUIRED;
+* PASS.
+
+localization code present = negative
+
+nu este suficient.
+
+⸻
+
+10. Știință
+
+Trebuie separate:
+
+* misconception finding;
+* correction status;
+* final takeaway;
+* advisory/review unde politica îl cere;
+* confirmed false scientific takeaway;
+* PASS;
+* REVIEW_REQUIRED;
+* REPAIR_REQUIRED.
+
+D-15 rămâne autoritativă.
+
+⸻
+
+11. Calitate / D-18
+
+Trebuie separate:
+
+artifact quality state
+
+de:
+
+assessment validation state.
+
+Un fabricated quote poate produce:
+
+ASSESSMENT_INVALID
+
+fără să producă:
+
+CONTENT_NEGATIVE.
+
+Această distincție trebuie să existe în ground truth și în metrici.
+
+⸻
+
+12. ASSESSMENT_INVALID
+
+Nu îl proiecta automat în:
+
+negative.
+
+⸻
+
+13. UNVERIFIED
+
+Nu îl proiecta automat în:
+
+positive.
+
+Și nici în:
+
+negative.
+
+Este o stare epistemică a assessment-ului.
+
+⸻
+
+14. Proiecția legacy
+
+Dacă se păstrează positive/negative/null, proiecția trebuie:
+
+* versionată;
+* explicită;
+* derivată;
+* reproductibilă.
+
+Nu trebuie folosită pentru a ascunde ground truth-ul multidimensional.
+
+⸻
+
+15. Unele stări pot să nu aibă proiecție binară validă
+
+Dacă:
+
+UNVERIFIED
+
+nu are o proiecție semantic corectă în positive/negative,
+
+atunci proiecția poate fi:
+
+null / not-applicable-for-binary-metric
+
+în raportul nou.
+
+Nu forța clasificarea doar pentru a păstra o matrice binară.
+
+⸻
+
+METRICI
+
+16. Detection accuracy
+
+Măsoară separat:
+
+A găsit sistemul finding-ul care trebuia găsit?
+
+Aceasta este detection accuracy.
+
+⸻
+
+17. Finding false positive / false negative
+
+False positive și false negative la nivel de finding se calculează față de:
+
+expectedFinding.
+
+Nu față de publishing consequence.
+
+⸻
+
+18. Severity accuracy
+
+Dacă finding-ul este corect:
+
+a atribuit severitatea corectă?
+
+Aceasta este o metrică separată.
+
+⸻
+
+19. Policy-consequence accuracy
+
+A aplicat corect politica în jurisdicția autoritativă?
+
+Separat.
+
+⸻
+
+20. Publishing-decision accuracy
+
+A produs sistemul consecința corectă pentru publicare?
+
+Separat.
+
+⸻
+
+21. Assessment-validation accuracy
+
+Pentru cazurile D-18:
+
+A identificat corect VALIDATED / UNVERIFIED / INVALID?
+
+Separat.
+
+⸻
+
+22. Nu colapsa metricile într-un singur „accuracy”
+
+Un sistem poate:
+
+* detecta perfect finding-ul;
+* greși severitatea;
+* greși publishing consequence.
+
+Sau invers.
+
+Raportul trebuie să arate unde a greșit.
+
+⸻
+
+23. exact
+
+Poate exista o metrică strictă end-to-end.
+
+Dar trebuie definită ca:
+
+toate componentele relevante cazului sunt corecte.
+
+Nu înlocuiește metricile pe straturi.
+
+⸻
+
+COVERAGE
+
+24. Resping ca prag final suficient regula legacy 8 / 6 / 3 / 3
+
+Nu afirm că numerele sunt „greșite” statistic.
+
+Afirm:
+
+nu există evidence suficientă pentru a le valida ca praguri finale de Enterprise acceptance.
+
+Mai important, ele sunt definite peste o reprezentare binară care nu mai este suficientă.
+
+Prin urmare:
+
+8 calibration / 6 holdout / 3 positive / 3 negative
+
+rămâne:
+
+historical proposed v2 coverage requirement
+
+și NU:
+
+operator-approved final Enterprise coverage requirement.
+
+⸻
+
+25. Nu înlocuiesc 8/6/3/3 cu alte numere arbitrare
+
+Nu aleg:
+
+10 / 8 / 4 / 4,
+
+sau:
+
+5 / 5 / 2 / 2,
+
+fără evidence.
+
+Ar fi aceeași problemă cu alte cifre.
+
+⸻
+
+26. D-19 aprobă un minimum structural
+
+Pentru fiecare required policy-relevant coverage cell:
+
+calibration
+
+trebuie să existe cel puțin un caz adjudecat reprezentativ;
+
+independent holdout / validation
+
+trebuie să existe cel puțin un caz adjudecabil independent pentru aceeași ramură relevantă a politicii.
+
+Aceasta este:
+
+structural coverage minimum.
+
+Este un minimum de existență, NU o afirmație că un singur caz este statistic suficient.
+
+⸻
+
+27. Un caz nu înseamnă suficiență statistică
+
+Formulare obligatorie:
+
+NON-ZERO STRUCTURAL COVERAGE ≠ SUFFICIENT EMPIRICAL VALIDATION.
+
+D-19 răspunde:
+
+Is the required policy branch represented at all?
+
+D-21 va răspunde:
+
+Is measured performance sufficient for acceptance?
+
+Nu le amesteca.
+
+⸻
+
+28. Celulă zero
+
+Dacă o celulă obligatorie are zero cazuri:
+
+→ UNCOVERED.
+
+Nu:
+
+→ PASS deoarece totalul pe tip este mare.
+
+⸻
+
+29. Celulă neaplicabilă
+
+Dacă politica demonstrează că o dimensiune nu se aplică:
+
+→ NOT_APPLICABLE
+
+cu rationale.
+
+Nu trebuie populată artificial.
+
+⸻
+
+30. Celulă nerealizată încă
+
+Dacă sistemul pretinde suport, dar nu există evidence:
+
+→ UNCOVERED.
+
+Nu N/A.
+
+⸻
+
+31. Unknown
+
+Dacă nu știm încă dacă o dimensiune schimbă politica:
+
+→ COVERAGE_REQUIREMENT_UNRESOLVED
+
+sau echivalent.
+
+Nu o ascunde în total.
+
+⸻
+
+STRATIFICARE
+
+32. Age band
+
+Age band este obligatoriu în coverage matrix acolo unde D-11–D-15 arată că verdictul/severitatea/perceptibilitatea poate varia după bandă.
+
+Prin urmare lipsurile precum:
+
+* age 5–6 EN = 0;
+* science 3–4 = 0;
+* science 5–6 = 0;
+
+nu pot fi mascate de totalurile tipului.
+
+⸻
+
+33. Nu toate safety policies trebuie multiplicate automat pe toate benzile
+
+Dacă D-01…D-10 spun explicit că physical/content-policy truth este același între benzi, nu cer trei copii artificiale doar pentru safety truth.
+
+Dar dacă:
+
+* imitability;
+* perceptibility;
+* age-fit;
+* emotional impact;
+
+pot schimba consecința, stratificarea relevantă devine obligatorie.
+
+⸻
+
+34. Language / edition
+
+EN / RO trebuie stratificate acolo unde:
+
+* evaluatorul operează ambele;
+* realizarea lingvistică poate schimba finding-ul;
+* D-15/D-18 au demonstrat parity failure;
+* localization este evaluată între ediții.
+
+⸻
+
+35. Nu cer traduceri artificiale doar pentru număr
+
+Dacă o jurisdicție există doar într-o anumită direcție prin Product Contract, matricea trebuie să reprezinte acea direcție reală.
+
+Dar trebuie raportată explicit.
+
+⸻
+
+36. Modality
+
+Dacă sistemul pretinde:
+
+* visual safety;
+* visual policy;
+* cross-modal reasoning;
+
+atunci coverage pentru acele jurisdicții trebuie să existe înainte ca sistemul să pretindă validare Enterprise pentru ele.
+
+⸻
+
+37. Lipsa cazurilor vizuale
+
+Gold-v2 actual este text-only pentru familiile investigate.
+
+Prin urmare:
+
+nu putem afirma că actualul Gold-v2 validează comportamentul visual/cross-modal.
+
+Aceasta trebuie raportată explicit ca gap.
+
+⸻
+
+38. Nu fabrica acum cazuri vizuale pentru a face D-19 verde
+
+D-19 definește cerința.
+
+Crearea/adjudecarea noilor cazuri urmează procedura D-20/D-22 și planul de validare independentă.
+
+⸻
+
+SCOPE
+
+39. Page
+
+Trebuie să existe coverage pentru reguli care operează local pe pagină.
+
+⸻
+
+40. Book
+
+Dacă politica poate schimba verdictul după contextul întregii cărți:
+
+trebuie să existe cazuri Book-level.
+
+⸻
+
+41. Volume
+
+Dacă există agregare sau drift la nivel de volum:
+
+trebuie coverage pentru acel comportament înainte de a pretinde validare.
+
+⸻
+
+42. Collection
+
+Dacă produsul face afirmații de collection-level:
+
+trebuie coverage pentru aggregation/drift la Collection.
+
+⸻
+
+43. Gold-v2 actual
+
+Dacă actualele cazuri nu acoperă Book / Volume / Collection pentru o politică ce depinde de ele:
+
+raportează:
+
+UNCOVERED.
+
+Nu extrapola dintr-un fragment scurt.
+
+⸻
+
+CURRENT GOLD-V2 CONSEQUENCE
+
+44. COVERAGE_MINIMA = PASS actual rămâne adevărat numai pentru regula legacy
+
+Nu rescrie raportul istoric.
+
+Formulare:
+
+Gold-v2 passes the historical/proposed legacy v2 coarse coverage calculation.
+
+Dar:
+
+Gold-v2 does not yet satisfy the D-19 operator-approved structural policy-relevant coverage requirement.
+
+Ambele pot fi adevărate simultan.
+
+⸻
+
+45. Current validation status
+
+Prin urmare:
+
+NOT_COMPLETE
+
+rămâne corect.
+
+Dar după D-19 există încă un motiv independent:
+
+policy-relevant coverage gaps.
+
+Nu doar:
+
+0/226 adjudication + 20 null labels.
+
+⸻
+
+46. Calitate
+
+Faptul că holdout-ul are doar un pozitiv relevant nu trebuie ascuns de total.
+
+Mai important:
+
+quality este doar 3–4 EN în evidence-ul prezentat.
+
+Nu putem pretinde coverage pentru alte benzi/ediții dacă produsul/politica are nevoie de ele.
+
+⸻
+
+47. Age
+
+5–6 EN = zero:
+
+→ explicit UNCOVERED pentru celulele age-policy relevante acelei benzi.
+
+⸻
+
+48. Science
+
+Doar 7–8:
+
+→ nu validează perceptibilitatea/corecția pentru 3–4 sau 5–6.
+
+Aceste celule sunt UNCOVERED dacă produsul pretinde aplicarea politicii acolo.
+
+⸻
+
+49. Localization
+
+Direcția evaluată trebuie înregistrată explicit.
+
+Nu transforma totalul într-o afirmație că toate perechile de limbă sunt validate.
+
+⸻
+
+50. Visual / cross-modal
+
+Actualul Gold-v2 nu validează aceste jurisdicții doar prin existența cazurilor text.
+
+⸻
+
+BOUNDARY COVERAGE
+
+51. O politică cu prag trebuie să aibă boundary coverage
+
+Pentru reguli numerice/ordonate precum:
+
+* 7 vs 6.99;
+* 8 vs 7.99;
+* PASS vs advisory;
+* advisory vs material;
+* correction sufficient vs ambiguous;
+
+coverage trebuie să includă cazuri relevante de frontieră.
+
+Nu doar extreme evidente.
+
+⸻
+
+52. Boundary coverage nu înseamnă numai valori numerice
+
+D-01…D-15 au frontiere semantice.
+
+Exemple:
+
+* toy play benign vs threatening;
+* challenged stereotype vs fake challenge;
+* permission vs safety confirmation;
+* correction vs reinforcement;
+* visual referent vs conceptual grounding.
+
+Acestea sunt boundary families.
+
+⸻
+
+53. Calibration și holdout nu trebuie să fie clone
+
+Un caz aproape identic în ambele nu demonstrează generalizare.
+
+D-22 rămâne autoritativ pentru independență.
+
+⸻
+
+54. Template-family coverage ≠ independent domain coverage
+
+Dacă zece cazuri sunt variații superficiale ale aceluiași template:
+
+ele pot acoperi o regulă de regresie,
+
+dar nu justifică automat zece unități independente de domain evidence.
+
+Raportează ambele.
+
+⸻
+
+RELAȚIA CU D-20
+
+55. D-19 nu decide ce facem cu actualul holdout
+
+Nu:
+
+* reparăm;
+* păstrăm;
+* înlocuim;
+* construim altul;
+
+în D-19.
+
+Aceasta rămâne D-20.
+
+⸻
+
+56. D-19 transmite D-20 cerințele
+
+Orice strategie D-20 trebuie să poată satisface ulterior:
+
+* schema multidimensională;
+* policy-relevant cells;
+* missing bands;
+* missing consequences;
+* missing scopes;
+* missing modalities unde sistemul pretinde suport;
+* independence requirements.
+
+⸻
+
+RELAȚIA CU D-21
+
+57. D-19 = coverage
+
+D-19 decide:
+
+ce trebuie reprezentat.
+
+⸻
+
+58. D-21 = performance acceptance
+
+D-21 decide:
+
+cât de bine trebuie să performeze sistemul pe evidence-ul valid.
+
+Nu folosi D-19 pentru a inventa accuracy thresholds.
+
+⸻
+
+59. Sample sufficiency rămâne de tratat cu D-21/validation design
+
+Un caz per cell este minimum structural.
+
+Nu este automat suficient pentru:
+
+* precision estimate;
+* recall estimate;
+* false-pass bound;
+* false-block bound;
+* confidence interval;
+* Enterprise acceptance.
+
+Orice cerință statistică suplimentară trebuie fundamentată, nu inventată.
+
+⸻
+
+RELAȚIA CU D-22
+
+60. Independence
+
+Cazurile noi necesare pentru holdout/hidden validation trebuie să respecte D-22.
+
+D-19 nu autorizează Claude să-și scrie propriul examen și apoi să-l folosească drept dovadă independentă.
+
+⸻
+
+RELAȚIA CU D-01…D-18
+
+61. D-01–D-10
+
+REVIEW și BLOCK sunt stări distincte.
+
+Coverage trebuie să le distingă unde politica le poate produce.
+
+⸻
+
+62. D-11
+
+Age-fit fear:
+
+finding + severity + publishing consequence separate.
+
+⸻
+
+63. D-12
+
+Abstractness:
+
+finding poate exista cu advisory și publishing PASS.
+
+⸻
+
+64. D-13
+
+Syntax:
+
+finding poate exista cu advisory și publishing PASS.
+
+⸻
+
+65. D-14
+
+D-19 formalizează pentru măsurare:
+
+finding → severity → consequence
+
+fără colapsare.
+
+⸻
+
+66. D-15
+
+Science correction:
+
+final takeaway și consequence trebuie reprezentate separat de simpla detecție a unui misconception token.
+
+⸻
+
+67. D-16
+
+Quality thresholds sunt publishing/quality-gate policy.
+
+Coverage trebuie să includă boundary behaviour relevant.
+
+⸻
+
+68. D-17
+
+Jurisdicția autoritativă trebuie să existe în expected truth.
+
+Același defect observat de două mecanisme nu devine două ground truths independente.
+
+⸻
+
+69. D-18
+
+Assessment validation este o axă separată.
+
+INVALID și UNVERIFIED nu sunt content positive/negative.
+
+⸻
+
+CE SE ÎNTÂMPLĂ CU 8 / 6 / 3 / 3
+
+70. Verdict explicit
+
+Nu le aprob ca final Enterprise acceptance minima.
+
+Nu le șterg.
+
+Nu le modific retroactiv.
+
+Le clasific drept:
+
+legacy/proposed coarse v2 coverage thresholds, historically reproducible, not sufficient for D-19 v3 structural coverage acceptance.
+
+⸻
+
+71. Nu există încă un nou număr magic
+
+D-19 aprobă:
+
+all required policy-relevant cells must be non-zero in both calibration and independent validation/holdout before structural coverage can pass.
+
+Dar:
+
+non-zero does not imply empirical sufficiency.
+
+⸻
+
+72. Dacă o singură celulă obligatorie este zero
+
+D-19 structural coverage:
+
+→ FAIL / INCOMPLETE.
+
+Indiferent dacă totalul tipului este 100.
+
+⸻
+
+73. Dacă toate celulele sunt non-zero
+
+D-19 structural coverage poate fi:
+
+→ structurally complete.
+
+Dar Enterprise validation poate rămâne:
+
+→ NOT ACCEPTED
+
+din cauza:
+
+* D-21 performance;
+* D-22 independence;
+* adjudication incompletă;
+* insufficient statistical evidence;
+* failed integrity;
+* failed hidden validation;
+* alte gates.
+
+⸻
+
+FORMULĂRI OBLIGATORII
+
+Înregistrează explicit:
+
+The operator extends D-19 to define the representation required for meaningful coverage measurement; the original registry row remains unchanged as historical evidence.
+
+The canonical ground truth is multidimensional. positive / negative / null is a legacy compatibility projection and is not sufficient as the canonical policy representation.
+
+Finding presence, finding severity, assessment-validation state, authoritative policy consequence and publishing consequence are separate dimensions and must not be conflated.
+
+Detection accuracy, severity accuracy, policy-consequence accuracy, assessment-validation accuracy and publishing-decision accuracy are separate measurements.
+
+A policy-relevant coverage cell with zero cases is uncovered even when kind-level totals exceed legacy thresholds.
+
+The legacy proposed 8 / 6 / 3 / 3 thresholds remain historically reproducible but are not operator-approved as sufficient final Enterprise coverage thresholds.
+
+D-19 establishes non-zero structural coverage for every required policy-relevant cell in calibration and independent validation/holdout; non-zero structural coverage does not imply empirical or statistical sufficiency.
+
+Coverage and performance are separate: D-19 determines what must be represented; D-21 determines performance acceptance.
+
+ASSESSMENT_INVALID is not content-negative and UNVERIFIED is neither content-positive nor content-negative.
+
+Frozen historical datasets and reports are not retroactively rewritten to simulate the new policy.
+
+⸻
+
+CE NU DECIDE D-19
+
+D-19 NU decide:
+
+* ce facem cu actualele holdout failures — D-20;
+* dacă actualul holdout se păstrează, se înlocuiește sau se completează — D-20;
+* performance thresholds — D-21;
+* confidence thresholds;
+* precision/recall acceptance values;
+* false-pass / false-block acceptance values;
+* sample-size formula finală;
+* confidence intervals;
+* autorul cazurilor noi — D-22;
+* independența noului validation set — D-22;
+* etichetele concrete finale ale celor 226 de cazuri;
+* conținutul cazurilor noi;
+* schema fizică finală JSON/JSONL;
+* implementation details;
+* evaluator architecture;
+* semantic hardening;
+* Product Contract;
+* rubric redesign.
+```
+
+### Formulări obligatorii (înregistrate ca atare)
+
+> The operator extends D-19 to define the representation required for meaningful coverage measurement; the original registry row
+> remains unchanged as historical evidence.
+>
+> The canonical ground truth is multidimensional. positive / negative / null is a legacy compatibility projection and is not sufficient
+> as the canonical policy representation.
+>
+> Finding presence, finding severity, assessment-validation state, authoritative policy consequence and publishing consequence are
+> separate dimensions and must not be conflated.
+>
+> Detection accuracy, severity accuracy, policy-consequence accuracy, assessment-validation accuracy and publishing-decision accuracy
+> are separate measurements.
+>
+> A policy-relevant coverage cell with zero cases is uncovered even when kind-level totals exceed legacy thresholds.
+>
+> The legacy proposed 8 / 6 / 3 / 3 thresholds remain historically reproducible but are not operator-approved as sufficient final
+> Enterprise coverage thresholds.
+>
+> D-19 establishes non-zero structural coverage for every required policy-relevant cell in calibration and independent
+> validation/holdout; non-zero structural coverage does not imply empirical or statistical sufficiency.
+>
+> Coverage and performance are separate: D-19 determines what must be represented; D-21 determines performance acceptance.
+>
+> ASSESSMENT_INVALID is not content-negative and UNVERIFIED is neither content-positive nor content-negative.
+>
+> Frozen historical datasets and reports are not retroactively rewritten to simulate the new policy.
+>
+> NON-ZERO STRUCTURAL COVERAGE ≠ SUFFICIENT EMPIRICAL VALIDATION.
+>
+> Gold-v2 passes the historical/proposed legacy v2 coarse coverage calculation. Gold-v2 does not yet satisfy the D-19 operator-approved
+> structural policy-relevant coverage requirement.
+
+### Separarea cerută
+
+| Strat | Conținut |
+|---|---|
+| **Domeniul original / extinderea** | Original: 8 / 6 / 3 / 3 pe tip, peste `positive / negative / null`. Extins de operator: reprezentarea ground truth. Rândul din registru nu se rescrie. |
+| **Reprezentarea legacy / proiecția** | `label` binar + `expected` per tip: compatibilitate, rapoarte istorice, comparație v1 / v2. Proiecție derivată, versionată, reproductibilă. ASSESSMENT_INVALID nu → negative; UNVERIFIED nici positive, nici negative (null / not-applicable-for-binary-metric). |
+| **Reprezentarea canonică** | A finding (prezent / absent, familie, cod, jurisdicție) · B severitate (doar unde se aplică) · C validarea evaluării (D-18) · D consecința în jurisdicția autoritativă · E consecința de publicare (PASS / PASS_WITH_ADVISORY / REVIEW_REQUIRED / REPAIR_REQUIRED / BLOCKED_BY_POLICY / ASSESSMENT_INVALID / ASSESSMENT_VALIDATION_REQUIRED) · F scope (Page → Collection) · G ediție · H modalitate (unde jurisdicția există). |
+| **Pe tipuri** | Siguranță: PASS / REVIEW / BLOCK distincte. Vârstă: finding prezent ≠ negativ (abs-03 marcat pentru adjudecare; syn-02 = finding + advisory + PASS). Localizare: candidat / confirmat / respins / REVIEW / REPAIR / PASS. Știință: finding, corectare, takeaway, consecință (D-15). Calitate: starea artifactului ≠ starea validării evaluării. |
+| **Metrici** | Detecție (FP / FN față de expectedFinding) · severitate · policy consequence · publishing decision · assessment validation · `exact` = toate componentele corecte. Fără colapsare într-un singur „accuracy”. |
+| **Celula obligatorie / aplicabilitate / stare de acoperire** | Policy-relevant coverage matrix, fără produs cartezian: o celulă e obligatorie doar dacă dimensiunea schimbă legitim finding / severitate / interpretare / consecință sau sistemul pretinde că o operează. Stări: COVERED / UNCOVERED (zero, sau suport pretins fără evidence) / NOT_APPLICABLE (cu rationale) / COVERAGE_REQUIREMENT_UNRESOLVED. |
+| **Bandă / ediție / modalitate / scope** | Banda unde D-11–D-15 o fac relevantă; safety truth identic între benzi nu se multiplică artificial. EN / RO unde se evaluează ambele sau există paritate de verificat; direcția reală raportată. Vizual / cross-modal doar unde e pretins; Gold-v2 e text-only → gap. Book / Volume / Collection unde politica depinde de ele, altfel UNCOVERED. |
+| **Split calibrare / holdout** | Minim structural: ≥ 1 caz adjudecat în calibrare și ≥ 1 caz adjudecabil independent în validarea / holdout-ul independent, per celulă obligatorie. O celulă la zero → structural coverage FAIL / INCOMPLETE. Toate non-zero → structurally complete, dar acceptarea poate rămâne NOT ACCEPTED. |
+| **Frontiere / familii de șabloane / independență** | Frontiere numerice și semantice (boundary families D-01…D-15). Template-family coverage ≠ independent domain coverage (ambele raportate). Calibrarea și holdout-ul nu sunt clone (D-22). |
+| **Statutul 8 / 6 / 3 / 3** | legacy/proposed coarse v2 coverage thresholds, historically reproducible, not sufficient for D-19 v3 structural coverage acceptance. Nu se aprobă, nu se șterg, nu se modifică; fără alte cifre arbitrare. |
+| **Statutul structural al Gold-v2 actual** | Legacy coarse coverage: PASS. D-19 structural: **nesatisfăcut** (vârstă 5–6 EN = 0; știință 3–4 / 5–6 = 0; calitate doar 3–4 EN, holdout cu un singur pozitiv relevant; localizare doar EN → RO; vizual / cross-modal absent; Book / Volume / Collection absent). NOT_COMPLETE rămâne corect, cu acest motiv independent nou. |
+| **Suficiența empirică** | Nerezolvată: un caz per celulă nu dă precision / recall / bounds / intervale; orice cerință statistică trebuie fundamentată (D-21). |
+| **Relația cu D-20 / D-21 / D-22** | D-20: soarta holdout-ului actual, care trebuie să poată satisface cerințele D-19. D-21: performanța. D-22: independența; furnizorul nu își scrie propriul examen ca dovadă independentă. |
+| **Comportamentul la momentul deciziei** (HEAD `e06d22a`, neschimbat) | `COVERAGE_MINIMA` = trece; NOT_COMPLETE global. Scorare binară: REVIEW și BLOCK = negative; orice semnal de vârstă sau cod de localizare = negative; `SCIENCE_REVIEW` = positive; dovada inventată = negative. **Comportamentul nu e politica.** |
+
+### Afectate (fără nicio modificare acum)
+
+- **Gold-v2:** v2c-age-abs-03 marcat pentru adjudecare (finding + advisory + PASS / PASS_WITH_ADVISORY); syn-02, cele 12 REVIEW de siguranță și v2c-quality-03 cer reprezentarea nouă; 0/226 adjudecate; nicio etichetă modificată.
+- **`validationRequirements`, rapoartele, sigiliul, setul rezervat:** neschimbate.
+- **Gold-v1:** neschimbat.
+
+### Nu decide
+
+D-20 (holdout-ul actual) · D-21 (performanța, încrederea, precision / recall, false-pass / false-block, formula de eșantion, intervale) ·
+D-22 (autorul și independența) · etichetele celor 226 de cazuri · conținutul cazurilor noi · schema fizică JSON / JSONL ·
+implementarea · arhitectura evaluatorului · Semantic Hardening · Product Contract · rubrica.
+
+### Dependențe deschise
+
+- **D-19-DEP-COVERAGE-MATRIX-DEFINITION** · **D-19-DEP-NEW-CASES** → D-20 / D-22 · **D-19-DEP-SAMPLE-SUFFICIENCY** → D-21 ·
+  **D-19-DEP-PHYSICAL-SCHEMA**.
+- **Rezolvate conceptual:** D-14-DEP-MEASUREMENT-REPRESENTATION, D-18-DEP-MEASUREMENT (schema fizică rămâne deschisă).

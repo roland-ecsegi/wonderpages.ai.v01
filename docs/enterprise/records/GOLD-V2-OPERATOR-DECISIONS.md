@@ -22,7 +22,9 @@ finding → confirmare → severitate → consecință; age-fit material → REV
 corectare semantică + takeaway științific final; bat-05 → PASS; takeaway fals confirmat → REPAIR), neimplementată. D-16: DECISĂ (opțiunea D,
 minim 7 pe criteriile aplicabile, politică de produs nevalidată empiric; egalitatea trece; fără waiver), neimplementată. D-17: DECISĂ (opțiunea D,
 jurisdicții separate; T07 critic cu prag 7; fără dublă adjudecare), neimplementată. D-18: DECISĂ (opțiunea D,
-validarea evaluării separată și simetrică, politică v3; PASS / FAIL final doar pe evaluare validată), neimplementată. Tabelul de mai jos rămâne prezentarea inițială, nu se rescrie.
+validarea evaluării separată și simetrică, politică v3; PASS / FAIL final doar pe evaluare validată), neimplementată. D-19: DECISĂ (0-b, domeniu extins
+de operator la reprezentare; D peste C: ground truth multidimensional, matrice de acoperire relevantă politicii, minim structural
+non-zero; 8 / 6 / 3 / 3 rămân istorice), neimplementată. Tabelul de mai jos rămâne prezentarea inițială, nu se rescrie.
 
 **Cum se înregistrează:**
 - **Pentru un caz:** `node scripts/enterprise/gold-adjudicate.mjs record --case=<id> --decision=correct --label=positive|negative
