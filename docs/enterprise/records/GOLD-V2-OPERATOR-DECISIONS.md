@@ -27,7 +27,9 @@ de operator la reprezentare; D peste C: ground truth multidimensional, matrice d
 non-zero; 8 / 6 / 3 / 3 rămân istorice), neimplementată. D-20: DECISĂ (opțiunea (d) din (b): setul rezervat actual
 retras din rolul de acceptare, păstrat ca istoric / rescorare / regresie; set nou independent, ascuns, sigilat înainte de SH#2),
 neimplementată. D-21: DECISĂ (opțiunea (d): porți de performanță precommitted, calculate automat, pe costul erorii — P1 zero
-evadări critice + limită unilaterală 95 % ≤ 5 %, P2 zero downgrade-uri, P3 escaladare falsă ≤ 10 % pe ≥ 30 de cazuri), neimplementată. Tabelul de mai jos rămâne prezentarea inițială, nu se rescrie.
+evadări critice + limită unilaterală 95 % ≤ 5 %, P2 zero downgrade-uri, P3 escaladare falsă ≤ 10 % pe ≥ 30 de cazuri), neimplementată. D-22: DECISĂ (opțiunea (b), protocol hibrid: ≥ 2 surse
+de autor independente de implementator, roluri separate, brief normativ sanitizat, commitment sărat), neimplementată.
+**Toate cele 22 de decizii sunt decise** (vezi `GOLD-V2-POLICY-CLOSURE.md`). Tabelul de mai jos rămâne prezentarea inițială, nu se rescrie.
 
 **Cum se înregistrează:**
 - **Pentru un caz:** `node scripts/enterprise/gold-adjudicate.mjs record --case=<id> --decision=correct --label=positive|negative

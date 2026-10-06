@@ -42,6 +42,7 @@ explicită a operatorului. Etichetele cazurilor se dau la adjudecarea Gold-v2.
 | D-19 — pragurile de acoperire (+ reprezentarea, extins de operator) | DECISĂ (neimplementată) | 0-b; D peste C (matrice de acoperire, minim structural non-zero) | `405a85bf53371e24…` |
 | D-20 — setul rezervat actual și protocolul noului set de acceptare | DECISĂ (neimplementată) | (d) din (b): holdout retras; set nou ascuns, sigilat înainte de SH#2 | `e526e5533966a6dc…` |
 | D-21 — porțile de performanță ale acceptării (RC1) | DECISĂ (neimplementată) | (d): P0–P9; P1 = 0 + limită ≤ 5 % (≥ 59), P2 = 0, P3 ≤ 10 % (≥ 30) | `aef2e202b8d811a9…` |
+| D-22 — independența autorului și protocolul setului ascuns (RC1) | DECISĂ (neimplementată) | (b) hibrid: ≥ 2 surse independente; roluri separate; brief sanitizat | `9854d40f4d891dd4…` |
 
 ## D-01 — „Fără arme” pentru o armă reală
 
@@ -18541,3 +18542,1326 @@ performanța viitoare · Enterprise SaaS / P9.
 
 - **D-21-DEP-INDEPENDENT-SET-SIZE** → D-22 · **D-21-DEP-STABILITY-CONTRACT** · **D-21-DEP-INVALID-TEST-EVIDENCE-PROTOCOL** → D-22 / D-20 ·
   **D-21-DEP-THRESHOLD-POLICY-VERSIONING**.
+
+## D-22 — Independența autorului și protocolul setului ascuns (RC1)
+
+### Declarația operatorului (cuvânt cu cuvânt)
+
+```text
+D-22 — DECIZIA OPERATORULUI
+
+Aleg:
+
+Opțiunea (b), cu protocol hibrid de autor independent și separare explicită Author / Adjudicator / Custodian / Runner / Implementer / Auditor.
+
+Pentru WonderPages Enterprise Local RC1:
+
+Noul independent hidden acceptance set NU poate fi scris de furnizorul care implementează evaluatorul și NU poate fi scris de un agent/model care primește contextul implementării, repo-ul, evaluatorul, failure history sau actualele cazuri expuse.
+
+Independența este definită procedural și prin provenance.
+
+Nu doar prin numele modelului.
+
+⸻
+
+PRINCIPII CENTRALE
+
+DIFFERENT SESSION ≠ INDEPENDENT AUTHOR.
+
+DIFFERENT MODEL ≠ INDEPENDENT AUTHOR IF CONTEXT IS SHARED.
+
+DIFFERENT PROVIDER ≠ INDEPENDENT AUTHOR IF IMPLEMENTATION EVIDENCE IS SHARED.
+
+INDEPENDENCE REQUIRES CONTEXT SEPARATION, NOT ONLY MODEL SEPARATION.
+
+SEALED ≠ INDEPENDENT.
+
+HIDDEN ≠ INDEPENDENT IF THE IMPLEMENTER AUTHORED IT.
+
+AUTHOR INDEPENDENCE ≠ GROUND-TRUTH CORRECTNESS.
+
+GROUND-TRUTH ADJUDICATION ≠ AUTHOR INDEPENDENCE.
+
+THE IMPLEMENTER MUST NOT WRITE ITS OWN FINAL EXAM.
+
+POLICY KNOWLEDGE IS REQUIRED; IMPLEMENTATION KNOWLEDGE IS PROHIBITED FOR THE HIDDEN-SET AUTHOR.
+
+⸻
+
+1. Actualul Gold-v2 nu este independent
+
+Confirm limitarea existentă.
+
+Actualele:
+
+* stimuli Gold-v2;
+* etichete propuse;
+* evaluatorii H1–H5;
+
+au același furnizor de implementare ca autor.
+
+Prin urmare, sigiliul actual demonstrează:
+
+immutability after sealing
+
+dar NU:
+
+independent authorship.
+
+D-20 a stabilit deja statutul acestui set.
+
+D-22 nu îl modifică.
+
+⸻
+
+2. Varianta (a) este respinsă
+
+Nu acceptăm contaminarea de autor drept suficientă pentru Enterprise acceptance.
+
+Actualul set rămâne evidence istoric/regression conform D-20.
+
+Pentru acceptarea post-SH#2 este obligatoriu un set nou.
+
+⸻
+
+ROLURILE
+
+3. Author
+
+Author creează stimuli noi.
+
+Author NU decide singur ground truth-ul final.
+
+Author NU poate fi:
+
+* implementatorul evaluatorului;
+* Claude Code care face SH#2;
+* aceeași sesiune de implementare;
+* un sub-agent al implementatorului cu acces la același context;
+* un alt model căruia i s-a dat repo-ul/evaluatorul/failure history.
+
+⸻
+
+4. Adjudicator
+
+Adjudicator stabilește ground truth-ul final conform politicii operatorului.
+
+Pentru RC1:
+
+operatorul este adjudicatorul final.
+
+Author poate propune expected outcomes.
+
+Dar:
+
+AUTHOR-PROPOSED LABEL ≠ ADJUDICATED GROUND TRUTH.
+
+⸻
+
+5. Custodian
+
+Custodian:
+
+* păstrează hidden set-ul;
+* păstrează ground truth-ul;
+* păstrează secretele/nonce-urile commitment-ului;
+* păstrează provenance;
+* controlează accesul;
+* pregătește setul pentru blind run.
+
+Pentru RC1 operatorul poate fi:
+
+Adjudicator + Custodian.
+
+Aceasta nu compromite independența față de implementator.
+
+⸻
+
+6. Runner
+
+Runner execută evaluatorul înghețat asupra hidden set-ului.
+
+Pentru RC1 operatorul poate fi:
+
+Custodian + Runner.
+
+Dar runner-ul trebuie să urmeze protocolul precommitted și să nu modifice evaluatorul.
+
+⸻
+
+7. Implementer
+
+Implementer:
+
+* construiește evaluatorul;
+* face SH#2;
+* construiește generic validation tooling;
+* repară development/calibration failures;
+* poate vedea exposed regression evidence.
+
+Implementer NU vede înainte de scored run:
+
+* hidden stimuli;
+* individual hidden labels;
+* individual expected findings;
+* individual expected consequences;
+* individual case descriptors suficient de detaliați pentru reconstrucție.
+
+⸻
+
+8. Auditor
+
+Auditor verifică:
+
+* provenance;
+* commitments;
+* evaluator freeze;
+* threshold freeze;
+* run identity;
+* metric calculation;
+* integrity.
+
+Pentru RC1 operatorul poate îndeplini și acest rol.
+
+O a doua persoană independentă este preferabilă, dar nu obligatorie pentru RC1.
+
+⸻
+
+AUTHORSHIP
+
+9. Protocol hibrid
+
+Noul hidden set trebuie să provină din:
+
+minimum două surse de autor independente de implementator.
+
+Pentru RC1 recomand și aprob:
+
+Source A — human/operator authored
+
+Operatorul sau alt om creează o parte din:
+
+* boundary cases;
+* P1/P2 high-risk cases;
+* semantic adversarial cases;
+* cazuri dificil de redus la template.
+
+Source B — independent external model/agent
+
+Un model/agent separat poate genera volum suplimentar, DAR numai într-un context izolat conform D-22.
+
+Nu trebuie să fie Claude Code / implementatorul.
+
+⸻
+
+10. Nu toate cele 59 P1 trebuie scrise manual
+
+D-21 cere minimum 59 relevant P1 opportunities.
+
+D-22 NU cere 59 cazuri scrise manual de operator.
+
+Scopul protocolului hibrid este să reducă:
+
+* correlated blind spots;
+* template bias;
+* implementer bias;
+
+fără să facă procesul impracticabil.
+
+⸻
+
+11. Partea critică nu poate proveni dintr-o singură sursă
+
+Pentru P1/P2:
+
+fiecare familie de politică relevantă trebuie să conțină evidence din mai mult de o perspectivă de authoring acolo unde este practic.
+
+Cel puțin o parte din boundary/adversarial coverage trebuie să fie human-authored sau human-materially-reworked.
+
+Nu acceptăm:
+
+„un singur model a generat toate cazurile și operatorul doar a apăsat approve”.
+
+⸻
+
+12. O sesiune nouă Claude nu este suficientă
+
+O sesiune nouă a aceluiași model:
+
+* poate elimina conversational context;
+* dar nu elimină correlated model priors;
+* și nu constituie separarea puternică dorită pentru RC1.
+
+Prin urmare:
+
+fresh Claude session alone is insufficient as the sole independent hidden-set author for RC1.
+
+Poate eventual contribui ca sursă auxiliară numai dacă nu este implementatorul și protocolul viitor permite asta.
+
+Nu este Source B preferată.
+
+⸻
+
+13. Alt model/provider nu este suficient prin el însuși
+
+Dacă alt model primește:
+
+* repo-ul;
+* evaluator code;
+* SH#2 design;
+* exposed holdout;
+* known failures;
+* diagnostic probes;
+* detailed implementation limitations;
+
+independența este compromisă.
+
+Prin urmare:
+
+provider separation without context separation is insufficient.
+
+⸻
+
+AUTHOR BRIEF
+
+14. Autorul primește policy-only brief
+
+Author primește numai informația necesară pentru a testa politica.
+
+Poate primi:
+
+* normative policy rules;
+* policy dimensions;
+* jurisdiction boundaries;
+* age bands;
+* language/edition requirements;
+* modality requirements;
+* scope requirements;
+* consequence vocabulary;
+* D-19 required coverage cells;
+* D-21 required counts/classes;
+* schema de output necesară authoring-ului.
+
+⸻
+
+15. Autorul NU primește implementation brief
+
+Nu primește:
+
+* source code;
+* evaluator implementation;
+* regex-uri;
+* word lists;
+* prompts;
+* known evaluator weaknesses;
+* current false-pass examples;
+* actual Gold-v1/Gold-v2 stimuli;
+* holdout failures;
+* exposed adversarial probes;
+* implementation bugs;
+* SH#2 design;
+* evaluator outputs.
+
+⸻
+
+16. Full D-01…D-21 ledger nu este author brief
+
+Ledger-ul conține numeroase exemple concrete și diagnostic evidence.
+
+Prin urmare:
+
+nu da autorului hidden set-ului întregul ledger drept prompt de generare.
+
+Trebuie creat un:
+
+SANITIZED NORMATIVE POLICY BRIEF
+
+care păstrează regulile normative, dar elimină:
+
+* stimuli existenți;
+* probe;
+* evaluator outputs;
+* known failure examples;
+* implementation commentary.
+
+⸻
+
+17. Sanitized brief este versionat
+
+Brief-ul trebuie:
+
+* versionat;
+* hash-uit;
+* păstrat în provenance;
+* legat de policy version.
+
+Astfel știm exact ce cunoștea author-ul.
+
+⸻
+
+18. Implementerul poate ajuta la structurarea brief-ului, dar nu îl autorizează singur
+
+Deoarece implementerul cunoaște politica, poate produce un draft mecanic de policy-only brief.
+
+Dar operatorul trebuie să îl revizuiască și să îl aprobe înainte de utilizarea pentru hidden authoring.
+
+Brief-ul aprobat devine input-ul autorului independent.
+
+⸻
+
+CONTAMINATION SCREENING
+
+19. Hidden cases trebuie să fie noi
+
+Nu sunt permise drept independent evidence:
+
+* duplicate exacte;
+* traduceri triviale ale cazurilor cunoscute;
+* near-duplicates structurale evidente;
+* simple noun swaps;
+* template substitutions;
+* cazuri reconstruite din probele D-01…D-21.
+
+⸻
+
+20. Similarity screening este obligatoriu
+
+Înainte de seal trebuie verificată similaritatea față de:
+
+* Gold-v1;
+* Gold-v2;
+* probe registry;
+* known holdout;
+* exposed D-01…D-21 examples;
+* SH#2 development corpus disponibil la acel moment.
+
+Rezultatul screening-ului intră în provenance.
+
+⸻
+
+21. Screening-ul nu trebuie să expună setul implementatorului
+
+Tooling-ul generic poate fi implementat și testat pe date artificiale.
+
+Rularea lui pe hidden data se face de custode.
+
+Implementatorul primește doar rezultatul permis de protocol, nu hidden stimuli.
+
+⸻
+
+GROUND TRUTH
+
+22. Toate cazurile sunt adjudecate înainte de seal
+
+Nu există în hidden acceptance set:
+
+label = null
+
+la momentul seal-ului.
+
+Ground truth-ul necesar D-19/D-21 trebuie stabilit înainte de SH#2.
+
+⸻
+
+23. Reprezentarea este D-19
+
+Ground truth-ul nu este doar positive/negative.
+
+Trebuie să reprezinte unde este aplicabil:
+
+* expected finding;
+* dimension;
+* severity;
+* assessment-validation state;
+* authoritative policy consequence;
+* publishing consequence;
+* scope;
+* edition;
+* modality.
+
+⸻
+
+24. Operatorul este autoritatea finală de policy adjudication
+
+Dacă author și operator nu sunt de acord:
+
+ground truth-ul final este adjudecarea operatorului conform D-01…D-22.
+
+Dezacordul nu se șterge.
+
+Se păstrează în provenance.
+
+⸻
+
+25. Facts nu devin preferințe de operator
+
+Pentru science/factual truth și alte elemente factuale:
+
+adjudecarea trebuie să distingă:
+
+* factual verification;
+* policy consequence.
+
+Operatorul decide politica.
+
+Nu redefinește arbitrar faptul pentru a face testul să treacă.
+
+⸻
+
+26. A doua privire
+
+Pentru RC1:
+
+a doua adjudecare umană completă NU este obligatorie.
+
+Dar pentru cazurile:
+
+* ambigue;
+* P1/P2 high-risk;
+* factual contestable;
+* unde author și operator diferă;
+
+este recomandată o a doua verificare independentă.
+
+Dacă nu există, limitarea se declară explicit.
+
+⸻
+
+STORAGE / VISIBILITY
+
+27. Hidden înseamnă inaccesibil implementatorului
+
+Nu stoca hidden stimuli sau answers într-un loc pe care implementatorul îl poate accesa.
+
+Aceasta include orice repository/branch/workspace oferit implementatorului.
+
+⸻
+
+28. Nu presupunem că numele serviciului garantează izolarea
+
+Regula este capability-based:
+
+dacă implementatorul/sesiunea de implementare poate accesa acel storage, acel storage NU este hidden storage.
+
+⸻
+
+29. Operatorul este responsabil de secret boundary
+
+Dacă operatorul copiază accidental hidden stimulus în conversația de implementare:
+
+incidentul trebuie înregistrat.
+
+Cazul/setul afectat trebuie evaluat pentru contamination.
+
+Nu îl tratăm ca și cum expunerea nu s-ar fi întâmplat.
+
+⸻
+
+CRYPTOGRAPHIC COMMITMENT
+
+30. Nu folosim hash simplu al stimulilor scurți
+
+Un simplu:
+
+SHA256(stimulus)
+
+poate permite dictionary/guess confirmation pentru stimuli scurți.
+
+Prin urmare, nu este suficient drept commitment confidențial.
+
+⸻
+
+31. Commitment-ul trebuie să includă entropie secretă
+
+Folosește un commitment canonical cu:
+
+* canonical serialization;
+* high-entropy secret nonce/salt;
+* dataset version;
+* policy version;
+* stimulus payload;
+* adjudicated ground truth.
+
+Poate fi realizat printr-o schemă criptografică standard potrivită.
+
+D-22 decide proprietatea, nu biblioteca concretă.
+
+⸻
+
+32. Stimuli și ground truth sunt ambele committed
+
+Nu este suficient să commit-uim doar stimulii.
+
+Altfel expected answers ar putea fi schimbate după run.
+
+Trebuie să fie precommitted:
+
+stimuli + adjudicated ground truth.
+
+⸻
+
+33. Commitment-ul public nu divulgă secretul înainte de run
+
+În repo poate exista:
+
+* commitment/root;
+* dataset version;
+* policy version;
+* total counts;
+* aggregated coverage manifest;
+* provenance attestation;
+* seal timestamp/commit relationship.
+
+Secretul necesar verificării/reveal-ului rămâne la custode până când protocolul permite dezvăluirea.
+
+⸻
+
+34. Merkle/aggregate commitment este permis
+
+Dacă implementarea viitoare folosește un Merkle root sau mecanism echivalent, este acceptabil.
+
+Nu este obligatoriu prin D-22.
+
+Proprietățile obligatorii sunt:
+
+* binding;
+* confidentiality before reveal;
+* reproducibility after authorized reveal;
+* tamper evidence.
+
+⸻
+
+COVERAGE MANIFEST
+
+35. Implementerul poate vedea coverage agregat
+
+Înainte de run poate vedea:
+
+* required cell schema;
+* total counts;
+* aggregate counts per policy-relevant cell;
+* P1 opportunity count;
+* P3 auto-acceptable count;
+* modalities/scopes represented.
+
+⸻
+
+36. Manifestul nu conține per-case descriptors
+
+Nu include înainte de run:
+
+* case IDs semantice;
+* exact topics;
+* objects;
+* phrasings;
+* story situations;
+* expected per-case consequence;
+* metadata suficientă pentru reconstrucție.
+
+⸻
+
+37. D-19 și D-21 trebuie demonstrabile fără disclosure
+
+Custodele trebuie să poată demonstra înainte de SH#2 că design-ul satisface:
+
+* D-19 structural coverage;
+* D-21 minimum denominators;
+
+fără a dezvălui cazurile.
+
+⸻
+
+VISUAL / CROSS-MODAL
+
+38. RC1 include visual/cross-modal unde produsul pretinde acea jurisdicție
+
+WonderPages produce cărți ilustrate și pipeline-ul are visual QA/safety responsibilities.
+
+Prin urmare:
+
+dacă Enterprise Local RC1 pretinde că respectivele porți sunt validate pentru:
+
+* visual safety;
+* visual age-fit;
+* cross-modal safety/policy;
+* alte dimensiuni vizuale autoritative;
+
+hidden acceptance trebuie să includă acele modalități conform D-19.
+
+Nu putem declara full Enterprise acceptance pentru o jurisdicție nevalidată.
+
+⸻
+
+39. Nu inventăm artificial coverage dacă feature-ul nu există încă
+
+Dacă o anumită jurisdicție cross-modal nu este implementată în RC1:
+
+raportul trebuie să spună:
+
+NOT IMPLEMENTED / NOT VALIDATED
+
+și claim-ul RC1 se limitează corespunzător.
+
+Nu pretindem coverage pentru o capacitate inexistentă.
+
+⸻
+
+40. Generarea hidden visuals respectă aceeași separare
+
+Implementatorul nu generează hidden acceptance images.
+
+Acestea provin din authoring pipeline-ul independent sau din materiale create/obținute legitim de custode.
+
+Provenance-ul lor se păstrează.
+
+⸻
+
+RUNNER
+
+41. Runner-ul trebuie izolat procedural, nu obligatoriu offline
+
+Corectez recomandarea „fără rețea” ca regulă universală.
+
+Dacă evaluatorul înghețat este complet local/determinist:
+
+un clean local/offline run este preferabil.
+
+Dacă evaluatorul validat necesită un model/provider extern:
+
+rețeaua necesară acelui provider poate fi permisă.
+
+⸻
+
+42. Network access este least-privilege
+
+Runner-ul poate avea numai accesul necesar execuției aprobate.
+
+Nu trebuie să sincronizeze hidden data către:
+
+* implementer workspace;
+* repo;
+* logging necontrolat;
+* analytics neesențial;
+* development session.
+
+⸻
+
+43. Provider exposure trebuie documentată
+
+Dacă hidden stimuli sunt transmise unui inference provider pentru evaluare:
+
+provenance-ul run-ului trebuie să noteze:
+
+* provider;
+* model/version unde disponibil;
+* data path relevant;
+* retention/configuration relevantă cunoscută;
+* faptul că providerul a primit stimuli în timpul scored run-ului.
+
+Aceasta nu este automat aceeași contaminare cu expunerea către implementator, dar este o limitare care trebuie declarată.
+
+⸻
+
+44. Runner-ul nu modifică evaluatorul
+
+Runner execută artifactul înghețat.
+
+Nu patch-uiește.
+
+Nu retry-uiește selectiv cazuri nereușite în afara protocolului.
+
+Nu face best-of-N.
+
+⸻
+
+INFORMATION BEFORE RUN
+
+45. Implementerul poate primi înainte de run
+
+Doar:
+
+* normative policy;
+* sanitized authoring-independent policy contract unde este necesar;
+* D-19 coverage schema;
+* D-21 threshold policy;
+* aggregate coverage counts;
+* generic input/output schema;
+* generic validation tooling requirements;
+* commitments;
+* evaluator freeze requirements.
+
+⸻
+
+46. Implementerul NU primește înainte de run
+
+* hidden stimuli;
+* hidden images;
+* expected answers;
+* per-case findings;
+* per-case consequence;
+* author notes;
+* adjudication discussions;
+* semantic case IDs;
+* detailed hidden distributions care permit reconstruction.
+
+⸻
+
+INFORMATION AFTER RUN
+
+47. PASS
+
+Dacă run-ul trece:
+
+se pot publica:
+
+* aggregate metrics;
+* gate results;
+* commitments;
+* integrity evidence;
+* coverage evidence;
+* limitations.
+
+Operatorul decide ulterior dacă setul concret devine public.
+
+Pentru o versiune viitoare, odată expus, nu îl considerăm automat hidden acceptance evidence.
+
+⸻
+
+48. FAIL
+
+Dacă run-ul eșuează:
+
+înregistrăm mai întâi:
+
+* FAIL;
+* evaluator version;
+* dataset commitment;
+* threshold version;
+* aggregate gate result.
+
+⸻
+
+49. Dacă vrem repair
+
+Dacă implementatorului îi oferim informație din failure pentru a repara evaluatorul:
+
+D-20 se aplică.
+
+Setul este consumat pentru viitoarea independent acceptance.
+
+⸻
+
+50. Nu este necesar să ascundem failures pentru totdeauna
+
+După ce acceptăm că setul este consumat:
+
+putem folosi:
+
+* failure IDs;
+* stimuli;
+* reasoning;
+* ground truth;
+
+pentru debugging.
+
+Dar următoarea acceptare necesită un set nou.
+
+⸻
+
+INVALID_RUN
+
+51. INVALID_RUN nu consumă automat setul
+
+Dacă run-ul este invalid strict tehnic și:
+
+* evaluatorul nu este modificat;
+* hidden results nu sunt folosite pentru tuning;
+* failure semantics nu sunt expuse implementatorului;
+* protocolul D-20 este respectat;
+
+același set poate fi rerulat.
+
+Incidentul rămâne în audit trail.
+
+⸻
+
+PROVENANCE
+
+52. Fiecare hidden case are provenance intern
+
+Custodele păstrează cel puțin:
+
+* case ID opac;
+* author source;
+* authoring timestamp;
+* authoring brief version;
+* original author output;
+* operator edits;
+* adjudication history;
+* factual sources unde sunt necesare;
+* modality;
+* scope;
+* edition/language;
+* D-19 cell membership;
+* D-21 class membership;
+* contamination-screen status;
+* final ground truth;
+* commitment membership.
+
+⸻
+
+53. Pentru model-authored cases
+
+Se păstrează:
+
+* provider/model identity unde disponibilă;
+* session/context isolation attestation;
+* exact sanitized brief;
+* prompt;
+* raw output;
+* operator modifications.
+
+Acestea rămân la custode înainte de run.
+
+⸻
+
+54. Pentru human-authored cases
+
+Se păstrează:
+
+* author identity/role sau pseudonymous audit identity;
+* brief version;
+* creation timestamp;
+* operator edits;
+* adjudication.
+
+⸻
+
+55. Provenance-ul trebuie să poată demonstra separarea
+
+Trebuie să putem răspunde ulterior:
+
+Cine a scris cazul?
+
+Ce știa?
+
+Ce nu știa?
+
+Cine l-a adjudecat?
+
+Când a fost sigilat?
+
+A existat înainte de SH#2?
+
+A fost expus implementatorului?
+
+⸻
+
+CONTAMINATION INCIDENTS
+
+56. Contaminarea nu este binară doar la nivel de set
+
+Un incident poate afecta:
+
+* un caz;
+* o familie;
+* o celulă;
+* întregul set.
+
+Trebuie evaluat scope-ul.
+
+⸻
+
+57. Caz expus înainte de run
+
+Un caz expus implementatorului înainte de scored run:
+
+nu mai poate conta drept independent evidence pentru denominatorii D-19/D-21.
+
+Trebuie:
+
+* exclus înainte de run;
+* înlocuit prin protocol independent;
+* recommitted/resealed înainte de SH#2 dacă expunerea are loc înainte de SH#2.
+
+⸻
+
+58. Expunere după SH#2 dar înainte de run
+
+Dacă hidden case este expus implementatorului după SH#2, dar înainte de scored run:
+
+nu îl păstrăm doar fiindcă evaluatorul era aproape final.
+
+Independența lui este compromisă.
+
+⸻
+
+59. Incident major
+
+Dacă nu putem demonstra ce parte a setului a fost expusă:
+
+presupunem contaminare la scope-ul cel mai sigur justificabil.
+
+Nu pretindem independență nedemonstrabilă.
+
+⸻
+
+RELAȚIA CU D-19
+
+60. D-19 definește spațiul de coverage
+
+Authorii trebuie să creeze setul din:
+
+policy space
+
+nu din:
+
+evaluator failure space.
+
+⸻
+
+61. Coverage manifest agregat
+
+D-19 poate fi verificat prin counts pe celule fără a expune stimuli.
+
+⸻
+
+RELAȚIA CU D-20
+
+62. Setul este creat înainte de SH#2
+
+Stimuli + ground truth + provenance + commitments sunt finalizate înainte de SH#2.
+
+⸻
+
+63. Implementer blindness continuă până la scored run
+
+Nu este suficient ca setul să fi fost sigilat.
+
+Trebuie să rămână ascuns.
+
+⸻
+
+64. Consumption rule rămâne neschimbată
+
+Orice feedback folosit pentru evaluator tuning consumă setul.
+
+⸻
+
+RELAȚIA CU D-21
+
+65. Setul trebuie să satisfacă P1/P3 denominators
+
+Înainte de seal:
+
+* minimum 59 relevant P1 opportunities;
+* minimum 30 auto-acceptable P3 cases;
+* D-19 structural cells;
+* celelalte cerințe D-21.
+
+Overlap-ul legitim este permis.
+
+⸻
+
+66. Compoziția nu se ajustează după rezultat
+
+Nu adăugăm 20 de cazuri ușoare după FAIL ca să diluăm rata.
+
+Denominatorii și design-ul sunt committed înainte.
+
+⸻
+
+67. Authorul nu vede evaluator outputs
+
+Nu i se spune:
+
+„sistemul ratează cuțite, deci scrie alte 20 de cazuri cu arme”.
+
+Authoring-ul derivă din politica normativă și coverage plan.
+
+⸻
+
+OPERATORUL
+
+68. Operatorul poate cumula trei roluri
+
+Pentru RC1 operatorul poate fi:
+
+* Adjudicator;
+* Custodian;
+* Runner.
+
+Acest lucru NU compromite independența față de implementator.
+
+⸻
+
+69. Operatorul poate contribui și ca Author
+
+Da.
+
+Dar setul RC1 nu trebuie să fie exclusiv operator-authored dacă același operator adjudecă toate cazurile.
+
+Protocolul hibrid cu minimum două surse reduce acest risc.
+
+⸻
+
+70. Disciplina operatorului este parte din protocol
+
+După seal:
+
+operatorul nu trebuie să transmită implementatorului:
+
+* exemple;
+* indicii;
+* teme ascunse;
+* failure guesses;
+* hidden author discussions.
+
+⸻
+
+LIMITĂRILE PE CARE LE DECLARĂM
+
+71. Nu pretindem independență absolută
+
+Nu există independență epistemică perfectă.
+
+Policy author, operator, authorii și modelele pot împărți:
+
+* limbaj;
+* cultură;
+* publishing priors;
+* LLM priors;
+* aceleași concepte.
+
+Claim-ul este:
+
+procedurally independent from the evaluator implementation/development process to the degree defined and evidenced by D-22.
+
+⸻
+
+72. Synthetic validation ≠ production validation
+
+Chiar dacă hidden acceptance trece:
+
+nu demonstrează singur calitatea cărților reale.
+
+După Enterprise Local RC:
+
+* instalare;
+* provider authentication;
+* Agent System Commissioning;
+* Dinosaur World V1 migration;
+* real production workflow;
+* actual acceptance;
+
+rămân evidence distincte.
+
+⸻
+
+73. Hidden acceptance ≠ Agent System Commissioning
+
+Nu confundăm evaluator validation cu validarea celor 11 agenți permanenți în funcționare reală.
+
+⸻
+
+74. Hidden acceptance ≠ Dinosaur World acceptance
+
+Dinosaur World rămâne testul real de produs/workflow.
+
+⸻
+
+PROTOCOL CANONICAL RC1
+
+Ordinea aprobată este:
+
+1. Închidere D-22.
+
+2. Closure Report D-01…D-22.
+
+3. Construirea și aprobarea sanitized normative policy brief.
+
+4. Construirea hidden set-ului de minimum două surse independente de implementator.
+
+5. Operator adjudication în schema D-19.
+
+6. Contamination / near-duplicate screening.
+
+7. Verificarea D-19 structural coverage.
+
+8. Verificarea D-21 denominators și composition requirements.
+
+9. Finalizarea provenance.
+
+10. Commitment pentru stimuli + ground truth.
+
+11. Seal înainte de SH#2.
+
+12. Hidden set devine inaccesibil implementatorului.
+
+13. Semantic Hardening #2 exclusiv din policy + development/calibration/exposed diagnostic evidence.
+
+14. Regression pe evidence cunoscută.
+
+15. Freeze evaluator + prompts + configuration + thresholds.
+
+16. P0 integrity verification.
+
+17. Blind scored run.
+
+18. D-19 + D-21 acceptance calculation.
+
+19. PASS / FAIL / INVALID_RUN înregistrat fără post-hoc threshold changes.
+
+20. Dacă FAIL conduce la tuning → set consumed → următoarea acceptare necesită set nou.
+
+⸻
+
+FORMULĂRI OBLIGATORII
+
+Înregistrează explicit:
+
+WonderPages Enterprise Local RC1 requires independent hidden-set authorship; the evaluator implementation provider may not author its own final acceptance set.
+
+Different session, model or provider identity alone does not establish independence; context separation and provenance are required.
+
+A hidden-set author may know the normative policy and required coverage, but must not receive evaluator implementation, known failures, exposed holdout cases, diagnostic probes or SH#2 implementation details.
+
+The full D-01…D-22 evidence ledger is not itself an acceptable hidden-author brief because it contains concrete examples and diagnostic evidence; a sanitized normative policy brief is required.
+
+RC1 uses at least two authoring sources independent of the implementation provider; the operator may contribute human-authored cases and an isolated external model/agent may provide additional volume.
+
+A fresh Claude session alone is insufficient as the sole independent hidden-set author for RC1.
+
+Author-proposed labels are not ground truth; operator adjudication establishes the final policy ground truth before sealing.
+
+The operator may simultaneously serve as adjudicator, custodian and runner without compromising independence from the implementation provider, provided the hidden-set boundary is preserved.
+
+Stimuli and adjudicated ground truth must both be cryptographically committed before SH#2; simple unsalted hashes of short stimuli are insufficient as confidential commitments.
+
+The implementation provider may see aggregate coverage and denominator counts before the run but not per-case information sufficient to reconstruct hidden stimuli or expected answers.
+
+Hidden acceptance evidence must satisfy D-19 structural coverage and D-21 performance-denominator requirements before sealing.
+
+For RC1, visual and cross-modal hidden evidence is required wherever the RC1 product claim asserts an implemented authoritative visual or cross-modal jurisdiction; unimplemented or unvalidated jurisdictions must be explicitly excluded from the claim rather than inferred.
+
+Runner isolation is capability-based and least-privilege; offline execution is preferred when possible but is not mandatory when the frozen evaluator legitimately requires an external inference provider.
+
+Any external provider exposure during the scored run must be documented as run provenance and must not silently expose the hidden set to the implementation workflow.
+
+Any hidden case exposed to the implementation provider before the scored run loses eligibility as independent evidence for the affected acceptance denominator.
+
+Any scored-run feedback used for evaluator tuning consumes the set for future independent acceptance according to D-20.
+
+D-22 establishes procedural independence from the evaluator implementation process, not absolute epistemic independence.
+
+Synthetic hidden-set acceptance does not replace Agent System Commissioning, Dinosaur World V1 production validation or real product acceptance.
+
+⸻
+
+CE NU DECIDE D-22
+
+D-22 NU decide:
+
+* identitatea concretă a celui de-al doilea author;
+* providerul/modelul concret folosit pentru Source B;
+* numărul final total de cazuri peste minime;
+* stimulii concreți;
+* imaginile concrete;
+* ground truth-ul cazurilor individuale;
+* tool-ul criptografic concret;
+* storage product-ul concret;
+* schema fizică finală;
+* implementarea runner-ului;
+* implementarea validatorului;
+* SH#2;
+* schimbări în evaluator;
+* etichetele actualelor 226 cazuri;
+* Agent System Commissioning;
+* Dinosaur World;
+* V1–V6 production acceptance;
+* P9.
+```
+
+### Formulări obligatorii (înregistrate ca atare)
+
+> WonderPages Enterprise Local RC1 requires independent hidden-set authorship; the evaluator implementation provider may not author its
+> own final acceptance set.
+>
+> Different session, model or provider identity alone does not establish independence; context separation and provenance are required.
+>
+> A hidden-set author may know the normative policy and required coverage, but must not receive evaluator implementation, known
+> failures, exposed holdout cases, diagnostic probes or SH#2 implementation details.
+>
+> The full D-01…D-22 evidence ledger is not itself an acceptable hidden-author brief because it contains concrete examples and
+> diagnostic evidence; a sanitized normative policy brief is required.
+>
+> RC1 uses at least two authoring sources independent of the implementation provider; the operator may contribute human-authored cases
+> and an isolated external model/agent may provide additional volume.
+>
+> A fresh Claude session alone is insufficient as the sole independent hidden-set author for RC1.
+>
+> Author-proposed labels are not ground truth; operator adjudication establishes the final policy ground truth before sealing.
+>
+> The operator may simultaneously serve as adjudicator, custodian and runner without compromising independence from the implementation
+> provider, provided the hidden-set boundary is preserved.
+>
+> Stimuli and adjudicated ground truth must both be cryptographically committed before SH#2; simple unsalted hashes of short stimuli are
+> insufficient as confidential commitments.
+>
+> The implementation provider may see aggregate coverage and denominator counts before the run but not per-case information sufficient
+> to reconstruct hidden stimuli or expected answers.
+>
+> Hidden acceptance evidence must satisfy D-19 structural coverage and D-21 performance-denominator requirements before sealing.
+>
+> For RC1, visual and cross-modal hidden evidence is required wherever the RC1 product claim asserts an implemented authoritative visual
+> or cross-modal jurisdiction; unimplemented or unvalidated jurisdictions must be explicitly excluded from the claim rather than
+> inferred.
+>
+> Runner isolation is capability-based and least-privilege; offline execution is preferred when possible but is not mandatory when the
+> frozen evaluator legitimately requires an external inference provider.
+>
+> Any external provider exposure during the scored run must be documented as run provenance and must not silently expose the hidden set
+> to the implementation workflow.
+>
+> Any hidden case exposed to the implementation provider before the scored run loses eligibility as independent evidence for the
+> affected acceptance denominator.
+>
+> Any scored-run feedback used for evaluator tuning consumes the set for future independent acceptance according to D-20.
+>
+> D-22 establishes procedural independence from the evaluator implementation process, not absolute epistemic independence.
+>
+> Synthetic hidden-set acceptance does not replace Agent System Commissioning, Dinosaur World V1 production validation or real product
+> acceptance.
+
+### Separarea cerută
+
+| Strat | Conținut |
+|---|---|
+| **Definiția independenței RC1** | Procedurală și prin provenance; nu prin identitatea modelului. |
+| **Limitarea Gold-v2 actual / opțiunea (a)** | Același autor pentru cazuri, etichete propuse și evaluatori; sigiliul ≠ independență; statutul D-20 neschimbat. (a) respinsă. |
+| **Autor hibrid / minimum două surse** | Source A: om / operator (frontiere, P1 / P2 cu risc mare, adversarial semantic). Source B: model / agent extern în context izolat, nu Claude Code. Nu e nevoie ca toate cele 59 P1 să fie scrise manual. Partea critică are mai mult de o perspectivă de autor; nu „un model a generat tot și operatorul a aprobat”. |
+| **Roluri** | Author (stimuli, fără ground truth final) · Adjudicator (operatorul, autoritate finală) · Custodian (set, secrete, provenance, acces) · Runner (artifact înghețat, fără patch / retry / best-of-N) · Implementer (blind până la scored run) · Auditor (operatorul; a doua persoană preferabilă). Operatorul poate cumula Adjudicator + Custodian + Runner (+ Auditor); ca Author, nu exclusiv. |
+| **Autori interziși / sesiune nouă / alt furnizor** | Implementatorul, sesiunea lui, sub-agenții cu același context, orice model cu repo / evaluator / failure history. Sesiune nouă Claude: insuficientă ca unic autor. Separarea de furnizor fără separarea de context: insuficientă. |
+| **Brief-ul autorului / proveniența brief-ului** | SANITIZED NORMATIVE POLICY BRIEF (doar reguli, dimensiuni, jurisdicții, benzi, ediții, modalități, scope, vocabularul consecințelor, celulele D-19, clasele D-21, schema de output); fără cod, prompturi, liste, slăbiciuni, exemple, stimuli Gold, eșecuri, probe, design SH#2, ieșiri. Versionat, hash-uit, legat de policy version; draft mecanic posibil de la implementer, aprobat de operator. |
+| **Screening de contaminare** | Obligatoriu înainte de seal, față de Gold-v1, Gold-v2, registrul de probe, holdout-ul, exemplele D-01…D-21, corpusul SH#2; rulat de custode cu tooling generic. |
+| **Ground truth** | Toate cazurile adjudecate înainte de seal, în reprezentarea D-19; dezacordurile păstrate; faptul verificat separat de consecința de politică; a doua adjudecare recomandată pentru cazurile ambigue / P1 / P2 / factual contestabile, altfel limitare declarată. |
+| **Stocare / commitment / manifest** | Hidden = inaccesibil implementatorului (capability-based). Commitment sărat, canonic, pe stimuli + ground truth; Merkle permis; binding, confidențialitate, reproductibilitate, tamper evidence. Manifest doar agregat; fără descriptori per caz; D-19 și D-21 demonstrate fără dezvăluire. |
+| **Vizual / cross-modal** | Obligatoriu unde claim-ul RC1 afirmă jurisdicția; altfel NOT IMPLEMENTED / NOT VALIDATED și claim limitat. Imaginile ascunse nu sunt generate de implementer. |
+| **Runner** | Capability-based, least-privilege; offline preferat, nu obligatoriu (recomandarea furnizorului „fără rețea” ca regulă universală, corectată). Expunerea către un inference provider documentată. |
+| **Dezvăluire înainte / după rulare** | Înainte: doar politică, scheme, praguri, numărători agregate, cerințe, commitments. După PASS: agregate, porți, integritate, acoperire, limitări. După FAIL: înregistrare întâi; folosirea pentru repair consumă setul. INVALID_RUN tehnic: rerun permis în condiții. |
+| **Proveniență** | Per caz (ID opac, sursă, timestamp, brief, output original, editări, adjudecare, surse factuale, modalitate, scope, ediție, celulă D-19, clasă D-21, screening, ground truth, commitment); detalii suplimentare pentru cazurile scrise de model sau de om; trebuie să poată demonstra separarea. |
+| **Incidente de contaminare** | Scope evaluat; caz expus → exclus / înlocuit / resigilat; expunere post-SH#2 → compromis; scope nedemonstrabil → presupunere conservatoare. Disciplina operatorului după seal. |
+| **Relația cu D-19 / D-20 / D-21** | Din policy space, nu din failure space; finalizat înainte de SH#2; blindness până la scored run; regula de consum; ≥ 59 P1, ≥ 30 P3, celulele D-19 înainte de seal; fără ajustare post-rezultat. |
+| **Limitările independenței** | Procedurală, nu epistemică absolută; sintetic ≠ producție; ≠ Agent Commissioning; ≠ acceptarea Dinosaur World. |
+| **Secvența canonică RC1** | 20 de pași: închidere D-22 → raport de închidere → brief sanitizat → set ascuns din ≥ 2 surse → adjudecare D-19 → screening → verificare D-19 → verificare D-21 → provenance → commitment → seal înainte de SH#2 → ascundere → SH#2 → regresie → freeze → P0 → blind run → calcul D-19 + D-21 → PASS / FAIL / INVALID_RUN → set consumat dacă FAIL + tuning. |
+| **Comportamentul la momentul deciziei** (HEAD `0e4dffd`, neschimbat) | Nu există tooling pentru brief, commitment sărat, manifest, screening de custode, runner izolat, provenance per caz. Sigilarea actuală folosește hash-uri nesărate pe caz. Sesiunea de implementare are acces la repo și la conectori (de ex. Google Drive), deci nu pot fi hidden storage. **Comportamentul nu e politica.** |
+
+### Nu decide
+
+Al doilea autor concret · providerul / modelul pentru Source B · numărul total de cazuri peste minime · stimulii / imaginile / ground
+truth-ul individuale · tool-ul criptografic · storage-ul concret · schema fizică · runner-ul · validatorul · SH#2 · evaluatorul ·
+etichetele celor 226 de cazuri · Agent System Commissioning · Dinosaur World · V1–V6 · P9.
+
+### Dependențe deschise
+
+- **D-22-DEP-SANITIZED-BRIEF** · **D-22-DEP-SOURCE-B** · **D-22-DEP-GENERIC-TOOLING** · **D-22-DEP-STORAGE** · **D-22-DEP-RC1-VISUAL-CLAIM**.
