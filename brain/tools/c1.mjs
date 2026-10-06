@@ -12,7 +12,9 @@
  *        STILL PENDING (current Bridge main, control-verified tool) and STILL AUTHORIZED (phase id / status / authority digest /
  *        delegation hash / WonderPages origin head unchanged since the bootstrap; every change since the bootstrap, committed or
  *        not, passes `scope`; the committed HEAD passes the gate). Valid with a clean or a dirty working tree, so it can run right
- *        before a commit, a push and a Bridge message alike (audit C1-A02). Exit 0 with write true, exit 1 otherwise.
+ *        before a commit, a push and a Bridge message alike (audit C1-A02). If the message is no longer pending only because THIS
+ *        run already replied (its provenance.notes carry this session's URL), the result is write true with writeKind
+ *        RUN_RECORD_ONLY: the run record of step 8 may still be pushed, nothing else. Exit 0 with write true, exit 1 otherwise.
  *   node brain/tools/c1.mjs scope --since=SHA           every path changed since SHA (commits + working tree) is inside the
  *        writeScope AS PINNED AT SHA (the bootstrap head, never the mutable current file), touches no AUTHORITY_PATHS and leaves
  *        the ACTIVE-PHASE authority fields unchanged (audit C1-A01)
@@ -144,7 +146,10 @@ export function bootstrap({ bridge, head = null, pr = null, wpRoot = BRAIN_ROOT,
   } catch (e) { return bad('exception', String(e.message || e)); }
 }
 
-export function recheck({ bridge, order, id, wpRoot = BRAIN_ROOT, fetch = true } = {}) {
+/** This run's session id (`session_…`), from the platform's CLAUDE_CODE_REMOTE_SESSION_ID (`cse_…`); null when not exposed. */
+export const runSession = (env = process.env) => env.CLAUDE_CODE_REMOTE_SESSION_ID ? env.CLAUDE_CODE_REMOTE_SESSION_ID.replace(/^cse_/, 'session_') : null;
+
+export function recheck({ bridge, order, id, wpRoot = BRAIN_ROOT, fetch = true, session = runSession() } = {}) {
   const res = { schema: 'wonderpages.c1.recheck/1', id, at: new Date().toISOString(), write: false, stillPending: false, stillAuthorized: false, reasons: [] };
   const G = (args, allowFail = false) => git(args, { cwd: bridge, allowFail });
   try {
@@ -158,8 +163,16 @@ export function recheck({ bridge, order, id, wpRoot = BRAIN_ROOT, fetch = true }
       if (!cf.ok) { res.reasons.push('current Bridge main control files differ from WonderPages BRIDGE-CONTROL.json'); return res; }
       const r = spawnSync(process.execPath, [path.join(wt, 'tools/bridge.mjs'), 'write-check', '--for=claude', `--id=${id}`], { cwd: wt, encoding: 'utf8' });
       let w; try { w = JSON.parse(r.stdout); } catch { w = null; }
-      if (!w || w.WRITE_CHECK !== 'WRITE') { res.reasons.push(`STILL PENDING failed: ${w ? w.reason + (w.resolvedBy ? ' by ' + w.resolvedBy : '') : 'write-check error'}`); return res; }
-      res.stillPending = true;
+      // Resolved by THIS run's own reply (provenance.notes carries this session's URL): only the run record may still be written
+      // (step 8). Any other resolution, including a duplicate session's reply, stops the write.
+      let own = null;
+      if (w && w.WRITE_CHECK !== 'WRITE' && w.resolvedBy && session) {
+        const f = path.join(wt, 'exchange', 'messages', `${w.resolvedBy}.json`), x = fs.existsSync(f) ? JSON.parse(fs.readFileSync(f, 'utf8')) : null;
+        if (x && x.from === 'claude' && String(x.provenance?.notes || '').includes(`/code/${session}`)) own = x.id;
+      }
+      if (own) { res.resolvedByThisRun = own; res.writeKind = 'RUN_RECORD_ONLY'; }
+      else if (!w || w.WRITE_CHECK !== 'WRITE') { res.reasons.push(`STILL PENDING failed: ${w ? w.reason + (w.resolvedBy ? ' by ' + w.resolvedBy : '') : 'write-check error'}`); return res; }
+      else res.stillPending = true;
     } finally { G(['worktree', 'remove', '--force', wt], true); }
     const auth = authorityState(wpRoot), was = order.authority;
     if (fetch && auth.canonicalBranch) git(['fetch', '-q', 'origin', auth.canonicalBranch], { cwd: wpRoot, allowFail: true });

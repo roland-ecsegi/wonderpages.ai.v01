@@ -3,7 +3,7 @@
 - **Authorized by:** operator follow-up #13 (verbatim: `brain/phase/authorizations/CONTINUITY-1.operator-authorization-C1.txt`;
   record `brain/phase/authorizations/CONTINUITY-1.operator-followups.md`).
 - **Authority model:** `brain/phase/DELEGATION.json`, checked by gate G14.
-- **Status:** IMPLEMENTED; local and adversarial tests PASS; live test IN PROGRESS (§4); independent audit rounds 1–2 repaired (§5).
+- **Status:** IMPLEMENTED; local and adversarial tests PASS; live test: autonomous wake proven (§4 steps 9–10), run-record defect repaired, cold-restart round trip pending; independent audit rounds 1–2 repaired (§5).
 
 ## 1. Architecture (the real platform, not the documented one)
 
@@ -69,6 +69,9 @@ Sequence: Claude → Bridge → ChatGPT Work → Bridge → autonomous C1 wake �
 | 6. ChatGPT wake and reply, round 2 | doorbell seq 7 (R 914b0c2); `MSG-20261006T182725Z-chatgpt-b017` (6f462d3, 18:27:25 UTC): A01 / A02 RESOLVED, A03 / A04 ACCEPTED_LIMITATION, new C1-B01 MAJOR. `ingress-claude` run 4 (37511452433) deferred the ring: within 30 min of the previous ring (coalescing works live). |
 | 7. Repair round 2, ChatGPT round 3 | Bridge control 9496069 + snapshot 000022 (f0cd22e), WonderPages 99b94cf; request `MSG-20261006T183011Z-claude-f35f` (207df6a); ChatGPT doorbell seq 8; reply `MSG-20261006T183155Z-chatgpt-c301` (42e0459, 18:31:55 UTC): **PASS_WITH_LIMITATIONS**, B01 RESOLVED, no new findings. ChatGPT leg: three autonomous round trips in 25 minutes. |
 | 8. Claude ring for c301 | `ingress-claude` run 6 (37512033085) deferred the ring by the 30-minute coalescing rule; the stale seq-1 doorbell left by run 2 (before the rollback repair) counted as the last ring. The deferred ring waits for the hourly schedule. **Finding:** no scheduled run of any Bridge workflow has ever started (`event=schedule`: 0 runs; ingress-chatgpt `17 */3 * * *` since about 12:30, ingress-claude `41 * * * *` since 17:51). Push-triggered rings work; retries and deferred rings depend on GitHub's scheduler. The repository setting that lets Actions open pull requests is still needed (operator-only). |
+| 9. Operator setting saved; ring | Operator confirmed the PR setting. `ingress-claude` was dispatched once by the implementer (run 37517735005), because GitHub schedule events never fired: doorbell seq 2 (H 9ab7475, R 42e0459), **PR #4 opened by github-actions[bot]** at 19:16:48 UTC. |
+| 10. **Autonomous routine wake** | Routine `trig_01RAjfwuD1vV1YCJapQTMrVa` fired at 19:16:51 UTC (3 s after the PR), fresh session `session_01SAi79Q8zbVhUJqdvDwvrri`, origin `github_webhook_trigger`, finished SUCCEEDED at 19:19:57. Model `claude-opus-5-5` (configured, session, last served, every turn); effort `high` (CLAUDE_EFFORT and CLAUDE_CODE_EFFORT_LEVEL); `isUsingOverage` false; no credential variables. Bootstrap PROCEED from the canon, gate PASS, recheck write=true, then **CLOSED** `MSG-20261006T191813Z-claude-f02d` (Bridge 5a82462); `ingress-claude` run 37517981617 did not ring again (no loop). Full evidence: `brain/evidence/C1-LIVE-RUN-1.json`. |
+| 11. Defect found by run 1 | Step 8 re-checks STILL PENDING for the message the run itself just closed, so the run record could never be pushed. The routine stopped (fail-closed; it also refused a platform stop hook that asked it to push). Repaired: `recheck` returns write true with `writeKind: RUN_RECORD_ONLY` when the only resolution is this run's own reply (its notes carry this session's URL); another session or an unknown session gets write false; authority is still enforced. Integration test added. |
 
 ## 5. Independent audit, round 1 (ChatGPT, advisory) and disposition
 

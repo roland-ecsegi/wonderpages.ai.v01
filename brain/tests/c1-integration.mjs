@@ -102,6 +102,16 @@ try {
     gw('checkout', '-q', '--', '.'); fs.appendFileSync(path.join(C, 'brain/tools/c1.mjs'), '\n'); gw('add', '-A'); gw('commit', '-q', '-m', 'weaken');
     r = c1.recheck({ bridge: B, wpRoot: C, order: o, id: a.id, fetch: false }); assert.equal(r.write, false); assert.match(r.reasons.join(), /brain\/tools\/c1.mjs \(authority-bearing/);
   });
+  await t('recheck after this run\'s own reply → RUN_RECORD_ONLY write (step 8); another session\'s or an unknown session\'s reply → no write', async () => {
+    reset(); const { a } = audit(); pushMain('m'); const { H } = ring(); const o = boot({ head: H });
+    msg({ from: 'claude', to: 'chatgpt', type: 'CLOSED', body: 'closed by the run', replyTo: a.id, notes: 'C1 routine https://claude.ai/code/session_01OWN' }); pushMain('own close');
+    const own = c1.recheck({ bridge: B, wpRoot: C, order: o, id: a.id, fetch: false, session: 'session_01OWN' });
+    assert.equal(own.write, true, own.reasons.join('; ')); assert.equal(own.writeKind, 'RUN_RECORD_ONLY'); assert.equal(own.stillPending, false);
+    assert.equal(c1.recheck({ bridge: B, wpRoot: C, order: o, id: a.id, fetch: false, session: 'session_01OTHER' }).write, false, 'a duplicate session cannot write');
+    assert.equal(c1.recheck({ bridge: B, wpRoot: C, order: o, id: a.id, fetch: false, session: null }).write, false, 'no session id → fail closed');
+    const p = path.join(C, 'brain/phase/DELEGATION.json'); fs.writeFileSync(p, fs.readFileSync(p, 'utf8').replace('"status": "ACTIVE"', '"status": "SUSPENDED"')); gw('add', '-A'); gw('commit', '-q', '-m', 'narrow');
+    assert.equal(c1.recheck({ bridge: B, wpRoot: C, order: o, id: a.id, fetch: false, session: 'session_01OWN' }).write, false, 'authority is still enforced for the run record');
+  });
   await t('recheck: someone else pushed WonderPages after the wake → no write; the routine\'s own fast-forward push is accepted', async () => {
     reset(); const { a } = audit(); pushMain('m'); const { H } = ring(); const o = boot({ head: H });
     gw('update-ref', `refs/remotes/origin/${branch}`, gw('commit-tree', `${wpBase}^{tree}`, '-p', wpBase, '-m', 'foreign'));

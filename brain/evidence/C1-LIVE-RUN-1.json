@@ -1,0 +1,126 @@
+{
+ "schema": "wonderpages.c1.live-run-evidence/1",
+ "run": 1,
+ "summary": "First C1 routine run, woken by a GitHub Actions bot pull request. It processed the pending ChatGPT AUDIT_RESULT (COMMUNICATE → CLOSED on the Bridge). It did not push its WonderPages run record: step 8 re-checks STILL PENDING for a message the run itself had just closed, so the recheck returned write=false and the routine stopped (fail-closed, as instructed). Repaired in brain/tools/c1.mjs (recheck: RUN_RECORD_ONLY when resolved by this run's own reply).",
+ "wake": {
+  "ringTrigger": "workflow_dispatch of ingress-claude (run 37517735005) by the implementer session, because GitHub schedule events never fired in the Agent Bridge; the deferred ring had no other trigger",
+  "doorbell": {
+   "seq": 2,
+   "H": "9ab7475db57feb385fcc4699e7de1274053bb447",
+   "R": "42e0459fe61add4a0132f900edf18a95b9a95c19",
+   "ringAt": "2026-10-06T19:16:43.854Z"
+  },
+  "pullRequest": {
+   "number": 4,
+   "author": "github-actions[bot]",
+   "createdAt": "2026-10-06T19:16:48Z",
+   "head": "inbox/claude",
+   "base": "main"
+  },
+  "routineFiredAt": "2026-10-06T19:16:51.579Z",
+  "routineFinishedAt": "2026-10-06T19:19:57.926Z",
+  "routineStatus": "ROUTINE_RUN_STATUS_SUCCEEDED",
+  "trigger": "trig_01RAjfwuD1vV1YCJapQTMrVa (WonderPages Claude ingress)"
+ },
+ "platformEvidence": {
+  "source": "get_session / get_trigger from the implementer session",
+  "session": "session_01SAi79Q8zbVhUJqdvDwvrri",
+  "origin": "github_webhook_trigger",
+  "sessionSources": [
+   "roland-ecsegi/wonderpages.agent-bridge @ refs/pull/4/head",
+   "roland-ecsegi/wonderpages.ai.v01"
+  ],
+  "configuredModel": "claude-opus-5-5",
+  "sessionContextModel": "claude-opus-5-5",
+  "lastServedModel": "claude-opus-5-5",
+  "perTurnModel": "claude-opus-5-5 on every assistant turn of the transcript",
+  "effort": {
+   "CLAUDE_EFFORT": "high",
+   "CLAUDE_CODE_EFFORT_LEVEL": "high",
+   "source": "environment of the run (recorded by the routine)"
+  },
+  "rateLimit": {
+   "isUsingOverage": false,
+   "rateLimitType": "seven_day",
+   "status": "allowed_warning"
+  },
+  "credentialsPresent": {
+   "ANTHROPIC_API_KEY": false,
+   "ANTHROPIC_AUTH_TOKEN": false,
+   "CLAUDE_CODE_OAUTH_TOKEN": false
+  }
+ },
+ "writes": {
+  "bridge": {
+   "commit": "5a82462c3ba77200f3d14a3ee21cb2374d084bed",
+   "files": [
+    "exchange/messages/MSG-20261006T191813Z-claude-f02d.json"
+   ],
+   "message": "CLOSED, inReplyTo MSG-20261006T183155Z-chatgpt-c301, correlation MSG-20261006T180648Z-claude-7014, authority implementer, no operator decision claimed"
+  },
+  "wonderpages": "none pushed (local commit only, kept as evidence in the routine's container; the routine refused a platform stop hook asking it to push, because its recheck had returned write=false)",
+  "noRing": "ingress-claude run 37517981617 on 5a82462: ring skipped (a CLOSED from Claude never rings)"
+ },
+ "runRecordRecovered": {
+  "recoveredBy": "implementer session https://claude.ai/code/session_012rtQhr65ed69kGHocqgqmE, verbatim from the routine's transcript (list_events), not committed by the routine",
+  "record": {
+   "schema": "wonderpages.c1.run-record/1",
+   "event": {
+    "repository": "roland-ecsegi/wonderpages.agent-bridge",
+    "event": "pull_request",
+    "action": "opened",
+    "pullRequest": 4,
+    "headBranch": "inbox/claude",
+    "baseBranch": "main",
+    "headSha": "9ab7475db57feb385fcc4699e7de1274053bb447"
+   },
+   "order": {
+    "verdict": "PROCEED",
+    "at": "2026-10-06T19:17:20.787Z",
+    "H": "9ab7475db57feb385fcc4699e7de1274053bb447",
+    "R": "42e0459fe61add4a0132f900edf18a95b9a95c19",
+    "doorbellSeq": 2,
+    "doorbellReason": "new",
+    "pending": [
+     "MSG-20261006T183155Z-chatgpt-c301"
+    ],
+    "mirrorSnapshot": "000022-99b94cfbaddb",
+    "wonderpagesHead": "aae886e785796cfe2ab3ea6a3b2e9ddb198adba7",
+    "writesAllowed": true
+   },
+   "messages": [
+    {
+     "id": "MSG-20261006T183155Z-chatgpt-c301",
+     "type": "AUDIT_RESULT",
+     "thread": "MSG-20261006T180648Z-claude-7014",
+     "class": "COMMUNICATE",
+     "recheck": {
+      "at": "2026-10-06T19:18:02.118Z",
+      "write": true
+     },
+     "result": "CLOSED — advisory PASS_WITH_LIMITATIONS (round 3: FINDINGS none, C1-B01 RESOLVED; A03/A04 accepted limitations) received; thread closed, no further re-audit requested",
+     "reply": "MSG-20261006T191813Z-claude-f02d",
+     "commits": {
+      "bridge": [
+       "5a82462"
+      ],
+      "wonderpages": []
+     }
+    }
+   ],
+   "runtime": {
+    "sessionUrl": "https://claude.ai/code/session_01SAi79Q8zbVhUJqdvDwvrri",
+    "CLAUDE_EFFORT": "high",
+    "CLAUDE_CODE_EFFORT_LEVEL": "high",
+    "model": "UNKNOWN",
+    "credentialsPresent": {
+     "ANTHROPIC_API_KEY": false,
+     "ANTHROPIC_AUTH_TOKEN": false,
+     "CLAUDE_CODE_OAUTH_TOKEN": false
+    },
+    "utc": "2026-10-06T19:19:00Z"
+   },
+   "notes": "First C1 run woken automatically through the Claude ingress (doorbell PR opened → routine). Only the run record is written in WonderPages."
+  }
+ }
+}
