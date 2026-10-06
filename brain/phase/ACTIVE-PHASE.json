@@ -109,12 +109,21 @@
     "B-04": "found by Claude while processing f62b (createdAt 7 min after its GitHub commit) — tool keeps thread time monotonic, validate warns on clock skew, task text requires real UTC time"
    },
    "authority": "advisory findings verified on sources (commit times checked on GitHub); no change outside the CONTINUITY-1 write scope"
+  },
+  {
+   "round": 5,
+   "trigger": "Agent Bridge MSG-20261006T134107Z-chatgpt-e91c (advisory final re-audit, snapshot 000011-6aadefd8bafb): B-02, B-03, B-04 PASS; CHANGES_REQUIRED B-05",
+   "processedBecause": "operator follow-up #6",
+   "findings": {
+    "B-05": "accepted — task step 7 now re-reads the item's thread on current Bridge main (data only) just before each write and re-applies the durable-queue rule; CLOSED / SUPERSEDED after the wake, an existing resolving reply, hand-off or receipt → skip silently; reference implementation writeCheck + CLI write-check; tests close-before-wake, supersede-before-wake, existing-resolution-before-wake (42/42)"
+   },
+   "authority": "advisory finding verified on sources; no change outside the CONTINUITY-1 write scope"
   }
  ],
  "operatorFollowups": "brain/phase/authorizations/CONTINUITY-1.operator-followups.md",
  "operatorDecisions": {
   "A": "DONE — BRIDGE_SYNC_TOKEN configured; automatic sync demonstrated (F-05 closed by ChatGPT, MSG-20261006T121530Z-chatgpt-c3f1)",
-  "B": "AUTHORIZED option 1 (operatorFollowups #3, extended by #4) — ChatGPT ingress PR + ChatGPT Work event-triggered task (target GPT-6 Astra, reasoning Medium, subscription only, no API fallback); durable delivery: pending until a valid resolving reply, at-least-once wake with bounded backoff (3h/6h/12h/24h/48h, cap 48h, max 9 attempts ≈ 9.9 days, beyond a 7-day weekly allowance window → STALLED until revived, surfaced as a workflow warning), batching, idempotent processing, WAIT_FOR_ALLOWANCE without usage monitor; fixed task text is the bootstrap authority (B-01), anchored per wake to the immutable doorbell mainCommit (B-02); honest monotonic timestamps (B-04). End-to-end test pending the operator's ChatGPT Work configuration",
+  "B": "AUTHORIZED option 1 (operatorFollowups #3, extended by #4) — ChatGPT ingress PR + ChatGPT Work event-triggered task (target GPT-6 Astra, reasoning Medium, subscription only, no API fallback); durable delivery: pending until a valid resolving reply, at-least-once wake with bounded backoff (3h/6h/12h/24h/48h, cap 48h, max 9 attempts ≈ 9.9 days, beyond a 7-day weekly allowance window → STALLED until revived, surfaced as a workflow warning), batching, idempotent processing, WAIT_FOR_ALLOWANCE without usage monitor; fixed task text is the bootstrap authority (B-01), anchored per wake to the immutable doorbell mainCommit (B-02); honest monotonic timestamps (B-04); still-pending re-check on current main before every write, skip if closed / superseded / resolved since the wake (B-05). End-to-end test pending the operator's ChatGPT Work configuration",
   "C": "NOT AUTHORIZED / NOT IMPLEMENTED — requirements (operatorFollowups #3, #4): full-duplex ChatGPT → Bridge → Claude with the same guarantees as B (durable queue, at-least-once wake, idempotency, batching, bounded retry/backoff, anti-loop, fail-closed); target Claude Opus 5.5 / High on the existing Claude subscription, no separately billed API; after B is accepted, first investigate and demonstrate an event-driven wake of Claude Code — never assume it exists; report limitation and alternatives before any implementation"
  },
  "bridgeConstraints": [

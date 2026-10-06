@@ -1,8 +1,8 @@
 {
- "schema": "wonderpages.brain.decision-evidence/3",
+ "schema": "wonderpages.brain.decision-evidence/4",
  "decision": "B — option 1 (event-driven ChatGPT wake-up through a dedicated Agent Bridge ingress PR)",
  "authorizedBy": "brain/phase/authorizations/CONTINUITY-1.operator-followups.md #3 (verbatim, 2026-10-06)",
- "status": "BUILT WITH DURABLE DELIVERY; B-01…B-04 REPAIRED; VERIFIED ON THE GITHUB SIDE — FINAL RE-AUDIT REQUESTED; END-TO-END TEST PENDING THE OPERATOR'S CHATGPT WORK CONFIGURATION",
+ "status": "BUILT WITH DURABLE DELIVERY; B-01…B-05 REPAIRED; VERIFIED ON THE GITHUB SIDE — LAST RE-AUDIT REQUESTED; END-TO-END TEST PENDING THE OPERATOR'S CHATGPT WORK CONFIGURATION",
  "bridge": {
   "controlCommit": "425fda2 (ingress workflow, ingress plan/guard, INGRESS.md, README/PROTOCOL, 28 self-tests)",
   "publication": "2c3ede7 — mirror 000007-d8013443e53d published together with the control files (control-consistent at every commit)",
@@ -61,11 +61,11 @@
   "model": "pending = actionable message to chatgpt without a resolving reply (derived from the messages, never from the doorbell; ACK does not resolve a request); doorbell v2 records delivery attempts per message",
   "atLeastOnce": "re-ring when the bounded backoff is due: 3h, 6h, 12h, 24h, 48h, cap 48h; max 9 attempts at +0,3,9,21,45,93,141,189,237h (≈9.9 days > 7-day weekly allowance window; two attempts after 168h) → STALLED (kept, visible, workflow warning), revived by any new message to chatgpt or workflow_dispatch revive",
   "batching": "every ring carries all non-stalled pending messages",
-  "idempotency": "ChatGPT skips messages it already resolved; first resolving reply canonical, duplicates ignored and reported as validate warnings",
+  "idempotency": "just before each write ChatGPT re-reads the item's thread on current main (data only) and re-applies the durable-queue rule (B-05: skip silently if CLOSED / SUPERSEDED after the wake, or a resolving reply / hand-off / receipt exists); first resolving reply canonical, duplicates ignored and reported as validate warnings",
   "limits": "no usage monitor, no reset-time guess: an exhausted allowance or unavailable recipient yields no reply and the backoff waits (WAIT_FOR_ALLOWANCE / WAIT_FOR_RESET); no paid fallback; task writes nothing partial",
   "schedule": "cron 17 */3 * * * — writes nothing unless a retry is due (no aggressive polling)",
-  "bridgeCommit": "12115d0 (durable delivery), aedc0c5 (B-02/B-03/B-04)",
-  "tests": "Bridge tools/test.mjs 37/37 (incl. B-03 horizon > 168h and sparse; B-04 monotonic reply time)"
+  "bridgeCommit": "12115d0 (durable delivery), aedc0c5 (B-02/B-03/B-04), f39cf55 (B-05)",
+  "tests": "Bridge tools/test.mjs 42/42 (incl. B-03 horizon > 168h and sparse; B-04 monotonic reply time; B-05 close-before-wake, supersede-before-wake, existing-resolution-before-wake, still-pending, delivery retired)"
  },
  "b01": {
   "finding": "MSG-20261006T124900Z-chatgpt-d84a (advisory): task prompt trusted live control docs before re-establishing integrity (TOCTOU)",
@@ -91,5 +91,10 @@
  "b04": {
   "finding": "found by Claude: MSG-20261006T133500Z-chatgpt-f62b createdAt 13:35:00Z while its GitHub commit is 13:27:56Z (7 min in the future) — would block replies (reply must be later than parent) and skew ordering",
   "repair": "tools/bridge.mjs new: createdAt >= parent + 1s with provenance note; validate: clock-skew warning (> 5 min after the adding commit); task text: real current UTC time, never rounded/future/before parent"
+ },
+ "b05": {
+  "finding": "MSG-20261006T134107Z-chatgpt-e91c (advisory final re-audit; B-02, B-03, B-04 PASS): step 5 computes pending at R, but step 7 only checked on main whether ChatGPT had already replied — a thread CLOSED or SUPERSEDED after the doorbell and before the wake could still get a late answer",
+  "repair": "INGRESS.md task step 7: immediately before writing, re-read the thread on current main as data and re-apply the step-5 rule (CLOSED / SUPERSEDED by anyone, resolving reply or hand-off from ChatGPT, receipt of an ANSWER/RESPONSE, non-ACK reply to a BLOCKER) → skip silently; reference implementation tools/bridge.mjs writeCheck + CLI write-check (live: write-check on MSG-20261006T133529Z-claude-75b7 → SKIP ALREADY_RESOLVED by e91c)",
+  "observation": "e91c's long report is audit/MSG-20261006T134024Z-chatgpt-e91c.md, not audit/<message id>.md as PROTOCOL.md asks; it is referenced explicitly from the message, so nothing is lost; recorded, not repaired (outside B-05)"
  }
 }

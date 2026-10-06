@@ -97,3 +97,20 @@ Recorded: decision B extended with durable delivery (pending until a valid reply
 > Nu configura și nu implementa Decision C și nu începe nimic post-CONTINUITY-1.
 
 Recorded: apply the findings of the latest ChatGPT re-audit (B-02, B-03) within CONTINUITY-1 and request the final re-audit. B-04, a timestamp issue observed while processing it, is handled in the same round. Decision C is not configured or implemented. Nothing post-CONTINUITY-1 is started.
+
+## 2026-10-06 — #6 (decision-B repair B-05)
+
+> Verifică Agent Bridge și procesează toate mesajele noi adresate ție.
+>
+> Aplică B-05 din ultimul re-audit ChatGPT, strict în CONTINUITY-1.
+>
+> După reparație:
+>
+> * rulează toate testele și gate-urile;
+> * publică snapshot VERIFIED;
+> * cere ultimul re-audit ChatGPT pentru Decision B;
+> * oprește-te.
+>
+> Nu implementa Decision C și nu începe nimic post-CONTINUITY-1.
+
+Recorded: apply B-05 (audit MSG-20261006T134107Z-chatgpt-e91c: before each write, re-check on current Bridge `main`, as data, that the item is still pending, with the durable-queue rules; skip silently if it was closed, superseded or resolved after the wake) within CONTINUITY-1, then run all tests and gates, publish a VERIFIED snapshot, request the last ChatGPT re-audit for decision B and stop. Decision C is not implemented. Nothing post-CONTINUITY-1 is started.
