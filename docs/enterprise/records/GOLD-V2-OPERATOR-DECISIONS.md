@@ -15,7 +15,8 @@ mecanism de pericol ↔ mecanism de control), neimplementată. D-06: DECISĂ (op
 Volume → Collection), neimplementată. D-07: DECISĂ (opțiunea C, locul = dovadă, nu verdict),
 neimplementată. D-08: DECISĂ (opțiunea D, gradată; contestat → REVIEW), neimplementată.
 D-09: DECISĂ (opțiunea D; motiv, aplicabilitate, contrafactual, referință), neimplementată. D-10: DECISĂ (opțiunea C,
-rafinată semantic), neimplementată. D-11: DECISĂ (opțiunea C, age-fit multi-factor cu escaladare la severitate), neimplementată. Tabelul de mai jos rămâne prezentarea inițială, nu se rescrie.
+rafinată semantic), neimplementată. D-11: DECISĂ (opțiunea C, age-fit multi-factor cu escaladare la severitate), neimplementată.
+D-12: DECISĂ (opțiunea C, profil semantic de abstracție; escaladare doar la mismatch material), neimplementată. Tabelul de mai jos rămâne prezentarea inițială, nu se rescrie.
 
 **Cum se înregistrează:**
 - **Pentru un caz:** `node scripts/enterprise/gold-adjudicate.mjs record --case=<id> --decision=correct --label=positive|negative

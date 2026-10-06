@@ -32,6 +32,7 @@ explicită a operatorului. Etichetele cazurilor se dau la adjudecarea Gold-v2.
 | D-09 — restricție situațională formulată cu gen | DECISĂ (neimplementată) | D (motiv, aplicabilitate, contrafactual, referință) | `88f4acd4c98f79ba…` |
 | D-10 — verbul „a urât” (a urî), adjectivul „urât” | DECISĂ (neimplementată) | C (rafinată semantic) | `5172167615877ff4…` |
 | D-11 — frică cu recuperare imediată; frică ușoară | DECISĂ (neimplementată) | C (age-fit multi-factor, escaladare la severitate) | `e33f74238b246333…` |
+| D-12 — text scurt, dar abstract (3–4) | DECISĂ (neimplementată) | C (profil semantic de abstracție; escaladare doar la mismatch material) | `457abb2bcbb4a826…` |
 
 ## D-01 — „Fără arme” pentru o armă reală
 
@@ -7027,3 +7028,991 @@ numerice pe bandă · taxonomia intensității emoționale · toate mecanismele 
 - **D-11-DEP-BAND-THRESHOLD-CALIBRATION:** calibrarea pragurilor pe bandă pe evidence.
 - **D-11-DEP-FINDING-SEVERITY-GATE-MODEL:** modelul finding → severity → publishing consequence (legat de D-14).
 - **D-11-DEP-OTHER-EMOTIONS:** tristețe / pierdere / furie.
+
+## D-12 — Text scurt, dar abstract, pentru 3–4 ani
+
+### Declarația operatorului (cuvânt cu cuvânt)
+
+```text
+D-12 — DECIZIA OPERATORULUI
+
+Aleg Opțiunea C, rafinată: profil semantic de abstracție pe axa AGE-FIT, cu finding → severitate → publishing consequence, specific D-12.
+
+Principiul central:
+
+SHORT TEXT ≠ SIMPLE CONCEPT.
+
+Și:
+
+CONCRETE WORDS ≠ CONCRETE MEANING.
+
+Și:
+
+VISUAL REFERENT ≠ CONCEPTUAL GROUNDING.
+
+O propoziție de șase cuvinte poate fi mult mai dificilă pentru 3–4 ani decât o propoziție mai lungă despre o acțiune concretă și observabilă.
+
+Nu implementa acum.
+
+⸻
+
+1. Axa
+
+Abstracția conceptuală aparține:
+
+AGE-FIT / DEVELOPMENTAL FIT
+
+Nu este:
+
+* physical safety;
+* content-policy;
+* defect de calitate universal;
+* simplă funcție a lungimii.
+
+Banda de vârstă poate modifica legitim severitatea finding-ului.
+
+⸻
+
+2. Modelul D-11 se aplică și aici
+
+Separă explicit:
+
+1. proprietatea detectată;
+2. finding-ul age-fit;
+3. severitatea finding-ului;
+4. publishing consequence.
+
+Conceptual:
+
+conceptual profile → age-fit finding → severity → publishing consequence
+
+Nu transforma orice AGE_ABSTRACTION în blocare.
+
+⸻
+
+3. D-12 stabilește o regulă specifică abstracției
+
+D-12 poate decide că abstracția material incompatibilă cu banda 3–4 escaladează la publishing REVIEW.
+
+Aceasta NU decide anticipat D-14 pentru toate celelalte semnale.
+
+D-14 rămâne decizia generală pentru:
+
+* sintaxă;
+* densitate;
+* temporal/cauzal;
+* alte age-fit advisories;
+* localization advisories;
+* politica generală de escaladare.
+
+D-12 este un caz specific, justificat de contractul explicit kids-sc pentru 3–4:
+
+concrete everyday words
+
+și de cerința unei narațiuni simple și lineare.
+
+⸻
+
+4. Lungimea nu este proxy pentru abstracție
+
+Exemplu:
+
+Milo questions whether time is real.
+
+este scurt lexical.
+
+Dar solicită reprezentarea unor concepte precum:
+
+* existență;
+* realitate;
+* natura timpului;
+* relația dintre concept și existență.
+
+Prin urmare, nu poate fi clasificat simplu doar pentru că are puține cuvinte.
+
+⸻
+
+5. Lungimea mai mare nu înseamnă automat dificultate conceptuală
+
+Exemplu:
+
+Milo sees a shiny yellow leaf on the path, picks it up, and smiles.
+
+poate fi mai lung, dar este predominant:
+
+* observabil;
+* senzorial;
+* secvențial;
+* concret.
+
+Lungimea și abstracția sunt dimensiuni diferite.
+
+⸻
+
+6. Concretețea trebuie evaluată semantic
+
+Evaluatorul trebuie să distingă cel puțin:
+
+* obiect concret;
+* acțiune observabilă;
+* proprietate senzorială;
+* eveniment familiar;
+* relație concretă;
+* stare internă familiară;
+* inferență;
+* generalizare;
+* concept abstract;
+* concept filozofic/ontologic;
+* metaforă;
+* idiom;
+* simbolism;
+* concept temporal;
+* concept cauzal;
+* suport contextual;
+* suport vizual.
+
+Nu implementa printr-o listă simplă de time, real, tomorrow, wonder.
+
+⸻
+
+7. Vocabular simplu ≠ concept simplu
+
+time
+
+și
+
+real
+
+sunt cuvinte scurte.
+
+Întrebarea:
+
+whether time is real
+
+nu devine simplă din acest motiv.
+
+Evaluatorul trebuie să reprezinte dificultatea sensului compus, nu doar dificultatea lexicală.
+
+⸻
+
+8. Vocabular mai sofisticat poate fi concret
+
+Un cuvânt mai lung sau nou poate fi explicat:
+
+* prin imagine;
+* prin acțiune;
+* prin context;
+* prin repetiție.
+
+Aceasta este o dimensiune diferită de abstracția conceptuală.
+
+Nu amesteca D-12 cu AGE_VOCABULARY.
+
+⸻
+
+9. Concepte abstracte familiare
+
+Concepte precum:
+
+* dor;
+* curaj;
+* bunătate;
+* prietenie;
+* așteptare;
+
+NU primesc automat finding doar pentru că sunt abstracte în sens lingvistic.
+
+Contează cum sunt prezentate.
+
+Exemplu:
+
+Milo misses Grandma. He hugs her photo.
+
+poate fi suficient de concret pentru 3–4.
+
+→ PASS, în mod normal.
+
+⸻
+
+10. „Mâine” nu este automat abstracție materială
+
+Exemplu:
+
+Milo thinks about tomorrow, when he will see Grandma.
+
+este legat de:
+
+* un eveniment concret;
+* o persoană cunoscută;
+* o secvență temporală familiară.
+
+În forma furnizată:
+
+→ PASS la 3–4 pe dimensiunea D-12.
+
+Actualul AGE_ABSTRACTION este fals pozitiv.
+
+Nu crea regula:
+
+tomorrow = abstraction.
+
+⸻
+
+11. Curiozitatea despre un fenomen concret
+
+Exemplu:
+
+Milo wonders where the sun goes at night.
+
+este o întrebare despre:
+
+* un obiect observabil;
+* o schimbare observabilă;
+* o experiență familiară.
+
+În forma furnizată:
+
+→ PASS pe D-12 la 3–4.
+
+Dacă răspunsul ulterior conține o afirmație științifică greșită, aceasta aparține axei science, nu D-12.
+
+⸻
+
+12. Întrebarea ontologică este diferită
+
+Are the stars real?
+
+nu este echivalent developmental cu:
+
+Where are the stars?
+
+sau:
+
+Why can we see the stars at night?
+
+Primul pune în discuție existența/realitatea referentului.
+
+Celelalte pot rămâne curiozități concrete despre un fenomen observabil.
+
+Evaluatorul trebuie să păstreze această diferență semantică.
+
+⸻
+
+13. Imaginea cu stele NU rezolvă automat abstracția
+
+Corecție explicită față de recomandarea prezentată:
+
+O imagine cu stele poate concretiza referentul:
+
+stars.
+
+Dar nu face automat concretă relația:
+
+whether the stars are real.
+
+Prin urmare:
+
+VISUAL REFERENT SUPPORT ≠ ABSTRACT PROPOSITION RESOLVED.
+
+⸻
+
+14. Imaginea poate totuși reduce severitatea
+
+Exemplu:
+
+Text:
+
+Milo wonders what "sharing" means.
+
+Imagine:
+
+Milo are două mere, îi oferă unul Tiei, iar amândoi zâmbesc.
+
+Imaginea poate transforma conceptul într-o relație concretă și observabilă.
+
+Aici visual grounding poate reduce severitatea age-fit.
+
+⸻
+
+15. Conceptul „time is real”
+
+Pentru:
+
+Milo questions whether time is real.
+
+o imagine cu:
+
+* ceas;
+* soare;
+* calendar;
+* zi/noapte;
+
+poate concretiza manifestări ale timpului.
+
+Dar nu rezolvă automat întrebarea ontologică despre existența timpului.
+
+Dacă textul rămâne la acest nivel filozofic, finding-ul rămâne.
+
+⸻
+
+16. Text-only, visual-only și cross-modal
+
+D-12 se aplică explicit tuturor celor trei:
+
+Text-only
+→ ce solicită propoziția conceptual.
+
+Visual-only
+→ dacă imaginea însăși este simbolică, suprarealistă, metaforică sau cere inferențe complexe.
+
+Cross-modal
+→ dacă imaginea concretizează, explică, amplifică sau contrazice conceptul din text.
+
+Nu presupune că simpla existență a unei ilustrații reduce severitatea.
+
+⸻
+
+17. Metafora nu este automat nepotrivită la 3–4
+
+Nu accept regula:
+
+figurative language at 3–4 = advisory.
+
+Unele metafore/comparații sunt transparente și concretizate.
+
+Exemplu:
+
+Her blanket was soft like a cloud.
+
+poate fi perfect accesibil contextual.
+
+⸻
+
+18. Metafora conceptuală poate necesita finding
+
+Exemplu:
+
+Friendship is a bridge between hearts.
+
+poate necesita:
+
+* mapping conceptual;
+* interpretare simbolică;
+* inferență.
+
+Pentru 3–4 poate produce age-fit finding.
+
+Verdictul depinde de:
+
+* transparență;
+* familiaritate;
+* suport contextual;
+* suport vizual;
+* cât de importantă este metafora pentru înțelegerea poveștii.
+
+⸻
+
+19. Idiomurile trebuie separate de metaforele transparente
+
+Exemplu:
+
+Time flies when Milo plays.
+
+nu trebuie considerat automat simplu doar pentru că propoziția este scurtă.
+
+Dacă înțelegerea literală ar produce alt sens decât cel intenționat și contextul nu clarifică expresia:
+
+→ age-fit finding posibil.
+
+La 3–4 severitatea poate fi materială dacă idiomul este necesar pentru înțelegerea scenei.
+
+⸻
+
+20. Abstracția fără verb cognitiv trebuie detectabilă
+
+Exemplu:
+
+Nothing lasts forever, not even summer.
+
+poate fi conceptual abstract fără:
+
+* wonder;
+* think;
+* question.
+
+Actualul fals negativ demonstrează limita structurii lexicale.
+
+Nu condiționa abstracția de existența unui verb cognitiv.
+
+⸻
+
+21. Verbul cognitiv nu creează singur abstracția
+
+Milo thinks about Grandma.
+
+sau:
+
+Milo wonders where his red ball went.
+
+nu sunt automat conceptual abstracte.
+
+Actualul model cognitive verb + keyword trebuie considerat accident de implementare, nu policy.
+
+⸻
+
+22. Relațiile cauzale
+
+Cauzalitatea nu este automat abstracție.
+
+Exemplu:
+
+Milo is sad because his balloon flew away.
+
+este:
+
+* cauzal;
+* dar concret;
+* observabil;
+* legat de o experiență directă.
+
+Poate fi PASS la 3–4.
+
+⸻
+
+23. Inferența poate crește dificultatea
+
+Exemplu:
+
+Milo realizes that losing something can teach us what truly matters.
+
+solicită o generalizare de nivel superior.
+
+Chiar dacă vocabularul este simplu, conceptual load este mai mare.
+
+Acest lucru poate produce finding age-fit.
+
+⸻
+
+24. Working-memory load este o dimensiune separată, dar interacționează
+
+Dificultatea totală poate crește prin combinația:
+
+abstraction + nested syntax + multiple referents + causal dependencies + implicit inference.
+
+Nu decide D-13 aici.
+
+Dar păstrează arhitectura capabilă să combine findings fără să reducă totul la număr de cuvinte.
+
+⸻
+
+25. Nu inventa acum un scor numeric
+
+Nu implementa:
+
+abstraction score >= 2 = REVIEW.
+
+Severitatea trebuie justificată prin evidence semantică până când există calibrare suficientă.
+
+⸻
+
+26. Severitatea trebuie să reflecte necesitatea conceptului pentru înțelegere
+
+Un element abstract incidental poate fi mai puțin problematic decât unul central.
+
+Exemplu:
+
+dacă o metaforă apare decorativ și copilul poate urmări povestea fără să o decodeze:
+
+→ severitate mai mică.
+
+Dacă întregul conflict și rezolvarea depind de înțelegerea conceptului:
+
+→ severitate mai mare.
+
+⸻
+
+27. Repetiția nu face automat conceptul accesibil
+
+Repetarea:
+
+Is time real? Is time real?
+
+nu concretizează conceptul.
+
+Repetiția poate ajuta vocabularul și memoria, dar nu rezolvă automat abstracția conceptuală.
+
+⸻
+
+28. 3–4 ani
+
+Pentru banda 3–4, contractul WonderPages cere o orientare puternică spre:
+
+* concret;
+* familiar;
+* observabil;
+* senzorial;
+* secvență simplă;
+* suport vizual relevant.
+
+Abstracția filozofică/ontologică centrală și neancorată poate deveni material age-fit mismatch.
+
+Aceasta poate escalada la publishing REVIEW.
+
+Aceasta este politică editorială WonderPages bazată pe profilul produsului, nu o afirmație universală că un copil de 3–4 ani „nu poate” înțelege conceptul.
+
+⸻
+
+29. 5–6 ani
+
+Banda 5–6 poate tolera mai multă inferență și conceptualizare dacă:
+
+* contextul clarifică;
+* există exemple concrete;
+* conceptul este legat de acțiune;
+* povestea nu cere raționament filozofic susținut.
+
+Nu implementa:
+
+abstraction at 5–6 = advisory always.
+
+Severitatea rămâne semantică.
+
+⸻
+
+30. 7–8 ani
+
+Profilul permite:
+
+* vocabular mai bogat;
+* unele figuri de stil;
+* stakes mai complexe;
+* inferență mai mare.
+
+Dar nu implementa:
+
+age 7–8 = all abstraction PASS.
+
+Un text extrem de dens, filozofic sau dependent de concepte foarte abstracte poate primi în continuare finding age-fit.
+
+Pentru cazul exact D-12 însă verdictul este stabilit mai jos.
+
+⸻
+
+31. abs-04 / P-A03 — 3–4
+
+Milo questions whether time is real.
+
+→ AGEFIT_CONCEPTUAL_ABSTRACTION;
+
+→ severitate materială pentru profilul 3–4;
+
+→ publishing REVIEW.
+
+Motivul nu este lungimea sau cuvintele individuale.
+
+Motivul este caracterul ontologic/filozofic central al propoziției, fără grounding suficient în stimulul furnizat.
+
+⸻
+
+32. abs-04 / P-A03 — 5–6
+
+Același stimul:
+
+→ age-fit finding;
+
+→ severitate advisory în forma izolată furnizată;
+
+→ publishing PASS.
+
+Un editor trebuie să știe că textul este conceptual avansat, dar D-12 nu îl blochează automat.
+
+Dacă book context adaugă densitate filozofică, lipsă de grounding sau dependență repetată de astfel de concepte, severitatea poate crește.
+
+⸻
+
+33. abs-04 / P-A03 — 7–8
+
+Același stimul:
+
+→ PASS pe D-12 în forma furnizată.
+
+Nu rezultă însă regula generală că orice abstracție este potrivită la 7–8.
+
+⸻
+
+34. abs-01 — „whether the stars are real”
+
+La 3–4:
+
+→ age-fit finding;
+
+→ material dacă propoziția rămâne o întrebare ontologică neancorată;
+
+→ publishing REVIEW.
+
+Imaginea cu stele nu elimină singură finding-ul.
+
+⸻
+
+35. abs-03 — 5–6
+
+Bo se întreabă dacă stelele există cu adevărat.
+
+→ age-fit finding;
+
+→ în forma izolată, advisory;
+
+→ publishing PASS.
+
+Aceasta este o modificare conceptuală față de interpretarea simplă negative = gate failure.
+
+Etichetele/seturile existente NU se modifică acum.
+
+⸻
+
+36. v2h-age-03 / -04
+
+Setul rezervat rămâne înghețat.
+
+Faptul că evaluatorul actual a trecut aceste cazuri nu demonstrează generalizare, deoarece familia este contaminată de același șablon semantic/lexical.
+
+Păstrează limita L-7.
+
+Nu retune acum.
+
+⸻
+
+37. P-A01
+
+Milo sees a leaf that is shiny and he smiles.
+
+→ PASS la 3–4 pe D-12.
+
+Este concret și observabil chiar dacă propoziția este mai lungă decât abs-04.
+
+Această pereche este importantă pentru principiul:
+
+length ≠ conceptual difficulty.
+
+⸻
+
+38. Paritate EN / RO
+
+Paritatea trebuie stabilită semantic.
+
+Nu:
+
+whether + real = abstraction
+
+și separat:
+
+dacă + adevărat = abstraction.
+
+Ci:
+
+meaning / conceptual demand → age-fit finding.
+
+O traducere care face textul mai abstract sau mai literal poate introduce și localization finding separat.
+
+⸻
+
+39. Reason codes conceptuale
+
+Pot exista, de exemplu:
+
+* AGEFIT_CONCEPTUAL_ABSTRACTION;
+* AGEFIT_UNGROUNDED_ABSTRACT_CONCEPT;
+* AGEFIT_FIGURATIVE_LANGUAGE;
+* AGEFIT_IDIOMATIC_LANGUAGE;
+* AGEFIT_HIGH_INFERENCE_LOAD;
+* AGEFIT_VISUAL_GROUNDING_INSUFFICIENT;
+* AGEFIT_WORKING_MEMORY_LOAD;
+
+sau denumiri mai bune.
+
+Reason code-ul nu trebuie să determine singur publishing consequence.
+
+⸻
+
+40. Nu crea taxonomy-by-word-list
+
+Semantic Hardening #2 nu trebuie să transforme această decizie într-o listă mai mare cu:
+
+* time;
+* reality;
+* existence;
+* forever;
+* tomorrow;
+* friendship;
+* courage;
+* truth.
+
+Aceste cuvinte pot apărea în texte perfect accesibile.
+
+Trebuie evaluată relația conceptuală în care apar.
+
+⸻
+
+41. Visual grounding trebuie demonstrat
+
+Pentru a reduce severitatea, imaginea trebuie să ofere informație relevantă pentru concept.
+
+Nu este suficient:
+
+concept mentioned + related object visible.
+
+Trebuie analizat dacă reprezentarea vizuală:
+
+* exemplifică;
+* concretizează;
+* explică;
+* stabilește relația;
+* reduce inferența necesară.
+
+⸻
+
+42. Visual abstraction
+
+O imagine poate ea însăși crește abstracția:
+
+* simbolism greu de interpretat;
+* reprezentări suprarealiste;
+* relații temporale imposibile;
+* metafore vizuale;
+* perspective conceptuale fără ancorare.
+
+D-12 se aplică deci și QA vizual.
+
+⸻
+
+43. Cross-modal contradiction
+
+Dacă textul este concret, dar imaginea introduce un simbolism complex care schimbă sensul:
+
+→ visual/cross-modal age-fit finding posibil.
+
+Dacă textul este abstract, iar imaginea îl explică concret:
+
+→ severitatea poate scădea.
+
+Dar numai dacă grounding-ul este demonstrat.
+
+⸻
+
+44. Finding cumulativ
+
+Mai multe elemente moderate pot deveni material dificile împreună:
+
+* abstracție;
+* sintaxă complexă;
+* referenți multipli;
+* schimbări temporale;
+* metaforă;
+* inferență implicită.
+
+Păstrează această posibilitate.
+
+Nu stabili pragul numeric acum.
+
+⸻
+
+45. Page → Book
+
+Evaluarea trebuie să existe cel puțin la:
+
+Page → Book.
+
+O pagină poate avea un concept abstract care este explicat în paginile următoare.
+
+Păstrează:
+
+* page-level finding;
+* book-level resolution/grounding.
+
+Book-level grounding poate reduce publishing concern.
+
+Nu șterge retroactiv proprietatea paginii.
+
+⸻
+
+46. Collection-level
+
+Dacă abstracția devine o caracteristică repetată a întregii colecții 3–4, poate exista cumulative age-fit drift chiar dacă fiecare caz individual este borderline.
+
+Arhitectura existentă:
+
+Page → Book → Volume → Collection
+
+trebuie să poată agrega acest lucru.
+
+⸻
+
+47. Ce decide D-12 despre publishing gate
+
+D-12 stabilește numai:
+
+un finding de abstracție conceptuală poate escalada la publishing REVIEW atunci când este material incompatibil cu profilul benzii.
+
+Nu stabilește că:
+
+all age-fit findings can block.
+
+Aceasta rămâne pentru D-14 și deciziile specifice.
+
+⸻
+
+48. D-14 rămâne explicit deschis
+
+Da:
+
+D-14 rămâne decizia generală pentru celelalte semnale consultative de vârstă și localizare.
+
+Nu folosi D-12 ca precedent automat pentru:
+
+* syntax;
+* vocabulary;
+* density;
+* temporal/causal signals;
+* localization omissions/additions;
+* alte advisories.
+
+Fiecare trebuie tratat conform D-14 și dovezilor sale.
+
+⸻
+
+49. Rezultatele centrale D-12
+
+v2c-age-abs-04 / P-A03
+
+3–4:
+→ material age-fit finding
+→ publishing REVIEW
+
+5–6:
+→ advisory age-fit finding
+→ publishing PASS
+
+7–8:
+→ PASS
+
+⸻
+
+Concepte familiare concretizate
+
+Exemplu: dor, bunătate, curaj prezentate prin acțiune/context:
+
+→ în mod normal PASS la 3–4 pe D-12.
+
+⸻
+
+Curiozitate despre fenomen concret
+
+Where does the sun go at night?
+
+→ PASS la 3–4 pe D-12.
+
+Science se evaluează separat.
+
+⸻
+
+Metaforă
+
+→ nu există verdict automat.
+
+Se evaluează:
+
+mapping complexity + familiarity + contextual support + visual grounding + importance to comprehension + age band.
+
+⸻
+
+Imagine
+
+→ poate reduce sau crește severitatea;
+
+→ nu neutralizează automat abstracția;
+
+→ referent concret ≠ propoziție abstractă concretizată.
+
+⸻
+
+50. Ce NU decide D-12
+
+D-12 NU decide:
+
+* D-13 — sintaxa imbricată la 5–6;
+* D-14 — politica generală pentru advisory findings;
+* AGE_VOCABULARY;
+* toate pragurile age-fit;
+* praguri numerice;
+* taxonomia completă a abstracției;
+* taxonomia completă a metaforelor/idiomurilor;
+* reguli exhaustive de visual grounding;
+* toate formele de working-memory load;
+* validitatea empirică a evaluatorului.
+
+D-12 stabilește însă:
+
+abstracția conceptuală este independentă de lungimea textului.
+
+cuvintele concrete/simple nu garantează sens concret.
+
+verbele cognitive nu implică automat abstracție.
+
+conceptele familiare pot fi făcute accesibile prin acțiune și context.
+
+visual support trebuie să concretizeze relația conceptuală, nu doar să afișeze referentul.
+
+metafora nu este automat nepotrivită la 3–4.
+
+un material mismatch de abstracție poate escalada la publishing REVIEW pentru banda țintă.
+
+D-14 rămâne decizia generală pentru celelalte semnale consultative.
+```
+
+### Separarea cerută
+
+| Strat | Conținut |
+|---|---|
+| **Decizie de politică** | Opțiunea C, rafinată, pe axa AGE-FIT. SHORT TEXT ≠ SIMPLE CONCEPT. CONCRETE WORDS ≠ CONCRETE MEANING. VISUAL REFERENT ≠ CONCEPTUAL GROUNDING. Escaladare la publishing REVIEW **doar** pentru mismatch material de abstracție cu banda. D-14 rămâne deschisă pentru celelalte semnale; D-12 nu e precedent automat. |
+| **Lungimea lexicală / numărul de propoziții** | Nu sunt proxy pentru abstracție. Propozițiile ≠ densitatea ideilor. |
+| **Referenți concreți / conținut observabil-senzorial** | Pot exista și într-o propoziție abstractă. O propoziție lungă, concretă (P-A01) → PASS. |
+| **Abstracția conceptuală / cerința ontologic-filozofică** | Sensul compus („whether time is real”, „are the stars real?”) vs curiozitate concretă („where the sun goes at night”). |
+| **Concept abstract familiar** | Dor, curaj, bunătate, prietenie, așteptare, prezentate prin acțiune / context → PASS în mod normal. |
+| **Verbul cognitiv** | Nu implică singur abstracție („thinks about Grandma”). |
+| **Încărcarea inferențială / relația cauzală** | Inferența de nivel superior crește dificultatea. Cauzalitatea concretă nu e abstracție. |
+| **Limbaj figurat / metaforă / idiom** | Fără verdict automat. Metafora transparentă (soft like a cloud) vs conceptuală (bridge between hearts). Idiomul (time flies) poate fi material la 3–4 dacă e necesar înțelegerii. |
+| **Densitate conceptuală / memorie de lucru** | Dimensiuni separate care interacționează (D-13 nedecisă). Finding cumulativ posibil, fără prag numeric. |
+| **Grounding contextual / vizual** | Imaginea reduce severitatea doar dacă concretizează **relația** conceptuală, nu dacă doar arată referentul. |
+| **Abstracția vizuală / relația cross-modal** | Imaginea poate ea însăși crește abstracția. Text-only / visual-only / cross-modal se evaluează separat. |
+| **Banda de vârstă** | 3–4: contractul kids-sc (concret, familiar, observabil). 5–6: mai tolerant, cu condiții. 7–8: mai mult, fără bypass. |
+| **Finding-ul age-fit / severitatea / consecința de publicare** | abs-04 / P-A03: 3–4 material → REVIEW; 5–6 advisory → PASS; 7–8 → PASS. abs-01 la 3–4 → material dacă e neancorat → REVIEW. abs-03 la 5–6 → advisory → PASS. Severitatea e semantică, fără scor numeric. Reason code-ul nu decide singur consecința. |
+| **Finding de pagină / grounding la nivel de carte** | Proprietatea paginii se păstrează. Grounding-ul ulterior reduce îngrijorarea, nu o șterge. |
+| **Încărcătura cumulativă** | Elementele moderate combinate pot deveni materiale. Drift la nivel de colecție 3–4. |
+| **Paritate semantică EN / RO** | Meaning → finding. O traducere care schimbă nivelul de abstracție → posibil finding de localizare separat. |
+| **Comportamentul implementării la momentul deciziei** (HEAD `dc08881`, neschimbat) | `AGE_ABSTRACTION` = verb cognitiv din listă + cuvânt din listă; prag numeric pe bandă; consultativ minor fără efect. Fals pozitive („thinks about tomorrow…”, „se gândește la mâine”). Fals negative (metaforă, idiom, abstracție fără verb). Fără suport vizual. **Șablon comun calibrare / set rezervat (L-7).** **Comportamentul nu e politica.** |
+| **Consecințe viitoare** (Semantic Hardening #2, neautorizat încă) | Profil semantic de abstracție în locul perechii verb + keyword. Severitate semantică pe bandă. Escaladare doar pentru mismatch material de abstracție; restul după D-14. Agregare pe niveluri. QA vizual. Paritate semantică. Coduri AGEFIT_* separate de consecință. |
+
+### Afectate (fără nicio modificare acum)
+
+- **Gold-v2:**
+  - abs-04 (3–4) e candidat finding material → REVIEW;
+  - abs-01 e finding, material dacă e neancorat;
+  - abs-03 (5–6) e advisory → PASS (etichetele existente nu se modifică acum);
+  - abs-02 rămâne PASS.
+- **Probe:**
+  - P-A03: 3–4 REVIEW, 5–6 advisory, 7–8 PASS;
+  - P-A01: PASS.
+- **Setul rezervat (înghețat):** v2h-age-03 / -04 rămân neschimbate; trecerea lor nu arată generalizare (L-7).
+- **Gold-v1:** neschimbat.
+
+### Nu decide
+
+D-13 · D-14 · `AGE_VOCABULARY` · toate pragurile age-fit · praguri numerice · taxonomia completă a abstracției, metaforelor și
+idiomurilor · reguli exhaustive de grounding vizual · toate formele de memorie de lucru · validitatea empirică.
+
+### Dependențe deschise
+
+- **D-12-DEP-ABSTRACTION-TAXONOMY:** taxonomia abstracției, metaforelor și idiomurilor.
+- **D-12-DEP-VISUAL-GROUNDING-CRITERIA:** criterii testabile pentru grounding și abstracție vizuală.
+- **D-11-DEP-FINDING-SEVERITY-GATE-MODEL** (preluată, legată de D-14).
+- **D-12-DEP-ABSTRACTION-TEMPLATE-CONTAMINATION:** șablonul comun calibrare / set rezervat; setul adversarial independent viitor (D-20 / D-22).
