@@ -156,6 +156,12 @@
    "originCommit": "fae311b9b7bc34ba08e54c15b497a6fc9efe9685"
   },
   "tests": "Bridge tools/test.mjs 57/57 incl. 15 B-06 tests: unknown malformed fails closed; exact entry → PASS + QUARANTINED warning; excluded from threads/pending/resolution; ingress rings a new valid request alone; durable queue correct; valid pending message cannot be hidden; second unknown malformed still fails; blob / origin commit / exact-error binding; wildcard and pattern entries rejected; missing-file, duplicate and unknown-field entries rejected; reply to quarantined rejected; ledger change without Bridge-Control trailer flagged; tampered / unlisted ledger fails verify-control",
-  "live": "NOT YET RECORDED at this commit: publication (Bridge control commit d6d8177 + snapshot) and CI results are recorded by the following WonderPages commit"
+  "live": {
+   "bridgeCommits": "d6d8177 (control: quarantine) + baf927a (snapshot 000015-c128cbe05d61 of WonderPages c128cbe), one push",
+   "before": "Bridge fae311b: bridge-verify 37482726772 failure, ingress-chatgpt 37482726883 failure (messages INVALID → no ring); snapshot 000014 push: bridge-verify 37493126425 failure",
+   "after": "bridge-verify 37494556226 success (tests 57/57, mirror + provenance + control VERIFIED, MESSAGES VALID with QUARANTINED warning, append-only PASS); ingress-chatgpt 37494574119 (workflow_dispatch, revive false) success: Verify step success, Plan step success, Ring step skipped (nothing pending), inbox/chatgpt unchanged at e126e49",
+   "local": "bridge.mjs all: SYNC VERIFIED, provenance VERIFIED, CONTROL VERIFIED (11 files), MESSAGES VALID (27 messages, 1 quarantined), APPEND_ONLY PASS; bridge-export verify (WonderPages side): PROVENANCE VERIFIED, CONTROL VERIFIED",
+   "wonderpages": "brain-gate 37494569245 success on c128cbe"
+  }
  }
 }
