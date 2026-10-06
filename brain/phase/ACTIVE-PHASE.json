@@ -88,13 +88,23 @@
     "F-05": "operator configured BRIDGE_SYNC_TOKEN; end-to-end automatic sync demonstration recorded in completionEvidence (bridgeSync)"
    },
    "authority": "advisory findings verified on sources; no change outside the CONTINUITY-1 write scope"
+  },
+  {
+   "round": 3,
+   "trigger": "Agent Bridge MSG-20261006T124900Z-chatgpt-d84a (advisory decision-B audit, snapshot 000008-11bacbefafb4): CHANGES_REQUIRED B-01",
+   "processedBecause": "operator follow-up #4",
+   "findings": {
+    "B-01": "accepted — fixed ChatGPT task text is the bootstrap authority: mirror VERIFIED + 5/5 → canonical BRIDGE-CONTROL.json (now with git blob ids) → live control blob ids, before any repository document is trusted; FAIL → one BLOCKER"
+   },
+   "extension": "operator follow-up #4: durable delivery for decision B (see operatorDecisions.B)",
+   "authority": "advisory finding verified on sources; no change outside the CONTINUITY-1 write scope"
   }
  ],
  "operatorFollowups": "brain/phase/authorizations/CONTINUITY-1.operator-followups.md",
  "operatorDecisions": {
   "A": "DONE — BRIDGE_SYNC_TOKEN configured; automatic sync demonstrated (F-05 closed by ChatGPT, MSG-20261006T121530Z-chatgpt-c3f1)",
-  "B": "AUTHORIZED option 1 (operatorFollowups #3) — ChatGPT ingress PR + ChatGPT Work event-triggered task (target GPT-6 Astra, reasoning Medium, subscription only, no API fallback); built in the Agent Bridge; end-to-end test pending operator configuration in ChatGPT Work",
-  "C": "NOT AUTHORIZED / NOT IMPLEMENTED — future requirement: Claude Opus 5.5, High effort, existing Claude subscription, no metered Anthropic API; investigate first whether this can be technically guaranteed"
+  "B": "AUTHORIZED option 1 (operatorFollowups #3, extended by #4) — ChatGPT ingress PR + ChatGPT Work event-triggered task (target GPT-6 Astra, reasoning Medium, subscription only, no API fallback); durable delivery: pending until a valid resolving reply, at-least-once wake with bounded backoff (3h/6h/12h/24h, cap 24h, max 8 attempts → STALLED until revived), batching, idempotent processing, WAIT_FOR_ALLOWANCE without usage monitor; fixed task text is the bootstrap authority (B-01). End-to-end test pending the operator's ChatGPT Work configuration",
+  "C": "NOT AUTHORIZED / NOT IMPLEMENTED — requirements (operatorFollowups #3, #4): full-duplex ChatGPT → Bridge → Claude with the same guarantees as B (durable queue, at-least-once wake, idempotency, batching, bounded retry/backoff, anti-loop, fail-closed); target Claude Opus 5.5 / High on the existing Claude subscription, no separately billed API; after B is accepted, first investigate and demonstrate an event-driven wake of Claude Code — never assume it exists; report limitation and alternatives before any implementation"
  },
  "bridgeConstraints": [
   "Agent Bridge is an external development/control plane only; never a runtime, build, production, agent, orchestration, evaluation or Enterprise Local dependency of WonderPages; WonderPages works unchanged if the Bridge is removed",

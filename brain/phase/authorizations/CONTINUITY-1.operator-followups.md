@@ -47,3 +47,43 @@ enters a repository. **B and C (automatic wake-up of ChatGPT / Claude) remain un
 > 5. oprește-te înainte de testul end-to-end care necesită configurarea mea.
 
 Recorded decisions: **B = option 1 authorized**. Event-driven ChatGPT wake-up uses a dedicated ingress pull request in the Agent Bridge. The target is ChatGPT Work, GPT-6 Astra, reasoning Medium, on the subscription allowance, with no paid API fallback. **C is not authorized**. Its future requirement is Claude Opus 5.5, High effort, on the existing Claude subscription, without the metered Anthropic API, and it must first be investigated to see whether that configuration can be technically guaranteed. Binding constraints: the Bridge is an external development/control plane only, not a runtime, build, production, agent, orchestration or evaluation dependency of WonderPages; no change to the 11 agents; subscription-first; no post-CONTINUITY-1 phase; no functional change to the application.
+
+## 2026-10-06 — #4 (decision B robustness, B-01, symmetric requirement for C)
+
+> Verifică Agent Bridge și procesează toate mesajele noi adresate ție.
+>
+> Aplică reparația B-01 cerută de ultimul audit ChatGPT, rămânând strict în CONTINUITY-1.
+>
+> Înainte ca operatorul să configureze ChatGPT Work, extinde Decision B astfel încât mecanismul să fie robust la atingerea limitelor de utilizare ChatGPT/Claude.
+>
+> Cerințe obligatorii:
+>
+> 1. Un mesaj nu este considerat livrat doar pentru că a produs un doorbell. El rămâne durable PENDING până când există un răspuns valid în thread.
+> 2. Delivery/wake-up trebuie să fie at-least-once, iar procesarea trebuie să fie idempotentă. Retry-urile nu pot produce răspunsuri, modificări sau decizii duplicate.
+> 3. Dacă ChatGPT Work nu poate procesa mesajul din cauza usage limit, indisponibilității, approval requirement sau altui eșec temporar, mesajul nu poate fi pierdut și nu poate rămâne blocat definitiv deoarece id-ul există deja în rung.
+> 4. Proiectează și implementează un retry/backoff bounded pentru mesajele pending, fără polling agresiv și fără bucle. Batch-uiește toate mesajele actionable pending într-o singură trezire ori de câte ori este posibil.
+> 5. Nu introduce OpenAI API, Anthropic API, usage credits, paid resets, pay-per-token, pay-per-call sau auto-purchase. La epuizarea cotei abonamentului, comportamentul implicit este WAIT_FOR_ALLOWANCE / WAIT_FOR_RESET și reluare sigură ulterior.
+> 6. Nu presupune că Bridge poate cunoaște direct procentul de usage rămas sau ora exactă de reset dacă platforma nu oferă oficial acea informație programatic. Nu inventa un usage monitor. Fă sistemul robust și atunci când recipientul este pur și simplu temporar indisponibil.
+> 7. Păstrează mecanismul complet extern aplicației WonderPages. Nicio schimbare runtime/build/agenți/orchestrare/evaluator/producție.
+> 8. Înregistrează ca cerință simetrică pentru Decision C faptul că sistemul final trebuie să fie full-duplex:
+>     Claude → Bridge → ChatGPT
+>     și
+>     ChatGPT → Bridge → Claude.
+>
+> NU implementa încă Decision C.
+>
+> Pentru C, după ce B este acceptat, trebuie investigată și demonstrată o cale event-driven prin care ChatGPT poate trezi Claude Code folosind autentificarea abonamentului existent și ținta Claude Opus 5.5 / High, fără API cu taxare separată. Nu presupune că această capabilitate există. Dacă nu poate fi demonstrată din produsul actual, raportează limitarea și alternativele înainte de orice implementare.
+>
+> 9. Decision C trebuie ulterior să primească aceleași garanții: durable queue, at-least-once wake, idempotency, batching, retry/backoff, anti-loop și fail-closed.
+>
+> După reparația B:
+>
+> * rulează toate testele și gate-urile;
+> * publică automat un nou snapshot VERIFIED;
+> * actualizează evidence;
+> * cere re-audit ChatGPT;
+> * oprește-te înainte de configurarea operatorului în ChatGPT Work.
+>
+> Nu începe nimic post-CONTINUITY-1.
+
+Recorded: decision B extended with durable delivery (pending until a valid reply, at-least-once wake, idempotent processing, bounded retry/backoff, batching, WAIT_FOR_ALLOWANCE, no usage monitor, no paid fallback) and repair B-01 (fixed task text is the bootstrap authority). **Decision C remains NOT implemented**. Requirements recorded for later: full-duplex (ChatGPT → Bridge → Claude) with the same guarantees; investigate after B is accepted whether ChatGPT can wake Claude Code event-driven on the existing subscription with Claude Opus 5.5 / High and no separately billed API; report the limitation and alternatives before any implementation.

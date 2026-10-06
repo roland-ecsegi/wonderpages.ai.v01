@@ -1,47 +1,57 @@
 {
  "schema": "wonderpages.brain.bridge-control/1",
  "bridgeRepo": "roland-ecsegi/wonderpages.agent-bridge",
- "rule": "Canonical hashes of the Agent Bridge control files. Bridge CI (tools/bridge.mjs verify-control) and Claude (bridge-export.mjs verify) require the live control files to equal these and forbid unlisted control files. Updated only by Claude after a reviewed control change, then exported through the provenance-verified mirror.",
+ "rule": "Canonical hashes (sha256 + git blob id, the latter directly comparable through the GitHub connector) of the Agent Bridge control files. Bridge CI (tools/bridge.mjs verify-control) and Claude (bridge-export.mjs verify) require the live control files to equal these and forbid unlisted control files. Updated only by Claude after a reviewed control change, then exported through the provenance-verified mirror.",
  "files": [
   {
    "path": ".github/workflows/ingress-chatgpt.yml",
-   "sha256": "4a32425488e63d5e0f7e35558b44d67db049850bff8a6d7d031b5ce9d6e1dee0"
+   "sha256": "a9aae5d65b15cb868f60b15bc2359a3b816d02467eb169f0ab263098f9353318",
+   "gitBlob": "851cf0c24a409a995e7ba7ebd4d14b8a440e6809"
   },
   {
    "path": ".github/workflows/verify.yml",
-   "sha256": "3ba61fef7922a951ed618f06d5dd750ede71c8fbd86047f8d81781405198187d"
+   "sha256": "3ba61fef7922a951ed618f06d5dd750ede71c8fbd86047f8d81781405198187d",
+   "gitBlob": "f8a71a6a4a05927ceed5e426ab41ac3104a6644e"
   },
   {
    "path": "INGRESS.md",
-   "sha256": "e2459bc95ba6713f45686cae24f8d5b16c39e7d28a6a1ee46b90ad25e629040f"
+   "sha256": "c1f4de83f2a026ee68fc4b25aec5b4f7f197a700723f478eab6533147ddd76bc",
+   "gitBlob": "9ed57ba9cec3ba7e7e0bbb4fd5b3293aead9e307"
   },
   {
    "path": "PROTOCOL.md",
-   "sha256": "1da5ac818f2584e933346b4972442827818358c14f0f1edab15b663d389335fa"
+   "sha256": "b1569c30a127b247511ceeddf18d79a12c95b1b2470c47e4ec7a995842b4db12",
+   "gitBlob": "f1acf376f8d8369a1ea95b73d8966ad06908b8d4"
   },
   {
    "path": "README.md",
-   "sha256": "32688dd601c5cc4e3e5fb77cf2af93ea4c122d21fbc71084ed3dfff3e07e889f"
+   "sha256": "5d25d13bc58796eebdce2b57e457f919e2bf3a443296d7e76ae2572bf0218769",
+   "gitBlob": "38144f58d581e1ddaffa82863b6dc68132d01870"
   },
   {
    "path": "audit/README.md",
-   "sha256": "4fd90ea3ae7083c47795a917b8f3e8ab1308b767c1bdd561cd10372be269ce03"
+   "sha256": "4fd90ea3ae7083c47795a917b8f3e8ab1308b767c1bdd561cd10372be269ce03",
+   "gitBlob": "9754ce8b9d27ffa0f3118e279a700e254e09d3bb"
   },
   {
    "path": "schemas/example-chatgpt-audit-result.json",
-   "sha256": "5f5e7ed1d123a5b27d65a0303a17143ee18d83719bc29895298a02f0513db8fe"
+   "sha256": "5f5e7ed1d123a5b27d65a0303a17143ee18d83719bc29895298a02f0513db8fe",
+   "gitBlob": "50e22468e942bbc60b9d9ff9c84e636c9ef4301f"
   },
   {
    "path": "schemas/message.schema.json",
-   "sha256": "e45df8cc86759e2814513bcebb7dcf76cbbaba4e31e4e3bede89804e9cffdee7"
+   "sha256": "e45df8cc86759e2814513bcebb7dcf76cbbaba4e31e4e3bede89804e9cffdee7",
+   "gitBlob": "59fc2ad9b8ec5c999dea67af5dca243458bdb8cf"
   },
   {
    "path": "tools/bridge.mjs",
-   "sha256": "4125d07bd315ff5f445a935b65330e9124b1692b39cfef41e888003ddf12f915"
+   "sha256": "91068690e0ab227c98ce636e8b4aa906105f9db554c8453853ebf7151651cb67",
+   "gitBlob": "1dd9eaee64edea6ad70d60e3f1dc27a3190afff6"
   },
   {
    "path": "tools/test.mjs",
-   "sha256": "6f1c6d7d2416bec9de8e35acf3fc786354f0b1f8d463d006bf1cfe8200d1ac02"
+   "sha256": "d3807d58a8cba0fcf3815b0fd99a5c2bbd37f176e0b1edec32bb427a4607c88c",
+   "gitBlob": "74e458b9575c1f9f54b8aefdbbfc10213e07734b"
   }
  ]
 }

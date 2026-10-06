@@ -28,13 +28,13 @@ export const BRIDGE_CONTROL = [/^tools\//, /^schemas\//, /^\.github\//, /^PROTOC
 const bridgeFiles = bridge => [...new Set([...git(['ls-files'], { cwd: bridge }).split('\n'), ...git(['ls-files', '--others', '--exclude-standard'], { cwd: bridge }).split('\n')])].filter(Boolean).sort();
 
 export function controlManifest(bridge, root = BRAIN_ROOT) {
-  const files = bridgeFiles(bridge).filter(f => BRIDGE_CONTROL.some(r => r.test(f)) && fs.existsSync(path.join(bridge, f))).map(f => ({ path: f, sha256: sha256(fs.readFileSync(path.join(bridge, f))) }));
-  return { schema: 'wonderpages.brain.bridge-control/1', bridgeRepo: readJSON(POLICY, root).bridgeRepo, rule: 'Canonical hashes of the Agent Bridge control files. Bridge CI (tools/bridge.mjs verify-control) and Claude (bridge-export.mjs verify) require the live control files to equal these and forbid unlisted control files. Updated only by Claude after a reviewed control change, then exported through the provenance-verified mirror.', files };
+  const files = bridgeFiles(bridge).filter(f => BRIDGE_CONTROL.some(r => r.test(f)) && fs.existsSync(path.join(bridge, f))).map(f => { const b = fs.readFileSync(path.join(bridge, f)); return { path: f, sha256: sha256(b), gitBlob: gitBlobSha(b) }; });
+  return { schema: 'wonderpages.brain.bridge-control/1', bridgeRepo: readJSON(POLICY, root).bridgeRepo, rule: 'Canonical hashes (sha256 + git blob id, the latter directly comparable through the GitHub connector) of the Agent Bridge control files. Bridge CI (tools/bridge.mjs verify-control) and Claude (bridge-export.mjs verify) require the live control files to equal these and forbid unlisted control files. Updated only by Claude after a reviewed control change, then exported through the provenance-verified mirror.', files };
 }
 export function verifyControlFiles(bridge, root = BRAIN_ROOT) {
   const errors = []; if (!fs.existsSync(path.join(root, CONTROL_FILE))) return { ok: false, errors: [`${CONTROL_FILE} missing`] };
   const man = readJSON(CONTROL_FILE, root), listed = new Set(man.files.map(f => f.path));
-  for (const f of man.files) { const p = path.join(bridge, f.path); if (!fs.existsSync(p)) errors.push(`control: missing ${f.path}`); else if (sha256(fs.readFileSync(p)) !== f.sha256) errors.push(`control: ${f.path} differs from the WonderPages-canonical hash`); }
+  for (const f of man.files) { const p = path.join(bridge, f.path); if (!fs.existsSync(p)) errors.push(`control: missing ${f.path}`); else { const b = fs.readFileSync(p); if (sha256(b) !== f.sha256 || (f.gitBlob && gitBlobSha(b) !== f.gitBlob)) errors.push(`control: ${f.path} differs from the WonderPages-canonical hash`); } }
   for (const f of bridgeFiles(bridge)) if (BRIDGE_CONTROL.some(r => r.test(f)) && !listed.has(f)) errors.push(`control: unlisted control file ${f}`);
   return { ok: errors.length === 0, errors };
 }
