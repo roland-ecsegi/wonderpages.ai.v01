@@ -130,5 +130,12 @@
   "Agent Bridge is an external development/control plane only; never a runtime, build, production, agent, orchestration, evaluation or Enterprise Local dependency of WonderPages; WonderPages works unchanged if the Bridge is removed",
   "The Bridge does not change the application's functional architecture nor the identity, permanence, orchestration or contracts of the 11 agents",
   "Subscription-first: no OpenAI API, Anthropic API or other pay-per-token/pay-per-call service as a mandatory dependency without a later explicit operator decision"
- ]
+ ],
+ "decisionBLiveE2E": {
+  "authorizedBy": "brain/phase/authorizations/CONTINUITY-1.operator-followups.md #7 (verbatim, 2026-10-06)",
+  "status": "IN_PROGRESS",
+  "preconditions": "ChatGPT advisory re-audit MSG-20261006T135204Z-chatgpt-c7a2: PASS for B-01…B-05; operator configured ChatGPT Work task 6ac5063e875081919246521097c4b900 on PR #1 (commit updates only; model/reasoning not pinned at task level); bootstrap prompt = INGRESS.md git blob 10edb1434c56ba69ca41489f5792268772045ba3 = BRIDGE-CONTROL.json gitBlob",
+  "rules": "one new diagnostic request; exactly one initial ring through the ingress workflow; no forced re-wake; no simulated or manual response; LIVE PASS only on an autonomous ChatGPT-written response validated from the Bridge; otherwise the request stays PENDING under the existing backoff",
+  "evidence": "brain/evidence/DECISION-B-INGRESS.json (liveE2E)"
+ }
 }

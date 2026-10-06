@@ -114,3 +114,129 @@ Recorded: apply the findings of the latest ChatGPT re-audit (B-02, B-03) within 
 > Nu implementa Decision C și nu începe nimic post-CONTINUITY-1.
 
 Recorded: apply B-05 (audit MSG-20261006T134107Z-chatgpt-e91c: before each write, re-check on current Bridge `main`, as data, that the item is still pending, with the durable-queue rules; skip silently if it was closed, superseded or resolved after the wake) within CONTINUITY-1, then run all tests and gates, publish a VERIFIED snapshot, request the last ChatGPT re-audit for decision B and stop. Decision C is not implemented. Nothing post-CONTINUITY-1 is started.
+
+## 2026-10-06 — #7 (decision B: one controlled real end-to-end wake test)
+
+> Decision B — ChatGPT ingress este acum creat și ACTIV în ChatGPT Work.
+>
+> Operatorul a finalizat configurarea.
+>
+> Configurația observată:
+>
+> * Work task ID: 6ac5063e875081919246521097c4b900
+> * Repository: roland-ecsegi/wonderpages.agent-bridge
+> * PR #1: [ingress] ChatGPT inbox — do not merge
+> * enable_commit_updates = true
+> * enable_comments = false
+> * enable_reviews = false
+> * only_on_merge = false
+> * task status: enabled / Monitoring / Work
+> * GitHub permissions: Allow all tools
+> * bootstrap prompt: exact current INGRESS.md
+> * source INGRESS blob SHA: 10edb1434c56ba69ca41489f5792268772045ba3
+> * model/reasoning are NOT pinned at task level; observed Work session was GPT-6 Astra / Medium.
+> * no paid API fallback exists or is authorized.
+>
+> ChatGPT independently re-verified immediately before this instruction:
+>
+> * Bridge CURRENT seq = 12
+> * snapshot = 000012-5a482e04032e
+> * source WonderPages commit = 5a482e04032e758564bd5e5112b64a4990a022e3
+> * syncStatus = VERIFIED
+> * contextIntegrity = PASS
+> * all five CURRENT integrity checks = true
+> * PR #1 remains open
+> * INGRESS blob SHA matches the value above.
+>
+> You are authorized to perform ONE controlled real end-to-end Decision B wake test now.
+>
+> OBJECTIVE
+>
+> Prove the live path:
+>
+> Claude
+> → Bridge main
+> → durable pending request
+> → ingress doorbell / PR #1 commit update
+> → ChatGPT Work event wake
+> → immutable-R bootstrap
+> → ChatGPT response written to Bridge main
+> → durable queue resolution
+>
+> TEST REQUIREMENTS
+>
+> 1. Create a NEW uniquely identified test request from Claude to ChatGPT in the Bridge.
+>
+> Do NOT reuse:
+> MSG-20261006T134701Z-claude-450d
+>
+> That request has already been resolved.
+>
+> 2. Make the new request harmless and diagnostic only.
+>
+> It should ask ChatGPT to:
+>
+> * prove it bootstrapped from the immutable doorbell mainCommit;
+> * verify CURRENT at R;
+> * verify the canonical Bridge controls at R;
+> * identify the snapshot/source commit it audited;
+> * return a valid protocol response to the new request;
+> * perform no WonderPages application changes.
+>
+> 3. Use the existing durable queue and ingress mechanism exactly as designed.
+>
+> Do not manually simulate ChatGPT.
+>
+> Do not manually create ChatGPT’s response.
+>
+> Do not bypass the ingress PR.
+>
+> 4. Ring PR #1 through the existing ingress mechanism exactly once for the initial delivery.
+>
+> This commit update is intended to be the real event that wakes the active ChatGPT Work task.
+>
+> 5. After ringing, do NOT make additional changes merely to force Work to wake.
+>
+> Allow the configured Work event task to react naturally.
+>
+> 6. Observe the Bridge for the resulting ChatGPT response.
+>
+> Validate:
+>
+> * correct correlation / inReplyTo;
+> * response written on Bridge main;
+> * immutable R used correctly;
+> * control integrity verified;
+> * request becomes resolved under durable queue semantics;
+> * no duplicate response;
+> * no self-trigger loop;
+> * no unauthorized control/mirror modifications;
+> * no WonderPages runtime/build/application drift.
+>
+> 7. Record the actual observed evidence.
+>
+> Do not claim PASS merely because the doorbell commit succeeded.
+>
+> Decision B LIVE PASS requires an actual autonomous Work execution and valid ChatGPT-written response.
+>
+> 8. If Work does not respond immediately, preserve the request as PENDING.
+>
+> Do not use OpenAI API, Anthropic API, credits, paid reset, pay-per-token fallback, aggressive polling, or manual response substitution.
+>
+> Respect the existing retry/backoff architecture.
+>
+> 9. Do NOT implement Decision C.
+>
+> Do NOT begin RC1, Semantic Hardening #2, Gold work, Dinosaur World work, or any other post-CONTINUITY-1 work.
+>
+> 10. Do not ask the operator to copy ChatGPT’s response back to you.
+>
+> The response must travel through the Bridge.
+>
+> When the live response arrives, validate it from the Bridge and produce the Decision B E2E evidence/checkpoint according to the existing continuity architecture.
+>
+> If a genuinely new operator decision is required, stop fail-closed and report exactly that decision.
+>
+> Otherwise proceed autonomously within this authorized E2E test.
+
+Recorded: the operator configured the ChatGPT Work event task (configuration as observed by the operator above; model and reasoning not pinned at task level). ChatGPT's last advisory re-audit MSG-20261006T135204Z-chatgpt-c7a2 returned PASS for B-01…B-05. One controlled live end-to-end wake test of decision B is authorized: one new diagnostic request, one ring through the existing ingress mechanism, no forced re-wake, no manual or simulated response; LIVE PASS only on an autonomous ChatGPT-written response validated from the Bridge. Decision C is not implemented. Nothing post-CONTINUITY-1 is started.
