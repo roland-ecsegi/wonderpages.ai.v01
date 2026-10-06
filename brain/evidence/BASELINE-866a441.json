@@ -414,9 +414,9 @@
    "n": 79,
    "results": "650e519bf769b35e4039a510cfef634bf8ea4ba33a4735868a4e29afc0c74a4b"
   },
-  "versions": "3a082b6b4db009ab98c604f3e9645fdf145fa449ac480f0045cc5ed8d3833e10",
+  "versions": "0d844c15947bab8fada5eadd821602937b68010a7035294ebdaa82b7942fa823",
   "evaluatorVersion": 2,
-  "digest": "9ce82c098351830e5c32b65f65ddf6887cb9c9f2c8b730db78cb03a14bd62c57"
+  "digest": "6ccf9b86e5231d21c76fa157a083d79fd83fd1c178a865222b0e9889571c28db"
  },
  "evidence": {
   "goldV1": "603fa00aac029d3e4d1eabe9d29d182049d9984320a232457aa0ad05c9cee2db",
@@ -439,5 +439,6 @@
   "fail": 0,
   "result": "Rezultat: 428 trecute, 0 picate",
   "environmentNote": "A run from a worktree under a very long path fails 1 test (P8-T03 diagnostic: delivery path length) because the check measures the checkout path; environment-dependent, not code-dependent."
- }
+ },
+ "fingerprintNote": "Host facts (node / npm versions) are excluded from the behaviour fingerprint (fixed after the first CI run on Node 24 vs local Node 22)."
 }

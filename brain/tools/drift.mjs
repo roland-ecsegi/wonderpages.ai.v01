@@ -37,7 +37,7 @@ export async function fingerprint(root, scope = writeScope()) {
   }
   { const gold = JSON.parse(file('evaluation/gold/gold-v2.json')); const { id, at, ...rep } = runEvaluation(gold, { split: 'all', policy: 2 }); behaviour.goldV2Report = canonHash(rep); }
   behaviour.probes = { n: PROBES.length, results: canonHash(PROBES.map(p => [p.id, runProbe(p)])) };
-  const versions = await gate.versionsOf(root); delete versions.code.commit;
+  const versions = await gate.versionsOf(root); delete versions.code.commit; delete versions.tools?.node; delete versions.tools?.npm;   // host facts, not application behaviour
   behaviour.versions = canonHash(versions); behaviour.evaluatorVersion = EVALUATOR_VERSION;
   const ledger = readJSONL('evaluation/gold-v2-policy/decisions.jsonl', root);
   return {
