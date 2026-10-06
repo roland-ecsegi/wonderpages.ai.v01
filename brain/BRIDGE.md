@@ -77,11 +77,13 @@ The token never enters either repository. It can only write the Bridge.
 |---|---|
 | Persistent communication (messages survive both chats, threads, status) | **implemented and demonstrated** (thread `MSG-20261006T111449Z-claude-8923`, ChatGPT audit result, Claude acknowledgement) |
 | CI triggers on every push (WonderPages: gate, self-tests, drift, bridge-sync; Bridge: integrity, provenance, control, messages) | **implemented and demonstrated** |
-| ChatGPT wakes when Claude writes | **AVAILABLE CAPABILITY, NOT CONFIGURED / NOT DEMONSTRATED.** ChatGPT Plus/Pro event-triggered (webhook) tasks can react to GitHub pull-request activity in a connected repository (opened, reviews, comments, commit updates, merges), using the subscription, without the OpenAI API (reported by ChatGPT audit F-04, confirmed by search on 2026-10-06). It needs an ingress pull request in the Bridge that Claude updates, plus an event-triggered task configured by the operator in ChatGPT. Both need an operator decision (Bridge thread `OPERATOR_DECISION_REQUIRED`). |
-| Claude wakes when ChatGPT writes | **AVAILABLE CAPABILITY, NOT CONFIGURED / NOT DEMONSTRATED.** Options: a scheduled Routine that runs the gate and the inbox procedure, or a Claude session subscribed to the same Bridge ingress pull request (push events wake it). Both need operator authorization, because a recurring Routine consumes the operator's Claude usage. |
+| ChatGPT wakes when Claude writes | **AUTHORIZED (decision B, option 1) — BUILT, end-to-end test pending the operator's ChatGPT Work configuration.** A new Claude → ChatGPT message that calls for action makes the Bridge workflow `ingress-chatgpt.yml` verify the whole Bridge (fail-closed). It then pushes one doorbell commit to branch `inbox/chatgpt`, which is "commit update" activity on the never-merged ingress pull request. The operator's ChatGPT Work event-triggered task (target: GPT-6 Astra, reasoning Medium, subscription allowance, no API fallback) listens only to that activity. Each message rings at most once. Replies go `to: claude` and never ring. Spec and task text: Bridge `INGRESS.md`. |
+| Claude wakes when ChatGPT writes | **NOT AUTHORIZED / NOT IMPLEMENTED (decision C).** Operator requirement for later: Claude Opus 5.5, High effort, on the existing Claude subscription, without the metered Anthropic API. Whether that configuration can be technically guaranteed must be investigated before anything is built. |
 
-Loop prevention, if configured: the ChatGPT task reacts only to messages addressed `to: chatgpt` on the ingress pull request. Claude reacts only
-to `to: claude`. Neither writes to the other's ingress branch.
+Loop prevention (B): only new pending messages `to: chatgpt` ring, each at most once. ChatGPT replies `to: claude`, and ACK / CLOSED never ring.
+Doorbell commits use `GITHUB_TOKEN`, so they never trigger workflows. ChatGPT never writes to `inbox/chatgpt` (CI ingress guard), and `main` must never contain
+`ingress/`. Independence: the ingress lives entirely in the Agent Bridge. WonderPages has no runtime or build dependency on it (gate G11, self-tests) and works
+unchanged if the Bridge is removed.
 
 Inbox procedure for any woken Claude session: run the gate → `git pull` the Bridge → `node tools/bridge.mjs all` (mirror, provenance,
 control, messages, append-only) → `node tools/bridge.mjs status` → answer open threads addressed to `claude` within the active phase only

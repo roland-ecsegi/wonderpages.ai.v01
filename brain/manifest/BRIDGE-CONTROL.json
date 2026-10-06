@@ -4,16 +4,24 @@
  "rule": "Canonical hashes of the Agent Bridge control files. Bridge CI (tools/bridge.mjs verify-control) and Claude (bridge-export.mjs verify) require the live control files to equal these and forbid unlisted control files. Updated only by Claude after a reviewed control change, then exported through the provenance-verified mirror.",
  "files": [
   {
+   "path": ".github/workflows/ingress-chatgpt.yml",
+   "sha256": "4a32425488e63d5e0f7e35558b44d67db049850bff8a6d7d031b5ce9d6e1dee0"
+  },
+  {
    "path": ".github/workflows/verify.yml",
-   "sha256": "4bb4de5331df7a8f899ae72d6dd55a0c9091e4ade9568e40d5ffef66972c5346"
+   "sha256": "3ba61fef7922a951ed618f06d5dd750ede71c8fbd86047f8d81781405198187d"
+  },
+  {
+   "path": "INGRESS.md",
+   "sha256": "e2459bc95ba6713f45686cae24f8d5b16c39e7d28a6a1ee46b90ad25e629040f"
   },
   {
    "path": "PROTOCOL.md",
-   "sha256": "787fa7d28e9b2813a0a20d1c3b36e3afac4e83c29334fd17b0b4a30d69f34156"
+   "sha256": "1da5ac818f2584e933346b4972442827818358c14f0f1edab15b663d389335fa"
   },
   {
    "path": "README.md",
-   "sha256": "e9cc8482990ba12c31729dcdf8bc89f464ab576369e2c4b8deb3507cae47ca73"
+   "sha256": "32688dd601c5cc4e3e5fb77cf2af93ea4c122d21fbc71084ed3dfff3e07e889f"
   },
   {
    "path": "audit/README.md",
@@ -29,11 +37,11 @@
   },
   {
    "path": "tools/bridge.mjs",
-   "sha256": "63dfb114c44f87ebe4e4d53cf21f01bec848efd999b3355a5dc0ec2ee69feefa"
+   "sha256": "4125d07bd315ff5f445a935b65330e9124b1692b39cfef41e888003ddf12f915"
   },
   {
    "path": "tools/test.mjs",
-   "sha256": "504e071473015d6ff8705fc3f3a6879ccc16a0b808a304069cb470e4a6ac9794"
+   "sha256": "6f1c6d7d2416bec9de8e35acf3fc786354f0b1f8d463d006bf1cfe8200d1ac02"
   }
  ]
 }

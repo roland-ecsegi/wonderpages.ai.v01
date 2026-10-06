@@ -19,3 +19,31 @@ within CONTINUITY-1. None of them opens a new phase.
 Recorded decisions from these messages: **A = done**, meaning the operator configured the Actions secret `BRIDGE_SYNC_TOKEN`. Its value never
 enters a repository. **B and C (automatic wake-up of ChatGPT / Claude) remain undecided** (Bridge thread
 `MSG-20261006T114753Z-claude-1ec6`).
+
+## 2026-10-06 — #3 (decision B, option 1)
+
+> Autorizez decizia B, opțiunea 1: mecanism event-driven pentru trezirea automată a ChatGPT prin Agent Bridge.
+>
+> Construiește mecanismul de ingress necesar în Agent Bridge, folosind un PR dedicat pentru ChatGPT și respectând toate garanțiile existente de integritate, separarea WonderPages → Bridge și prevenirea buclelor.
+>
+> Obiectivul este ca un mesaj nou Claude → ChatGPT din Bridge să producă activitatea GitHub PR necesară pentru a declanșa un ChatGPT Work event-triggered task.
+>
+> Adaug următoarele constrângeri obligatorii:
+>
+> 1. Agent Bridge rămâne exclusiv development/control-plane extern. Nu poate deveni dependency de runtime, build, producție, agenți, orchestrare, evaluare sau funcționare Enterprise Local a WonderPages. WonderPages trebuie să poată funcționa independent dacă Agent Bridge este eliminat complet.
+> 2. Bridge-ul nu modifică arhitectura funcțională a aplicației și nu schimbă identitatea, permanența, orchestrarea sau contractele celor 11 agenți. Rolul său este exclusiv continuitatea și colaborarea de dezvoltare/audit Claude ↔ ChatGPT.
+> 3. Arhitectura este subscription-first și nu poate introduce OpenAI API, Anthropic API sau alt serviciu pay-per-token/pay-per-call ca dependență obligatorie fără o decizie explicită ulterioară a operatorului.
+> 4. Pentru B, ținta este ChatGPT Work cu GPT-6 Astra și reasoning Medium, folosind allowance-ul abonamentului ChatGPT, dacă platforma permite fixarea explicită a acestei configurații pentru event-triggered task. Nu introduce fallback API plătit.
+> 5. Pentru viitorul C, cerința operatorului este Claude Opus 5.5 cu High reasoning/effort, folosind autentificarea și abonamentul Claude existent, fără Anthropic API metered. Nu implementa C încă. Mai întâi investighează ulterior dacă această configurație poate fi garantată tehnic.
+>
+> Nu autorizez încă nicio fază post-CONTINUITY-1 și nu autorizez modificări funcționale ale aplicației.
+>
+> După implementarea B:
+>
+> 1. verifică integral mecanismul;
+> 2. demonstrează că nu există runtime/build dependency WonderPages → Agent Bridge;
+> 3. demonstrează că nu a fost introdusă nicio dependență API cu cost separat;
+> 4. spune-mi exact ce trebuie să configurez eu în ChatGPT Work;
+> 5. oprește-te înainte de testul end-to-end care necesită configurarea mea.
+
+Recorded decisions: **B = option 1 authorized**. Event-driven ChatGPT wake-up uses a dedicated ingress pull request in the Agent Bridge. The target is ChatGPT Work, GPT-6 Astra, reasoning Medium, on the subscription allowance, with no paid API fallback. **C is not authorized**. Its future requirement is Claude Opus 5.5, High effort, on the existing Claude subscription, without the metered Anthropic API, and it must first be investigated to see whether that configuration can be technically guaranteed. Binding constraints: the Bridge is an external development/control plane only, not a runtime, build, production, agent, orchestration or evaluation dependency of WonderPages; no change to the 11 agents; subscription-first; no post-CONTINUITY-1 phase; no functional change to the application.

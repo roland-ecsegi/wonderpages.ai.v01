@@ -2,7 +2,7 @@
  "schema": "wonderpages.brain.active-phase/1",
  "id": "CONTINUITY-1",
  "title": "WonderPages Project Brain + Continuity System + Agent Bridge",
- "status": "COMPLETE_AWAITING_OPERATOR_REVIEW",
+ "status": "IN_PROGRESS",
  "authorizedBy": {
   "actor": "operator",
   "date": "2026-10-06",
@@ -45,7 +45,7 @@
  "nextAuthorizedStep": {
   "id": "OPERATOR-REVIEW-CONTINUITY-1",
   "actor": "operator",
-  "summary": "The operator reviews the continuity system (CONTINUITY-1) and either explicitly authorizes a next phase or asks for corrections. Until then no implementation work is authorized."
+  "summary": "The operator configures the ChatGPT Work event-triggered task for the ingress PR (Agent Bridge INGRESS.md), then Claude runs the decision-B end-to-end test; after that the operator reviews CONTINUITY-1 and either explicitly authorizes a next phase or asks for corrections. No implementation outside CONTINUITY-1 is authorized."
  },
  "doNotStart": {
   "source": "brain/phase/authorizations/CONTINUITY-1.operator-instruction.txt §10 (verbatim item names)",
@@ -90,5 +90,15 @@
    "authority": "advisory findings verified on sources; no change outside the CONTINUITY-1 write scope"
   }
  ],
- "operatorFollowups": "brain/phase/authorizations/CONTINUITY-1.operator-followups.md"
+ "operatorFollowups": "brain/phase/authorizations/CONTINUITY-1.operator-followups.md",
+ "operatorDecisions": {
+  "A": "DONE — BRIDGE_SYNC_TOKEN configured; automatic sync demonstrated (F-05 closed by ChatGPT, MSG-20261006T121530Z-chatgpt-c3f1)",
+  "B": "AUTHORIZED option 1 (operatorFollowups #3) — ChatGPT ingress PR + ChatGPT Work event-triggered task (target GPT-6 Astra, reasoning Medium, subscription only, no API fallback); built in the Agent Bridge; end-to-end test pending operator configuration in ChatGPT Work",
+  "C": "NOT AUTHORIZED / NOT IMPLEMENTED — future requirement: Claude Opus 5.5, High effort, existing Claude subscription, no metered Anthropic API; investigate first whether this can be technically guaranteed"
+ },
+ "bridgeConstraints": [
+  "Agent Bridge is an external development/control plane only; never a runtime, build, production, agent, orchestration, evaluation or Enterprise Local dependency of WonderPages; WonderPages works unchanged if the Bridge is removed",
+  "The Bridge does not change the application's functional architecture nor the identity, permanence, orchestration or contracts of the 11 agents",
+  "Subscription-first: no OpenAI API, Anthropic API or other pay-per-token/pay-per-call service as a mandatory dependency without a later explicit operator decision"
+ ]
 }

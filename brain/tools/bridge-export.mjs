@@ -24,7 +24,7 @@ import { runGate } from './brain.mjs';
 export const PROTOCOL = 'wonderpages.bridge-protocol/1';
 const POLICY = 'brain/manifest/MIRROR-POLICY.json';
 export const CONTROL_FILE = 'brain/manifest/BRIDGE-CONTROL.json';
-export const BRIDGE_CONTROL = [/^tools\//, /^schemas\//, /^\.github\//, /^PROTOCOL\.md$/, /^README\.md$/, /^audit\/README\.md$/];
+export const BRIDGE_CONTROL = [/^tools\//, /^schemas\//, /^\.github\//, /^PROTOCOL\.md$/, /^README\.md$/, /^INGRESS\.md$/, /^audit\/README\.md$/];
 const bridgeFiles = bridge => [...new Set([...git(['ls-files'], { cwd: bridge }).split('\n'), ...git(['ls-files', '--others', '--exclude-standard'], { cwd: bridge }).split('\n')])].filter(Boolean).sort();
 
 export function controlManifest(bridge, root = BRAIN_ROOT) {
