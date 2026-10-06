@@ -1,57 +1,57 @@
 {
- "schema": "wonderpages.brain.phase-acceptance/1",
+ "schema": "wonderpages.brain.phase-acceptance/2",
  "phase": "CONTINUITY-1",
- "recordedAt": "2026-10-06T11:29:07.622Z",
- "note": "Evidence of the CONTINUITY-1 exit criteria. Acceptance of the phase itself is the operator's decision (NEXT_AUTHORIZED_STEP OPERATOR-REVIEW-CONTINUITY-1).",
+ "candidateCommit": "99fd72c967de4b527c3d7cae21883384bd14fcec",
+ "recordedAt": "2026-10-06T11:47:04.079Z",
+ "note": "Evidence for the candidate commit. After it only evidence files may change (checked by: node brain/tools/brain.mjs acceptance). At any later commit the closing checks are the gate (G13 zero-drift) and the CI run on that commit. Acceptance of the phase is the operator decision (OPERATOR-REVIEW-CONTINUITY-1).",
  "applicationZeroDrift": {
   "result": "PASS",
+  "comparedAt": "99fd72c967de4b527c3d7cae21883384bd14fcec",
   "baseline": "866a441",
-  "comparedAt": "2bc5d018e90cea1aa9c0deb95b50b013e1ddbd61",
-  "releaseSourceDigest": {
-   "files": 368,
-   "sha256": "1f7a651a469f0702421c63f7ff734739386a5287196880c2ce47946dd63d3c0a"
-  },
-  "protectedFiles": 382,
-  "behaviourDigest": "6ccf9b86e5231d21c76fa157a083d79fd83fd1c178a865222b0e9889571c28db",
-  "diffs": [],
-  "changedPathsSince866a441": "only CLAUDE.md, brain/**, .github/workflows/brain-gate.yml, .github/workflows/bridge-sync.yml"
+  "method": "node brain/tools/drift.mjs compare brain/evidence/BASELINE-866a441.json (release sourceDigest 1f7a651a…, 382 protected files, behaviour digest 6ccf9b86…) + gate G13 at every commit",
+  "ci": "brain-gate run 37458373964 success on 99fd72c (gate + 23 self-tests + drift, Node 24)"
  },
  "applicationTestSuite": {
   "commit": "7f0e473",
-  "command": "BROWSER_PATH=/opt/pw-browsers/chromium node tests/run.mjs",
   "tests": 428,
   "pass": 428,
   "fail": 0,
   "baselineAt866a441": "428/428",
-  "note": "Later commits change only brain/ (proved by the drift comparison above)."
+  "bindingToCandidate": "Protected tree at the candidate is byte-identical to 7f0e473 and 866a441 (G13 / drift), so the suite result applies unchanged; the 428 tests are not re-run for brain-only commits."
  },
  "brainSelfTests": {
-  "result": "22/22 PASS (local and in CI brain-gate run 2 on Node 24)",
-  "command": "node brain/tests/run.mjs"
- },
- "ci": {
-  "wonderpages": {
-   "brain-gate": "run 37455281663 success (7f0e473)",
-   "bridge-sync": "runs succeed and report PENDING_OPERATOR_SETUP (secret absent); write steps skipped"
-  },
-  "bridge": {
-   "bridge-verify": "run 37455161761 success (ebc351e): 16 tool self-tests, mirror integrity + provenance from GitHub, messages valid, append-only"
-  }
+  "result": "23/23 PASS",
+  "commit": "99fd72c967de4b527c3d7cae21883384bd14fcec"
  },
  "freshSessionContinuity": {
   "result": "PASS",
   "score": "27/27",
-  "session": "session_01DBiyEsxg8keTN8vRnzpAVH (new cloud session, branch checkout at 7f0e473, no conversation history)",
-  "record": "brain/continuity/results/2026-10-06-fresh-session-01DBiyEsxg8keTN8vRnzpAVH.json",
-  "audit": "8 read-only tool calls; did not read or run the grader, results or brain tests; tree left clean",
-  "findingsApplied": "commit 2bc5d01"
+  "testedCommit": "99fd72c967de4b527c3d7cae21883384bd14fcec",
+  "session": "session_01WwAViZbzqDMoBvLVX1Em3a (new cloud session, detached checkout of the candidate, no history)",
+  "record": "brain/continuity/results/2026-10-06-fresh-session-2-01WwAViZbzqDMoBvLVX1Em3a.json",
+  "audit": "11 read-only commands; no access to the grader, results, brain tests or this evidence; tree left clean",
+  "observations": "no contradictions; ambiguities reported (detached-HEAD G03 WARN by design; Q26 forbidden vs doNotStart; model alias vs id; Q22 Romanian wording) - not defects, brain left unchanged after the test"
  },
  "bridge": {
-  "repo": "roland-ecsegi/wonderpages.agent-bridge",
-  "firstSnapshot": "000001-8bee54600859",
+  "snapshot": "000003-99fd72c967de",
   "syncStatus": "VERIFIED (5/5)",
-  "provenance": "VERIFIED from both sides",
-  "syncMode": "manual; ci = PENDING_OPERATOR_SETUP (BRIDGE_SYNC_TOKEN)",
-  "firstThread": "MSG-20261006T111449Z-claude-8923 (AUDIT_REQUEST to chatgpt, OPEN)"
+  "provenance": "VERIFIED (Bridge CI from GitHub + WonderPages side)",
+  "control": "VERIFIED (BRIDGE-CONTROL.json, 8 files)",
+  "syncMode": "manual; ci = PENDING_OPERATOR_SETUP (BRIDGE_SYNC_TOKEN)"
+ },
+ "audit": {
+  "round": 1,
+  "by": "ChatGPT (advisory)",
+  "message": "MSG-20261006T113320Z-chatgpt-a1c4",
+  "verdict": "CHANGES_REQUIRED",
+  "repairs": "F-01 G13 + candidate-bound evidence; F-02 second fresh session on the candidate; F-03 Bridge control hash manifest; F-04 trigger reclassified, operator decision requested; F-05 operator setup pending"
+ },
+ "history": {
+  "round0": {
+   "candidate": "6b5ebf4 (evidence at 2bc5d01 / 7f0e473)",
+   "freshSession": "session_01DBiyEsxg8keTN8vRnzpAVH 27/27 at 7f0e473",
+   "record": "brain/continuity/results/2026-10-06-fresh-session-01DBiyEsxg8keTN8vRnzpAVH.json",
+   "supersededBecause": "ChatGPT audit F-01/F-02: evidence not bound to the final commit"
+  }
  }
 }
