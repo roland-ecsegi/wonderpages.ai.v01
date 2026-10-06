@@ -20,7 +20,8 @@ D-12: DECISĂ (opțiunea C, profil semantic de abstracție; escaladare doar la m
 DECISĂ (opțiunea B, profil structural; consecința de publicare → D-14), neimplementată. D-14: DECISĂ (opțiunea C,
 finding → confirmare → severitate → consecință; age-fit material → REVIEW, fidelity confirmată → REPAIR), neimplementată. D-15: DECISĂ (opțiunea D,
 corectare semantică + takeaway științific final; bat-05 → PASS; takeaway fals confirmat → REPAIR), neimplementată. D-16: DECISĂ (opțiunea D,
-minim 7 pe criteriile aplicabile, politică de produs nevalidată empiric; egalitatea trece; fără waiver), neimplementată. Tabelul de mai jos rămâne prezentarea inițială, nu se rescrie.
+minim 7 pe criteriile aplicabile, politică de produs nevalidată empiric; egalitatea trece; fără waiver), neimplementată. D-17: DECISĂ (opțiunea D,
+jurisdicții separate; T07 critic cu prag 7; fără dublă adjudecare), neimplementată. Tabelul de mai jos rămâne prezentarea inițială, nu se rescrie.
 
 **Cum se înregistrează:**
 - **Pentru un caz:** `node scripts/enterprise/gold-adjudicate.mjs record --case=<id> --decision=correct --label=positive|negative

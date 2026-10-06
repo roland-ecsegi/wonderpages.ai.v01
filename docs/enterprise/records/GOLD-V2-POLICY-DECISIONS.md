@@ -37,6 +37,7 @@ explicită a operatorului. Etichetele cazurilor se dau la adjudecarea Gold-v2.
 | D-14 — semnalele consultative: finding, severitate, consecință | DECISĂ (neimplementată) | C (finding → confirmare → severitate → consecință; age-fit ≠ fidelity) | `9868b43824a361f1…` |
 | D-15 — fereastra de corectare a unei idei științifice greșite | DECISĂ (neimplementată) | D (corectare semantică + takeaway final + scope) | `dbc63cbc0e2a724d…` |
 | D-16 — minimul pentru criteriile non-critice; semantica pragurilor | DECISĂ (neimplementată) | D (minim 7 pe criteriile aplicabile; egalitate exactă; fără waiver) | `bd4cab1527f23f18…` |
+| D-17 — T07 vs porțile de siguranță, content-policy și age-fit | DECISĂ (neimplementată) | D (jurisdicții separate; T07 ≥ 7; fără dublă adjudecare) | `e9bea3e83f8e552d…` |
 
 ## D-01 — „Fără arme” pentru o armă reală
 
@@ -12665,3 +12666,1143 @@ adaptive din `learning.js` · calitatea criticului · validitatea empirică.
 - **D-16-DEP-SCORING-GRANULARITY** · **D-16-DEP-NA-TAXONOMY** · **D-16-DEP-COLLECTION-SYSTEMIC-QUALITY** ·
   **D-16-DEP-EMPIRICAL-FLOOR-VALIDATION** (D-19 / D-20 / D-21) · **D-16-DEP-NATIVE-EDITION-RUBRIC** · **D-16-DEP-PASS-VERSION-RANKING** ·
   **D-16-DEP-T07** → D-17 · **D-16-DEP-EVIDENCE-VALIDITY** → D-18.
+
+## D-17 — T07 în rubrică vs porțile de siguranță, content-policy și age-fit
+
+### Declarația operatorului (cuvânt cu cuvânt)
+
+```text
+D-17 — DECIZIA OPERATORULUI
+
+Aleg Opțiunea D, rafinată: separation of jurisdiction + linked evidence + no double adjudication.
+
+Principiile centrale sunt:
+
+T07 QUALITY SCORE ≠ SAFETY GATE.
+
+T07 QUALITY SCORE ≠ CONTENT-POLICY GATE.
+
+T07 QUALITY SCORE ≠ AGE-FIT GATE.
+
+ONE UNDERLYING DEFECT MUST HAVE ONE AUTHORITATIVE JURISDICTION.
+
+THE SAME DEFECT MAY BE OBSERVED BY MULTIPLE SYSTEMS, BUT IT MUST NOT BE ADJUDICATED OR BLOCK RELEASE TWICE.
+
+A RESOLVED HASH-BOUND GATE FINDING CANNOT BE REOPENED INDIRECTLY THROUGH T07 USING THE SAME EVIDENCE.
+
+NEW MATERIAL EVIDENCE MAY CREATE A NEW CANDIDATE FINDING; IT DOES NOT SILENTLY OVERRIDE THE PREVIOUS DECISION.
+
+DEPICTION OF UNDESIRABLE BEHAVIOUR ≠ NARRATIVE ENDORSEMENT OF THAT BEHAVIOUR.
+
+Nu implementa acum.
+
+⸻
+
+1. Jurisdicțiile rămân separate
+
+Pentru WonderPages:
+
+* physical / imitation safety → safety gate;
+* content / child-safety policy → content-policy gate;
+* developmental / emotional suitability → age-fit;
+* science truth → science layer stabilit prin D-15;
+* editorial values / moral modelling → T07 quality dimension, în măsura în care nu este deja responsabilitatea uneia dintre axele de mai sus.
+
+T07 nu devine o a doua autoritate pentru primele patru.
+
+⸻
+
+2. Nu schimbăm acum textul rubricii
+
+Contractul actual spune:
+
+T07 — Safety and values: nothing frightening beyond the age, no stereotypes, positive values
+
+și îl marchează critical: true.
+
+D-17 NU rescrie acum Product Contract și NU redenumește T07.
+
+Dar stabilește interpretarea arhitecturală obligatorie pentru Semantic Hardening #2:
+
+elementele din T07 care aparțin unor jurisdicții specializate trebuie delegate / linked, nu readjudecate independent prin scor.
+
+Prin urmare:
+
+* frightening beyond the age → D-11 / age-fit;
+* stereotypes → D-08 / D-09 content-policy;
+* physical hazards → safety;
+* science → D-15;
+* editorial values / behavioural modelling care nu intră în aceste axe → T07.
+
+⸻
+
+3. T07 rămâne criteriu critic
+
+Păstrăm metadata existentă:
+
+T07 critical = true.
+
+Dar:
+
+critical ≠ automatically threshold 8.
+
+Nu există evidence suficientă și nici decizie anterioară care să justifice deducția:
+
+T07 critical → T07 >= 8.
+
+T01 și T08 au pragul 8 prin politica specifică deja decisă.
+
+Nu extindem acel prag la T07 prin analogie.
+
+⸻
+
+4. Pragul T07
+
+Pentru actualul kids-sc:
+
+T07 >= 7.
+
+Se aplică semantica D-16:
+
+* 7.0 → threshold PASS;
+* 6.99 → FAIL, dacă 6.99 este o valoare validă conform scoring contract;
+* fără pre-rounding;
+* fără floating-point boundary error;
+* fără quality waiver pentru un scor valid și confirmat sub prag.
+
+⸻
+
+5. De ce nu aleg 8
+
+Nu vreau ca simplul label critical să creeze o politică numerică nouă fără evidence.
+
+Mai important, T07 are în prezent o semantică amestecată.
+
+Ridicarea lui la 8 înainte de separarea jurisdicțiilor ar transforma o notă de critic într-o a doua poartă mai strictă pentru:
+
+* safety;
+* stereotypes;
+* fear / age-fit;
+* values.
+
+Aceasta ar amplifica exact defectul arhitectural pe care D-17 trebuie să-l elimine.
+
+Prin urmare:
+
+T07 >= 7 is operator-approved policy.
+
+Nu:
+
+T07 >= 7 because safety gate makes T07 unimportant.
+
+Și nu:
+
+T07 >= 8 because T07 is marked critical.
+
+⸻
+
+6. v2c-quality-15 / P-Q07
+
+T07 = 7.5.
+
+Condiția T07:
+
+→ PASS.
+
+Dacă:
+
+* overall mean trece;
+* toate celelalte criterii trec;
+* safety/content-policy/age-fit gates trec;
+* evidence-ul este valid;
+
+atunci:
+
+→ QUALITY PASS.
+
+Prin urmare:
+
+v2c-quality-15 = PASS pentru politica D-17.
+
+P-Q07 = PASS pentru politica D-17.
+
+Dovada:
+
+Bo holds on tight.
+
+nu demonstrează singură un defect de values care să justifice T07 <7.
+
+O eventuală problemă fizică de siguranță aparține safety gate.
+
+⸻
+
+7. T07 = 7.0
+
+→ threshold PASS.
+
+⸻
+
+8. T07 = 6.99
+
+→ threshold FAIL.
+
+Un singur reason principal:
+
+QUALITY_CRITICAL_BELOW_THRESHOLD:T07
+
+sau echivalent mai bun.
+
+Nu genera simultan:
+
+QUALITY_CRITERION_BELOW_MINIMUM:T07
+
+ca al doilea defect independent.
+
+Metadata poate consemna că valoarea este și sub universal floor.
+
+⸻
+
+9. T07 = 0
+
+→ QUALITY FAIL.
+
+Nu poate fi compensat de media mare.
+
+D-16 se aplică.
+
+⸻
+
+10. T07 = 7.5 NU înseamnă „safety PASS”
+
+Un artifact poate avea:
+
+T07 = 9
+
+și:
+
+safety = BLOCK.
+
+Exemplul:
+
+Tom plays with matches in his room.
+
+Dacă safety gate confirmă hazardul:
+
+→ safety BLOCK;
+
+→ release FAIL,
+
+indiferent de T07.
+
+Aceasta este arhitectură corectă.
+
+⸻
+
+11. Inversul este de asemenea posibil
+
+Un artifact poate avea:
+
+safety = PASS
+
+dar:
+
+T07 < 7
+
+dintr-o problemă editorială reală de values / moral modelling care nu aparține safety/content-policy/age-fit.
+
+Atunci:
+
+→ quality FAIL;
+
+→ REPAIR_REQUIRED conform D-16.
+
+Safety PASS nu transformă automat values quality în PASS.
+
+⸻
+
+12. Exemplul cu minciuna și furtul
+
+Text:
+
+Milo lied to his friend and took her cake, and he was proud of it.
+
+Faptul că safety gate spune PASS nu demonstrează că T07 trebuie să spună PASS.
+
+Acesta este exact tipul de caz pe care T07 îl poate examina editorial.
+
+Dar D-17 NU decide automat:
+
+bad behaviour depicted = T07 fail.
+
+Trebuie separat:
+
+behaviour depicted → speaker/actor → narrative stance → consequence → correction/repair → final takeaway → endorsement vs challenge → editorial values finding.
+
+Prin urmare:
+
+depiction ≠ endorsement.
+
+Un personaj poate:
+
+* minți;
+* fura;
+* fi egoist;
+* greși;
+
+într-o poveste perfect legitimă.
+
+Problema editorială apare dacă produsul endorses / glorifies / normalizes comportamentul într-un mod incompatibil cu standardul său editorial.
+
+Taxonomia completă rămâne dependency.
+
+⸻
+
+AUTHORITATIVE JURISDICTION
+
+13. Un defect are o jurisdicție principală
+
+Exemplu:
+
+stereotip susținut.
+
+Autoritatea pentru adevărul policy:
+
+→ content-policy gate D-08/D-09.
+
+Nu:
+
+→ content-policy BLOCK
+și separat
+→ T07 quality failure pentru același stereotip.
+
+⸻
+
+14. Criticul poate observa problema
+
+Dacă criticul observă un posibil stereotip:
+
+nu trebuie să îl transforme într-o a doua adjudecare T07.
+
+Trebuie să emită / refere:
+
+candidate content-policy finding
+
+cu:
+
+* evidence;
+* content hash;
+* source location;
+* relation;
+* provenance.
+
+Finding-ul merge în jurisdicția content-policy.
+
+⸻
+
+15. Același lucru pentru safety
+
+Dacă criticul observă un hazard fizic pe care safety evaluator-ul nu l-a găsit:
+
+nu spune pur și simplu:
+
+T07 = 5.
+
+Trebuie să producă:
+
+candidate safety finding.
+
+Safety layer îl adjudecă.
+
+⸻
+
+16. Același lucru pentru age-fit
+
+Dacă problema este:
+
+too frightening for age 3–4
+
+→ age-fit D-11.
+
+Nu folosi T07 ca a doua poartă pentru același fapt.
+
+⸻
+
+17. Science nu intră în T07
+
+D-15 rămâne autoritatea.
+
+Un mit științific nu trebuie ascuns într-o notă T07.
+
+⸻
+
+SAME DEFECT / DOUBLE COUNTING
+
+18. Same underlying defect = linked findings
+
+Dacă două sisteme observă aceeași problemă:
+
+nu șterge una dintre observații.
+
+Păstrează provenance-ul ambelor.
+
+Dar leagă-le prin:
+
+* underlying issue id;
+* related finding IDs;
+* authoritative jurisdiction;
+* content hash;
+* evidence relation.
+
+⸻
+
+19. O singură consecință autoritativă
+
+Exemplu:
+
+Critic detects stereotype
+→ candidate policy finding.
+
+Content-policy evaluates it
+→ BLOCK.
+
+Release este blocat de:
+
+content-policy BLOCK.
+
+Nu mai adăuga separat:
+
+quality fail because same stereotype lowered T07.
+
+⸻
+
+20. Nu înseamnă că scorul T07 trebuie falsificat
+
+Nu ridica artificial:
+
+T07 6.5 → 7
+
+doar ca să elimini dubla penalizare.
+
+În schimb, scorul T07 trebuie să fie justificat prin evidence care aparține jurisdicției T07.
+
+Dacă singurul motiv pentru 6.5 este un stereotip deja delegat content-policy:
+
+→ scorul T07 este mis-scoped / unsupported for independent quality consequence;
+
+→ trebuie reevaluat.
+
+Aceasta NU este quality waiver.
+
+Este corectarea jurisdicției/evidence-ului.
+
+D-18 va formaliza validitatea evidence-ului.
+
+⸻
+
+OPERATOR CLOSURE
+
+21. Hash-bound closure are autoritate în jurisdicția sa
+
+Dacă un:
+
+REVIEW
+
+a fost adjudecat de operator pentru un anumit:
+
+* finding;
+* artifact/content hash;
+* evidence;
+* policy version;
+
+criticul nu îl poate redeschide indirect prin:
+
+T07 < 7
+
+folosind aceeași problemă și aceeași evidence.
+
+⸻
+
+22. Exemplu D-08
+
+Stereotip autentic contestat:
+
+D-08 → REVIEW.
+
+Operatorul adjudecă acel REVIEW pentru hash-ul respectiv.
+
+Criticul nu poate spune apoi:
+
+same stereotype → T07=6.5 → quality FAIL
+
+și astfel să anuleze pe ocolite decizia operatorului.
+
+⸻
+
+23. Evidence nouă poate redeschide problema
+
+Closure-ul nu înseamnă:
+
+never inspect again.
+
+Dacă apare:
+
+* evidence nouă;
+* altă pagină;
+* contradicție vizuală;
+* repetare ulterioară;
+* final de carte care schimbă stance-ul;
+* artifact hash nou;
+
+poate apărea un nou candidate finding.
+
+Acesta trebuie adjudecat explicit în jurisdicția corectă.
+
+Nu prin scăderea ascunsă a T07.
+
+⸻
+
+24. Same hash + same evidence + same policy issue
+
+→ nu redeschide.
+
+⸻
+
+25. Changed hash / materially new evidence
+
+→ poate necesita reevaluare.
+
+⸻
+
+CRITIC SCORE
+
+26. T07 trebuie să aibă evidence decomposition
+
+În viitoarea implementare, un T07 nu trebuie să fie doar:
+
+score: 6.5.
+
+Trebuie să poată arăta de ce.
+
+Conceptual:
+
+* values/editorial evidence;
+* delegated safety candidate;
+* delegated content-policy candidate;
+* delegated age-fit candidate;
+* related findings;
+* independent T07 rationale.
+
+⸻
+
+27. Numai rationale-ul aflat în jurisdicția T07 poate susține independent quality failure
+
+Aceasta este regula care previne dublarea.
+
+⸻
+
+28. CriticNotes
+
+Safety/content-policy/age-fit findings pot fi furnizate criticului ca context.
+
+Dar scopul lor este:
+
+* awareness;
+* consistency;
+* editorial understanding.
+
+Nu:
+
+convert gate finding into second quality penalty.
+
+⸻
+
+29. Criticul descoperă ceva nou
+
+Atunci produce:
+
+candidate finding → authoritative layer.
+
+Nu:
+
+hidden escalation through T07.
+
+Aceasta extinde principiul de trasabilitate D-14.
+
+⸻
+
+VALUES
+
+30. Values rămâne responsabilitate reală
+
+Nu aleg Opțiunea B.
+
+Safety gate nu acoperă tot ce înseamnă calitate editorială și model comportamental.
+
+Prin urmare T07 nu devine pur informativ.
+
+⸻
+
+31. Values este quality, nu physical safety
+
+În lipsa unei politici separate viitoare:
+
+editorial values / behavioural modelling rămâne sub T07.
+
+Un finding confirmat care justifică T07 <7:
+
+→ quality FAIL;
+
+→ REPAIR_REQUIRED;
+
+→ no waiver conform D-16.
+
+⸻
+
+32. Nu creăm acum VALUES BLOCK gate
+
+D-17 nu inventează:
+
+VALUES_BLOCK.
+
+Nu transformă fiecare judecată morală într-o regulă deterministă.
+
+Rămâne editorial quality cu evidence.
+
+⸻
+
+33. Taxonomia completă se amână
+
+Va trebui ulterior să distingem cel puțin conceptual:
+
+* depiction;
+* endorsement;
+* glorification;
+* consequence;
+* correction;
+* repair;
+* empathy;
+* coercion;
+* dishonesty;
+* cruelty;
+* prosocial resolution;
+* narrative stance;
+* final takeaway.
+
+Dar D-17 nu fixează taxonomia completă sau praguri pe bandă.
+
+⸻
+
+TEXT / VISUAL / CROSS-MODAL
+
+34. T07 actual nu trebuie pretins ca multimodal
+
+Investigația arată:
+
+T07 critic vede textul.
+
+Prin urmare nu pretinde:
+
+T07 evaluates text + image
+
+cât timp runtime-ul nu face asta.
+
+⸻
+
+35. Safety vizual
+
+Visual safety rămâne în QA vizual / safety jurisdiction.
+
+Dacă imaginea arată un hazard pe care textul nu îl arată:
+
+→ visual safety finding.
+
+Nu:
+
+→ hidden T07 penalty.
+
+⸻
+
+36. Content-policy vizual
+
+Dacă o imagine:
+
+* întărește un stereotip;
+* contrazice contestarea din text;
+* introduce o problemă content-policy;
+
+→ candidate content-policy / cross-modal finding.
+
+Autoritatea rămâne content-policy.
+
+⸻
+
+37. Age-fit vizual
+
+Frightening imagery / developmental visual intensity:
+
+→ visual/age-fit layer conform politicilor relevante.
+
+Nu T07 ca a doua autoritate.
+
+⸻
+
+38. Values exclusiv vizuale
+
+Dacă o problemă editorială de values apare numai în imagine și nu aparține safety/content-policy:
+
+aceasta este momentan un coverage gap / future visual-editorial dependency.
+
+Nu pretinde că actualul T07 text-only a evaluat-o.
+
+⸻
+
+39. Cross-modal contradiction
+
+Textul poate spune:
+
+Mia helps everyone.
+
+iar imaginea poate sugera contrariul.
+
+Dacă relația produce:
+
+* safety issue → safety;
+* policy issue → content-policy;
+* age-fit issue → age-fit;
+* pur editorial values issue → future cross-modal editorial finding.
+
+Nu rezolva printr-un T07 text-only inventat.
+
+⸻
+
+NATIVE EDITION
+
+40. Nu pretindem că T07 acoperă independent RO
+
+Dacă rubrica actuală T07 nu rulează pe ediția nativă, D-17 nu pretinde că o face.
+
+D-14 fidelity și celelalte porți aplicabile ediției native rămân active.
+
+Editorial-values parity pentru ediția nativă rămâne dependency dacă localizarea poate schimba stance-ul moral fără să fie captată suficient de fidelity.
+
+⸻
+
+PAGE → BOOK → VOLUME → COLLECTION
+
+41. Findings locale rămân locale
+
+Safety/content-policy/age-fit:
+
+→ păstrează page-level evidence.
+
+T07:
+
+→ quality evaluation la nivelul său contractual actual.
+
+Nu șterge finding-ul local doar pentru că volumul are un scor bun.
+
+⸻
+
+42. Book/Volume
+
+T07 poate evalua stance-ul editorial al manuscrisului la nivel de carte/volum.
+
+Un comportament negativ pe o pagină poate fi rezolvat ulterior.
+
+Prin urmare:
+
+local undesirable act ≠ automatically poor T07.
+
+Final takeaway contează.
+
+⸻
+
+43. Collection
+
+Dacă aceeași problemă editorială se repetă sistemic în volume:
+
+→ poate exista collection-level systemic quality finding conform principiului D-16.
+
+Nu inventa acum prag numeric.
+
+⸻
+
+44. Nu dubla între niveluri
+
+Page finding + volume finding + collection pattern:
+
+pot coexista ca evidence/provenance,
+
+dar nu trebuie transformate automat în trei penalizări pentru același defect.
+
+⸻
+
+RELEASE
+
+45. Release verifică toate jurisdicțiile relevante
+
+Conceptual release eligibility este conjuncția:
+
+quality eligible
+AND
+safety eligible
+AND
+content-policy eligible
+AND
+age-fit eligible
+AND
+science/fidelity/etc. eligible where applicable.
+
+Nu este:
+
+T07 decides everything.
+
+⸻
+
+46. Raportarea trebuie să arate toate porțile care pică
+
+Actualul comportament „prima eroare oprește raportarea” este insuficient pentru Enterprise diagnostics.
+
+Dacă un volum are simultan:
+
+* quality FAIL;
+* safety BLOCK;
+* fidelity REPAIR_REQUIRED;
+
+raportul trebuie să poată expune toate stările relevante.
+
+Release rămâne FAIL.
+
+Aceasta este consecință de implementare pentru Hardening #2, nu schimbare runtime acum.
+
+⸻
+
+47. Un singur defect nu trebuie raportat de trei ori ca trei cauze independente
+
+Raportarea trebuie să distingă:
+
+multiple independent failures
+
+de:
+
+multiple observations of the same underlying issue.
+
+⸻
+
+BOUNDARY RESULTS
+
+48. T07 = 8.0
+
+→ PASS T07.
+
+⸻
+
+49. T07 = 7.99
+
+→ PASS T07.
+
+Nu există threshold 8 pentru T07.
+
+⸻
+
+50. T07 = 7.5
+
+→ PASS T07.
+
+v2c-quality-15 / P-Q07 rămân quality PASS dacă restul condițiilor trec.
+
+⸻
+
+51. T07 = 7.0
+
+→ PASS T07.
+
+Equality passes.
+
+⸻
+
+52. T07 = 6.99
+
+→ FAIL T07.
+
+Un singur primary reason.
+
+⸻
+
+53. T07 = 0
+
+→ FAIL T07.
+
+Media nu compensează.
+
+⸻
+
+54. T01 = 7.5
+
+Rămâne:
+
+→ FAIL,
+
+deoarece T01 are threshold specific 8.
+
+Aceasta nu justifică threshold 8 pentru T07.
+
+⸻
+
+EXEMPLE DE DEZACORD ÎNTRE PORȚI
+
+55. T07 PASS + safety BLOCK
+
+Perfect posibil.
+
+Verdict final:
+
+→ release FAIL prin safety.
+
+Nu modifica T07 artificial.
+
+⸻
+
+56. T07 FAIL pe values + safety PASS
+
+Perfect posibil.
+
+Verdict final:
+
+→ release FAIL prin quality.
+
+⸻
+
+57. T07 FAIL numai pentru același safety finding deja adjudecat
+
+Nu accept.
+
+Scorul trebuie re-evaluat / evidence-ul separat.
+
+Nu este quality waiver.
+
+Este jurisdiction/evidence correction.
+
+⸻
+
+58. Safety REVIEW închis de operator + aceeași evidence în T07
+
+Closure-ul rămâne autoritativ pentru acea problemă și hash.
+
+T07 nu o redeschide.
+
+⸻
+
+59. Safety REVIEW închis + evidence nouă materială
+
+→ new candidate safety finding;
+
+→ safety reevaluation.
+
+Nu hidden T07 escalation.
+
+⸻
+
+RELAȚIA CU D-01…D-16
+
+60. D-01–D-07
+
+Hazardurile fizice și armele:
+
+→ safety jurisdiction.
+
+T07 nu le adjudecă independent.
+
+⸻
+
+61. D-08–D-10
+
+Stereotipuri / discriminare / insultă și politicile aferente:
+
+→ content-policy jurisdiction conform deciziilor respective.
+
+T07 nu le transformă într-o a doua poartă.
+
+⸻
+
+62. D-11
+
+Fear/developmental emotional fit:
+
+→ age-fit.
+
+T07 phrase nothing frightening beyond the age este delegată acestei jurisdicții.
+
+⸻
+
+63. D-12–D-14
+
+Age-fit semantic + finding → severity → consequence:
+
+→ rămâne autoritativ.
+
+T07 nu îl suprascrie.
+
+⸻
+
+64. D-15
+
+Science truth:
+
+→ science layer.
+
+Nu T07.
+
+⸻
+
+65. D-16
+
+Se aplică T07:
+
+* canonical scores;
+* equality;
+* minimum;
+* no floating-point boundary errors;
+* no confirmed-quality-defect waiver;
+* invalid score may be challenged;
+* gate-valid candidate outranks gate-failing candidate.
+
+D-17 adaugă:
+
+a T07 score is valid for independent quality consequence only to the extent its rationale belongs to T07’s authoritative quality jurisdiction rather than duplicating another gate.
+
+⸻
+
+D-18
+
+66. D-17 nu rezolvă validitatea evidence-ului
+
+D-17 decide:
+
+where a finding belongs.
+
+D-18 va decide:
+
+whether the evidence supporting a score/finding is valid enough.
+
+Exemplu:
+
+Bo holds on tight.
+
+D-17 spune că aceasta nu poate fi transformată automat într-o a doua safety adjudication prin T07.
+
+D-18 va analiza dacă este evidence validă pentru nota atribuită.
+
+⸻
+
+STATUSUL T07 DUPĂ D-17
+
+67. Contractul logic
+
+T07:
+
+* rămâne rubric criterion;
+* rămâne marcat critical;
+* threshold actual = 7;
+* nu este safety gate;
+* nu este content-policy gate;
+* nu este age-fit gate;
+* nu este science gate;
+* păstrează independent editorial-values responsibility;
+* trebuie să aibă evidence trasabilă;
+* trebuie să delege candidate findings jurisdicțiilor specializate;
+* nu poate dubla aceeași problemă;
+* nu poate anula pe ocolite o adjudecare hash-bound.
+
+⸻
+
+68. Formulare obligatorie
+
+Înregistrează explicit:
+
+T07 remains a critical quality criterion with an operator-approved threshold of 7 for kids-sc. Its critical designation does not imply a threshold of 8. Safety, content-policy, age-fit and science truth are adjudicated by their authoritative layers; T07 may observe and refer candidate findings in those domains but may not independently re-adjudicate or double-penalize the same underlying defect.
+
+Și:
+
+A T07 score below threshold may independently fail quality only when its supporting rationale belongs to T07’s quality jurisdiction and is valid; a score reduction caused solely by a finding delegated to another authoritative gate is not an independent quality failure and requires score/evidence re-evaluation, not a waiver.
+
+⸻
+
+CE NU DECIDE D-17
+
+D-17 NU decide:
+
+* taxonomia completă a editorial values;
+* praguri de values pe bandă;
+* redenumirea T07;
+* împărțirea T07 în criterii noi;
+* schimbarea Product Contract acum;
+* un nou VALUES gate;
+* validitatea evidence-ului — D-18;
+* Gold representation / metrics — D-19 / D-20;
+* validation thresholds — D-21;
+* author independence — D-22;
+* science criterion în rubrică;
+* native-edition rubric redesign;
+* visual rubric V01–V04;
+* full cross-modal editorial-values evaluator;
+* implementation of D-08;
+* critic model quality;
+* empirical validity.
+```
+
+### Formulări obligatorii (înregistrate ca atare)
+
+> T07 remains a critical quality criterion with an operator-approved threshold of 7 for kids-sc. Its critical designation does not
+> imply a threshold of 8. Safety, content-policy, age-fit and science truth are adjudicated by their authoritative layers; T07 may
+> observe and refer candidate findings in those domains but may not independently re-adjudicate or double-penalize the same
+> underlying defect.
+
+> A T07 score below threshold may independently fail quality only when its supporting rationale belongs to T07’s quality jurisdiction
+> and is valid; a score reduction caused solely by a finding delegated to another authoritative gate is not an independent quality
+> failure and requires score/evidence re-evaluation, not a waiver.
+
+### Separarea cerută
+
+| Strat | Conținut |
+|---|---|
+| **Decizie de politică** | Opțiunea D, rafinată: separarea jurisdicțiilor + evidence legat + fără dublă adjudecare. |
+| **Versiunea criteriului / critical / prag / proveniență** | Rubrica `kids-sc` curentă, text nemodificat (Product Contract neschimbat). `critical: true` păstrat; critical ≠ prag 8. **Prag 7**, decis de operator în D-17, cu semantica D-16 (egalitate, valoare canonică, fără waiver). Nu „pentru că există poarta de siguranță”, nu „8 pentru că e critical”. |
+| **Scor / scor canonic / evidence / domeniul evidence-ului** | T07 cu evidence descompus: valori / editorial (T07) vs. safety, content-policy, age-fit, știință (delegate). Doar rationale-ul independent T07 poate susține un eșec de calitate. |
+| **Jurisdicția autoritativă** | Siguranță fizică / imitație → safety gate. Content / child-safety policy → content-policy gate. Potrivire developmentală / emoțională → age-fit. Știință → D-15. Valori editoriale / model moral neacoperit de acestea → T07. |
+| **Candidate findings delegate / related IDs / underlying issue ID / content hash** | Criticul care observă un hazard, un stereotip sau o problemă de vârstă emite un candidat (evidence, hash, locație, relație, proveniență) către jurisdicția potrivită. Observațiile aceluiași defect se păstrează și se leagă; **o singură consecință autoritativă**. |
+| **Închiderea operatorului / hash / versiunea politicii / evidence nouă** | Un REVIEW închis de operator (finding, hash, evidence, versiune) e autoritativ: același hash + aceeași evidence + aceeași problemă → nu se redeschide prin T07. Evidence nouă materială sau hash nou → nou candidat, adjudecat explicit în jurisdicția corectă. |
+| **Consecințe pe jurisdicții** | Calitate: T07 < 7 cu rationale valid T07 → FAIL → REPAIR_REQUIRED, fără waiver. Siguranță / content-policy / age-fit / știință: decise de porțile lor, independent de T07. |
+| **Dublă numărare / reevaluarea scorului** | T07 redus doar de un finding delegat → mis-scoped → reevaluare (corectare de jurisdicție, nu waiver, nu ridicare artificială). |
+| **Valori** | Responsabilitate reală (B respinsă). Fără VALUES_BLOCK. Depiction ≠ endorsement: comportament → actor → stance → consecință → corectare / reparare → takeaway → endorsement vs contestare. Taxonomia se amână. |
+| **Release** | Conjuncția tuturor jurisdicțiilor relevante. Raportarea arată toate porțile care pică și distinge eșecuri independente de observații ale aceluiași defect (consecință pentru Hardening #2). |
+| **Niveluri** | Siguranță / policy / age-fit pe pagină. T07 pe carte / volum (takeaway-ul final contează). Pattern sistemic pe colecție fără prag. Fără triplă penalizare. |
+| **Text / vizual / cross-modal / ediția nativă** | T07 e text-only și nu se pretinde altfel. Vizualul se rutează după jurisdicție. Valorile exclusiv vizuale = gol de acoperire. T07 nu acoperă RO; paritatea valorilor = dependență. |
+| **Comportamentul runtime la momentul deciziei** (HEAD `5a33668`, neschimbat) | v2: prag 8 doar T01 / T08; T07 la 7. T07 = 6.99 → două coduri. v2c-quality-15 → PASS; siguranța PASS pe același text. Poarta de siguranță per pagină; REVIEW închis de operator legat de hash. `criticNotes` fără finding-uri de siguranță. Fără legătură BLOCK ↔ T07. Închiderea operatorului poate fi anulată indirect prin T07. Valorile („Milo lied…”) nu au nicio poartă. Stereotipul contestat → BLOCK (D-08 neimplementat). Release-ul raportează doar prima poartă care pică. **Comportamentul nu e politica.** |
+| **Consecințe pentru Hardening #2** (neautorizat încă) | Delegarea elementelor T07; evidence descompus; candidați rutați; observații legate; o consecință autoritativă; respectarea închiderilor hash-bound; un motiv principal; release ca conjuncție cu raportare completă; taxonomia valorilor ulterior. |
+
+### Rezultate explicite
+
+v2c-quality-15 / P-Q07 (T07 = 7.5) → T07 PASS · T07 = 8.0 / 7.99 / 7.5 / 7.0 → PASS · T07 = 6.99 → FAIL (un singur motiv) · T07 = 0 → FAIL ·
+T07 PASS + safety BLOCK → release FAIL prin siguranță · T07 FAIL pe un defect de valori confirmat + safety PASS → release FAIL prin
+calitate · același defect văzut de critic și de poarta autoritativă → observații legate, o adjudecare, fără dublă penalizare · REVIEW
+închis (hash-bound) + aceeași evidence → T07 nu îl redeschide · evidence nouă materială → nou candidat în jurisdicția autoritativă ·
+depiction ≠ endorsement · știința nu aparține T07.
+
+### Afectate (fără nicio modificare acum)
+
+- **Gold-v2:** v2c-quality-15 → PASS pentru politica D-17 (eticheta se dă la adjudecare).
+- **Probe:** P-Q07 → PASS; registrul nu se schimbă acum.
+- **Setul rezervat:** niciun caz T07; înghețat.
+- **Gold-v1:** neschimbat.
+
+### Nu decide
+
+Taxonomia valorilor · praguri de valori pe bandă · redenumirea / împărțirea T07 · Product Contract · VALUES gate · D-18 · D-19 / D-20 ·
+D-21 · D-22 · criteriul științific în rubrică · rubrica ediției native · rubrica vizuală V01–V04 · evaluator cross-modal de valori ·
+implementarea D-08 · calitatea criticului · validitatea empirică.
+
+### Dependențe deschise
+
+- **D-17-DEP-VALUES-TAXONOMY** · **D-17-DEP-RUBRIC-T07-WORDING** · **D-17-DEP-VISUAL-EDITORIAL-VALUES** · **D-17-DEP-NATIVE-VALUES-PARITY** ·
+  **D-17-DEP-EVIDENCE-VALIDITY** → D-18 · **D-17-DEP-MEASUREMENT** → D-19 / D-20.
