@@ -22,7 +22,7 @@
   ]
  },
  "activePhase": "CONTINUITY-1",
- "nextAuthorizedStep": "C1-BUILD-LIVE-TEST-COLD-RESTART-CLOSURE",
+ "nextAuthorizedStep": "OPERATOR-REVIEW-CONTINUITY-1-CLOSURE",
  "phases": {
   "P1": "DONE",
   "P2": "DONE",
@@ -41,6 +41,8 @@
  },
  "statuses": {
   "OPERATOR_POLICY_DECISION_PHASE": "COMPLETE",
+  "CONTINUITY_1": "COMPLETE — closure checkpoint brain/evidence/CONTINUITY-1-CLOSURE.json; operator review pending",
+  "NEXT_PHASE": "RC1 POLICY DEPENDENCY CLOSURE / PRE-HARDENING SPECIFICATION — NOT YET AUTHORIZED / NOT STARTED",
   "SEMANTIC_HARDENING_2": "NOT AUTHORIZED / NOT STARTED",
   "POLICY_D01_D22": "DECIDED POLICY · NOT IMPLEMENTED · NOT YET EMPIRICALLY VALIDATED",
   "EVALUATOR_V2": "CURRENT IMPLEMENTATION; does not comply with D-01…D-22; not validated",
@@ -82,9 +84,8 @@
   }
  ],
  "awaitingOperator": [
-  "Decision B: ChatGPT Work task configured and live end-to-end wake test PASS (2026-10-06); operator acceptance of decision B is part of the CONTINUITY-1 review",
-  "Review / acceptance of CONTINUITY-1 and explicit authorization of the next phase",
-  "Decision C (Claude wake-up) — C0 live test DONE — PASS_WITH_LIMITATIONS (one routine run from Bridge PR #3, Opus 5.5, subscription only; brain/evidence/DECISION-C0-LIVE.md §8); C / C1 not implemented; C0 feasibility: FEASIBLE_WITH_LIMITATIONS (brain/evidence/DECISION-C0-FEASIBILITY.md); not implemented; operator to confirm P1 usage credits OFF / P2 Claude GitHub App on the Bridge and to authorize the C0 live test; B-06 repaired (quarantine), B ingress operational; routine daily limits Pro 5 / Max 15 / Team-Enterprise 25 recorded, batching required",
+  "Review of the CONTINUITY-1 closure checkpoint (brain/evidence/CONTINUITY-1-CLOSURE.json): CONTINUITY-1 COMPLETE; decision B ACCEPTED per exit criterion (live E2E PASS, B-01…B-06 repaired); decision C: C0 COMPLETE, C1 live PASS_WITH_LIMITATIONS; final cold restart PASS",
+  "Explicit authorization (or not) of the next phase RC1 POLICY DEPENDENCY CLOSURE / PRE-HARDENING SPECIFICATION — NOT YET AUTHORIZED / NOT STARTED",
   "Gold-v1 validation/acceptance; Gold-v2 adjudication",
   "Dinosaur World observations O1/O2; real Creative Upgrade; V1 pilot",
   "Open policy dependencies (closure §10)"

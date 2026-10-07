@@ -2,7 +2,8 @@
  "schema": "wonderpages.brain.operator-delegation/1",
  "id": "DELEGATION-CONTINUITY-1-C1",
  "appliesToPhase": "CONTINUITY-1",
- "status": "ACTIVE",
+ "status": "EXPIRED",
+ "expired": { "at": "2026-10-07T06:45:00Z", "because": "CONTINUITY-1 COMPLETE (brain/evidence/CONTINUITY-1-CLOSURE.json); this contract applied only to that phase", "effect": "no Claude routine may write WonderPages; the C1 routine only communicates or escalates" },
  "authorizedBy": {
   "actor": "operator",
   "date": "2026-10-06",

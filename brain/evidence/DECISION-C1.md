@@ -3,7 +3,7 @@
 - **Authorized by:** operator follow-up #13 (verbatim: `brain/phase/authorizations/CONTINUITY-1.operator-authorization-C1.txt`;
   record `brain/phase/authorizations/CONTINUITY-1.operator-followups.md`).
 - **Authority model:** `brain/phase/DELEGATION.json`, checked by gate G14.
-- **Status:** IMPLEMENTED; local and adversarial tests PASS; live test: autonomous wake proven (§4 steps 9–10), run-record defect repaired, cold-restart round trip pending; independent audit rounds 1–2 repaired (§5).
+- **Status:** IMPLEMENTED; local and adversarial tests PASS; live **PASS_WITH_LIMITATIONS** (§6); cold restart PASS; CONTINUITY-1 closed (`brain/evidence/CONTINUITY-1-CLOSURE.json`); independent audit rounds 1–2 repaired (§5).
 
 ## 1. Architecture (the real platform, not the documented one)
 
@@ -72,6 +72,11 @@ Sequence: Claude → Bridge → ChatGPT Work → Bridge → autonomous C1 wake �
 | 9. Operator setting saved; ring | Operator confirmed the PR setting. `ingress-claude` was dispatched once by the implementer (run 37517735005), because GitHub schedule events never fired: doorbell seq 2 (H 9ab7475, R 42e0459), **PR #4 opened by github-actions[bot]** at 19:16:48 UTC. |
 | 10. **Autonomous routine wake** | Routine `trig_01RAjfwuD1vV1YCJapQTMrVa` fired at 19:16:51 UTC (3 s after the PR), fresh session `session_01SAi79Q8zbVhUJqdvDwvrri`, origin `github_webhook_trigger`, finished SUCCEEDED at 19:19:57. Model `claude-opus-5-5` (configured, session, last served, every turn); effort `high` (CLAUDE_EFFORT and CLAUDE_CODE_EFFORT_LEVEL); `isUsingOverage` false; no credential variables. Bootstrap PROCEED from the canon, gate PASS, recheck write=true, then **CLOSED** `MSG-20261006T191813Z-claude-f02d` (Bridge 5a82462); `ingress-claude` run 37517981617 did not ring again (no loop). Full evidence: `brain/evidence/C1-LIVE-RUN-1.json`. |
 | 11. Defect found by run 1 | Step 8 re-checks STILL PENDING for the message the run itself just closed, so the run record could never be pushed. The routine stopped (fail-closed; it also refused a platform stop hook that asked it to push). Repaired: `recheck` returns write true with `writeKind: RUN_RECORD_ONLY` when the only resolution is this run's own reply (its notes carry this session's URL); another session or an unknown session gets write false; authority is still enforced. Integration test added. |
+| 12. Cold restart: fresh Claude (WonderPages side) | Fresh session `session_01V3x74GzAWoJvJMSxogYWe8` (environment wonderpages-c0, no prior context): gate PASS at 2fce3a6, questionnaire **31/31 PASS** (`brain/continuity/results/2026-10-06-cold-restart-claude-session_01V3x74GzAWoJvJMSxogYWe8.json`, commit 22f339f). Attaching the Bridge (`add_repo`) was refused by the platform's auto-mode permission check; the session stopped without a workaround. |
+| 13. Cold restart: fresh Claude (Bridge side) | Fresh session `session_01LZuWSWiVcF2XTLbupUyyc9` started on the Bridge: verify-mirror VERIFIED, verify-control VERIFIED, validate VALID, snapshot 000023, both queues empty; one REQUEST `MSG-20261006T202603Z-claude-6432` (Bridge 8faa395, 20:26:15 UTC). |
+| 14. Cold restart: fresh ChatGPT Work | Doorbell seq 9 (R 8faa395); RESPONSE `MSG-20261006T202816Z-chatgpt-cd23` (Bridge f8311fb, 20:28:16 UTC): R, CURRENT@R, CONTROL@R (three blobs MATCH), STATE@R, THREAD, NONCE all correct (checked by the implementer and by the routine). |
+| 15. **Autonomous wake, run 2 (no operator or implementer action)** | ChatGPT's push → `ingress-claude` run 10 → PR #4 closed, **PR #5 opened by github-actions[bot]** (20:28:31, doorbell seq 3, R f8311fb) → routine fired at 20:28:35 in fresh session `session_019NabkhQwNCzohv89P1EcDK` (origin `github_webhook_trigger`, `claude-opus-5-5`, effort high, `isUsingOverage` false, no credential variables) → bootstrap PROCEED, recheck write=true → **CLOSED** `MSG-20261006T202953Z-claude-d342` (Bridge 9534b6a) → recheck `RUN_RECORD_ONLY` → run record pushed (WonderPages 34899cb, `brain/ingress/runs/`; scope PASS). `ingress-claude` run 11 on 9534b6a did not ring. Finished SUCCEEDED at 20:31:03. |
+| 16. Scheduler | GitHub schedule events in the Bridge do fire, but sparsely and late: ingress-claude first ran on schedule at 22:46 UTC (about 5 h after it was added), then 02:40; ingress-chatgpt at 20:22 and 00:45. |
 
 ## 5. Independent audit, round 1 (ChatGPT, advisory) and disposition
 
@@ -84,3 +89,27 @@ Sequence: Claude → Bridge → ChatGPT Work → Bridge → autonomous C1 wake �
 | C1-A05 INFO | No action. |
 | Round 2 (`MSG-20261006T182725Z-chatgpt-b017`) | A01 RESOLVED, A02 RESOLVED, A03 ACCEPTED_LIMITATION, A04 ACCEPTED_LIMITATION. |
 | C1-B01 MAJOR: rollback assumed a failed `gh pr create` means no PR | Repaired (Bridge control 9496069): rollback only on confirmed absence; present = delivered; unknown = keep the attempt and fail. Bridge test covers absent / present / query error. Round 3 (`MSG-20261006T183155Z-chatgpt-c301`): RESOLVED; verdict PASS_WITH_LIMITATIONS. |
+
+## 6. Verdict
+
+**C1: PASS_WITH_LIMITATIONS.** Every C1 acceptance property is shown live, or, where it cannot be exercised on demand, implemented and tested:
+
+| Property | Result |
+|---|---|
+| Repeatable wake, no operator action per normal wake | live: run 2 (push → ring → PR → routine), run 1 woke the same way after one implementer dispatch |
+| At most one routine wake per pending batch | live: PR #4 → 1 run, PR #5 → 1 run |
+| Bot-generated wake | live: PRs #4 and #5 by github-actions[bot] |
+| Fresh routine starts automatically | live: two fresh sessions, origin `github_webhook_trigger` |
+| Immutable R, canon, active phase and delegation verified | live: `c1.mjs bootstrap` PROCEED in both runs |
+| No authority taken from ChatGPT | live: both messages classified COMMUNICATE; replies claim no operator decision |
+| STILL PENDING / STILL AUTHORIZED before each write | live: recheck before the Bridge reply and before the run-record push |
+| Writes confined | live: run 2 changed only `brain/ingress/runs/` plus the seal files; scope PASS |
+| Valid response, no duplicate, no loop | live: CLOSED f02d and d342 valid; no ring on Claude-written pushes |
+| Durable retry; allowance failure preserves work | live: c1a4 / c301 stayed pending through a failed and a deferred ring; allowance exhaustion not exercised (tested design) |
+| No API / PAYG / usage-credit fallback | live: no credential variables; `isUsingOverage` false; usage credits OFF (operator) |
+| Opus 5.5 by platform evidence; High effort | live: configured, session and last-served model `claude-opus-5-5`; CLAUDE_EFFORT and CLAUDE_CODE_EFFORT_LEVEL `high` |
+| Bridge integrity, WonderPages gate, no application drift | PASS at every step (bridge-verify, gate, G13 / drift) |
+
+Limitations: GitHub schedule events are sparse and late (§4 step 16); duplicate webhook delivery could start two sessions (C1-A03); overage is an account setting (C1-A04); the routine cannot read its own model; the routine prompt copy in the Routines UI is operator-held; Pro routine and Bridge ring budgets bound the wake rate.
+
+After the CONTINUITY-1 closure the delegation contract is EXPIRED: the routine stays enabled but `writesAllowed` is false, so it can only communicate or escalate.

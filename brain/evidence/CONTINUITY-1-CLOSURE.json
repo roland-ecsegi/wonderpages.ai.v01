@@ -1,0 +1,266 @@
+{
+ "schema": "wonderpages.brain.phase-closure/1",
+ "phase": "CONTINUITY-1",
+ "verdict": "COMPLETE",
+ "closedAt": "2026-10-07T06:45:00Z",
+ "closedBy": "Claude (implementer session https://claude.ai/code/session_012rtQhr65ed69kGHocqgqmE) under operator follow-up #13 (brain/phase/authorizations/CONTINUITY-1.operator-authorization-C1.txt §18)",
+ "operatorReview": "PENDING — acceptance of this closure and authorization of any next phase are operator decisions",
+ "exitCriteria": [
+  {
+   "criterion": "PROJECT_BRAIN, CONTEXT_INTEGRITY_GATE, CLAUDE_CHATGPT_PROTOCOL, FRESH_SESSION_CONTINUITY and APPLICATION_ZERO_DRIFT reported with evidence",
+   "result": "PASS",
+   "evidence": [
+    "brain/evidence/CONTINUITY-1-ACCEPTANCE.json",
+    "brain/continuity/results/"
+   ]
+  },
+  {
+   "criterion": "Decision B accepted (live E2E PASS) and B-06 repaired",
+   "result": "PASS",
+   "evidence": [
+    "brain/evidence/DECISION-B-INGRESS.json",
+    "ACTIVE-PHASE.decisionBLiveE2E",
+    "ACTIVE-PHASE.openFindings B-06 REPAIRED"
+   ],
+   "note": "Accepted as defined by this criterion: live E2E PASS (2026-10-06, MSG-20261006T144339Z-claude-d7b5 → 8e42) and B-01…B-06 repaired; B then woke ChatGPT Work autonomously 5 more times in the C1 test and the cold restart (doorbell seq 6–9). Formal operator acceptance is part of the operator review of this checkpoint."
+  },
+  {
+   "criterion": "Decision C0 evidence complete",
+   "result": "PASS",
+   "evidence": [
+    "brain/evidence/DECISION-C0-FEASIBILITY.md",
+    "brain/evidence/DECISION-C0-LIVE.md"
+   ]
+  },
+  {
+   "criterion": "Decision C1 live PASS",
+   "result": "PASS_WITH_LIMITATIONS",
+   "evidence": [
+    "brain/evidence/DECISION-C1.md §4–§6",
+    "brain/evidence/C1-LIVE-RUN-1.json",
+    "brain/ingress/runs/20261006T203031Z-session_019NabkhQwNCzohv89P1EcDK.json"
+   ]
+  },
+  {
+   "criterion": "Final cold-restart continuity PASS: fresh Claude routine + fresh ChatGPT Work round trip",
+   "result": "PASS",
+   "evidence": [
+    "brain/continuity/results/2026-10-06-cold-restart-claude-session_01V3x74GzAWoJvJMSxogYWe8.json",
+    "Bridge MSG-20261006T202603Z-claude-6432 → MSG-20261006T202816Z-chatgpt-cd23 → MSG-20261006T202953Z-claude-d342"
+   ],
+   "note": "The questionnaire (31/31) was answered by a fresh platform-created Claude session (session_01V3x74GzAWoJvJMSxogYWe8), not by a routine-triggered one; the routine-triggered fresh session (session_019NabkhQwNCzohv89P1EcDK) reconstructed the canon through c1.mjs bootstrap + gate. Both started without this conversation."
+  },
+  {
+   "criterion": "Project Brain gates/tests PASS, Bridge integrity PASS, application zero drift PASS",
+   "result": "PASS",
+   "evidence": [
+    "verification below"
+   ]
+  },
+  {
+   "criterion": "Final closure checkpoint brain/evidence/CONTINUITY-1-CLOSURE.json; then STOP (next phase NOT YET AUTHORIZED)",
+   "result": "PASS",
+   "evidence": [
+    "this file"
+   ]
+  }
+ ],
+ "wonderpages": {
+  "branch": "claude/wonderpages-enterprise-architecture-8hy7w9",
+  "preClosureHead": "34899cb572bcf82c9c6f549923c01492ebb2f175",
+  "preClosureTree": "7558eba8d0e5a506a168078d84c636e42804fc94",
+  "closureCommit": "the commit that adds this file (subject 'brain: CONTINUITY-1 CLOSURE …'); its full SHA and tree are recorded by the Bridge mirror snapshot that follows it (Source-Commit trailer) and in the operator report"
+ },
+ "bridge": {
+  "repo": "roland-ecsegi/wonderpages.agent-bridge",
+  "mainAtClosure": "9534b6a85d9953e7375caeb52caf646ddbc7afbc",
+  "controlCommits": {
+   "C1": "6d42a3b",
+   "ringRollback": "a460a16",
+   "ringRollbackConfirmedAbsence (C1-B01)": "9496069"
+  },
+  "controlFiles": [
+   {
+    "path": ".github/workflows/ingress-chatgpt.yml",
+    "sha256": "b3e81d1c886081eec808894eff257f0ebfae837ffd5b816ff0d97776f3e4e36a",
+    "gitBlob": "a64b7726f4e9aa38f392f17e924cdbafe0242560"
+   },
+   {
+    "path": ".github/workflows/ingress-claude.yml",
+    "sha256": "02afe802a64531376f8aa542ce7022cb6407db276dc11fa6485a8af9f27cfba0",
+    "gitBlob": "c1130c4d6768c77921f05c85c376a883bbb049e3"
+   },
+   {
+    "path": ".github/workflows/verify.yml",
+    "sha256": "5da89c0c3c344e87e9fc37da675d8fb601fed577060e85f642f4db737eda07f8",
+    "gitBlob": "442f13523cbc69ec089dad15315b15d2baef7356"
+   },
+   {
+    "path": "CLAUDE-INGRESS.md",
+    "sha256": "b339af9fefd2f5ba493f8d03d0e223d5b857db51a9c995123f64fa2d47985527",
+    "gitBlob": "3be4e1791299d206c7ce7c9929c40bfe368364d4"
+   },
+   {
+    "path": "INGRESS.md",
+    "sha256": "790a412580b5f47046550f6d4bce2502513ac88483f6d94b315c69a5a2fd6454",
+    "gitBlob": "5d391c5a9287d07a7a701ea5aff7a26ce3a805ab"
+   },
+   {
+    "path": "PROTOCOL.md",
+    "sha256": "684a892488bc68aa3bb6f42240eaa5d8289a76df68823a884f71665bac4f715c",
+    "gitBlob": "37e7cba9b0c87116208badab01f7a3b7e3237a64"
+   },
+   {
+    "path": "README.md",
+    "sha256": "5d0ba7d1da55d384b917c0d509740e7fa6130e439447c8303b7fdf7934e50c3e",
+    "gitBlob": "baa271fd77c8db218aa265318ac0d6fea7b62431"
+   },
+   {
+    "path": "audit/README.md",
+    "sha256": "4fd90ea3ae7083c47795a917b8f3e8ab1308b767c1bdd561cd10372be269ce03",
+    "gitBlob": "9754ce8b9d27ffa0f3118e279a700e254e09d3bb"
+   },
+   {
+    "path": "exchange/QUARANTINE.json",
+    "sha256": "bf8f1fd2e5c5476cf8db70b5c19dd2eb1034add681b3d6f127fe25df6cf22862",
+    "gitBlob": "f594e3f7ce37ab88011e7f1d9cebdf447601881b"
+   },
+   {
+    "path": "schemas/example-chatgpt-audit-result.json",
+    "sha256": "5f5e7ed1d123a5b27d65a0303a17143ee18d83719bc29895298a02f0513db8fe",
+    "gitBlob": "50e22468e942bbc60b9d9ff9c84e636c9ef4301f"
+   },
+   {
+    "path": "schemas/message.schema.json",
+    "sha256": "e45df8cc86759e2814513bcebb7dcf76cbbaba4e31e4e3bede89804e9cffdee7",
+    "gitBlob": "59fc2ad9b8ec5c999dea67af5dca243458bdb8cf"
+   },
+   {
+    "path": "tools/bridge.mjs",
+    "sha256": "e1ade853516eabff92150ae1660cd0745d46fdadee090835702e79c0051d4186",
+    "gitBlob": "37c6fc478ad98edfd3099299ae392bc2960405cb"
+   },
+   {
+    "path": "tools/test.mjs",
+    "sha256": "ce8cd46b64575730dd9e024ce44a6e9ae64b2231cc29b5826e1885203d9a843a",
+    "gitBlob": "a231dce6ad160cfe1182c4f72975d7b9756156e0"
+   }
+  ],
+  "lastSnapshotBeforeClosure": "000023-2fce3a6661c0",
+  "finalSnapshot": "the mirror commit that follows the closure commit (Bridge-Sync trailer; Source-Commit = closure commit), verified by bridge.mjs all and bridge-verify",
+  "queuesAtClosure": {
+   "claude": "empty",
+   "chatgpt": "empty"
+  }
+ },
+ "verification": {
+  "atPreClosureHead": {
+   "gate": "CONTEXT_INTEGRITY PASS (G01–G14)",
+   "brainSelfTests": "29/29",
+   "c1Integration": "28/28 (node brain/tests/c1-integration.mjs --bridge=<Bridge main 9534b6a>)",
+   "applicationZeroDrift": "PASS — node brain/tools/drift.mjs compare brain/evidence/BASELINE-866a441.json: 382 protected files, behaviour digest 6ccf9b86e5231d21c76fa157a083d79fd83fd1c178a865222b0e9889571c28db, diffs []",
+   "bridgeSelfTests": "68/68",
+   "bridgeAll": "SYNC_STATUS VERIFIED, provenance VERIFIED, CONTROL VERIFIED, MESSAGES VALID, APPEND_ONLY PASS"
+  },
+  "atClosureCommit": "gate PASS, brain self-tests and zero drift re-run before the push and by CI brain-gate (dispatched for the closure commit); the C1 integration suite is not re-run after closure because it requires an IN_PROGRESS phase with an ACTIVE delegation (c1.mjs code is unchanged since 2fce3a6)"
+ },
+ "freshClaude": {
+  "wonderpagesSide": {
+   "session": "session_01V3x74GzAWoJvJMSxogYWe8",
+   "environment": "wonderpages-c0",
+   "gate": "PASS at 2fce3a6",
+   "questionnaire": "FRESH_SESSION_CONTINUITY PASS 31/31",
+   "commit": "22f339f",
+   "blocked": "step 3 (attach the Bridge with add_repo) was refused by the platform's auto-mode permission check; the session stopped without a workaround"
+  },
+  "bridgeSide": {
+   "session": "session_01LZuWSWiVcF2XTLbupUyyc9",
+   "environment": "wonderpages-c0",
+   "bootstrap": "verify-mirror VERIFIED, verify-control VERIFIED, validate VALID, snapshot 000023-2fce3a6661c0, both queues empty",
+   "request": "MSG-20261006T202603Z-claude-6432 (Bridge 8faa395), nonce 620b009b63a08cbe"
+  }
+ },
+ "freshChatGPT": {
+  "mechanism": "decision B: ChatGPT Work event-triggered task on PR #1 (commit update)",
+  "ring": "doorbell seq 9, R 8faa395, 20:26:36 UTC",
+  "response": "MSG-20261006T202816Z-chatgpt-cd23 (Bridge f8311fb, 20:28:16 UTC)",
+  "checks": "R/seq, CURRENT@R, CONTROL@R (3 blobs MATCH), STATE@R, THREAD (7014 CLOSED by f02d), NONCE all correct — verified by the implementer and by the routine",
+  "limits": "model/reasoning unknown (not exposed); commit identity is the operator's GitHub connector"
+ },
+ "fullDuplex": {
+  "chain": "fresh Claude (8faa395) → Bridge → ChatGPT Work (f8311fb) → Bridge → ingress-claude ring seq 3 (PR #5 by github-actions[bot], 20:28:31) → fresh routine session_019NabkhQwNCzohv89P1EcDK (20:28:35) → CLOSED d342 (9534b6a) + run record (WonderPages 34899cb)",
+  "operatorActions": "none",
+  "manualDispatch": "none for this round trip (run 1 on PR #4 used one implementer dispatch; see DECISION-C1.md §4)",
+  "noLoop": "ingress-claude runs on Claude-written pushes did not ring (runs 8 and 11)",
+  "routinePlatformEvidence": {
+   "origin": "github_webhook_trigger",
+   "model": "claude-opus-5-5 (configured, session, last served)",
+   "effort": "CLAUDE_EFFORT=high, CLAUDE_CODE_EFFORT_LEVEL=high",
+   "isUsingOverage": false,
+   "credentialsPresent": "none",
+   "status": "ROUTINE_RUN_STATUS_SUCCEEDED 20:28:35 → 20:31:03",
+   "recheck": "write true before the Bridge reply; writeKind RUN_RECORD_ONLY before the run-record push"
+  }
+ },
+ "decisionB": "ACCEPTED per exit criterion (live E2E PASS, B-01…B-06 repaired); operational; ingress PR #1 retained",
+ "decisionC": "C0 COMPLETE (feasibility + one-shot live, PASS_WITH_LIMITATIONS); C1 IMPLEMENTED, live PASS_WITH_LIMITATIONS; routine 'WonderPages Claude ingress' (trig_01RAjfwuD1vV1YCJapQTMrVa) stays enabled; with CONTINUITY-1 COMPLETE and DELEGATION EXPIRED its writesAllowed is false: it may only communicate (CLOSED / ACKNOWLEDGED / ANSWER) or escalate",
+ "subscriptionOnly": {
+  "evidence": [
+   "no API key, auth token or OAuth token in any routine run (bootstrap fails closed if present)",
+   "isUsingOverage false on every observed session",
+   "no secret in the Bridge; ingress uses GITHUB_TOKEN only",
+   "usage credits OFF (operator-held account setting)"
+  ],
+  "limitations": [
+   "overage cannot be enforced in-run (C1-A04): account-level setting",
+   "allowance exhaustion not exercised live; durable pending + bounded retry implemented and tested"
+  ]
+ },
+ "residualLimitations": [
+  "GitHub schedule events in the Agent Bridge are sparse and late (ingress-claude: first scheduled run 22:46 UTC, about 5 h after it was added, then 02:40; ingress-chatgpt 20:22, 00:45). Push-triggered wakes are immediate; retries and deferred rings wait for the scheduler or the next message.",
+  "Duplicate webhook delivery could start two routine sessions (C1-A03); canonical writes stay deduplicated.",
+  "Routine daily run limits (Pro 5) and the Bridge budget of 3 rings per rolling 24 h bound the wake rate; the first, failed ring (seq 1) used one budget slot.",
+  "ChatGPT Work: model/reasoning not observable; its commits carry the operator's GitHub identity.",
+  "The routine cannot call get_session; model and effort per run come from the implementer's platform reads.",
+  "The saved routine prompt is an operator-held copy of brain/ingress/CLAUDE-ROUTINE-PROMPT.txt; changing it is an operator UI action.",
+  "A fresh session created with one repository cannot attach the other one under auto mode (add_repo refused); fresh sessions therefore run per repository."
+ ],
+ "applicationZeroDrift": "PASS — protected tree identical to the functional checkpoint 866a441 (382 files, behaviour digest 6ccf9b86…); gate G13 at every commit",
+ "artifacts": {
+  "retained": [
+   "Bridge PR #1 [ingress] ChatGPT inbox (decision B, open by design)",
+   "Bridge PR #5 [ingress] Claude inbox (#3) — latest C1 wake PR, closed automatically by the next ring",
+   "branches inbox/chatgpt, inbox/claude",
+   "routine trig_01RAjfwuD1vV1YCJapQTMrVa 'WonderPages Claude ingress' (enabled, communicate-only after closure)",
+   "ChatGPT Work task 6ac5063e875081919246521097c4b900 (decision B)"
+  ],
+  "stoppedOrDisabled": [
+   "routine trig_01N4poWHyZgAL7kZrwwVagb6 'WonderPages C0 probe' (disabled by the operator)",
+   "Bridge PR #2 [c0] (inert, open, never merged)",
+   "Bridge PR #3 [c0-live] (one-shot, open, never merged)",
+   "branches inbox/claude-c0, inbox/claude-c0-live, claude/c0-result (C0 evidence)",
+   "Bridge PR #4 (C1 run 1, closed by the ring of seq 3)",
+   "fresh sessions session_01V3x74GzAWoJvJMSxogYWe8 and session_01LZuWSWiVcF2XTLbupUyyc9 (idle, finished)"
+  ],
+  "operatorMayClose": "PR #2 and PR #3 are no longer needed except as C0 evidence; closing them is an operator choice"
+ },
+ "futureItems": {
+  "nextPhase": "RC1 POLICY DEPENDENCY CLOSURE / PRE-HARDENING SPECIFICATION",
+  "nextPhaseState": "NOT YET AUTHORIZED / NOT STARTED",
+  "doNotStart": [
+   "Dependency Closure",
+   "RC1 Scope Closure",
+   "sanitized final policy brief",
+   "hidden acceptance set",
+   "Semantic Hardening #2",
+   "evaluator implementation",
+   "Dinosaur World production"
+  ],
+  "openFromEarlierPhases": [
+   "Gold-v1 validation/acceptance; Gold-v2 adjudication",
+   "Dinosaur World observations O1/O2; real Creative Upgrade; V1 pilot",
+   "Open policy dependencies (closure §10)"
+  ]
+ },
+ "stop": "CONTINUITY-1 is closed. No work of the next phase starts until the operator records a new authorization under brain/phase/authorizations/."
+}

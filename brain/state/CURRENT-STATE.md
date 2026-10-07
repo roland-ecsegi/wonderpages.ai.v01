@@ -4,8 +4,8 @@
 As of 2026-10-06 · functional checkpoint `866a441` · last decision commit `168905b`
 Repository `roland-ecsegi/wonderpages.ai.v01` · branch `claude/wonderpages-enterprise-architecture-8hy7w9` · public
 
-**ACTIVE PHASE:** `CONTINUITY-1` — WonderPages Project Brain + Continuity System + Agent Bridge (IN_PROGRESS)
-**NEXT_AUTHORIZED_STEP:** C1-BUILD-LIVE-TEST-COLD-RESTART-CLOSURE — Operator follow-up #13: build and verify Decision C1, run the live full-duplex test, then the final cold-restart test and the CONTINUITY-1 closure checkpoint; stop only for operator-only UI/configuration steps. Nothing of the next phase starts before the closure checkpoint passes.
+**ACTIVE PHASE:** `CONTINUITY-1` — WonderPages Project Brain + Continuity System + Agent Bridge (COMPLETE)
+**NEXT_AUTHORIZED_STEP:** OPERATOR-REVIEW-CONTINUITY-1-CLOSURE — CONTINUITY-1 is COMPLETE (brain/evidence/CONTINUITY-1-CLOSURE.json). The operator reviews the closure checkpoint and decides whether to authorize the next phase, RC1 POLICY DEPENDENCY CLOSURE / PRE-HARDENING SPECIFICATION, which is NOT YET AUTHORIZED / NOT STARTED. Claude starts nothing until then.
 
 > Run `node brain/tools/brain.mjs gate` before relying on anything below. Every row names its authoritative source; if this view
 > and the source differ, the source wins and the gate must fail.
@@ -38,6 +38,8 @@ Sources: C-GOAL → `reference/architecture/WonderPages_Enterprise_Master_Archit
 | Item | Status | Source |
 |---|---|---|
 | OPERATOR_POLICY_DECISION_PHASE | COMPLETE | C-POLICY-PHASE-COMPLETE → `docs/enterprise/records/GOLD-V2-POLICY-CLOSURE.md`, `docs/enterprise/JURNAL-IMPLEMENTARE.md` |
+| CONTINUITY_1 | COMPLETE — closure checkpoint brain/evidence/CONTINUITY-1-CLOSURE.json; operator review pending | C-CONTINUITY-1-COMPLETE → `brain/evidence/CONTINUITY-1-CLOSURE.json`, `brain/phase/authorizations/CONTINUITY-1.operator-authorization-C1.txt` |
+| NEXT_PHASE | RC1 POLICY DEPENDENCY CLOSURE / PRE-HARDENING SPECIFICATION — NOT YET AUTHORIZED / NOT STARTED | C-RC1-NOT-AUTHORIZED → `brain/phase/authorizations/CONTINUITY-1.operator-authorization-C1.txt` |
 | SEMANTIC_HARDENING_2 | NOT AUTHORIZED / NOT STARTED | C-SH2 → `docs/enterprise/records/GOLD-V2-POLICY-CLOSURE.md` |
 | POLICY_D01_D22 | DECIDED POLICY · NOT IMPLEMENTED · NOT YET EMPIRICALLY VALIDATED | C-DECISIONS-STATE → `docs/enterprise/records/GOLD-V2-POLICY-CLOSURE.md`, `evaluation/gold-v2-policy/decisions.jsonl` |
 | EVALUATOR_V2 | CURRENT IMPLEMENTATION; does not comply with D-01…D-22; not validated | C-EVALUATOR → `server/quality/evaluation.js`, `docs/enterprise/records/GOLD-V2-POLICY-CLOSURE.md` |
@@ -53,9 +55,8 @@ Sources: C-GOAL → `reference/architecture/WonderPages_Enterprise_Master_Archit
 - **B-GOLD-V2-ADJUDICATION** — Gold-v2 adjudication 0/226; validation NOT_COMPLETE. (C-GOLD-V2)
 
 ## Awaiting the operator
-- Decision B: ChatGPT Work task configured and live end-to-end wake test PASS (2026-10-06); operator acceptance of decision B is part of the CONTINUITY-1 review
-- Review / acceptance of CONTINUITY-1 and explicit authorization of the next phase
-- Decision C (Claude wake-up) — C0 live test DONE — PASS_WITH_LIMITATIONS (one routine run from Bridge PR #3, Opus 5.5, subscription only; brain/evidence/DECISION-C0-LIVE.md §8); C / C1 not implemented; C0 feasibility: FEASIBLE_WITH_LIMITATIONS (brain/evidence/DECISION-C0-FEASIBILITY.md); not implemented; operator to confirm P1 usage credits OFF / P2 Claude GitHub App on the Bridge and to authorize the C0 live test; B-06 repaired (quarantine), B ingress operational; routine daily limits Pro 5 / Max 15 / Team-Enterprise 25 recorded, batching required
+- Review of the CONTINUITY-1 closure checkpoint (brain/evidence/CONTINUITY-1-CLOSURE.json): CONTINUITY-1 COMPLETE; decision B ACCEPTED per exit criterion (live E2E PASS, B-01…B-06 repaired); decision C: C0 COMPLETE, C1 live PASS_WITH_LIMITATIONS; final cold restart PASS
+- Explicit authorization (or not) of the next phase RC1 POLICY DEPENDENCY CLOSURE / PRE-HARDENING SPECIFICATION — NOT YET AUTHORIZED / NOT STARTED
 - Gold-v1 validation/acceptance; Gold-v2 adjudication
 - Dinosaur World observations O1/O2; real Creative Upgrade; V1 pilot
 - Open policy dependencies (closure §10)

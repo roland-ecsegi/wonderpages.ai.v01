@@ -20,6 +20,7 @@ const node = (...a) => sh(C, process.execPath, ...a);
 const gate = (...flags) => { const r = node('brain/tools/brain.mjs', 'gate', '--json', ...flags); return JSON.parse(r.stdout); };
 const failed = (r, id) => r.checks.find(c => c.id.startsWith(id))?.status === 'FAIL';
 const edit = (rel, fn) => { const p = path.join(C, rel); fs.writeFileSync(p, fn(fs.readFileSync(p, 'utf8'))); };
+const editJSON = (rel, fn) => edit(rel, s => { const o = JSON.parse(s); fn(o); return JSON.stringify(o, null, 1) + '\n'; });
 const commit = msg => { git('add', '-A'); git('commit', '-q', '-m', msg); };
 let base, passed = 0;
 const reset = () => { git('reset', '-q', '--hard', base); git('clean', '-qfd'); };
@@ -91,12 +92,21 @@ try {
     fs.writeFileSync(kf, JSON.stringify({ ...k, Q10: 'AUTHORIZED' })); assert.equal(node('brain/continuity/continuity.mjs', 'grade', kf).status, 1);
   });
   t('G14 delegation: the quote must stay verbatim in the follow-up record (tampering → FAIL)', () => { edit('brain/phase/authorizations/CONTINUITY-1.operator-followups.md', s => s.replace('Bridge-ul și ChatGPT nu pot crea autoritate nouă', 'Bridge-ul și ChatGPT pot crea autoritate')); commit('tamper'); assert.ok(failed(gate(), 'G14')); });
-  t('G14 delegation: an ACTIVE contract for a phase that is not the IN_PROGRESS one → FAIL', () => { edit('brain/phase/DELEGATION.json', s => s.replace('"appliesToPhase": "CONTINUITY-1"', '"appliesToPhase": "RC1-SOMETHING"')); commit('x'); assert.ok(failed(gate(), 'G14')); });
+  t('G14 delegation: an ACTIVE contract for a phase that is not the IN_PROGRESS one → FAIL', () => { editJSON('brain/phase/DELEGATION.json', d => { d.status = 'ACTIVE'; d.appliesToPhase = 'RC1-SOMETHING'; }); commit('x'); assert.ok(failed(gate(), 'G14')); });
+  t('G09: a COMPLETE phase without its closure checkpoint (verdict COMPLETE) → FAIL', () => {
+    reset(); const cp = p => `brain/evidence/${p.id}-CLOSURE.json`;
+    editJSON('brain/phase/ACTIVE-PHASE.json', p => { p.status = 'COMPLETE'; p.closure = cp(p); p.nextAuthorizedStep = { ...p.nextAuthorizedStep, actor: 'operator' }; });
+    const id = JSON.parse(fs.readFileSync(path.join(C, 'brain/phase/ACTIVE-PHASE.json'), 'utf8')).id, f = path.join(C, `brain/evidence/${id}-CLOSURE.json`);
+    if (fs.existsSync(f)) fs.rmSync(f); commit('complete without checkpoint'); assert.match(JSON.stringify(gate()), /phase COMPLETE without its closure checkpoint/);
+    fs.writeFileSync(f, JSON.stringify({ verdict: 'INCOMPLETE' })); commit('incomplete checkpoint'); assert.match(JSON.stringify(gate()), /does not record verdict COMPLETE/);
+  });
   t('C1 authority: a non-ACTIVE delegation or a phase not IN_PROGRESS grants no WonderPages writes', () => {
-    const auth = () => JSON.parse(node('brain/tools/c1.mjs', 'authority').stdout);
-    assert.equal(auth().writesAllowed, true);
-    edit('brain/phase/DELEGATION.json', s => s.replace('"status": "ACTIVE"', '"status": "SUSPENDED"')); assert.equal(auth().writesAllowed, false); reset();
-    edit('brain/phase/ACTIVE-PHASE.json', s => s.replace('"status": "IN_PROGRESS"', '"status": "COMPLETE"')); assert.equal(auth().writesAllowed, false);
+    reset(); const auth = () => JSON.parse(node('brain/tools/c1.mjs', 'authority').stdout);
+    const open = () => { editJSON('brain/phase/ACTIVE-PHASE.json', p => { p.status = 'IN_PROGRESS'; }); editJSON('brain/phase/DELEGATION.json', d => { d.status = 'ACTIVE'; d.appliesToPhase = 'CONTINUITY-1'; }); };
+    open(); assert.equal(auth().writesAllowed, true, 'IN_PROGRESS phase + ACTIVE contract for it');
+    editJSON('brain/phase/DELEGATION.json', d => { d.status = 'SUSPENDED'; }); assert.equal(auth().writesAllowed, false); reset();
+    open(); editJSON('brain/phase/ACTIVE-PHASE.json', p => { p.status = 'COMPLETE'; }); assert.equal(auth().writesAllowed, false); reset();
+    open(); editJSON('brain/phase/DELEGATION.json', d => { d.status = 'EXPIRED'; }); assert.equal(auth().writesAllowed, false);
   });
   t('C1 scope: a change outside the active writeScope is reported, inside is not', () => {
     const head = git('rev-parse', 'HEAD');

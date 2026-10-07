@@ -246,7 +246,14 @@ export function runGate(root = BRAIN_ROOT, { allowDirty = false, env = process.e
     if (!phases.phases.some(p => p.id === phase.id)) bad.push(`UNKNOWN phase ${phase.id}`);
     if (active[0]?.id !== phase.id) bad.push(`ACTIVE-PHASE ${phase.id} ≠ registry ACTIVE ${active[0]?.id}`);
     if (state.activePhase !== phase.id) bad.push(`CURRENT-STATE.activePhase ${state.activePhase} ≠ ACTIVE-PHASE ${phase.id}`);
-    if (!['IN_PROGRESS', 'COMPLETE_AWAITING_OPERATOR_REVIEW'].includes(phase.status)) bad.push(`unknown phase status ${phase.status}`);
+    if (!['IN_PROGRESS', 'COMPLETE_AWAITING_OPERATOR_REVIEW', 'COMPLETE'].includes(phase.status)) bad.push(`unknown phase status ${phase.status}`);
+    // COMPLETE only with its closure checkpoint (verdict COMPLETE) and with the single next step held by the operator
+    if (phase.status === 'COMPLETE') {
+      const cp = `brain/evidence/${phase.id}-CLOSURE.json`;
+      if (phase.closure !== cp || !exists(cp, root)) bad.push(`phase COMPLETE without its closure checkpoint ${cp}`);
+      else if (JSON.parse(readText(cp, root)).verdict !== 'COMPLETE') bad.push(`closure checkpoint ${cp} does not record verdict COMPLETE`);
+      if (phase.nextAuthorizedStep?.actor !== 'operator') bad.push('phase COMPLETE but the next step is not the operator\'s');
+    }
     const auth = active[0]?.authorization; if (!auth || !exists(auth, root)) bad.push('active phase has no recorded operator authorization');
     else if (phase.authorizedBy?.instructionSha256 !== sha256(fs.readFileSync(path.join(root, auth)))) bad.push('authorization text hash ≠ ACTIVE-PHASE.authorizedBy.instructionSha256');
     const next = phase.nextAuthorizedStep?.id; if (!next) bad.push('no next authorized step');
@@ -337,7 +344,7 @@ export function runGate(root = BRAIN_ROOT, { allowDirty = false, env = process.e
   const head = (() => { try { return git(['rev-parse', 'HEAD'], { cwd: root }).trim(); } catch { return null; } })();
   return {
     schema: 'wonderpages.brain.readiness-evidence/1', at: new Date().toISOString(), head,
-    CONTEXT_INTEGRITY: fail ? 'FAIL' : 'PASS', CONTEXT: fail ? 'CONTEXT_NOT_READY' : 'CONTEXT_READY', WORK: fail ? 'NOT AUTHORIZED' : `AUTHORIZED ONLY WITHIN ${phase?.id}`,
+    CONTEXT_INTEGRITY: fail ? 'FAIL' : 'PASS', CONTEXT: fail ? 'CONTEXT_NOT_READY' : 'CONTEXT_READY', WORK: fail ? 'NOT AUTHORIZED' : phase?.status === 'COMPLETE' ? `NONE: ${phase.id} COMPLETE — next phase awaits operator authorization` : `AUTHORIZED ONLY WITHIN ${phase?.id}`,
     activePhase: phase ? { id: phase.id, title: phase.title, status: phase.status, writeScope: phase.writeScope, nextAuthorizedStep: phase.nextAuthorizedStep } : null,
     checks, read: Object.fromEntries([...read.entries()].sort()),
     notVerified: [

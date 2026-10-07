@@ -2,7 +2,9 @@
  "schema": "wonderpages.brain.active-phase/1",
  "id": "CONTINUITY-1",
  "title": "WonderPages Project Brain + Continuity System + Agent Bridge",
- "status": "IN_PROGRESS",
+ "status": "COMPLETE",
+ "completedAt": "2026-10-07T06:45:00Z",
+ "closure": "brain/evidence/CONTINUITY-1-CLOSURE.json",
  "authorizedBy": {
   "actor": "operator",
   "date": "2026-10-06",
@@ -49,9 +51,15 @@
   "Final closure checkpoint brain/evidence/CONTINUITY-1-CLOSURE.json; then STOP (next phase NOT YET AUTHORIZED)"
  ],
  "nextAuthorizedStep": {
-  "id": "C1-BUILD-LIVE-TEST-COLD-RESTART-CLOSURE",
-  "actor": "claude",
-  "summary": "Operator follow-up #13: build and verify Decision C1, run the live full-duplex test, then the final cold-restart test and the CONTINUITY-1 closure checkpoint; stop only for operator-only UI/configuration steps. Nothing of the next phase starts before the closure checkpoint passes."
+  "id": "OPERATOR-REVIEW-CONTINUITY-1-CLOSURE",
+  "actor": "operator",
+  "summary": "CONTINUITY-1 is COMPLETE (brain/evidence/CONTINUITY-1-CLOSURE.json). The operator reviews the closure checkpoint and decides whether to authorize the next phase, RC1 POLICY DEPENDENCY CLOSURE / PRE-HARDENING SPECIFICATION, which is NOT YET AUTHORIZED / NOT STARTED. Claude starts nothing until then."
+ },
+ "nextPhase": {
+  "id": "RC1-POLICY-DEPENDENCY-CLOSURE",
+  "title": "RC1 POLICY DEPENDENCY CLOSURE / PRE-HARDENING SPECIFICATION",
+  "state": "NOT YET AUTHORIZED / NOT STARTED",
+  "source": "brain/phase/authorizations/CONTINUITY-1.operator-authorization-C1.txt §19"
  },
  "doNotStart": {
   "source": "brain/phase/authorizations/CONTINUITY-1.operator-instruction.txt §10 (verbatim item names)",
@@ -223,7 +231,7 @@
  ],
  "delegation": "brain/phase/DELEGATION.json",
  "c1": {
-  "status": "IN_PROGRESS — live: autonomous routine wake proven (run 1, PR #4); run-record defect repaired; cold-restart round trip next",
+  "status": "PASS_WITH_LIMITATIONS — live full duplex proven (runs 1–2), audit rounds 1–3 closed, cold restart PASS; see brain/evidence/DECISION-C1.md §6",
   "evidence": "brain/evidence/DECISION-C1.md",
   "liveTest": {
    "request": "MSG-20261006T180648Z-claude-7014 (Bridge 3d21f24)",
@@ -234,7 +242,8 @@
   "auditRound2": "MSG-20261006T182725Z-chatgpt-b017: A01/A02 RESOLVED, A03/A04 ACCEPTED_LIMITATION; C1-B01 repaired in Bridge control 9496069 (rollback only on confirmed PR absence)",
   "auditRound3": "MSG-20261006T183155Z-chatgpt-c301: PASS_WITH_LIMITATIONS, B01 RESOLVED, no new findings; pending for the Claude routine",
   "run1": "brain/evidence/C1-LIVE-RUN-1.json — PR #4 (github-actions[bot]) → routine fired in 3 s → CLOSED f02d on the Bridge; run record not pushed (step-8 defect, repaired)",
-  "limitations": "GitHub schedule events have never fired in the Agent Bridge: retries and deferred rings wait for the next message push (or a manual dispatch)",
+  "run2": "brain/ingress/runs/20261006T203031Z-session_019NabkhQwNCzohv89P1EcDK.json — PR #5 opened by github-actions[bot] after ChatGPT Work wrote cd23; routine fired in 4 s; CLOSED d342; run record pushed (RUN_RECORD_ONLY)",
+  "limitations": "GitHub schedule events in the Agent Bridge are sparse and late (first scheduled ingress-claude run about 5 h after it was added, then 02:40 UTC); push-triggered wakes are immediate",
   "routinePrompt": "brain/ingress/CLAUDE-ROUTINE-PROMPT.txt",
   "bootstrapTool": "brain/tools/c1.mjs"
  }

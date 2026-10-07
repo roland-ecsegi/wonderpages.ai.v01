@@ -1,6 +1,7 @@
 {
  "schema": "wonderpages.brain.phase-acceptance/3",
  "phase": "CONTINUITY-1",
+ "closure": "brain/evidence/CONTINUITY-1-CLOSURE.json (2026-10-07: CONTINUITY-1 COMPLETE; this file stays the candidate-bound acceptance record of 4f6c968; the final cold restart, C1 live evidence and final verification are in the closure checkpoint)",
  "candidateCommit": "4f6c9688b35258e6581f1266d20ecfe9494b0cd1",
  "recordedAt": "2026-10-06T12:10:48.993Z",
  "note": "Evidence for the candidate commit. After it only evidence files may change (checked by: node brain/tools/brain.mjs acceptance). At any later commit the closing checks are the gate (G13 zero-drift) and the CI run on that commit. Acceptance of the phase is the operator decision (OPERATOR-REVIEW-CONTINUITY-1).",

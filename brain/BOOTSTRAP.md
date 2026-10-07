@@ -24,6 +24,9 @@ No step may be skipped because "the context seems obvious".
 ## Outcomes
 
 - `CONTEXT_INTEGRITY = PASS` · `CONTEXT_READY` · `WORK AUTHORIZED ONLY WITHIN <phase>`.
+- `CONTEXT_INTEGRITY = PASS` · `CONTEXT_READY` · `WORK NONE: <phase> COMPLETE — next phase awaits operator authorization`. The phase
+  is closed (its checkpoint is `brain/evidence/<phase>-CLOSURE.json`): read and report only; start nothing until the operator records
+  a new authorization under `brain/phase/authorizations/`.
 - `CONTEXT_INTEGRITY = FAIL` · `CONTEXT_NOT_READY` · `WORK NOT AUTHORIZED`. Report the failing checks verbatim to the operator.
   The only work then allowed is repairing the brain itself (the continuity write scope) and only if the active phase permits it.
   Never "fix" a FAIL by editing a source document to match the brain.
