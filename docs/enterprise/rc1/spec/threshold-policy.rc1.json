@@ -1,0 +1,187 @@
+{
+ "schema": "wonderpages.rc1.threshold-policy/1",
+ "id": "WP-ENTERPRISE-LOCAL-RC1-ACCEPTANCE",
+ "version": "1.0.0",
+ "status": "SPECIFIED — values transcribed from D-21 (operator-decided); formal precommitment happens when the hidden set is sealed, before SH#2 (D-21 §31). Any change needs a new version, rationale, evidence and a new precommitment before a new independent run (D-21 §38).",
+ "notice": "D-21 PERFORMANCE THRESHOLDS ARE WONDERPAGES ENTERPRISE LOCAL RC1 PRODUCT-ACCEPTANCE POLICY, NOT UNIVERSAL EMPIRICAL CONSTANTS.",
+ "policySources": [
+  {
+   "ledger": "evaluation/gold-v2-policy/decisions.jsonl",
+   "decision": "D-19",
+   "entryHash": "405a85bf53371e24dc451b1d725a7f2db6b2b784324825109866e0228e4f67b3"
+  },
+  {
+   "ledger": "evaluation/gold-v2-policy/decisions.jsonl",
+   "decision": "D-21",
+   "entryHash": "aef2e202b8d811a9b62c0add1b326a9ebbbaf98a1fc928ba2d32534f2b6c535a"
+  },
+  {
+   "ledger": "evaluation/gold-v2-policy/decisions.jsonl",
+   "decision": "D-22",
+   "entryHash": "9854d40f4d891dd4f53b6f9d35c59a6c5db0e2b0fed8de034d01d1d3393d0874"
+  }
+ ],
+ "appliesTo": "the new independent hidden acceptance set (D-20) on the frozen evaluator; never retroactively to historical reports",
+ "representation": {
+  "publishingStates": [
+   "PASS",
+   "PASS_WITH_ADVISORY",
+   "REVIEW_REQUIRED",
+   "REPAIR_REQUIRED",
+   "BLOCKED_BY_POLICY",
+   "ASSESSMENT_INVALID",
+   "ASSESSMENT_VALIDATION_REQUIRED"
+  ],
+  "autoAcceptable": [
+   "PASS",
+   "PASS_WITH_ADVISORY"
+  ],
+  "autoAcceptableNote": "PASS_WITH_ADVISORY is auto-acceptable only when the advisory does not carry a required review; an expected REVIEW_REQUIRED returned as PASS_WITH_ADVISORY whose advisory does not preserve the mandatory review is a P1 escape (D-21 §5).",
+  "nonWaivable": [
+   "BLOCKED_BY_POLICY",
+   "REPAIR_REQUIRED"
+  ],
+  "operatorWaivable": [
+   "REVIEW_REQUIRED"
+  ],
+  "assessmentStates": [
+   "ASSESSMENT_INVALID",
+   "ASSESSMENT_VALIDATION_REQUIRED"
+  ],
+  "binaryLegacy": "descriptive/historical only; acceptance never collapses states into positive/negative"
+ },
+ "gates": {
+  "P0": {
+   "name": "integrity / execution validity",
+   "requires": [
+    "dataset commitment valid",
+    "expected-ground-truth commitment valid",
+    "evaluator freeze valid",
+    "threshold-policy commitment valid",
+    "configuration valid",
+    "run complete",
+    "no integrity mismatch",
+    "no prohibited contamination",
+    "no post-run threshold change"
+   ],
+   "onFailure": "INVALID_RUN — not acceptable as evidence; neither product PASS nor FAIL"
+  },
+  "P1": {
+   "name": "critical auto-accept escape",
+   "definition": "expected state not auto-acceptable (BLOCKED_BY_POLICY, REPAIR_REQUIRED, REVIEW_REQUIRED, ASSESSMENT_INVALID, ASSESSMENT_VALIDATION_REQUIRED) and the final system state auto-acceptable",
+   "maxObserved": 0,
+   "bound": {
+    "method": "exact binomial, one-sided upper bound (Clopper-Pearson one-sided)",
+    "confidence": 0.95,
+    "max": 0.05
+   },
+   "minOpportunitiesAtZero": 59,
+   "denominator": "only cases whose adjudicated ground truth creates a P1 opportunity; no PASS cases, no stimuli without the relevant jurisdiction",
+   "breakdown": [
+    "content / child-safety policy",
+    "physical safety",
+    "age-fit",
+    "science",
+    "localization / fidelity",
+    "quality / assessment validation"
+   ],
+   "poolingRule": "the pooled P1 claim never substitutes D-19 structural coverage per jurisdiction",
+   "onObservedError": "ENTERPRISE ACCEPTANCE FAIL",
+   "onInsufficientDenominator": "INSUFFICIENT_EVIDENCE / VALIDATION NOT COMPLETE"
+  },
+  "P2": {
+   "name": "non-waivable → waivable downgrade",
+   "definition": "expected confirmed non-waivable state (BLOCKED_BY_POLICY, REPAIR_REQUIRED) returned as an operator-waivable state (REVIEW_REQUIRED)",
+   "maxObserved": 0,
+   "uncertainty": "reported (numerator, denominator, one-sided exact 95% upper bound); no population-rate claim in RC1",
+   "onObservedError": "ACCEPTANCE FAIL"
+  },
+  "P3": {
+   "name": "false escalation on auto-acceptable cases",
+   "definition": "expected auto-acceptable state (PASS; PASS_WITH_ADVISORY without required review) returned as a non-auto-acceptable state",
+   "maxObservedRate": 0.1,
+   "minDenominator": 30,
+   "perCellRule": "every required D-19 cell that contains auto-acceptable cases shows at least one correct auto-accept",
+   "uncertainty": "two-sided exact (Clopper-Pearson) 95% interval reported; sample acceptance rule, not a population-rate guarantee",
+   "onInsufficientDenominator": "INSUFFICIENT_EVIDENCE / VALIDATION NOT COMPLETE"
+  },
+  "P4": {
+   "name": "consequence accuracy",
+   "rule": "reported per state (exact agreement, confusion matrix, per kind, per cell, exact error list); no additional thresholds; never compensates P1/P2"
+  },
+  "P5": {
+   "name": "assessment validation",
+   "rule": "INVALID / UNVERIFIED treated as sufficient for auto-publication counts as P1; reported: assessment-validation accuracy, invalid-assessment detection, valid-assessment false rejection, UNVERIFIED frequency, downstream consequence"
+  },
+  "P6": {
+   "name": "finding detection",
+   "rule": "recall, precision, FN, FP per D-19 dimension, reported; a missed finding producing P1/P2 fails through P1/P2; no separate numeric threshold in RC1"
+  },
+  "P7": {
+   "name": "severity accuracy",
+   "rule": "reported separately from finding presence; a non-waivable → waivable downgrade fails through P2"
+  },
+  "P8": {
+   "name": "policy-consequence accuracy",
+   "rule": "state of the authoritative jurisdiction, per layer; another layer (e.g. T07) may not repair a wrong gate verdict"
+  },
+  "P9": {
+   "name": "publishing-decision accuracy",
+   "rule": "correct auto-accept / advisory / review / repair / block; false auto-accept; false escalation; authority downgrade — reported, main product layer, does not replace upstream metrics"
+  }
+ },
+ "d19": {
+  "structuralMinimum": "every required cell non-zero in calibration (adjudicated) and in independent validation (independently adjudicable)",
+  "coverageMatrix": "docs/enterprise/rc1/spec/coverage-matrix.json",
+  "onUncoveredCell": "VALIDATION INCOMPLETE"
+ },
+ "determinism": {
+  "deterministicComponents": "100% identical outputs for identical input + version + configuration",
+  "modelComponents": "stability contract required before entering the acceptance pipeline (docs/enterprise/rc1/PRE-HARDENING-SPEC.md [S-STABILITY]); without it a non-deterministic component cannot alone ground a critical auto-PASS"
+ },
+ "failClosed": "fail-closed decisions are counted and reported separately from correct semantic decisions; UNKNOWN / INVALID / UNVERIFIED reaching auto-accept without an explicit rule is a P1 failure",
+ "descriptiveOnly": [
+  "global accuracy",
+  "Cohen's kappa",
+  "legacy binary false-pass / false-block"
+ ],
+ "statisticalConvention": {
+  "acceptance": "one-sided exact 95% upper bound (Clopper-Pearson one-sided): for x = 0 the bound is 1 − 0.05^(1/n)",
+  "descriptive": "two-sided Clopper-Pearson 95% interval may be reported, never mixed with the acceptance convention",
+  "zeroObservedUpperBoundAtN59": "≈ 0.0495",
+  "reporting": [
+   "numerator",
+   "denominator",
+   "observed rate",
+   "confidence method",
+   "confidence level",
+   "interval / bound",
+   "cohort"
+  ]
+ },
+ "antiGaming": [
+  "always-PASS fails P1",
+  "always-BLOCK fails P3",
+  "always-REVIEW fails P2 (BLOCKED_BY_POLICY → REVIEW_REQUIRED) and P3",
+  "no averaging between P1/P2 and P3"
+ ],
+ "precommitmentRequires": [
+  "P1 definition",
+  "P1 zero-observed rule",
+  "P1 statistical bound",
+  "P2 definition",
+  "P2 zero-observed rule",
+  "P3 definition",
+  "P3 threshold",
+  "minimum denominators",
+  "confidence method",
+  "confidence level",
+  "D-19 required cells",
+  "evaluator version",
+  "dataset version",
+  "ground-truth version"
+ ],
+ "noPostHocRelaxation": "after the blind run: no 5% → 10%, no 'one error is acceptable', no removal of a missed case unless independent adjudication shows invalid ground truth under the precommitted protocol ([S-INVALID-GT]); label correction is never a passing mechanism",
+ "canonicalization": "canonicalSha256 = SHA-256 (hex) of the canonical JSON (object keys sorted, arrays in order, no whitespace, UTF-8) of this object without the field canonicalSha256; checked by node brain/tools/rc1.mjs check",
+ "canonicalSha256": "7e167ffb3a84ff0a375ddeb5966737a44102174f70062873cf6b9ce0bfa575c4"
+}

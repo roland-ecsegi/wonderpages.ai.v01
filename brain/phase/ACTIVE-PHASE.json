@@ -110,6 +110,20 @@
  },
  "progress": {
   "note": "Evidence of RC1 work (non-authority field).",
-  "items": []
+  "items": [
+   {
+    "at": "2026-10-07",
+    "what": "RC1 activated: verbatim authorization, CONTINUITY-1 closure accepted, DELEGATION-RC1, zero-drift compare aware of the active write scope",
+    "commits": [
+     "04c6e8e",
+     "ef77003"
+    ]
+   },
+   {
+    "at": "2026-10-07",
+    "what": "Dependency register (87 dependencies classified), operator decision package Q-01…Q-20, pre-hardening specification, ground-truth schema, coverage matrix (410 cells, 354 REQUIRED), D-21 threshold-policy document, artificial test vectors; gate G15 (brain/tools/rc1.mjs)",
+    "status": "draft for ChatGPT audit and operator decisions"
+   }
+  ]
  }
 }

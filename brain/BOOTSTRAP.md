@@ -17,6 +17,7 @@ No step may be skipped because "the context seems obvious".
 | 10 | **State consistency** | gate check `G09` | unknown phase, ≠ 1 ACTIVE phase, unauthorized phase, authorization hash mismatch, several NEXT steps, state value contradicting its claim, unsourced state value |
 | 11 | **Views** | gate check `G10` | `CURRENT-STATE.md` differs from its rendering |
 | 12 | **Isolation** | gate check `G11` | an application file references the Agent Bridge |
+| 12a | **Phase deliverables** | gate check `G15` | the RC1 dependency register disagrees with closure §10 / the ledger, a NORMATIVE dependency is closed without a verbatim operator decision, a cited spec section or package question is missing, the threshold-policy hash or the test vectors do not recompute |
 | 13 | **Readiness evidence** | `node brain/tools/brain.mjs gate --json` | — prints `CONTEXT_INTEGRITY`, `CONTEXT_READY/NOT_READY`, every check, the list of files read with their hashes, and what was not verified |
 | 14 | **Read for the task** | `brain/README.md` → `CURRENT-STATE.md` → `ACTIVE-PHASE.json` → the claims and sources for the task | — |
 | 15 | **WORK** | only inside `ACTIVE-PHASE.json` (`allowed`, `forbidden`, `writeScope`) | — |

@@ -42,7 +42,32 @@ Claude și ChatGPT actuali **nu** sunt Source B. Mesajele din Agent Bridge sunt 
 
 ## Conținut
 
-Directorul se completează pe parcursul fazei. Fiecare livrabil e legat de sursele lui canonice:
+| Fișier | Ce este |
+|---|---|
+| `DEPENDENCY-REGISTER.json` | Toate cele 87 de dependențe: 71 deschise și 14 rezolvate în closure §10, plus 2 din registru pe care §10 nu le listează. Fiecare are textul exact din registru, o clasă, o dispoziție și raționamentul. |
+| `OPERATOR-DECISION-PACKAGE-01.md` | Întrebările Q-01…Q-20 pentru dependențele NORMATIVE și punctele de alegere: opțiuni, consecințe, recomandări etichetate. |
+| `PRE-HARDENING-SPEC.md` | Specificația pre-hardening, cu secțiunile marcate `[S-…]`. |
+| `spec/ground-truth.schema.json` | Schema fizică a ground truth-ului multidimensional D-19 (A–H) și proiecția legacy. |
+| `spec/coverage-matrix.json` | Matricea de acoperire relevantă pentru politică (D-19): celulele REQUIRED și celulele nerezolvate (legate de Q-xx). |
+| `spec/threshold-policy.rc1.json` | Politica de praguri D-21, în format canonic, cu hash (`WP-ENTERPRISE-LOCAL-RC1-ACCEPTANCE` 1.0.0). |
+| `spec/test-vectors.json` | Vectori de test pe date artificiale: statistică, commitment Merkle, porțile P1 / P2 / P3, anti-gaming. |
 
-- closure §10 și §15–§21;
-- câmpurile `openDependencies` și `notDecided` din registrul D-01…D-22.
+Verificarea: `node brain/tools/rc1.mjs check`. Gate-ul o rulează ca G15. Ea verifică:
+
+- registrul față de closure §10 și de registrul de decizii (text identic);
+- dispozițiile față de clase;
+- că nicio dependență NORMATIVE nu e închisă fără o decizie verbatim a operatorului;
+- trimiterile la specificație și la pachet;
+- matricea;
+- hash-ul politicii de praguri;
+- vectorii de test.
+
+## Starea
+
+- 19 dependențe NORMATIVE așteaptă decizia operatorului (Q-01…Q-20).
+- 38 ENGINEERING sunt închise prin specificație.
+- 7 EMPIRICAL au ruta de evidence specificată.
+- 7 OUT_OF_SCOPE sunt excluse, cu consecința pentru claim.
+- 16 au fost rezolvate înainte de RC1.
+
+RC1 se închide după ce operatorul decide sau amână explicit fiecare întrebare și după auditul ChatGPT.

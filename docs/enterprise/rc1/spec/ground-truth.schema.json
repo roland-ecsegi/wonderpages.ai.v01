@@ -1,0 +1,645 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "wonderpages.rc1.ground-truth/1",
+ "title": "WonderPages multidimensional ground truth (D-19 A–H) with versioned legacy projection",
+ "description": "Physical schema closing D-19-DEP-PHYSICAL-SCHEMA. One JSON object per case (JSONL). Used for adjudicated calibration / development cases and, held only by the custodian, for hidden acceptance cases. The schema itself contains no case. Spec: docs/enterprise/rc1/PRE-HARDENING-SPEC.md [S-GT-SCHEMA].",
+ "type": "object",
+ "required": [
+  "schema",
+  "caseId",
+  "datasetVersion",
+  "policyVersion",
+  "split",
+  "stimulus",
+  "expected",
+  "legacyProjection",
+  "provenance"
+ ],
+ "additionalProperties": false,
+ "properties": {
+  "schema": {
+   "const": "wonderpages.rc1.ground-truth/1"
+  },
+  "caseId": {
+   "type": "string",
+   "pattern": "^[A-Za-z0-9_-]{8,64}$",
+   "description": "Opaque id. For hidden cases it carries no semantic information (D-22 §36)."
+  },
+  "datasetVersion": {
+   "type": "string"
+  },
+  "policyVersion": {
+   "type": "string",
+   "description": "Policy corpus the ground truth is adjudicated against, e.g. 'D-01…D-22 + RC1-D-xx' with ledger head hashes."
+  },
+  "split": {
+   "enum": [
+    "calibration",
+    "development",
+    "independent-validation"
+   ]
+  },
+  "stimulus": {
+   "type": "object",
+   "required": [
+    "modality",
+    "scope",
+    "editions",
+    "ageBand",
+    "payload"
+   ],
+   "additionalProperties": false,
+   "properties": {
+    "modality": {
+     "enum": [
+      "text",
+      "visual",
+      "cross-modal"
+     ]
+    },
+    "scope": {
+     "enum": [
+      "Page",
+      "Book",
+      "Volume",
+      "Collection"
+     ]
+    },
+    "editions": {
+     "type": "array",
+     "minItems": 1,
+     "items": {
+      "enum": [
+       "EN",
+       "RO"
+      ]
+     },
+     "description": "Editions actually assessed (G). Two editions for fidelity cases."
+    },
+    "evaluatedEdition": {
+     "enum": [
+      "EN",
+      "RO"
+     ],
+     "description": "The edition whose properties are judged (age-fit, safety, …); for fidelity cases the target edition."
+    },
+    "ageBand": {
+     "enum": [
+      "3-4",
+      "5-6",
+      "7-8"
+     ]
+    },
+    "payload": {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "pages": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "required": [
+         "n"
+        ],
+        "additionalProperties": false,
+        "properties": {
+         "n": {
+          "type": "integer",
+          "minimum": 1
+         },
+         "text": {
+          "type": "object",
+          "additionalProperties": {
+           "type": "string"
+          }
+         },
+         "image": {
+          "$ref": "#/$defs/imageRef"
+         },
+         "scene": {
+          "type": "string",
+          "description": "Scene description: text about the intended image, never image evidence (D-18 §62)."
+         }
+        }
+       }
+      },
+      "assessment": {
+       "$ref": "#/$defs/assessmentUnderTest"
+      }
+     }
+    }
+   }
+  },
+  "expected": {
+   "type": "object",
+   "required": [
+    "findings",
+    "policyConsequences",
+    "publishingConsequence"
+   ],
+   "additionalProperties": false,
+   "properties": {
+    "findings": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/finding"
+     },
+     "description": "A: expected findings (present and explicitly absent). An empty array means: no finding expected in any jurisdiction relevant to the case."
+    },
+    "assessmentValidation": {
+     "oneOf": [
+      {
+       "type": "null"
+      },
+      {
+       "$ref": "#/$defs/assessmentValidation"
+      }
+     ],
+     "description": "C: only for cases about an assessment / evidence (D-18)."
+    },
+    "policyConsequences": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/policyConsequence"
+     },
+     "description": "D: consequence in each authoritative jurisdiction involved (one per jurisdiction, D-17)."
+    },
+    "publishingConsequence": {
+     "$ref": "#/$defs/publishingState",
+     "description": "E: final publishing consequence (conjunction of jurisdictions, D-17 §45)."
+    },
+    "linkedObservations": {
+     "type": "array",
+     "items": {
+      "type": "object",
+      "required": [
+       "underlyingIssue",
+       "findingRefs",
+       "authoritativeJurisdiction"
+      ],
+      "additionalProperties": false,
+      "properties": {
+       "underlyingIssue": {
+        "type": "string"
+       },
+       "findingRefs": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       "authoritativeJurisdiction": {
+        "$ref": "#/$defs/jurisdiction"
+       }
+      }
+     },
+     "description": "Same underlying defect observed by several mechanisms: one ground truth, one authoritative jurisdiction (D-17 §18, D-19 §68)."
+    },
+    "publishingReviewKind": {
+     "enum": [
+      "waivable",
+      "confirm-or-dismiss",
+      "not-applicable"
+     ],
+     "description": "reviewKind of the final publishing consequence when it is REVIEW_REQUIRED."
+    }
+   }
+  },
+  "d19Cells": {
+   "type": "array",
+   "items": {
+    "type": "string"
+   },
+   "description": "Ids of docs/enterprise/rc1/spec/coverage-matrix.json cells this case represents."
+  },
+  "d21": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "p1Opportunity": {
+     "type": "boolean",
+     "description": "True iff the expected publishing consequence is not auto-acceptable."
+    },
+    "p1Jurisdiction": {
+     "$ref": "#/$defs/jurisdiction"
+    },
+    "p2Opportunity": {
+     "type": "boolean",
+     "description": "True iff the expected state is confirmed non-waivable (BLOCKED_BY_POLICY, REPAIR_REQUIRED)."
+    },
+    "autoAcceptable": {
+     "type": "boolean",
+     "description": "True iff the expected publishing consequence is PASS, or PASS_WITH_ADVISORY without a required review (P3 denominator)."
+    }
+   }
+  },
+  "boundaryFamily": {
+   "type": "string",
+   "description": "Numeric or semantic boundary family the case probes (D-19 §51–§52), e.g. 'T07 7.0 vs 6.99', 'permission vs safety confirmation'."
+  },
+  "templateFamily": {
+   "type": "string",
+   "description": "Structural template family; template-family coverage ≠ domain coverage (D-19 §54)."
+  },
+  "legacyProjection": {
+   "type": "object",
+   "required": [
+    "projectionVersion",
+    "label"
+   ],
+   "additionalProperties": false,
+   "properties": {
+    "projectionVersion": {
+     "const": "rc1-legacy-projection/1"
+    },
+    "label": {
+     "enum": [
+      "positive",
+      "negative",
+      "not-applicable-for-binary-metric"
+     ]
+    },
+    "derivedFrom": {
+     "type": "string",
+     "description": "Always the expected publishing consequence and assessment validation of this record (derived, reproducible; D-19 §14)."
+    }
+   }
+  },
+  "provenance": {
+   "type": "object",
+   "required": [
+    "authorSource",
+    "briefVersion",
+    "adjudication"
+   ],
+   "additionalProperties": false,
+   "properties": {
+    "authorSource": {
+     "enum": [
+      "source-A-human",
+      "source-B-isolated-model",
+      "operator",
+      "implementation-provider",
+      "historical-gold"
+     ],
+     "description": "'implementation-provider' is allowed only for calibration / development cases, never for split = independent-validation (D-22)."
+    },
+    "authorRef": {
+     "type": "string",
+     "description": "Role or pseudonymous audit identity; for model authors: provider/model where available."
+    },
+    "briefVersion": {
+     "type": [
+      "string",
+      "null"
+     ],
+     "description": "Sanitized brief version + sha256 known to the author (null for historical cases)."
+    },
+    "createdAt": {
+     "type": "string"
+    },
+    "isolationAttestation": {
+     "type": "string",
+     "description": "Required for source-B-isolated-model."
+    },
+    "operatorEdits": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "adjudication": {
+     "type": "array",
+     "minItems": 1,
+     "items": {
+      "type": "object",
+      "required": [
+       "by",
+       "at",
+       "decision"
+      ],
+      "additionalProperties": false,
+      "properties": {
+       "by": {
+        "type": "string"
+       },
+       "at": {
+        "type": "string"
+       },
+       "decision": {
+        "type": "string"
+       },
+       "notes": {
+        "type": "string"
+       }
+      }
+     }
+    },
+    "authorOperatorDisagreement": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     },
+     "description": "Kept, never deleted (D-22 §24)."
+    },
+    "factualSources": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     },
+     "description": "Factual verification sources (science), separate from policy consequence (D-22 §25)."
+    },
+    "secondLook": {
+     "enum": [
+      "done",
+      "not-done-declared",
+      "not-required"
+     ]
+    },
+    "contaminationScreen": {
+     "enum": [
+      "pending",
+      "passed",
+      "excluded"
+     ]
+    },
+    "commitment": {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "root": {
+       "type": "string"
+      },
+      "leafIndex": {
+       "type": "integer"
+      }
+     }
+    }
+   }
+  }
+ },
+ "allOf": [
+  {
+   "if": {
+    "properties": {
+     "split": {
+      "const": "independent-validation"
+     }
+    }
+   },
+   "then": {
+    "properties": {
+     "provenance": {
+      "properties": {
+       "authorSource": {
+        "not": {
+         "enum": [
+          "implementation-provider",
+          "historical-gold"
+         ]
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ ],
+ "$defs": {
+  "jurisdiction": {
+   "enum": [
+    "physical-safety",
+    "content-policy",
+    "age-fit",
+    "science",
+    "localization-fidelity",
+    "quality",
+    "assessment-validation"
+   ]
+  },
+  "publishingState": {
+   "enum": [
+    "PASS",
+    "PASS_WITH_ADVISORY",
+    "REVIEW_REQUIRED",
+    "REPAIR_REQUIRED",
+    "BLOCKED_BY_POLICY",
+    "ASSESSMENT_INVALID",
+    "ASSESSMENT_VALIDATION_REQUIRED"
+   ]
+  },
+  "severity": {
+   "enum": [
+    "advisory",
+    "material",
+    "severe",
+    "not-applicable"
+   ],
+   "description": "B: canonical cross-axis severity; an axis may refine it with severityDetail. 'not-applicable' where the concept does not apply (D-19 §B)."
+  },
+  "imageRef": {
+   "type": "object",
+   "required": [
+    "sha256"
+   ],
+   "additionalProperties": false,
+   "properties": {
+    "sha256": {
+     "type": "string",
+     "pattern": "^[0-9a-f]{64}$"
+    },
+    "origin": {
+     "enum": [
+      "independent-author",
+      "custodian-obtained",
+      "historical"
+     ]
+    }
+   }
+  },
+  "location": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "page": {
+     "type": "integer"
+    },
+    "edition": {
+     "enum": [
+      "EN",
+      "RO"
+     ]
+    },
+    "layer": {
+     "enum": [
+      "text",
+      "image",
+      "scene",
+      "title",
+      "blurb",
+      "cover-text"
+     ]
+    },
+    "span": {
+     "type": "string"
+    }
+   }
+  },
+  "finding": {
+   "type": "object",
+   "required": [
+    "id",
+    "present",
+    "family",
+    "jurisdiction"
+   ],
+   "additionalProperties": false,
+   "properties": {
+    "id": {
+     "type": "string"
+    },
+    "present": {
+     "type": "boolean"
+    },
+    "family": {
+     "type": "string",
+     "description": "Finding family, e.g. 'hazard.fire', 'stereotype', 'agefit.center-embedding', 'fidelity.negation'. Taxonomy: [S-TAX-*]."
+    },
+    "code": {
+     "type": "string",
+     "description": "Expected reason code where applicable; codes are evidence, not verdicts."
+    },
+    "jurisdiction": {
+     "$ref": "#/$defs/jurisdiction"
+    },
+    "severity": {
+     "$ref": "#/$defs/severity"
+    },
+    "severityDetail": {
+     "type": "string",
+     "description": "Axis-specific level, e.g. D-06 consequence scale 'meaningful', hazard class 'B'."
+    },
+    "confirmation": {
+     "enum": [
+      "candidate",
+      "confirmed",
+      "dismissed-false-positive",
+      "repaired",
+      "revalidated",
+      "not-applicable"
+     ],
+     "description": "D-14 §1; required for localization-fidelity and science."
+    },
+    "scope": {
+     "enum": [
+      "Page",
+      "Book",
+      "Volume",
+      "Collection"
+     ]
+    },
+    "location": {
+     "$ref": "#/$defs/location"
+    },
+    "modality": {
+     "enum": [
+      "text",
+      "visual",
+      "cross-modal"
+     ]
+    }
+   }
+  },
+  "policyConsequence": {
+   "type": "object",
+   "required": [
+    "jurisdiction",
+    "state"
+   ],
+   "additionalProperties": false,
+   "properties": {
+    "jurisdiction": {
+     "$ref": "#/$defs/jurisdiction"
+    },
+    "state": {
+     "$ref": "#/$defs/publishingState"
+    },
+    "reasonCodes": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "reviewKind": {
+     "enum": [
+      "waivable",
+      "confirm-or-dismiss",
+      "not-applicable"
+     ],
+     "description": "For REVIEW_REQUIRED: waivable (operator may accept unchanged with justification) or confirm-or-dismiss (operator only confirms → REPAIR_REQUIRED or dismisses as false positive; fidelity D-14 §18, science D-15 §30). How it counts in D-21 P2: Q-20."
+    }
+   }
+  },
+  "assessmentValidation": {
+   "type": "object",
+   "required": [
+    "state"
+   ],
+   "additionalProperties": false,
+   "properties": {
+    "state": {
+     "enum": [
+      "VALIDATED",
+      "UNVERIFIED",
+      "INVALID"
+     ]
+    },
+    "perCriterion": {
+     "type": "object",
+     "additionalProperties": {
+      "enum": [
+       "VALIDATED",
+       "UNVERIFIED",
+       "INVALID"
+      ]
+     }
+    },
+    "reasons": {
+     "type": "array",
+     "items": {
+      "enum": [
+       "EVIDENCE_ABSENT",
+       "EVIDENCE_FABRICATED",
+       "EVIDENCE_NOT_CITABLE",
+       "EVIDENCE_LOCATION_MISMATCH",
+       "EVIDENCE_WRONG_EDITION",
+       "EVIDENCE_WRONG_LAYER",
+       "EVIDENCE_STALE_HASH",
+       "EVIDENCE_IRRELEVANT",
+       "EVIDENCE_CONTRADICTS_CLAIM",
+       "EVIDENCE_FALSE_ARTIFACT_CLAIM",
+       "EVIDENCE_INSUFFICIENT_FOR_CLAIM",
+       "EVIDENCE_INSUFFICIENT_FOR_SCORE",
+       "EVIDENCE_REUSED",
+       "EVIDENCE_REUSED_UNSUPPORTED",
+       "EVIDENCE_JURISDICTION_MISMATCH"
+      ]
+     }
+    }
+   }
+  },
+  "assessmentUnderTest": {
+   "type": "object",
+   "description": "For D-18 cases: the critic assessment whose validity is judged (criterion, score as canonical decimal string, rationale, evidence with locations, issues).",
+   "additionalProperties": true,
+   "properties": {
+    "criteria": {
+     "type": "array"
+    },
+    "artifactSha256": {
+     "type": "string"
+    }
+   }
+  }
+ }
+}

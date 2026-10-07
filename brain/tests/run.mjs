@@ -136,6 +136,20 @@ try {
     const r3 = spawnSync(process.execPath, ['brain/tools/c1.mjs', 'bootstrap', `--bridge=${tmp}`, '--no-fetch'], { cwd: C, encoding: 'utf8', env: { ...process.env, ANTHROPIC_API_KEY: 'x' } });
     assert.equal(r3.status, 1); assert.match(r3.stdout, /credential variable present \(ANTHROPIC_API_KEY\)/);
   });
+  t('G15 RC1 register: consistent on HEAD; a missing dependency, an unbacked NORMATIVE closure, a tampered threshold and a missing spec marker each FAIL', () => {
+    const reg = 'docs/enterprise/rc1/DEPENDENCY-REGISTER.json'; if (!fs.existsSync(path.join(C, reg))) return;
+    assert.notEqual(gate().checks.find(c => c.id.startsWith('G15')).status, 'FAIL');
+    editJSON(reg, d => { d.dependencies = d.dependencies.filter(x => x.id !== 'D-22-DEP-SOURCE-B'); d.counts.total--; d.counts.byClass.NORMATIVE--; d.counts.byDisposition.OPERATOR_DECISION_REQUIRED--; }); commit('drop dep');
+    let r = gate(); assert.ok(failed(r, 'G15')); assert.match(JSON.stringify(r), /missing from the register: D-22-DEP-SOURCE-B/); reset();
+    editJSON(reg, d => { const x = d.dependencies.find(y => y.id === 'D-01-DEP-EXPLOSIVES'); x.disposition = 'CLOSED_BY_OPERATOR_DECISION'; d.counts.byDisposition.OPERATOR_DECISION_REQUIRED--; d.counts.byDisposition.CLOSED_BY_OPERATOR_DECISION = 1; }); commit('self-closed');
+    r = gate(); assert.ok(failed(r, 'G15')); assert.match(JSON.stringify(r), /without a verbatim operator decision/); reset();
+    editJSON(reg, d => { d.dependencies.find(y => y.id === 'D-01-DEP-EXPLOSIVES').class = 'ENGINEERING'; }); commit('reclass');
+    assert.ok(failed(gate(), 'G15')); reset();
+    editJSON('docs/enterprise/rc1/spec/threshold-policy.rc1.json', p => { p.gates.P3.maxObservedRate = 0.2; }); commit('relax');
+    r = gate(); assert.ok(failed(r, 'G15')); assert.match(JSON.stringify(r), /canonicalSha256/); reset();
+    edit('docs/enterprise/rc1/PRE-HARDENING-SPEC.md', s => s.replace('## [S-INVALID-RUN]', '## INVALID-RUN')); commit('marker');
+    r = gate(); assert.ok(failed(r, 'G15')); assert.match(JSON.stringify(r), /\[S-INVALID-RUN\] not found/);
+  });
   t('application code does not import the brain', () => { const r = sh(C, 'git', 'grep', '-l', '-E', "from ['\"][./]*brain/|require\\(['\"][./]*brain/", '--', 'server', 'public', 'scripts', 'tests'); assert.equal(r.stdout.trim(), ''); });
   console.log(`\n${passed} brain self-tests passed`);
 } catch (e) { console.error('✖ ' + (e.stack || e)); process.exitCode = 1; }

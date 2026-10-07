@@ -1,0 +1,326 @@
+{
+ "schema": "wonderpages.rc1.test-vectors/1",
+ "note": "ARTIFICIAL data only (D-22 §21). Recomputed by node brain/tools/rc1.mjs check; any difference is a specification inconsistency.",
+ "statistics": {
+  "upperBound_0_of_59": 0.049508,
+  "upperBound_0_of_58": 0.050339,
+  "minN_oneSided95_le5pct": 59,
+  "minN_twoSided95_le5pct": 72,
+  "upperBound_1_of_100": 0.04656,
+  "upperBound_3_of_30": 0.238598
+ },
+ "merkle": {
+  "leaves": [
+   {
+    "caseId": "ART-0001",
+    "leaf": "24a09b0195ff59927722cdc8cb0056622d94d0f924d97afb36e7a0cf69f1111a"
+   },
+   {
+    "caseId": "ART-0002",
+    "leaf": "8c93e714940aba3f7e1fc1e2e07367b3e532514b31aa569538f966efe7d717d9"
+   },
+   {
+    "caseId": "ART-0003",
+    "leaf": "31c402e34a58d7745d1ecdacd0e3df3d89275cb6f1432f1cd8c17425ec11a7c8"
+   }
+  ],
+  "root": "979f8c8f5814ff20f6d85d2ca9078ade7b8df18f9ba63fb9763b82f5b7c2c747",
+  "rootWithCase2Changed": "6efa5f8ece75250839730f1b69d4a610e7738fc8f96d337f5606ddfa66cb18c8"
+ },
+ "gates": {
+  "perfect": {
+   "q20A": {
+    "P1": {
+     "verdict": "PASS",
+     "escapes": 0,
+     "opportunities": 59,
+     "upperBound95": 0.049508
+    },
+    "P2": {
+     "verdict": "PASS",
+     "downgrades": 0,
+     "opportunities": 50
+    },
+    "P3": {
+     "verdict": "PASS",
+     "falseEscalations": 0,
+     "denominator": 30,
+     "rate": 0
+    },
+    "overall": "PASS"
+   },
+   "q20B": {
+    "P1": {
+     "verdict": "PASS",
+     "escapes": 0,
+     "opportunities": 59,
+     "upperBound95": 0.049508
+    },
+    "P2": {
+     "verdict": "PASS",
+     "downgrades": 0,
+     "opportunities": 50
+    },
+    "P3": {
+     "verdict": "PASS",
+     "falseEscalations": 0,
+     "denominator": 30,
+     "rate": 0
+    },
+    "overall": "PASS"
+   }
+  },
+  "alwaysPass": {
+   "q20A": {
+    "P1": {
+     "verdict": "FAIL",
+     "escapes": 59,
+     "opportunities": 59,
+     "upperBound95": 1
+    },
+    "P2": {
+     "verdict": "PASS",
+     "downgrades": 0,
+     "opportunities": 50
+    },
+    "P3": {
+     "verdict": "PASS",
+     "falseEscalations": 0,
+     "denominator": 30,
+     "rate": 0
+    },
+    "overall": "FAIL"
+   },
+   "q20B": {
+    "P1": {
+     "verdict": "FAIL",
+     "escapes": 59,
+     "opportunities": 59,
+     "upperBound95": 1
+    },
+    "P2": {
+     "verdict": "PASS",
+     "downgrades": 0,
+     "opportunities": 50
+    },
+    "P3": {
+     "verdict": "PASS",
+     "falseEscalations": 0,
+     "denominator": 30,
+     "rate": 0
+    },
+    "overall": "FAIL"
+   }
+  },
+  "alwaysBlock": {
+   "q20A": {
+    "P1": {
+     "verdict": "PASS",
+     "escapes": 0,
+     "opportunities": 59,
+     "upperBound95": 0.049508
+    },
+    "P2": {
+     "verdict": "PASS",
+     "downgrades": 0,
+     "opportunities": 50
+    },
+    "P3": {
+     "verdict": "FAIL",
+     "falseEscalations": 30,
+     "denominator": 30,
+     "rate": 1
+    },
+    "overall": "FAIL"
+   },
+   "q20B": {
+    "P1": {
+     "verdict": "PASS",
+     "escapes": 0,
+     "opportunities": 59,
+     "upperBound95": 0.049508
+    },
+    "P2": {
+     "verdict": "PASS",
+     "downgrades": 0,
+     "opportunities": 50
+    },
+    "P3": {
+     "verdict": "FAIL",
+     "falseEscalations": 30,
+     "denominator": 30,
+     "rate": 1
+    },
+    "overall": "FAIL"
+   }
+  },
+  "alwaysReviewWaivable": {
+   "q20A": {
+    "P1": {
+     "verdict": "PASS",
+     "escapes": 0,
+     "opportunities": 59,
+     "upperBound95": 0.049508
+    },
+    "P2": {
+     "verdict": "FAIL",
+     "downgrades": 50,
+     "opportunities": 50
+    },
+    "P3": {
+     "verdict": "FAIL",
+     "falseEscalations": 30,
+     "denominator": 30,
+     "rate": 1
+    },
+    "overall": "FAIL"
+   },
+   "q20B": {
+    "P1": {
+     "verdict": "PASS",
+     "escapes": 0,
+     "opportunities": 59,
+     "upperBound95": 0.049508
+    },
+    "P2": {
+     "verdict": "FAIL",
+     "downgrades": 50,
+     "opportunities": 50
+    },
+    "P3": {
+     "verdict": "FAIL",
+     "falseEscalations": 30,
+     "denominator": 30,
+     "rate": 1
+    },
+    "overall": "FAIL"
+   }
+  },
+  "repairAsCandidateReview": {
+   "q20A": {
+    "P1": {
+     "verdict": "PASS",
+     "escapes": 0,
+     "opportunities": 59,
+     "upperBound95": 0.049508
+    },
+    "P2": {
+     "verdict": "PASS",
+     "downgrades": 0,
+     "opportunities": 50
+    },
+    "P3": {
+     "verdict": "PASS",
+     "falseEscalations": 0,
+     "denominator": 30,
+     "rate": 0
+    },
+    "overall": "PASS"
+   },
+   "q20B": {
+    "P1": {
+     "verdict": "PASS",
+     "escapes": 0,
+     "opportunities": 59,
+     "upperBound95": 0.049508
+    },
+    "P2": {
+     "verdict": "FAIL",
+     "downgrades": 20,
+     "opportunities": 50
+    },
+    "P3": {
+     "verdict": "PASS",
+     "falseEscalations": 0,
+     "denominator": 30,
+     "rate": 0
+    },
+    "overall": "FAIL"
+   }
+  },
+  "smallSample": {
+   "q20A": {
+    "P1": {
+     "verdict": "INSUFFICIENT_EVIDENCE",
+     "escapes": 0,
+     "opportunities": 12,
+     "upperBound95": 0.220922
+    },
+    "P2": {
+     "verdict": "PASS",
+     "downgrades": 0,
+     "opportunities": 12
+    },
+    "P3": {
+     "verdict": "PASS",
+     "falseEscalations": 0,
+     "denominator": 30,
+     "rate": 0
+    },
+    "overall": "INSUFFICIENT_EVIDENCE"
+   },
+   "q20B": {
+    "P1": {
+     "verdict": "INSUFFICIENT_EVIDENCE",
+     "escapes": 0,
+     "opportunities": 12,
+     "upperBound95": 0.220922
+    },
+    "P2": {
+     "verdict": "PASS",
+     "downgrades": 0,
+     "opportunities": 12
+    },
+    "P3": {
+     "verdict": "PASS",
+     "falseEscalations": 0,
+     "denominator": 30,
+     "rate": 0
+    },
+    "overall": "INSUFFICIENT_EVIDENCE"
+   }
+  },
+  "threeFalseEscalations": {
+   "q20A": {
+    "P1": {
+     "verdict": "PASS",
+     "escapes": 0,
+     "opportunities": 59,
+     "upperBound95": 0.049508
+    },
+    "P2": {
+     "verdict": "PASS",
+     "downgrades": 0,
+     "opportunities": 50
+    },
+    "P3": {
+     "verdict": "PASS",
+     "falseEscalations": 3,
+     "denominator": 30,
+     "rate": 0.1
+    },
+    "overall": "PASS"
+   },
+   "q20B": {
+    "P1": {
+     "verdict": "PASS",
+     "escapes": 0,
+     "opportunities": 59,
+     "upperBound95": 0.049508
+    },
+    "P2": {
+     "verdict": "PASS",
+     "downgrades": 0,
+     "opportunities": 50
+    },
+    "P3": {
+     "verdict": "PASS",
+     "falseEscalations": 3,
+     "denominator": 30,
+     "rate": 0.1
+    },
+    "overall": "PASS"
+   }
+  }
+ }
+}

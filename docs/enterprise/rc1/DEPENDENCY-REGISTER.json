@@ -1,0 +1,1730 @@
+{
+ "schema": "wonderpages.rc1.dependency-register/1",
+ "phase": "RC1-POLICY-DEPENDENCY-CLOSURE",
+ "version": 1,
+ "sources": [
+  "docs/enterprise/records/GOLD-V2-POLICY-CLOSURE.md §10",
+  "evaluation/gold-v2-policy/decisions.jsonl (openDependencies, verbatim)"
+ ],
+ "rule": "Every dependency has exactly one class and one disposition. NORMATIVE dependencies close only by a verbatim operator decision (evaluation/rc1-policy/decisions.jsonl) or an explicit operator deferral; Claude and ChatGPT only recommend. ENGINEERING closes by specification, EMPIRICAL by a specified evidence route (still NOT YET EMPIRICALLY VALIDATED), OUT_OF_SCOPE by an explicit exclusion and its consequence for the RC1 claim. Checked by node brain/tools/rc1.mjs check (gate G15).",
+ "classes": [
+  "NORMATIVE",
+  "ENGINEERING",
+  "EMPIRICAL",
+  "OUT_OF_SCOPE",
+  "RESOLVED_BEFORE_RC1"
+ ],
+ "dispositions": [
+  "OPERATOR_DECISION_REQUIRED",
+  "CLOSED_BY_OPERATOR_DECISION",
+  "DEFERRED_BY_OPERATOR",
+  "CLOSED_BY_SPECIFICATION",
+  "EVIDENCE_ROUTE_SPECIFIED",
+  "EXCLUDED_FROM_RC1",
+  "RESOLVED_BY_EXISTING_DECISION"
+ ],
+ "blockKinds": [
+  "SANITIZED_BRIEF",
+  "COVERAGE_MATRIX",
+  "HIDDEN_SET_GROUND_TRUTH",
+  "SH2_IMPLEMENTATION",
+  "RC1_CLAIM"
+ ],
+ "counts": {
+  "total": 87,
+  "byClass": {
+   "NORMATIVE": 19,
+   "EMPIRICAL": 7,
+   "ENGINEERING": 38,
+   "OUT_OF_SCOPE": 7,
+   "RESOLVED_BEFORE_RC1": 16
+  },
+  "byDisposition": {
+   "OPERATOR_DECISION_REQUIRED": 19,
+   "EVIDENCE_ROUTE_SPECIFIED": 7,
+   "CLOSED_BY_SPECIFICATION": 38,
+   "EXCLUDED_FROM_RC1": 7,
+   "RESOLVED_BY_EXISTING_DECISION": 16
+  }
+ },
+ "dependencies": [
+  {
+   "id": "D-01-DEP-EXPLOSIVES",
+   "owner": "D-01",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Explozivii (bombe, grenade, dinamită, artificii?) au un hazard propriu de siguranță chiar fără folosire violentă explicită? Politica existentă (SAFETY.md: „arme” → BLOCK) nu îl definește separat.",
+    "status": "OPERATOR_DECISION_REQUIRED (separat de D-01; nu e inventată acum)"
+   },
+   "class": "NORMATIVE",
+   "components": [],
+   "disposition": "OPERATOR_DECISION_REQUIRED",
+   "blocks": [
+    "SANITIZED_BRIEF",
+    "COVERAGE_MATRIX",
+    "HIDDEN_SET_GROUND_TRUTH",
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": true,
+   "rationale": "Registrul o marchează OPERATOR_DECISION_REQUIRED. D-01 interzice explicit deducerea politicii pentru explozivi; fără ea, cazurile cu explozivi nu pot fi adjudecate.",
+   "packageRef": "Q-01"
+  },
+  {
+   "id": "D-01-DEP-IMPLICIT-THREAT",
+   "owner": "D-01",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Amenințarea implicită/ambiguă cu o armă (P-S15, „aimed at”, „fired at” fără obiect).",
+    "status": "OPERATOR_DECISION_REQUIRED (separat de D-01)"
+   },
+   "class": "NORMATIVE",
+   "components": [],
+   "disposition": "OPERATOR_DECISION_REQUIRED",
+   "blocks": [
+    "SANITIZED_BRIEF",
+    "COVERAGE_MATRIX",
+    "HIDDEN_SET_GROUND_TRUTH",
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": true,
+   "rationale": "Registrul o marchează OPERATOR_DECISION_REQUIRED. D-01 spune că aceste cazuri nu se reclasifică automat; consecința (PASS / REVIEW / BLOCK) e o alegere de politică.",
+   "packageRef": "Q-02"
+  },
+  {
+   "id": "D-02-DEP-VIOLENCE-WITHOUT-OBJECT",
+   "owner": "D-02",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Politica generală pentru violența fără obiect (lovituri, îmbrânceli) — D-02 a decis doar jucăria folosită pentru vătămare.",
+    "status": "OPERATOR_DECISION_REQUIRED (separat)"
+   },
+   "class": "NORMATIVE",
+   "components": [],
+   "disposition": "OPERATOR_DECISION_REQUIRED",
+   "blocks": [
+    "SANITIZED_BRIEF",
+    "COVERAGE_MATRIX",
+    "HIDDEN_SET_GROUND_TRUTH",
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": true,
+   "rationale": "Registrul o marchează OPERATOR_DECISION_REQUIRED. D-02 a decis numai jucăria folosită pentru a răni; lovitura sau îmbrânceala fără obiect nu are consecință decisă.",
+   "packageRef": "Q-03"
+  },
+  {
+   "id": "D-02-DEP-AGE-DIFFERENTIATION",
+   "owner": "D-02",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "O eventuală diferențiere pe benzi de vârstă pentru jucării-armă trebuie demonstrată și decisă separat (azi: aceeași politică pe toate benzile).",
+    "status": "deschisă doar dacă apare o nevoie demonstrată"
+   },
+   "class": "EMPIRICAL",
+   "components": [],
+   "disposition": "EVIDENCE_ROUTE_SPECIFIED",
+   "blocks": [],
+   "visualCrossModal": false,
+   "rationale": "Statusul din registru o condiționează de o nevoie demonstrată; nu există un astfel de evidence. Politica decisă (aceeași pe toate benzile) rămâne în vigoare.",
+   "specRefs": [
+    "S-EMPIRICAL"
+   ],
+   "evidenceRoute": "Se redeschide numai dacă evidence adjudecat arată că banda schimbă adevărul de siguranță pentru jucăriile-armă. Până atunci D-02 §7 se aplică identic pe toate benzile și matricea D-19 nu cere stratificare pe bandă pentru acest adevăr (D-19 §33)."
+  },
+  {
+   "id": "D-03-DEP-GORE-DEATH",
+   "owner": "D-03",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Politica generală pentru sânge/gore/moarte (poate adăuga motive și un verdict cel puțin la fel de sever peste D-03).",
+    "status": "OPERATOR_DECISION_REQUIRED (separat; regula gore existentă rămâne până atunci)"
+   },
+   "class": "NORMATIVE",
+   "components": [],
+   "disposition": "OPERATOR_DECISION_REQUIRED",
+   "blocks": [
+    "SANITIZED_BRIEF",
+    "COVERAGE_MATRIX",
+    "HIDDEN_SET_GROUND_TRUTH",
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": true,
+   "rationale": "Registrul o marchează OPERATOR_DECISION_REQUIRED. Până la decizie rămâne regula gore existentă din SAFETY.md, care nu separă sângele grafic, rana minoră și moartea.",
+   "packageRef": "Q-04"
+  },
+  {
+   "id": "D-03-DEP-AGE-FIT-CONFLICT",
+   "owner": "D-03",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Cum evaluează age-fit intensitatea, frica și durata conflictului pe benzi (axă separată de siguranță/politică).",
+    "status": "legată de D-11 / D-14 (decizii separate)"
+   },
+   "class": "ENGINEERING",
+   "components": [
+    "EMPIRICAL"
+   ],
+   "disposition": "CLOSED_BY_SPECIFICATION",
+   "blocks": [
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": true,
+   "rationale": "Arhitectura e decisă: D-11 (factori: intensitate, durată, recuperare) și D-14 (advisory → PASS, material → REVIEW, fără BLOCK de age-fit). Rămân profilul de factori (specificat) și pragurile pe bandă (empirice, prin D-11-DEP-BAND-THRESHOLD-CALIBRATION).",
+   "specRefs": [
+    "S-TAX-AGEFIT",
+    "S-EMPIRICAL"
+   ]
+  },
+  {
+   "id": "D-04-DEP-HAZARD-TAXONOMY",
+   "owner": "D-04",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Clasificarea fiecărei familii de hazard în A (condițional) / B (cere control) / C (periculos indiferent de permisiune) și condiția de siguranță necesară pentru fiecare — D-04 a stabilit principiul, nu taxonomia completă.",
+    "status": "deschisă (de construit în Semantic Hardening #2; decizii punctuale ale operatorului unde e editorial)"
+   },
+   "class": "ENGINEERING",
+   "components": [],
+   "disposition": "CLOSED_BY_SPECIFICATION",
+   "blocks": [
+    "SH2_IMPLEMENTATION",
+    "COVERAGE_MATRIX"
+   ],
+   "visualCrossModal": true,
+   "rationale": "D-04 / D-05 / D-06 decid definițiile A / B / C și logica condiției de siguranță. Registrul spune: „de construit în Semantic Hardening #2; decizii punctuale ale operatorului unde e editorial”. RC1 specifică structura (familie, clasă, condiție cerută, dovadă) și regula de adjudecare caz cu caz. Clasificarea completă pe familii rămâne în SH#2.",
+   "specRefs": [
+    "S-TAX-HAZARD"
+   ]
+  },
+  {
+   "id": "D-05-DEP-SUFFICIENT-CONTROL",
+   "owner": "D-05",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Standardul de „control suficient” pe tipuri de activitate (ce dovadă în text/imagine arată că mecanismul e neutralizat).",
+    "status": "deschisă (Semantic Hardening #2; decizii punctuale ale operatorului unde e editorial)"
+   },
+   "class": "ENGINEERING",
+   "components": [],
+   "disposition": "CLOSED_BY_SPECIFICATION",
+   "blocks": [
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": true,
+   "rationale": "D-05 decide cele trei rezultate (neutralizat → poate PASS; relevant dar incert → REVIEW; irelevant / insuficient → verdictul hazardului). Rămâne modelul de dovadă pentru „control suficient”. Registrul îl trimite în SH#2, cu decizii punctuale ale operatorului unde e editorial.",
+   "specRefs": [
+    "S-TAX-HAZARD"
+   ]
+  },
+  {
+   "id": "D-06-DEP-SEVERITY-TAXONOMY",
+   "owner": "D-06",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "SEVERITY / CONSEQUENCE TAXONOMY: no consequence / near miss / minor-reversible / meaningful / severe / irreversible-catastrophic, după mecanism, testabilă și cross-modal — de definit înainte de implementarea completă.",
+    "status": "deschisă (Semantic Hardening #2)"
+   },
+   "class": "NORMATIVE",
+   "components": [
+    "ENGINEERING"
+   ],
+   "disposition": "OPERATOR_DECISION_REQUIRED",
+   "blocks": [
+    "SANITIZED_BRIEF",
+    "HIDDEN_SET_GROUND_TRUTH",
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": true,
+   "rationale": "Scala e decisă de D-06 §18 (fără consecință / near miss / minor-reversibil / semnificativ / sever / ireversibil-catastrofal). D-06 decide BLOCK pentru „consecință gravă sau ireversibilă” și REVIEW pentru „minor + lecție” (A / B). Consecința nivelului „semnificativ” (meaningful harm) nu e decisă.",
+   "packageRef": "Q-05"
+  },
+  {
+   "id": "D-06-DEP-CAUTIONARY-AGE-FIT",
+   "owner": "D-06",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Pragurile finale age-fit pentru povești-avertisment pe benzi (claritate, imitabilitate, intensitate, izolare vizuală).",
+    "status": "deschisă (legată de D-11 / D-14)"
+   },
+   "class": "EMPIRICAL",
+   "components": [
+    "ENGINEERING"
+   ],
+   "disposition": "EVIDENCE_ROUTE_SPECIFIED",
+   "blocks": [
+    "COVERAGE_MATRIX",
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": true,
+   "rationale": "Mecanismul e decis (D-06 §20 + D-14). Lipsesc numai pragurile, iar acestea se pot stabili doar pe evidence.",
+   "specRefs": [
+    "S-TAX-AGEFIT",
+    "S-EMPIRICAL"
+   ],
+   "evidenceRoute": "Pragurile pe bandă se calibrează pe cazuri de poveste-avertisment adjudecate, stratificate pe 3–4 / 5–6 / 7–8. Factorii sunt cei din D-06 §20; consecința urmează D-14 (advisory → PASS, material → REVIEW)."
+  },
+  {
+   "id": "D-06-DEP-MULTILEVEL-EVALUATION",
+   "owner": "D-06",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Modelarea evaluării pe niveluri Page → Book → Volume → Collection (findings de pagină păstrate, interpretare de carte, normalizare la volum/colecție) în porțile existente.",
+    "status": "deschisă (Semantic Hardening #2)"
+   },
+   "class": "ENGINEERING",
+   "components": [],
+   "disposition": "CLOSED_BY_SPECIFICATION",
+   "blocks": [
+    "SH2_IMPLEMENTATION",
+    "RC1_CLAIM"
+   ],
+   "visualCrossModal": false,
+   "rationale": "Principiul Page → Book → Volume → Collection e decis (D-06 §24, D-14 §38–43). Rămâne modelul de agregare în porți (specificat). Nivelurile incluse în claim-ul RC1 sunt o întrebare separată (Q-17).",
+   "packageRef": "Q-17",
+   "specRefs": [
+    "S-MULTILEVEL"
+   ]
+  },
+  {
+   "id": "D-07-DEP-CONTROLLED-LOCATION-PAIR",
+   "owner": "D-07",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Pereche controlată forest ≡ bush (doar locul variază: actor, acțiune, aliment, descriptori, sintaxă, bandă identice) pentru testarea ulterioară; nu în setul rezervat actual.",
+    "status": "deschisă (Semantic Hardening #2 / testare)"
+   },
+   "class": "ENGINEERING",
+   "components": [],
+   "disposition": "CLOSED_BY_SPECIFICATION",
+   "blocks": [
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": false,
+   "rationale": "D-07 §15 descrie complet perechea controlată. E o cerință de design pentru corpusul de dezvoltare SH#2, nu pentru setul ascuns.",
+   "specRefs": [
+    "S-DEV-CORPUS"
+   ]
+  },
+  {
+   "id": "D-07-DEP-ENVIRONMENTAL-HAZARDS",
+   "owner": "D-07",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Politica generală pentru hazardurile de mediu (proprietăți fizice: adâncime, curent, înălțime, suprafață) și extragerea lor din text/imagine.",
+    "status": "deschisă"
+   },
+   "class": "NORMATIVE",
+   "components": [
+    "ENGINEERING"
+   ],
+   "disposition": "OPERATOR_DECISION_REQUIRED",
+   "blocks": [
+    "SANITIZED_BRIEF",
+    "COVERAGE_MATRIX",
+    "HIDDEN_SET_GROUND_TRUTH",
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": true,
+   "rationale": "D-07 decide principiul (locul nu e verdict; proprietățile fizice contează). „Politica generală pentru hazardurile de mediu” e deschisă. Rămâne de stabilit dacă apa, înălțimea, vremea etc. intră în cadrul A / B / C al D-04…D-06 sau au o politică proprie.",
+   "packageRef": "Q-06"
+  },
+  {
+   "id": "D-07-DEP-IDENTITY-CONFIDENCE",
+   "owner": "D-07",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Cum se stabilește încrederea în identitate (narator/canon vs presupunerea personajului vs ambiguu) în mod testabil.",
+    "status": "deschisă (Semantic Hardening #2)"
+   },
+   "class": "ENGINEERING",
+   "components": [],
+   "disposition": "CLOSED_BY_SPECIFICATION",
+   "blocks": [
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": false,
+   "rationale": "D-07 §5–§9 decid consecințele: identitate stabilită de narator → fără hazard prin loc; presupusă de copil → condiția D-04; ambiguă → REVIEW. Rămâne reprezentarea testabilă (specificată).",
+   "specRefs": [
+    "S-TAX-ENV"
+   ]
+  },
+  {
+   "id": "D-08-DEP-STEREOTYPE-TARGET-TAXONOMY",
+   "owner": "D-08",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "STEREOTYPE_TARGET_TAXONOMY: ce constituie țintă de grup/identitate; stereotip vs descriere factuală vs context relevant; severitate; context; eventuale diferențe de politică.",
+    "status": "deschisă (de definit înainte de implementarea completă; fără listă improvizată)"
+   },
+   "class": "NORMATIVE",
+   "components": [],
+   "disposition": "OPERATOR_DECISION_REQUIRED",
+   "blocks": [
+    "SANITIZED_BRIEF",
+    "COVERAGE_MATRIX",
+    "HIDDEN_SET_GROUND_TRUTH",
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": true,
+   "rationale": "D-08 cere explicit o taxonomie definită înainte de implementare, „fără listă improvizată”. Ea trebuie să fixeze ce e țintă de grup / identitate, diferența stereotip / descriere factuală, severitatea și eventualele diferențe de politică. Acestea sunt alegeri de politică.",
+   "packageRef": "Q-07"
+  },
+  {
+   "id": "D-08-DEP-CONTENT-POLICY-LAYER",
+   "owner": "D-08",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Stratul CONTENT / CHILD-SAFETY POLICY distinct de siguranța fizică/imitabilă: arhitectura porților, deblocabilitatea REVIEW, afișarea în UI, aplicarea și la alte reguli de conținut (insulte, frică etc.).",
+    "status": "deschisă (Semantic Hardening #2; D-10, D-11 pot depinde de ea)"
+   },
+   "class": "ENGINEERING",
+   "components": [],
+   "disposition": "CLOSED_BY_SPECIFICATION",
+   "blocks": [
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": false,
+   "rationale": "Stratul e decis (D-08 §17–§18: separat de siguranța fizică; BLOCK ne-deblocabil, REVIEW deblocabil). Rămân arhitectura porților și aplicarea la D-10 / D-11 (specificate). Afișarea în UI e implementare ulterioară.",
+   "specRefs": [
+    "S-JURIS",
+    "S-TAX-CONTENT"
+   ]
+  },
+  {
+   "id": "D-09-DEP-LEGITIMATE-ACCESS-RULES",
+   "owner": "D-09",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Criteriile testabile pentru reguli contextuale legitime de acces/privacy (relevanță, necesitate, proporționalitate, specificitate, nederogatoriu) fără listă exhaustivă de excepții.",
+    "status": "deschisă (Semantic Hardening #2; decizii punctuale ale operatorului unde e editorial)"
+   },
+   "class": "ENGINEERING",
+   "components": [],
+   "disposition": "CLOSED_BY_SPECIFICATION",
+   "blocks": [
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": true,
+   "rationale": "Criteriile sunt numite de registru (relevanță, necesitate, proporționalitate, specificitate, nederogatoriu), fără listă de excepții. RC1 le specifică drept test. Registrul trimite restul în SH#2, cu decizii punctuale unde e editorial.",
+   "specRefs": [
+    "S-TAX-CONTENT"
+   ]
+  },
+  {
+   "id": "D-09-DEP-OTHER-RESTRICTION-BASES",
+   "owner": "D-09",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Restricțiile bazate pe vârstă, rol sau capacitate (ex. „Only grown-ups can drive”) — firești sau nu, după aceeași logică.",
+    "status": "deschisă (nedecisă de D-09)"
+   },
+   "class": "NORMATIVE",
+   "components": [],
+   "disposition": "OPERATOR_DECISION_REQUIRED",
+   "blocks": [
+    "SANITIZED_BRIEF",
+    "COVERAGE_MATRIX",
+    "HIDDEN_SET_GROUND_TRUTH"
+   ],
+   "visualCrossModal": false,
+   "rationale": "Registrul o marchează „nedecisă de D-09”. Restricțiile pe vârstă, rol sau capacitate („Only grown-ups can drive”) cer o regulă de politică.",
+   "packageRef": "Q-08"
+  },
+  {
+   "id": "D-10-DEP-BULLYING-HARASSMENT-TAXONOMY",
+   "owner": "D-10",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Taxonomia bullying/hărțuire/excludere/degradare și agregarea pattern-urilor de ostilitate interpersonală la nivel de carte/volum.",
+    "status": "deschisă"
+   },
+   "class": "NORMATIVE",
+   "components": [],
+   "disposition": "OPERATOR_DECISION_REQUIRED",
+   "blocks": [
+    "SANITIZED_BRIEF",
+    "COVERAGE_MATRIX",
+    "HIDDEN_SET_GROUND_TRUTH",
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": true,
+   "rationale": "D-10 decide numai ostilitatea adresată izolată (REVIEW). Pentru tiparul repetat spune „REVIEW sau findings suplimentare”. Plafonul consecinței (REVIEW sau BLOCK) pentru bullying / hărțuire / excludere persistentă nu e decis.",
+   "packageRef": "Q-09"
+  },
+  {
+   "id": "D-10-DEP-APPEARANCE-DEGRADATION-TAXONOMY",
+   "owner": "D-10",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Taxonomia degradării pe bază de aspect/corp (judecată narativă vs batjocură vs degradare) și severitatea.",
+    "status": "deschisă"
+   },
+   "class": "NORMATIVE",
+   "components": [],
+   "disposition": "OPERATOR_DECISION_REQUIRED",
+   "blocks": [
+    "SANITIZED_BRIEF",
+    "HIDDEN_SET_GROUND_TRUTH",
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": true,
+   "rationale": "D-10 fixează minimul (REVIEW) pentru batjocura și degradarea pe aspect. Severitatea maximă (dacă degradarea severă poate fi BLOCK) nu e decisă.",
+   "packageRef": "Q-09"
+  },
+  {
+   "id": "D-10-DEP-FORBIDDEN-WORDS-STATUS",
+   "owner": "D-10",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Statutul final al lint-ului forbidden_words (rămâne consultativ până la o decizie separată).",
+    "status": "deschisă"
+   },
+   "class": "NORMATIVE",
+   "components": [],
+   "disposition": "OPERATOR_DECISION_REQUIRED",
+   "blocks": [],
+   "visualCrossModal": false,
+   "rationale": "D-10 §23: lint-ul rămâne consultativ „până la o decizie separată”. Pentru RC1 statutul e cunoscut, dar statutul final e o decizie a operatorului; întrebarea cere doar confirmarea.",
+   "packageRef": "Q-10"
+  },
+  {
+   "id": "D-10-DEP-MEANING-PRESERVING-NORMALIZATION",
+   "owner": "D-10",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Normalizare care păstrează sensul (diacritice, lemă, idiom) înainte de policy, fără parser extern obligatoriu, testabilă EN/RO.",
+    "status": "deschisă (Semantic Hardening #2)"
+   },
+   "class": "ENGINEERING",
+   "components": [],
+   "disposition": "CLOSED_BY_SPECIFICATION",
+   "blocks": [
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": false,
+   "rationale": "D-10 §1, §4, §22 decid cerințele (normalizarea nu distruge informația de dezambiguizare; fără parser extern obligatoriu; EN / RO). Registrul o trimite în SH#2. RC1 o specifică drept cerințe testabile.",
+   "specRefs": [
+    "S-TAX-CONTENT"
+   ]
+  },
+  {
+   "id": "D-11-DEP-EMOTIONAL-INTENSITY-TAXONOMY",
+   "owner": "D-11",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Taxonomia intensității emoționale și a mecanismelor de recuperare, testabilă și cross-modal.",
+    "status": "deschisă"
+   },
+   "class": "ENGINEERING",
+   "components": [
+    "EMPIRICAL"
+   ],
+   "disposition": "CLOSED_BY_SPECIFICATION",
+   "blocks": [
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": true,
+   "rationale": "D-11 enumeră factorii (intensitate, cauză, realitatea amenințării, durată, sprijin, recuperare, stare finală, persistență, încărcare cumulativă, amplificare vizuală) și mecanismele de recuperare. Taxonomia e un model de factori; pragurile sunt empirice.",
+   "specRefs": [
+    "S-TAX-AGEFIT"
+   ]
+  },
+  {
+   "id": "D-11-DEP-BAND-THRESHOLD-CALIBRATION",
+   "owner": "D-11",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Calibrarea pe evidence a pragurilor de severitate pe bandă (fără scor arbitrar).",
+    "status": "deschisă"
+   },
+   "class": "EMPIRICAL",
+   "components": [],
+   "disposition": "EVIDENCE_ROUTE_SPECIFIED",
+   "blocks": [
+    "COVERAGE_MATRIX",
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": false,
+   "rationale": "D-11 §43 cere explicit calibrarea pe evidence a pragurilor pe bandă.",
+   "specRefs": [
+    "S-EMPIRICAL"
+   ],
+   "evidenceRoute": "Calibrare pe cazuri age-fit adjudecate, stratificate pe bandă și pe ediție (EN / RO), în corpusul de dezvoltare. Validarea finală se face pe setul ascuns (celulele D-19 pe bandă). Fără scor numeric inventat (D-11 §43)."
+  },
+  {
+   "id": "D-11-DEP-OTHER-EMOTIONS",
+   "owner": "D-11",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Tristețe / pierdere / furie și alte emoții intense.",
+    "status": "deschisă (nedecisă de D-11)"
+   },
+   "class": "NORMATIVE",
+   "components": [],
+   "disposition": "OPERATOR_DECISION_REQUIRED",
+   "blocks": [
+    "SANITIZED_BRIEF",
+    "COVERAGE_MATRIX",
+    "HIDDEN_SET_GROUND_TRUTH"
+   ],
+   "visualCrossModal": true,
+   "rationale": "D-11 și D-14 §11 interzic extrapolarea automată a politicii fricii la tristețe, pierdere, furie, separare, anxietate sau rușine. Aplicarea modelului D-11 la aceste emoții e o alegere de politică.",
+   "packageRef": "Q-11"
+  },
+  {
+   "id": "D-12-DEP-ABSTRACTION-TAXONOMY",
+   "owner": "D-12",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Taxonomia abstracției conceptuale, a metaforelor și idiomurilor, testabilă EN/RO.",
+    "status": "deschisă"
+   },
+   "class": "ENGINEERING",
+   "components": [
+    "EMPIRICAL"
+   ],
+   "disposition": "CLOSED_BY_SPECIFICATION",
+   "blocks": [
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": false,
+   "rationale": "D-12 §6 enumeră categoriile de concretețe / abstracție; §17–§23 dau regulile pentru metaforă, idiom, inferență și cauzalitate. Consecința e decisă (D-12 + D-14). Rămâne taxonomia ca model testabil EN / RO (specificată).",
+   "specRefs": [
+    "S-TAX-AGEFIT"
+   ]
+  },
+  {
+   "id": "D-12-DEP-VISUAL-GROUNDING-CRITERIA",
+   "owner": "D-12",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Criterii testabile pentru grounding vizual (când imaginea concretizează relația conceptuală) și pentru abstracția vizuală.",
+    "status": "deschisă"
+   },
+   "class": "ENGINEERING",
+   "components": [],
+   "disposition": "CLOSED_BY_SPECIFICATION",
+   "blocks": [
+    "SH2_IMPLEMENTATION",
+    "RC1_CLAIM"
+   ],
+   "visualCrossModal": true,
+   "rationale": "Criteriile sunt în D-12 §41: exemplifică, concretizează, explică, stabilește relația, reduce inferența. Specificate. Includerea în claim-ul RC1 depinde de Q-16.",
+   "packageRef": "Q-16",
+   "specRefs": [
+    "S-TAX-AGEFIT",
+    "S-RC1-CLAIM"
+   ]
+  },
+  {
+   "id": "D-12-DEP-ABSTRACTION-TEMPLATE-CONTAMINATION",
+   "owner": "D-12",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Cazurile de abstracție din calibrare și setul rezervat folosesc același șablon; viitorul set adversarial independent trebuie să acopere abstracția fără șablon comun (L-7, D-22).",
+    "status": "deschisă (legată de D-20 / D-22)"
+   },
+   "class": "ENGINEERING",
+   "components": [],
+   "disposition": "CLOSED_BY_SPECIFICATION",
+   "blocks": [
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": false,
+   "rationale": "Cerința e decisă (D-12, L-7, D-19 §53–§54, D-22 §19–§20): fără șablon comun între calibrare și validare; template-family ≠ domain coverage. RC1 o specifică drept cerință de construcție și screening.",
+   "specRefs": [
+    "S-HIDDEN-SET",
+    "S-DEV-CORPUS",
+    "S-TOOLING"
+   ]
+  },
+  {
+   "id": "D-13-DEP-REFERENCE-AMBIGUITY-TAXONOMY",
+   "owner": "D-13",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Taxonomia ambiguității și a urmăririi referențiale; când ambiguitatea reală e problemă generală de claritate/calitate.",
+    "status": "deschisă"
+   },
+   "class": "ENGINEERING",
+   "components": [],
+   "disposition": "CLOSED_BY_SPECIFICATION",
+   "blocks": [
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": false,
+   "rationale": "D-13 §17–§19 separă ambiguitatea referențială de încărcarea de urmărire. Rubrica existentă T15 cere „unambiguous pronouns”. RC1 leagă ambiguitatea reală de jurisdicția calitate (T15), după regula D-17 a unei singure jurisdicții. Încărcarea de urmărire rămâne age-fit.",
+   "specRefs": [
+    "S-TAX-AGEFIT",
+    "S-JURIS"
+   ]
+  },
+  {
+   "id": "D-13-DEP-STRUCTURAL-FAMILY-DIVERSITY",
+   "owner": "D-13",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Familii structurale mai diverse pentru testarea sintaxei (calibrarea și setul rezervat actuale au același șablon; L-7).",
+    "status": "deschisă (legată de D-20 / D-22; fără modificarea setului înghețat)"
+   },
+   "class": "ENGINEERING",
+   "components": [],
+   "disposition": "CLOSED_BY_SPECIFICATION",
+   "blocks": [
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": false,
+   "rationale": "Cerința e decisă (D-13 §39, L-7): familii structurale diverse, fără modificarea setului înghețat. Specificată pentru corpusul de dezvoltare și pentru setul ascuns.",
+   "specRefs": [
+    "S-DEV-CORPUS",
+    "S-HIDDEN-SET"
+   ]
+  },
+  {
+   "id": "D-14-DEP-AGEFIT-DIMENSION-TAXONOMIES",
+   "owner": "D-14",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Taxonomia completă pentru fiecare dimensiune age-fit (temporal/cauzal, densitate, vocabular, complexitate, emoții în afara fricii).",
+    "status": "deschisă"
+   },
+   "class": "ENGINEERING",
+   "components": [
+    "EMPIRICAL"
+   ],
+   "disposition": "CLOSED_BY_SPECIFICATION",
+   "blocks": [
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": false,
+   "rationale": "D-14 §7–§10 dau principiile pentru temporal / cauzal, densitate, vocabular și complexitate; consecința e decisă. Emoțiile în afara fricii sunt în Q-11.",
+   "packageRef": "Q-11",
+   "specRefs": [
+    "S-TAX-AGEFIT"
+   ]
+  },
+  {
+   "id": "D-14-DEP-LOCALIZATION-DEFECT-TAXONOMY",
+   "owner": "D-14",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Toate tipurile de localization defect; TR_EMPTY / TR_MISALIGNED în afara D-14.",
+    "status": "deschisă"
+   },
+   "class": "ENGINEERING",
+   "components": [
+    "NORMATIVE"
+   ],
+   "disposition": "CLOSED_BY_SPECIFICATION",
+   "blocks": [
+    "SH2_IMPLEMENTATION",
+    "HIDDEN_SET_GROUND_TRUTH"
+   ],
+   "visualCrossModal": false,
+   "rationale": "D-14 §12–§23 decid modelul candidat / confirmat / respins și dimensiunile materialității. TR_EMPTY și TR_MISALIGNED sunt în afara D-14; consecința lor e o alegere punctuală (Q-12).",
+   "packageRef": "Q-12",
+   "specRefs": [
+    "S-TAX-LOC"
+   ]
+  },
+  {
+   "id": "D-14-DEP-VISUAL-AGEFIT-TAXONOMY",
+   "owner": "D-14",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Taxonomia completă a age-fit-ului vizual și criterii testabile.",
+    "status": "deschisă"
+   },
+   "class": "ENGINEERING",
+   "components": [],
+   "disposition": "CLOSED_BY_SPECIFICATION",
+   "blocks": [
+    "SH2_IMPLEMENTATION",
+    "RC1_CLAIM"
+   ],
+   "visualCrossModal": true,
+   "rationale": "D-14 §44–§47 decid aplicarea modelului la vizual (scene complexity, clutter etc. ca evidence, nu checklist). Taxonomia e specificată ca model. Claim-ul vizual e Q-16.",
+   "packageRef": "Q-16",
+   "specRefs": [
+    "S-TAX-AGEFIT",
+    "S-RC1-CLAIM"
+   ]
+  },
+  {
+   "id": "D-14-DEP-SAFETY-DISTRESS-CONTEXT",
+   "owner": "D-14",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "SAFETY_DISTRESS_CONTEXT rămâne în afara D-14.",
+    "status": "deschisă"
+   },
+   "class": "ENGINEERING",
+   "components": [],
+   "disposition": "CLOSED_BY_SPECIFICATION",
+   "blocks": [
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": false,
+   "rationale": "Codul actual SAFETY_DISTRESS_CONTEXT amestecă hazardul de apă cu distress-ul de vârstă. D-11 §2 decide că axele se compun: finding de siguranță (D-07) și finding age-fit (D-11), fiecare în jurisdicția lui. RC1 specifică descompunerea.",
+   "specRefs": [
+    "S-JURIS"
+   ]
+  },
+  {
+   "id": "D-14-DEP-EVALUATOR-MECHANISM",
+   "owner": "D-14",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Mecanismul final al parserului / evaluatorului și validitatea lui empirică.",
+    "status": "deschisă (Semantic Hardening #2, validare ulterioară)"
+   },
+   "class": "OUT_OF_SCOPE",
+   "components": [],
+   "disposition": "EXCLUDED_FROM_RC1",
+   "blocks": [
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": false,
+   "rationale": "Registrul îl trimite în „Semantic Hardening #2, validare ulterioară”. Implementarea evaluatorului e interzisă în RC1.",
+   "rc1Consequence": "Mecanismul final al evaluatorului nu există în RC1. Claim-ul RC1 nu poate afirma nicio performanță a evaluatorului înainte de SH#2 și de rularea oarbă.",
+   "scopeSource": "ledger status + ACTIVE-PHASE.forbidden (evaluator implementation for SH#2)"
+  },
+  {
+   "id": "D-15-DEP-SIMPLIFICATION-TAXONOMY",
+   "owner": "D-15",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Acceptable simplification vs misleading oversimplification vs false claim (OBS-GS-15).",
+    "status": "deschisă"
+   },
+   "class": "NORMATIVE",
+   "components": [],
+   "disposition": "OPERATOR_DECISION_REQUIRED",
+   "blocks": [
+    "SANITIZED_BRIEF",
+    "HIDDEN_SET_GROUND_TRUTH",
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": false,
+   "rationale": "D-15 §50 lasă deschisă granița simplificare acceptabilă / simplificare înșelătoare / afirmație falsă. E o alegere editorial-educațională de politică: decide ce devine REPAIR_REQUIRED. Faptul științific în sine nu e preferința operatorului (D-22 §25).",
+   "packageRef": "Q-13"
+  },
+  {
+   "id": "D-15-DEP-MISCONCEPTION-TAXONOMY",
+   "owner": "D-15",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Taxonomia completă a concepțiilor greșite (azi listă închisă, L-10).",
+    "status": "deschisă"
+   },
+   "class": "ENGINEERING",
+   "components": [],
+   "disposition": "CLOSED_BY_SPECIFICATION",
+   "blocks": [
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": false,
+   "rationale": "Lista închisă actuală e un accident (L-10). Concepțiile greșite sunt fapte verificabile, nu politică (D-22 §25). RC1 specifică o resursă deschisă, cu surse factuale și verificare, nu o listă de verdicte.",
+   "specRefs": [
+    "S-TAX-SCIENCE"
+   ]
+  },
+  {
+   "id": "D-15-DEP-BAND-PERCEPTIBILITY-EVIDENCE",
+   "owner": "D-15",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Cazuri de știință pe 3–4 / 5–6 și RO; pragurile de perceptibilitate nu sunt demonstrate (L-16).",
+    "status": "deschisă (legată de D-20 / D-22; fără modificarea setului înghețat)"
+   },
+   "class": "EMPIRICAL",
+   "components": [],
+   "disposition": "EVIDENCE_ROUTE_SPECIFIED",
+   "blocks": [
+    "COVERAGE_MATRIX"
+   ],
+   "visualCrossModal": false,
+   "rationale": "D-15 §37 păstrează limita L-16. Pragurile de perceptibilitate se pot demonstra numai pe evidence.",
+   "specRefs": [
+    "S-EMPIRICAL",
+    "S-COVERAGE"
+   ],
+   "evidenceRoute": "Celule D-19 obligatorii pentru știință pe 3–4, 5–6 și RO (perceptibilitatea corectării). Cazuri în corpusul de dezvoltare și în setul ascuns. Fără inferență din 7–8 (D-21 §25)."
+  },
+  {
+   "id": "D-15-DEP-FANTASY-WORLD-SCIENCE",
+   "owner": "D-15",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Reguli pentru lumi fantastice cu fapte proprii.",
+    "status": "deschisă"
+   },
+   "class": "NORMATIVE",
+   "components": [],
+   "disposition": "OPERATOR_DECISION_REQUIRED",
+   "blocks": [
+    "SANITIZED_BRIEF",
+    "HIDDEN_SET_GROUND_TRUTH"
+   ],
+   "visualCrossModal": false,
+   "rationale": "Nicio decizie nu fixează cum se tratează faptele proprii ale unei lumi fantastice față de adevărul științific real. T18 („natural light and weather are not presented as magic”) arată că e o întrebare de politică editorială.",
+   "packageRef": "Q-14"
+  },
+  {
+   "id": "D-15-DEP-VISUAL-SCIENCE-TAXONOMY",
+   "owner": "D-15",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Taxonomia completă a afirmațiilor științifice vizuale și criteriile de interpretabilitate.",
+    "status": "deschisă"
+   },
+   "class": "ENGINEERING",
+   "components": [],
+   "disposition": "CLOSED_BY_SPECIFICATION",
+   "blocks": [
+    "SH2_IMPLEMENTATION",
+    "RC1_CLAIM"
+   ],
+   "visualCrossModal": true,
+   "rationale": "D-15 §38–§43 decid principiile vizuale (corectare vizuală doar dacă e neechivocă; imaginea poate purta defectul). Taxonomia e specificată ca model. Claim-ul vizual e Q-16.",
+   "packageRef": "Q-16",
+   "specRefs": [
+    "S-TAX-SCIENCE",
+    "S-RC1-CLAIM"
+   ]
+  },
+  {
+   "id": "D-15-DEP-RUBRIC-SCIENCE-CRITERION",
+   "owner": "D-15",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Criteriul științific în rubrica de calitate / relația cu porțile.",
+    "status": "D-17"
+   },
+   "class": "OUT_OF_SCOPE",
+   "components": [],
+   "disposition": "EXCLUDED_FROM_RC1",
+   "blocks": [],
+   "visualCrossModal": false,
+   "rationale": "D-17 a stabilit că știința nu intră în T07. Un criteriu nou în rubrică înseamnă redesign de rubrică / Product Contract, interzis în RC1.",
+   "rc1Consequence": "Claim-ul RC1 nu conține un criteriu științific în rubrica de calitate. Adevărul științific rămâne jurisdicția stratului de știință (D-15), nu a lui T07 (D-17).",
+   "scopeSource": "closure §6 + D-17 notDecided + ACTIVE-PHASE.forbidden (Product Contract)"
+  },
+  {
+   "id": "D-16-DEP-SCORING-GRANULARITY",
+   "owner": "D-16",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Granularitatea notelor în contractul de scoring (validare / normalizare la intrare, nu în poartă).",
+    "status": "deschisă"
+   },
+   "class": "EMPIRICAL",
+   "components": [
+    "ENGINEERING"
+   ],
+   "disposition": "EVIDENCE_ROUTE_SPECIFIED",
+   "blocks": [
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": false,
+   "rationale": "D-16 §14 refuză explicit fixarea unei granulații fără evidence. Reprezentarea exactă e specificată (ENGINEERING); valoarea granulației e empirică.",
+   "specRefs": [
+    "S-TAX-QUALITY",
+    "S-EMPIRICAL"
+   ],
+   "evidenceRoute": "Granularitatea se calibrează pe scorurile reale ale criticului. Până atunci contractul de scoring validează și normalizează la intrare. Poarta compară valoarea canonică exactă (D-16 §14–§15)."
+  },
+  {
+   "id": "D-16-DEP-NA-TAXONOMY",
+   "owner": "D-16",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Taxonomia completă a aplicabilității pentru T01–T18 (ex. T09 în volumul 1, T12).",
+    "status": "deschisă"
+   },
+   "class": "ENGINEERING",
+   "components": [],
+   "disposition": "CLOSED_BY_SPECIFICATION",
+   "blocks": [
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": false,
+   "rationale": "Mecanismul e decis (D-16 §16–§21): evidence, aplicabil implicit, înregistrare auditată, excludere din medie, anti-gaming. Regulile per criteriu T01–T18 se construiesc în SH#2. Fiecare caz ascuns de calitate e adjudecat de operator prin mecanism.",
+   "specRefs": [
+    "S-TAX-QUALITY"
+   ]
+  },
+  {
+   "id": "D-16-DEP-COLLECTION-SYSTEMIC-QUALITY",
+   "owner": "D-16",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Reguli și calibrare pentru QUALITY_SYSTEMIC_PATTERN la nivel de colecție.",
+    "status": "deschisă"
+   },
+   "class": "EMPIRICAL",
+   "components": [
+    "ENGINEERING"
+   ],
+   "disposition": "EVIDENCE_ROUTE_SPECIFIED",
+   "blocks": [
+    "RC1_CLAIM"
+   ],
+   "visualCrossModal": false,
+   "rationale": "D-16 §40: „Severitatea și threshold-urile exacte se calibrează ulterior”.",
+   "specRefs": [
+    "S-TAX-QUALITY",
+    "S-MULTILEVEL",
+    "S-EMPIRICAL"
+   ],
+   "evidenceRoute": "Calibrare pe colecții reale (V1–V6 și pilotul Dinosaur World), după autorizare. În RC1 nivelul Collection al calității e inclus sau exclus din claim prin Q-17."
+  },
+  {
+   "id": "D-16-DEP-EMPIRICAL-FLOOR-VALIDATION",
+   "owner": "D-16",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Validarea / calibrarea empirică a minimului 7.",
+    "status": "deschisă (D-19 / D-20 / D-21)"
+   },
+   "class": "EMPIRICAL",
+   "components": [],
+   "disposition": "EVIDENCE_ROUTE_SPECIFIED",
+   "blocks": [],
+   "visualCrossModal": false,
+   "rationale": "D-16 §64 cere formularea „pending empirical validation/calibration”. Registrul trimite validarea la D-19 / D-20 / D-21.",
+   "specRefs": [
+    "S-EMPIRICAL"
+   ],
+   "evidenceRoute": "Validarea minimului 7 cere judecăți umane de calitate puse lângă scoruri, pe artefacte reale, după autorizare. Nu e o condiție D-21 de acceptare a evaluatorului. Claim-ul RC1 spune „operator-approved product policy, pending empirical validation” (D-16 §64)."
+  },
+  {
+   "id": "D-16-DEP-NATIVE-EDITION-RUBRIC",
+   "owner": "D-16",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Asimetria ediției native (fără rubrică T01–T18).",
+    "status": "deschisă (architecture gap)"
+   },
+   "class": "OUT_OF_SCOPE",
+   "components": [],
+   "disposition": "EXCLUDED_FROM_RC1",
+   "blocks": [
+    "RC1_CLAIM"
+   ],
+   "visualCrossModal": false,
+   "rationale": "Registrul o numește „architecture gap”. Redesign-ul rubricii native e în notDecided al D-16 / D-17 și e interzis în RC1 (Product Contract).",
+   "rc1Consequence": "Claim-ul RC1 nu conține poarta de calitate T01–T18 pentru ediția nativă (RO). Ediția RO e acoperită de age-fit (D-14 §34) și de fidelitate (D-14), nu de rubrică.",
+   "scopeSource": "ledger status + D-16 §42 + ACTIVE-PHASE.forbidden (Product Contract)"
+  },
+  {
+   "id": "D-16-DEP-PASS-VERSION-RANKING",
+   "owner": "D-16",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Ranking-ul între două versiuni care trec poarta.",
+    "status": "deschisă"
+   },
+   "class": "ENGINEERING",
+   "components": [],
+   "disposition": "CLOSED_BY_SPECIFICATION",
+   "blocks": [
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": false,
+   "rationale": "Regula de siguranță e decisă (o versiune validă la poartă bate una care pică). Ranking-ul între două versiuni care trec nu schimbă eligibilitatea de publicare. RC1 specifică un ranking determinist implicit, ca detaliu de implementare.",
+   "specRefs": [
+    "S-TAX-QUALITY"
+   ]
+  },
+  {
+   "id": "D-17-DEP-VALUES-TAXONOMY",
+   "owner": "D-17",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Taxonomia valorilor editoriale (depiction, endorsement, glorification, consequence, correction, repair, empathy, coercion, dishonesty, cruelty, prosocial resolution, narrative stance, final takeaway) și eventuale praguri pe bandă.",
+    "status": "deschisă"
+   },
+   "class": "NORMATIVE",
+   "components": [],
+   "disposition": "OPERATOR_DECISION_REQUIRED",
+   "blocks": [
+    "SANITIZED_BRIEF",
+    "COVERAGE_MATRIX",
+    "HIDDEN_SET_GROUND_TRUTH"
+   ],
+   "visualCrossModal": false,
+   "rationale": "D-17 §33 amână taxonomia valorilor editoriale și eventualele praguri pe bandă. Ce înseamnă „endorses / glorifies / normalizes” incompatibil cu standardul editorial e politică de produs.",
+   "packageRef": "Q-15"
+  },
+  {
+   "id": "D-17-DEP-RUBRIC-T07-WORDING",
+   "owner": "D-17",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Redenumirea / împărțirea T07 în rubrică (Product Contract).",
+    "status": "deschisă (în afara acestei faze)"
+   },
+   "class": "OUT_OF_SCOPE",
+   "components": [],
+   "disposition": "EXCLUDED_FROM_RC1",
+   "blocks": [],
+   "visualCrossModal": false,
+   "rationale": "Registrul o marchează „în afara acestei faze” (Product Contract).",
+   "rc1Consequence": "Claim-ul RC1 folosește formularea actuală a T07 cu interpretarea arhitecturală D-17 (delegare, prag 7). Nu redenumește și nu împarte criteriul.",
+   "scopeSource": "ledger status + ACTIVE-PHASE.forbidden (Product Contract)"
+  },
+  {
+   "id": "D-17-DEP-VISUAL-EDITORIAL-VALUES",
+   "owner": "D-17",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Valori editoriale exclusiv vizuale și contradicții cross-modal de valori.",
+    "status": "deschisă (coverage gap)"
+   },
+   "class": "NORMATIVE",
+   "components": [],
+   "disposition": "OPERATOR_DECISION_REQUIRED",
+   "blocks": [
+    "RC1_CLAIM",
+    "COVERAGE_MATRIX"
+   ],
+   "visualCrossModal": true,
+   "rationale": "Registrul o numește „coverage gap”. Valorile exclusiv vizuale și contradicțiile cross-modale de valori intră în claim-ul RC1 numai dacă operatorul le include; altfel se declară NOT IMPLEMENTED / NOT VALIDATED (D-22 §39).",
+   "packageRef": "Q-16"
+  },
+  {
+   "id": "D-17-DEP-NATIVE-VALUES-PARITY",
+   "owner": "D-17",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Paritatea valorilor editoriale pe ediția nativă când localizarea poate schimba stance-ul moral.",
+    "status": "deschisă"
+   },
+   "class": "ENGINEERING",
+   "components": [],
+   "disposition": "CLOSED_BY_SPECIFICATION",
+   "blocks": [
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": false,
+   "rationale": "D-14 §19 listează „stance-ul” printre schimbările materiale de sens. O schimbare de stance moral prin localizare e deci un defect de fidelitate (candidat → REVIEW; confirmat → REPAIR_REQUIRED). Paritatea de valori dincolo de fidelitate ține de rubrica nativă (exclusă, vezi D-16-DEP-NATIVE-EDITION-RUBRIC).",
+   "specRefs": [
+    "S-TAX-LOC"
+   ]
+  },
+  {
+   "id": "D-18-DEP-SEMANTIC-VALIDATOR",
+   "owner": "D-18",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Furnizorul / agentul validatorului semantic, costul și independența lui logică.",
+    "status": "deschisă (implementation / commissioning)"
+   },
+   "class": "OUT_OF_SCOPE",
+   "components": [],
+   "disposition": "EXCLUDED_FROM_RC1",
+   "blocks": [
+    "SH2_IMPLEMENTATION",
+    "RC1_CLAIM"
+   ],
+   "visualCrossModal": false,
+   "rationale": "Registrul îl trimite la „implementation / commissioning”. Furnizorul și costul lui sunt decizii ale operatorului, luate la autorizarea SH#2 / commissioning, cu regula subscription-first.",
+   "rc1Consequence": "Fără validatorul semantic nu există „v3 validated quality” (D-18 §40). Claim-ul RC1 pentru poarta de calitate cere validatorul implementat și cu contract de stabilitate (D-21 §20) înaintea rulării oarbe.",
+   "scopeSource": "ledger status + D-18 §89"
+  },
+  {
+   "id": "D-18-DEP-RETRY-COUNT",
+   "owner": "D-18",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Numărul de reîncercări înainte de ASSESSMENT_INVALID.",
+    "status": "deschisă"
+   },
+   "class": "ENGINEERING",
+   "components": [],
+   "disposition": "CLOSED_BY_SPECIFICATION",
+   "blocks": [
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": false,
+   "rationale": "D-18 §41–§44 decid comportamentul: reevaluare, apoi ASSESSMENT_INVALID, niciodată ARTIFACT_QUALITY_FAIL. Numărul de reîncercări e un parametru de workflow. Intră în configurația înghețată și precommitted înaintea rulării oarbe.",
+   "specRefs": [
+    "S-TAX-QUALITY"
+   ]
+  },
+  {
+   "id": "D-18-DEP-SUFFICIENCY-TAXONOMY",
+   "owner": "D-18",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Taxonomia per criteriu a evidence-ului suficient (inclusiv bundle pentru criterii globale).",
+    "status": "deschisă"
+   },
+   "class": "ENGINEERING",
+   "components": [],
+   "disposition": "CLOSED_BY_SPECIFICATION",
+   "blocks": [
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": false,
+   "rationale": "D-18 §24–§30 decid că suficiența e semantică (nu lungime), pe bundle pentru criterii globale, raportată la direcția și scorul evaluării. RC1 specifică structura bundle-ului. Regulile per criteriu se construiesc în SH#2.",
+   "specRefs": [
+    "S-TAX-QUALITY"
+   ]
+  },
+  {
+   "id": "D-18-DEP-VISUAL-CROSSMODAL-EVIDENCE",
+   "owner": "D-18",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Validarea evidence-ului vizual și cross-modal.",
+    "status": "deschisă"
+   },
+   "class": "ENGINEERING",
+   "components": [],
+   "disposition": "CLOSED_BY_SPECIFICATION",
+   "blocks": [
+    "SH2_IMPLEMENTATION",
+    "RC1_CLAIM"
+   ],
+   "visualCrossModal": true,
+   "rationale": "D-18 §59–§62 decid principiile: scene description ≠ image evidence; cross-modal cere text + vizual + relația dintre ele. Specificate. Claim-ul vizual e Q-16.",
+   "packageRef": "Q-16",
+   "specRefs": [
+    "S-TAX-QUALITY",
+    "S-RC1-CLAIM"
+   ]
+  },
+  {
+   "id": "D-18-DEP-V3-REPORT-REGENERATION",
+   "owner": "D-18",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Regenerarea rapoartelor sub politica v3 după procedura stabilită.",
+    "status": "deschisă (după închiderea deciziilor)"
+   },
+   "class": "OUT_OF_SCOPE",
+   "components": [],
+   "disposition": "EXCLUDED_FROM_RC1",
+   "blocks": [],
+   "visualCrossModal": false,
+   "rationale": "Registrul o pune „după închiderea deciziilor”. Regenerarea produce rezultate de evaluare noi, interzise în RC1.",
+   "rc1Consequence": "În RC1 nu există rapoarte v3. Rapoartele istorice v2 rămân neschimbate (D-18 §2, D-19). Regenerarea cere o fază autorizată, după implementarea v3.",
+   "scopeSource": "ledger status + ACTIVE-PHASE.forbidden (validation results)"
+  },
+  {
+   "id": "D-19-DEP-COVERAGE-MATRIX-DEFINITION",
+   "owner": "D-19",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Enumerarea concretă a celulelor obligatorii din policy-relevant coverage matrix (pe tip, ramură de consecință, bandă, ediție, modalitate, scope) și a celor UNRESOLVED.",
+    "status": "deschisă"
+   },
+   "class": "ENGINEERING",
+   "components": [],
+   "disposition": "CLOSED_BY_SPECIFICATION",
+   "blocks": [
+    "COVERAGE_MATRIX",
+    "SANITIZED_BRIEF"
+   ],
+   "visualCrossModal": true,
+   "rationale": "D-19 §4 și §26–§36 dau regula completă: celula e obligatorie doar dacă dimensiunea schimbă legitim rezultatul sau sistemul pretinde că o operează. RC1 enumeră celulele (spec/coverage-matrix.json). Celulele care depind de claim (Q-16, Q-17) sau de politici nedecise rămân COVERAGE_REQUIREMENT_UNRESOLVED.",
+   "packageRef": "Q-16",
+   "specRefs": [
+    "S-COVERAGE"
+   ]
+  },
+  {
+   "id": "D-19-DEP-NEW-CASES",
+   "owner": "D-19",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Cazurile noi necesare pentru celulele UNCOVERED (calibrare și validare independentă).",
+    "status": "D-20 / D-22"
+   },
+   "class": "OUT_OF_SCOPE",
+   "components": [],
+   "disposition": "EXCLUDED_FROM_RC1",
+   "blocks": [
+    "COVERAGE_MATRIX"
+   ],
+   "visualCrossModal": false,
+   "rationale": "Registrul o trimite la D-20 / D-22. Crearea cazurilor de acceptare e interzisă în RC1.",
+   "rc1Consequence": "Celulele UNCOVERED rămân UNCOVERED în RC1. Cazurile noi se creează în faza setului ascuns (D-22, autori independenți) și în corpusul de dezvoltare SH#2, nu în RC1.",
+   "scopeSource": "ledger status + ACTIVE-PHASE.forbidden (hidden acceptance set)"
+  },
+  {
+   "id": "D-19-DEP-SAMPLE-SUFFICIENCY",
+   "owner": "D-19",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Suficiența statistică dincolo de minimul structural.",
+    "status": "D-21 / validation design"
+   },
+   "class": "ENGINEERING",
+   "components": [
+    "EMPIRICAL"
+   ],
+   "disposition": "CLOSED_BY_SPECIFICATION",
+   "blocks": [
+    "COVERAGE_MATRIX"
+   ],
+   "visualCrossModal": false,
+   "rationale": "D-21 a decis numitorii minimi (≥ 59 oportunități P1, ≥ 30 auto-acceptabile P3, ≥ 1 auto-accept corect pe celulă) și a refuzat praguri numerice suplimentare fără evidence (D-21 §15). RC1 specifică designul statistic și raportarea incertitudinii. Nu inventează cerințe noi.",
+   "specRefs": [
+    "S-THRESHOLDS",
+    "S-COVERAGE"
+   ]
+  },
+  {
+   "id": "D-19-DEP-PHYSICAL-SCHEMA",
+   "owner": "D-19",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Schema fizică finală (JSON / JSONL) a ground truth-ului multidimensional și a proiecției legacy.",
+    "status": "deschisă (implementare)"
+   },
+   "class": "ENGINEERING",
+   "components": [],
+   "disposition": "CLOSED_BY_SPECIFICATION",
+   "blocks": [
+    "HIDDEN_SET_GROUND_TRUTH",
+    "SANITIZED_BRIEF"
+   ],
+   "visualCrossModal": false,
+   "rationale": "Dimensiunile A–H și regulile proiecției legacy sunt decise (D-19 §3, §14–§15). Schema fizică e specificată (spec/ground-truth.schema.json). Punctul de alegere descoperit de RC1 (cum se numără REVIEW-ul de candidat în P2) e Q-20.",
+   "specRefs": [
+    "S-GT-SCHEMA"
+   ],
+   "packageRef": "Q-20"
+  },
+  {
+   "id": "D-20-DEP-DEVELOPMENT-CORPUS",
+   "owner": "D-20",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Corpusul de dezvoltare SH#2 versionat separat de Gold-v2.",
+    "status": "deschisă (după închiderea deciziilor)"
+   },
+   "class": "ENGINEERING",
+   "components": [],
+   "disposition": "CLOSED_BY_SPECIFICATION",
+   "blocks": [
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": false,
+   "rationale": "D-20 §8–§9 decid câmpurile obligatorii (versiune, provenance, autor / sursă, legătura cu eșecul cunoscut, hash-uri, timp, versiunea politicii). RC1 specifică formatul. Crearea corpusului ține de SH#2.",
+   "specRefs": [
+    "S-DEV-CORPUS"
+   ]
+  },
+  {
+   "id": "D-20-DEP-INVALID-RUN-PROCEDURE",
+   "owner": "D-20",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Procedura concretă INVALID_RUN.",
+    "status": "deschisă"
+   },
+   "class": "ENGINEERING",
+   "components": [],
+   "disposition": "CLOSED_BY_SPECIFICATION",
+   "blocks": [
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": false,
+   "rationale": "D-20 §31–§32 și D-22 §51 decid condițiile. RC1 specifică procedura concretă.",
+   "specRefs": [
+    "S-INVALID-RUN"
+   ]
+  },
+  {
+   "id": "D-20-DEP-VALIDATION-STATE-ADAPTATION",
+   "owner": "D-20",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Adaptarea validationState la retragerea holdout-ului Gold-v2 și la noul set de acceptare.",
+    "status": "deschisă (implementare ulterioară)"
+   },
+   "class": "ENGINEERING",
+   "components": [],
+   "disposition": "CLOSED_BY_SPECIFICATION",
+   "blocks": [
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": false,
+   "rationale": "D-20 §1–§4 și D-21 §2 decid ce se schimbă (holdout retras, set nou, porți calculate). RC1 specifică starea de validare v3. Implementarea vine ulterior.",
+   "specRefs": [
+    "S-VALIDATION-STATE"
+   ]
+  },
+  {
+   "id": "D-21-DEP-STABILITY-CONTRACT",
+   "owner": "D-21",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Contractul de stabilitate pentru componente model nedeterministe (D-18).",
+    "status": "deschisă"
+   },
+   "class": "ENGINEERING",
+   "components": [
+    "EMPIRICAL"
+   ],
+   "disposition": "CLOSED_BY_SPECIFICATION",
+   "blocks": [
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": false,
+   "rationale": "D-21 §20 enumeră elementele contractului și interzice un procent arbitrar acum. RC1 specifică șablonul și regula de până atunci. Valorile se fixează când componenta există, pe evidence, înaintea înghețării.",
+   "specRefs": [
+    "S-STABILITY"
+   ]
+  },
+  {
+   "id": "D-21-DEP-INVALID-TEST-EVIDENCE-PROTOCOL",
+   "owner": "D-21",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Protocolul pentru ground truth invalid descoperit după run.",
+    "status": "D-22 / D-20"
+   },
+   "class": "ENGINEERING",
+   "components": [],
+   "disposition": "CLOSED_BY_SPECIFICATION",
+   "blocks": [
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": false,
+   "rationale": "D-21 §32–§33 și D-22 §24, §26 decid principiile (corectarea ground truth-ului ≠ tuning; adjudecare independentă; dezacordul păstrat). RC1 specifică protocolul.",
+   "specRefs": [
+    "S-INVALID-GT"
+   ]
+  },
+  {
+   "id": "D-21-DEP-THRESHOLD-POLICY-VERSIONING",
+   "owner": "D-21",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Identificatorul canonic și commitment-ul versiunii politicii de praguri.",
+    "status": "deschisă (implementare)"
+   },
+   "class": "ENGINEERING",
+   "components": [],
+   "disposition": "CLOSED_BY_SPECIFICATION",
+   "blocks": [
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": false,
+   "rationale": "D-21 §31 și §38–§39 decid conținutul. RC1 produce documentul canonic al politicii de praguri (spec/threshold-policy.rc1.json), cu identificator, versiune, convenție statistică și hash canonic. Commitment-ul formal se face la sigilarea setului ascuns.",
+   "specRefs": [
+    "S-THRESHOLDS"
+   ]
+  },
+  {
+   "id": "D-22-DEP-SANITIZED-BRIEF",
+   "owner": "D-22",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Draftul mecanic și aprobarea operatorului pentru SANITIZED NORMATIVE POLICY BRIEF.",
+    "status": "deschisă (pasul 3 al secvenței canonice)"
+   },
+   "class": "ENGINEERING",
+   "components": [
+    "NORMATIVE"
+   ],
+   "disposition": "CLOSED_BY_SPECIFICATION",
+   "blocks": [
+    "SANITIZED_BRIEF"
+   ],
+   "visualCrossModal": false,
+   "rationale": "D-22 §14–§18 decid conținutul permis / interzis, versionarea și aprobarea. RC1 specifică brief-ul. Draftul mecanic vine după ce intrările normative sunt decise. Aprobarea e a operatorului.",
+   "specRefs": [
+    "S-BRIEF"
+   ]
+  },
+  {
+   "id": "D-22-DEP-SOURCE-B",
+   "owner": "D-22",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Modelul / agentul extern concret pentru Source B și attestation-ul de izolare.",
+    "status": "deschisă"
+   },
+   "class": "NORMATIVE",
+   "components": [],
+   "disposition": "OPERATOR_DECISION_REQUIRED",
+   "blocks": [
+    "RC1_CLAIM"
+   ],
+   "visualCrossModal": false,
+   "rationale": "D-22 lasă deschise modelul / agentul Source B și atestarea de izolare. Autorizarea RC1 spune că Claude și ChatGPT actuali nu devin Source B dacă starea canonică îi consideră contaminați. Alegerea e a operatorului.",
+   "packageRef": "Q-18"
+  },
+  {
+   "id": "D-22-DEP-GENERIC-TOOLING",
+   "owner": "D-22",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Tooling generic: commitment sărat, manifest agregat, screening, calculul porților, verificarea provenance.",
+    "status": "deschisă (necesită autorizare)"
+   },
+   "class": "ENGINEERING",
+   "components": [],
+   "disposition": "CLOSED_BY_SPECIFICATION",
+   "blocks": [
+    "SH2_IMPLEMENTATION"
+   ],
+   "visualCrossModal": false,
+   "rationale": "D-22 §20–§21 și §30–§37, plus closure §20.5, decid proprietățile. RC1 specifică tooling-ul și vectorii de test artificiali. Implementarea cere autorizare separată (closure §20) și nu se face în codul aplicației în RC1.",
+   "specRefs": [
+    "S-TOOLING"
+   ]
+  },
+  {
+   "id": "D-22-DEP-STORAGE",
+   "owner": "D-22",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Storage-ul concret al custodelui, inaccesibil implementatorului (capability-based).",
+    "status": "deschisă"
+   },
+   "class": "NORMATIVE",
+   "components": [],
+   "disposition": "OPERATOR_DECISION_REQUIRED",
+   "blocks": [
+    "RC1_CLAIM"
+   ],
+   "visualCrossModal": false,
+   "rationale": "D-22 §27–§29: storage-ul custodelui se alege după capabilitate. Alegerea concretă e a operatorului (D-20 §15, D-22).",
+   "packageRef": "Q-19"
+  },
+  {
+   "id": "D-22-DEP-RC1-VISUAL-CLAIM",
+   "owner": "D-22",
+   "closureSection10": "open",
+   "ledger": {
+    "question": "Care jurisdicții vizuale / cross-modale intră în claim-ul RC1 (altfel NOT IMPLEMENTED / NOT VALIDATED).",
+    "status": "deschisă"
+   },
+   "class": "NORMATIVE",
+   "components": [],
+   "disposition": "OPERATOR_DECISION_REQUIRED",
+   "blocks": [
+    "RC1_CLAIM",
+    "COVERAGE_MATRIX",
+    "SANITIZED_BRIEF"
+   ],
+   "visualCrossModal": true,
+   "rationale": "D-22 §38–§39: jurisdicțiile vizuale / cross-modale intră în claim doar dacă produsul le pretinde; altfel NOT IMPLEMENTED / NOT VALIDATED. Ce pretinde claim-ul RC1 e o decizie a operatorului.",
+   "packageRef": "Q-16"
+  },
+  {
+   "id": "D-11-DEP-FINDING-SEVERITY-GATE-MODEL",
+   "owner": "D-11",
+   "closureSection10": "resolved",
+   "ledger": {
+    "question": "Modelul machine-readable finding → severity → publishing consequence pentru axa age-fit (și integrarea cu porțile existente).",
+    "status": "deschisă (Semantic Hardening #2; legată de D-14)"
+   },
+   "class": "RESOLVED_BEFORE_RC1",
+   "disposition": "RESOLVED_BY_EXISTING_DECISION",
+   "resolvedBy": "closure §10 „Rezolvate în această fază”",
+   "rationale": "Rezolvată înaintea RC1, conform raportului de închidere §10 și §6."
+  },
+  {
+   "id": "D-13-DEP-SYNTAX-PUBLISHING-CONSEQUENCE",
+   "owner": "D-13",
+   "closureSection10": "resolved",
+   "ledger": {
+    "question": "Consecința de publicare pentru findings sintactice (advisory / material).",
+    "status": "D-14"
+   },
+   "class": "RESOLVED_BEFORE_RC1",
+   "disposition": "RESOLVED_BY_EXISTING_DECISION",
+   "resolvedBy": "closure §10 „Rezolvate în această fază”",
+   "rationale": "Rezolvată înaintea RC1, conform raportului de închidere §10 și §6."
+  },
+  {
+   "id": "D-14-DEP-MEASUREMENT-REPRESENTATION",
+   "owner": "D-14",
+   "closureSection10": "resolved",
+   "ledger": {
+    "question": "Reprezentarea finding / severity / consequence / confirmation în Gold, adjudecare, metrici și scoring.",
+    "status": "D-19 / D-20"
+   },
+   "class": "RESOLVED_BEFORE_RC1",
+   "disposition": "RESOLVED_BY_EXISTING_DECISION",
+   "resolvedBy": "closure §10 „Rezolvate în această fază”",
+   "rationale": "Rezolvată înaintea RC1, conform raportului de închidere §10 și §6."
+  },
+  {
+   "id": "D-18-DEP-MEASUREMENT",
+   "owner": "D-18",
+   "closureSection10": "resolved",
+   "ledger": {
+    "question": "Reprezentarea ASSESSMENT_INVALID / UNVERIFIED separat de content negative / positive.",
+    "status": "D-19 / D-20"
+   },
+   "class": "RESOLVED_BEFORE_RC1",
+   "disposition": "RESOLVED_BY_EXISTING_DECISION",
+   "resolvedBy": "closure §10 „Rezolvate în această fază”",
+   "rationale": "Rezolvată înaintea RC1, conform raportului de închidere §10 și §6."
+  },
+  {
+   "id": "D-14-DEP-QUALITY-THRESHOLDS",
+   "owner": "D-14",
+   "closureSection10": "resolved",
+   "ledger": {
+    "question": "Pragurile quality (T01/T08) nu se schimbă în D-14.",
+    "status": "D-16 / D-17"
+   },
+   "class": "RESOLVED_BEFORE_RC1",
+   "disposition": "RESOLVED_BY_EXISTING_DECISION",
+   "resolvedBy": "closure §10 „Rezolvate în această fază”",
+   "rationale": "Rezolvată înaintea RC1, conform raportului de închidere §10 și §6."
+  },
+  {
+   "id": "D-14-DEP-EVIDENCE-VALIDITY",
+   "owner": "D-14",
+   "closureSection10": "resolved",
+   "ledger": {
+    "question": "Validitatea evidence-ului citat (inclusiv de critic).",
+    "status": "D-18"
+   },
+   "class": "RESOLVED_BEFORE_RC1",
+   "disposition": "RESOLVED_BY_EXISTING_DECISION",
+   "resolvedBy": "closure §10 „Rezolvate în această fază”",
+   "rationale": "Rezolvată înaintea RC1, conform raportului de închidere §10 și §6."
+  },
+  {
+   "id": "D-16-DEP-EVIDENCE-VALIDITY",
+   "owner": "D-16",
+   "closureSection10": "resolved",
+   "ledger": {
+    "question": "Când e scorul/evidence-ul criticului de încredere.",
+    "status": "D-18"
+   },
+   "class": "RESOLVED_BEFORE_RC1",
+   "disposition": "RESOLVED_BY_EXISTING_DECISION",
+   "resolvedBy": "closure §10 „Rezolvate în această fază”",
+   "rationale": "Rezolvată înaintea RC1, conform raportului de închidere §10 și §6."
+  },
+  {
+   "id": "D-17-DEP-EVIDENCE-VALIDITY",
+   "owner": "D-17",
+   "closureSection10": "resolved",
+   "ledger": {
+    "question": "Validitatea evidence-ului care susține T07 (ex. „Bo holds on tight.”).",
+    "status": "D-18"
+   },
+   "class": "RESOLVED_BEFORE_RC1",
+   "disposition": "RESOLVED_BY_EXISTING_DECISION",
+   "resolvedBy": "closure §10 „Rezolvate în această fază”",
+   "rationale": "Rezolvată înaintea RC1, conform raportului de închidere §10 și §6."
+  },
+  {
+   "id": "D-16-DEP-T07",
+   "owner": "D-16",
+   "closureSection10": "resolved",
+   "ledger": {
+    "question": "T07 în rubrică vs poarta de siguranță.",
+    "status": "D-17"
+   },
+   "class": "RESOLVED_BEFORE_RC1",
+   "disposition": "RESOLVED_BY_EXISTING_DECISION",
+   "resolvedBy": "closure §10 „Rezolvate în această fază”",
+   "rationale": "Rezolvată înaintea RC1, conform raportului de închidere §10 și §6."
+  },
+  {
+   "id": "D-15-DEP-MEASUREMENT",
+   "owner": "D-15",
+   "closureSection10": "resolved",
+   "ledger": {
+    "question": "Reprezentarea în Gold a stărilor PASS / PASS_WITH_ADVISORY / REVIEW / REPAIR pentru știință.",
+    "status": "D-19 / D-20"
+   },
+   "class": "RESOLVED_BEFORE_RC1",
+   "disposition": "RESOLVED_BY_EXISTING_DECISION",
+   "resolvedBy": "closure §10 „Rezolvate în această fază”",
+   "rationale": "Rezolvată înaintea RC1, conform raportului de închidere §10 și §6."
+  },
+  {
+   "id": "D-17-DEP-MEASUREMENT",
+   "owner": "D-17",
+   "closureSection10": "resolved",
+   "ledger": {
+    "question": "Reprezentarea jurisdicțiilor și a observațiilor legate în Gold și metrici.",
+    "status": "D-19 / D-20"
+   },
+   "class": "RESOLVED_BEFORE_RC1",
+   "disposition": "RESOLVED_BY_EXISTING_DECISION",
+   "resolvedBy": "closure §10 „Rezolvate în această fază”",
+   "rationale": "Rezolvată înaintea RC1, conform raportului de închidere §10 și §6."
+  },
+  {
+   "id": "D-20-DEP-PERFORMANCE-THRESHOLDS",
+   "owner": "D-20",
+   "closureSection10": "resolved",
+   "ledger": {
+    "question": "Pragurile de performanță, precommitted înainte de blind run.",
+    "status": "D-21"
+   },
+   "class": "RESOLVED_BEFORE_RC1",
+   "disposition": "RESOLVED_BY_EXISTING_DECISION",
+   "resolvedBy": "closure §10 „Rezolvate în această fază”",
+   "rationale": "Rezolvată înaintea RC1, conform raportului de închidere §10 și §6."
+  },
+  {
+   "id": "D-20-DEP-INDEPENDENCE-PROTOCOL",
+   "owner": "D-20",
+   "closureSection10": "resolved",
+   "ledger": {
+    "question": "Autorul, vizibilitatea, adjudecarea, storage-ul și execuția setului ascuns.",
+    "status": "D-22"
+   },
+   "class": "RESOLVED_BEFORE_RC1",
+   "disposition": "RESOLVED_BY_EXISTING_DECISION",
+   "resolvedBy": "closure §10 „Rezolvate în această fază”",
+   "rationale": "Rezolvată înaintea RC1, conform raportului de închidere §10 și §6."
+  },
+  {
+   "id": "D-21-DEP-INDEPENDENT-SET-SIZE",
+   "owner": "D-21",
+   "closureSection10": "resolved",
+   "ledger": {
+    "question": "Mecanismul independent care produce ≥ 59 oportunități P1, ≥ 30 auto-acceptabile P3 și acoperirea D-19.",
+    "status": "D-22"
+   },
+   "class": "RESOLVED_BEFORE_RC1",
+   "disposition": "RESOLVED_BY_EXISTING_DECISION",
+   "resolvedBy": "closure §10 „Rezolvate în această fază”",
+   "rationale": "Rezolvată înaintea RC1, conform raportului de închidere §10 și §6."
+  },
+  {
+   "id": "D-04-DEP-D05",
+   "owner": "D-04",
+   "closureSection10": "unlisted",
+   "ledger": {
+    "question": "Supravegherea activă / controlul fizic / participarea adultului.",
+    "status": "D-05"
+   },
+   "class": "RESOLVED_BEFORE_RC1",
+   "disposition": "RESOLVED_BY_EXISTING_DECISION",
+   "resolvedBy": "D-05",
+   "rationale": "D-05 decide supravegherea activă, controlul fizic și participarea adultului. Statusul din registru trimite chiar la această decizie. Closure §10 nu o listează (omisiune constatată de RC1, fără efect asupra politicii)."
+  },
+  {
+   "id": "D-05-DEP-D06",
+   "owner": "D-05",
+   "closureSection10": "unlisted",
+   "ledger": {
+    "question": "Efectul avertismentului / explicației / lecției după act.",
+    "status": "D-06"
+   },
+   "class": "RESOLVED_BEFORE_RC1",
+   "disposition": "RESOLVED_BY_EXISTING_DECISION",
+   "resolvedBy": "D-06",
+   "rationale": "D-06 decide efectul avertismentului / lecției după act. Statusul din registru trimite chiar la această decizie. Closure §10 nu o listează (omisiune constatată de RC1, fără efect asupra politicii)."
+  }
+ ]
+}

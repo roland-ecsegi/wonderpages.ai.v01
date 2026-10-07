@@ -19,6 +19,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { BRAIN_ROOT, sha256, canon, canonHash, git, indexEntries, globToRe, readJSON, readText, exists, writeJSON, verifyChain, readJSONL } from './lib.mjs';
+import { check as rc1Check, RC1 } from './rc1.mjs';
 
 export const FILES = Object.freeze({
   state: 'brain/state/CURRENT-STATE.json', stateMd: 'brain/state/CURRENT-STATE.md', phase: 'brain/phase/ACTIVE-PHASE.json', phases: 'brain/phase/PHASES.json',
@@ -342,6 +343,15 @@ export function runGate(root = BRAIN_ROOT, { allowDirty = false, env = process.e
       add('G14-delegation', bad.length ? 'FAIL' : 'PASS', bad.length ? 'operator delegation contract invalid' : `${d.id} ${d.status} for ${d.appliesToPhase}, anchored to the verbatim authorization (${vf})`, bad);
     }
   } catch (e) { add('G14-delegation', 'FAIL', String(e.message || e)); }
+
+  /* G15 RC1 deliverables: dependency register ↔ canonical sources (closure §10, ledger openDependencies), dispositions ↔ classes,
+     NORMATIVE closed only by a verbatim operator decision, spec / package references, coverage matrix, threshold-policy hash,
+     ground-truth schema, artificial test vectors (brain/tools/rc1.mjs). Absent register: nothing to check. */
+  try {
+    const r = rc1Check(root);
+    if (r.RC1_REGISTER === 'ABSENT') add('G15-rc1-register', 'PASS', 'no RC1 dependency register in this tree');
+    else { load(RC1.register); add('G15-rc1-register', r.RC1_REGISTER === 'CONSISTENT' ? 'PASS' : 'FAIL', r.RC1_REGISTER === 'CONSISTENT' ? `${r.summary.dependencies} dependencies classified (${Object.entries(r.summary.byClass).map(([k, v]) => `${k} ${v}`).join(', ')}); ${r.summary.openNormative} NORMATIVE awaiting the operator; ${r.summary.requiredCells}/${r.summary.matrixCells} coverage cells REQUIRED; threshold policy and test vectors consistent` : 'RC1 deliverables inconsistent with their canonical sources', r.problems); }
+  } catch (e) { add('G15-rc1-register', 'FAIL', String(e.message || e)); }
 
   const fail = checks.some(c => c.status === 'FAIL');
   const head = (() => { try { return git(['rev-parse', 'HEAD'], { cwd: root }).trim(); } catch { return null; } })();

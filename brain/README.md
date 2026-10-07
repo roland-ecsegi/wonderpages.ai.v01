@@ -50,7 +50,7 @@ critical claim to an exact anchor, and lets a tool prove that the pointers still
 | `brain/evidence/C0-ROUTINE-PROMPT.txt` | Fixed bootstrap instruction entered verbatim into the C0 routine (hash recorded in DECISION-C0-LIVE.md) | evidence |
 | `brain/evidence/CONTINUITY-1-ACCEPTANCE.json` | Exit evidence of CONTINUITY-1: zero drift, 428/428, self-tests, CI, fresh-session 27/27, Bridge | evidence |
 | `brain/continuity/` | Fresh-session continuity questionnaire, grader and recorded results | test |
-| `brain/tools/` | `brain.mjs` (gate/seal/index/render), `drift.mjs`, `bridge-export.mjs` | tooling |
+| `brain/tools/` | `brain.mjs` (gate/seal/index/render), `drift.mjs`, `bridge-export.mjs`, `rc1.mjs` (RC1 register / spec consistency, gate G15) | tooling |
 | `brain/tests/run.mjs` | Self-tests, including negative tests that must make the gate fail | tests |
 
 ## Reconstruct the project: where each answer lives
