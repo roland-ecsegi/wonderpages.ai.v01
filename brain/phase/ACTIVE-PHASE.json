@@ -89,9 +89,9 @@
   "Closure checkpoint brain/evidence/RC1-POLICY-DEPENDENCY-CLOSURE-CLOSURE.json; then STOP (no later phase starts without a new explicit operator authorization)"
  ],
  "nextAuthorizedStep": {
-  "id": "OAR-1-PROVENANCE-INVESTIGATION",
-  "actor": "claude",
-  "summary": "OAR-1 (operator authorization 2026-10-07): investigate first whether a relayed operator declaration can be proven to come from an explicit operator action; then design/implement/test/audit or fail closed (NOT FEASIBLE WITH CURRENT CAPABILITIES); stop at the activation checkpoint. RC1 decisions Q-01…Q-24 stay pending with the operator (still decidable in a Claude session)."
+  "id": "OPERATOR-DECISIONS-RC1-Q-AND-OAR-E1R",
+  "actor": "operator",
+  "summary": "RC1 IN_PROGRESS; OAR-1 verdict NOT_FEASIBLE_WITH_CURRENT_CAPABILITIES (final, fail closed). The operator decides: (a) Q-01…Q-23 of docs/enterprise/rc1/OPERATOR-DECISION-PACKAGE-01.md (then Q-24), which Claude records verbatim in evaluation/rc1-policy/decisions.jsonl before completing the dependent specification and the RC1 closure checkpoint; (b) whether to adopt the extension E1r of brain/evidence/OAR-1.md §6 as a new authority channel (trust root = operator activation comment pinning the verifier; declared credential/browser isolation). Nothing is built for E1r and nothing after RC1 starts without that decision."
  },
  "delegation": "brain/phase/DELEGATION.json",
  "zeroDriftBaseline": "brain/evidence/BASELINE-866a441.json",
@@ -147,6 +147,11 @@
     "at": "2026-10-07",
     "what": "ChatGPT audit round 3 (Bridge MSG-20261007T074136Z-chatgpt-c4f2): PASS, no findings; thread closed (MSG-20261007T074300Z-claude-e487); OPERATOR_DECISION_REQUIRED written to the operator (MSG-20261007T074301Z-claude-fe4c, Bridge 1c0c8a2)",
     "status": "awaiting operator decisions Q-01…Q-24"
+   },
+   {
+    "at": "2026-10-07",
+    "what": "OAR-1 ChatGPT adversarial audit (Bridge MSG-20261007T141526Z-chatgpt-d7a3, report audit/MSG-20261007T141526Z-chatgpt-d7a3.md): AGREE_NOT_FEASIBLE; connector probe on Bridge issue #6 → performed_via_github_app = chatgpt-codex-connector (comment 6039836428, re-read independently); findings OAR-A01…A07 blocking for E1 + A08 non-blocking, integrated in the E1r design (A02/A03 escalated as authority-boundary items)",
+    "status": "OAR-1 verdict final: NOT_FEASIBLE_WITH_CURRENT_CAPABILITIES; E1r awaiting operator decision"
    }
   ]
  },
@@ -154,7 +159,7 @@
   {
    "id": "OAR-1",
    "title": "OPERATOR AUTHORITY RELAY",
-   "status": "NOT_FEASIBLE_WITH_CURRENT_CAPABILITIES (draft verdict, under ChatGPT adversarial audit); smallest safe extension E1 proposed — needs operator decision",
+   "status": "NOT_FEASIBLE_WITH_CURRENT_CAPABILITIES (final; ChatGPT adversarial audit AGREE_NOT_FEASIBLE, Bridge MSG-20261007T141526Z-chatgpt-d7a3); smallest safe extension E1r (audit findings OAR-A01…A08 integrated in the design) proposed, NOT implemented — needs operator decision",
    "authorizedBy": {
     "actor": "operator",
     "date": "2026-10-07",

@@ -22,7 +22,7 @@
   ]
  },
  "activePhase": "RC1-POLICY-DEPENDENCY-CLOSURE",
- "nextAuthorizedStep": "OAR-1-PROVENANCE-INVESTIGATION",
+ "nextAuthorizedStep": "OPERATOR-DECISIONS-RC1-Q-AND-OAR-E1R",
  "phases": {
   "P1": "DONE",
   "P2": "DONE",
@@ -87,7 +87,7 @@
  ],
  "awaitingOperator": [
   "RC1 operator decisions Q-01…Q-23 (then Q-24, brief approval) — docs/enterprise/rc1/OPERATOR-DECISION-PACKAGE-01.md; 26 NORMATIVE dependencies; ChatGPT content audit PASS",
-  "OAR-1 OPERATOR AUTHORITY RELAY: final activation confirmation, after the verdict (PASS) — or the smallest safe extension (NOT FEASIBLE)",
+  "OAR-1 OPERATOR AUTHORITY RELAY: verdict NOT_FEASIBLE_WITH_CURRENT_CAPABILITIES (final, ChatGPT audit AGREE_NOT_FEASIBLE); decide whether to adopt the smallest safe extension E1r (brain/evidence/OAR-1.md §6) — not implemented",
   "Review of the RC1 closure checkpoint (when RC1 reaches it) and any authorization of a later phase",
   "Gold-v1 validation/acceptance; Gold-v2 adjudication",
   "Dinosaur World observations O1/O2; real Creative Upgrade; V1 pilot"

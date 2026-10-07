@@ -5,7 +5,7 @@ As of 2026-10-07 · functional checkpoint `866a441` · last decision commit `168
 Repository `roland-ecsegi/wonderpages.ai.v01` · branch `claude/wonderpages-enterprise-architecture-8hy7w9` · public
 
 **ACTIVE PHASE:** `RC1-POLICY-DEPENDENCY-CLOSURE` — RC1 POLICY DEPENDENCY CLOSURE / PRE-HARDENING SPECIFICATION (IN_PROGRESS)
-**NEXT_AUTHORIZED_STEP:** OAR-1-PROVENANCE-INVESTIGATION — OAR-1 (operator authorization 2026-10-07): investigate first whether a relayed operator declaration can be proven to come from an explicit operator action; then design/implement/test/audit or fail closed (NOT FEASIBLE WITH CURRENT CAPABILITIES); stop at the activation checkpoint. RC1 decisions Q-01…Q-24 stay pending with the operator (still decidable in a Claude session).
+**NEXT_AUTHORIZED_STEP:** OPERATOR-DECISIONS-RC1-Q-AND-OAR-E1R — RC1 IN_PROGRESS; OAR-1 verdict NOT_FEASIBLE_WITH_CURRENT_CAPABILITIES (final, fail closed). The operator decides: (a) Q-01…Q-23 of docs/enterprise/rc1/OPERATOR-DECISION-PACKAGE-01.md (then Q-24), which Claude records verbatim in evaluation/rc1-policy/decisions.jsonl before completing the dependent specification and the RC1 closure checkpoint; (b) whether to adopt the extension E1r of brain/evidence/OAR-1.md §6 as a new authority channel (trust root = operator activation comment pinning the verifier; declared credential/browser isolation). Nothing is built for E1r and nothing after RC1 starts without that decision.
 
 > Run `node brain/tools/brain.mjs gate` before relying on anything below. Every row names its authoritative source; if this view
 > and the source differ, the source wins and the gate must fail.
@@ -57,7 +57,7 @@ Sources: C-GOAL → `reference/architecture/WonderPages_Enterprise_Master_Archit
 
 ## Awaiting the operator
 - RC1 operator decisions Q-01…Q-23 (then Q-24, brief approval) — docs/enterprise/rc1/OPERATOR-DECISION-PACKAGE-01.md; 26 NORMATIVE dependencies; ChatGPT content audit PASS
-- OAR-1 OPERATOR AUTHORITY RELAY: final activation confirmation, after the verdict (PASS) — or the smallest safe extension (NOT FEASIBLE)
+- OAR-1 OPERATOR AUTHORITY RELAY: verdict NOT_FEASIBLE_WITH_CURRENT_CAPABILITIES (final, ChatGPT audit AGREE_NOT_FEASIBLE); decide whether to adopt the smallest safe extension E1r (brain/evidence/OAR-1.md §6) — not implemented
 - Review of the RC1 closure checkpoint (when RC1 reaches it) and any authorization of a later phase
 - Gold-v1 validation/acceptance; Gold-v2 adjudication
 - Dinosaur World observations O1/O2; real Creative Upgrade; V1 pilot

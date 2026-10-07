@@ -6,7 +6,7 @@ critical claim to an exact anchor, and lets a tool prove that the pointers still
 
 **CHAT IS TRANSIENT. REPOSITORY IS CANONICAL.** Start every session with `node brain/tools/brain.mjs gate` (see `/CLAUDE.md`).
 
-**ACTIVE PHASE:** `RC1-POLICY-DEPENDENCY-CLOSURE` (IN_PROGRESS) · **NEXT_AUTHORIZED_STEP:** `OAR-1-PROVENANCE-INVESTIGATION` (subscope OAR-1; RC1 decisions Q-01…Q-24 still pending) (canonical: `brain/phase/ACTIVE-PHASE.json`)
+**ACTIVE PHASE:** `RC1-POLICY-DEPENDENCY-CLOSURE` (IN_PROGRESS) · **NEXT_AUTHORIZED_STEP:** `OPERATOR-DECISIONS-RC1-Q-AND-OAR-E1R` (operator: RC1 Q-01…Q-24; OAR-1 = NOT FEASIBLE, adopt E1r or not) (canonical: `brain/phase/ACTIVE-PHASE.json`)
 
 ## Layout
 
