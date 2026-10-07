@@ -22,7 +22,7 @@
   ]
  },
  "activePhase": "RC1-POLICY-DEPENDENCY-CLOSURE",
- "nextAuthorizedStep": "RC1-DEPENDENCY-CLOSURE-WORK",
+ "nextAuthorizedStep": "RC1-OPERATOR-DECISIONS-PACKAGE-01",
  "phases": {
   "P1": "DONE",
   "P2": "DONE",
@@ -86,7 +86,7 @@
   }
  ],
  "awaitingOperator": [
-  "NORMATIVE policy dependencies packaged by RC1 (operator decision packages under docs/enterprise/rc1/), as they are escalated",
+  "RC1 operator decisions Q-01…Q-23 (then Q-24, brief approval) — docs/enterprise/rc1/OPERATOR-DECISION-PACKAGE-01.md; 26 NORMATIVE dependencies; ChatGPT content audit PASS",
   "Review of the RC1 closure checkpoint (when RC1 reaches it) and any authorization of a later phase",
   "Gold-v1 validation/acceptance; Gold-v2 adjudication",
   "Dinosaur World observations O1/O2; real Creative Upgrade; V1 pilot"

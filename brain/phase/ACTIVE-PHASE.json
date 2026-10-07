@@ -89,9 +89,9 @@
   "Closure checkpoint brain/evidence/RC1-POLICY-DEPENDENCY-CLOSURE-CLOSURE.json; then STOP (no later phase starts without a new explicit operator authorization)"
  ],
  "nextAuthorizedStep": {
-  "id": "RC1-DEPENDENCY-CLOSURE-WORK",
-  "actor": "claude",
-  "summary": "RC1 IN_PROGRESS: build the dependency register and the pre-hardening specification inside this contract; escalate only operator-reserved decisions (DELEGATION.json escalationTriggers); stop at the RC1 closure checkpoint."
+  "id": "RC1-OPERATOR-DECISIONS-PACKAGE-01",
+  "actor": "operator",
+  "summary": "RC1 IN_PROGRESS. ChatGPT content audit PASS (round 3). The operator decides or explicitly defers Q-01…Q-23 of docs/enterprise/rc1/OPERATOR-DECISION-PACKAGE-01.md (26 NORMATIVE dependencies); Claude records each statement verbatim in evaluation/rc1-policy/decisions.jsonl, completes the dependent specification and coverage cells, drafts the sanitized brief for Q-24, then prepares the RC1 closure checkpoint. Nothing after RC1 starts."
  },
  "delegation": "brain/phase/DELEGATION.json",
  "zeroDriftBaseline": "brain/evidence/BASELINE-866a441.json",
@@ -138,7 +138,15 @@
    {
     "at": "2026-10-07",
     "what": "ChatGPT audit round 2 (Bridge MSG-20261007T073626Z-chatgpt-b2e7, CHANGES_REQUIRED; A01…A06 resolved substantially, no further hidden normative choices found): RC1-B01 (spec intros no longer claim to close NORMATIVE dependencies; mechanical guard in rc1.mjs) and RC1-B02 (Q-01…Q-23) repaired",
-    "status": "re-audit round 3 requested"
+    "status": "re-audited in round 3",
+    "commits": [
+     "a1b7706"
+    ]
+   },
+   {
+    "at": "2026-10-07",
+    "what": "ChatGPT audit round 3 (Bridge MSG-20261007T074136Z-chatgpt-c4f2): PASS, no findings; thread closed (MSG-20261007T074300Z-claude-e487); OPERATOR_DECISION_REQUIRED written to the operator (MSG-20261007T074301Z-claude-fe4c, Bridge 1c0c8a2)",
+    "status": "awaiting operator decisions Q-01…Q-24"
    }
   ]
  }

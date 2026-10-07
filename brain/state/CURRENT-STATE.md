@@ -5,7 +5,7 @@ As of 2026-10-07 · functional checkpoint `866a441` · last decision commit `168
 Repository `roland-ecsegi/wonderpages.ai.v01` · branch `claude/wonderpages-enterprise-architecture-8hy7w9` · public
 
 **ACTIVE PHASE:** `RC1-POLICY-DEPENDENCY-CLOSURE` — RC1 POLICY DEPENDENCY CLOSURE / PRE-HARDENING SPECIFICATION (IN_PROGRESS)
-**NEXT_AUTHORIZED_STEP:** RC1-DEPENDENCY-CLOSURE-WORK — RC1 IN_PROGRESS: build the dependency register and the pre-hardening specification inside this contract; escalate only operator-reserved decisions (DELEGATION.json escalationTriggers); stop at the RC1 closure checkpoint.
+**NEXT_AUTHORIZED_STEP:** RC1-OPERATOR-DECISIONS-PACKAGE-01 — RC1 IN_PROGRESS. ChatGPT content audit PASS (round 3). The operator decides or explicitly defers Q-01…Q-23 of docs/enterprise/rc1/OPERATOR-DECISION-PACKAGE-01.md (26 NORMATIVE dependencies); Claude records each statement verbatim in evaluation/rc1-policy/decisions.jsonl, completes the dependent specification and coverage cells, drafts the sanitized brief for Q-24, then prepares the RC1 closure checkpoint. Nothing after RC1 starts.
 
 > Run `node brain/tools/brain.mjs gate` before relying on anything below. Every row names its authoritative source; if this view
 > and the source differ, the source wins and the gate must fail.
@@ -56,7 +56,7 @@ Sources: C-GOAL → `reference/architecture/WonderPages_Enterprise_Master_Archit
 - **B-GOLD-V2-ADJUDICATION** — Gold-v2 adjudication 0/226; validation NOT_COMPLETE. (C-GOLD-V2)
 
 ## Awaiting the operator
-- NORMATIVE policy dependencies packaged by RC1 (operator decision packages under docs/enterprise/rc1/), as they are escalated
+- RC1 operator decisions Q-01…Q-23 (then Q-24, brief approval) — docs/enterprise/rc1/OPERATOR-DECISION-PACKAGE-01.md; 26 NORMATIVE dependencies; ChatGPT content audit PASS
 - Review of the RC1 closure checkpoint (when RC1 reaches it) and any authorization of a later phase
 - Gold-v1 validation/acceptance; Gold-v2 adjudication
 - Dinosaur World observations O1/O2; real Creative Upgrade; V1 pilot
