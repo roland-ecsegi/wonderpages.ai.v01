@@ -147,6 +147,8 @@ try {
     assert.ok(failed(gate(), 'G15')); reset();
     editJSON('docs/enterprise/rc1/spec/threshold-policy.rc1.json', p => { p.gates.P3.maxObservedRate = 0.2; }); commit('relax');
     r = gate(); assert.ok(failed(r, 'G15')); assert.match(JSON.stringify(r), /canonicalSha256/); reset();
+    edit('docs/enterprise/rc1/PRE-HARDENING-SPEC.md', s => s + '\nÎnchide D-01-DEP-EXPLOSIVES.\n'); commit('claims closure');
+    r = gate(); assert.ok(failed(r, 'G15')); assert.match(JSON.stringify(r), /spec claims to close D-01-DEP-EXPLOSIVES/); reset();
     edit('docs/enterprise/rc1/PRE-HARDENING-SPEC.md', s => s.replace('## [S-INVALID-RUN]', '## INVALID-RUN')); commit('marker');
     r = gate(); assert.ok(failed(r, 'G15')); assert.match(JSON.stringify(r), /\[S-INVALID-RUN\] not found/);
   });

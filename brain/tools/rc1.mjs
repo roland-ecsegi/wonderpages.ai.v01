@@ -161,6 +161,8 @@ export function check(root = BRAIN_ROOT) {
   if (!exists(RC1.vectors, root)) P(`${RC1.vectors} missing (run rc1.mjs vectors --write)`);
   else { const v = computeVectors(root), stored = readJSON(RC1.vectors, root); if (canon(v) !== canon(stored)) P('artificial test vectors differ from their recomputation'); if (v.statistics.minN_oneSided95_le5pct !== 59 || v.statistics.minN_twoSided95_le5pct !== 72) P('statistics: 59 / 72 anchors of D-21 §8 not reproduced'); }
 
+  /* a spec line that says it closes ("Închide …") a dependency that is still NORMATIVE and open misstates the register (audit RC1-B01) */
+  for (const line of spec.split('\n').filter(l => /^Închide\b/.test(l))) for (const d of reg.dependencies) if (d.class === 'NORMATIVE' && d.disposition === 'OPERATOR_DECISION_REQUIRED' && line.includes(d.id)) P(`spec claims to close ${d.id}, which is NORMATIVE and open in the register`);
   const openNormative = reg.dependencies.filter(d => d.disposition === 'OPERATOR_DECISION_REQUIRED').map(d => d.id);
   return {
     RC1_REGISTER: problems.length ? 'INCONSISTENT' : 'CONSISTENT', problems,

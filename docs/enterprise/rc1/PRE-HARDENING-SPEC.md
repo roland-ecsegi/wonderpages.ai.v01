@@ -1,6 +1,6 @@
 # RC1 — Specificația pre-hardening
 
-**Faza:** `RC1-POLICY-DEPENDENCY-CLOSURE`. **Versiune:** 1.1 (după auditul ChatGPT runda 1; draft pentru deciziile operatorului).
+**Faza:** `RC1-POLICY-DEPENDENCY-CLOSURE`. **Versiune:** 1.2 (după auditul ChatGPT rundele 1–2; draft pentru deciziile operatorului).
 
 Specificația nu schimbă politica. Ea traduce deciziile D-01…D-22 în reprezentări, proceduri și cerințe testabile de care au
 nevoie fazele următoare: brief-ul sanitizat, setul ascuns, SH#2 și rularea oarbă. Unde politica e nedecisă, specificația nu
@@ -100,7 +100,7 @@ Toate taxonomiile de mai jos respectă aceleași reguli, decise în D-01…D-18:
 
 ## [S-TAX-HAZARD] Hazard: familie, clasă, condiție de siguranță, control
 
-Închide structural D-04-DEP-HAZARD-TAXONOMY și D-05-DEP-SUFFICIENT-CONTROL.
+Specifică componenta de reprezentare (ENGINEERING) a D-04-DEP-HAZARD-TAXONOMY și D-05-DEP-SUFFICIENT-CONTROL. Clasificările și standardele concrete rămân deschise (NORMATIVE, Q-21).
 
 **Înregistrarea unui hazard:**
 
@@ -328,8 +328,9 @@ Includerea în claim: **Q-16**. Simplificarea: **Q-13**. Lumile fantastice: **Q-
 
 ## [S-TAX-QUALITY] Calitate și validarea evaluării
 
-Închide D-16-DEP-NA-TAXONOMY, D-16-DEP-PASS-VERSION-RANKING, D-18-DEP-RETRY-COUNT și D-18-DEP-SUFFICIENCY-TAXONOMY, plus
-partea de reprezentare din D-16-DEP-SCORING-GRANULARITY.
+Închide D-18-DEP-RETRY-COUNT și partea de reprezentare din D-16-DEP-SCORING-GRANULARITY. Specifică doar componenta de
+reprezentare (ENGINEERING) a D-16-DEP-NA-TAXONOMY și D-18-DEP-SUFFICIENCY-TAXONOMY. Regulile concrete rămân deschise (Q-21).
+D-16-DEP-PASS-VERSION-RANKING rămâne deschisă (Q-23). Audit RC1-B01.
 
 **Contractul de scor (D-16 §7–§15)**
 
@@ -475,7 +476,7 @@ Proiecția servește doar comparabilității istorice. Acceptarea nu o foloseșt
   - banda: age-fit, iar la știință doar perceptibilitatea. Calitatea nu se stratifică pe bandă: pragurile D-16 / D-17 sunt
     uniforme (D-19 §4, §32; audit RC1-A04);
   - ediția: EN / RO pentru siguranță, content-policy, age-fit și știință; EN → RO pentru fidelitate; EN pentru calitate.
-- **Celulele dependente de decizii** (Q-01…Q-22) sunt `COVERAGE_REQUIREMENT_UNRESOLVED`. Nu se ascund în totaluri
+- **Celulele dependente de decizii** (Q-01…Q-23) sunt `COVERAGE_REQUIREMENT_UNRESOLVED`. Nu se ascund în totaluri
   (D-19 §31).
 - **Minimul structural:** ≥ 1 caz adjudecat în calibrare **și** ≥ 1 caz adjudecabil independent în validarea independentă,
   pentru fiecare celulă `REQUIRED` (D-19 §26). Non-zero ≠ suficiență statistică (D-19 §27).
@@ -732,7 +733,7 @@ Trasabilitatea cerințelor relevante, conform stării canonice:
 | Cerință | Sursă | Stare după RC1 |
 |---|---|---|
 | Set ascuns independent, sigilat înainte de SH#2, rulat o dată | D-20, D-22 | specificat ([S-HIDDEN-SET], [S-TOOLING]); construcția: faza următoare |
-| Acoperire structurală D-19 | D-19 | matricea definită ([S-COVERAGE]); celulele dependente de Q-01…Q-22 nerezolvate |
+| Acoperire structurală D-19 | D-19 | matricea definită ([S-COVERAGE]); celulele dependente de Q-01…Q-23 nerezolvate |
 | Porți de performanță P0–P9 precommitted | D-21 | document canonic ([S-THRESHOLDS]) |
 | Independența autorului (≥ 2 surse) | D-22 | protocol specificat; Source B = Q-18; storage = Q-19 |
 | Brief sanitizat aprobat | D-22 | specificat ([S-BRIEF]); draft după decizii; aprobare = operator |

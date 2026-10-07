@@ -130,7 +130,15 @@
    {
     "at": "2026-10-07",
     "what": "ChatGPT audit round 1 (Bridge MSG-20261007T072819Z-chatgpt-a4e1, CHANGES_REQUIRED): RC1-A01 (D-04/D-05 classifications → NORMATIVE Q-21, extended to D-16 N/A and D-18 sufficiency), RC1-A02 (D-13 ambiguity jurisdiction → Q-22), RC1-A03 (version ranking → Q-23), RC1-A04 (quality band strata removed: 354 → 326 REQUIRED), RC1-A05 (brief draft + approval → Q-24), RC1-A06 (Q-10 option C) repaired",
-    "status": "re-audit requested"
+    "status": "re-audited in round 2",
+    "commits": [
+     "d2b2b7a"
+    ]
+   },
+   {
+    "at": "2026-10-07",
+    "what": "ChatGPT audit round 2 (Bridge MSG-20261007T073626Z-chatgpt-b2e7, CHANGES_REQUIRED; A01…A06 resolved substantially, no further hidden normative choices found): RC1-B01 (spec intros no longer claim to close NORMATIVE dependencies; mechanical guard in rc1.mjs) and RC1-B02 (Q-01…Q-23) repaired",
+    "status": "re-audit round 3 requested"
    }
   ]
  }
