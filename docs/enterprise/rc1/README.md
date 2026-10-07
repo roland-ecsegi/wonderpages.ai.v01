@@ -45,7 +45,7 @@ Claude și ChatGPT actuali **nu** sunt Source B. Mesajele din Agent Bridge sunt 
 | Fișier | Ce este |
 |---|---|
 | `DEPENDENCY-REGISTER.json` | Toate cele 87 de dependențe: 71 deschise și 14 rezolvate în closure §10, plus 2 din registru pe care §10 nu le listează. Fiecare are textul exact din registru, o clasă, o dispoziție și raționamentul. |
-| `OPERATOR-DECISION-PACKAGE-01.md` | Întrebările Q-01…Q-20 pentru dependențele NORMATIVE și punctele de alegere: opțiuni, consecințe, recomandări etichetate. |
+| `OPERATOR-DECISION-PACKAGE-01.md` | Întrebările Q-01…Q-24 pentru dependențele NORMATIVE și punctele de alegere: opțiuni, consecințe, recomandări etichetate. |
 | `PRE-HARDENING-SPEC.md` | Specificația pre-hardening, cu secțiunile marcate `[S-…]`. |
 | `spec/ground-truth.schema.json` | Schema fizică a ground truth-ului multidimensional D-19 (A–H) și proiecția legacy. |
 | `spec/coverage-matrix.json` | Matricea de acoperire relevantă pentru politică (D-19): celulele REQUIRED și celulele nerezolvate (legate de Q-xx). |
@@ -64,10 +64,14 @@ Verificarea: `node brain/tools/rc1.mjs check`. Gate-ul o rulează ca G15. Ea ver
 
 ## Starea
 
-- 19 dependențe NORMATIVE așteaptă decizia operatorului (Q-01…Q-20).
-- 38 ENGINEERING sunt închise prin specificație.
+După auditul ChatGPT runda 1 (CHANGES_REQUIRED, findings RC1-A01…A06 reparate):
+
+- 26 de dependențe NORMATIVE așteaptă decizia operatorului (Q-01…Q-24; Q-24 vine după draftul brief-ului).
+- 31 ENGINEERING sunt închise prin specificație.
 - 7 EMPIRICAL au ruta de evidence specificată.
 - 7 OUT_OF_SCOPE sunt excluse, cu consecința pentru claim.
 - 16 au fost rezolvate înainte de RC1.
+- Matricea are 382 de celule: 326 REQUIRED și 56 nerezolvate.
 
-RC1 se închide după ce operatorul decide sau amână explicit fiecare întrebare și după auditul ChatGPT.
+RC1 se închide după ce operatorul decide sau amână explicit fiecare întrebare, după aprobarea brief-ului (Q-24) și după
+re-auditul ChatGPT.

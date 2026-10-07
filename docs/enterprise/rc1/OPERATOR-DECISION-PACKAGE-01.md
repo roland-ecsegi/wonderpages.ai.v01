@@ -11,7 +11,7 @@ Politica deja decisă (D-01…D-22) nu se redeschide aici. Întrebările acoper�
 
 Poți răspunde scurt, de exemplu:
 
-- „Accept recomandările pentru Q-01…Q-20.”
+- „Accept recomandările pentru Q-01…Q-23.” (Q-24 vine după draftul brief-ului.)
 - „Accept recomandările, cu excepția: Q-04 → opțiunea B; Q-16 → opțiunea A.”
 - Sau formulezi propria regulă pentru oricare întrebare.
 
@@ -42,6 +42,10 @@ consecința ei intră în claim-ul RC1: jurisdicția respectivă devine NOT VALI
 | Q-18 Source B | D-22-DEP-SOURCE-B | construcția setului ascuns |
 | Q-19 Storage-ul custodelui | D-22-DEP-STORAGE | construcția setului ascuns |
 | Q-20 REVIEW-ul de candidat în metricile D-21 | punct de alegere în D-19-DEP-PHYSICAL-SCHEMA (ambiguitate constatată de RC1) | ground truth, calculul P2 |
+| Q-21 Clasificările și standardele concrete ale taxonomiilor „decizii punctuale ale operatorului” | D-04-DEP-HAZARD-TAXONOMY, D-05-DEP-SUFFICIENT-CONTROL, D-16-DEP-NA-TAXONOMY, D-18-DEP-SUFFICIENCY-TAXONOMY | brief, matrice, ground truth, SH#2 |
+| Q-22 Jurisdicția ambiguității referențiale reale | D-13-DEP-REFERENCE-AMBIGUITY-TAXONOMY | brief, matrice, ground truth, SH#2 |
+| Q-23 Ranking-ul între două versiuni care trec poarta | D-16-DEP-PASS-VERSION-RANKING | SH#2 |
+| Q-24 Aprobarea brief-ului sanitizat (după draft) | D-22-DEP-SANITIZED-BRIEF | brief, construcția setului ascuns |
 
 ---
 
@@ -198,8 +202,10 @@ anti-bullying și nu lasă un tipar nerezolvat să depindă doar de un REVIEW.
 |---|---|
 | A | Confirmi: lint-ul rămâne permanent consultativ, nu e niciodată poartă și nu face parte din claim-ul RC1. |
 | B | Lint-ul se retrage. |
+| C | Lint-ul devine poartă sau semnal cu consecință definită: jurisdicție, consecință și condiții explicite. Risc: reintroduce un verdict lexical, pe care D-10 §23 și principiul „cuvântul e evidence, nu verdict” îl exclud. Ar cere și o regulă semantică separată. |
 
-**RECOMANDARE (Claude): A.** E statutul actual, fără efect asupra politicii semantice.
+**RECOMANDARE (Claude): A.** E statutul actual, fără efect asupra politicii semantice. C e listată pentru completitudine
+(audit RC1-A06).
 
 ## Age-fit
 
@@ -357,6 +363,76 @@ are conector Google Drive, deci Drive-ul conectat **nu** e hidden storage.
 scade) sunt adevărate simultan. Un REVIEW `confirm-or-dismiss` nu dă operatorului autoritatea de a publica eroarea, iar
 P2 protejează tocmai această autoritate.
 
+### Q-21 — Clasificările concrete din taxonomiile lăsate „deciziilor punctuale ale operatorului”
+
+**Constatat la auditul RC1-A01.** Registrul spune pentru D-04 și D-05 „de construit în Semantic Hardening #2; decizii punctuale
+ale operatorului unde e editorial”. Aceeași logică se aplică regulilor N/A per criteriu (D-16) și pragului de suficiență a
+evidence-ului per criteriu (D-18). Structura e specificată în RC1 (ENGINEERING). Totuși, fiecare clasificare concretă schimbă
+direct consecința:
+
+- familia de hazard → clasa A / B / C;
+- tipul de activitate → standardul de control suficient;
+- criteriul T01–T18 → regula N/A;
+- criteriul → pragul de suficiență.
+
+| Opțiune | Regimul |
+|---|---|
+| A | Clasificările se propun în SH#2 de implementator (marcate `PROPOSED`, fără efect normativ). Fiecare intră în vigoare numai după confirmarea ta, înregistrată verbatim. O clasificare neconfirmată nu produce niciun verdict automat: ieșirea e UNKNOWN → REVIEW, contabilizată fail-closed. Ground truth-ul setului ascuns îl adjudeci tu caz cu caz, după principiile deja decise, fără să aștepți taxonomia completă. |
+| B | Le decizi acum, în RC1, pe o listă propusă de Claude. RC1 durează mai mult. Taxonomia ar fi fixată înainte de SH#2, fără evidence de dezvoltare. |
+| C | Delegi clasificările implementatorului, fără confirmare. Contrazice formularea „decizii punctuale ale operatorului” din registru. |
+
+**RECOMANDARE (Claude): A.** Respectă statusul din registru (SH#2 + decizii punctuale ale tale). Nu blochează setul ascuns,
+pentru că ground truth-ul se adjudecă oricum pe caz. Împiedică orice clasificare neconfirmată să producă verdicte.
+
+### Q-22 — Jurisdicția ambiguității referențiale reale
+
+**Deja decis.** D-13 §17–§19:
+
+- ambiguitatea referențială (referent nedeterminabil) ≠ încărcarea de urmărire (referent determinabil, cu efort);
+- încărcarea e age-fit;
+- ambiguitatea reală „poate exista și ca problemă generală de clarity / quality”, iar taxonomia rămâne deschisă.
+
+Rubrica T15 cere „unambiguous pronouns”. D-17: o singură jurisdicție per defect.
+
+| Opțiune | Regula |
+|---|---|
+| A | Ambiguitatea reală e jurisdicția `quality` / T15 (prag 7, D-16). Aceeași ambiguitate observată de age-fit se leagă, nu se adjudecă a doua oară. |
+| B | Ambiguitatea reală e age-fit (material → REVIEW `waivable`); T15 nu o adjudecă. |
+| C | Depinde de bandă: la 3–4 e age-fit, altfel quality / T15. |
+
+**RECOMANDARE (Claude): A.** T15 o numește explicit. Ambiguitatea reală e un defect pentru orice cititor, nu doar pentru o
+bandă.
+
+### Q-23 — Ranking-ul între două versiuni care trec poarta
+
+**Deja decis.** O versiune validă la poartă bate una care pică (D-16 §32–§34). Algoritmul între versiuni PASS „poate fi
+definit separat”.
+
+| Opțiune | Regula |
+|---|---|
+| A | Media canonică mai mare; la egalitate, minimul cel mai mare; apoi versiunea mai veche (mai puține modificări). |
+| B | Minimul cel mai mare primul (prudență: cea mai slabă dimensiune e cea mai bună), apoi media. |
+| C | Fără ranking automat: toate versiunile PASS ți se prezintă, iar tu alegi. |
+| D | Ultima versiune care trece (cea mai recentă reparație). |
+
+**RECOMANDARE (Claude): A, cu C ca alternativă** dacă vrei controlul editorial complet. Până la decizie, tooling-ul raportează
+toate versiunile PASS și nu alege.
+
+### Q-24 — Aprobarea brief-ului normativ sanitizat
+
+**Deja decis.** Implementatorul produce un draft mecanic. Operatorul îl revizuiește și îl aprobă înainte de folosire
+(D-22 §18). Specificația e în `PRE-HARDENING-SPEC.md` [S-BRIEF].
+
+**Când:** după deciziile Q-01…Q-23. Claude produce draftul `brief-rc1-v1` (versiune, SHA-256, screening de sanitizare) și ți-l
+trimite.
+
+| Opțiune | Regula |
+|---|---|
+| A | Aprobi `brief-rc1-vN` (hash-ul exact) ca input pentru autorii setului ascuns. |
+| B | Ceri modificări: urmează un draft nou, cu hash nou. |
+
+**Nu există recomandare acum:** draftul nu există încă. RC1 nu se închide fără această aprobare (audit RC1-A05).
+
 ---
 
 ## După decizii
@@ -364,4 +440,4 @@ P2 protejează tocmai această autoritate.
 1. Claude înregistrează declarația ta, cuvânt cu cuvânt, în `evaluation/rc1-policy/decisions.jsonl` (înlănțuit prin hash).
 2. Registrul trece dependențele la `CLOSED_BY_OPERATOR_DECISION` sau `DEFERRED_BY_OPERATOR`. Gate-ul G15 verifică legătura.
 3. Specificația pre-hardening completează celulele matricei și secțiunile dependente.
-4. Claude produce draftul mecanic al brief-ului sanitizat. **Aprobarea brief-ului e o decizie separată a ta** (D-22 §18).
+4. Claude produce draftul mecanic al brief-ului sanitizat. **Aprobarea lui e Q-24, o decizie separată a ta** (D-22 §18).

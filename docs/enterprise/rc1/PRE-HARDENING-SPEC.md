@@ -1,6 +1,6 @@
 # RC1 — Specificația pre-hardening
 
-**Faza:** `RC1-POLICY-DEPENDENCY-CLOSURE`. **Versiune:** 1.0 (draft pentru auditul ChatGPT și pentru deciziile operatorului).
+**Faza:** `RC1-POLICY-DEPENDENCY-CLOSURE`. **Versiune:** 1.1 (după auditul ChatGPT runda 1; draft pentru deciziile operatorului).
 
 Specificația nu schimbă politica. Ea traduce deciziile D-01…D-22 în reprezentări, proceduri și cerințe testabile de care au
 nevoie fazele următoare: brief-ul sanitizat, setul ascuns, SH#2 și rularea oarbă. Unde politica e nedecisă, specificația nu
@@ -65,12 +65,13 @@ Reguli:
    Nu scade T07 (D-17 §14–§16, §29). Findings date criticului ca context au proveniență și nu comandă nota (D-14 §24–§28).
 4. O închidere a operatorului legată de hash nu se redeschide prin T07 cu aceeași evidence. Evidence material nou creează un
    candidat nou în jurisdicția corectă (D-17 §21–§25).
-5. **Ambiguitatea referențială** (D-13-DEP-REFERENCE-AMBIGUITY-TAXONOMY):
-   - **Ambiguitatea reală** e jurisdicția `quality`, criteriul T15. Ambiguitate reală înseamnă că un cititor competent nu
-     poate determina referentul. T15 cere „unambiguous pronouns”.
-   - **Încărcarea de urmărire** e `age-fit`. Încărcarea de urmărire înseamnă că referentul e determinabil, dar cere efort pe
-     bandă (D-13 §18–§19).
-   - Pentru același defect există o singură consecință autoritativă.
+5. **Ambiguitatea referențială** (D-13-DEP-REFERENCE-AMBIGUITY-TAXONOMY). Reprezentarea separă două lucruri (D-13 §18):
+   - `referent-undeterminable`: un cititor competent nu poate determina referentul;
+   - `referent-tracking-load`: referentul e determinabil, dar cere efort.
+
+   Încărcarea de urmărire e age-fit (D-13 §18). **Jurisdicția ambiguității reale** (quality / T15, age-fit sau ambele legate)
+   e **deschisă: Q-22**. Până la decizie, celula ei e `COVERAGE_REQUIREMENT_UNRESOLVED`. Indiferent de decizie, pentru
+   același defect există o singură consecință autoritativă (audit RC1-A02).
 6. **SAFETY_DISTRESS_CONTEXT** (D-14-DEP-SAFETY-DISTRESS-CONTEXT) se descompune în două findings:
    - un finding de `physical-safety`: mediul acvatic, adâncimea, singurătatea, după D-07;
    - un finding de `age-fit`: distress-ul emoțional, după D-11.
@@ -132,15 +133,27 @@ framing             endorsed | neutral | cautionary | prevented | contradictory 
 | Lecție ulterioară, A / B, fără consecință gravă | REVIEW (poveste-avertisment, D-06 §5) |
 | Clasa C sau consecință gravă / ireversibilă | BLOCK (D-06 §16–§17) |
 
-**Familiile și clasa lor.** Lista completă se construiește în SH#2. Familiile de mediu intră aici dacă Q-06 = A. Pentru
-fiecare familie se înregistrează:
+**Familiile și clasa lor.** Clasificarea concretă a unei familii în A / B / C și condiția cerută pe activitate schimbă
+direct consecința, deci sunt **alegeri normative**. Regimul lor e **Q-21** (audit RC1-A01). Familiile de mediu intră aici
+dacă Q-06 = A.
+
+Pentru fiecare familie se înregistrează:
 
 - clasa;
 - mecanismul;
 - condiția cerută;
-- sursa clasificării: decizia D-xx, decizia punctuală a operatorului sau derivarea implementatorului, marcată „de confirmat”.
+- `classificationSource`, care poate fi:
+  - decizia D-xx citată;
+  - decizia operatorului înregistrată verbatim;
+  - `PROPOSED`, o propunere a implementatorului **fără efect normativ**.
 
-O familie fără clasă confirmată nu poate produce `PASS` prin atenuare.
+O familie fără clasă confirmată de operator sau de o decizie citată nu poate produce **niciun** verdict automat:
+
+- nici PASS prin atenuare;
+- nici BLOCK sau REVIEW pe baza clasei.
+
+Ieșirea ei e `UNKNOWN`. Se escaladează ca REVIEW și se contabilizează ca fail-closed, separat de deciziile semantice corecte
+(D-21 §17–§18). Ground truth-ul cazurilor e adjudecat de operator, caz cu caz (D-22 §24).
 
 **Control suficient.** Dovada are trei componente:
 
@@ -148,7 +161,9 @@ O familie fără clasă confirmată nu poate produce `PASS` prin atenuare.
 - **acoperirea**: întreaga parte periculoasă e controlată;
 - **expunerea reziduală**: copilul mai execută partea riscantă?
 
-Prezența, privitul și instrucțiunea verbală nu sunt, singure, control (D-05 §1–§4).
+Prezența, privitul și instrucțiunea verbală nu sunt, singure, control (D-05 §1–§4). Acesta e modelul de dovadă
+(ENGINEERING). **Standardul concret** de suficiență pe tip de activitate e o alegere normativă (Q-21). Până la decizie,
+suficiența incertă rămâne REVIEW (D-05 §7). Nicio implementare nu o poate declara „suficientă” fără standardul confirmat.
 
 ## [S-TAX-SEVERITY] Scala consecințelor
 
@@ -327,7 +342,8 @@ partea de reprezentare din D-16-DEP-SCORING-GRANULARITY.
 6. Test obligatoriu: 17 × 8.1 + 6.3 ⇒ media exactă = 8, deci condiția mediei trece. 6.3 < 7 ⇒ pică minimul. Motivul
    principal e minimul.
 
-**NOT_APPLICABLE (D-16 §16–§21).** Înregistrarea conține:
+**NOT_APPLICABLE (D-16 §16–§21).** Mecanismul e decis. **Regulile concrete per criteriu T01–T18** sunt alegeri normative
+(Q-21). Înregistrarea conține:
 
 - criterionId;
 - versiunea definiției;
@@ -339,8 +355,8 @@ partea de reprezentare din D-16-DEP-SCORING-GRANULARITY.
 - proveniența.
 
 Criteriul e aplicabil implicit. Un N/A fără evidence sau unul folosit pentru a ridica media duce la `ASSESSMENT_INVALID`. Un
-N/A legitim iese din numitorul mediei. Regulile per criteriu T01–T18 se construiesc în SH#2, cu decizii punctuale ale
-operatorului.
+N/A legitim iese din numitorul mediei. Până la regulile confirmate (Q-21), orice N/A cere evidence și se tratează conform
+D-16 §17–§19, caz cu caz.
 
 **Motive (D-16 §60).** Un singur motiv principal per încălcare, cel mai specific:
 
@@ -362,8 +378,9 @@ Ordinea:
 
 O versiune validă la poartă bate întotdeauna una care pică.
 
-**Ranking-ul între două versiuni valide** (D-16-DEP-PASS-VERSION-RANKING; implicit tehnic, nu politică): media canonică mai
-mare, apoi minimul cel mai mare, apoi versiunea mai veche. E determinist și auditat. Nu schimbă eligibilitatea.
+**Ranking-ul între două versiuni valide** (D-16-DEP-PASS-VERSION-RANKING) e **deschis: Q-23**. E o preferință de produs
+(audit RC1-A03). Până la decizie, tooling-ul raportează toate versiunile PASS, cu scorurile lor canonice. Nu alege un
+câștigător automat.
 
 **Validarea evaluării (D-18)**
 
@@ -382,7 +399,9 @@ Verificările deterministe (D-18 §11), care se aplică inclusiv evidence-ului d
 
 Validatorul semantic e logic distinct de critic (D-18 §90).
 
-**Suficiența e un bundle** (D-18-DEP-SUFFICIENCY-TAXONOMY). Pentru fiecare criteriu, bundle-ul conține:
+**Suficiența e un bundle** (D-18-DEP-SUFFICIENCY-TAXONOMY). Structura de mai jos e ENGINEERING. **Pragul concret de
+„suficient” per criteriu** e o alegere normativă (Q-21). Până atunci, o suficiență nedemonstrată dă `UNVERIFIED` →
+`ASSESSMENT_VALIDATION_REQUIRED` (D-18 §5). Pentru fiecare criteriu, bundle-ul conține:
 
 - tipul criteriului: local sau global (pacing, coerență, agency, final, voce);
 - evidence-ul minim:
@@ -453,14 +472,16 @@ Proiecția servește doar comparabilității istorice. Acceptarea nu o foloseșt
 
 - **Ramurile** sunt consecințele decise ale D-01…D-18. Frontierele sunt marcate (`boundaryFamily`).
 - **Stratificarea** se aplică numai unde politica o cere:
-  - banda: age-fit, calitate, iar la știință doar perceptibilitatea;
+  - banda: age-fit, iar la știință doar perceptibilitatea. Calitatea nu se stratifică pe bandă: pragurile D-16 / D-17 sunt
+    uniforme (D-19 §4, §32; audit RC1-A04);
   - ediția: EN / RO pentru siguranță, content-policy, age-fit și știință; EN → RO pentru fidelitate; EN pentru calitate.
-- **Celulele dependente de decizii** (Q-01…Q-17) sunt `COVERAGE_REQUIREMENT_UNRESOLVED`. Nu se ascund în totaluri
+- **Celulele dependente de decizii** (Q-01…Q-22) sunt `COVERAGE_REQUIREMENT_UNRESOLVED`. Nu se ascund în totaluri
   (D-19 §31).
 - **Minimul structural:** ≥ 1 caz adjudecat în calibrare **și** ≥ 1 caz adjudecabil independent în validarea independentă,
   pentru fiecare celulă `REQUIRED` (D-19 §26). Non-zero ≠ suficiență statistică (D-19 §27).
 - **Consecință practică:**
-  - versiunea 1.0 are **354 de celule `REQUIRED`** (text, Page / Book) și 56 nerezolvate;
+  - versiunea 1.1 are **326 de celule `REQUIRED`** (text, Page / Book) și 56 nerezolvate. În 1.0 erau 354: ramurile de calitate
+    multiplicate pe bandă au fost eliminate (audit RC1-A04), pentru că pragurile D-16 / D-17 sunt identice pe benzi;
   - un caz bilingv evaluat pe ambele ediții acoperă celula EN și celula RO ale aceleiași ramuri;
   - cazurile pot servi simultan D-21 P1 / P3 (overlap legitim, D-21 §41);
   - setul ascuns va avea deci câteva sute de cazuri;
@@ -671,7 +692,8 @@ să fie consistentă. Ei conțin:
 
 ## [S-BRIEF] Brief-ul normativ sanitizat
 
-Închide D-22-DEP-SANITIZED-BRIEF la nivel de specificație. Draftul vine după decizii. Aprobarea e a operatorului.
+Specifică brief-ul (componenta ENGINEERING a D-22-DEP-SANITIZED-BRIEF). Dependența însăși („draft mecanic + aprobarea
+operatorului”) rămâne **deschisă** până la draft și până la aprobarea ta (Q-24; audit RC1-A05).
 
 **Conține** (D-22 §14):
 
@@ -710,7 +732,7 @@ Trasabilitatea cerințelor relevante, conform stării canonice:
 | Cerință | Sursă | Stare după RC1 |
 |---|---|---|
 | Set ascuns independent, sigilat înainte de SH#2, rulat o dată | D-20, D-22 | specificat ([S-HIDDEN-SET], [S-TOOLING]); construcția: faza următoare |
-| Acoperire structurală D-19 | D-19 | matricea definită ([S-COVERAGE]); celulele dependente de Q-01…Q-17 nerezolvate |
+| Acoperire structurală D-19 | D-19 | matricea definită ([S-COVERAGE]); celulele dependente de Q-01…Q-22 nerezolvate |
 | Porți de performanță P0–P9 precommitted | D-21 | document canonic ([S-THRESHOLDS]) |
 | Independența autorului (≥ 2 surse) | D-22 | protocol specificat; Source B = Q-18; storage = Q-19 |
 | Brief sanitizat aprobat | D-22 | specificat ([S-BRIEF]); draft după decizii; aprobare = operator |

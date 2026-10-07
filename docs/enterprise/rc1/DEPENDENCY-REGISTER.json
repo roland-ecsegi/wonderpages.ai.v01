@@ -1,7 +1,7 @@
 {
  "schema": "wonderpages.rc1.dependency-register/1",
  "phase": "RC1-POLICY-DEPENDENCY-CLOSURE",
- "version": 1,
+ "version": 2,
  "sources": [
   "docs/enterprise/records/GOLD-V2-POLICY-CLOSURE.md §10",
   "evaluation/gold-v2-policy/decisions.jsonl (openDependencies, verbatim)"
@@ -33,16 +33,16 @@
  "counts": {
   "total": 87,
   "byClass": {
-   "NORMATIVE": 19,
+   "NORMATIVE": 26,
    "EMPIRICAL": 7,
-   "ENGINEERING": 38,
+   "ENGINEERING": 31,
    "OUT_OF_SCOPE": 7,
    "RESOLVED_BEFORE_RC1": 16
   },
   "byDisposition": {
-   "OPERATOR_DECISION_REQUIRED": 19,
+   "OPERATOR_DECISION_REQUIRED": 26,
    "EVIDENCE_ROUTE_SPECIFIED": 7,
-   "CLOSED_BY_SPECIFICATION": 38,
+   "CLOSED_BY_SPECIFICATION": 31,
    "EXCLUDED_FROM_RC1": 7,
    "RESOLVED_BY_EXISTING_DECISION": 16
   }
@@ -182,18 +182,23 @@
     "question": "Clasificarea fiecărei familii de hazard în A (condițional) / B (cere control) / C (periculos indiferent de permisiune) și condiția de siguranță necesară pentru fiecare — D-04 a stabilit principiul, nu taxonomia completă.",
     "status": "deschisă (de construit în Semantic Hardening #2; decizii punctuale ale operatorului unde e editorial)"
    },
-   "class": "ENGINEERING",
-   "components": [],
-   "disposition": "CLOSED_BY_SPECIFICATION",
+   "class": "NORMATIVE",
+   "components": [
+    "ENGINEERING"
+   ],
+   "disposition": "OPERATOR_DECISION_REQUIRED",
    "blocks": [
-    "SH2_IMPLEMENTATION",
-    "COVERAGE_MATRIX"
+    "SANITIZED_BRIEF",
+    "COVERAGE_MATRIX",
+    "HIDDEN_SET_GROUND_TRUTH",
+    "SH2_IMPLEMENTATION"
    ],
    "visualCrossModal": true,
-   "rationale": "D-04 / D-05 / D-06 decid definițiile A / B / C și logica condiției de siguranță. Registrul spune: „de construit în Semantic Hardening #2; decizii punctuale ale operatorului unde e editorial”. RC1 specifică structura (familie, clasă, condiție cerută, dovadă) și regula de adjudecare caz cu caz. Clasificarea completă pe familii rămâne în SH#2.",
+   "rationale": "Componenta de reprezentare (familie, clasă, condiție cerută, dovadă) și regula de verdict decisă de D-04 / D-05 / D-06 sunt specificate în [S-TAX-HAZARD] (ENGINEERING). Clasificarea concretă a fiecărei familii în A / B / C și condiția pe activitate schimbă direct PASS / REVIEW / BLOCK, deci sunt alegeri normative; registrul le atribuie „deciziilor punctuale ale operatorului unde e editorial”. Regimul lor (Q-21) e decizia operatorului (audit RC1-A01).",
    "specRefs": [
     "S-TAX-HAZARD"
-   ]
+   ],
+   "packageRef": "Q-21"
   },
   {
    "id": "D-05-DEP-SUFFICIENT-CONTROL",
@@ -203,17 +208,21 @@
     "question": "Standardul de „control suficient” pe tipuri de activitate (ce dovadă în text/imagine arată că mecanismul e neutralizat).",
     "status": "deschisă (Semantic Hardening #2; decizii punctuale ale operatorului unde e editorial)"
    },
-   "class": "ENGINEERING",
-   "components": [],
-   "disposition": "CLOSED_BY_SPECIFICATION",
+   "class": "NORMATIVE",
+   "components": [
+    "ENGINEERING"
+   ],
+   "disposition": "OPERATOR_DECISION_REQUIRED",
    "blocks": [
+    "HIDDEN_SET_GROUND_TRUTH",
     "SH2_IMPLEMENTATION"
    ],
    "visualCrossModal": true,
-   "rationale": "D-05 decide cele trei rezultate (neutralizat → poate PASS; relevant dar incert → REVIEW; irelevant / insuficient → verdictul hazardului). Rămâne modelul de dovadă pentru „control suficient”. Registrul îl trimite în SH#2, cu decizii punctuale ale operatorului unde e editorial.",
+   "rationale": "Modelul de dovadă (relevanță, acoperire, expunere reziduală) e specificat în [S-TAX-HAZARD] (ENGINEERING). Standardul concret de „control suficient” pe tip de activitate decide PASS vs REVIEW și e alegere normativă („decizii punctuale ale operatorului unde e editorial”). Regimul: Q-21 (audit RC1-A01).",
    "specRefs": [
     "S-TAX-HAZARD"
-   ]
+   ],
+   "packageRef": "Q-21"
   },
   {
    "id": "D-06-DEP-SEVERITY-TAXONOMY",
@@ -645,18 +654,24 @@
     "question": "Taxonomia ambiguității și a urmăririi referențiale; când ambiguitatea reală e problemă generală de claritate/calitate.",
     "status": "deschisă"
    },
-   "class": "ENGINEERING",
-   "components": [],
-   "disposition": "CLOSED_BY_SPECIFICATION",
+   "class": "NORMATIVE",
+   "components": [
+    "ENGINEERING"
+   ],
+   "disposition": "OPERATOR_DECISION_REQUIRED",
    "blocks": [
+    "SANITIZED_BRIEF",
+    "COVERAGE_MATRIX",
+    "HIDDEN_SET_GROUND_TRUTH",
     "SH2_IMPLEMENTATION"
    ],
    "visualCrossModal": false,
-   "rationale": "D-13 §17–§19 separă ambiguitatea referențială de încărcarea de urmărire. Rubrica existentă T15 cere „unambiguous pronouns”. RC1 leagă ambiguitatea reală de jurisdicția calitate (T15), după regula D-17 a unei singure jurisdicții. Încărcarea de urmărire rămâne age-fit.",
+   "rationale": "Separarea tehnică „referent nedeterminabil” vs „referent determinabil cu efort” (D-13 §17–§18) e specificată în [S-JURIS] (ENGINEERING). Întrebarea deschisă din registru — când ambiguitatea reală e problemă generală de claritate / calitate — decide jurisdicția și poarta, deci e normativă: Q-22 (audit RC1-A02).",
    "specRefs": [
     "S-TAX-AGEFIT",
     "S-JURIS"
-   ]
+   ],
+   "packageRef": "Q-22"
   },
   {
    "id": "D-13-DEP-STRUCTURAL-FAMILY-DIVERSITY",
@@ -941,17 +956,20 @@
     "question": "Taxonomia completă a aplicabilității pentru T01–T18 (ex. T09 în volumul 1, T12).",
     "status": "deschisă"
    },
-   "class": "ENGINEERING",
-   "components": [],
-   "disposition": "CLOSED_BY_SPECIFICATION",
+   "class": "NORMATIVE",
+   "components": [
+    "ENGINEERING"
+   ],
+   "disposition": "OPERATOR_DECISION_REQUIRED",
    "blocks": [
     "SH2_IMPLEMENTATION"
    ],
    "visualCrossModal": false,
-   "rationale": "Mecanismul e decis (D-16 §16–§21): evidence, aplicabil implicit, înregistrare auditată, excludere din medie, anti-gaming. Regulile per criteriu T01–T18 se construiesc în SH#2. Fiecare caz ascuns de calitate e adjudecat de operator prin mecanism.",
+   "rationale": "Mecanismul N/A e decis de D-16 §16–§21 și specificat în [S-TAX-QUALITY] (ENGINEERING). Regulile concrete de aplicabilitate per criteriu T01–T18 schimbă media și deci consecința; sunt alegeri normative. Regimul: Q-21 (aceeași logică ca RC1-A01).",
    "specRefs": [
     "S-TAX-QUALITY"
-   ]
+   ],
+   "packageRef": "Q-21"
   },
   {
    "id": "D-16-DEP-COLLECTION-SYSTEMIC-QUALITY",
@@ -1024,17 +1042,18 @@
     "question": "Ranking-ul între două versiuni care trec poarta.",
     "status": "deschisă"
    },
-   "class": "ENGINEERING",
+   "class": "NORMATIVE",
    "components": [],
-   "disposition": "CLOSED_BY_SPECIFICATION",
+   "disposition": "OPERATOR_DECISION_REQUIRED",
    "blocks": [
     "SH2_IMPLEMENTATION"
    ],
    "visualCrossModal": false,
-   "rationale": "Regula de siguranță e decisă (o versiune validă la poartă bate una care pică). Ranking-ul între două versiuni care trec nu schimbă eligibilitatea de publicare. RC1 specifică un ranking determinist implicit, ca detaliu de implementare.",
+   "rationale": "D-16 decide doar că o versiune validă la poartă bate una care pică (§32–§34) și spune că algoritmul de ranking între două versiuni PASS „poate fi definit separat”. Alegerea schimbă artefactul publicat: preferință de produs, deci normativă: Q-23 (audit RC1-A03). Până la decizie, tooling-ul raportează toate versiunile PASS fără să aleagă.",
    "specRefs": [
     "S-TAX-QUALITY"
-   ]
+   ],
+   "packageRef": "Q-23"
   },
   {
    "id": "D-17-DEP-VALUES-TAXONOMY",
@@ -1160,17 +1179,20 @@
     "question": "Taxonomia per criteriu a evidence-ului suficient (inclusiv bundle pentru criterii globale).",
     "status": "deschisă"
    },
-   "class": "ENGINEERING",
-   "components": [],
-   "disposition": "CLOSED_BY_SPECIFICATION",
+   "class": "NORMATIVE",
+   "components": [
+    "ENGINEERING"
+   ],
+   "disposition": "OPERATOR_DECISION_REQUIRED",
    "blocks": [
     "SH2_IMPLEMENTATION"
    ],
    "visualCrossModal": false,
-   "rationale": "D-18 §24–§30 decid că suficiența e semantică (nu lungime), pe bundle pentru criterii globale, raportată la direcția și scorul evaluării. RC1 specifică structura bundle-ului. Regulile per criteriu se construiesc în SH#2.",
+   "rationale": "Structura bundle-ului de suficiență e decisă de D-18 §24–§30 și specificată în [S-TAX-QUALITY] (ENGINEERING). Pragul concret de „evidence suficient” per criteriu decide VALIDATED vs UNVERIFIED și deci consecința; e alegere normativă. Regimul: Q-21 (aceeași logică ca RC1-A01).",
    "specRefs": [
     "S-TAX-QUALITY"
-   ]
+   ],
+   "packageRef": "Q-21"
   },
   {
    "id": "D-18-DEP-VISUAL-CROSSMODAL-EVIDENCE",
@@ -1428,19 +1450,20 @@
     "question": "Draftul mecanic și aprobarea operatorului pentru SANITIZED NORMATIVE POLICY BRIEF.",
     "status": "deschisă (pasul 3 al secvenței canonice)"
    },
-   "class": "ENGINEERING",
+   "class": "NORMATIVE",
    "components": [
-    "NORMATIVE"
+    "ENGINEERING"
    ],
-   "disposition": "CLOSED_BY_SPECIFICATION",
+   "disposition": "OPERATOR_DECISION_REQUIRED",
    "blocks": [
     "SANITIZED_BRIEF"
    ],
    "visualCrossModal": false,
-   "rationale": "D-22 §14–§18 decid conținutul permis / interzis, versionarea și aprobarea. RC1 specifică brief-ul. Draftul mecanic vine după ce intrările normative sunt decise. Aprobarea e a operatorului.",
+   "rationale": "Specificația brief-ului e închisă în [S-BRIEF] (ENGINEERING). Dependența din registru e „draftul mecanic și aprobarea operatorului”: rămâne deschisă până la draft și până la aprobarea operatorului (Q-24, după Q-01…Q-23). Audit RC1-A05.",
    "specRefs": [
     "S-BRIEF"
-   ]
+   ],
+   "packageRef": "Q-24"
   },
   {
    "id": "D-22-DEP-SOURCE-B",
@@ -1725,6 +1748,16 @@
    "disposition": "RESOLVED_BY_EXISTING_DECISION",
    "resolvedBy": "D-06",
    "rationale": "D-06 decide efectul avertismentului / lecției după act. Statusul din registru trimite chiar la această decizie. Closure §10 nu o listează (omisiune constatată de RC1, fără efect asupra politicii)."
+  }
+ ],
+ "history": [
+  {
+   "version": 1,
+   "commit": "bc35473"
+  },
+  {
+   "version": 2,
+   "change": "audit RC1 round 1 (Bridge MSG-20261007T072819Z-chatgpt-a4e1): RC1-A01 D-04/D-05 (+ D-16-NA, D-18-SUFFICIENCY, same logic) → NORMATIVE Q-21; RC1-A02 D-13-REFERENCE → Q-22; RC1-A03 D-16-RANKING → Q-23; RC1-A05 D-22-BRIEF → Q-24"
   }
  ]
 }

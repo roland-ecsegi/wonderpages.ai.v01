@@ -122,7 +122,15 @@
    {
     "at": "2026-10-07",
     "what": "Dependency register (87 dependencies classified), operator decision package Q-01…Q-20, pre-hardening specification, ground-truth schema, coverage matrix (410 cells, 354 REQUIRED), D-21 threshold-policy document, artificial test vectors; gate G15 (brain/tools/rc1.mjs)",
-    "status": "draft for ChatGPT audit and operator decisions"
+    "status": "draft for ChatGPT audit and operator decisions",
+    "commits": [
+     "bc35473"
+    ]
+   },
+   {
+    "at": "2026-10-07",
+    "what": "ChatGPT audit round 1 (Bridge MSG-20261007T072819Z-chatgpt-a4e1, CHANGES_REQUIRED): RC1-A01 (D-04/D-05 classifications → NORMATIVE Q-21, extended to D-16 N/A and D-18 sufficiency), RC1-A02 (D-13 ambiguity jurisdiction → Q-22), RC1-A03 (version ranking → Q-23), RC1-A04 (quality band strata removed: 354 → 326 REQUIRED), RC1-A05 (brief draft + approval → Q-24), RC1-A06 (Q-10 option C) repaired",
+    "status": "re-audit requested"
    }
   ]
  }
