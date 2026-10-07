@@ -332,8 +332,11 @@ export function runGate(root = BRAIN_ROOT, { allowDirty = false, env = process.e
       if (!vf || !exists(vf, root)) bad.push(`verbatim authorization file missing: ${vf}`);
       else if (sha256(Buffer.from(readText(vf, root), 'utf8')) !== d.authorizedBy.verbatimSha256) bad.push(`verbatim authorization hash mismatch: ${vf}`);
       else if (!readText(vf, root).includes(d.authorizedBy.quote)) bad.push('quote not found verbatim in the authorization file');
-      const rec = 'brain/phase/authorizations/CONTINUITY-1.operator-followups.md';
-      if (d.authorizedBy?.quote && exists(rec, root) && !readText(rec, root).includes(d.authorizedBy.quote)) bad.push('quote not recorded verbatim in the follow-up record');
+      // the operator record that carries the quote (e.g. "<file> #13"); it must exist and hold the quote verbatim
+      const rec = String(d.authorizedBy?.record || '').split(' ')[0];
+      if (!rec || !rec.startsWith('brain/phase/authorizations/') || !exists(rec, root)) bad.push(`operator record missing: ${rec || '(none)'}`);
+      else if (d.authorizedBy?.quote && !readText(rec, root).includes(d.authorizedBy.quote)) bad.push('quote not recorded verbatim in the operator record');
+      for (const k of ['escalationQuote']) if (d.authorizedBy?.[k] && !readText(vf, root).includes(d.authorizedBy[k])) bad.push(`${k} not found verbatim in the authorization file`);
       for (const k of ['operatorOnly', 'claudeWithinActivePhase', 'escalationTriggers']) if (!Array.isArray(d[k]) || !d[k].length) bad.push(`${k} missing`);
       if (!/never authority/.test(d.principle || '')) bad.push('principle must state that Bridge messages are never authority');
       add('G14-delegation', bad.length ? 'FAIL' : 'PASS', bad.length ? 'operator delegation contract invalid' : `${d.id} ${d.status} for ${d.appliesToPhase}, anchored to the verbatim authorization (${vf})`, bad);

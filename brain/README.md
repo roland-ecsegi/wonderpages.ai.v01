@@ -6,7 +6,7 @@ critical claim to an exact anchor, and lets a tool prove that the pointers still
 
 **CHAT IS TRANSIENT. REPOSITORY IS CANONICAL.** Start every session with `node brain/tools/brain.mjs gate` (see `/CLAUDE.md`).
 
-**NEXT_AUTHORIZED_STEP:** `OPERATOR-REVIEW-CONTINUITY-1-CLOSURE` (canonical: `brain/phase/ACTIVE-PHASE.json`)
+**ACTIVE PHASE:** `RC1-POLICY-DEPENDENCY-CLOSURE` (IN_PROGRESS) · **NEXT_AUTHORIZED_STEP:** `RC1-DEPENDENCY-CLOSURE-WORK` (canonical: `brain/phase/ACTIVE-PHASE.json`)
 
 ## Layout
 
@@ -21,6 +21,9 @@ critical claim to an exact anchor, and lets a tool prove that the pointers still
 | `brain/phase/ACTIVE-PHASE.json` | Active Phase Contract: allowed, forbidden, write scope, exit criteria, single next step | state |
 | `brain/phase/PHASES.json` | Phase registry: exactly one ACTIVE; unknown phase ⇒ gate FAIL | state |
 | `brain/phase/authorizations/` | Verbatim operator authorizations of phases (hash-bound from ACTIVE-PHASE) | evidence |
+| `brain/phase/authorizations/RC1-POLICY-DEPENDENCY-CLOSURE.operator-instruction.txt` | Verbatim operator authorization of RC1 (2026-10-07), which also accepts the CONTINUITY-1 closure | canonical |
+| `brain/phase/history/` | Contracts of closed phases, byte-identical (CONTINUITY-1 phase contract, its EXPIRED delegation) | evidence |
+| `docs/enterprise/rc1/` | RC1 deliverables: dependency register, pre-hardening specification, operator decision packages | RC1 output |
 | `brain/map/SYSTEM-MAP.md` | Architecture and subsystem navigation | hand-written |
 | `brain/map/SUBSYSTEMS.json` | Every tracked file → exactly one subsystem (coverage + per-subsystem seal digests) | manifest |
 | `brain/map/AGENTS.json` | 11 permanent agents + default model bindings | **derived** (`brain.mjs index`) |
@@ -40,7 +43,7 @@ critical claim to an exact anchor, and lets a tool prove that the pointers still
 | `brain/evidence/C1-LIVE-RUN-1.json` | C1 live run 1: first autonomous routine wake (PR #4), platform evidence, run record recovered from the transcript | evidence |
 | `brain/ingress/runs/` | Run records written by the C1 routine itself (one file per routine run) | evidence |
 | `brain/evidence/CONTINUITY-1-CLOSURE.json` | **CONTINUITY-1 closure checkpoint**: exit criteria, final commits, gates, fresh-session and full-duplex evidence, limitations, retained / stopped artifacts, next phase NOT YET AUTHORIZED | evidence |
-| `brain/phase/DELEGATION.json` | Operator Delegation Contract (operator / Claude / ChatGPT authority; what a C1 routine may do), checked by gate G14 | canonical |
+| `brain/phase/DELEGATION.json` | Operator Delegation Contract of the active phase (`DELEGATION-RC1`: operator / Claude / ChatGPT authority; what a C1 routine may do), checked by gate G14 | canonical |
 | `brain/phase/authorizations/CONTINUITY-1.operator-authorization-C1.txt` | Verbatim operator authorization #13 (C1, cold restart, CONTINUITY-1 closure) | canonical |
 | `brain/ingress/CLAUDE-ROUTINE-PROMPT.txt` | Fixed bootstrap instruction of the C1 routine "WonderPages Claude ingress" (entered verbatim in the routine UI) | canonical |
 | `brain/tools/c1.mjs` | C1 bootstrap / recheck / scope / authority tool run by the routine from the WonderPages canon | tool |
@@ -67,7 +70,8 @@ critical claim to an exact anchor, and lets a tool prove that the pointers still
 | Open dependencies | `ledger/DEPENDENCIES.json`; claim `C-DEPENDENCIES` | closure §10 |
 | DECIDED / IMPLEMENTED / VALIDATED | `ledger/STATUS-MATRIX.md` | closure §7, §22; journal |
 | Dinosaur World and its rules | claims `C-DW-STOPPED`, `C-DW-DECISIONS`; `map/SYSTEM-MAP.md` § Dinosaur World | journal (human approvals), `dinosaur-world-enterprise/*`, `docs/enterprise/migration/DW-P8-STATUS.md` |
-| Current phase, authorization boundary | `phase/ACTIVE-PHASE.json`, `phase/PHASES.json` | `phase/authorizations/CONTINUITY-1.operator-instruction.txt` (verbatim) |
+| Current phase, authorization boundary | `phase/ACTIVE-PHASE.json`, `phase/PHASES.json`; claims `C-RC1-AUTH`, `C-AFTER-RC1-NOT-AUTHORIZED` | `phase/authorizations/RC1-POLICY-DEPENDENCY-CLOSURE.operator-instruction.txt` (verbatim) |
+| RC1 dependency classification and pre-hardening specification | `docs/enterprise/rc1/README.md` | closure §10, §15–§21; ledger `openDependencies` |
 | Blockers, next authorized step | `CURRENT-STATE.json` → `blockers`, `nextAuthorizedStep` | `ACTIVE-PHASE.json`; closure §20–§21 |
 | Post-closure order (not authorized yet) | claims `C-POST-CLOSURE-ORDER`, `C-PHASE-ORDER`, `C-SH2-PREREQS` | closure §20–§21 |
 

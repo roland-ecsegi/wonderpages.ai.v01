@@ -1,250 +1,115 @@
 {
  "schema": "wonderpages.brain.active-phase/1",
- "id": "CONTINUITY-1",
- "title": "WonderPages Project Brain + Continuity System + Agent Bridge",
- "status": "COMPLETE",
- "completedAt": "2026-10-07T06:45:00Z",
- "closure": "brain/evidence/CONTINUITY-1-CLOSURE.json",
+ "id": "RC1-POLICY-DEPENDENCY-CLOSURE",
+ "title": "RC1 POLICY DEPENDENCY CLOSURE / PRE-HARDENING SPECIFICATION",
+ "status": "IN_PROGRESS",
+ "startedAt": "2026-10-07",
  "authorizedBy": {
   "actor": "operator",
-  "date": "2026-10-06",
-  "instruction": "WONDERPAGES PROJECT BRAIN + CONTINUITY SYSTEM + AGENT BRIDGE",
-  "text": "brain/phase/authorizations/CONTINUITY-1.operator-instruction.txt",
-  "instructionSha256": "92f0d100d72ec6dc362e5cb1ce66c6e48d57ec52a106e735a306e97248af12fc",
-  "textNote": "Verbatim operator message (session transcript 2026-10-06T09:40:07Z); the chat is transient, this file is the canonical copy.",
+  "date": "2026-10-07",
+  "instruction": "AUTORIZARE OPERATOR — ACCEPTARE CONTINUITY-1 + RC1",
+  "text": "brain/phase/authorizations/RC1-POLICY-DEPENDENCY-CLOSURE.operator-instruction.txt",
+  "instructionSha256": "5b5c1e0523dbc211032d84fb57cdfb781a5e9c044587addcd4d32bae6c3c697e",
+  "textNote": "Verbatim operator message (Claude Code session https://claude.ai/code/session_01YTpb4cFbSB6YnHEiFDradE, 2026-10-07); the chat is transient, this file is the canonical copy.",
   "baseCheckpoint": "866a441",
-  "scopeQuote": "Sunt permise numai documentația/control-plane-ul de continuitate, tooling-ul de integritate/sincronizare aferent și repository-ul extern Agent Bridge."
+  "previousPhase": {
+   "id": "CONTINUITY-1",
+   "closure": "brain/evidence/CONTINUITY-1-CLOSURE.json",
+   "operatorReview": "ACCEPTED 2026-10-07 (same message)",
+   "contract": "brain/phase/history/CONTINUITY-1.ACTIVE-PHASE.json"
+  },
+  "scopeQuote": "RC1 trebuie să închidă dependențele de policy și să producă specificația pre-hardening necesară fazelor următoare.",
+  "delegationQuote": "În cadrul RC1 ai autoritate delegată să execuți autonom analiza, specificarea, documentarea, testele/gate-urile, reparațiile necesare, actualizările Project Brain, commit/push și ciclurile de audit cu ChatGPT prin Agent Bridge, atât timp cât rămâi strict în scopul RC1 și în limitele autorității deja definite."
  },
  "writeScope": [
   "CLAUDE.md",
   "brain/**",
   ".github/workflows/brain-gate.yml",
-  ".github/workflows/bridge-sync.yml"
+  ".github/workflows/bridge-sync.yml",
+  "docs/enterprise/rc1/**",
+  "evaluation/rc1-policy/**"
  ],
+ "writeScopeNotes": {
+  "docs/enterprise/rc1/**": "RC1 deliverables: dependency register, pre-hardening specification, operator decision packages, machine-readable specifications (schemas, matrices, commitments). Documentation and specification only; nothing here is imported by the application.",
+  "evaluation/rc1-policy/**": "Only verbatim operator statements that decide RC1 normative dependencies, as an append-only hash-chained ledger (same entry discipline as evaluation/gold-v2-policy/decisions.jsonl). Claude records, never decides. D-01…D-22 and their ledger stay unchanged."
+ },
  "externalScope": [
-  "roland-ecsegi/wonderpages.agent-bridge (separate control-plane repository; WonderPages → Bridge only)"
+  "roland-ecsegi/wonderpages.agent-bridge (separate control plane; WonderPages → Bridge only, plus the narrow C1 rule)"
  ],
  "allowed": [
-  "Project Brain documentation and machine state under brain/ and the root CLAUDE.md bootstrap",
-  "Integrity / freshness / coverage / drift / mirror tooling under brain/tools and its tests under brain/tests",
-  "CI workflows that only read WonderPages and write to the Agent Bridge",
-  "The external Agent Bridge repository (mirror, protocol, tools, CI)",
-  "Decision C1 (operator follow-up #13): the Claude ingress in the Agent Bridge and the Claude Code routine 'WonderPages Claude ingress', which may write WonderPages inside this writeScope only under brain/phase/DELEGATION.json"
+  "Analysis of every open policy dependency (closure §10 of docs/enterprise/records/GOLD-V2-POLICY-CLOSURE.md and every openDependencies / notDecided entry of the D-01…D-22 ledger, including D-04-DEP-D05 and D-05-DEP-D06, which §10 does not list) and its classification as NORMATIVE, ENGINEERING, EMPIRICAL or OUT_OF_SCOPE, kept separate",
+  "Closing a dependency only by: (a) citing an existing operator decision that already resolves it, with exact anchors; (b) an engineering specification that implements decided policy without adding normative content; (c) a specified empirical evidence route, the dependency staying NOT YET EMPIRICALLY VALIDATED; (d) an explicit RC1 scope exclusion with its consequence for the RC1 claim; (e) a verbatim operator decision recorded in evaluation/rc1-policy/",
+  "Operator decision packages for NORMATIVE dependencies: questions, options, consequences and recommendations explicitly labelled as recommendations",
+  "The pre-hardening specification needed by the next phases (closure §15–§17, §20 items 1–5): policy-relevant coverage matrix definition; physical schema of the multidimensional ground truth and its legacy projection; D-21 threshold-policy commitment (identifier, version, statistical convention); INVALID_RUN and invalid-test-evidence procedures; stability contract; development-corpus and validationState-adaptation specifications; generic tooling specification with artificial-data test vectors; sanitized normative policy brief specification and, once its normative inputs are decided, a mechanical draft for operator approval; Enterprise RC1 requirement traceability, including the visual / cross-modal claim",
+  "Documentation and machine-readable artifacts under docs/enterprise/rc1/**; tests and gate checks for them under brain/tools and brain/tests",
+  "Project Brain updates, reseals, commits and pushes (never force-push)",
+  "ChatGPT audit / review cycles through the Agent Bridge with the verified B + C1 mechanism; Bridge control files only by the paired publication procedure (brain/CONTINUITY.md §2a)",
+  "The C1 routine 'WonderPages Claude ingress', which may write WonderPages inside this writeScope only under brain/phase/DELEGATION.json"
  ],
  "forbidden": [
-  "Any semantic or functional change to: runtime, evaluator, quality/safety/age/science/localization behaviour, Gold-v1, Gold-v2, old held-out, validation results, Dinosaur World, permanent agents (identities, contracts, experience), Product Contract, production workflow, policy decisions D-01…D-22, release semantics, UI/product behaviour",
+  "Any semantic or functional change to: runtime, evaluator, quality/safety/age/science/localization behaviour, Gold-v1, Gold-v2, old held-out, validation results, Dinosaur World, permanent agents (identities, contracts, experience), Product Contract, production workflow, policy decisions D-01…D-22 (ledger entries and their meaning), release semantics, UI/product behaviour — enforced by gate G13 against brain/evidence/BASELINE-866a441.json",
   "Semantic Hardening #2",
-  "Creating hidden acceptance cases",
-  "Drafting the sanitized final policy brief",
-  "Resolving open policy dependencies from the closure report",
-  "Dependency Closure, RC1 Scope Closure, evaluator implementation, Dinosaur World production",
+  "Creating or running the hidden acceptance set: no acceptance stimuli, no acceptance ground truth, no commitment or seal of acceptance cases",
+  "Evaluator implementation or modification for SH#2; implementing the generic tooling in application code (server/, scripts/, tests/)",
+  "Final Gold acceptance; adjudicating Gold-v1 / Gold-v2 cases in the operator's place; changing Gold labels",
+  "Enterprise Local RC, Agent System Commissioning, Dinosaur World production or migration, PHASE 9, or any later phase",
+  "Deciding normative content (policy taxonomies' normative choices, thresholds, the scope of the RC1 claim, Source B, custodian storage, approval of the sanitized brief): operator only; Claude and ChatGPT only recommend",
+  "Treating the current Claude or ChatGPT as an independent Source B, or having them author acceptance cases",
   "WonderPages importing, reading or depending on the Bridge at runtime/build; the Agent Bridge or ChatGPT writing WonderPages or creating authority in it; any Bridge → WonderPages path other than the narrow C1 rule (a Claude routine woken through the C1 ingress writes WonderPages only under brain/phase/DELEGATION.json, inside this phase's writeScope)",
-  "Committing secrets or credentials; paid APIs/services; PHASE 9; external publication"
+  "Committing secrets or credentials; PAYG API, usage credits, extra usage or any paid fallback; external publication"
  ],
+ "doNotStart": {
+  "source": "brain/phase/authorizations/RC1-POLICY-DEPENDENCY-CLOSURE.operator-instruction.txt (verbatim item names)",
+  "items": [
+   "Semantic Hardening #2",
+   "crearea/rularea hidden acceptance set-ului",
+   "implementarea/modificarea evaluatorului pentru SH2",
+   "acceptarea finală Gold",
+   "Enterprise Local RC",
+   "Agent System Commissioning",
+   "producția/migrarea Dinosaur World"
+  ],
+  "rule": "Nor any other later phase. RC1 must be closed and reviewed by the operator before any of these can start."
+ },
+ "dependencyClasses": {
+  "NORMATIVE": "Needs a policy choice that D-01…D-22 do not make (what is allowed, at which severity / consequence, for whom, in which claim). Closed only by a verbatim operator decision; RC1 delivers options and labelled recommendations.",
+  "ENGINEERING": "The policy is decided; what remains is a representation, schema, procedure, algorithm or test design that implements it without new normative content. Closed in RC1 by specification; implementation belongs to later authorized phases.",
+  "EMPIRICAL": "Can be settled only by measurement on evidence (calibration, adjudicated cases, the blind run). Closed in RC1 by a specified evidence route; stays NOT YET EMPIRICALLY VALIDATED.",
+  "OUT_OF_SCOPE": "Outside RC1 (Product Contract, rubric redesign, commissioning, Dinosaur World, P9 …). Closed in RC1 by an explicit exclusion and its consequence for the RC1 claim (NOT CLAIMED / NOT IMPLEMENTED / NOT VALIDATED)."
+ },
  "exitCriteria": [
-  "PROJECT_BRAIN, CONTEXT_INTEGRITY_GATE, CLAUDE_CHATGPT_PROTOCOL, FRESH_SESSION_CONTINUITY and APPLICATION_ZERO_DRIFT reported with evidence",
-  "Decision B accepted (live E2E PASS) and B-06 repaired",
-  "Decision C0 evidence complete",
-  "Decision C1 live PASS (brain/evidence/DECISION-C1.md)",
-  "Final cold-restart continuity PASS: fresh Claude routine + fresh ChatGPT Work round trip",
-  "Project Brain gates/tests PASS, Bridge integrity PASS, application zero drift PASS",
-  "Final closure checkpoint brain/evidence/CONTINUITY-1-CLOSURE.json; then STOP (next phase NOT YET AUTHORIZED)"
+  "Dependency register complete: every dependency of closure §10 (open and resolved) and of the ledger's openDependencies has exactly one class and one disposition with evidence, checked by a gate check",
+  "Every NORMATIVE dependency is decided by the operator (verbatim in evaluation/rc1-policy/) or explicitly deferred by the operator with its consequence for the RC1 claim; none is closed by Claude or ChatGPT",
+  "Every ENGINEERING dependency has its specification (or an exact citation of the decision that resolves it), traceable to ledger anchors",
+  "Every EMPIRICAL dependency has a specified evidence route and stays NOT YET EMPIRICALLY VALIDATED",
+  "Every OUT_OF_SCOPE dependency has an explicit exclusion and its consequence for the RC1 claim",
+  "Pre-hardening specification complete (coverage matrix, ground-truth schema + legacy projection, D-21 threshold commitment, INVALID_RUN / invalid evidence procedures, stability contract, generic tooling spec, brief specification, development corpus, validationState adaptation, Enterprise RC1 traceability including visual / cross-modal)",
+  "ChatGPT audit through the Agent Bridge with no unresolved blocking finding (or the finding escalated to the operator)",
+  "Gate PASS, brain self-tests PASS, application zero drift PASS against 866a441",
+  "Closure checkpoint brain/evidence/RC1-POLICY-DEPENDENCY-CLOSURE-CLOSURE.json; then STOP (no later phase starts without a new explicit operator authorization)"
  ],
  "nextAuthorizedStep": {
-  "id": "OPERATOR-REVIEW-CONTINUITY-1-CLOSURE",
-  "actor": "operator",
-  "summary": "CONTINUITY-1 is COMPLETE (brain/evidence/CONTINUITY-1-CLOSURE.json). The operator reviews the closure checkpoint and decides whether to authorize the next phase, RC1 POLICY DEPENDENCY CLOSURE / PRE-HARDENING SPECIFICATION, which is NOT YET AUTHORIZED / NOT STARTED. Claude starts nothing until then."
+  "id": "RC1-DEPENDENCY-CLOSURE-WORK",
+  "actor": "claude",
+  "summary": "RC1 IN_PROGRESS: build the dependency register and the pre-hardening specification inside this contract; escalate only operator-reserved decisions (DELEGATION.json escalationTriggers); stop at the RC1 closure checkpoint."
  },
- "nextPhase": {
-  "id": "RC1-POLICY-DEPENDENCY-CLOSURE",
-  "title": "RC1 POLICY DEPENDENCY CLOSURE / PRE-HARDENING SPECIFICATION",
-  "state": "NOT YET AUTHORIZED / NOT STARTED",
-  "source": "brain/phase/authorizations/CONTINUITY-1.operator-authorization-C1.txt §19"
- },
- "doNotStart": {
-  "source": "brain/phase/authorizations/CONTINUITY-1.operator-instruction.txt §10 (verbatim item names)",
-  "items": [
-   "Dependency Closure",
-   "RC1 Scope Closure",
-   "sanitized final policy brief",
-   "hidden acceptance set",
-   "Semantic Hardening #2",
-   "evaluator implementation",
-   "Dinosaur World production work"
-  ],
-  "rule": "After CONTINUITY-1 is built and validated: STOP. These are introduced later only through the Active Phase Contract, after the continuity system passes audit."
- },
- "completionEvidence": "brain/evidence/CONTINUITY-1-ACCEPTANCE.json",
+ "delegation": "brain/phase/DELEGATION.json",
  "zeroDriftBaseline": "brain/evidence/BASELINE-866a441.json",
- "repairRounds": [
-  {
-   "round": 1,
-   "trigger": "Agent Bridge MSG-20261006T113320Z-chatgpt-a1c4 (advisory AUDIT_RESULT, snapshot 000002-6b5ebf42983d)",
-   "processedBecause": "operator request 2026-10-06: verify the Agent Bridge and process the new messages addressed to Claude",
-   "findings": {
-    "F-01": "accepted — gate G13 enforces zero drift at every commit; evidence bound to the candidate commit",
-    "F-02": "accepted — second fresh session on the final candidate; evidence commit may touch only evidence paths (brain.mjs acceptance)",
-    "F-03": "accepted — Bridge control-file hashes canonical in brain/manifest/BRIDGE-CONTROL.json, enforced Bridge-side and Claude-side",
-    "F-04": "accepted (verified externally) — ChatGPT wake-up reclassified AVAILABLE, NOT CONFIGURED / NOT DEMONSTRATED; adapter + configuration need operator decision",
-    "F-05": "unchanged — operator setup of BRIDGE_SYNC_TOKEN"
-   },
-   "authority": "ChatGPT findings are advisory; each was verified against sources before acting; nothing outside the CONTINUITY-1 write scope changes"
-  },
-  {
-   "round": 2,
-   "trigger": "Agent Bridge MSG-20261006T115035Z-chatgpt-b72e (advisory re-audit, snapshot 000004-9c5fb9a4f4ab)",
-   "processedBecause": "operator follow-up #2 (verbatim in operatorFollowups)",
-   "findings": {
-    "F-01": "CLOSED by re-audit",
-    "F-02": "CLOSED by re-audit",
-    "F-03": "CLOSED by re-audit",
-    "F-04": "correction CLOSED; activation pending operator decision B/C",
-    "F-05": "operator configured BRIDGE_SYNC_TOKEN; end-to-end automatic sync demonstration recorded in completionEvidence (bridgeSync)"
-   },
-   "authority": "advisory findings verified on sources; no change outside the CONTINUITY-1 write scope"
-  },
-  {
-   "round": 3,
-   "trigger": "Agent Bridge MSG-20261006T124900Z-chatgpt-d84a (advisory decision-B audit, snapshot 000008-11bacbefafb4): CHANGES_REQUIRED B-01",
-   "processedBecause": "operator follow-up #4",
-   "findings": {
-    "B-01": "accepted — fixed ChatGPT task text is the bootstrap authority: mirror VERIFIED + 5/5 → canonical BRIDGE-CONTROL.json (now with git blob ids) → live control blob ids, before any repository document is trusted; FAIL → one BLOCKER"
-   },
-   "extension": "operator follow-up #4: durable delivery for decision B (see operatorDecisions.B)",
-   "authority": "advisory finding verified on sources; no change outside the CONTINUITY-1 write scope"
-  },
-  {
-   "round": 4,
-   "trigger": "Agent Bridge MSG-20261006T133500Z-chatgpt-f62b (advisory re-audit, snapshot 000010-be660c310178): CHANGES_REQUIRED B-02, B-03",
-   "processedBecause": "operator follow-up #5",
-   "findings": {
-    "B-02": "accepted — every wake anchored to the doorbell mainCommit R; mirror, control manifest, control files and messages read at R; blob-verified contents used as the run's instructions; pending recomputed at R",
-    "B-03": "accepted — backoff 3/6/12/24/48h, cap 48h, max 9 attempts (+0…+237h ≈ 9.9 days > 168h weekly window; two attempts after 168h); STALLED → workflow warning",
-    "B-04": "found by Claude while processing f62b (createdAt 7 min after its GitHub commit) — tool keeps thread time monotonic, validate warns on clock skew, task text requires real UTC time"
-   },
-   "authority": "advisory findings verified on sources (commit times checked on GitHub); no change outside the CONTINUITY-1 write scope"
-  },
-  {
-   "round": 5,
-   "trigger": "Agent Bridge MSG-20261006T134107Z-chatgpt-e91c (advisory final re-audit, snapshot 000011-6aadefd8bafb): B-02, B-03, B-04 PASS; CHANGES_REQUIRED B-05",
-   "processedBecause": "operator follow-up #6",
-   "findings": {
-    "B-05": "accepted — task step 7 now re-reads the item's thread on current Bridge main (data only) just before each write and re-applies the durable-queue rule; CLOSED / SUPERSEDED after the wake, an existing resolving reply, hand-off or receipt → skip silently; reference implementation writeCheck + CLI write-check; tests close-before-wake, supersede-before-wake, existing-resolution-before-wake (42/42)"
-   },
-   "authority": "advisory finding verified on sources; no change outside the CONTINUITY-1 write scope"
-  },
-  {
-   "round": 6,
-   "trigger": "B-06 found by Claude while starting C0: invalid ChatGPT message MSG-20261006T145200Z-chatgpt-bpass (Bridge fae311b) made the Bridge INVALID and blocked decision-B ingress",
-   "processedBecause": "operator follow-up #9",
-   "findings": {
-    "B-06": "repaired — Bridge control file exchange/QUARANTINE.json (exact allowlist; entry binds path, git blob 15918724ff72f394a67416f34987ae45cc25e33a, origin commit fae311b9b7bc34ba08e54c15b497a6fc9efe9685, exact errors, reason, B-06); validate excludes it from threads/pending/ingress/resolution with a QUARANTINED warning only when everything matches; valid messages cannot be quarantined; unlisted invalid files stay fatal; ledger pinned in BRIDGE-CONTROL.json (11 control files); 15 regression tests (57/57)"
-   },
-   "authority": "operator-authorized repair inside the CONTINUITY-1 write scope; the invalid file and its history are preserved"
-  }
- ],
- "operatorFollowups": "brain/phase/authorizations/CONTINUITY-1.operator-followups.md",
- "operatorDecisions": {
-  "A": "DONE — BRIDGE_SYNC_TOKEN configured; automatic sync demonstrated (F-05 closed by ChatGPT, MSG-20261006T121530Z-chatgpt-c3f1)",
-  "B": "AUTHORIZED option 1 (operatorFollowups #3, extended by #4) — ChatGPT ingress PR + ChatGPT Work event-triggered task (target GPT-6 Astra, reasoning Medium, subscription only, no API fallback); durable delivery: pending until a valid resolving reply, at-least-once wake with bounded backoff (3h/6h/12h/24h/48h, cap 48h, max 9 attempts ≈ 9.9 days, beyond a 7-day weekly allowance window → STALLED until revived, surfaced as a workflow warning), batching, idempotent processing, WAIT_FOR_ALLOWANCE without usage monitor; fixed task text is the bootstrap authority (B-01), anchored per wake to the immutable doorbell mainCommit (B-02); honest monotonic timestamps (B-04); still-pending re-check on current main before every write, skip if closed / superseded / resolved since the wake (B-05). Live end-to-end test PASS 2026-10-06 (operator follow-up #7; ChatGPT Work task configured by the operator)",
-  "C": "AUTHORIZED C1 (operator follow-up #13, verbatim; phase-level delegated authorization): durable ChatGPT → Bridge → Claude channel (Bridge CLAUDE-INGRESS.md: one new never-merged inbox/claude PR per wake, pull_request.opened → Claude Code routine), Claude routine writes WonderPages only under brain/phase/DELEGATION.json; subscription only; after C1 PASS: final cold restart and CONTINUITY-1 closure. C0: FEASIBLE_WITH_LIMITATIONS, live PASS_WITH_LIMITATIONS (one-shot)."
- },
  "bridgeConstraints": [
   "Agent Bridge is an external development/control plane only; never a runtime, build, production, agent, orchestration, evaluation or Enterprise Local dependency of WonderPages; WonderPages works unchanged if the Bridge is removed",
   "The Bridge does not change the application's functional architecture nor the identity, permanence, orchestration or contracts of the 11 agents",
   "Subscription-first: no OpenAI API, Anthropic API or other pay-per-token/pay-per-call service as a mandatory dependency without a later explicit operator decision"
  ],
- "decisionBLiveE2E": {
-  "authorizedBy": "brain/phase/authorizations/CONTINUITY-1.operator-followups.md #7 (verbatim, 2026-10-06)",
-  "status": "PASS",
-  "preconditions": "ChatGPT advisory re-audit MSG-20261006T135204Z-chatgpt-c7a2: PASS for B-01…B-05; operator configured ChatGPT Work task 6ac5063e875081919246521097c4b900 on PR #1 (commit updates only; model/reasoning not pinned at task level); bootstrap prompt = INGRESS.md git blob 10edb1434c56ba69ca41489f5792268772045ba3 = BRIDGE-CONTROL.json gitBlob",
-  "rules": "one new diagnostic request; exactly one initial ring through the ingress workflow; no forced re-wake; no simulated or manual response; LIVE PASS only on an autonomous ChatGPT-written response validated from the Bridge; otherwise the request stays PENDING under the existing backoff",
-  "evidence": "brain/evidence/DECISION-B-INGRESS.json (liveE2E)",
-  "result": {
-   "request": "Bridge MSG-20261006T144339Z-claude-d7b5 (REQUEST, diagnostic, nonce) — commit a2f0ee6",
-   "ring": "single doorbell e126e49 by bridge-ingress[bot], seq 5, reason new, mainCommit a2f0ee6, 2026-10-06T14:44:03Z",
-   "response": "MSG-20261006T144624Z-chatgpt-8e42 (RESPONSE, written on Bridge main in 43baaa5 at 14:46:25Z, ≈2 min 22 s after the ring; self-reported trigger pull_request synchronize on PR #1)",
-   "validatedBy": "Claude from the Bridge; closed by MSG-20261006T144923Z-claude-69b3 (Bridge b6e539a)",
-   "residual": "attribution: the response commit carries the operator's GitHub identity (ChatGPT connector), so the Bridge cannot cryptographically tell a Work run from an interactive ChatGPT session — the Work task run history in ChatGPT is the record of autonomy; model/reasoning not pinned (reported unknown); usage-limit behaviour not observed"
+ "subscription": "Subscription-first: Claude and ChatGPT subscriptions only; no PAYG API, usage credits, extra usage or paid fallback without a new explicit operator decision. Allowance exhausted → pending work stays durable and resumes after the reset.",
+ "history": {
+  "CONTINUITY-1": {
+   "contract": "brain/phase/history/CONTINUITY-1.ACTIVE-PHASE.json",
+   "closure": "brain/evidence/CONTINUITY-1-CLOSURE.json",
+   "delegation": "brain/phase/history/DELEGATION-CONTINUITY-1-C1.json"
   }
  },
- "decisionC0": {
-  "authorizedBy": "brain/phase/authorizations/CONTINUITY-1.operator-followups.md #8 (verbatim, 2026-10-06)",
-  "status": "INVESTIGATION COMPLETE — FEASIBLE_WITH_LIMITATIONS; nothing implemented; live test not run",
-  "report": "brain/evidence/DECISION-C0-FEASIBILITY.md",
-  "recommendedRoute": "R1 — Claude Code routine with a GitHub trigger (pull_request.synchronize on a never-merged Bridge ingress PR), subscription only, no credential stored in GitHub; R2 (claude-code-action + CLAUDE_CODE_OAUTH_TOKEN in WonderPages) as fallback",
-  "operatorPreconditions": [
-   "P1: usage credits OFF on the operator's Claude account (else C must not be built)",
-   "P2: Claude GitHub App installed on the Bridge repository"
-  ],
-  "openOperatorDecisions": [
-   "optional: disable or delete the C0 routine and close PR #2 / PR #3 (Claude does not do it on its own)",
-   "Decision C / C1 needs a separate authorization: wake event that can repeat (opened is one-shot), scope of autonomous writes vs the standing rule 'Bridge → WonderPages automatic is forbidden', operator-written delegation table, daily/weekly allowance budget"
-  ],
-  "routineDailyLimits": "Pro 5 / Max 15 / Team-Enterprise 25 routines per day (official announcement 2026-04-14; docs page silent); beyond them only extra usage, which is not authorized → WAIT_FOR_ALLOWANCE / WAIT_FOR_RESET",
-  "requiredProperties": [
-   "batching: one wake processes all pending Claude work",
-   "ring coalescing and a daily ring budget below the plan's included routine runs",
-   "no extra usage / usage credits / API / paid fallback"
-  ],
-  "liveTest": {
-   "authorizedBy": "operatorFollowups #10, adapted by #11 (verbatim)",
-   "status": "DONE — C0 LIVE: PASS_WITH_LIMITATIONS (one PR opened = one wake = one routine run; result 43e75bc on claude/c0-result validated; limitations: model confirmed only via platform record, effort via CLAUDE_EFFORT, sender not exposed, opened-event not approved for C/C1, weekly allowance near limit)",
-   "preconditions": "P1 Pro + usage credits OFF, P2 Claude GitHub App on the Bridge (operator-confirmed)",
-   "pullRequest": "none yet for the LIVE branch inbox/claude-c0-live (R 6723b29f893dd4c94e30df8f2fc365bc7ea9a58d, nonce 136281ab91a9232afc8dcc2f2be66285); revision-1 artifact PR #2 kept inert",
-   "routinePrompt": "brain/evidence/C0-ROUTINE-PROMPT.txt (revision 2, sha256 e936bef253322d6c0078d605b23eaa857c2ce7e23a04865a6998fbc6104ff44a)",
-   "evidence": "brain/evidence/DECISION-C0-LIVE.md",
-   "rules": "one wake (opening one PR), no retry, no Run now, no loop, result only on branch claude/c0-result; opened is not approved as the C/C1 wake architecture",
-   "prBinding": "PR number not guessed: unique N with refs/pull/N/head == EXPECTED_R",
-   "run": {
-    "routine": "trig_01N4poWHyZgAL7kZrwwVagb6",
-    "pullRequest": "roland-ecsegi/wonderpages.agent-bridge#3",
-    "session": "session_01RLgUX9zQLHnEV467qUyAKG",
-    "firedAt": "2026-10-06T17:13:36Z",
-    "finishedAt": "2026-10-06T17:15:10Z",
-    "status": "ROUTINE_RUN_STATUS_SUCCEEDED",
-    "resultCommit": "43e75bcf2d5614619d085dee4c5752ed7269ad83",
-    "model": "claude-opus-5-5 (configured, session, last served)",
-    "effort": "CLAUDE_EFFORT=high, CLAUDE_CODE_EFFORT_LEVEL=high",
-    "overage": "isUsingOverage false"
-   }
-  }
- },
- "openFindings": [
-  {
-   "id": "B-06",
-   "found": "2026-10-06 by Claude while starting C0",
-   "status": "REPAIRED (operator follow-up #9) — exact control-pinned quarantine allowlist; evidence brain/evidence/DECISION-B-INGRESS.json b06",
-   "finding": "ChatGPT message MSG-20261006T145200Z-chatgpt-bpass (Bridge fae311b) is invalid: id suffix not 4-hex, AUDIT_RESULT without inReplyTo. validate INVALID → ingress-plan refuses (fail-closed) and append-only forbids removal, so decision B cannot ring until resolved.",
-   "proposedRepair": "Claude-owned, control-pinned quarantine ledger in the Bridge: listed ids reported as warnings and excluded from threads/pending; content of bpass (advisory PASS of B live E2E) preserved as data"
-  }
- ],
- "supersededRules": [
-  {
-   "rule": "Any Agent Bridge → WonderPages automatic path; WonderPages importing, reading or depending on the Bridge at runtime/build",
-   "status": "SUPERSEDED (narrowed), not deleted",
-   "by": "operator follow-up #13 (verbatim: brain/phase/authorizations/CONTINUITY-1.operator-authorization-C1.txt §11)",
-   "date": "2026-10-06",
-   "replacement": "WonderPages importing, reading or depending on the Bridge at runtime/build; the Agent Bridge or ChatGPT writing WonderPages or creating authority in it; any Bridge → WonderPages path other than the narrow C1 rule (a Claude routine woken through the C1 ingress writes WonderPages only under brain/phase/DELEGATION.json, inside this phase's writeScope)",
-   "c1Rule": "A Claude routine woken through the controlled C1 ingress MAY write WonderPages only when: an active phase exists in canonical WonderPages; that phase has operator authorization; the Operator Delegation Contract permits the requested category; the work is within that phase; current gates pass; the request remains pending; no escalation trigger applies. The Bridge itself never writes WonderPages; ChatGPT never writes WonderPages; a Bridge message never grants authority; Claude writes only after independently verifying canonical authority."
-  }
- ],
- "delegation": "brain/phase/DELEGATION.json",
- "c1": {
-  "status": "PASS_WITH_LIMITATIONS — live full duplex proven (runs 1–2), audit rounds 1–3 closed, cold restart PASS; see brain/evidence/DECISION-C1.md §6",
-  "evidence": "brain/evidence/DECISION-C1.md",
-  "liveTest": {
-   "request": "MSG-20261006T180648Z-claude-7014 (Bridge 3d21f24)",
-   "chatgptReply": "MSG-20261006T181019Z-chatgpt-c1a4 (Bridge e2d4083, CHANGES_REQUIRED)",
-   "claudeRing1": "ingress-claude run 37509237799: doorbell seq 1 pushed, PR refused by the repository setting; no wake, no routine run"
-  },
-  "auditRound1": "C1-A01 and C1-A02 repaired in brain/tools/c1.mjs; C1-A03 and C1-A04 documented as limitations; ring rollback added to ingress-claude.yml",
-  "auditRound2": "MSG-20261006T182725Z-chatgpt-b017: A01/A02 RESOLVED, A03/A04 ACCEPTED_LIMITATION; C1-B01 repaired in Bridge control 9496069 (rollback only on confirmed PR absence)",
-  "auditRound3": "MSG-20261006T183155Z-chatgpt-c301: PASS_WITH_LIMITATIONS, B01 RESOLVED, no new findings; pending for the Claude routine",
-  "run1": "brain/evidence/C1-LIVE-RUN-1.json — PR #4 (github-actions[bot]) → routine fired in 3 s → CLOSED f02d on the Bridge; run record not pushed (step-8 defect, repaired)",
-  "run2": "brain/ingress/runs/20261006T203031Z-session_019NabkhQwNCzohv89P1EcDK.json — PR #5 opened by github-actions[bot] after ChatGPT Work wrote cd23; routine fired in 4 s; CLOSED d342; run record pushed (RUN_RECORD_ONLY)",
-  "limitations": "GitHub schedule events in the Agent Bridge are sparse and late (first scheduled ingress-claude run about 5 h after it was added, then 02:40 UTC); push-triggered wakes are immediate",
-  "routinePrompt": "brain/ingress/CLAUDE-ROUTINE-PROMPT.txt",
-  "bootstrapTool": "brain/tools/c1.mjs"
+ "progress": {
+  "note": "Evidence of RC1 work (non-authority field).",
+  "items": []
  }
 }

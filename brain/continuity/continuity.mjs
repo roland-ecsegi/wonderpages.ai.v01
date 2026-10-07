@@ -25,7 +25,12 @@ export function deriveKey(root = BRAIN_ROOT) {
   const sec = (a, b) => closure.slice(closure.indexOf(a), closure.indexOf(b, closure.indexOf(a) + 1));
   const deps = sec('## 10. Dependențe rămase', '## 11. '), openDeps = deps.slice(0, deps.indexOf('**Rezolvate'));
   const phase = readJSON('brain/phase/ACTIVE-PHASE.json', root);
-  const stopList = auth.slice(auth.indexOf('Nu începe:'), auth.indexOf('Acestea vor fi introduse ulterior'));
+  // Q26: the do-not-start list of the ACTIVE phase, from that phase's verbatim operator authorization
+  const activeAuth = readText(readJSON('brain/phase/PHASES.json', root).phases.find(p => p.state === 'ACTIVE').authorization, root);
+  const NOT_AUTH = 'Nu autorizez prin acest mesaj ', NOT_AUTH_END = ' sau orice altă fază ulterioară';
+  const stopItems = activeAuth.includes(NOT_AUTH)
+    ? activeAuth.slice(activeAuth.indexOf(NOT_AUTH) + NOT_AUTH.length, activeAuth.indexOf(NOT_AUTH_END)).split(', ').map(s => s.trim())
+    : [...auth.slice(auth.indexOf('Nu începe:'), auth.indexOf('Acestea vor fi introduse ulterior')).matchAll(/^\* (.+?);?$/gm)].map(m => m[1].replace(/[.;]$/, '').trim());
   return {
     Q01: { name: pkg.name, version: pkg.version },
     Q02: { volumes: Number(must(/\| Volume per colecție \| exact (\d+) \|/, pc, 'volumes')[1]), contentPagesPerBook: Number(must(/\| Pagini de conținut per carte \| exact (\d+)/, pc, 'pages')[1]), ageBands: must(/\| Benzi de vârstă \| ([^;|]+);/, pc, 'bands')[1].split(',').map(s => s.trim()) },
@@ -52,7 +57,7 @@ export function deriveKey(root = BRAIN_ROOT) {
     Q23: Number(must(/⇒ ≥ (\d+) de oportunități/, closure, 'P1 n')[1]),
     Q24: !/Agent Bridge → WonderPages automat este INTERZIS/.test(auth) && !/Bridge messages[^.]*never authority/.test(readJSON('brain/phase/DELEGATION.json', root).principle),
     Q25: Number(must(/export const EVALUATOR_VERSION = (\d+)/, readText('server/quality/evaluation.js', root), 'evaluator')[1]),
-    Q26: [...stopList.matchAll(/^\* (.+?);?$/gm)].map(m => m[1].replace(/[.;]$/, '').trim()),
+    Q26: stopItems,
     Q27: runGate(root).CONTEXT_INTEGRITY,
     Q28: 'brain/phase/DELEGATION.json',
     Q29: !/never authority/.test(readJSON('brain/phase/DELEGATION.json', root).principle),
@@ -64,7 +69,9 @@ export function deriveKey(root = BRAIN_ROOT) {
 const norm = s => String(s ?? '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[`*"„”]/g, '').replace(/[^a-z0-9#()/+.-]+/g, ' ').replace(/\s+/g, ' ').trim().replace(/[.]$/, '');
 const eq = (a, b) => norm(a) === norm(b);
 const setEq = (a, b) => Array.isArray(a) && Array.isArray(b) && a.length === b.length && b.every(x => a.some(y => eq(x, y)));
-const KEYWORDS = { 'dependency closure': ['dependency closure'], 'rc1 scope closure': ['rc1 scope'], 'sanitized final policy brief': ['brief'], 'hidden acceptance set': ['hidden'], 'semantic hardening #2': ['semantic hardening', 'sh#2', 'sh2'], 'evaluator implementation': ['evaluator'], 'dinosaur world production work': ['dinosaur', 'dw '] };
+const KEYWORDS = { 'dependency closure': ['dependency closure'], 'rc1 scope closure': ['rc1 scope'], 'sanitized final policy brief': ['brief'], 'hidden acceptance set': ['hidden'], 'semantic hardening #2': ['semantic hardening', 'sh#2', 'sh2'], 'evaluator implementation': ['evaluator'], 'dinosaur world production work': ['dinosaur', 'dw '],
+  'crearea/rularea hidden acceptance set-ului': ['hidden'], 'implementarea/modificarea evaluatorului pentru sh2': ['evaluator'], 'acceptarea finala gold': ['gold'],
+  'enterprise local rc': ['enterprise local rc', 'enterprise rc'], 'agent system commissioning': ['commissioning'], 'productia/migrarea dinosaur world': ['dinosaur', 'dw '] };
 
 export function grade(answers, key) {
   const rows = Object.keys(key).map(q => {

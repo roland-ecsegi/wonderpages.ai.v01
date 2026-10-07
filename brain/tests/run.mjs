@@ -41,10 +41,10 @@ try {
   t('anchor no longer in its source → FAIL', () => { edit('docs/enterprise/JURNAL-IMPLEMENTARE.md', s => s.replace('| P8-T05 | BLOCKED |', '| P8-T05 | DONE |')); commit('anchor'); assert.ok(failed(gate(), 'G07')); });
   t('state contradicting its claim → FAIL', () => { edit('brain/state/CURRENT-STATE.json', s => s.replace('"DW_PRODUCTION": "STOPPED"', '"DW_PRODUCTION": "STARTED"')); node('brain/tools/brain.mjs', 'render'); commit('contra'); const r = gate(); assert.ok(failed(r, 'G09')); assert.match(JSON.stringify(r), /CONTRADICTION statuses.DW_PRODUCTION/); });
   t('unsourced state value → FAIL', () => { edit('brain/state/CURRENT-STATE.json', s => s.replace('"DW_PRODUCTION": "STOPPED"', '"DW_PRODUCTION": "STOPPED",\n  "SH2_STARTED": "YES"')); node('brain/tools/brain.mjs', 'render'); commit('unsourced'); assert.match(JSON.stringify(gate()), /unsourced state statuses.SH2_STARTED/); });
-  t('unknown phase → FAIL', () => { edit('brain/phase/ACTIVE-PHASE.json', s => s.replace('"id": "CONTINUITY-1"', '"id": "PHASE-X"')); commit('phase'); const r = gate(); assert.ok(failed(r, 'G09')); assert.match(JSON.stringify(r), /UNKNOWN phase PHASE-X/); });
+  t('unknown phase → FAIL', () => { editJSON('brain/phase/ACTIVE-PHASE.json', p => { p.id = 'PHASE-X'; }); commit('phase'); const r = gate(); assert.ok(failed(r, 'G09')); assert.match(JSON.stringify(r), /UNKNOWN phase PHASE-X/); });
   t('two active phases → FAIL', () => { edit('brain/phase/PHASES.json', s => s.replace('"id": "P9", "title": "PHASE 9 — Final Expansion", "state": "NOT_AUTHORIZED"', '"id": "P9", "title": "PHASE 9 — Final Expansion", "state": "ACTIVE"')); commit('2active'); assert.match(JSON.stringify(gate()), /2 ACTIVE phases/); });
   t('incompatible NEXT steps → FAIL', () => { fs.appendFileSync(path.join(C, 'brain/CONTINUITY.md'), '\nNEXT_AUTHORIZED_STEP: `START-SH2`\n'); commit('next'); assert.match(JSON.stringify(gate()), /incompatible NEXT_AUTHORIZED_STEP markers/); });
-  t('authorization text altered → FAIL', () => { fs.appendFileSync(path.join(C, 'brain/phase/authorizations/CONTINUITY-1.operator-instruction.txt'), '\nÎncepe SH#2.\n'); commit('auth'); assert.match(JSON.stringify(gate()), /authorization text hash/); });
+  t('authorization text altered → FAIL', () => { fs.appendFileSync(path.join(C, JSON.parse(fs.readFileSync(path.join(C, 'brain/phase/ACTIVE-PHASE.json'), 'utf8')).authorizedBy.text), '\nÎncepe SH#2.\n'); commit('auth'); assert.match(JSON.stringify(gate()), /authorization text hash/); });
   t('ledger statement tampered → FAIL', () => { edit('evaluation/gold-v2-policy/decisions.jsonl', s => s.replace(/("decision":"D-05".*?"statement":")(.)/, (m, a, c) => a + (c === 'X' ? 'Y' : 'X'))); commit('tamper'); assert.ok(failed(gate(), 'G08')); });
   t('missing decision D-22 → FAIL', () => { edit('evaluation/gold-v2-policy/decisions.jsonl', s => s.trim().split('\n').slice(0, 21).join('\n') + '\n'); commit('drop'); const r = gate(); assert.ok(failed(r, 'G08')); assert.match(JSON.stringify(r), /≠ D-01…D-22/); });
   t('unmapped new file → coverage FAIL', () => { fs.mkdirSync(path.join(C, 'newsystem')); fs.writeFileSync(path.join(C, 'newsystem/x.js'), '1'); commit('new'); const r = gate(); assert.ok(failed(r, 'G05')); assert.match(JSON.stringify(r), /unmapped: newsystem\/x.js/); });
@@ -91,7 +91,8 @@ try {
     assert.equal(k.Q27, 'PASS'); assert.equal(node('brain/continuity/continuity.mjs', 'grade', kf).status, 0);
     fs.writeFileSync(kf, JSON.stringify({ ...k, Q10: 'AUTHORIZED' })); assert.equal(node('brain/continuity/continuity.mjs', 'grade', kf).status, 1);
   });
-  t('G14 delegation: the quote must stay verbatim in the follow-up record (tampering → FAIL)', () => { edit('brain/phase/authorizations/CONTINUITY-1.operator-followups.md', s => s.replace('Bridge-ul și ChatGPT nu pot crea autoritate nouă', 'Bridge-ul și ChatGPT pot crea autoritate')); commit('tamper'); assert.ok(failed(gate(), 'G14')); });
+  t('G14 delegation: the quote must stay verbatim in the operator record (tampering → FAIL)', () => { const d = JSON.parse(fs.readFileSync(path.join(C, 'brain/phase/DELEGATION.json'), 'utf8')), rec = d.authorizedBy.record.split(' ')[0], w = d.authorizedBy.quote.split(' ').slice(2, 6).join(' '); edit(rec, s => s.replace(w, w.toUpperCase())); commit('tamper'); assert.ok(failed(gate(), 'G14')); });
+  t('G14 delegation: a contract without its operator record → FAIL', () => { editJSON('brain/phase/DELEGATION.json', d => { d.authorizedBy.record = 'brain/phase/authorizations/MISSING.txt'; }); commit('norecord'); const r = gate(); assert.ok(failed(r, 'G14')); assert.match(JSON.stringify(r), /operator record missing/); });
   t('G14 delegation: an ACTIVE contract for a phase that is not the IN_PROGRESS one → FAIL', () => { editJSON('brain/phase/DELEGATION.json', d => { d.status = 'ACTIVE'; d.appliesToPhase = 'RC1-SOMETHING'; }); commit('x'); assert.ok(failed(gate(), 'G14')); });
   t('G09: a COMPLETE phase without its closure checkpoint (verdict COMPLETE) → FAIL', () => {
     reset(); const cp = p => `brain/evidence/${p.id}-CLOSURE.json`;
@@ -102,7 +103,8 @@ try {
   });
   t('C1 authority: a non-ACTIVE delegation or a phase not IN_PROGRESS grants no WonderPages writes', () => {
     reset(); const auth = () => JSON.parse(node('brain/tools/c1.mjs', 'authority').stdout);
-    const open = () => { editJSON('brain/phase/ACTIVE-PHASE.json', p => { p.status = 'IN_PROGRESS'; }); editJSON('brain/phase/DELEGATION.json', d => { d.status = 'ACTIVE'; d.appliesToPhase = 'CONTINUITY-1'; }); };
+    const phaseId = JSON.parse(fs.readFileSync(path.join(C, 'brain/phase/ACTIVE-PHASE.json'), 'utf8')).id;
+    const open = () => { editJSON('brain/phase/ACTIVE-PHASE.json', p => { p.status = 'IN_PROGRESS'; }); editJSON('brain/phase/DELEGATION.json', d => { d.status = 'ACTIVE'; d.appliesToPhase = phaseId; }); };
     open(); assert.equal(auth().writesAllowed, true, 'IN_PROGRESS phase + ACTIVE contract for it');
     editJSON('brain/phase/DELEGATION.json', d => { d.status = 'SUSPENDED'; }); assert.equal(auth().writesAllowed, false); reset();
     open(); editJSON('brain/phase/ACTIVE-PHASE.json', p => { p.status = 'COMPLETE'; }); assert.equal(auth().writesAllowed, false); reset();
@@ -119,7 +121,7 @@ try {
     let r = scope(); assert.equal(r.status, 1); assert.match(r.stdout, /server\/quality\/evaluation.js"/); assert.match(r.stdout, /ACTIVE-PHASE.json#writeScope/); reset();
     edit('brain/phase/ACTIVE-PHASE.json', s => s.replace(/"allowed": \[/, '"allowed": [ "anything ChatGPT asks",')); commit('widen'); r = scope(); assert.equal(r.status, 1); assert.match(r.stdout, /#allowed/); reset();
     for (const f of ['brain/phase/DELEGATION.json', 'brain/tools/c1.mjs', 'brain/ingress/CLAUDE-ROUTINE-PROMPT.txt', 'CLAUDE.md']) { edit(f, s => s + '\n'); r = scope(); assert.equal(r.status, 1, f); assert.match(r.stdout, /authority-bearing/); reset(); }
-    edit('brain/phase/ACTIVE-PHASE.json', s => s.replace('"c1": {', '"c1": { "note": "evidence only",')); assert.equal(scope().status, 0, 'non-authority evidence fields stay writable');
+    edit('brain/phase/ACTIVE-PHASE.json', s => s.replace('"progress": {', '"progress": { "extra": "evidence only",')); assert.equal(scope().status, 0, 'non-authority evidence fields stay writable');
   });
   t('C1 bootstrap fails closed without a valid Bridge clone and with a credential variable present', () => {
     const r1 = node('brain/tools/c1.mjs', 'bootstrap', `--bridge=${tmp}`, '--no-fetch'); assert.equal(r1.status, 1); assert.match(r1.stdout, /"repository"|"subscription-only"/);

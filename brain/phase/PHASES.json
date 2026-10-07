@@ -7,9 +7,9 @@
   { "id": "GS", "title": "Gold-v1 adjudication", "state": "CLOSED", "claims": ["C-GS"] },
   { "id": "HARDENING-1", "title": "Hardening #1 + Gold-v2 up to adjudication (H0–H6)", "state": "CLOSED", "claims": ["C-HARDENING"] },
   { "id": "POLICY-DECISIONS", "title": "Gold-v2 operator policy decisions D-01…D-22 + closure report", "state": "CLOSED", "claims": ["C-POLICY-PHASE-COMPLETE"] },
-  { "id": "CONTINUITY-1", "title": "Project Brain + Continuity System + Agent Bridge", "state": "ACTIVE", "status": "COMPLETE", "closure": "brain/evidence/CONTINUITY-1-CLOSURE.json", "authorization": "brain/phase/authorizations/CONTINUITY-1.operator-instruction.txt", "claims": ["C-CONTINUITY-AUTH", "C-CONTINUITY-1-COMPLETE"] },
-  { "id": "RC1-POLICY-DEPENDENCY-CLOSURE", "title": "RC1 POLICY DEPENDENCY CLOSURE / PRE-HARDENING SPECIFICATION", "state": "NOT_AUTHORIZED", "claims": ["C-RC1-NOT-AUTHORIZED"] },
-  { "id": "POST-CLOSURE", "title": "Canonical post-closure order (sanitized brief → hidden set → … → SH#2 → acceptance)", "state": "NOT_AUTHORIZED", "claims": ["C-POST-CLOSURE-ORDER"] },
+  { "id": "CONTINUITY-1", "title": "Project Brain + Continuity System + Agent Bridge", "state": "CLOSED", "status": "COMPLETE", "operatorReview": "ACCEPTED 2026-10-07", "closure": "brain/evidence/CONTINUITY-1-CLOSURE.json", "contract": "brain/phase/history/CONTINUITY-1.ACTIVE-PHASE.json", "authorization": "brain/phase/authorizations/CONTINUITY-1.operator-instruction.txt", "claims": ["C-CONTINUITY-AUTH", "C-CONTINUITY-1-COMPLETE"] },
+  { "id": "RC1-POLICY-DEPENDENCY-CLOSURE", "title": "RC1 POLICY DEPENDENCY CLOSURE / PRE-HARDENING SPECIFICATION", "state": "ACTIVE", "status": "IN_PROGRESS", "authorization": "brain/phase/authorizations/RC1-POLICY-DEPENDENCY-CLOSURE.operator-instruction.txt", "claims": ["C-RC1-AUTH", "C-RC1-IN-PROGRESS"] },
+  { "id": "POST-CLOSURE", "title": "Canonical post-closure order (sanitized brief → hidden set → … → SH#2 → acceptance)", "state": "NOT_AUTHORIZED", "claims": ["C-POST-CLOSURE-ORDER", "C-AFTER-RC1-NOT-AUTHORIZED"] },
   { "id": "P9", "title": "PHASE 9 — Final Expansion", "state": "NOT_AUTHORIZED", "claims": ["C-P9-NOT-AUTHORIZED"] }
  ]
 }

@@ -1,10 +1,10 @@
 {
  "schema": "wonderpages.brain.current-state/1",
  "asOf": {
-  "date": "2026-10-06",
+  "date": "2026-10-07",
   "checkpointCommit": "866a441",
   "lastDecisionCommit": "168905b",
-  "note": "Functional checkpoint = policy closure 866a441. CONTINUITY-1 adds only brain/, CLAUDE.md and two CI workflows on top of it."
+  "note": "Functional checkpoint = policy closure 866a441. CONTINUITY-1 (closed, accepted 2026-10-07) added only brain/, CLAUDE.md and two CI workflows; RC1 adds documentation/specification under docs/enterprise/rc1/ and the RC1 decision ledger evaluation/rc1-policy/ (when the operator decides), nothing else."
  },
  "repository": {
   "name": "roland-ecsegi/wonderpages.ai.v01",
@@ -21,8 +21,8 @@
    "C-SUBSCRIPTIONS-ONLY"
   ]
  },
- "activePhase": "CONTINUITY-1",
- "nextAuthorizedStep": "OPERATOR-REVIEW-CONTINUITY-1-CLOSURE",
+ "activePhase": "RC1-POLICY-DEPENDENCY-CLOSURE",
+ "nextAuthorizedStep": "RC1-DEPENDENCY-CLOSURE-WORK",
  "phases": {
   "P1": "DONE",
   "P2": "DONE",
@@ -41,8 +41,9 @@
  },
  "statuses": {
   "OPERATOR_POLICY_DECISION_PHASE": "COMPLETE",
-  "CONTINUITY_1": "COMPLETE — closure checkpoint brain/evidence/CONTINUITY-1-CLOSURE.json; operator review pending",
-  "NEXT_PHASE": "RC1 POLICY DEPENDENCY CLOSURE / PRE-HARDENING SPECIFICATION — NOT YET AUTHORIZED / NOT STARTED",
+  "CONTINUITY_1": "COMPLETE — closure accepted by the operator on 2026-10-07 (brain/evidence/CONTINUITY-1-CLOSURE.json)",
+  "RC1": "IN_PROGRESS — authorized by the operator on 2026-10-07; ends at its closure checkpoint",
+  "NEXT_PHASE": "NONE AUTHORIZED after RC1 — SH#2, hidden acceptance set, evaluator work for SH#2, final Gold acceptance, Enterprise Local RC, Agent System Commissioning, Dinosaur World production/migration: NOT AUTHORIZED",
   "SEMANTIC_HARDENING_2": "NOT AUTHORIZED / NOT STARTED",
   "POLICY_D01_D22": "DECIDED POLICY · NOT IMPLEMENTED · NOT YET EMPIRICALLY VALIDATED",
   "EVALUATOR_V2": "CURRENT IMPLEMENTATION; does not comply with D-01…D-22; not validated",
@@ -54,10 +55,10 @@
  "blockers": [
   {
    "id": "B-OPERATOR-AUTH",
-   "what": "Every post-closure step (sanitized brief, hidden set, SH#2, …) needs explicit operator authorization through the Active Phase Contract.",
+   "what": "Every step after RC1 (hidden set, SH#2, evaluator work, Gold acceptance, Enterprise Local RC, …) needs a new explicit operator authorization through the Active Phase Contract; RC1 ends at its closure checkpoint.",
    "claims": [
     "C-POST-CLOSURE-ORDER",
-    "C-CONTINUITY-AUTH"
+    "C-AFTER-RC1-NOT-AUTHORIZED"
    ]
   },
   {
@@ -70,9 +71,10 @@
   },
   {
    "id": "B-OPEN-DEPENDENCIES",
-   "what": "Open policy dependencies of closure §10 (OPERATOR_DECISION_REQUIRED / undecided taxonomies).",
+   "what": "Open policy dependencies of closure §10 (OPERATOR_DECISION_REQUIRED / undecided taxonomies): RC1 classifies and closes them; NORMATIVE ones only by verbatim operator decision.",
    "claims": [
-    "C-DEPENDENCIES"
+    "C-DEPENDENCIES",
+    "C-RC1-AUTH"
    ]
   },
   {
@@ -84,10 +86,9 @@
   }
  ],
  "awaitingOperator": [
-  "Review of the CONTINUITY-1 closure checkpoint (brain/evidence/CONTINUITY-1-CLOSURE.json): CONTINUITY-1 COMPLETE; decision B ACCEPTED per exit criterion (live E2E PASS, B-01…B-06 repaired); decision C: C0 COMPLETE, C1 live PASS_WITH_LIMITATIONS; final cold restart PASS",
-  "Explicit authorization (or not) of the next phase RC1 POLICY DEPENDENCY CLOSURE / PRE-HARDENING SPECIFICATION — NOT YET AUTHORIZED / NOT STARTED",
+  "NORMATIVE policy dependencies packaged by RC1 (operator decision packages under docs/enterprise/rc1/), as they are escalated",
+  "Review of the RC1 closure checkpoint (when RC1 reaches it) and any authorization of a later phase",
   "Gold-v1 validation/acceptance; Gold-v2 adjudication",
-  "Dinosaur World observations O1/O2; real Creative Upgrade; V1 pilot",
-  "Open policy dependencies (closure §10)"
+  "Dinosaur World observations O1/O2; real Creative Upgrade; V1 pilot"
  ]
 }

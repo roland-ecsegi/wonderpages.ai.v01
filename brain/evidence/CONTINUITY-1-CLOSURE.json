@@ -4,7 +4,19 @@
  "verdict": "COMPLETE",
  "closedAt": "2026-10-07T06:45:00Z",
  "closedBy": "Claude (implementer session https://claude.ai/code/session_012rtQhr65ed69kGHocqgqmE) under operator follow-up #13 (brain/phase/authorizations/CONTINUITY-1.operator-authorization-C1.txt §18)",
- "operatorReview": "PENDING — acceptance of this closure and authorization of any next phase are operator decisions",
+ "operatorReview": {
+  "status": "ACCEPTED",
+  "date": "2026-10-07",
+  "by": "operator",
+  "record": "brain/phase/authorizations/RC1-POLICY-DEPENDENCY-CLOSURE.operator-instruction.txt",
+  "quote": "Accept ca operator closure-ul CONTINUITY-1 și verdictul canonic COMPLETE, inclusiv limitările reziduale documentate. Marchează operatorReview ca acceptat și păstrează integral dovezile și istoricul fazei.",
+  "previous": "PENDING — acceptance of this closure and authorization of any next phase are operator decisions",
+  "preservedHistory": [
+   "brain/phase/history/CONTINUITY-1.ACTIVE-PHASE.json (CONTINUITY-1 phase contract, byte-identical to ACTIVE-PHASE.json at d5b1b4c; the ACTIVE-PHASE.* references above resolve there)",
+   "brain/phase/history/DELEGATION-CONTINUITY-1-C1.json (EXPIRED delegation contract, byte-identical to DELEGATION.json at d5b1b4c)"
+  ],
+  "note": "Only this field changed after the closure commit d5b1b4c; every other field, all evidence files and the git history are unchanged."
+ },
  "exitCriteria": [
   {
    "criterion": "PROJECT_BRAIN, CONTEXT_INTEGRITY_GATE, CLAUDE_CHATGPT_PROTOCOL, FRESH_SESSION_CONTINUITY and APPLICATION_ZERO_DRIFT reported with evidence",
