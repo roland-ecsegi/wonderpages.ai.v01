@@ -12,7 +12,9 @@
  * Application modules are loaded read-only from --root; nothing is written there.
  */
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
+import { spawnSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
 import { BRAIN_ROOT, sha256, canonHash, indexEntries, matchAny, readJSON, git, readJSONL, verifyChain } from './lib.mjs';
 
@@ -56,15 +58,35 @@ export async function fingerprint(root, scope = writeScope()) {
   };
 }
 
-export function compare(base, cur) {
-  const diffs = [];
-  if (base.releaseSourceDigest.sha256 !== cur.releaseSourceDigest.sha256) diffs.push(`release sourceDigest ${base.releaseSourceDigest.sha256.slice(0, 12)} → ${cur.releaseSourceDigest.sha256.slice(0, 12)}`);
-  const a = base.protectedTree.entries, b = cur.protectedTree.entries;
+/** Release sourceDigest of the committed HEAD with every file inside `scope` removed: the exact digest the release evidence would
+ *  record if the active phase's own (documentation) files did not exist. Built from `git archive HEAD` in a temporary directory. */
+export async function releaseDigestOutsideScope(root, scope) {
+  const gate = await import(pathToFileURL(path.join(root, 'scripts/enterprise/release-gate.mjs')).href);
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'drift-release-'));
+  try {
+    const tar = path.join(tmp, 'head.tar'), dir = path.join(tmp, 'tree'); fs.mkdirSync(dir);
+    git(['archive', '--format=tar', '-o', tar, 'HEAD'], { cwd: root });
+    const r = spawnSync('tar', ['-xf', tar, '-C', dir]); if (r.status !== 0) throw new Error('tar: ' + r.stderr);
+    const removed = indexEntries(root).map(e => e.path).filter(p => matchAny(p, scope));
+    for (const p of removed) fs.rmSync(path.join(dir, p), { force: true });
+    return { ...gate.sourceDigest(dir), removed: removed.length };
+  } finally { fs.rmSync(tmp, { recursive: true, force: true }); }
+}
+
+/** `extraScope`: the ACTIVE phase's write scope (it may be wider than the baseline's). Files inside it are not application files
+ *  for this comparison; everything outside it must be byte- and behaviour-identical to the baseline. */
+export function compare(base, cur, { extraScope = [], releaseOutsideScope = null } = {}) {
+  const diffs = [], notes = [], inScope = p => matchAny(p, extraScope);
+  if (base.releaseSourceDigest.sha256 !== cur.releaseSourceDigest.sha256) {
+    if (releaseOutsideScope && releaseOutsideScope.sha256 === base.releaseSourceDigest.sha256) notes.push(`release sourceDigest differs from the baseline only inside the active write scope: with its ${releaseOutsideScope.removed} tracked file(s) removed it equals the baseline ${base.releaseSourceDigest.sha256.slice(0, 12)}`);
+    else diffs.push(`release sourceDigest ${base.releaseSourceDigest.sha256.slice(0, 12)} → ${(releaseOutsideScope || cur.releaseSourceDigest).sha256.slice(0, 12)}${releaseOutsideScope ? ' (active write scope removed)' : ''}`);
+  }
+  const a = Object.fromEntries(Object.entries(base.protectedTree.entries).filter(([p]) => !inScope(p))), b = Object.fromEntries(Object.entries(cur.protectedTree.entries).filter(([p]) => !inScope(p)));
   for (const p of new Set([...Object.keys(a), ...Object.keys(b)])) if (a[p] !== b[p]) diffs.push(`protected file ${p}: ${a[p] ? a[p].slice(0, 10) : 'absent'} → ${b[p] ? b[p].slice(0, 10) : 'absent'}`);
   if (base.behaviour.digest !== cur.behaviour.digest) for (const k of Object.keys(base.behaviour)) if (k !== 'digest' && canonHash(base.behaviour[k]) !== canonHash(cur.behaviour[k])) diffs.push(`behaviour ${k} changed`);
   for (const k of Object.keys(base.evidence)) if (canonHash(base.evidence[k]) !== canonHash(cur.evidence[k])) diffs.push(`evidence ${k} changed`);
   if (cur.dirty.length) diffs.push(`uncommitted tracked changes: ${cur.dirty.join(', ')}`);
-  return { ok: diffs.length === 0, diffs };
+  return { ok: diffs.length === 0, diffs, notes };
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1] || '').href) {
@@ -74,9 +96,11 @@ if (import.meta.url === pathToFileURL(process.argv[1] || '').href) {
     if (out) fs.writeFileSync(out, JSON.stringify(fp, null, 1) + '\n');
     console.log(JSON.stringify({ head: fp.head, releaseSourceDigest: fp.releaseSourceDigest, protectedTree: { files: fp.protectedTree.files, digest: fp.protectedTree.digest }, behaviour: fp.behaviour.digest, evidence: fp.evidence }, null, 1));
   } else if (cmd === 'compare') {
-    const base = JSON.parse(fs.readFileSync(process.argv[3], 'utf8')), cur = await fingerprint(root, base.writeScope);
-    const r = compare(base, cur);
-    console.log(JSON.stringify({ APPLICATION_ZERO_DRIFT: r.ok ? 'PASS' : 'FAIL', baseline: base.head, current: cur.head, releaseSourceDigest: cur.releaseSourceDigest, protectedFiles: cur.protectedTree.files, behaviour: cur.behaviour.digest, diffs: r.diffs }, null, 1));
+    const base = JSON.parse(fs.readFileSync(process.argv[3], 'utf8')), active = readJSON('brain/phase/ACTIVE-PHASE.json', root).writeScope;
+    const extraScope = active.filter(g => !base.writeScope.includes(g)), cur = await fingerprint(root, [...base.writeScope, ...extraScope]);
+    const releaseOutsideScope = extraScope.length && cur.releaseSourceDigest.sha256 !== base.releaseSourceDigest.sha256 ? await releaseDigestOutsideScope(root, [...base.writeScope, ...extraScope]) : null;
+    const r = compare(base, cur, { extraScope, releaseOutsideScope });
+    console.log(JSON.stringify({ APPLICATION_ZERO_DRIFT: r.ok ? 'PASS' : 'FAIL', baseline: base.head, current: cur.head, activeWriteScopeBeyondBaseline: extraScope, releaseSourceDigest: cur.releaseSourceDigest, releaseSourceDigestOutsideActiveScope: releaseOutsideScope, protectedFiles: cur.protectedTree.files, behaviour: cur.behaviour.digest, diffs: r.diffs, notes: r.notes }, null, 1));
     process.exit(r.ok ? 0 : 1);
   } else { console.error('usage: drift.mjs fingerprint|compare'); process.exit(2); }
 }

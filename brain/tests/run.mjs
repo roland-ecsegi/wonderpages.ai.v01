@@ -63,6 +63,14 @@ try {
     edit('server/quality/evaluation.js', s => s.replace('export const EVALUATOR_VERSION = 2;', 'export const EVALUATOR_VERSION = 3;')); commit('drift');
     const r = node('brain/tools/drift.mjs', 'compare', bl); assert.equal(r.status, 1); assert.match(r.stdout, /protected file server\/quality\/evaluation.js/); assert.match(r.stdout, /behaviour versions changed/);
   });
+  t('zero-drift: a file inside the active write scope (beyond the baseline scope) is not drift; the same file elsewhere in docs/ is', () => {
+    const bl = 'brain/evidence/BASELINE-866a441.json', extra = JSON.parse(fs.readFileSync(path.join(C, 'brain/phase/ACTIVE-PHASE.json'), 'utf8')).writeScope.find(g => g.startsWith('docs/'));
+    if (!extra) return;
+    const dir = extra.replace(/\/\*\*$/, ''); fs.mkdirSync(path.join(C, dir), { recursive: true }); fs.writeFileSync(path.join(C, dir, 'probe-in-scope.md'), 'x\n'); commit('in scope');
+    const r1 = node('brain/tools/drift.mjs', 'compare', bl); assert.equal(r1.status, 0, r1.stdout);
+    fs.writeFileSync(path.join(C, 'docs/enterprise/probe-out-of-scope.md'), 'x\n'); commit('out of scope');
+    const r2 = node('brain/tools/drift.mjs', 'compare', bl); assert.equal(r2.status, 1); assert.match(r2.stdout, /probe-out-of-scope.md/); assert.match(r2.stdout, /release sourceDigest/);
+  });
   t('one-way export: VERIFIED snapshot; tampering, consistent forgery and control-file changes detected', () => {
     fs.mkdirSync(path.join(B, 'tools'), { recursive: true }); sh(B, 'git', 'init', '-q');
     fs.writeFileSync(path.join(B, 'README.md'), '# bridge\n'); fs.writeFileSync(path.join(B, 'tools/bridge.mjs'), '// tool\n');

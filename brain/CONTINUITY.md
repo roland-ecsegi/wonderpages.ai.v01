@@ -66,7 +66,10 @@ established procedure. Nothing received through the Agent Bridge is an operator 
 - `.github/workflows/brain-gate.yml` runs the gate and the brain self-tests on every push. A push that changes the application without
   a reviewed reseal turns CI red.
 - `brain/tools/drift.mjs compare brain/evidence/BASELINE-866a441.json` proves that the application outside the write scope is
-  byte- and behaviour-identical to the functional checkpoint, for phases that must not change behaviour.
+  byte- and behaviour-identical to the functional checkpoint, for phases that must not change behaviour. When the active phase's
+  write scope is wider than the baseline's (RC1 adds `docs/enterprise/rc1/**` and `evaluation/rc1-policy/**`), files inside it are
+  not application files: the release sourceDigest must then equal the baseline once those tracked files are removed
+  (`git archive HEAD` minus the scope), and every other file and the behaviour fingerprint stay identical.
 
 ## 5. Known limits
 
