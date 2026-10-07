@@ -89,9 +89,9 @@
   "Closure checkpoint brain/evidence/RC1-POLICY-DEPENDENCY-CLOSURE-CLOSURE.json; then STOP (no later phase starts without a new explicit operator authorization)"
  ],
  "nextAuthorizedStep": {
-  "id": "RC1-OPERATOR-DECISIONS-PACKAGE-01",
-  "actor": "operator",
-  "summary": "RC1 IN_PROGRESS. ChatGPT content audit PASS (round 3). The operator decides or explicitly defers Q-01…Q-23 of docs/enterprise/rc1/OPERATOR-DECISION-PACKAGE-01.md (26 NORMATIVE dependencies); Claude records each statement verbatim in evaluation/rc1-policy/decisions.jsonl, completes the dependent specification and coverage cells, drafts the sanitized brief for Q-24, then prepares the RC1 closure checkpoint. Nothing after RC1 starts."
+  "id": "OAR-1-PROVENANCE-INVESTIGATION",
+  "actor": "claude",
+  "summary": "OAR-1 (operator authorization 2026-10-07): investigate first whether a relayed operator declaration can be proven to come from an explicit operator action; then design/implement/test/audit or fail closed (NOT FEASIBLE WITH CURRENT CAPABILITIES); stop at the activation checkpoint. RC1 decisions Q-01…Q-24 stay pending with the operator (still decidable in a Claude session)."
  },
  "delegation": "brain/phase/DELEGATION.json",
  "zeroDriftBaseline": "brain/evidence/BASELINE-866a441.json",
@@ -149,5 +149,53 @@
     "status": "awaiting operator decisions Q-01…Q-24"
    }
   ]
- }
+ },
+ "subscopes": [
+  {
+   "id": "OAR-1",
+   "title": "OPERATOR AUTHORITY RELAY",
+   "status": "INVESTIGATING_PROVENANCE",
+   "authorizedBy": {
+    "actor": "operator",
+    "date": "2026-10-07",
+    "text": "brain/phase/authorizations/RC1-OAR.operator-authorization.txt",
+    "sha256": "693da9f99d8d33e5afd5b5f914f5b64b5d67c9a729c55345e1a921b6809ff65c",
+    "textNote": "Verbatim operator message (Claude Code session https://claude.ai/code/session_01YTpb4cFbSB6YnHEiFDradE, 2026-10-07)."
+   },
+   "scopeQuote": "Această autorizare modifică exclusiv control-plane-ul și mecanismul de transport/proveniență al autorității. Nu modifică nicio decizie normativă existentă și nu autorizează nicio fază ulterioară.",
+   "rc1Preserved": "Q-01…Q-24 rămân NEDECIDED; the RC1 register, decision package, specification and coverage matrix are unchanged by OAR-1; RC1 stays IN_PROGRESS and resumes at RC1-OPERATOR-DECISIONS-PACKAGE-01.",
+   "writeScope": [
+    "CLAUDE.md",
+    "brain/**",
+    ".github/workflows/brain-gate.yml",
+    ".github/workflows/bridge-sync.yml"
+   ],
+   "externalScope": [
+    "roland-ecsegi/wonderpages.agent-bridge (control files only by the paired publication procedure, brain/CONTINUITY.md §2a)"
+   ],
+   "allowed": [
+    "Investigating whether the available infrastructure can prove that a relayed declaration comes from an explicit operator action (first step, mandatory)",
+    "Designing, implementing, auditing (ChatGPT via the Agent Bridge, adversarial) and testing the relay in the control plane only (brain/tools, brain/tests, Bridge control files), only if provenance is demonstrable",
+    "Documenting the exact blocker and the smallest safe extension when provenance is not demonstrable (verdict NOT FEASIBLE WITH CURRENT CAPABILITIES)"
+   ],
+   "forbidden": [
+    "Turning agent (GPT, GPT Work, Claude, Bridge) text into operator authority; relaxing the existing authority boundary",
+    "Using the relay for any real normative decision before the operator's final activation confirmation",
+    "Deciding or accepting Q-01…Q-24",
+    "Changing the WonderPages product/runtime beyond strictly necessary control-plane infrastructure",
+    "SH#2, hidden acceptance set, contaminated Claude/ChatGPT as Source B, Dinosaur World production/migration, any later phase",
+    "PAYG API, usage credits, extra usage, auto-purchase, paid fallback; secrets in a repository"
+   ],
+   "verdicts": [
+    "PASS",
+    "NOT_FEASIBLE_WITH_CURRENT_CAPABILITIES"
+   ],
+   "exitCriteria": [
+    "PASS only if the new flow is demonstrated to preserve or strengthen the authority boundary and no agent can unilaterally turn its own output into an operator instruction (positive + adversarial tests, real end-to-end / cold restart where the infrastructure allows, ChatGPT adversarial audit)",
+    "Otherwise NOT_FEASIBLE_WITH_CURRENT_CAPABILITIES with the exact blocker and the smallest safe extension",
+    "Then publish the canonical state through the Bridge and STOP at the activation checkpoint for the operator's final confirmation"
+   ],
+   "evidence": "brain/evidence/OAR-1.md"
+  }
+ ]
 }

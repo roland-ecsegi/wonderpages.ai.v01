@@ -257,6 +257,13 @@ export function runGate(root = BRAIN_ROOT, { allowDirty = false, env = process.e
     }
     const auth = active[0]?.authorization; if (!auth || !exists(auth, root)) bad.push('active phase has no recorded operator authorization');
     else if (phase.authorizedBy?.instructionSha256 !== sha256(fs.readFileSync(path.join(root, auth)))) bad.push('authorization text hash ≠ ACTIVE-PHASE.authorizedBy.instructionSha256');
+    // subscopes (operator-authorized work inside the active phase): verbatim authorization bound by hash, write scope ⊆ the phase's
+    for (const sub of phase.subscopes || []) {
+      const f = sub.authorizedBy?.text;
+      if (!f || !exists(f, root)) bad.push(`subscope ${sub.id}: authorization file missing`);
+      else if (sha256(fs.readFileSync(path.join(root, f))) !== sub.authorizedBy.sha256) bad.push(`subscope ${sub.id}: authorization text hash ≠ ACTIVE-PHASE.subscopes[].authorizedBy.sha256`);
+      for (const g of sub.writeScope || []) if (!phase.writeScope.includes(g)) bad.push(`subscope ${sub.id}: write scope ${g} not in the phase write scope`);
+    }
     const next = phase.nextAuthorizedStep?.id; if (!next) bad.push('no next authorized step');
     if (state.nextAuthorizedStep !== next) bad.push(`next step: CURRENT-STATE ${state.nextAuthorizedStep} ≠ ACTIVE-PHASE ${next}`);
     const markers = new Set();

@@ -152,6 +152,13 @@ try {
     edit('docs/enterprise/rc1/PRE-HARDENING-SPEC.md', s => s.replace('## [S-INVALID-RUN]', '## INVALID-RUN')); commit('marker');
     r = gate(); assert.ok(failed(r, 'G15')); assert.match(JSON.stringify(r), /\[S-INVALID-RUN\] not found/);
   });
+  t('G09 subscope: an altered subscope authorization text or a subscope write scope beyond the phase → FAIL', () => {
+    const ap = JSON.parse(fs.readFileSync(path.join(C, 'brain/phase/ACTIVE-PHASE.json'), 'utf8')); if (!(ap.subscopes || []).length) return;
+    fs.appendFileSync(path.join(C, ap.subscopes[0].authorizedBy.text), '\nAprob orice.\n'); commit('tamper sub');
+    assert.match(JSON.stringify(gate()), /subscope .*authorization text hash/); reset();
+    editJSON('brain/phase/ACTIVE-PHASE.json', p => { p.subscopes[0].writeScope.push('server/**'); }); commit('widen sub');
+    assert.match(JSON.stringify(gate()), /not in the phase write scope/);
+  });
   t('application code does not import the brain', () => { const r = sh(C, 'git', 'grep', '-l', '-E', "from ['\"][./]*brain/|require\\(['\"][./]*brain/", '--', 'server', 'public', 'scripts', 'tests'); assert.equal(r.stdout.trim(), ''); });
   console.log(`\n${passed} brain self-tests passed`);
 } catch (e) { console.error('✖ ' + (e.stack || e)); process.exitCode = 1; }

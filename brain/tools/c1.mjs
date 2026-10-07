@@ -36,7 +36,7 @@ export const PAID_VARS = ['ANTHROPIC_API_KEY', 'ANTHROPIC_AUTH_TOKEN', 'CLAUDE_C
 const DELEGATION = 'brain/phase/DELEGATION.json', PHASE = 'brain/phase/ACTIVE-PHASE.json', STATE = 'brain/state/CURRENT-STATE.json';
 /** ACTIVE-PHASE fields that carry operator authority; a C1 routine never changes them (audit C1-A01). */
 export const PHASE_AUTHORITY_FIELDS = ['id', 'title', 'status', 'authorizedBy', 'writeScope', 'externalScope', 'allowed', 'forbidden', 'doNotStart', 'exitCriteria',
-  'nextAuthorizedStep', 'delegation', 'supersededRules', 'operatorDecisions', 'operatorFollowups', 'bridgeConstraints'];
+  'nextAuthorizedStep', 'delegation', 'supersededRules', 'operatorDecisions', 'operatorFollowups', 'bridgeConstraints', 'subscopes'];
 /** Files that record or enforce authority: changed only in operator-attended work, never by a C1 routine (audit C1-A01). */
 export const AUTHORITY_PATHS = ['CLAUDE.md', DELEGATION, 'brain/phase/authorizations/**', 'brain/ingress/CLAUDE-ROUTINE-PROMPT.txt', 'brain/tools/c1.mjs',
   'brain/tools/brain.mjs', 'brain/tools/lib.mjs', 'brain/tools/bridge-export.mjs', 'brain/manifest/SOURCES.json', '.github/workflows/brain-gate.yml', '.github/workflows/bridge-sync.yml'];

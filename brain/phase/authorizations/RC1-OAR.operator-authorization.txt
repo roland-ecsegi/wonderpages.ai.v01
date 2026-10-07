@@ -1,0 +1,128 @@
+AUTORIZARE OPERATOR — OPERATOR AUTHORITY RELAY
+
+Autorizez proiectarea, implementarea, auditarea și testarea unui mecanism OPERATOR AUTHORITY RELAY pentru WonderPages, cu scopul ca după validarea lui interfața mea umană principală să poată fi o singură conversație GPT fresh, iar deciziile mele explicite de operator să poată ajunge canonic la Claude prin Agent Bridge fără copy/paste manual în sesiunea Claude.
+
+Această autorizare modifică exclusiv control-plane-ul și mecanismul de transport/proveniență al autorității. Nu modifică nicio decizie normativă existentă și nu autorizează nicio fază ulterioară.
+
+Q-01…Q-24 rămân NEDECIDED prin acest mesaj. Nu interpreta această autorizare drept acceptare a niciunei recomandări Claude sau ChatGPT din pachetul RC1.
+
+Înregistrează această instrucțiune textual/verbatim în Project Brain înainte de implementare și creează contractul/subscope-ul canonic necesar fără a pierde starea curentă RC1.
+
+Obiectiv UX
+
+După PASS, fluxul normal dorit este:
+
+Operator → GPT fresh → Agent Bridge → Claude → WonderPages → Agent Bridge → GPT
+
+Eu trebuie să pot discuta în GPT fresh, să primesc recomandări și apoi să dau o declarație explicită precum „Sunt de acord cu recomandările tale; aplică-le”, iar numai acea aprobare explicită a mea, legată fără ambiguitate de obiectul exact aprobat, să poată deveni autoritate canonică în WonderPages.
+
+GPT Work Task și Claude Routine trebuie să rămână mecanisme autonome de infrastructură și să nu necesite operare manuală în fluxul normal.
+
+Cerință fundamentală de securitate
+
+GPT, GPT Work, Claude, Bridge-ul sau orice agent nu pot crea, presupune, extinde, reformula material sau auto-aproba autoritatea operatorului.
+
+Un mesaj generat de un agent care afirmă „operatorul a aprobat” nu este suficient.
+
+Trebuie păstrată separarea dintre:
+
+1. PROPOSAL / RECOMMENDATION — produsă de agenți și fără autoritate;
+2. OPERATOR DECLARATION — declarația explicită a operatorului;
+3. AUTHORITY RELAY — transport fidel al declarației;
+4. CANONICAL AUTHORITY — declarația verificată și înregistrată în Project Brain;
+5. EXECUTION — acțiunea permisă strict de acea autoritate.
+
+Proveniență
+
+Investighează mai întâi dacă infrastructura disponibilă poate demonstra suficient că declarația relayed provine dintr-o acțiune explicită a operatorului și nu poate fi fabricată de GPT Work sau de alt agent care folosește aceeași identitate/infrastructură GitHub.
+
+Faptul că două fluxuri apar sub aceeași identitate GitHub NU este dovadă suficientă de proveniență.
+
+Dacă această proprietate nu poate fi realizată cu capabilitățile actuale, FAIL CLOSED. Nu implementa un mecanism care transformă textul GPT în autoritate și nu relaxa boundary-ul existent. În acel caz documentează exact blocker-ul și propune cea mai mică extensie sigură necesară.
+
+Proprietăți obligatorii dacă mecanismul este fezabil
+
+Mecanismul trebuie să includă cel puțin:
+
+* păstrarea verbatim a declarației operatorului;
+* binding explicit la proposal/decision package, versiune/hash/snapshot și scope-ul aprobat;
+* identificator unic al declarației;
+* hash/integrity protection;
+* immutable anchor;
+* replay protection și consumare idempotentă;
+* prevenirea substitution/confused-deputy;
+* verificare still pending;
+* verificare still authorized imediat înainte de write/execution;
+* prevenirea extinderii scope-ului de către relay;
+* separarea strictă dintre proposal și approval;
+* audit trail complet;
+* revocation/supersession semantics;
+* fail-closed pentru mesaje incomplete, contradictorii, stale sau cu proveniență insuficientă;
+* protecție împotriva faptului că GPT Work își aprobă propria recomandare;
+* protecție împotriva faptului că Claude își aprobă propria recomandare;
+* zero autoritate derivată din simpla prezență a unui mesaj în Bridge.
+
+O expresie scurtă de aprobare precum „Sunt de acord cu recomandările tale” este validă numai dacă sistemul o poate lega în mod determinist și imutabil de exact proposal-ul pe care operatorul îl vedea și îl aproba. Dacă există mai multe proposal-uri eligibile sau proposal-ul s-a schimbat, mecanismul trebuie să refuze și să solicite clarificare.
+
+Testare obligatorie
+
+Construiește teste pozitive și negative/adversariale, inclusiv cel puțin:
+
+* aprobare operator validă;
+* mesaj GPT care pretinde fals că operatorul a aprobat;
+* GPT Work care încearcă să creeze autoritate;
+* Claude care încearcă să creeze/extindă autoritate;
+* replay al unei aprobări deja consumate;
+* proposal modificat după aprobare;
+* hash/snapshot mismatch;
+* approval pentru alt scope;
+* approval ambiguu;
+* approval stale;
+* approval revocat/superseded;
+* două mesaje concurente;
+* transport duplicat;
+* Bridge retry;
+* pierdere temporară a unui wake;
+* încercare de a folosi approval-ul pentru o fază ulterioară.
+
+Testează end-to-end/cold-restart în măsura permisă de infrastructura reală, nu doar prin mock-uri.
+
+Audit
+
+Folosește ChatGPT prin Agent Bridge pentru audit adversarial al designului și implementării.
+
+Auditorul poate produce findings și recomandări, dar nu poate aproba mecanismul în numele operatorului și nu poate crea authority.
+
+Repară autonom findings-urile care sunt engineering și se află în scope. Escaladează orice problemă care necesită schimbarea boundary-ului de autoritate.
+
+Constrângeri
+
+Subscription-only.
+
+Fără API PAYG, usage credits, extra usage, auto-purchase sau paid fallback.
+
+Fără secrete introduse în repository.
+
+Fără modificarea produsului/runtime-ului WonderPages în afara infrastructurii strict necesare acestui control-plane.
+
+Fără SH#2.
+
+Fără hidden acceptance set.
+
+Fără folosirea actualului Claude sau ChatGPT contaminat drept Source B.
+
+Fără Dinosaur World production/migration.
+
+Fără acceptarea Q-01…Q-24.
+
+Fără începerea unei faze ulterioare.
+
+Exit criterion
+
+Consideră OPERATOR AUTHORITY RELAY = PASS numai dacă poți demonstra că noul flux păstrează sau întărește actualul authority boundary și că un agent nu poate transforma unilateral propria ieșire într-o instrucțiune de operator.
+
+Dacă PASS este demonstrat, publică starea canonică prin Bridge și oprește-te la checkpoint-ul de activare pentru confirmarea finală a operatorului înainte ca noul mecanism să fie folosit prima dată pentru o decizie normativă reală.
+
+Dacă proprietatea de proveniență nu poate fi demonstrată, verdictul trebuie să fie NOT FEASIBLE WITH CURRENT CAPABILITIES sau echivalentul canonic, fără workaround nesigur.
+
+După PASS și confirmarea finală, obiectivul operațional este ca eu să nu mai trebuiască să folosesc manual Claude Code, GPT Work Task sau Claude Routine în fluxul normal. GPT fresh trebuie să devină consola mea principală, iar infrastructura din spate să mă escaladeze numai pentru decizii reale de operator.
