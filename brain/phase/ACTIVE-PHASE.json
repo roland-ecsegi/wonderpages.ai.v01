@@ -154,7 +154,7 @@
   {
    "id": "OAR-1",
    "title": "OPERATOR AUTHORITY RELAY",
-   "status": "INVESTIGATING_PROVENANCE",
+   "status": "NOT_FEASIBLE_WITH_CURRENT_CAPABILITIES (draft verdict, under ChatGPT adversarial audit); smallest safe extension E1 proposed — needs operator decision",
    "authorizedBy": {
     "actor": "operator",
     "date": "2026-10-07",
